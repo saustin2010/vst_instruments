@@ -1,0 +1,32 @@
+{
+  "name": "Braids",
+  "vendor": "Mutable Instruments",
+  "uid": "BrDs",
+  "so": "braids.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/braids_plugin.cpp",
+      "src/dsp/braids/macro_oscillator.cc",
+      "src/dsp/braids/analog_oscillator.cc",
+      "src/dsp/braids/digital_oscillator.cc",
+      "src/dsp/braids/resources.cc",
+      "src/dsp/braids/quantizer.cc",
+      "src/dsp/stmlib/utils/random.cc"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-std=gnu++14",
+      "-DTEST", "-DMPC_PORT", "-fwrapv"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "MODULE_DIR": "\"/sdcard/vst/braids\""
+  }
+}

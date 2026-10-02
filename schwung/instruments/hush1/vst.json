@@ -1,0 +1,27 @@
+{
+  "name": "Hush One",
+  "vendor": "Move Everything",
+  "uid": "Hsh1",
+  "so": "hushone.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/sh101_plugin.c",
+      "src/dsp/sh101_control.c",
+      "src/dsp/sh101_env.c",
+      "src/dsp/sh101_filter.c",
+      "src/dsp/sh101_lfo.c",
+      "src/dsp/sh101_osc.c"
+    ],
+    "cflags": [
+      "-Isrc",
+      "-Isrc/dsp"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

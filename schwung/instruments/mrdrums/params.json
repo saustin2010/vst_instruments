@@ -1,0 +1,206 @@
+{
+ "name": "Mrdrums",
+ "params": [
+  {
+   "key": "unused_sample_path",
+   "name": "UNUSED A",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pad_vol",
+   "name": "PAD VOLUME",
+   "min": 0,
+   "max": 2,
+   "default": 1
+  },
+  {
+   "key": "pad_pan",
+   "name": "PAD PAN",
+   "min": -1,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pad_tune",
+   "name": "PAD TUNE",
+   "min": -24,
+   "max": 24,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "pad_start",
+   "name": "PAD START",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pad_attack_ms",
+   "name": "PAD ATTACK",
+   "min": 0,
+   "max": 5000,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "pad_decay_ms",
+   "name": "PAD DECAY",
+   "min": 0,
+   "max": 5000,
+   "default": 250,
+   "display": "int"
+  },
+  {
+   "key": "pad_choke_group",
+   "name": "CHOKE GROUP",
+   "min": 0,
+   "max": 16,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "pad_mode",
+   "name": "PAD MODE",
+   "options": [
+    "GATE",
+    "ONESHOT"
+   ],
+   "default": 1
+  },
+  {
+   "key": "pad_rand_pan_amt",
+   "name": "RAND PAN",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pad_rand_vol_amt",
+   "name": "RAND VOLUME",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pad_rand_decay_amt",
+   "name": "RAND DECAY",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pad_chance_pct",
+   "name": "CHANCE",
+   "min": 0,
+   "max": 100,
+   "default": 100,
+   "display": "int"
+  },
+  {
+   "key": "kit",
+   "name": "KIT",
+   "min": 0,
+   "max": 63,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "kit_prev",
+   "name": "PREV KIT",
+   "momentary": true,
+   "step_of": "kit",
+   "step_delta": -1
+  },
+  {
+   "key": "kit_next",
+   "name": "NEXT KIT",
+   "momentary": true,
+   "step_of": "kit",
+   "step_delta": 1
+  },
+  {
+   "key": "kit_name",
+   "name": "KIT NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "ui_current_pad",
+   "name": "EDIT PAD",
+   "min": 1,
+   "max": 16,
+   "default": 1,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "ui_current_pad_prev",
+   "name": "PREV PAD",
+   "momentary": true,
+   "step_of": "ui_current_pad",
+   "step_delta": -1
+  },
+  {
+   "key": "ui_current_pad_next",
+   "name": "NEXT PAD",
+   "momentary": true,
+   "step_of": "ui_current_pad",
+   "step_delta": 1
+  },
+  {
+   "key": "ui_auto_select_pad",
+   "name": "AUTO SELECT",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "g_master_vol",
+   "name": "MASTER VOL",
+   "min": 0,
+   "max": 2,
+   "default": 1
+  },
+  {
+   "key": "g_polyphony",
+   "name": "POLYPHONY",
+   "min": 1,
+   "max": 64,
+   "default": 16,
+   "display": "int"
+  },
+  {
+   "key": "g_vel_curve",
+   "name": "VEL CURVE",
+   "options": [
+    "LINEAR",
+    "SOFT",
+    "HARD"
+   ],
+   "default": 0
+  },
+  {
+   "key": "g_humanize_ms",
+   "name": "HUMANIZE",
+   "min": 0,
+   "max": 50,
+   "default": 0
+  },
+  {
+   "key": "g_rand_loop_steps",
+   "name": "RAND LOOP",
+   "min": 1,
+   "max": 128,
+   "default": 16,
+   "display": "int"
+  }
+ ]
+}

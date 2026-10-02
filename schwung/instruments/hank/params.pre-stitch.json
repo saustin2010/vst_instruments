@@ -1,0 +1,201 @@
+{
+ "name": "Hank",
+ "params": [
+  {
+   "key": "ratio",
+   "name": "RATIO",
+   "short_name": "Ratio",
+   "type": "int",
+   "min": 0,
+   "max": 15,
+   "step": 1,
+   "default": 4,
+   "options": [
+    "0.5",
+    "1",
+    "1.5",
+    "2",
+    "2.5",
+    "3",
+    "3.7",
+    "4",
+    "5",
+    "5.4",
+    "6",
+    "7",
+    "8",
+    "9.2",
+    "11",
+    "14"
+   ],
+   "viz": {
+    "group": "fm",
+    "role": "ratio",
+    "kind": "custom:hank_wave"
+   }
+  },
+  {
+   "key": "bright",
+   "name": "BRIGHT",
+   "short_name": "Bright",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 0.35,
+   "unit": "%",
+   "viz": {
+    "group": "fm",
+    "role": "level"
+   }
+  },
+  {
+   "key": "bite",
+   "name": "BITE",
+   "short_name": "Bite",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 0.0,
+   "unit": "%",
+   "viz": {
+    "group": "fm",
+    "role": "feedback"
+   }
+  },
+  {
+   "key": "tone",
+   "name": "TONE",
+   "short_name": "Tone",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 0.8,
+   "unit": "%"
+  },
+  {
+   "key": "attack",
+   "name": "ATTACK",
+   "short_name": "Atk",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 0.0,
+   "unit": "%"
+  },
+  {
+   "key": "decay",
+   "name": "DECAY",
+   "short_name": "Dec",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 0.45,
+   "unit": "%"
+  },
+  {
+   "key": "sustain",
+   "name": "SUSTAIN",
+   "short_name": "Sus",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 0.7,
+   "unit": "%"
+  },
+  {
+   "key": "noise",
+   "name": "NOISE",
+   "short_name": "Nois",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 0.0,
+   "unit": "%"
+  },
+  {
+   "key": "voice_count",
+   "name": "VOICES",
+   "short_name": "Voc",
+   "type": "int",
+   "min": 1,
+   "max": 16,
+   "step": 1,
+   "default": 8,
+   "display": "int"
+  },
+  {
+   "key": "glide",
+   "name": "GLIDE",
+   "short_name": "Gld",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 0.0,
+   "unit": "%"
+  },
+  {
+   "key": "pitch",
+   "name": "TRANSPOSE",
+   "short_name": "Trans",
+   "type": "float",
+   "min": -96.0,
+   "max": 96.0,
+   "step": 1.0,
+   "default": 0.0,
+   "unit": "st",
+   "display": "int"
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "short_name": "Vol",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0,
+   "step": 0.01,
+   "default": 1.0,
+   "unit": "%"
+  },
+  {
+   "key": "preset",
+   "name": "PATCH",
+   "short_name": "Preset",
+   "type": "stepper",
+   "min": 0,
+   "max_param": "preset_count",
+   "default": 0,
+   "max": 31,
+   "display": "int"
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "PATCH NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

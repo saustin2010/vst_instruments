@@ -1,0 +1,238 @@
+/* Copyright 2013-2017 Matt Tytel
+ *
+ * helm is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * helm is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with helm.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "JuceHeader.h"
+#include "border_bounds_constrainer.h"
+#include "helm_editor.h"
+#include "load_save.h"
+
+class HelmApplication : public juce::JUCEApplication {
+  public:
+    class MainWindow : public juce::DocumentWindow,
+                       public ApplicationCommandTarget,
+                       private juce::AsyncUpdater {
+    public:
+      enum PatchCommands {
+        kSave = 0x5001,
+        kSaveAs,
+        kOpen,
+        kEscape,
+      };
+
+      MainWindow(juce::String name, bool visible = true) :
+          DocumentWindow(name, juce::Colours::lightgrey, DocumentWindow::allButtons, visible) {
+        editor_ = new HelmEditor(visible);
+        if (visible) {
+          editor_->animate(LoadSave::shouldAnimateWidgets());
+
+          setUsingNativeTitleBar(true);
+          setContentOwned(editor_, true);
+          setResizable(true, true);
+
+          constrainer_.setMinimumSize(2 * mopo::DEFAULT_WINDOW_WIDTH / 3,
+                                      2 * mopo::DEFAULT_WINDOW_HEIGHT / 3);
+          constrainer_.setBorder(getPeer()->getFrameSize());
+          double ratio = (1.0 * mopo::DEFAULT_WINDOW_WIDTH) / mopo::DEFAULT_WINDOW_HEIGHT;
+
+          constrainer_.setFixedAspectRatio(ratio);
+          setConstrainer(&constrainer_);
+
+          centreWithSize(getWidth(), getHeight());
+          setVisible(visible);
+          triggerAsyncUpdate();
+        }
+        else
+          editor_->animate(false);
+      }
+
+      void closeButtonPressed() override {
+        JUCEApplication::getInstance()->systemRequestedQuit();
+      }
+
+      bool loadFile(juce::File file) {
+        bool success = editor_->loadFromFile(file);
+        if (success)
+          editor_->externalPatchLoaded(file);
+        return success;
+      }
+
+      ApplicationCommandTarget* getNextCommandTarget() override {
+        return findFirstTargetParentComponent();
+      }
+
+      void getAllCommands(juce::Array<juce::CommandID>& commands) override {
+        commands.add(kSave);
+        commands.add(kSaveAs);
+        commands.add(kOpen);
+        commands.add(kEscape);        
+      }
+
+      void getCommandInfo(const juce::CommandID commandID, juce::ApplicationCommandInfo& result) override {
+        if (commandID == kSave) {
+          result.setInfo(TRANS("Save"), TRANS("Saves the current patch"), "Application", 0);
+          result.defaultKeypresses.add(juce::KeyPress('s', juce::ModifierKeys::commandModifier, 0));
+        }
+        else if (commandID == kSaveAs) {
+          result.setInfo(TRANS("Save As"), TRANS("Saves patch to a new file"), "Application", 0);
+          juce::ModifierKeys modifier = juce::ModifierKeys::commandModifier | juce::ModifierKeys::shiftModifier;
+          result.defaultKeypresses.add(juce::KeyPress('s', modifier, 0));
+        }
+        else if (commandID == kOpen) {
+          result.setInfo(TRANS("Open"), TRANS("Opens a patch"), "Application", 0);
+          result.defaultKeypresses.add(juce::KeyPress('o', juce::ModifierKeys::commandModifier, 0));
+        }
+        else if (commandID == kEscape) {
+          result.setInfo(TRANS("Escape"), TRANS("Escape modal"), "Application", 0);
+          result.defaultKeypresses.add(juce::KeyPress(27, juce::ModifierKeys::noModifiers, 0));
+        }
+      }
+
+      void open() {
+        juce::File active_file = editor_->getActiveFile();
+        juce::FileChooser open_box("Open Patch", juce::File(),
+                             juce::String("*.") + mopo::PATCH_EXTENSION);
+
+        if (open_box.browseForFileToOpen())
+          loadFile(open_box.getResult());
+      }
+
+      bool perform(const InvocationInfo& info) override {
+        if (info.commandID == kSave) {
+          if (!editor_->saveToActiveFile())
+            editor_->exportToFile();
+          grabKeyboardFocus();
+          editor_->setFocus();
+          return true;
+        }
+        if (info.commandID == kSaveAs) {
+          editor_->exportToFile();
+          grabKeyboardFocus();
+          editor_->setFocus();
+          return true;
+        }
+        if (info.commandID == kOpen) {
+          open();
+          grabKeyboardFocus();
+          editor_->setFocus();
+          return true;
+        }
+        if (info.commandID == kEscape) {
+          editor_->closeModal();
+          return true;
+        }
+
+        return false;
+      }
+
+      void handleAsyncUpdate() override {
+        command_manager_ = new juce::ApplicationCommandManager();
+        command_manager_->registerAllCommandsForTarget(JUCEApplication::getInstance());
+        command_manager_->registerAllCommandsForTarget(this);
+        addKeyListener(command_manager_->getKeyMappings());
+        editor_->setFocus();
+      }
+
+      void activeWindowStatusChanged() override {
+        if (editor_)
+          editor_->animate(LoadSave::shouldAnimateWidgets() && isActiveWindow());
+
+        if (isActiveWindow())
+          editor_->grabKeyboardFocus();
+      }
+
+    private:
+      JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
+      HelmEditor* editor_;
+      juce::ScopedPointer<juce::ApplicationCommandManager> command_manager_;
+      BorderBoundsConstrainer constrainer_;
+    };
+
+    HelmApplication() { }
+
+    const juce::String getApplicationName() override { return ProjectInfo::projectName; }
+    const juce::String getApplicationVersion() override { return ProjectInfo::versionString; }
+    bool moreThanOneInstanceAllowed() override { return true; }
+
+    void initialise(const juce::String& command_line) override {
+      juce::String command = " " + command_line + " ";
+      // TODO: command management is error-prone now that I added the -c flag (current logic relies on flag "-c name" preceding the patch name)
+      if (command.contains(" --version ") || command.contains(" -v ")) {
+        std::cout << getApplicationName() << " " << getApplicationVersion() << juce::newLine;
+        quit();
+      }
+      else if (command.contains(" --help ") || command.contains(" -h ")) {
+        std::cout << "Usage:" << juce::newLine;
+        std::cout << "  " << getApplicationName().toLowerCase() << " [OPTION...]" << juce::newLine << juce::newLine;
+        std::cout << getApplicationName() << " polyphonic, semi-modular synthesizer." << juce::newLine << juce::newLine;
+        std::cout << "Help Options:" << juce::newLine;
+        std::cout << "  -h, --help                          Show help options" << juce::newLine << juce::newLine;
+        std::cout << "Application Options:" << juce::newLine;
+        std::cout << "  -v, --version                       Show version information and exit" << juce::newLine;
+        std::cout << "  --headless                          Run without graphical interface." << juce::newLine;
+        std::cout << "  -c [SUFFIX]                         Runs using a the config file which has suffix [SUFFIX]" << juce::newLine << juce::newLine;
+        quit();
+      }
+      else {
+        bool visible = !command.contains(" --headless ");
+        juce::String suffix = "default";
+
+        juce::StringArray args = getCommandLineParameterArray();
+
+        for (int i = 0; i < args.size(); ++i) {
+          if (args[i] == "-c" && args.size()>i+1) {
+            suffix = args[i+1];
+          } else {
+            setConfigFileSuffixPrefix(suffix);
+            if (args[i] != "" && args[i][0] != '-' && loadFromCommandLine(args[i]))
+              return;
+          }
+        }
+        setConfigFileSuffixPrefix(suffix);
+        main_window_ = new MainWindow(getApplicationName() + " (" + suffix + ")", visible);
+      }
+    }
+
+    void setConfigFileSuffixPrefix(const juce::String& configFileSuffixPrefix) {
+      LoadSave::setConfigSuffixPrefix( configFileSuffixPrefix );
+    }
+
+    bool loadFromCommandLine(const juce::String& command_line) {
+      juce::String file_path = command_line;
+      if (file_path[0] == '"' && file_path[file_path.length() - 1] == '"')
+        file_path = command_line.substring(1, command_line.length() - 1);
+      juce::File file = juce::File::getCurrentWorkingDirectory().getChildFile(file_path);
+      if (file.exists())
+        return main_window_->loadFile(file);
+      return false;
+    }
+
+    void shutdown() override {
+      main_window_ = nullptr;
+    }
+
+    void systemRequestedQuit() override {
+      quit();
+    }
+
+    void anotherInstanceStarted(const juce::String& command_line) override {
+      loadFromCommandLine(command_line);
+    }
+
+  private:
+    juce::ScopedPointer<MainWindow> main_window_;
+};
+
+START_JUCE_APPLICATION(HelmApplication)

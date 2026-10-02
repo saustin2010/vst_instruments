@@ -1,0 +1,75 @@
+{
+  "title": "Maze Lite",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "Dual generative",
+        "sequencer, Moog",
+        "Labyrinth style.",
+        "",
+        "Two 8-step seqs run",
+        "on the Move clock",
+        "and evolve.",
+        "",
+        "Incoming notes set",
+        "the root / transpose."
+      ]
+    },
+    {
+      "title": "Quick Start",
+      "lines": [
+        "1) Insert Maze Lite",
+        " in a MIDI FX slot.",
+        "2) Route output to a",
+        " synth module.",
+        "3) Press Play.",
+        "4) Play a note to set",
+        " the key."
+      ]
+    },
+    {
+      "title": "Seq 1 / Seq 2",
+      "lines": [
+        "Corrupt: mutate CVs;",
+        "past noon flips bits.",
+        "Range: pitch spread",
+        "around root.",
+        "Length: 1-8 steps.",
+        "Bit Flip: toggle the",
+        "current step.",
+        "Advance: nudge the",
+        "play head.",
+        "Reset: jump to step 1",
+        "every 1/2/4/8 bars",
+        "(Off to disable).",
+        "Trig Mix (Seq1 page):",
+        "velocity Seq1<->Seq2."
+      ]
+    },
+    {
+      "title": "Trig Mix",
+      "lines": [
+        "Full left: Seq1 only,",
+        "vel 127.",
+        "Noon: both at 100.",
+        "Full right: Seq2,",
+        "vel 127."
+      ]
+    },
+    {
+      "title": "Global",
+      "lines": [
+        "Scale: quantizer.",
+        "Note Rate: 1/32 up to",
+        "1 bar.",
+        "Note Length: gate,",
+        "1/4 step to 2 steps.",
+        "Reset Both: reset",
+        "both seqs to step 1",
+        "together, every",
+        "1/2/4/8 bars."
+      ]
+    }
+  ]
+}

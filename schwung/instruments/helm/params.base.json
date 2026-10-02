@@ -1,0 +1,1276 @@
+{
+ "name": "helm",
+ "params": [
+  {
+   "key": "preset",
+   "name": "Preset",
+   "min": 0,
+   "max": 9999,
+   "display": "int"
+  },
+  {
+   "key": "octave_transpose",
+   "name": "Octave",
+   "min": -3,
+   "max": 3,
+   "display": "int"
+  },
+  {
+   "key": "bpm",
+   "name": "BPM",
+   "min": 20,
+   "max": 300,
+   "display": "int"
+  },
+  {
+   "key": "sync_bpm",
+   "name": "Auto BPM",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "amp_attack",
+   "name": "Amp Attack",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "amp_decay",
+   "name": "Amp Decay",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "amp_release",
+   "name": "Amp Release",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "amp_sustain",
+   "name": "Amp Sustain",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "arp_frequency",
+   "name": "Arp Frequency",
+   "min": -1.0,
+   "max": 4.0
+  },
+  {
+   "key": "arp_gate",
+   "name": "Arp Gate",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "arp_octaves",
+   "name": "Arp Octaves",
+   "min": 1.0,
+   "max": 4.0,
+   "display": "int"
+  },
+  {
+   "key": "arp_on",
+   "name": "Arp Switch",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "arp_pattern",
+   "name": "Arp Pattern",
+   "options": [
+    "Up",
+    "Down",
+    "Up-Down",
+    "As Played",
+    "Random"
+   ],
+   "default": 0
+  },
+  {
+   "key": "arp_sync",
+   "name": "Arp Sync",
+   "options": [
+    "Seconds",
+    "Tempo",
+    "Tempo Dotted",
+    "Tempo Triplets"
+   ],
+   "default": 0
+  },
+  {
+   "key": "arp_tempo",
+   "name": "Arp Tempo",
+   "options": [
+    "32/1",
+    "16/1",
+    "8/1",
+    "4/1",
+    "2/1",
+    "1/1",
+    "1/2",
+    "1/4",
+    "1/8",
+    "1/16",
+    "1/32",
+    "1/64"
+   ],
+   "default": 0
+  },
+  {
+   "key": "cross_modulation",
+   "name": "Cross Mod",
+   "min": 0.0,
+   "max": 0.5
+  },
+  {
+   "key": "cutoff",
+   "name": "Filter Cutoff",
+   "min": 28.0,
+   "max": 127.0
+  },
+  {
+   "key": "delay_dry_wet",
+   "name": "Delay Mix",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "delay_feedback",
+   "name": "Delay Feedback",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "delay_frequency",
+   "name": "Delay Frequency",
+   "min": -2.0,
+   "max": 5.0
+  },
+  {
+   "key": "delay_on",
+   "name": "Delay Switch",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "delay_sync",
+   "name": "Delay Sync",
+   "options": [
+    "Seconds",
+    "Tempo",
+    "Tempo Dotted",
+    "Tempo Triplets"
+   ],
+   "default": 0
+  },
+  {
+   "key": "delay_tempo",
+   "name": "Delay Tempo",
+   "options": [
+    "32/1",
+    "16/1",
+    "8/1",
+    "4/1",
+    "2/1",
+    "1/1",
+    "1/2",
+    "1/4",
+    "1/8",
+    "1/16",
+    "1/32",
+    "1/64"
+   ],
+   "default": 0
+  },
+  {
+   "key": "distortion_drive",
+   "name": "Distortion Drive",
+   "min": -30.0,
+   "max": 30.0
+  },
+  {
+   "key": "distortion_mix",
+   "name": "Distortion Mix",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "distortion_on",
+   "name": "Distortion Switch",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "distortion_type",
+   "name": "Distortion Type",
+   "options": [
+    "Soft Clip",
+    "Hard Clip",
+    "Linear Fold",
+    "Sine Fold"
+   ],
+   "default": 0
+  },
+  {
+   "key": "fil_attack",
+   "name": "Filter Attack",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "fil_decay",
+   "name": "Filter Decay",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "fil_env_depth",
+   "name": "Filter Env Depth",
+   "min": -128.0,
+   "max": 128.0
+  },
+  {
+   "key": "fil_release",
+   "name": "Filter Release",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "fil_sustain",
+   "name": "Filter Sustain",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "filter_blend",
+   "name": "Filter Blend",
+   "min": 0.0,
+   "max": 2.0
+  },
+  {
+   "key": "filter_drive",
+   "name": "Filter Drive",
+   "min": -12.0,
+   "max": 20.0
+  },
+  {
+   "key": "filter_on",
+   "name": "Filter Switch",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_saturation",
+   "name": "Saturation",
+   "min": -60.0,
+   "max": 60.0
+  },
+  {
+   "key": "filter_shelf",
+   "name": "Filter Shelf",
+   "options": [
+    "Low Shelf",
+    "Band Shelf",
+    "High Shelf"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_style",
+   "name": "Filter Style",
+   "options": [
+    "12dB",
+    "24dB",
+    "Shelf"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_type",
+   "name": "Filter Type",
+   "min": 0.0,
+   "max": 6.0,
+   "display": "int"
+  },
+  {
+   "key": "formant_on",
+   "name": "Formant Switch",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "formant_x",
+   "name": "Formant X",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "formant_y",
+   "name": "Formant Y",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "keytrack",
+   "name": "Filter Key Track",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "legato",
+   "name": "Legato",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "mod_attack",
+   "name": "Mod Env Attack",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "mod_decay",
+   "name": "Mod Env Decay",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "mod_release",
+   "name": "Mod Env Release",
+   "min": 0.0,
+   "max": 4.0
+  },
+  {
+   "key": "mod_sustain",
+   "name": "Mod Env Sustain",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "mono_lfo_1_amplitude",
+   "name": "Mono LFO 1 Amp",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mono_lfo_1_frequency",
+   "name": "Mono LFO 1 Frequency",
+   "min": -7.0,
+   "max": 6.0
+  },
+  {
+   "key": "mono_lfo_1_retrigger",
+   "name": "Mono LFO 1 Retrigger",
+   "options": [
+    "Free",
+    "Retrigger",
+    "Sync to Playhead"
+   ],
+   "default": 0
+  },
+  {
+   "key": "mono_lfo_1_sync",
+   "name": "Mono LFO 1 Sync",
+   "options": [
+    "Seconds",
+    "Tempo",
+    "Tempo Dotted",
+    "Tempo Triplets"
+   ],
+   "default": 0
+  },
+  {
+   "key": "mono_lfo_1_tempo",
+   "name": "Mono LFO 1 Tempo",
+   "options": [
+    "32/1",
+    "16/1",
+    "8/1",
+    "4/1",
+    "2/1",
+    "1/1",
+    "1/2",
+    "1/4",
+    "1/8",
+    "1/16",
+    "1/32",
+    "1/64"
+   ],
+   "default": 0
+  },
+  {
+   "key": "mono_lfo_1_waveform",
+   "name": "Mono LFO 1 Waveform",
+   "options": [
+    "Sine",
+    "Triangle",
+    "Square",
+    "Saw Up",
+    "Saw Down",
+    "3 Step",
+    "4 Step",
+    "8 Step",
+    "3 Pyramid",
+    "5 Pyramid",
+    "9 Pyramid",
+    "Sample & Hold",
+    "Sample & Glide"
+   ],
+   "default": 0
+  },
+  {
+   "key": "mono_lfo_2_amplitude",
+   "name": "Mono LFO 2 Amp",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mono_lfo_2_frequency",
+   "name": "Mono LFO 2 Frequency",
+   "min": -7.0,
+   "max": 6.0
+  },
+  {
+   "key": "mono_lfo_2_retrigger",
+   "name": "Mono LFO 2 Retrigger",
+   "options": [
+    "Free",
+    "Retrigger",
+    "Sync to Playhead"
+   ],
+   "default": 0
+  },
+  {
+   "key": "mono_lfo_2_sync",
+   "name": "Mono LFO 2 Sync",
+   "options": [
+    "Seconds",
+    "Tempo",
+    "Tempo Dotted",
+    "Tempo Triplets"
+   ],
+   "default": 0
+  },
+  {
+   "key": "mono_lfo_2_tempo",
+   "name": "Mono LFO 2 Tempo",
+   "options": [
+    "32/1",
+    "16/1",
+    "8/1",
+    "4/1",
+    "2/1",
+    "1/1",
+    "1/2",
+    "1/4",
+    "1/8",
+    "1/16",
+    "1/32",
+    "1/64"
+   ],
+   "default": 0
+  },
+  {
+   "key": "mono_lfo_2_waveform",
+   "name": "Mono LFO 2 Waveform",
+   "options": [
+    "Sine",
+    "Triangle",
+    "Square",
+    "Saw Up",
+    "Saw Down",
+    "3 Step",
+    "4 Step",
+    "8 Step",
+    "3 Pyramid",
+    "5 Pyramid",
+    "9 Pyramid",
+    "Sample & Hold",
+    "Sample & Glide"
+   ],
+   "default": 0
+  },
+  {
+   "key": "noise_volume",
+   "name": "Noise Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "num_steps",
+   "name": "Num Steps",
+   "min": 1.0,
+   "max": 32.0,
+   "display": "int"
+  },
+  {
+   "key": "osc_1_transpose",
+   "name": "Osc 1 Transpose",
+   "min": -48.0,
+   "max": 48.0,
+   "display": "int"
+  },
+  {
+   "key": "osc_1_tune",
+   "name": "Osc 1 Tune",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc_1_unison_detune",
+   "name": "Osc 1 Unison Detune",
+   "min": 0.0,
+   "max": 100.0
+  },
+  {
+   "key": "osc_1_unison_voices",
+   "name": "Osc 1 Unison Voices",
+   "min": 1.0,
+   "max": 15.0,
+   "display": "int"
+  },
+  {
+   "key": "osc_1_volume",
+   "name": "Osc 1 Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc_1_waveform",
+   "name": "Osc 1 Waveform",
+   "options": [
+    "Sine",
+    "Triangle",
+    "Square",
+    "Saw Down",
+    "Saw Up",
+    "3 Step",
+    "4 Step",
+    "8 Step",
+    "3 Pyramid",
+    "5 Pyramid",
+    "9 Pyramid"
+   ],
+   "default": 0
+  },
+  {
+   "key": "osc_2_transpose",
+   "name": "Osc 2 Transpose",
+   "min": -48.0,
+   "max": 48.0,
+   "display": "int"
+  },
+  {
+   "key": "osc_2_tune",
+   "name": "Osc 2 Tune",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc_2_unison_detune",
+   "name": "Osc 2 Unison Detune",
+   "min": 0.0,
+   "max": 100.0
+  },
+  {
+   "key": "osc_2_unison_voices",
+   "name": "Osc 2 Unison Voices",
+   "min": 1.0,
+   "max": 15.0,
+   "display": "int"
+  },
+  {
+   "key": "osc_2_volume",
+   "name": "Osc 2 Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc_2_waveform",
+   "name": "Osc 2 Waveform",
+   "options": [
+    "Sine",
+    "Triangle",
+    "Square",
+    "Saw Down",
+    "Saw Up",
+    "3 Step",
+    "4 Step",
+    "8 Step",
+    "3 Pyramid",
+    "5 Pyramid",
+    "9 Pyramid"
+   ],
+   "default": 0
+  },
+  {
+   "key": "osc_feedback_amount",
+   "name": "Osc Feedback Amount",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc_feedback_transpose",
+   "name": "Osc Feedback Transpose",
+   "min": -24.0,
+   "max": 24.0,
+   "display": "int"
+  },
+  {
+   "key": "osc_feedback_tune",
+   "name": "Osc Feedback Tune",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc_mix",
+   "name": "Osc Mix",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pitch_bend_range",
+   "name": "Pitch Bend Range",
+   "min": 0.0,
+   "max": 48.0,
+   "display": "int"
+  },
+  {
+   "key": "poly_lfo_amplitude",
+   "name": "Poly LFO Amp",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "poly_lfo_frequency",
+   "name": "Poly LFO Frequency",
+   "min": -7.0,
+   "max": 6.0
+  },
+  {
+   "key": "poly_lfo_sync",
+   "name": "Poly LFO Sync",
+   "options": [
+    "Seconds",
+    "Tempo",
+    "Tempo Dotted",
+    "Tempo Triplets"
+   ],
+   "default": 0
+  },
+  {
+   "key": "poly_lfo_tempo",
+   "name": "Poly LFO Tempo",
+   "options": [
+    "32/1",
+    "16/1",
+    "8/1",
+    "4/1",
+    "2/1",
+    "1/1",
+    "1/2",
+    "1/4",
+    "1/8",
+    "1/16",
+    "1/32",
+    "1/64"
+   ],
+   "default": 0
+  },
+  {
+   "key": "poly_lfo_waveform",
+   "name": "Poly LFO Waveform",
+   "options": [
+    "Sine",
+    "Triangle",
+    "Square",
+    "Saw Up",
+    "Saw Down",
+    "3 Step",
+    "4 Step",
+    "8 Step",
+    "3 Pyramid",
+    "5 Pyramid",
+    "9 Pyramid",
+    "Sample & Hold",
+    "Sample & Glide"
+   ],
+   "default": 0
+  },
+  {
+   "key": "polyphony",
+   "name": "Polyphony",
+   "min": 1.0,
+   "max": 32.0,
+   "display": "int"
+  },
+  {
+   "key": "portamento",
+   "name": "Portamento",
+   "min": -9.0,
+   "max": -1.0
+  },
+  {
+   "key": "portamento_type",
+   "name": "Portamento Type",
+   "options": [
+    "Off",
+    "Auto",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "resonance",
+   "name": "Filter Resonance",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "reverb_damping",
+   "name": "Reverb Damping",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "reverb_dry_wet",
+   "name": "Reverb Mix",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "reverb_feedback",
+   "name": "Reverb Feedback",
+   "min": 0.8,
+   "max": 1.0
+  },
+  {
+   "key": "reverb_on",
+   "name": "Reverb Switch",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "step_frequency",
+   "name": "Step Frequency",
+   "min": -5.0,
+   "max": 6.0
+  },
+  {
+   "key": "step_seq_00",
+   "name": "Step 1",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_01",
+   "name": "Step 2",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_02",
+   "name": "Step 3",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_03",
+   "name": "Step 4",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_04",
+   "name": "Step 5",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_05",
+   "name": "Step 6",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_06",
+   "name": "Step 7",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_07",
+   "name": "Step 8",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_08",
+   "name": "Step 9",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_09",
+   "name": "Step 10",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_10",
+   "name": "Step 11",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_11",
+   "name": "Step 12",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_12",
+   "name": "Step 13",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_13",
+   "name": "Step 14",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_14",
+   "name": "Step 15",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_15",
+   "name": "Step 16",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_16",
+   "name": "Step 17",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_17",
+   "name": "Step 18",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_18",
+   "name": "Step 19",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_19",
+   "name": "Step 20",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_20",
+   "name": "Step 21",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_21",
+   "name": "Step 22",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_22",
+   "name": "Step 23",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_23",
+   "name": "Step 24",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_24",
+   "name": "Step 25",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_25",
+   "name": "Step 26",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_26",
+   "name": "Step 27",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_27",
+   "name": "Step 28",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_28",
+   "name": "Step 29",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_29",
+   "name": "Step 30",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_30",
+   "name": "Step 31",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_seq_31",
+   "name": "Step 32",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "step_sequencer_retrigger",
+   "name": "Step Retrigger",
+   "options": [
+    "Free",
+    "Retrigger",
+    "Sync to Playhead"
+   ],
+   "default": 0
+  },
+  {
+   "key": "step_sequencer_sync",
+   "name": "Step Sync",
+   "options": [
+    "Seconds",
+    "Tempo",
+    "Tempo Dotted",
+    "Tempo Triplets"
+   ],
+   "default": 0
+  },
+  {
+   "key": "step_sequencer_tempo",
+   "name": "Step Tempo",
+   "options": [
+    "32/1",
+    "16/1",
+    "8/1",
+    "4/1",
+    "2/1",
+    "1/1",
+    "1/2",
+    "1/4",
+    "1/8",
+    "1/16",
+    "1/32",
+    "1/64"
+   ],
+   "default": 0
+  },
+  {
+   "key": "step_smoothing",
+   "name": "Step Smoothing",
+   "min": 0.0,
+   "max": 0.5
+  },
+  {
+   "key": "stutter_frequency",
+   "name": "Stutter Frequency",
+   "min": 0.0,
+   "max": 7.0
+  },
+  {
+   "key": "stutter_on",
+   "name": "Stutter Switch",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "stutter_resample_frequency",
+   "name": "Resample Frequency",
+   "min": -7.0,
+   "max": 4.0
+  },
+  {
+   "key": "stutter_resample_sync",
+   "name": "Stutter Sync",
+   "options": [
+    "Seconds",
+    "Tempo",
+    "Tempo Dotted",
+    "Tempo Triplets"
+   ],
+   "default": 0
+  },
+  {
+   "key": "stutter_resample_tempo",
+   "name": "Stutter Tempo",
+   "options": [
+    "32/1",
+    "16/1",
+    "8/1",
+    "4/1",
+    "2/1",
+    "1/1",
+    "1/2",
+    "1/4",
+    "1/8",
+    "1/16",
+    "1/32",
+    "1/64"
+   ],
+   "default": 0
+  },
+  {
+   "key": "stutter_softness",
+   "name": "Stutter Softness",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "stutter_sync",
+   "name": "Stutter Sync",
+   "options": [
+    "Seconds",
+    "Tempo",
+    "Tempo Dotted",
+    "Tempo Triplets"
+   ],
+   "default": 0
+  },
+  {
+   "key": "stutter_tempo",
+   "name": "Stutter Tempo",
+   "options": [
+    "32/1",
+    "16/1",
+    "8/1",
+    "4/1",
+    "2/1",
+    "1/1",
+    "1/2",
+    "1/4",
+    "1/8",
+    "1/16",
+    "1/32",
+    "1/64"
+   ],
+   "default": 0
+  },
+  {
+   "key": "sub_octave",
+   "name": "Sub Octave Down",
+   "min": 0.0,
+   "max": 1.0,
+   "display": "int"
+  },
+  {
+   "key": "sub_shuffle",
+   "name": "Sub Osc Shuffle",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "sub_volume",
+   "name": "Sub Osc Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "sub_waveform",
+   "name": "Sub Osc Waveform",
+   "options": [
+    "Sine",
+    "Triangle",
+    "Square",
+    "Saw Down",
+    "Saw Up",
+    "3 Step",
+    "4 Step",
+    "8 Step",
+    "3 Pyramid",
+    "5 Pyramid",
+    "9 Pyramid"
+   ],
+   "default": 0
+  },
+  {
+   "key": "unison_1_harmonize",
+   "name": "Osc 1 Harmonize",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "unison_2_harmonize",
+   "name": "Osc 2 Harmonize",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "velocity_track",
+   "name": "Velocity Track",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "volume",
+   "name": "Volume",
+   "min": 0.0,
+   "max": 1.4143
+  },
+  {
+   "key": "mod_0_amount",
+   "name": "Mod 1 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_1_amount",
+   "name": "Mod 2 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_2_amount",
+   "name": "Mod 3 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_3_amount",
+   "name": "Mod 4 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_4_amount",
+   "name": "Mod 5 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_5_amount",
+   "name": "Mod 6 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_6_amount",
+   "name": "Mod 7 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_7_amount",
+   "name": "Mod 8 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_8_amount",
+   "name": "Mod 9 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_9_amount",
+   "name": "Mod 10 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_10_amount",
+   "name": "Mod 11 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_11_amount",
+   "name": "Mod 12 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_12_amount",
+   "name": "Mod 13 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_13_amount",
+   "name": "Mod 14 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_14_amount",
+   "name": "Mod 15 Amt",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_15_amount",
+   "name": "Mod 16 Amt",
+   "min": -1.0,
+   "max": 1.0
+  }
+ ],
+ "note": "from the engine's own chain_params, 2026-10-01"
+}

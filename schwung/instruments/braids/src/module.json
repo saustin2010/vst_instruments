@@ -1,0 +1,259 @@
+{
+  "id": "braids",
+  "name": "Braids",
+  "abbrev": "BR",
+  "version": "0.2.8",
+  "description": "Macro oscillator with 47 synthesis algorithms, based on Mutable Instruments Braids",
+  "author": "Emilie Gillet (port: charlesvestal)",
+  "license": "MIT",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "standalone": false,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "aftertouch": false,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "ui_hierarchy": {
+      "levels": {
+        "root": {
+          "params": [
+            {
+              "key": "engine",
+              "short_name": "ALGO",
+              "label": "Algorithm",
+              "type": "enum",
+              "options": [
+                "CSAW",
+                "MORPH",
+                "/\\-_",
+                "SINE^",
+                "BUZZ",
+                "SQR<",
+                "SAW<",
+                "SQsync",
+                "SWsync",
+                "3xSAW",
+                "3xSQR",
+                "3xTRI",
+                "3xSIN",
+                "3xRNG",
+                "SWARM",
+                "COMB",
+                "TOY",
+                "ZLPF",
+                "ZPKF",
+                "ZBPF",
+                "ZHPF",
+                "VOSIM",
+                "VOWL",
+                "V.FOF",
+                "HARM",
+                "FM",
+                "FBFM",
+                "WTFM",
+                "PLUK",
+                "BOWD",
+                "BLOW",
+                "FLUT",
+                "BELL",
+                "DRUM",
+                "KICK",
+                "CYMB",
+                "SNAR",
+                "WTBL",
+                "WMAP",
+                "WLIN",
+                "WTx4",
+                "NOIS",
+                "TWNQ",
+                "CLKN",
+                "GRN",
+                "PART",
+                "QPSK"
+              ],
+              "default": 0
+            },
+            {
+              "key": "timbre",
+              "label": "Timbre",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.5,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "color",
+              "label": "Color",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.5,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "attack",
+              "label": "Attack",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "decay",
+              "label": "Decay",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.5,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "sustain",
+              "label": "Sustain",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 1.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "release",
+              "label": "Release",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.3,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "cutoff",
+              "label": "Cutoff",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 1.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "resonance",
+              "label": "Resonance",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "filt_env",
+              "short_name": "Env",
+              "label": "Filt Env",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "fm",
+              "label": "FM",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "volume",
+              "label": "Volume",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.7,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "octave_transpose",
+              "label": "Octave",
+              "type": "int",
+              "min": -3,
+              "max": 3,
+              "default": 0
+            },
+            {
+              "key": "f_attack",
+              "short_name": "Attack",
+              "label": "F.Attack",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "f_decay",
+              "short_name": "Decay",
+              "label": "F.Decay",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.3,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "f_sustain",
+              "short_name": "Sustain",
+              "label": "F.Sustain",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "f_release",
+              "short_name": "Release",
+              "label": "F.Release",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.3,
+              "step": 0.02,
+              "unit": "%"
+            }
+          ],
+          "knobs": [
+            "engine",
+            "timbre",
+            "color",
+            "cutoff",
+            "attack",
+            "decay",
+            "sustain",
+            "release"
+          ],
+          "label": "Braids"
+        }
+      }
+    }
+  }
+}

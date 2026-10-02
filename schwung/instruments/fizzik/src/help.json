@@ -1,0 +1,123 @@
+{
+  "title": "Fizzik",
+  "children": [
+    {
+      "title": "About",
+      "lines": [
+        "Polyphonic physical-modeling synth.",
+        "A strike (exciter) rings TWO coupled",
+        "resonators per voice: String, Beam,",
+        "Plate or Membrane. Couple cross-feeds",
+        "them for emergent, living timbres.",
+        "6 voices. Press pads for aftertouch."
+      ]
+    },
+    {
+      "title": "Patch (root)",
+      "lines": [
+        "Preset: 30 sounds, click-free switch.",
+        "Rnd Patch: new random instrument.",
+        "Rnd Exc: new strike (hear next note).",
+        "Rnd Reson: new resonator pair.",
+        "Rnd All: randomize EVERYTHING (FX,",
+        "LFOs, aftertouch too; limiter safe).",
+        "Cutoff/Resonance/Type: global filter.",
+        "Menu: Voicing (12 analog filters)."
+      ]
+    },
+    {
+      "title": "Exciter",
+      "lines": [
+        "The strike. Shapes the NEXT note.",
+        "Exc Mix: noise burst vs mallet tick.",
+        "Crackle: random impulse clicks.",
+        "Color(+Reso): strike filter, dark",
+        "thud to bright snap.",
+        "Attack/Decay: burst shape, 0.2-400ms.",
+        "Long decay = bowed/scraped textures.",
+        "Vel Level/Color: velocity response."
+      ]
+    },
+    {
+      "title": "Reson A / B",
+      "lines": [
+        "Model: String (waveguide), Beam",
+        "(kalimba), Plate (bell), Membrane",
+        "(drum).",
+        "Structure: stiffness/morph/aspect.",
+        "Decay: ring time. Damp: HF decay",
+        "(modal brightness lives here).",
+        "Position: strike point (comb tone).",
+        "Tone: string brightness. Tune: +-24.",
+        "Tension: hard hits bend pitch up",
+        "(String/Beam only)."
+      ]
+    },
+    {
+      "title": "Voice",
+      "lines": [
+        "Couple: A<->B cross-feedback. THE",
+        "knob — from clean to interacting,",
+        "self-limiting, never blows up.",
+        "Balance: A vs B mix. Glide: porta.",
+        "Amp Atk/Rel: amplitude envelope.",
+        "Spread: per-note stereo. Drive:",
+        "warm saturation. Level: patch gain."
+      ]
+    },
+    {
+      "title": "FX / FX 2",
+      "lines": [
+        "FX: Reverb (mix/size/damp), stereo",
+        "ping-pong Delay (time warps like",
+        "tape), Width (M/S stereo).",
+        "FX2: Tone/Body EQ, Chorus, Glue",
+        "compressor, and the output limiter:",
+        "Lim Drive pushes loudness, Lim Ceil",
+        "is a brickwall. Default ceiling is",
+        "low for headphone safety - raise it",
+        "for more level."
+      ]
+    },
+    {
+      "title": "Mod",
+      "lines": [
+        "Two LFOs: Rate 0.05-20Hz, Depth,",
+        "Shape (Sine/Tri/Saw/Square/S&H),",
+        "Target: Cutoff, Pitch, Couple,",
+        "Balance, Tension, Tone, Reso.",
+        "Try slow sine to Couple: breathing",
+        "interaction. S&H to Pitch: broken",
+        "machine."
+      ]
+    },
+    {
+      "title": "Aftertouch",
+      "lines": [
+        "Press held pads - each note responds",
+        "to its own finger (poly AT).",
+        "AT Preset: 10 feels (Bow, Cello,",
+        "Swell, Wild...). Bright: opens tone.",
+        "Bow: pressure re-excites the note -",
+        "plucks bloom into bowed sustains.",
+        "Cutoff: opens global filter.",
+        "Vib/Bend(+Rate): pressure vibrato",
+        "and pitch. Curve: soft or hard",
+        "pressure response."
+      ]
+    },
+    {
+      "title": "Tips",
+      "lines": [
+        "Detune B +7 or +12 from A, raise",
+        "Couple: instant complexity.",
+        "AT Bow + long Amp Rel = bowing.",
+        "Ladder voicings self-oscillate at",
+        "max Resonance (bounded, safe).",
+        "Presets keep your filter/AT/FX2",
+        "setup - it is a global layer.",
+        "Rnd All never touches Lim Ceil."
+      ]
+    }
+  ]
+}

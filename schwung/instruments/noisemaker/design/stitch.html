@@ -1,0 +1,1852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noisemaker — MPC Live II Skin Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --theme-bg: #15181c;
+    --theme-panel: #1f2429;
+    --theme-line: #434c56;
+    --theme-ink: #f0f3f5;
+    --theme-ink-dim: #c3cbd2;
+    --theme-ink-faint: #76818c;
+    --theme-accent: #26a9b8;
+    --theme-accent-hi: #43d3e3;
+    --theme-knob-face: #e6ebef;
+    --theme-knob-ring: #2e353d;
+    --theme-knob-dot: #43d3e3;
+    --theme-lcd: #0b0d0f;
+    --theme-seg-active: #43d3e3;
+    --theme-seg-inactive: #2a3037;
+    --theme-seg-active-tx: #0e1114;
+    --theme-box: #1f2429;
+    --theme-display-bg: #04100f;
+    --theme-display-cell: #081c1c;
+    --theme-display-off: #0e2d2e;
+    --theme-display-ink: #4fe3f2;
+    --theme-display-bezel: #05070a;
+  }
+
+  * { box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
+  body {
+    background-color: #0c0e11;
+    color: var(--theme-ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    overflow-x: hidden;
+  }
+
+  /* Hardware Chassis Frame (Simulation of MPC Live II 1280x628 Touch Buffer) */
+  .mpc-chassis {
+    width: 1280px;
+    height: 700px;
+    background: #0f1215;
+    border-radius: 12px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 0 1px #252b33, inset 0 1px 0 rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 3px solid #1a1e24;
+  }
+
+  /* Hardware Top Bar */
+  .mpc-hardware-bar {
+    height: 40px;
+    background: linear-gradient(180deg, #181d22 0%, #111417 100%);
+    border-bottom: 2px solid #232a32;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-tag {
+    background: #1f252c;
+    color: var(--theme-accent-hi);
+    border: 1px solid #323d47;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .live-led {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--theme-accent-hi);
+    box-shadow: 0 0 8px var(--theme-accent-hi);
+    margin-right: 6px;
+  }
+
+  /* 1280 x 628 Native Touchscreen Buffer */
+  .touch-viewport {
+    width: 1280px;
+    height: 628px;
+    background-color: var(--theme-bg);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Global Navigation / Page Tabs */
+  .nav-header {
+    height: 48px;
+    background: #171c21;
+    border-bottom: 1px solid var(--theme-line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+  }
+
+  .brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    color: var(--theme-accent-hi);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand-sub {
+    font-size: 11px;
+    color: var(--theme-ink-faint);
+    letter-spacing: 0.04em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .page-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .tab-btn {
+    background: var(--theme-panel);
+    border: 1px solid var(--theme-line);
+    color: var(--theme-ink-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover {
+    color: var(--theme-ink);
+    border-color: var(--theme-accent);
+  }
+  .tab-btn.active {
+    background: var(--theme-accent);
+    color: #0b1216;
+    border-color: var(--theme-accent-hi);
+    box-shadow: 0 0 12px rgba(67, 211, 227, 0.4);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .audition-btn {
+    background: linear-gradient(180deg, #26a9b8 0%, #177884 100%);
+    color: #051417;
+    border: 1px solid #43d3e3;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 7px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(67, 211, 227, 0.35);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .audition-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 4px rgba(67, 211, 227, 0.6);
+  }
+
+  /* Main Workspace / Grid (Height 548px, leaves 32px for Q-Links Bar) */
+  .workspace {
+    flex: 1;
+    position: relative;
+    padding: 10px 12px;
+  }
+
+  .tab-page {
+    display: none;
+    height: 100%;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 260px 260px;
+    gap: 12px;
+  }
+  .tab-page.active {
+    display: grid;
+  }
+
+  /* Hardware Panels / Frames */
+  .frame-box {
+    background: var(--theme-panel);
+    border: 1px solid var(--theme-line);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 12px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  .frame-header {
+    height: 28px;
+    background: #171b1f;
+    border-bottom: 1px solid rgba(67, 76, 86, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--theme-accent-hi);
+  }
+  .frame-content {
+    flex: 1;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+  }
+
+  /* Special Digital Display (Dotmatrix & Waveform / Envelope visualizer) */
+  .dotmatrix-lcd {
+    background: var(--theme-display-bg);
+    border: 2px solid var(--theme-display-bezel);
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 0 0 1px #26a9b833;
+    border-radius: 4px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .lcd-grid-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(8, 28, 28, 0.4) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(8, 28, 28, 0.4) 1px, transparent 1px);
+    background-size: 4px 4px;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  .lcd-patch-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+  }
+  .lcd-patch-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--theme-accent);
+    font-weight: 700;
+  }
+  .lcd-patch-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--theme-display-ink);
+    text-shadow: 0 0 10px rgba(79, 227, 242, 0.6);
+  }
+  .lcd-patch-nav {
+    display: flex;
+    gap: 6px;
+    z-index: 1;
+  }
+  .lcd-step-btn {
+    background: #092124;
+    border: 1px solid #1a4d52;
+    color: var(--theme-accent-hi);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+  }
+  .lcd-step-btn:hover {
+    background: #144047;
+  }
+
+  /* Waveform Oscilloscope & Dynamic ADSR Canvas */
+  .scope-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #04100f;
+    border: 1px solid #1a4d52;
+  }
+  .scope-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .scope-label {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--theme-accent-hi);
+    background: rgba(4, 16, 15, 0.85);
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 1px solid rgba(67, 211, 227, 0.3);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* Knobs Skeuomorphism (Moog/TAL style matching spec) */
+  .knob-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: ns-resize;
+  }
+  .knob-body {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffffff 0%, var(--theme-knob-face) 55%, #bdc7ce 100%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7), inset 0 2px 3px rgba(255, 255, 255, 0.9), inset 0 -3px 4px rgba(0, 0, 0, 0.4);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--theme-knob-ring);
+    transition: transform 0.05s ease-out;
+  }
+  .knob-unit.large .knob-body {
+    width: 82px;
+    height: 82px;
+    border-width: 4px;
+  }
+  .knob-cap {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #252b31;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(255, 255, 255, 0.1);
+    position: relative;
+  }
+  .knob-unit.large .knob-cap {
+    width: 54px;
+    height: 54px;
+  }
+  .knob-indicator {
+    position: absolute;
+    width: 3px;
+    height: 16px;
+    background: var(--theme-knob-dot);
+    box-shadow: 0 0 6px var(--theme-knob-dot);
+    border-radius: 2px;
+    top: 2px;
+    left: calc(50% - 1.5px);
+    transform-origin: 50% 20px;
+    pointer-events: none;
+  }
+  .knob-unit.large .knob-indicator {
+    height: 20px;
+    transform-origin: 50% 25px;
+    top: 2px;
+  }
+  .knob-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--theme-ink-dim);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .knob-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--theme-accent-hi);
+    background: var(--theme-lcd);
+    border: 1px solid #28333c;
+    padding: 1px 6px;
+    border-radius: 2px;
+    min-width: 44px;
+    text-align: center;
+  }
+
+  /* Vertical Sliders (For Envelopes) */
+  .slider-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+    justify-content: center;
+  }
+  .slider-track {
+    width: 14px;
+    height: 130px;
+    background: #111417;
+    border-radius: 7px;
+    border: 1px solid #363e47;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+    position: relative;
+    cursor: pointer;
+  }
+  .slider-fill {
+    position: absolute;
+    bottom: 0;
+    left: 3px;
+    right: 3px;
+    background: linear-gradient(180deg, var(--theme-accent-hi) 0%, var(--theme-accent) 100%);
+    box-shadow: 0 0 8px rgba(67, 211, 227, 0.4);
+    border-radius: 4px;
+  }
+  .slider-thumb {
+    position: absolute;
+    width: 32px;
+    height: 18px;
+    background: linear-gradient(180deg, #d3dbe0 0%, #8b96a0 100%);
+    border: 1px solid #1a2026;
+    border-radius: 3px;
+    left: -9px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6), inset 0 1px 0 #fff;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slider-thumb::after {
+    content: '';
+    width: 14px;
+    height: 2px;
+    background: #25a8b7;
+    box-shadow: 0 0 4px #43d3e3;
+  }
+
+  /* Segmented Mode Selectors / Buttons */
+  .seg-control {
+    display: flex;
+    background: var(--theme-lcd);
+    border: 1px solid var(--theme-line);
+    border-radius: 4px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .seg-btn {
+    background: var(--theme-seg-inactive);
+    color: var(--theme-ink-dim);
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .seg-btn.active {
+    background: var(--theme-seg-active);
+    color: var(--theme-seg-active-tx);
+    box-shadow: 0 0 8px rgba(67, 211, 227, 0.4);
+  }
+
+  /* Hardware Toggles & Buttons */
+  .toggle-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .toggle-switch {
+    width: 58px;
+    height: 34px;
+    background: #111417;
+    border: 1px solid var(--theme-line);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--theme-ink-faint);
+    transition: all 0.15s;
+  }
+  .toggle-switch.on {
+    background: #0d282b;
+    border-color: var(--theme-accent-hi);
+    color: var(--theme-accent-hi);
+    box-shadow: 0 0 10px rgba(67, 211, 227, 0.35);
+  }
+
+  /* Dropdown Popups */
+  .popup-select {
+    background: #15191d;
+    border: 1px solid var(--theme-line);
+    color: var(--theme-ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+  }
+  .popup-select:focus {
+    border-color: var(--theme-accent-hi);
+  }
+
+  /* Bottom Q-Links Hardware Bar */
+  .qlinks-bar {
+    height: 32px;
+    background: #111417;
+    border-top: 1px solid #232a32;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--theme-ink-faint);
+  }
+  .qlinks-list {
+    display: flex;
+    gap: 16px;
+  }
+  .qlink-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .qlink-tag {
+    background: #232c35;
+    color: var(--theme-accent-hi);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-weight: 800;
+  }
+
+  /* Subtle Audio Waveform Visualizer in Main Program Frame */
+  .wave-inspect-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  /* Interactive Tooltips / Drag feedback */
+  .drag-hint {
+    font-size: 9px;
+    color: var(--theme-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+  <!-- MPC Live II Frame (1280px Native Buffer Viewport) -->
+  <div class="mpc-chassis">
+    <!-- Top System Header -->
+    <div class="mpc-hardware-bar">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span class="live-led"></span>
+        <strong style="color: #fff;">AKAI MPC LIVE II</strong>
+        <span style="color: #434c56;">|</span>
+        <span style="color: var(--theme-ink-dim);">TAL-NOISEMAKER PORT v3.2</span>
+        <span class="badge-tag">64-BIT LINUX ARM</span>
+      </div>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <span>DSP: <strong id="dsp-load" style="color: var(--theme-accent-hi);">12%</strong></span>
+        <span>RATE: <strong>48.0 kHz</strong></span>
+        <span>VOICES: <strong id="voice-count">4/8</strong></span>
+        <span style="background: #252b31; padding: 2px 6px; border-radius: 3px; color: #43d3e3;">Q-LINK BANK 1</span>
+      </div>
+    </div>
+
+    <!-- 1280 x 628 Screen Container -->
+    <div class="touch-viewport">
+      <!-- Navigation Header -->
+      <div class="nav-header">
+        <div class="brand-lockup">
+          <div class="brand-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M2 12h3l3-9 4 18 4-12 3 6h3"/>
+            </svg>
+            NOISEMAKER
+          </div>
+          <span class="brand-sub">// TAL HYBRID SYNTHESIZER</span>
+        </div>
+
+        <!-- 6 Pages Navigation -->
+        <div class="page-tabs">
+          <button class="tab-btn active" onclick="switchTab('MAIN')">1: MAIN</button>
+          <button class="tab-btn" onclick="switchTab('OSC')">2: OSC</button>
+          <button class="tab-btn" onclick="switchTab('FILTER')">3: FILTER</button>
+          <button class="tab-btn" onclick="switchTab('LFO')">4: LFO</button>
+          <button class="tab-btn" onclick="switchTab('MOD')">5: MOD</button>
+          <button class="tab-btn" onclick="switchTab('FX')">6: FX</button>
+        </div>
+
+        <div class="header-actions">
+          <button class="audition-btn" id="audition-btn" onmousedown="startAudition()" onmouseup="stopAudition()" ontouchstart="startAudition()" ontouchend="stopAudition()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            AUDITION [C3]
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Screen Contents (6 Pages) -->
+      <div class="workspace">
+
+        <!-- ================= PAGE 1: MAIN ================= -->
+        <div class="tab-page active" id="tab-MAIN">
+          <!-- PROGRAM FRAME with Real-time Oscilloscope & Patch Stepper -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>PROGRAM // PRESET SELECTION</span>
+              <span class="drag-hint">ACTIVE OSCILLOSCOPE TRACE</span>
+            </div>
+            <div class="frame-content" style="flex-direction: column; gap: 8px; justify-content: center;">
+              <!-- Dotmatrix LCD Display -->
+              <div class="dotmatrix-lcd" style="width: 100%; height: 72px;">
+                <div class="lcd-grid-pattern"></div>
+                <div class="lcd-patch-row">
+                  <span class="lcd-patch-number" id="patch-num-disp">PATCH 01/32</span>
+                  <div class="lcd-patch-nav">
+                    <button class="lcd-step-btn" onclick="stepPatch(-1)">◀ PREV</button>
+                    <button class="lcd-step-btn" onclick="stepPatch(1)">NEXT ▶</button>
+                  </div>
+                </div>
+                <div class="lcd-patch-title" id="patch-name-disp">01: TAL CYBER PLUCK</div>
+              </div>
+
+              <!-- Real-time Oscilloscope Wave Viewer (Jazzed Up!) -->
+              <div class="scope-container" style="width: 100%; height: 130px;">
+                <div class="scope-label">REAL-TIME WAVE OSCILLOSCOPE (48kHz RESAMPLED)</div>
+                <canvas id="main-scope-canvas" class="scope-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- FILTER FRAME -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>RESONANT FILTER // 24dB LADDER & SVF</span>
+              <span class="drag-hint">DRAG KNOB UP/DOWN</span>
+            </div>
+            <div class="frame-content">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">FILTER TYPE</label>
+                <select class="popup-select" id="filter-type-sel" onchange="updateFilterType(this.value)">
+                  <option value="LP24">24dB LP</option>
+                  <option value="LP12">12dB LP</option>
+                  <option value="HP24">24dB HP</option>
+                  <option value="BP12">12dB BP</option>
+                  <option value="NOTCH">NOTCH</option>
+                </select>
+              </div>
+
+              <!-- Giant Cutoff Knob -->
+              <div class="knob-unit large" data-param="cutoff" data-min="20" data-max="18000" data-val="2840" data-unit="Hz">
+                <div class="knob-body">
+                  <div class="knob-cap">
+                    <div class="knob-indicator"></div>
+                  </div>
+                </div>
+                <span class="knob-label">CUTOFF</span>
+                <span class="knob-val">2.84 kHz</span>
+              </div>
+
+              <div class="knob-unit" data-param="resonance" data-min="0" data-max="99" data-val="52" data-unit="%">
+                <div class="knob-body">
+                  <div class="knob-cap">
+                    <div class="knob-indicator"></div>
+                  </div>
+                </div>
+                <span class="knob-label">RESONANCE</span>
+                <span class="knob-val">52 %</span>
+              </div>
+
+              <div class="knob-unit" data-param="filter_env" data-min="-100" data-max="100" data-val="65" data-unit="%">
+                <div class="knob-body">
+                  <div class="knob-cap">
+                    <div class="knob-indicator"></div>
+                  </div>
+                </div>
+                <span class="knob-label">FILTER ENV</span>
+                <span class="knob-val">+65 %</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AMP ENVELOPE (Fitted with ADSR interactive curve viewer) -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>AMP ENVELOPE (ADSR)</span>
+              <span class="drag-hint">DYNAMIC CURVE VIEW</span>
+            </div>
+            <div class="frame-content" style="gap: 16px; padding: 10px 18px;">
+              <!-- Interactive Live ADSR Graphic Curve -->
+              <div class="scope-container" style="width: 180px; height: 160px; flex-shrink: 0;">
+                <div class="scope-label">AMP ADSR CURVE</div>
+                <canvas id="amp-adsr-canvas" class="scope-canvas"></canvas>
+              </div>
+
+              <!-- 4 Vertical Sliders as specified -->
+              <div class="slider-unit" data-param="aenv_a" data-val="15">
+                <div class="slider-track"><div class="slider-fill" style="height: 15%;"></div><div class="slider-thumb" style="bottom: 15%;"></div></div>
+                <span class="knob-label">ATTACK</span>
+                <span class="knob-val">12 ms</span>
+              </div>
+              <div class="slider-unit" data-param="aenv_d" data-val="45">
+                <div class="slider-track"><div class="slider-fill" style="height: 45%;"></div><div class="slider-thumb" style="bottom: 45%;"></div></div>
+                <span class="knob-label">DECAY</span>
+                <span class="knob-val">340 ms</span>
+              </div>
+              <div class="slider-unit" data-param="aenv_s" data-val="70">
+                <div class="slider-track"><div class="slider-fill" style="height: 70%;"></div><div class="slider-thumb" style="bottom: 70%;"></div></div>
+                <span class="knob-label">SUSTAIN</span>
+                <span class="knob-val">70 %</span>
+              </div>
+              <div class="slider-unit" data-param="aenv_r" data-val="35">
+                <div class="slider-track"><div class="slider-fill" style="height: 35%;"></div><div class="slider-thumb" style="bottom: 35%;"></div></div>
+                <span class="knob-label">RELEASE</span>
+                <span class="knob-val">520 ms</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VOICE / MASTER -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>VOICE & MASTER ENGINE</span>
+              <span class="drag-hint">POLYPHONIC ALLOCATION</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="volume" data-min="0" data-max="100" data-val="82" data-unit="%">
+                <div class="knob-body">
+                  <div class="knob-cap"><div class="knob-indicator"></div></div>
+                </div>
+                <span class="knob-label">VOLUME</span>
+                <span class="knob-val">82 %</span>
+              </div>
+
+              <div class="knob-unit" data-param="voices" data-min="1" data-max="8" data-val="4" data-unit="V">
+                <div class="knob-body">
+                  <div class="knob-cap"><div class="knob-indicator"></div></div>
+                </div>
+                <span class="knob-label">VOICES</span>
+                <span class="knob-val">4 V</span>
+              </div>
+
+              <div class="knob-unit" data-param="portamento" data-min="0" data-max="100" data-val="25" data-unit="ms">
+                <div class="knob-body">
+                  <div class="knob-cap"><div class="knob-indicator"></div></div>
+                </div>
+                <span class="knob-label">PORTAMENTO</span>
+                <span class="knob-val">25 ms</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <span class="knob-label">PORTA MODE</span>
+                <div class="seg-control">
+                  <button class="seg-btn" onclick="setPortaMode('OFF', this)">OFF</button>
+                  <button class="seg-btn active" onclick="setPortaMode('AUTO', this)">AUTO</button>
+                  <button class="seg-btn" onclick="setPortaMode('ON', this)">ON</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= PAGE 2: OSC ================= -->
+        <div class="tab-page" id="tab-OSC">
+          <!-- OSC 1 -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>OSCILLATOR 1 // ANALOG MODEL</span>
+              <span class="drag-hint">HARD SYNC MASTER</span>
+            </div>
+            <div class="frame-content">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <span class="knob-label">OSC1 WAVE</span>
+                <div class="seg-control">
+                  <button class="seg-btn active" onclick="setOscWave(1, 'SAW', this)">SAW</button>
+                  <button class="seg-btn" onclick="setOscWave(1, 'PULSE', this)">PULSE</button>
+                  <button class="seg-btn" onclick="setOscWave(1, 'NOISE', this)">NOISE</button>
+                </div>
+              </div>
+
+              <div class="knob-unit" data-param="osc1_tune" data-min="-24" data-max="24" data-val="0" data-unit="ST">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC1 TUNE</span>
+                <span class="knob-val">0 ST</span>
+              </div>
+
+              <div class="knob-unit" data-param="osc1_fine" data-min="-50" data-max="50" data-val="0" data-unit="ct">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC1 FINE</span>
+                <span class="knob-val">0 ct</span>
+              </div>
+
+              <div class="knob-unit" data-param="osc1_pw" data-min="0" data-max="100" data-val="50" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC1 PW</span>
+                <span class="knob-val">50 %</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- OSC 2 -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>OSCILLATOR 2 // FM & CROSS-MOD</span>
+              <span class="drag-hint">SLAVE SYNC</span>
+            </div>
+            <div class="frame-content">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">OSC2 WAVE</label>
+                <select class="popup-select" onchange="setOscWave(2, this.value)">
+                  <option value="SAW">SAW</option>
+                  <option value="PULSE">PULSE</option>
+                  <option value="TRIANGLE">TRIANGLE</option>
+                  <option value="SINE">SINE</option>
+                  <option value="NOISE">NOISE</option>
+                </select>
+              </div>
+
+              <div class="knob-unit" data-param="osc2_tune" data-min="-24" data-max="24" data-val="7" data-unit="ST">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC2 TUNE</span>
+                <span class="knob-val">+7 ST</span>
+              </div>
+
+              <div class="knob-unit" data-param="osc2_fine" data-min="-50" data-max="50" data-val="12" data-unit="ct">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC2 FINE</span>
+                <span class="knob-val">+12 ct</span>
+              </div>
+
+              <div class="knob-unit" data-param="osc2_fm" data-min="0" data-max="100" data-val="28" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC2 FM</span>
+                <span class="knob-val">28 %</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MIXER -->
+          <div class="frame-box" style="grid-column: span 4;">
+            <div class="frame-header">
+              <span>MIXER GAIN</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="osc1_vol" data-min="0" data-max="100" data-val="85" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC1 LEVEL</span>
+                <span class="knob-val">85 %</span>
+              </div>
+              <div class="knob-unit" data-param="osc2_vol" data-min="0" data-max="100" data-val="65" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC2 LEVEL</span>
+                <span class="knob-val">65 %</span>
+              </div>
+              <div class="knob-unit" data-param="osc3_vol" data-min="0" data-max="100" data-val="40" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">SUB LEVEL</span>
+                <span class="knob-val">40 %</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- OSC MOD & PHASE -->
+          <div class="frame-box" style="grid-column: span 8;">
+            <div class="frame-header">
+              <span>OSC MODULATION & SYNC</span>
+            </div>
+            <div class="frame-content">
+              <div class="toggle-unit">
+                <span class="knob-label">OSC SYNC</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')">ON</div>
+              </div>
+              <div class="knob-unit" data-param="ringmod" data-min="0" data-max="100" data-val="0" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">RING MOD</span>
+                <span class="knob-val">0 %</span>
+              </div>
+              <div class="knob-unit" data-param="osc_tune" data-min="-24" data-max="24" data-val="0" data-unit="ST">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">MASTER TUNE</span>
+                <span class="knob-val">0 ST</span>
+              </div>
+              <div class="knob-unit" data-param="osc1_phase" data-min="0" data-max="360" data-val="0" data-unit="°">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC1 PHASE</span>
+                <span class="knob-val">0°</span>
+              </div>
+              <div class="knob-unit" data-param="osc2_phase" data-min="0" data-max="360" data-val="180" data-unit="°">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">OSC2 PHASE</span>
+                <span class="knob-val">180°</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= PAGE 3: FILTER ================= -->
+        <div class="tab-page" id="tab-FILTER">
+          <!-- FILTER CHARACTER -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>FILTER RESPONSE & TRACKING</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="keyfollow" data-min="0" data-max="100" data-val="60" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">KEY TRACK</span>
+                <span class="knob-val">60 %</span>
+              </div>
+              <div class="knob-unit" data-param="filter_drive" data-min="0" data-max="100" data-val="35" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">DRIVE</span>
+                <span class="knob-val">35 %</span>
+              </div>
+              <div class="knob-unit" data-param="highpass" data-min="10" data-max="2000" data-val="120" data-unit="Hz">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">HIGH PASS</span>
+                <span class="knob-val">120 Hz</span>
+              </div>
+              <div class="knob-unit" data-param="vel_cut" data-min="0" data-max="100" data-val="45" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">VEL CUTOFF</span>
+                <span class="knob-val">45 %</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHARACTER / VINTAGE -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>ANALOG CHARACTER & WARP</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="detune" data-min="0" data-max="100" data-val="18" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">DETUNE</span>
+                <span class="knob-val">18 %</span>
+              </div>
+              <div class="knob-unit" data-param="vintage" data-min="0" data-max="100" data-val="42" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">VINTAGE</span>
+                <span class="knob-val">42 %</span>
+              </div>
+              <div class="knob-unit" data-param="bitcrush" data-min="0" data-max="16" data-val="0" data-unit="bit">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">BITCRUSH</span>
+                <span class="knob-val">OFF</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FILTER ENVELOPE (Fitted with dynamic Filter ADSR curve viewer) -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>FILTER ENVELOPE (ADSR)</span>
+              <span class="drag-hint">LIVE CUTOFF MODULATION</span>
+            </div>
+            <div class="frame-content" style="gap: 14px; padding: 10px 18px;">
+              <!-- Dynamic Filter ADSR Curve Graphic -->
+              <div class="scope-container" style="width: 180px; height: 160px; flex-shrink: 0;">
+                <div class="scope-label">FLT ADSR CURVE</div>
+                <canvas id="filter-adsr-canvas" class="scope-canvas"></canvas>
+              </div>
+
+              <!-- Sliders -->
+              <div class="slider-unit" data-param="fenv_a" data-val="20">
+                <div class="slider-track"><div class="slider-fill" style="height: 20%;"></div><div class="slider-thumb" style="bottom: 20%;"></div></div>
+                <span class="knob-label">ATTACK</span>
+                <span class="knob-val">24 ms</span>
+              </div>
+              <div class="slider-unit" data-param="fenv_d" data-val="60">
+                <div class="slider-track"><div class="slider-fill" style="height: 60%;"></div><div class="slider-thumb" style="bottom: 60%;"></div></div>
+                <span class="knob-label">DECAY</span>
+                <span class="knob-val">480 ms</span>
+              </div>
+              <div class="slider-unit" data-param="fenv_s" data-val="30">
+                <div class="slider-track"><div class="slider-fill" style="height: 30%;"></div><div class="slider-thumb" style="bottom: 30%;"></div></div>
+                <span class="knob-label">SUSTAIN</span>
+                <span class="knob-val">30 %</span>
+              </div>
+              <div class="slider-unit" data-param="fenv_r" data-val="40">
+                <div class="slider-track"><div class="slider-fill" style="height: 40%;"></div><div class="slider-thumb" style="bottom: 40%;"></div></div>
+                <span class="knob-label">RELEASE</span>
+                <span class="knob-val">600 ms</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TIME & VELOCITY -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>TIME SCALING & DYNAMICS</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="fenv_time" data-min="-50" data-max="50" data-val="0" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">FLT TIME</span>
+                <span class="knob-val">0 %</span>
+              </div>
+              <div class="knob-unit" data-param="aenv_time" data-min="-50" data-max="50" data-val="0" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">AMP TIME</span>
+                <span class="knob-val">0 %</span>
+              </div>
+              <div class="knob-unit" data-param="vel_vol" data-min="0" data-max="100" data-val="75" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">VEL VOLUME</span>
+                <span class="knob-val">75 %</span>
+              </div>
+              <div class="knob-unit" data-param="vel_env" data-min="0" data-max="100" data-val="50" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">VEL ENV</span>
+                <span class="knob-val">50 %</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= PAGE 4: LFO ================= -->
+        <div class="tab-page" id="tab-LFO">
+          <!-- LFO 1 -->
+          <div class="frame-box" style="grid-column: span 12;">
+            <div class="frame-header">
+              <span>LOW FREQUENCY OSCILLATOR 1</span>
+              <span class="drag-hint">CYCLIC MODULATION MATRIX</span>
+            </div>
+            <div class="frame-content">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">LFO1 WAVE</label>
+                <select class="popup-select">
+                  <option>TRIANGLE</option>
+                  <option>SINE</option>
+                  <option>SAW UP</option>
+                  <option>SAW DOWN</option>
+                  <option>SQUARE</option>
+                  <option>S&H NOISE</option>
+                </select>
+              </div>
+
+              <div class="knob-unit" data-param="lfo1_rate" data-min="0.1" data-max="30" data-val="4.2" data-unit="Hz">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">LFO1 RATE</span>
+                <span class="knob-val">4.2 Hz</span>
+              </div>
+
+              <div class="knob-unit" data-param="lfo1_amount" data-min="0" data-max="100" data-val="65" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">LFO1 AMOUNT</span>
+                <span class="knob-val">65 %</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">LFO1 DEST</label>
+                <select class="popup-select">
+                  <option>FILTER CUTOFF</option>
+                  <option>OSC 1 PITCH</option>
+                  <option>OSC 2 PITCH</option>
+                  <option>PULSE WIDTH</option>
+                  <option>PAN</option>
+                </select>
+              </div>
+
+              <div class="toggle-unit">
+                <span class="knob-label">LFO1 SYNC</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')">ON</div>
+              </div>
+
+              <div class="toggle-unit">
+                <span class="knob-label">KEY TRIG</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')">ON</div>
+              </div>
+
+              <div class="knob-unit" data-param="lfo1_phase" data-min="0" data-max="360" data-val="0" data-unit="°">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">LFO1 PHASE</span>
+                <span class="knob-val">0°</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- LFO 2 -->
+          <div class="frame-box" style="grid-column: span 12;">
+            <div class="frame-header">
+              <span>LOW FREQUENCY OSCILLATOR 2</span>
+            </div>
+            <div class="frame-content">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">LFO2 WAVE</label>
+                <select class="popup-select">
+                  <option>SINE</option>
+                  <option>TRIANGLE</option>
+                  <option>SQUARE</option>
+                  <option>SAMPLE & HOLD</option>
+                </select>
+              </div>
+
+              <div class="knob-unit" data-param="lfo2_rate" data-min="0.1" data-max="30" data-val="1.5" data-unit="Hz">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">LFO2 RATE</span>
+                <span class="knob-val">1.5 Hz</span>
+              </div>
+
+              <div class="knob-unit" data-param="lfo2_amount" data-min="0" data-max="100" data-val="30" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">LFO2 AMOUNT</span>
+                <span class="knob-val">30 %</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">LFO2 DEST</label>
+                <select class="popup-select">
+                  <option>VOLUME</option>
+                  <option>FILTER CUTOFF</option>
+                  <option>OSC 2 FM</option>
+                  <option>RING MOD</option>
+                </select>
+              </div>
+
+              <div class="toggle-unit">
+                <span class="knob-label">LFO2 SYNC</span>
+                <div class="toggle-switch" onclick="this.classList.toggle('on')">OFF</div>
+              </div>
+
+              <div class="toggle-unit">
+                <span class="knob-label">KEY TRIG</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')">ON</div>
+              </div>
+
+              <div class="knob-unit" data-param="lfo2_phase" data-min="0" data-max="360" data-val="90" data-unit="°">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">LFO2 PHASE</span>
+                <span class="knob-val">90°</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= PAGE 5: MOD ================= -->
+        <div class="tab-page" id="tab-MOD">
+          <!-- ENV 3 -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>ENVELOPE 3 // AUX MODULATOR</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="free_a" data-min="1" data-max="2000" data-val="80" data-unit="ms">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">ENV3 ATTACK</span>
+                <span class="knob-val">80 ms</span>
+              </div>
+              <div class="knob-unit" data-param="free_d" data-min="10" data-max="5000" data-val="650" data-unit="ms">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">ENV3 DECAY</span>
+                <span class="knob-val">650 ms</span>
+              </div>
+              <div class="knob-unit" data-param="free_amt" data-min="-100" data-max="100" data-val="50" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">ENV3 AMOUNT</span>
+                <span class="knob-val">+50 %</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">ENV3 DEST</label>
+                <select class="popup-select">
+                  <option>OSC 2 PITCH</option>
+                  <option>FILTER CUTOFF</option>
+                  <option>OSC 1 PW</option>
+                  <option>FM AMOUNT</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ENV DRAW (Warp Envelope) -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>ENVELOPE DRAW // SPLINE MODULATOR</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="env_amt" data-min="0" data-max="100" data-val="75" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">DRAW AMOUNT</span>
+                <span class="knob-val">75 %</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">DRAW SPEED</label>
+                <select class="popup-select">
+                  <option>1/4 NOTE</option>
+                  <option>1/8 NOTE</option>
+                  <option>1/16 NOTE</option>
+                  <option>1 BAR</option>
+                </select>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <label class="knob-label">DRAW DEST</label>
+                <select class="popup-select">
+                  <option>FILTER CUTOFF</option>
+                  <option>PANNING</option>
+                  <option>REVERB WET</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- WHEEL / BEND -->
+          <div class="frame-box" style="grid-column: span 3;">
+            <div class="frame-header">
+              <span>WHEEL / BEND</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="pw_cutoff" data-min="0" data-max="100" data-val="50" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">MW CUTOFF</span>
+                <span class="knob-val">50 %</span>
+              </div>
+              <div class="knob-unit" data-param="pw_pitch" data-min="1" data-max="24" data-val="2" data-unit="ST">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">BEND RANGE</span>
+                <span class="knob-val">2 ST</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHORUS (Juno style) -->
+          <div class="frame-box" style="grid-column: span 3;">
+            <div class="frame-header">
+              <span>ENSEMBLE CHORUS</span>
+            </div>
+            <div class="frame-content">
+              <div class="toggle-unit">
+                <span class="knob-label">CHORUS I</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')">ON</div>
+              </div>
+              <div class="toggle-unit">
+                <span class="knob-label">CHORUS II</span>
+                <div class="toggle-switch" onclick="this.classList.toggle('on')">OFF</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAL LOGO & GRAPHIC BADGE -->
+          <div class="frame-box" style="grid-column: span 6;">
+            <div class="frame-header">
+              <span>DSP ENGINE ARCHITECTURE</span>
+            </div>
+            <div class="frame-content" style="background: #12161a; justify-content: center; flex-direction: column; gap: 10px;">
+              <svg width="240" height="60" viewBox="0 0 240 60">
+                <rect x="2" y="2" width="236" height="56" rx="6" fill="#171e24" stroke="#26a9b8" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="120" y="32" fill="#43d3e3" font-family="JetBrains Mono" font-weight="800" font-size="16" text-anchor="middle" letter-spacing="3">TAL NOISEMAKER</text>
+                <text x="120" y="48" fill="#76818c" font-family="JetBrains Mono" font-weight="600" font-size="9" text-anchor="middle" letter-spacing="1">ZERO-DELAY FEEDBACK ENGINE</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= PAGE 6: FX ================= -->
+        <div class="tab-page" id="tab-FX">
+          <!-- REVERB -->
+          <div class="frame-box" style="grid-column: span 12;">
+            <div class="frame-header">
+              <span>PLATE REVERB DSP</span>
+              <span class="drag-hint">STEREO DIFFUSION PROCESSOR</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="reverb_wet" data-min="0" data-max="100" data-val="35" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">REVERB WET</span>
+                <span class="knob-val">35 %</span>
+              </div>
+              <div class="knob-unit" data-param="reverb_decay" data-min="0.1" data-max="10" data-val="3.4" data-unit="s">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">REV DECAY</span>
+                <span class="knob-val">3.4 s</span>
+              </div>
+              <div class="knob-unit" data-param="reverb_pre" data-min="0" data-max="200" data-val="25" data-unit="ms">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">PREDELAY</span>
+                <span class="knob-val">25 ms</span>
+              </div>
+              <div class="knob-unit" data-param="reverb_hi" data-min="1000" data-max="18000" data-val="6500" data-unit="Hz">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">REV HI CUT</span>
+                <span class="knob-val">6.5 kHz</span>
+              </div>
+              <div class="knob-unit" data-param="reverb_lo" data-min="20" data-max="800" data-val="150" data-unit="Hz">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">REV LO CUT</span>
+                <span class="knob-val">150 Hz</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DELAY -->
+          <div class="frame-box" style="grid-column: span 12;">
+            <div class="frame-header">
+              <span>STEREO CROSS-DELAY</span>
+            </div>
+            <div class="frame-content">
+              <div class="knob-unit" data-param="delay_wet" data-min="0" data-max="100" data-val="40" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">DELAY WET</span>
+                <span class="knob-val">40 %</span>
+              </div>
+              <div class="knob-unit" data-param="delay_time" data-min="10" data-max="1000" data-val="375" data-unit="ms">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">DELAY TIME</span>
+                <span class="knob-val">375 ms</span>
+              </div>
+              <div class="toggle-unit">
+                <span class="knob-label">SYNC</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')">1/8D</div>
+              </div>
+              <div class="toggle-unit">
+                <span class="knob-label">2X L</span>
+                <div class="toggle-switch" onclick="this.classList.toggle('on')">OFF</div>
+              </div>
+              <div class="toggle-unit">
+                <span class="knob-label">2X R</span>
+                <div class="toggle-switch on" onclick="this.classList.toggle('on')">ON</div>
+              </div>
+              <div class="knob-unit" data-param="delay_fb" data-min="0" data-max="99" data-val="55" data-unit="%">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">DLY FEEDBACK</span>
+                <span class="knob-val">55 %</span>
+              </div>
+              <div class="knob-unit" data-param="delay_hi" data-min="1000" data-max="18000" data-val="4200" data-unit="Hz">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">DLY HI CUT</span>
+                <span class="knob-val">4.2 kHz</span>
+              </div>
+              <div class="knob-unit" data-param="delay_lo" data-min="20" data-max="800" data-val="100" data-unit="Hz">
+                <div class="knob-body"><div class="knob-cap"><div class="knob-indicator"></div></div></div>
+                <span class="knob-label">DLY LO CUT</span>
+                <span class="knob-val">100 Hz</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom MPC Q-Link Encoder Hardware Strip -->
+      <div class="qlinks-bar">
+        <div class="qlinks-list" id="qlink-display">
+          <div class="qlink-item"><span class="qlink-tag">Q1</span> <span id="ql1">PATCH PRESET</span></div>
+          <div class="qlink-item"><span class="qlink-tag">Q2</span> <span id="ql2">FILTER TYPE</span></div>
+          <div class="qlink-item"><span class="qlink-tag">Q3</span> <span id="ql3">CUTOFF FREQ</span></div>
+          <div class="qlink-item"><span class="qlink-tag">Q4</span> <span id="ql4">RESONANCE</span></div>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <span>TOUCH ENGINE: <strong style="color: var(--theme-accent-hi);">120Hz EVDEV</strong></span>
+          <span style="color: #434c56;">|</span>
+          <span>LINUX FB: <strong style="color: #fff;">1280x628 RGB565</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Presets
+  const presets = [
+    "01: TAL CYBER PLUCK",
+    "02: BLADERUNNER BRASS",
+    "03: ACID DEVIL SAW",
+    "04: DUSK REESE BASS",
+    "05: RETRO SYNTHWAVE LEAD",
+    "06: GLASS BELL VOICES",
+    "07: ANALOG JUPITER STRINGS",
+    "08: DETUNED HARDSTYLE 90s"
+  ];
+  let currentPresetIdx = 0;
+
+  function stepPatch(delta) {
+    currentPresetIdx = (currentPresetIdx + delta + presets.length) % presets.length;
+    document.getElementById('patch-name-disp').textContent = presets[currentPresetIdx];
+    document.getElementById('patch-num-disp').textContent = `PATCH 0${currentPresetIdx + 1}/32`;
+    updateFilterCutoffWobble();
+  }
+
+  // Q-Link bank names per page
+  const qlinkMaps = {
+    'MAIN': ['PATCH PRESET', 'FILTER TYPE', 'CUTOFF FREQ', 'RESONANCE'],
+    'OSC': ['OSC1 WAVE', 'OSC1 TUNE', 'OSC2 TUNE', 'OSC2 FM'],
+    'FILTER': ['KEY TRACK', 'DRIVE', 'DETUNE', 'VINTAGE'],
+    'LFO': ['LFO1 WAVE', 'LFO1 RATE', 'LFO1 AMOUNT', 'LFO1 DEST'],
+    'MOD': ['ENV3 ATTACK', 'ENV3 DECAY', 'ENV DRAW AMT', 'CHORUS I'],
+    'FX': ['REVERB WET', 'REV DECAY', 'DELAY WET', 'DLY FEEDBACK']
+  };
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    
+    // Find matching button & page
+    const btns = Array.from(document.querySelectorAll('.tab-btn'));
+    const matchedBtn = btns.find(b => b.textContent.includes(tabId));
+    if (matchedBtn) matchedBtn.classList.add('active');
+
+    const targetPage = document.getElementById(`tab-${tabId}`);
+    if (targetPage) targetPage.classList.add('active');
+
+    // Update Q-Link bar
+    const links = qlinkMaps[tabId] || qlinkMaps['MAIN'];
+    document.getElementById('ql1').textContent = links[0];
+    document.getElementById('ql2').textContent = links[1];
+    document.getElementById('ql3').textContent = links[2];
+    document.getElementById('ql4').textContent = links[3];
+
+    // Trigger curve redraws if newly visible
+    drawAmpADSR();
+    drawFilterADSR();
+  }
+
+  // Knob Rotation & Parameter Interaction
+  let activeKnob = null;
+  let startY = 0;
+  let startVal = 0;
+
+  document.querySelectorAll('.knob-unit').forEach(knob => {
+    // Initial angle setup
+    const min = parseFloat(knob.dataset.min || 0);
+    const max = parseFloat(knob.dataset.max || 100);
+    const val = parseFloat(knob.dataset.val || 50);
+    applyKnobAngle(knob, val, min, max);
+
+    knob.addEventListener('mousedown', e => {
+      activeKnob = knob;
+      startY = e.clientY;
+      startVal = parseFloat(knob.dataset.val);
+      document.body.style.cursor = 'ns-resize';
+      e.preventDefault();
+    });
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!activeKnob) return;
+    const min = parseFloat(activeKnob.dataset.min || 0);
+    const max = parseFloat(activeKnob.dataset.max || 100);
+    const range = max - min;
+    const dy = startY - e.clientY;
+    const delta = (dy / 150) * range;
+    let newVal = Math.min(max, Math.max(min, startVal + delta));
+    
+    if (activeKnob.dataset.unit === 'Hz' && max > 1000) {
+      newVal = Math.round(newVal / 10) * 10;
+    } else if (range <= 10) {
+      newVal = Math.round(newVal * 10) / 10;
+    } else {
+      newVal = Math.round(newVal);
+    }
+    
+    activeKnob.dataset.val = newVal;
+    applyKnobAngle(activeKnob, newVal, min, max);
+
+    // Format text
+    const disp = activeKnob.querySelector('.knob-val');
+    const unit = activeKnob.dataset.unit || '';
+    if (unit === 'Hz' && newVal >= 1000) {
+      disp.textContent = `${(newVal / 1000).toFixed(2)} kHz`;
+    } else if (newVal > 0 && (activeKnob.dataset.param === 'filter_env' || activeKnob.dataset.param.includes('tune') || activeKnob.dataset.param.includes('fine'))) {
+      disp.textContent = `+${newVal} ${unit}`;
+    } else {
+      disp.textContent = `${newVal} ${unit}`;
+    }
+
+    if (activeKnob.dataset.param === 'cutoff' && audioFilter) {
+      audioFilter.frequency.setTargetAtTime(newVal, audioCtx.currentTime, 0.03);
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    activeKnob = null;
+    document.body.style.cursor = 'default';
+  });
+
+  function applyKnobAngle(knobEl, val, min, max) {
+    const fraction = (val - min) / (max - min);
+    const angle = -140 + fraction * 280; // -140 deg to +140 deg
+    const ind = knobEl.querySelector('.knob-indicator');
+    if (ind) ind.style.transform = `rotate(${angle}deg)`;
+  }
+
+  // Vertical Slider Drags
+  let activeSlider = null;
+  document.querySelectorAll('.slider-unit').forEach(unit => {
+    const track = unit.querySelector('.slider-track');
+    track.addEventListener('mousedown', e => {
+      activeSlider = unit;
+      updateSliderPos(e);
+      e.preventDefault();
+    });
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!activeSlider) return;
+    updateSliderPos(e);
+  });
+
+  window.addEventListener('mouseup', () => {
+    activeSlider = null;
+  });
+
+  function updateSliderPos(e) {
+    const track = activeSlider.querySelector('.slider-track');
+    const rect = track.getBoundingClientRect();
+    let fraction = (rect.bottom - e.clientY) / rect.height;
+    fraction = Math.max(0, Math.min(1, fraction));
+    const pct = Math.round(fraction * 100);
+
+    activeSlider.dataset.val = pct;
+    track.querySelector('.slider-fill').style.height = `${pct}%`;
+    track.querySelector('.slider-thumb').style.bottom = `${pct}%`;
+
+    const disp = activeSlider.querySelector('.knob-val');
+    const param = activeSlider.dataset.param;
+    if (param.includes('_a') || param.includes('_d') || param.includes('_r')) {
+      const ms = Math.round(fraction * 1200);
+      disp.textContent = `${ms} ms`;
+    } else {
+      disp.textContent = `${pct} %`;
+    }
+
+    // Refresh ADSR curves
+    drawAmpADSR();
+    drawFilterADSR();
+  }
+
+  // Segment Buttons
+  function setPortaMode(mode, btn) {
+    btn.parentElement.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function setOscWave(oscNum, wave, btn) {
+    if (btn) {
+      btn.parentElement.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  }
+
+  function updateFilterType(type) {
+    if (audioFilter) {
+      if (type.startsWith('LP')) audioFilter.type = 'lowpass';
+      else if (type.startsWith('HP')) audioFilter.type = 'highpass';
+      else if (type.startsWith('BP')) audioFilter.type = 'bandpass';
+      else if (type.startsWith('NOTCH')) audioFilter.type = 'notch';
+    }
+  }
+
+  // ================= WAVE VIEWER / OSCILLOSCOPE =================
+  const mainScopeCanvas = document.getElementById('main-scope-canvas');
+  const mainScopeCtx = mainScopeCanvas.getContext('2d');
+  let scopePhase = 0;
+
+  function resizeScope() {
+    mainScopeCanvas.width = mainScopeCanvas.clientWidth * window.devicePixelRatio;
+    mainScopeCanvas.height = mainScopeCanvas.clientHeight * window.devicePixelRatio;
+  }
+  window.addEventListener('resize', resizeScope);
+  resizeScope();
+
+  function renderOscilloscope() {
+    const w = mainScopeCanvas.width;
+    const h = mainScopeCanvas.height;
+    if (!w || !h) return requestAnimationFrame(renderOscilloscope);
+
+    mainScopeCtx.fillStyle = '#04100f';
+    mainScopeCtx.fillRect(0, 0, w, h);
+
+    // Subtle background grid
+    mainScopeCtx.strokeStyle = 'rgba(8, 38, 38, 0.5)';
+    mainScopeCtx.lineWidth = 1;
+    const gridCols = 8;
+    const gridRows = 4;
+    for (let c = 0; c <= gridCols; c++) {
+      const gx = (w / gridCols) * c;
+      mainScopeCtx.beginPath();
+      mainScopeCtx.moveTo(gx, 0);
+      mainScopeCtx.lineTo(gx, h);
+      mainScopeCtx.stroke();
+    }
+    for (let r = 0; r <= gridRows; r++) {
+      const gy = (h / gridRows) * r;
+      mainScopeCtx.beginPath();
+      mainScopeCtx.moveTo(0, gy);
+      mainScopeCtx.lineTo(w, gy);
+      mainScopeCtx.stroke();
+    }
+
+    // Dynamic Waveform Synthesis
+    mainScopeCtx.beginPath();
+    mainScopeCtx.lineWidth = 2.5 * window.devicePixelRatio;
+    mainScopeCtx.strokeStyle = '#43d3e3';
+    mainScopeCtx.shadowColor = '#4fe3f2';
+    mainScopeCtx.shadowBlur = 10;
+
+    const midY = h / 2;
+    const amp = h * 0.35;
+    const points = 160;
+    
+    // Wave parameters influenced by synth state
+    const isPlaying = !!audioOsc;
+    const baseFreq = isPlaying ? 3 : 2;
+    scopePhase += isPlaying ? 0.08 : 0.03;
+
+    for (let i = 0; i <= points; i++) {
+      const x = (w / points) * i;
+      const t = (i / points) * Math.PI * 2 * baseFreq + scopePhase;
+      // Morph between saw, pulse, and sine with harmonic harmonics
+      let yVal = Math.sin(t) * 0.7 + Math.sin(t * 2) * 0.25 + Math.sin(t * 3) * 0.1;
+      if (isPlaying) {
+        // Add subtle harmonic drive jitter
+        yVal = Math.tanh(yVal * 1.5);
+      }
+      const y = midY - yVal * amp;
+
+      if (i === 0) mainScopeCtx.moveTo(x, y);
+      else mainScopeCtx.lineTo(x, y);
+    }
+    mainScopeCtx.stroke();
+    mainScopeCtx.shadowBlur = 0; // reset
+
+    requestAnimationFrame(renderOscilloscope);
+  }
+  requestAnimationFrame(renderOscilloscope);
+
+  // ================= ADSR ENVELOPE CURVE RENDERERS =================
+  function drawAmpADSR() {
+    const canvas = document.getElementById('amp-adsr-canvas');
+    if (!canvas) return;
+    canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.fillStyle = '#04100f';
+    ctx.fillRect(0, 0, w, h);
+
+    // Read slider values
+    const aVal = parseFloat(document.querySelector('.slider-unit[data-param="aenv_a"]')?.dataset.val || 20);
+    const dVal = parseFloat(document.querySelector('.slider-unit[data-param="aenv_d"]')?.dataset.val || 50);
+    const sVal = parseFloat(document.querySelector('.slider-unit[data-param="aenv_s"]')?.dataset.val || 70);
+    const rVal = parseFloat(document.querySelector('.slider-unit[data-param="aenv_r"]')?.dataset.val || 40);
+
+    renderCurve(ctx, w, h, aVal, dVal, sVal, rVal, '#43d3e3', 'rgba(67, 211, 227, 0.2)');
+  }
+
+  function drawFilterADSR() {
+    const canvas = document.getElementById('filter-adsr-canvas');
+    if (!canvas) return;
+    canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.fillStyle = '#04100f';
+    ctx.fillRect(0, 0, w, h);
+
+    const aVal = parseFloat(document.querySelector('.slider-unit[data-param="fenv_a"]')?.dataset.val || 25);
+    const dVal = parseFloat(document.querySelector('.slider-unit[data-param="fenv_d"]')?.dataset.val || 60);
+    const sVal = parseFloat(document.querySelector('.slider-unit[data-param="fenv_s"]')?.dataset.val || 30);
+    const rVal = parseFloat(document.querySelector('.slider-unit[data-param="fenv_r"]')?.dataset.val || 40);
+
+    renderCurve(ctx, w, h, aVal, dVal, sVal, rVal, '#26a9b8', 'rgba(38, 169, 184, 0.2)');
+  }
+
+  function renderCurve(ctx, w, h, a, d, s, r, strokeColor, fillColor) {
+    const pad = 12 * window.devicePixelRatio;
+    const drawW = w - pad * 2;
+    const drawH = h - pad * 2;
+
+    const totalTimeWeight = Math.max(20, a + d + 30 + r);
+    const aW = (a / totalTimeWeight) * drawW;
+    const dW = (d / totalTimeWeight) * drawW;
+    const sW = (30 / totalTimeWeight) * drawW;
+    const rW = (r / totalTimeWeight) * drawW;
+
+    const sLevel = 1.0 - (s / 100); // 0 is top, 1 is bottom
+
+    const p0 = { x: pad, y: h - pad };
+    const p1 = { x: pad + aW, y: pad };
+    const p2 = { x: pad + aW + dW, y: pad + sLevel * drawH };
+    const p3 = { x: pad + aW + dW + sW, y: pad + sLevel * drawH };
+    const p4 = { x: pad + aW + dW + sW + rW, y: h - pad };
+
+    // Fill polygon under curve
+    ctx.beginPath();
+    ctx.moveTo(p0.x, p0.y);
+    ctx.lineTo(p1.x, p1.y);
+    ctx.quadraticCurveTo(p1.x + dW * 0.4, p2.y, p2.x, p2.y);
+    ctx.lineTo(p3.x, p3.y);
+    ctx.quadraticCurveTo(p3.x + rW * 0.3, p4.y, p4.x, p4.y);
+    ctx.lineTo(p0.x, p0.y);
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+
+    // Draw main stroke curve
+    ctx.beginPath();
+    ctx.lineWidth = 2.5 * window.devicePixelRatio;
+    ctx.strokeStyle = strokeColor;
+    ctx.shadowColor = strokeColor;
+    ctx.shadowBlur = 8;
+    ctx.moveTo(p0.x, p0.y);
+    ctx.lineTo(p1.x, p1.y);
+    ctx.quadraticCurveTo(p1.x + dW * 0.4, p2.y, p2.x, p2.y);
+    ctx.lineTo(p3.x, p3.y);
+    ctx.quadraticCurveTo(p3.x + rW * 0.3, p4.y, p4.x, p4.y);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Draw node dots
+    ctx.fillStyle = '#ffffff';
+    [p1, p2, p3].forEach(pt => {
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 3 * window.devicePixelRatio, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  setTimeout(() => {
+    drawAmpADSR();
+    drawFilterADSR();
+  }, 100);
+
+  // ================= WEB AUDIO API AUDITION ENGINE =================
+  let audioCtx = null;
+  let audioOsc = null;
+  let audioFilter = null;
+  let audioGain = null;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+
+  function startAudition() {
+    initAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    if (audioOsc) stopAudition();
+
+    const cutoffVal = parseFloat(document.querySelector('.knob-unit[data-param="cutoff"]')?.dataset.val || 2840);
+    const resoVal = parseFloat(document.querySelector('.knob-unit[data-param="resonance"]')?.dataset.val || 50);
+
+    // Oscillator
+    audioOsc = audioCtx.createOscillator();
+    audioOsc.type = 'sawtooth';
+    audioOsc.frequency.setValueAtTime(130.81, audioCtx.currentTime); // C3
+
+    // Filter
+    audioFilter = audioCtx.createBiquadFilter();
+    audioFilter.type = 'lowpass';
+    audioFilter.frequency.setValueAtTime(cutoffVal, audioCtx.currentTime);
+    audioFilter.Q.setValueAtTime((resoVal / 100) * 15, audioCtx.currentTime);
+
+    // VCA Gain
+    audioGain = audioCtx.createGain();
+    audioGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    audioGain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.04);
+
+    audioOsc.connect(audioFilter);
+    audioFilter.connect(audioGain);
+    audioGain.connect(audioCtx.destination);
+
+    audioOsc.start();
+    document.getElementById('audition-btn').style.background = '#43d3e3';
+    document.getElementById('audition-btn').style.color = '#0e1114';
+  }
+
+  function stopAudition() {
+    if (!audioGain) return;
+    audioGain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.15);
+    setTimeout(() => {
+      if (audioOsc) {
+        audioOsc.stop();
+        audioOsc.disconnect();
+        audioOsc = null;
+      }
+    }, 160);
+    document.getElementById('audition-btn').style.background = '';
+    document.getElementById('audition-btn').style.color = '';
+  }
+
+  // Keyboard shortcut Space to test audition
+  window.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !e.repeat && e.target.tagName !== 'INPUT') {
+      startAudition();
+      e.preventDefault();
+    }
+  });
+  window.addEventListener('keyup', e => {
+    if (e.code === 'Space') {
+      stopAudition();
+    }
+  });
+
+  function updateFilterCutoffWobble() {
+    // Subtle visual animation on patch change
+    const cutoff = document.querySelector('.knob-unit[data-param="cutoff"]');
+    if (cutoff) {
+      const presetsCut = [2840, 1450, 4200, 890, 3600, 1900, 2200, 5600];
+      const val = presetsCut[currentPresetIdx % presetsCut.length];
+      cutoff.dataset.val = val;
+      applyKnobAngle(cutoff, val, 20, 18000);
+      cutoff.querySelector('.knob-val').textContent = `${(val / 1000).toFixed(2)} kHz`;
+    }
+  }
+</script>
+</body>
+</html>

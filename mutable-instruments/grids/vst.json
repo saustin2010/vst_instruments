@@ -1,0 +1,25 @@
+{
+  "name": "Grids",
+  "vendor": "Mutable Instruments",
+  "uid": "MIgr",
+  "so": "grids.so",
+  "category": "Sequencer",
+  "build": {
+    "sources": [
+      "src/grids_fx.c",
+      "mpc/schwung_midi_fx.c"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Impc/host",
+      "-Isrc"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

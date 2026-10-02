@@ -1,0 +1,709 @@
+{
+ "name": "OB-Xd",
+ "params": [
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0,
+   "max": 100,
+   "default": 100,
+   "display": "int"
+  },
+  {
+   "key": "tune",
+   "name": "TUNE",
+   "min": 0,
+   "max": 100,
+   "default": 50,
+   "display": "int"
+  },
+  {
+   "key": "voice_count",
+   "name": "VOICES",
+   "min": 1,
+   "max": 8,
+   "default": 6,
+   "display": "int"
+  },
+  {
+   "key": "legato",
+   "name": "LEGATO",
+   "options": [
+    "RETRIG",
+    "LEG-1",
+    "LEG-2",
+    "KEEP"
+   ],
+   "default": 0
+  },
+  {
+   "key": "as_played",
+   "name": "AS PLAYED",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "unison",
+   "name": "UNISON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "unison_det",
+   "name": "SPREAD",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "portamento",
+   "name": "PORTAMENTO",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "bend_range",
+   "name": "BEND 12",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "bend_osc2",
+   "name": "BEND OSC2",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_rate",
+   "name": "LFO RATE",
+   "min": 0,
+   "max": 100,
+   "default": 30,
+   "display": "int"
+  },
+  {
+   "key": "lfo_sin",
+   "name": "LFO SINE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_square",
+   "name": "LFO SQUARE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_sh",
+   "name": "LFO S&H",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_sync",
+   "name": "LFO SYNC",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_amt1",
+   "name": "MOD AMOUNT",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "lfo_osc1",
+   "name": "MOD OSC1",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_osc2",
+   "name": "MOD OSC2",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_filter",
+   "name": "MOD FILTER",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_amt2",
+   "name": "PWM AMOUNT",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "lfo_pw1",
+   "name": "PWM OSC1",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_pw2",
+   "name": "PWM OSC2",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "osc1_pitch",
+   "name": "OSC1 PITCH",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "osc1_saw",
+   "name": "OSC1 SAW",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "osc1_pulse",
+   "name": "OSC1 PULSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "osc2_pitch",
+   "name": "OSC2 PITCH",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "osc2_saw",
+   "name": "OSC2 SAW",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "osc2_pulse",
+   "name": "OSC2 PULSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "osc2_detune",
+   "name": "OSC2 DETUNE",
+   "min": 0,
+   "max": 100,
+   "default": 10,
+   "display": "int"
+  },
+  {
+   "key": "osc2_sync",
+   "name": "OSC2 SYNC",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "pw_ofs",
+   "name": "PW OFFSET",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "pw",
+   "name": "PULSE WIDTH",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "pw_env",
+   "name": "PW ENV",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "pw_env_both",
+   "name": "PW ENV BOTH",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "xmod",
+   "name": "X-MOD",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "brightness",
+   "name": "BRIGHTNESS",
+   "min": 0,
+   "max": 100,
+   "default": 50,
+   "display": "int"
+  },
+  {
+   "key": "osc_quantize",
+   "name": "OSC2 STEP",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "env_pitch",
+   "name": "PITCH ENV",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "env_pitch_both",
+   "name": "P.ENV BOTH",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "osc1_mix",
+   "name": "OSC1 LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 50,
+   "display": "int"
+  },
+  {
+   "key": "osc2_mix",
+   "name": "OSC2 LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 50,
+   "display": "int"
+  },
+  {
+   "key": "noise",
+   "name": "NOISE",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "cutoff",
+   "name": "CUTOFF",
+   "min": 0,
+   "max": 100,
+   "default": 70,
+   "display": "int"
+  },
+  {
+   "key": "resonance",
+   "name": "RESONANCE",
+   "min": 0,
+   "max": 100,
+   "default": 20,
+   "display": "int"
+  },
+  {
+   "key": "filter_env",
+   "name": "ENV AMOUNT",
+   "min": 0,
+   "max": 100,
+   "default": 30,
+   "display": "int"
+  },
+  {
+   "key": "key_follow",
+   "name": "KEY TRACK",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "multimode",
+   "name": "MULTIMODE",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "bandpass",
+   "name": "BANDPASS",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "fourpole",
+   "name": "24 dB",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "self_osc",
+   "name": "SELF OSC",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "fenv_inv",
+   "name": "ENV INVERT",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "attack",
+   "name": "AMP ATTACK",
+   "min": 0,
+   "max": 100,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "decay",
+   "name": "AMP DECAY",
+   "min": 0,
+   "max": 100,
+   "default": 30,
+   "display": "int"
+  },
+  {
+   "key": "sustain",
+   "name": "AMP SUSTAIN",
+   "min": 0,
+   "max": 100,
+   "default": 70,
+   "display": "int"
+  },
+  {
+   "key": "release",
+   "name": "AMP RELEASE",
+   "min": 0,
+   "max": 100,
+   "default": 20,
+   "display": "int"
+  },
+  {
+   "key": "vel_amp",
+   "name": "AMP VEL",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "f_attack",
+   "name": "FLT ATTACK",
+   "min": 0,
+   "max": 100,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "f_decay",
+   "name": "FLT DECAY",
+   "min": 0,
+   "max": 100,
+   "default": 30,
+   "display": "int"
+  },
+  {
+   "key": "f_sustain",
+   "name": "FLT SUSTAIN",
+   "min": 0,
+   "max": 100,
+   "default": 30,
+   "display": "int"
+  },
+  {
+   "key": "f_release",
+   "name": "FLT RELEASE",
+   "min": 0,
+   "max": 100,
+   "default": 20,
+   "display": "int"
+  },
+  {
+   "key": "vel_filter",
+   "name": "FLT VEL",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "vibrato",
+   "name": "VIBRATO",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "filter_var",
+   "name": "FILTER VAR",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "porta_var",
+   "name": "GLIDE VAR",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "env_var",
+   "name": "ENV VAR",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "level_var",
+   "name": "LEVEL VAR",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "preset",
+   "name": "PATCH",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "PATCH NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ],
+ "sections": [
+  {
+   "label": "PATCH",
+   "keys": [
+    "preset",
+    "preset_prev",
+    "preset_next",
+    "preset_name"
+   ]
+  },
+  {
+   "label": "GLOBAL",
+   "keys": [
+    "volume",
+    "tune",
+    "voice_count",
+    "legato",
+    "as_played",
+    "unison",
+    "unison_det"
+   ]
+  },
+  {
+   "label": "CONTROL",
+   "keys": [
+    "portamento",
+    "bend_range",
+    "bend_osc2"
+   ]
+  },
+  {
+   "label": "MODULATION",
+   "keys": [
+    "lfo_rate",
+    "lfo_sin",
+    "lfo_square",
+    "lfo_sh",
+    "lfo_sync",
+    "lfo_amt1",
+    "lfo_osc1",
+    "lfo_osc2",
+    "lfo_filter",
+    "lfo_amt2",
+    "lfo_pw1",
+    "lfo_pw2"
+   ]
+  },
+  {
+   "label": "OSCILLATORS",
+   "keys": [
+    "osc1_pitch",
+    "osc1_saw",
+    "osc1_pulse",
+    "osc2_pitch",
+    "osc2_saw",
+    "osc2_pulse",
+    "osc2_detune",
+    "osc2_sync",
+    "pw_ofs",
+    "pw",
+    "pw_env",
+    "pw_env_both",
+    "xmod",
+    "brightness",
+    "osc_quantize",
+    "env_pitch",
+    "env_pitch_both"
+   ]
+  },
+  {
+   "label": "MIXER",
+   "keys": [
+    "osc1_mix",
+    "osc2_mix",
+    "noise"
+   ]
+  },
+  {
+   "label": "FILTER",
+   "keys": [
+    "cutoff",
+    "resonance",
+    "filter_env",
+    "key_follow",
+    "multimode",
+    "bandpass",
+    "fourpole",
+    "self_osc",
+    "fenv_inv"
+   ]
+  },
+  {
+   "label": "ENVELOPES",
+   "keys": [
+    "attack",
+    "decay",
+    "sustain",
+    "release",
+    "vel_amp",
+    "f_attack",
+    "f_decay",
+    "f_sustain",
+    "f_release",
+    "vel_filter"
+   ]
+  },
+  {
+   "label": "VOICE VARIATION",
+   "keys": [
+    "vibrato",
+    "filter_var",
+    "porta_var",
+    "env_var",
+    "level_var"
+   ]
+  }
+ ]
+}

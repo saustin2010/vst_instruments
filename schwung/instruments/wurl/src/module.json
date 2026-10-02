@@ -1,0 +1,28 @@
+{
+  "id": "wurl",
+  "name": "Wurl",
+  "version": "0.1.1",
+  "api_version": 2,
+  "description": "Physically-modeled Wurlitzer 200A electric piano",
+  "author": "fillioning (port of OpenWurli by hal0zer0)",
+  "abbrev": "WURL",
+  "dsp": "dsp.so",
+  "component_type": "sound_generator",
+  "raw_midi": true,
+  "capabilities": {
+    "audio_out": true,
+    "midi_in": true,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "ui_hierarchy": {
+      "modes": null,
+      "levels": {
+        "root": {
+          "name": "Wurl",
+          "knobs": ["volume","tremolo","attack","decay","brightness","darken","bark","reverb"],
+          "params": ["volume","tremolo","attack","decay","brightness","darken","bark","reverb","speaker","tune","preset"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PROPERTIES>
+  <VALUE name="exampleSetting" val="1"/>
+  <VALUE name="pluginList-arm">
+    <KNOWNPLUGINS>
+      <PLUGIN name="Someone Else" descriptiveName="Someone Else" format="VST" category="Synth" manufacturer="Other"
+              version="1.0" file="/sdcard/vst/other.so" uid="1" isInstrument="1"/>
+    </KNOWNPLUGINS>
+  </VALUE>
+  <VALUE name="anotherSetting" val="2"/>
+</PROPERTIES>

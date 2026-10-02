@@ -1,0 +1,22 @@
+{
+  "name": "Chordism",
+  "vendor": "Charles Vestal",
+  "uid": "Chdm",
+  "so": "chordism.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/chordism_plugin.cpp"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-std=c++14"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

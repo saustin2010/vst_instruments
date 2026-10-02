@@ -1,0 +1,27 @@
+{
+  "name": "Libpo32",
+  "vendor": "mestela",
+  "uid": "Po32",
+  "so": "libpo32.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/po32.c",
+      "src/dsp/po32_drum.c",
+      "src/dsp/po32_patch_import.c",
+      "src/dsp/po32_synth.c"
+    ],
+    "cflags": [
+      "-Isrc/dsp"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "MODULE_DIR": "\"/sdcard/vst/libpo32\""
+  }
+}

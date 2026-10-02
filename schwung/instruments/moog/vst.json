@@ -1,0 +1,24 @@
+{
+  "name": "Moog",
+  "vendor": "Raffo",
+  "uid": "Moog",
+  "so": "moog.so",
+  "module": "src/module.json",
+  "params": "params.json",
+  "build": {
+    "sources": [
+      "src/dsp/moog_plugin.cpp",
+      "src/dsp/moog_engine.c"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-std=gnu++14"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "layout": "layout.conf",
+  "programs": {"param": "preset", "name": "preset_name"},
+  "art": "html"
+}

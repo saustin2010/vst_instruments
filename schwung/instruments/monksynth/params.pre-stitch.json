@@ -1,0 +1,241 @@
+{
+ "name": "MonkSynth",
+ "params": [
+  {
+   "key": "face",
+   "name": "CHARACTER",
+   "short_name": "Char",
+   "min": 0,
+   "max": 11,
+   "step": 1,
+   "default": 0,
+   "show_value": false
+  },
+  {
+   "key": "vowel",
+   "name": "VOWEL",
+   "short_name": "Vow",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5,
+   "live": true,
+   "viz": {
+    "kind": "custom:monkmouth",
+    "extra_keys": [
+     "face"
+    ]
+   },
+   "card_script": "cards.js#vowel_card",
+   "card_w": 104,
+   "card_h": 46
+  },
+  {
+   "key": "head_size",
+   "name": "HEAD SIZE",
+   "short_name": "Head",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5
+  },
+  {
+   "key": "aspiration",
+   "name": "BREATH",
+   "short_name": "Brth",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5
+  },
+  {
+   "key": "glide",
+   "name": "GLIDE",
+   "short_name": "Gld",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5
+  },
+  {
+   "key": "vibrato",
+   "name": "VIBRATO",
+   "short_name": "Vib",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0
+  },
+  {
+   "key": "delay",
+   "name": "DELAY",
+   "short_name": "Dly",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.8
+  },
+  {
+   "key": "level",
+   "name": "LEVEL",
+   "short_name": "Lvl",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 1
+  },
+  {
+   "key": "vibrato_rate",
+   "name": "VIBRATO RATE",
+   "short_name": "VbRt",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5
+  },
+  {
+   "key": "attack",
+   "name": "ATTACK",
+   "short_name": "Atk",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0
+  },
+  {
+   "key": "decay",
+   "name": "DECAY",
+   "short_name": "Dec",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0
+  },
+  {
+   "key": "sustain",
+   "name": "SUSTAIN",
+   "short_name": "Sus",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 1
+  },
+  {
+   "key": "release",
+   "name": "RELEASE",
+   "short_name": "Rel",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0
+  },
+  {
+   "key": "unison",
+   "name": "UNISON",
+   "short_name": "Uni",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0
+  },
+  {
+   "key": "unison_detune",
+   "name": "DETUNE",
+   "short_name": "Det",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0
+  },
+  {
+   "key": "unison_spread",
+   "name": "SPREAD",
+   "short_name": "Spr",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0
+  },
+  {
+   "key": "delay_rate",
+   "name": "DELAY RATE",
+   "short_name": "DlRt",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5
+  },
+  {
+   "key": "pressure_routing",
+   "name": "PRESSURE TO",
+   "short_name": "Prs",
+   "options": [
+    "VOWEL",
+    "PITCH",
+    "BOTH",
+    "BOTH INV"
+   ],
+   "default": 0
+  },
+  {
+   "key": "bend_range",
+   "name": "BEND RANGE",
+   "short_name": "Bend",
+   "min": 0,
+   "max": 12,
+   "step": 0.5,
+   "default": 2,
+   "unit": "st",
+   "display": "int"
+  },
+  {
+   "key": "pressure_depth",
+   "name": "PRES DEPTH",
+   "short_name": "Dpth",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5
+  },
+  {
+   "key": "big_face",
+   "name": "FACE",
+   "short_name": "Face",
+   "canvas_script": "canvas.js",
+   "as_page": true,
+   "preset_browser": true,
+   "show_value": false
+  },
+  {
+   "key": "preset",
+   "name": "SINGER",
+   "min": 0,
+   "max": 11,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV SINGER",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT SINGER",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "SINGER NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

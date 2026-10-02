@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56" height="44" viewBox="0 0 56 44">
+ <defs><linearGradient id="plaits-cap-on" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#69716b"/><stop offset="0.45" stop-color="#49504b"/><stop offset="1" stop-color="#2f3330"/></linearGradient><filter id="plaits-glow" x="-2" y="-2" width="5" height="5"><feGaussianBlur stdDeviation="2.4"/></filter></defs>
+ <circle cx="28" cy="8" r="6.5" fill="#8ae673" opacity="0.85" filter="url(#plaits-glow)"/>
+ <circle cx="28" cy="8" r="4.5" fill="#8ae673" stroke="#000" stroke-width="1"/>
+ <circle cx="26.6" cy="6.6" r="1.4" fill="#fff" opacity="0.75"/>
+ <rect x="3" y="18" width="50" height="25" rx="4" fill="#050605"/>
+ <rect x="5" y="20" width="46" height="21" rx="3" fill="url(#plaits-cap-on)" stroke="#77847b" stroke-width="0.8"/>
+</svg>

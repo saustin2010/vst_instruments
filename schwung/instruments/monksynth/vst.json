@@ -1,0 +1,25 @@
+{
+  "name": "MonkSynth",
+  "vendor": "Jonathan Taylor",
+  "uid": "Monk",
+  "so": "monksynth.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/monksynth_plugin.c",
+      "src/dsp/synth.c",
+      "src/dsp/voice.c",
+      "src/dsp/delay.c"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-DNDEBUG"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

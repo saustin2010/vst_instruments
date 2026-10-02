@@ -1,0 +1,663 @@
+{
+ "name": "Mr Hyde",
+ "params": [
+  {
+   "key": "model",
+   "name": "Model",
+   "type": "enum",
+   "options": [
+    "VA VCF",
+    "Phase Distortion",
+    "Wave Terrain",
+    "String Machine",
+    "Virtual Analog",
+    "Waveshaping",
+    "FM 2-Op",
+    "Granular Formant",
+    "Harmonic",
+    "Wavetable",
+    "Chords",
+    "Vocal Speech",
+    "Swarm",
+    "Noise",
+    "Particle Noise",
+    "Inharmonic String",
+    "Modal Resonator"
+   ]
+  },
+  {
+   "key": "pitch",
+   "name": "Pitch",
+   "type": "float",
+   "min": -48.0,
+   "max": 48.0
+  },
+  {
+   "key": "harmonics",
+   "name": "Harmonics",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre",
+   "name": "Timbre",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "morph",
+   "name": "Morph",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "fm_amount",
+   "name": "FM Amount",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "aux_mix",
+   "name": "Aux Mix",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lpg_decay",
+   "name": "LPG Decay",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lpg_color",
+   "name": "LPG Color",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "filter_mode",
+   "name": "Mode",
+   "type": "enum",
+   "options": [
+    "lp",
+    "bp",
+    "hp"
+   ]
+  },
+  {
+   "key": "filter_cutoff",
+   "name": "Cutoff",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "filter_resonance",
+   "name": "Resonance",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_target",
+   "name": "Target",
+   "type": "enum",
+   "options": [
+    "off",
+    "morph",
+    "fm_amount",
+    "lpg_decay",
+    "lpg_color",
+    "filter_resonance",
+    "pitch",
+    "harmonics",
+    "timbre",
+    "filter_cutoff",
+    "volume",
+    "pan",
+    "detune",
+    "spread"
+   ]
+  },
+  {
+   "key": "assign1_mod_lfo_amt",
+   "name": "LFO",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_env_amt",
+   "name": "Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_cycle_env_amt",
+   "name": "Cycle Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_random_amt",
+   "name": "Random",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_velocity_amt",
+   "name": "Velocity",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_poly_aftertouch_amt",
+   "name": "Poly Aftertouch",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_target",
+   "name": "Target",
+   "type": "enum",
+   "options": [
+    "off",
+    "morph",
+    "fm_amount",
+    "lpg_decay",
+    "lpg_color",
+    "filter_resonance",
+    "pitch",
+    "harmonics",
+    "timbre",
+    "filter_cutoff",
+    "volume",
+    "pan",
+    "detune",
+    "spread"
+   ]
+  },
+  {
+   "key": "assign2_mod_lfo_amt",
+   "name": "LFO",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_env_amt",
+   "name": "Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_cycle_env_amt",
+   "name": "Cycle Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_random_amt",
+   "name": "Random",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_velocity_amt",
+   "name": "Velocity",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_poly_aftertouch_amt",
+   "name": "Poly Aftertouch",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "pitch_mod_lfo_amt",
+   "name": "LFO",
+   "type": "float",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_env_amt",
+   "name": "Env",
+   "type": "float",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_cycle_env_amt",
+   "name": "Cycle Env",
+   "type": "float",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_random_amt",
+   "name": "Random",
+   "type": "float",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_velocity_amt",
+   "name": "Velocity",
+   "type": "float",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_poly_aftertouch_amt",
+   "name": "Poly Aftertouch",
+   "type": "float",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "harmonics_mod_lfo_amt",
+   "name": "LFO",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_env_amt",
+   "name": "Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_cycle_env_amt",
+   "name": "Cycle Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_random_amt",
+   "name": "Random",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_velocity_amt",
+   "name": "Velocity",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_poly_aftertouch_amt",
+   "name": "Poly Aftertouch",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_lfo_amt",
+   "name": "LFO",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_env_amt",
+   "name": "Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_cycle_env_amt",
+   "name": "Cycle Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_random_amt",
+   "name": "Random",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_velocity_amt",
+   "name": "Velocity",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_poly_aftertouch_amt",
+   "name": "Poly Aftertouch",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_lfo_amt",
+   "name": "LFO",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_env_amt",
+   "name": "Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_cycle_env_amt",
+   "name": "Cycle Env",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_random_amt",
+   "name": "Random",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_velocity_amt",
+   "name": "Velocity",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_poly_aftertouch_amt",
+   "name": "Poly Aftertouch",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "lfo_shape",
+   "name": "Shape",
+   "type": "enum",
+   "options": [
+    "sine",
+    "triangle",
+    "saw",
+    "square",
+    "random",
+    "smooth_random"
+   ]
+  },
+  {
+   "key": "lfo_rate",
+   "name": "Rate",
+   "type": "float",
+   "min": 0.01,
+   "max": 40.0
+  },
+  {
+   "key": "lfo_rate_mode",
+   "name": "Sync",
+   "type": "enum",
+   "options": [
+    "free",
+    "sync"
+   ]
+  },
+  {
+   "key": "lfo_retrig",
+   "name": "Retrig",
+   "type": "enum",
+   "options": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "lfo_phase",
+   "name": "Phase",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "env_attack_ms",
+   "name": "Attack",
+   "type": "int",
+   "min": 0,
+   "max": 5000,
+   "step": 1
+  },
+  {
+   "key": "env_decay_ms",
+   "name": "Decay",
+   "type": "int",
+   "min": 0,
+   "max": 5000,
+   "step": 1
+  },
+  {
+   "key": "env_sustain",
+   "name": "Sustain",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "env_release_ms",
+   "name": "Release",
+   "type": "int",
+   "min": 0,
+   "max": 5000,
+   "step": 1
+  },
+  {
+   "key": "env_retrig",
+   "name": "Retrig",
+   "type": "enum",
+   "options": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "cycle_attack_ms",
+   "name": "Attack",
+   "type": "int",
+   "min": 1,
+   "max": 5000,
+   "step": 1
+  },
+  {
+   "key": "cycle_decay_ms",
+   "name": "Decay",
+   "type": "int",
+   "min": 1,
+   "max": 5000,
+   "step": 1
+  },
+  {
+   "key": "cycle_shape",
+   "name": "Shape",
+   "type": "enum",
+   "options": [
+    "linear",
+    "exponential",
+    "logarithmic"
+   ]
+  },
+  {
+   "key": "cycle_sync",
+   "name": "Sync",
+   "type": "enum",
+   "options": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "cycle_retrig",
+   "name": "Retrig",
+   "type": "enum",
+   "options": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "cycle_bipolar",
+   "name": "Bipolar",
+   "type": "enum",
+   "options": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "random_mode",
+   "name": "Mode",
+   "type": "enum",
+   "options": [
+    "sample_hold",
+    "smooth",
+    "drift"
+   ]
+  },
+  {
+   "key": "random_rate",
+   "name": "Rate",
+   "type": "float",
+   "min": 0.01,
+   "max": 40.0
+  },
+  {
+   "key": "random_rate_mode",
+   "name": "Sync",
+   "type": "enum",
+   "options": [
+    "free",
+    "sync"
+   ]
+  },
+  {
+   "key": "random_slew",
+   "name": "Slew",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "random_retrig",
+   "name": "Retrig",
+   "type": "enum",
+   "options": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "velocity_curve",
+   "name": "Curve",
+   "type": "float",
+   "min": 0.1,
+   "max": 4.0
+  },
+  {
+   "key": "poly_aftertouch_curve",
+   "name": "Curve",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "volume",
+   "name": "Volume",
+   "type": "float",
+   "min": 0.0,
+   "max": 2.0
+  },
+  {
+   "key": "pan",
+   "name": "Pan",
+   "type": "float",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "voice_mode",
+   "name": "Voice Mode",
+   "type": "enum",
+   "options": [
+    "mono",
+    "poly",
+    "mono_legato"
+   ]
+  },
+  {
+   "key": "polyphony",
+   "name": "Polyphony",
+   "type": "int",
+   "min": 1,
+   "max": 8
+  },
+  {
+   "key": "unison",
+   "name": "Unison",
+   "type": "int",
+   "min": 1,
+   "max": 8
+  },
+  {
+   "key": "detune",
+   "name": "Detune",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "spread",
+   "name": "Spread",
+   "type": "float",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "glide_ms",
+   "name": "Glide",
+   "type": "int",
+   "min": 0,
+   "max": 2000,
+   "step": 5
+  }
+ ]
+}

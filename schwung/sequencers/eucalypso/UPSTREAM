@@ -1,0 +1,4 @@
+https://github.com/handcraftedcc/move-everything-eucalypso
+commit f0ff52557829bd686118f45b90119c59188a9bf8 2026-03-23
+vendored 2026-10-01: upstream src/ as src/ + LICENSE;
+mpc/ = steve/tools/midifx adapter (MIDI out via an ALSA port, host transport as MIDI clock) + Schwung host headers + wrapper/engine.h

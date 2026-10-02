@@ -1,0 +1,77 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored. Each is described in README.md under "Changes for the MPC".
+--- a/src/dsp/wt/loader.h
++++ b/src/dsp/wt/loader.h
+@@ -58,7 +58,12 @@
+         cv.notify_all();
+     }
+ 
+-    ~WtLoader()
++    ~WtLoader() { stop(); }
++
++    /* Quit and join the worker (after the job in hand). MPC port: destroy_instance calls this BEFORE deleting the
++     * instance -- the members declared after the loader (sel, presets) are destroyed first, while the worker could
++     * still be publishing into them (ASan heap-use-after-free on a quick insert/remove, 2026-10-01). */
++    void stop()
+     {
+         {
+             std::lock_guard<std::mutex> lk(m);
+@@ -67,6 +72,7 @@
+         cv.notify_all();
+         if (started)
+             pthread_join(worker, nullptr);
++        started = false;
+     }
+ 
+     /* Called on the WORKER with each table as it finishes, before the engine
+--- a/src/dsp/wt/scanner.h
++++ b/src/dsp/wt/scanner.h
+@@ -28,7 +28,11 @@
+ 
+ class WtScanner {
+ public:
++#ifdef MPC_PORT   /* MPC port: user wavetables live next to the plugin, not in the Move's user library */
++    static constexpr const char *kUserDir = "/sdcard/vst/tablor/wavetables";   /* the shipped packs; add yours in a subfolder */
++#else
+     static constexpr const char *kUserDir = "/data/UserData/UserLibrary/Wavetables";
++#endif
+ 
+     /* One-time: copy the module's factory packs into the USER folder, so the
+      * user sees and manages everything in one place (Move Manager /
+--- a/src/dsp/tablor_plugin.cpp
++++ b/src/dsp/tablor_plugin.cpp
+@@ -944,6 +944,14 @@
+         return write_str(buf, buf_len,
+                          snap->pack_list.empty() ? "[]" : snap->pack_list.c_str());
+     }
++    if (!strcmp(key, "wt1_name") || !strcmp(key, "wt2_name")) {   /* MPC port: the loaded table's name, for a readout */
++        const std::string &path = inst->wt_path[key[2] == '2' ? 1 : 0];
++        if (path.empty()) return write_str(buf, buf_len, "Init");
++        std::string leaf = path.substr(path.find_last_of('/') + 1);
++        size_t dot = leaf.find_last_of('.');
++        if (dot != std::string::npos && dot > 0) leaf.resize(dot);
++        return write_str(buf, buf_len, leaf.c_str());
++    }
+     if (!strcmp(key, "wt1_select") || !strcmp(key, "wt2_select")) {
+         auto snap = inst->selection();
+         char tmp[16];
+@@ -1052,7 +1060,9 @@
+      * silence until the Init table is published. */
+     inst->loader.start();
+     inst->loader.post([inst] {
++#ifndef MPC_PORT   /* MPC port: no first-run copy of the factory packs into a user folder */
+         tb::WtScanner::seedUserFolder(inst->module_dir);   /* first-run copy */
++#endif
+         inst->scanner.scan();                              /* opendir walk   */
+         /* Derive the pack list and the published option lists ONCE, off the
+          * single scan — so get_param never has to. */
+@@ -1099,6 +1109,9 @@
+ 
+ static void tb_destroy_instance(void *instance)
+ {
++#ifdef MPC_PORT   /* join the loader before the members it publishes into go (see WtLoader::stop) */
++    if (instance) ((tablor_instance *) instance)->loader.stop();
++#endif
+     delete (tablor_instance *) instance;
+ }
+ 

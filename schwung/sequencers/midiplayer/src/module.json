@@ -1,0 +1,47 @@
+{
+  "id": "midi-player",
+  "name": "MIDI Player",
+  "abbrev": "MP",
+  "version": "0.1.4",
+  "description": "Play .mid files into the slot's sound generator, synced to Move's clock",
+  "author": "Charles Vestal",
+  "license": "MIT",
+  "dsp": "dsp.so",
+  "api_version": 1,
+  "assets": {
+    "path": "MIDI",
+    "label": "MIDI Files",
+    "extensions": [".mid"],
+    "description": "Upload Standard MIDI Files. Files appear in the slot's preset browser sorted alphabetically.",
+    "hint": "Plenty of public-domain classical MIDIs at",
+    "hint_url": "https://www.mfiles.co.uk/classical-midi.htm",
+    "hint_url_label": "mfiles.co.uk"
+  },
+  "capabilities": {
+    "chainable": true,
+    "component_type": "midi_fx",
+    "ui_hierarchy": {
+      "levels": {
+        "root": {
+          "name": "MIDI Player",
+          "list_param": "file_index",
+          "count_param": "file_count",
+          "name_param": "file_name_display",
+          "knobs": [],
+          "params": [
+            { "key": "loop", "name": "Loop", "type": "enum", "options": ["off", "on"], "default": 1 },
+            { "level": "track_select", "label": "Track" }
+          ]
+        },
+        "track_select": {
+          "name": "Track",
+          "items_param": "track_list_display",
+          "select_param": "track",
+          "children": null,
+          "knobs": [],
+          "params": []
+        }
+      }
+    }
+  }
+}

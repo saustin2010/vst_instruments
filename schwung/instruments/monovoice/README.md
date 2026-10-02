@@ -1,0 +1,110 @@
+# Mono Voice
+
+**Synth** · Elektron Monomachine-style digital voice: SuperWave, SID, DigiPRO, FM and more machines. · maker in MPC: timncox · licence: MIT
+
+<img src="screenshots/page_0.png" width="760" alt="Mono Voice on the MPC touchscreen">
+
+A digital synth voice modelled on the Elektron Monomachine: the MACHINE page picks the synthesis machine (SuperWave, SID-style chip sounds, user-wave DigiPRO, FM and others, with an arpeggiator), and the SYNTH page's 16 controls change meaning with the machine (they're numbered SYN 1-16 for that reason). Then an amp page, a filter page and an effect page, each with a SHIFT layer, and three LFOs that can each reach any of 114 destinations (picked with arrows).
+
+## On the MPC
+
+- In the plugin browser: **Mono Voice** by **timncox** (Synth)
+- Files: `/sdcard/vst/monovoice.so`, screen in `/sdcard/Synths/timncox - VST - Mono Voice/`
+- 119 parameters (all automatable) on 8 pages
+
+## Playing it
+
+Add it to a **plugin track** and play it from the pads, a keyboard or a MIDI clip. Every control can be turned with the Q-Links and automated, and the settings are saved with your project.
+
+## Pages
+
+Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
+
+### 1. MACHINE
+
+<img src="screenshots/page_0.png" width="760" alt="Mono Voice, page MACHINE">
+
+Q-Link columns: **1** MACHINE, LFO1 DEST, LFO2 DEST, LFO3 DEST
+
+### 2. SYNTH
+
+<img src="screenshots/page_1.png" width="760" alt="Mono Voice, page SYNTH">
+
+Q-Link columns: **1** SYN 1, SYN 2, SYN 3, SYN 4  ·  **2** SYN 5, SYN 6, SYN 7, SYN 8  ·  **3** SYN 9, SYN 10, SYN 11, SYN 12  ·  **4** SYN 13, SYN 14, SYN 15, SYN 16
+
+### 3. AMP
+
+<img src="screenshots/page_2.png" width="760" alt="Mono Voice, page AMP">
+
+Q-Link columns: **1** AMP ATTACK, AMP HOLD, AMP DECAY, AMP RELEASE  ·  **2** AMP DIST, AMP VOLUME, AMP PAN, AMP PORTA  ·  **3** AMP ATK CURV, AMP DCY CURV, AMP REL CURV, AMP VEL SENS  ·  **4** AMP KEY LEVE, AMP ENV AMT, AMP PAN KEY, AMP GAIN
+
+### 4. FILTER
+
+<img src="screenshots/page_3.png" width="760" alt="Mono Voice, page FILTER">
+
+Q-Link columns: **1** FLT BASE, FLT WIDTH, FLT HP Q, FLT LP Q  ·  **2** FLT ENV ATK, FLT ENV DCY, FLT ENV BASE, FLT ENV WIDT  ·  **3** FLT KEY TRAC, FLT VEL AMT, FLT ENV AMT, FLT PRE-DRIV  ·  **4** FLT HP SLOPE, FLT LP SLOPE, FLT DRY/WET, FLT SATURATI
+
+### 5. EFFECT
+
+<img src="screenshots/page_4.png" width="760" alt="Mono Voice, page EFFECT">
+
+Q-Link columns: **1** FX EQ FREQ, FX EQ GAIN, FX SAMP RATE, FX DELA SEND  ·  **2** FX DELA TIME, FX FEEDBACK, FX DELA BASE, FX DELA WIDT  ·  **3** FX EQ Q, FX EQ MIX, FX BIT DEPTH, FX PING-PONG  ·  **4** FX DELA DUCK, FX DELA DRIV, FX DEL MOD R, FX DEL MOD D
+
+### 6. LFO 1
+
+<img src="screenshots/page_5.png" width="760" alt="Mono Voice, page LFO 1">
+
+Q-Link columns: **1** LFO1 TRIGGER, LFO1 WAVE, LFO1 MULT, LFO1 SPEED  ·  **2** LFO1 INTERLA, LFO1 DEPTH, LFO1 PHASE, LFO1 FADE  ·  **3** LFO1 DELAY, LFO1 SLEW, LFO1 SYMMETR, LFO1 STEPS  ·  **4** LFO1 POLARIT, LFO1 VEL AMT, LFO KEY TR 1
+
+### 7. LFO 2
+
+<img src="screenshots/page_6.png" width="760" alt="Mono Voice, page LFO 2">
+
+Q-Link columns: **1** LFO2 TRIGGER, LFO2 WAVE, LFO2 MULT, LFO2 SPEED  ·  **2** LFO2 INTERLA, LFO2 DEPTH, LFO2 PHASE, LFO2 FADE  ·  **3** LFO2 DELAY, LFO2 SLEW, LFO2 SYMMETR, LFO2 STEPS  ·  **4** LFO2 POLARIT, LFO2 VEL AMT, LFO KEY TR 2
+
+### 8. LFO 3
+
+<img src="screenshots/page_7.png" width="760" alt="Mono Voice, page LFO 3">
+
+Q-Link columns: **1** LFO3 TRIGGER, LFO3 WAVE, LFO3 MULT, LFO3 SPEED  ·  **2** LFO3 INTERLA, LFO3 DEPTH, LFO3 PHASE, LFO3 FADE  ·  **3** LFO3 DELAY, LFO3 SLEW, LFO3 SYMMETR, LFO3 STEPS  ·  **4** LFO3 POLARIT, LFO3 VEL AMT, LFO KEY TR 3
+
+## Install
+
+From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
+
+```
+./install.sh <mpc-address> monovoice
+```
+
+## Where it comes from
+
+- Upstream: https://github.com/timncox/schwung-mono
+- Vendored at commit ce377749c32d9cb29060f98fc8e671aa1af73bbc 2026-09-01
+- Schwung module "Mono Voice" v0.4.3 by timncox
+- Licence: MIT ([`LICENSE`](LICENSE))
+- MPC port and screen: this repo, built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
+
+## Changes for the MPC
+
+- LFO destinations (114 options) are steppers with PREV/NEXT triggers instead of a pop-up.
+- New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+
+## Files
+
+| Path | What |
+|---|---|
+| `screenshots/` | the pages as MPC draws them |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (its presets/kits are in the repo's `presets/` folder, not here) |
+| `vst.json` | build settings: name, maker, sources, compiler flags |
+| `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
+| `params.base.json` | the engine's own parameter list it was derived from |
+| `layout.conf` | the screen: control positions, art, Q-Links (generated from the Stitch design) |
+| `layout.grid.conf` | the plan of pages and controls the Stitch conversion fills in |
+| `monovoice.css` | the artwork stylesheet |
+| `images/` | artwork: backgrounds, knobs, displays |
+| `design/` | the Google Stitch design this screen was converted from (`stitch.html`, as Stitch wrote it) |
+| `src/` | the engine's source, vendored from upstream |
+| `include/` | extra headers the build needs |
+| `UPSTREAM` | where the source came from, and at which commit |
+
+To rebuild from source see [BUILDING.md](../../../BUILDING.md); to change the screen, [RESKINNING.md](../../../RESKINNING.md).

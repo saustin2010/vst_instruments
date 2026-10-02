@@ -1,0 +1,25 @@
+{
+    "name": "Plaits Pad",
+    "version": 1,
+    "chain": {
+        "input": "pads",
+        "synth": {
+            "module": "plaits",
+            "config": {
+                "engine": "12",
+                "decay": "0.9",
+                "harmonics": "0.7",
+                "timbre": "0.6"
+            }
+        },
+        "audio_fx": [
+            {
+                "type": "freeverb",
+                "params": {
+                    "room_size": 0.8,
+                    "wet": 0.4
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,99 @@
+{
+ "name": "Rings FX",
+ "params": [
+  {
+   "key": "model",
+   "name": "MODEL",
+   "options": [
+    "MODAL",
+    "SYMPATHETIC",
+    "STRING",
+    "FM VOICE",
+    "SYMP CHORDS",
+    "STRING+VERB"
+   ],
+   "default": 0
+  },
+  {
+   "key": "polyphony",
+   "name": "POLYPHONY",
+   "options": [
+    "1 VOICE",
+    "2 VOICES",
+    "4 VOICES"
+   ],
+   "default": 1
+  },
+  {
+   "key": "structure",
+   "name": "STRUCTURE",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.4
+  },
+  {
+   "key": "brightness",
+   "name": "BRIGHTNESS",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "damping",
+   "name": "DAMPING",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.6
+  },
+  {
+   "key": "position",
+   "name": "POSITION",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "note",
+   "name": "NOTE",
+   "min": 24,
+   "max": 96,
+   "default": 48,
+   "display": "int"
+  },
+  {
+   "key": "fine",
+   "name": "FINE",
+   "min": -1.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "input_gain",
+   "name": "INPUT GAIN",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "mix",
+   "name": "MIX",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  },
+  {
+   "key": "width",
+   "name": "WIDTH",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 1.0
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  }
+ ]
+}

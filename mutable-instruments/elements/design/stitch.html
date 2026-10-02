@@ -1,0 +1,787 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Elements — Modal Synthesis Voice (MPC Live II)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  :root {
+    --bg: #0b0f0f;
+    --panel: #131a1a;
+    --line: #2f4544;
+    --ink: #eef8f7;
+    --ink-dim: #c4d8d6;
+    --ink-faint: #6f8886;
+    --accent: #2fb8ad;
+    --accent-hi: #5ee0d4;
+    --knob-face: #eef5f4;
+    --knob-ring: #243231;
+    --knob-dot: #5ee0d4;
+    --lcd: #070a0a;
+    --seg-active: #5ee0d4;
+    --seg-inactive: #1d2928;
+    --seg-active-tx: #0b0f0f;
+  }
+  body {
+    background: #050707;
+    color: var(--ink);
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px;
+    overflow-x: hidden;
+  }
+  .mpc-chassis {
+    width: 1280px;
+    height: 720px;
+    background: var(--bg);
+    border: 2px solid #233130;
+    border-radius: 8px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Top Nav / Status */
+  .top-bar {
+    height: 52px;
+    background: #0f1515;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+  .brand-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .led-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-hi);
+    box-shadow: 0 0 10px var(--accent-hi);
+  }
+  .device-title {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .plugin-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--accent-hi);
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .tab-btn {
+    background: #182222;
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #061110;
+    border-color: var(--accent-hi);
+    box-shadow: 0 0 12px rgba(94, 224, 212, 0.35);
+  }
+  .audition-btn {
+    background: #1a3331;
+    border: 1px solid var(--accent);
+    color: var(--accent-hi);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    padding: 7px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.1s ease;
+  }
+  .audition-btn:active, .audition-btn.playing {
+    background: var(--accent-hi);
+    color: #061110;
+    box-shadow: 0 0 18px var(--accent-hi);
+  }
+
+  /* Main Workspace */
+  .workspace {
+    width: 1280px;
+    height: 618px;
+    position: relative;
+    padding: 10px 10px 0 10px;
+  }
+  .tab-page {
+    display: none;
+    width: 100%;
+    height: 100%;
+  }
+  .tab-page.active {
+    display: block;
+  }
+
+  /* Frames & Modules */
+  .frame {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    position: absolute;
+    padding: 24px 12px 10px 12px;
+  }
+  .frame-title {
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    color: var(--accent-hi);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .frame-title::after {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* Knob Component */
+  .knob-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: ns-resize;
+    position: relative;
+  }
+  .knob-body {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f4fbfb, #ccd8d6 60%, #90a5a3 95%);
+    border: 3px solid var(--knob-ring);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.65), inset 0 2px 3px rgba(255,255,255,0.8), inset 0 -2px 3px rgba(0,0,0,0.4);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.05s linear;
+  }
+  .knob-pointer {
+    position: absolute;
+    top: 6px;
+    width: 3px;
+    height: 22px;
+    background: var(--accent);
+    border-radius: 2px;
+    box-shadow: 0 0 6px var(--accent-hi);
+  }
+  .knob-ticks {
+    position: absolute;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .knob-label {
+    margin-top: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ink-dim);
+    text-align: center;
+  }
+  .knob-val {
+    margin-top: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent-hi);
+    background: #090e0e;
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #1c2b2a;
+  }
+
+  /* Enum Selector (Vertical segmented) */
+  .enum-v {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .enum-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ink-dim);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .enum-opt {
+    background: var(--seg-inactive);
+    color: var(--ink-faint);
+    border: 1px solid #283736;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .enum-opt.active {
+    background: var(--seg-active);
+    color: var(--seg-active-tx);
+    border-color: #7ef5eb;
+    box-shadow: 0 0 10px rgba(94, 224, 212, 0.4);
+  }
+
+  /* Toggle button */
+  .toggle-btn {
+    width: 72px;
+    height: 48px;
+    background: #141f1f;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink-faint);
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .toggle-btn.on {
+    background: #1a3331;
+    border-color: var(--accent-hi);
+    color: var(--accent-hi);
+    box-shadow: 0 0 12px rgba(94, 224, 212, 0.25);
+  }
+  .toggle-led {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #233130;
+  }
+  .toggle-btn.on .toggle-led {
+    background: var(--accent-hi);
+    box-shadow: 0 0 8px var(--accent-hi);
+  }
+
+  /* Vector Visualizer Canvas */
+  .vis-container {
+    width: 100%;
+    height: 100%;
+    background: #080d0d;
+    border-radius: 3px;
+    border: 1px solid #1a2727;
+    position: relative;
+    overflow: hidden;
+  }
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Bottom Q-Links Bar */
+  .qlink-bar {
+    height: 44px;
+    background: #0c1212;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+  .qlink-bank-tag {
+    color: var(--accent-hi);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .qlink-badges {
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  .q-badge {
+    background: #152020;
+    border: 1px solid #233433;
+    padding: 3px 8px;
+    border-radius: 3px;
+    color: var(--ink-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    white-space: nowrap;
+  }
+  .q-badge b {
+    color: var(--accent-hi);
+  }
+</style>
+</head>
+<body>
+
+<div class="mpc-chassis">
+  <!-- Top Header -->
+  <div class="top-bar">
+    <div class="brand-badge">
+      <div class="led-dot"></div>
+      <div class="device-title">AKAI MPC LIVE II // MUTABLE ENGINE</div>
+      <div class="plugin-title">ELEMENTS // MODAL RESYNTHESIS VOICE</div>
+    </div>
+    
+    <div class="nav-tabs">
+      <button class="tab-btn active" id="tabBtn1" onclick="switchTab(1)">1: ELEMENTS</button>
+      <button class="tab-btn" id="tabBtn2" onclick="switchTab(2)">2: PLAY</button>
+    </div>
+
+    <button class="audition-btn" id="auditionBtn" onclick="triggerModalVoice()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      STRIKE / BLOW [SPACE]
+    </button>
+  </div>
+
+  <!-- Workspace Container -->
+  <div class="workspace">
+    
+    <!-- PAGE 1: ELEMENTS -->
+    <div class="tab-page active" id="pageElements">
+      <!-- Top Row: Bow (310), Blow (468), Strike (468) -->
+      <!-- FRAME: BOW (x=10 y=92 w=310 h=250) -->
+      <div class="frame" style="left: 10px; top: 10px; width: 310px; height: 260px;">
+        <div class="frame-title">BOW // CONTINUOUS FRICTION</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="bow" data-val="35" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">BOW</div>
+            <div class="knob-val">35 %</div>
+          </div>
+          <div class="knob-control" data-key="bow_timbre" data-val="62" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">BOW TIMBRE</div>
+            <div class="knob-val">62 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRAME: BLOW (x=326 y=92 w=468 h=250) -->
+      <div class="frame" style="left: 326px; top: 10px; width: 468px; height: 260px;">
+        <div class="frame-title">BLOW // AIR JET TURBULENCE</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="blow" data-val="20" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">BLOW</div>
+            <div class="knob-val">20 %</div>
+          </div>
+          <div class="knob-control" data-key="flow" data-val="55" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">FLOW</div>
+            <div class="knob-val">55 %</div>
+          </div>
+          <div class="knob-control" data-key="blow_timbre" data-val="48" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">BLOW TIMBRE</div>
+            <div class="knob-val">48 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRAME: STRIKE (x=800 y=92 w=450 h=250) -->
+      <div class="frame" style="left: 800px; top: 10px; width: 450px; height: 260px;">
+        <div class="frame-title">STRIKE // PERCUSSIVE IMPACT</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="strike" data-val="85" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">STRIKE</div>
+            <div class="knob-val">85 %</div>
+          </div>
+          <div class="knob-control" data-key="mallet" data-val="40" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">MALLET</div>
+            <div class="knob-val">40 %</div>
+          </div>
+          <div class="knob-control" data-key="strike_timbre" data-val="72" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">STRK TIMBRE</div>
+            <div class="knob-val">72 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: ENV (152), RESONATOR (942), SPACE (152) -->
+      <!-- FRAME: ENV (x=10 y=404 w=152) -->
+      <div class="frame" style="left: 10px; top: 278px; width: 152px; height: 280px;">
+        <div class="frame-title">ENV</div>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding-top: 12px;">
+          <div class="knob-control" data-key="contour" data-val="65" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">CONTOUR</div>
+            <div class="knob-val">65 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRAME: RESONATOR (x=168 y=404 w=936 h=280) -->
+      <div class="frame" style="left: 168px; top: 278px; width: 936px; height: 280px;">
+        <div class="frame-title">RESONATOR // MODAL FILTER BANK</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; height: 100%; padding: 10px 24px 0 24px;">
+          
+          <!-- Modal Enum Selector -->
+          <div class="enum-v">
+            <div class="enum-label">MODEL</div>
+            <div class="enum-opt active" onclick="selectEnum(this, 'MODAL')">MODAL</div>
+            <div class="enum-opt" onclick="selectEnum(this, 'STRING')">STRING</div>
+            <div class="enum-opt" onclick="selectEnum(this, 'STRINGS')">STRINGS</div>
+            <div class="enum-opt" onclick="selectEnum(this, 'OMINOUS')">OMINOUS</div>
+          </div>
+
+          <div class="knob-control" data-key="geometry" data-val="52" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">GEOMETRY</div>
+            <div class="knob-val">52 %</div>
+          </div>
+
+          <div class="knob-control" data-key="brightness" data-val="68" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">BRIGHTNESS</div>
+            <div class="knob-val">68 %</div>
+          </div>
+
+          <div class="knob-control" data-key="damping" data-val="45" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">DAMPING</div>
+            <div class="knob-val">45 %</div>
+          </div>
+
+          <div class="knob-control" data-key="position" data-val="38" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">POSITION</div>
+            <div class="knob-val">38 %</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FRAME: SPACE (x=1110 y=404 w=140 h=280) -->
+      <div class="frame" style="left: 1110px; top: 278px; width: 140px; height: 280px;">
+        <div class="frame-title">SPACE</div>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding-top: 12px;">
+          <div class="knob-control" data-key="space" data-val="58" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">SPACE</div>
+            <div class="knob-val">58 %</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: PLAY -->
+    <div class="tab-page" id="pagePlay">
+      <!-- PITCH (468), PLAYING (468), OUTPUT (310) -->
+      <div class="frame" style="left: 10px; top: 10px; width: 450px; height: 260px;">
+        <div class="frame-title">PITCH &amp; COARSE TUNING</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="octave" data-val="0" data-min="-3" data-max="3" data-unit="OCT">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">OCTAVE</div>
+            <div class="knob-val">0 OCT</div>
+          </div>
+          <div class="knob-control" data-key="fine" data-val="0" data-min="-50" data-max="50" data-unit="CT">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">FINE</div>
+            <div class="knob-val">0 CT</div>
+          </div>
+          <div class="knob-control" data-key="bend_range" data-val="2" data-min="1" data-max="12" data-unit="ST">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">BEND RANGE</div>
+            <div class="knob-val">±2 ST</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame" style="left: 468px; top: 10px; width: 468px; height: 260px;">
+        <div class="frame-title">PERFORMANCE &amp; DYNAMICS</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="toggle-btn" id="legatoBtn" onclick="toggleLegato(this)">
+              <div class="toggle-led"></div>
+              <div>LEGATO</div>
+            </div>
+            <div class="knob-label" style="margin-top: 8px;">LEGATO</div>
+          </div>
+          <div class="knob-control" data-key="velocity" data-val="75" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">VELOCITY</div>
+            <div class="knob-val">75 %</div>
+          </div>
+          <div class="knob-control" data-key="signature" data-val="40" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">SIGNATURE</div>
+            <div class="knob-val">40 %</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame" style="left: 944px; top: 10px; width: 306px; height: 260px;">
+        <div class="frame-title">MASTER OUT</div>
+        <div style="display: flex; justify-content: center; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="volume" data-val="88" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">VOLUME</div>
+            <div class="knob-val">88 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-time Modal Resonator Oscilloscope (x=10 y=404 w=1240 h=280) -->
+      <div class="frame" style="left: 10px; top: 278px; width: 1240px; height: 280px; padding: 28px 12px 12px 12px;">
+        <div class="frame-title">REAL-TIME MODAL RESONANCE SPECTRUM // 64-HARMONIC MODAL MESH</div>
+        <div class="vis-container">
+          <canvas id="modalCanvas"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Q-Link Encoder Status Strip -->
+  <div class="qlink-bar">
+    <div class="qlink-bank-tag">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+      <span id="bankName">Q-LINKS [ELEMENTS]</span>:
+    </div>
+    <div class="qlink-badges" id="qlinkBadges">
+      <!-- Populated via JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // Q-Link Mapping Definitions from elements.txt
+  const qlinkMaps = {
+    1: ['bow', 'bow_timbre', 'blow', 'flow', 'blow_timbre', 'strike', 'mallet', 'strike_timbre', 'contour', 'model', 'geometry', 'brightness', 'damping', 'position', 'space'],
+    2: ['octave', 'fine', 'bend_range', 'legato', 'velocity', 'signature', 'volume']
+  };
+
+  let currentTab = 1;
+  let audioCtx = null;
+  let isLegato = false;
+
+  function switchTab(tabIndex) {
+    currentTab = tabIndex;
+    document.getElementById('tabBtn1').classList.toggle('active', tabIndex === 1);
+    document.getElementById('tabBtn2').classList.toggle('active', tabIndex === 2);
+    document.getElementById('pageElements').classList.toggle('active', tabIndex === 1);
+    document.getElementById('pagePlay').classList.toggle('active', tabIndex === 2);
+    
+    document.getElementById('bankName').textContent = tabIndex === 1 ? 'Q-LINKS [ELEMENTS]' : 'Q-LINKS [PLAY]';
+    renderQLinks();
+  }
+
+  function renderQLinks() {
+    const list = qlinkMaps[currentTab] || [];
+    const container = document.getElementById('qlinkBadges');
+    container.innerHTML = list.map((item, idx) => `
+      <div class="q-badge"><b>Q${idx + 1}</b> ${item.toUpperCase().replace('_', ' ')}</div>
+    `).join('');
+  }
+  renderQLinks();
+
+  function selectEnum(el, val) {
+    el.parentNode.querySelectorAll('.enum-opt').forEach(btn => btn.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function toggleLegato(el) {
+    isLegato = !isLegato;
+    el.classList.toggle('on', isLegato);
+  }
+
+  // Rotary Knob Drag Handling
+  document.querySelectorAll('.knob-control').forEach(ctrl => {
+    let startY, startVal;
+    const body = ctrl.querySelector('.knob-body');
+    const valDisplay = ctrl.querySelector('.knob-val');
+    const min = parseFloat(ctrl.dataset.min);
+    const max = parseFloat(ctrl.dataset.max);
+    const unit = ctrl.dataset.unit || '';
+    
+    function updateKnob(val) {
+      val = Math.max(min, Math.min(max, val));
+      ctrl.dataset.val = val;
+      valDisplay.textContent = `${Math.round(val)} ${unit}`;
+      const pct = (val - min) / (max - min);
+      const deg = -135 + pct * 270;
+      body.style.transform = `rotate(${deg}deg)`;
+    }
+
+    // Init position
+    updateKnob(parseFloat(ctrl.dataset.val));
+
+    ctrl.addEventListener('pointerdown', (e) => {
+      startY = e.clientY;
+      startVal = parseFloat(ctrl.dataset.val);
+      ctrl.setPointerCapture(e.pointerId);
+
+      function onMove(me) {
+        const delta = startY - me.clientY;
+        const range = max - min;
+        const step = (range / 140) * delta;
+        updateKnob(startVal + step);
+      }
+      function onUp() {
+        ctrl.removeEventListener('pointermove', onMove);
+        ctrl.removeEventListener('pointerup', onUp);
+      }
+      ctrl.addEventListener('pointermove', onMove);
+      ctrl.addEventListener('pointerup', onUp);
+    });
+  });
+
+  // Modal Synthesis Canvas Animation (Inharmonic partial vibration mesh)
+  const canvas = document.getElementById('modalCanvas');
+  const ctx = canvas.getContext('2d');
+  let phase = 0;
+
+  function resizeCanvas() {
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  setTimeout(resizeCanvas, 50);
+
+  function drawModalSpectrum() {
+    if (!canvas.width) return requestAnimationFrame(drawModalSpectrum);
+    ctx.fillStyle = '#080d0d';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Grid lines
+    ctx.strokeStyle = '#121d1d';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < canvas.width; x += 40) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
+      ctx.stroke();
+    }
+    for (let y = 0; y < canvas.height; y += 30) {
+      ctx.beginPath();
+      ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
+      ctx.stroke();
+    }
+
+    // Draw multi-mode resonant standing wave
+    ctx.beginPath();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#5ee0d4';
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#2fb8ad';
+
+    const midY = canvas.height * 0.55;
+    const points = 120;
+    for (let i = 0; i < points; i++) {
+      const x = (i / (points - 1)) * canvas.width;
+      const k1 = Math.sin(i * 0.08 + phase) * 28;
+      const k2 = Math.sin(i * 0.22 - phase * 1.5) * 14;
+      const k3 = Math.sin(i * 0.53 + phase * 2.2) * 7;
+      const envelope = Math.sin((i / (points - 1)) * Math.PI);
+      const y = midY + (k1 + k2 + k3) * envelope;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Harmonic peak indicators
+    ctx.fillStyle = '#2fb8ad';
+    for (let p = 1; p <= 12; p++) {
+      const px = p * (canvas.width / 13);
+      const barH = (Math.sin(p * 1.8 + phase * 0.8) * 0.5 + 0.5) * 60 + 10;
+      ctx.fillRect(px - 2, canvas.height - barH - 8, 4, barH);
+    }
+
+    phase += 0.04;
+    requestAnimationFrame(drawModalSpectrum);
+  }
+  requestAnimationFrame(drawModalSpectrum);
+
+  // Web Audio Modal Pluck Audition
+  function triggerModalVoice() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const btn = document.getElementById('auditionBtn');
+    btn.classList.add('playing');
+    setTimeout(() => btn.classList.remove('playing'), 250);
+
+    const now = audioCtx.currentTime;
+    const oscCount = 5;
+    const freqs = [220, 220 * 1.58, 220 * 2.24, 220 * 2.92, 220 * 3.85]; // Inharmonic modal ratios
+
+    freqs.forEach((f, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+      osc.frequency.setValueAtTime(f, now);
+
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(f, now);
+      filter.Q.setValueAtTime(15 + idx * 8, now);
+
+      const amp = 0.2 / (idx + 1);
+      gain.gain.setValueAtTime(amp, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2 - idx * 0.15);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + 1.3);
+    });
+  }
+
+  // Keyboard shortcut: Spacebar auditions voice
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target === document.body) {
+      e.preventDefault();
+      triggerModalVoice();
+    }
+  });
+</script>
+
+</body></html>

@@ -1,0 +1,306 @@
+{
+  "id": "nusaw",
+  "name": "NuSaw",
+  "abbrev": "NS",
+  "version": "0.2.2",
+  "description": "Polyphonic detuned multi-saw synthesizer with resonant lowpass filter, dual envelopes, chorus, and delay",
+  "author": "charlesvestal",
+  "license": "MIT",
+  "ui": "ui.js",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "aftertouch": false,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "ui_hierarchy": {
+      "levels": {
+        "root": {
+          "name": "NuSaw",
+          "params": [
+            {
+              "key": "preset",
+              "label": "Preset",
+              "type": "int",
+              "min": 0,
+              "max_param": "preset_count",
+              "default": 0
+            },
+            {
+              "key": "cutoff",
+              "label": "Cutoff",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.7,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "resonance",
+              "label": "Resonance",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "detune",
+              "label": "Detune",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.3,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "spread",
+              "label": "Spread",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.7,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "f_amount",
+              "short_name": "Amt",
+              "label": "Filt Env",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.5,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "attack",
+              "label": "Attack",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.01,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "decay",
+              "label": "Decay",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.3,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "sustain",
+              "label": "Sustain",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.7,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "release",
+              "label": "Release",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.2,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "f_attack",
+              "short_name": "Attack",
+              "label": "F Attack",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.01,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "f_decay",
+              "short_name": "Decay",
+              "label": "F Decay",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.3,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "f_sustain",
+              "short_name": "Sustain",
+              "label": "F Sustain",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.3,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "f_release",
+              "short_name": "Release",
+              "label": "F Release",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.2,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "volume",
+              "label": "Volume",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.7,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "vel_sens",
+              "short_name": "Sens",
+              "label": "Vel Sens",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.5,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "bend_range",
+              "short_name": "Bend",
+              "label": "Bend Range",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.167,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "sub_level",
+              "label": "Sub",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "sub_octave",
+              "short_name": "Oct",
+              "label": "Sub Oct",
+              "type": "int",
+              "min": -2,
+              "max": 0,
+              "default": -1
+            },
+            {
+              "key": "saw_count",
+              "label": "Saws",
+              "type": "int",
+              "min": 3,
+              "max": 25,
+              "default": 7
+            },
+            {
+              "key": "chorus_mix",
+              "label": "Chorus",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "chorus_depth",
+              "short_name": "Chr",
+              "label": "Chr Depth",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.5,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "delay_time",
+              "short_name": "Time",
+              "label": "Dly Time",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.35,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "delay_fback",
+              "short_name": "Fback",
+              "label": "Dly Fback",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.4,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "delay_mix",
+              "label": "Delay",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "delay_tone",
+              "short_name": "Tone",
+              "label": "Dly Tone",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.6,
+              "step": 0.02,
+              "unit": "%"
+            }
+          ],
+          "knobs": [
+            "cutoff",
+            "resonance",
+            "detune",
+            "spread",
+            "attack",
+            "decay",
+            "sustain",
+            "release"
+          ]
+        }
+      }
+    }
+  }
+}

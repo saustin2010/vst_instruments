@@ -1,0 +1,4 @@
+https://github.com/pichenettes/eurorack (rings/)
+commit 08460a69a7e1f7a81c5a2abcc7189c9a6b7208d4 2023-08-16
+stmlib: https://github.com/pichenettes/stmlib commit e3bd7c9cc00e4364166f9905c0509b6ffd0535ec (the eurorack submodule pin)
+vendored 2026-10-01 (same as ../rings, with its velocity patch): rings/dsp, rings/resources.*, stmlib dsp/ utils/ stmlib.h + LICENSE (MIT header text)

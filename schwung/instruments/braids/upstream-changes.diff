@@ -1,0 +1,18 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored. Each is described in README.md under "Changes for the MPC".
+--- a/src/dsp/braids/macro_oscillator.h
++++ b/src/dsp/braids/macro_oscillator.h
+@@ -65,6 +65,13 @@
+   }
+ 
+   inline void set_pitch(int16_t pitch) {
++#ifdef MPC_PORT
++    // MPC port (2026-10-02): the module's firmware keeps pitch in 0..16383 before it gets here; the plugin's note +
++    // 44.1 kHz correction + FM + bend reaches ~19800, and pitch-indexed tables (the flute's body filter, 128 entries
++    // for pitch >> 7) were read past their end (found with steve/tools/fuzz).
++    if (pitch < 0) pitch = 0;
++    if (pitch > 16383) pitch = 16383;
++#endif
+     pitch_ = pitch;
+   }
+ 

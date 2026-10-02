@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Braids — Mutable Instruments Macro Oscillator (MPC Live II)</title>
+<style>
+  :root {
+    --theme-bg: #0b0f15;
+    --theme-panel: #131a23;
+    --theme-panel-elevated: #182230;
+    --theme-line: #2f3b4a;
+    --theme-line-bright: #3f5066;
+    --theme-ink: #eef3f8;
+    --theme-ink-dim: #b9c5d3;
+    --theme-ink-faint: #6b7b8e;
+    --theme-accent: #2f8fe0;
+    --theme-accent-hi: #5cb3ff;
+    --theme-knob-face: #e8eef5;
+    --theme-knob-ring: #26313e;
+    --theme-knob-dot: #5cb3ff;
+    --theme-lcd: #070b10;
+    --theme-seg-active: #eef3f8;
+    --theme-seg-inactive: #1d2632;
+    --theme-seg-active-tx: #0b0f15;
+    --theme-box: #131a23;
+    --theme-display-bg: #06101a;
+    --theme-display-cell: #0b1a2a;
+    --theme-display-off: #13283d;
+    --theme-display-ink: #6cc4ff;
+    --theme-display-bezel: #03070b;
+  }
+
+  * {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: #030508;
+    color: var(--theme-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "SF Pro Display", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  /* MPC Shell & Native 1280x628 Viewport Frame */
+  .mpc-chassis {
+    width: 1280px;
+    height: 720px;
+    background: #080a0e;
+    border-radius: 12px;
+    box-shadow: 0 35px 80px rgba(0, 0, 0, 0.9), 0 0 0 2px #1c2430, 0 0 60px rgba(47, 143, 224, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* MPC Header Bar */
+  .mpc-top-bar {
+    height: 46px;
+    background: linear-gradient(180deg, #161e2b 0%, #0e141c 100%);
+    border-bottom: 1px solid var(--theme-line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    font-family: "JetBrains Mono", "SF Mono", monospace;
+    color: var(--theme-ink-dim);
+  }
+
+  .brand-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-led {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--theme-accent-hi);
+    box-shadow: 0 0 8px var(--theme-accent-hi);
+    animation: ledPulse 2.5s infinite ease-in-out;
+  }
+
+  @keyframes ledPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .brand-title {
+    font-weight: 800;
+    color: var(--theme-ink);
+    letter-spacing: 0.12em;
+  }
+
+  .brand-pill {
+    background: #1e2838;
+    color: var(--theme-accent-hi);
+    border: 1px solid var(--theme-line);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .system-stats {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .stat-item span {
+    color: var(--theme-ink-faint);
+  }
+  .stat-item b {
+    color: var(--theme-accent-hi);
+  }
+
+  /* Navigation Tabs */
+  .tabs-nav {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tab-btn {
+    background: #111822;
+    border: 1px solid var(--theme-line);
+    color: var(--theme-ink-dim);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.08em;
+  }
+
+  .tab-btn:hover {
+    background: #1c2738;
+    color: var(--theme-ink);
+  }
+
+  .tab-btn.active {
+    background: var(--theme-accent);
+    color: #ffffff;
+    border-color: var(--theme-accent-hi);
+    box-shadow: 0 0 12px rgba(47, 143, 224, 0.45);
+  }
+
+  .audition-btn {
+    background: linear-gradient(180deg, #1b3a58 0%, #102336 100%);
+    border: 1px solid var(--theme-accent);
+    color: var(--theme-accent-hi);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: "JetBrains Mono", monospace;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+  }
+
+  .audition-btn:hover {
+    background: var(--theme-accent);
+    color: #fff;
+    box-shadow: 0 0 14px rgba(92, 179, 255, 0.5);
+  }
+
+  .audition-btn.playing {
+    background: #5cb3ff;
+    color: #050b12;
+    box-shadow: 0 0 20px #5cb3ff;
+  }
+
+  /* Hardware Viewport (1280 x 628) */
+  .hardware-viewport {
+    width: 1280px;
+    height: 628px;
+    background: var(--theme-bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Tab View containers */
+  .tab-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  .tab-view.active {
+    display: block;
+  }
+
+  /* Hardware Frames */
+  .hw-frame {
+    position: absolute;
+    background: var(--theme-panel);
+    border: 1px solid var(--theme-line);
+    border-radius: 6px;
+    padding: 10px 14px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 6px 14px rgba(0, 0, 0, 0.4);
+  }
+
+  .hw-frame-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(47, 59, 74, 0.6);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+
+  .hw-frame-title {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: var(--theme-accent-hi);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .hw-frame-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 11px;
+    background: var(--theme-accent);
+    border-radius: 1px;
+  }
+
+  .hw-frame-sub {
+    font-size: 10px;
+    color: var(--theme-ink-faint);
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* PROGRAM / STEPPER SECTION */
+  .stepper-container {
+    width: 100%;
+    height: 84px;
+    background: var(--theme-display-bg);
+    border: 2px solid var(--theme-display-bezel);
+    border-radius: 6px;
+    box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* CRT Scanline & Dotmatrix Grid effect */
+  .stepper-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.35) 0px,
+      rgba(0, 0, 0, 0.35) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .stepper-nav-btn {
+    width: 44px;
+    height: 52px;
+    background: #0f1c2b;
+    border: 1px solid var(--theme-line-bright);
+    color: var(--theme-accent-hi);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.12s ease;
+    z-index: 3;
+  }
+
+  .stepper-nav-btn:hover {
+    background: var(--theme-accent);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(92, 179, 255, 0.6);
+  }
+
+  .stepper-nav-btn:active {
+    transform: scale(0.95);
+  }
+
+  .patch-display-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    text-align: center;
+  }
+
+  .patch-id-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--theme-ink-faint);
+    letter-spacing: 0.15em;
+    margin-bottom: 2px;
+  }
+
+  .patch-name-text {
+    font-family: "Courier New", "JetBrains Mono", monospace;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--theme-display-ink);
+    text-shadow: 0 0 10px rgba(108, 196, 255, 0.8), 0 0 20px rgba(47, 143, 224, 0.4);
+    letter-spacing: 0.08em;
+  }
+
+  .patch-caption-art {
+    margin-top: 10px;
+    height: 148px;
+    background: #0d131b;
+    border: 1px solid #1f2a38;
+    border-radius: 5px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .algorithm-visual-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 100%;
+  }
+
+  .osc-wave-canvas {
+    flex: 1;
+    height: 95px;
+    background: #060b10;
+    border: 1px solid #1a2432;
+    border-radius: 4px;
+  }
+
+  .braids-char-matrix {
+    width: 145px;
+    height: 95px;
+    background: #070e17;
+    border: 1px solid #1a2533;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    padding: 6px;
+  }
+
+  .matrix-engine-icon {
+    font-size: 24px;
+    color: var(--theme-accent-hi);
+    margin-bottom: 4px;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(92, 179, 255, 0.6);
+  }
+
+  .matrix-engine-desc {
+    font-size: 9px;
+    color: var(--theme-ink-dim);
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  /* SKEUOMORPHIC METAL KNOBS */
+  .control-group-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: calc(100% - 32px);
+  }
+
+  .knob-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: grab;
+  }
+
+  .knob-widget:active {
+    cursor: grabbing;
+  }
+
+  .knob-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--theme-ink-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  /* Dial Disc */
+  .knob-disc {
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+      0 6px 14px rgba(0, 0, 0, 0.65),
+      0 0 0 2px var(--theme-knob-ring),
+      inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+
+  .knob-disc.large {
+    width: 92px;
+    height: 92px;
+  }
+
+  .knob-disc.medium {
+    width: 76px;
+    height: 76px;
+  }
+
+  /* Brushed Metal Dial Look */
+  .knob-metal-face {
+    width: 82%;
+    height: 82%;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      #9ba7b4 0deg,
+      #e8eef5 45deg,
+      #7b8794 90deg,
+      #d4dde6 135deg,
+      #717c88 180deg,
+      #e8eef5 225deg,
+      #84909d 270deg,
+      #cad5df 315deg,
+      #9ba7b4 360deg
+    );
+    border: 1px solid #ffffff33;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+    transition: transform 0.05s linear;
+  }
+
+  .knob-bezel-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(92, 179, 255, 0.25);
+    pointer-events: none;
+  }
+
+  /* Pointer indicator needle */
+  .knob-pointer-needle {
+    position: absolute;
+    top: 5px;
+    width: 3.5px;
+    height: 18px;
+    background: var(--theme-knob-dot);
+    border-radius: 2px;
+    box-shadow: 0 0 6px var(--theme-accent-hi);
+  }
+
+  /* Wireframe Readout Box */
+  .knob-val-box {
+    margin-top: 8px;
+    min-width: 62px;
+    height: 22px;
+    background: #090e14;
+    border: 1px solid #233446;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--theme-display-ink);
+    padding: 0 6px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+  }
+
+  /* POPUP ALGORITHM SELECTOR */
+  .algorithm-popup-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .popup-trigger-btn {
+    width: 210px;
+    height: 48px;
+    background: #0b131e;
+    border: 1px solid var(--theme-line-bright);
+    border-radius: 4px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--theme-accent-hi);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7);
+    transition: all 0.15s ease;
+  }
+
+  .popup-trigger-btn:hover {
+    border-color: var(--theme-accent);
+    background: #111d2e;
+  }
+
+  .popup-trigger-btn span.label-sub {
+    font-size: 9px;
+    color: var(--theme-ink-faint);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .popup-trigger-btn .caret-icon {
+    font-size: 11px;
+    color: var(--theme-accent);
+  }
+
+  /* Dropdown Menu Modal for Algorithm */
+  .algo-dropdown-menu {
+    position: absolute;
+    top: 78px;
+    left: 18px;
+    width: 280px;
+    max-height: 200px;
+    background: #0e1622;
+    border: 1px solid var(--theme-accent);
+    border-radius: 5px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.9);
+    z-index: 100;
+    overflow-y: auto;
+    display: none;
+  }
+
+  .algo-dropdown-menu.open {
+    display: block;
+  }
+
+  .algo-option-item {
+    padding: 8px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--theme-ink-dim);
+    border-bottom: 1px solid #1a2533;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .algo-option-item:hover, .algo-option-item.selected {
+    background: #1a283b;
+    color: var(--theme-accent-hi);
+  }
+
+  /* MUTABLE INSTRUMENTS BRAND LOGO ART (images/logo_310.svg recreation) */
+  .logo-310-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 24px);
+    background: radial-gradient(circle at center, #182332 0%, #0d141e 80%);
+    border-radius: 5px;
+    border: 1px solid #202b3a;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .logo-310-panel::before {
+    content: "";
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(92, 179, 255, 0.08) 0%, transparent 70%);
+  }
+
+  .mi-icon-geom {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(92, 179, 255, 0.4));
+  }
+
+  .mi-brand-title {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.28em;
+    font-weight: 300;
+    color: var(--theme-ink);
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .mi-brand-sub {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: var(--theme-accent-hi);
+    letter-spacing: 0.2em;
+    margin-top: 4px;
+  }
+
+  /* ENVELOPES TAB (PAGE 2) - VERTICAL SLIDERS WITH LIVE CURVES */
+  .envelope-bank-layout {
+    display: flex;
+    height: calc(100% - 30px);
+    gap: 20px;
+    align-items: center;
+  }
+
+  .slider-rack {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    padding: 0 10px;
+  }
+
+  .slider-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .slider-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--theme-ink-dim);
+    letter-spacing: 0.09em;
+    margin-bottom: 10px;
+  }
+
+  .slider-track-wrap {
+    width: 44px;
+    height: 160px;
+    background: #090e14;
+    border: 1px solid var(--theme-line);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.85);
+  }
+
+  .slider-center-groove {
+    width: 6px;
+    height: 136px;
+    background: #040608;
+    border-radius: 3px;
+    border-left: 1px solid #1b242e;
+    border-right: 1px solid #1b242e;
+    position: relative;
+  }
+
+  .slider-fill-light {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--theme-accent);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--theme-accent);
+  }
+
+  .slider-thumb-cap {
+    position: absolute;
+    width: 40px;
+    height: 24px;
+    background: linear-gradient(180deg, #f0f4f9 0%, #a4b2c0 40%, #566474 100%);
+    border-radius: 3px;
+    border: 1px solid #202b38;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.9);
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top 0.04s linear;
+  }
+
+  .slider-thumb-cap:active {
+    cursor: grabbing;
+  }
+
+  .thumb-notch {
+    width: 28px;
+    height: 2px;
+    background: var(--theme-accent);
+    box-shadow: 0 0 4px var(--theme-accent-hi);
+  }
+
+  .slider-value-readout {
+    margin-top: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--theme-display-ink);
+    background: #080d12;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid #1d2b3a;
+  }
+
+  .curve-visualizer-box {
+    width: 320px;
+    height: 180px;
+    background: #070e17;
+    border: 1px solid #1e2c3c;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .curve-header-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--theme-accent-hi);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .curve-canvas {
+    width: 100%;
+    height: 130px;
+    background: #04080d;
+    border-radius: 3px;
+    border: 1px solid #162230;
+  }
+
+  /* Q-LINKS BOTTOM HARDWARE STRIP */
+  .mpc-bottom-status {
+    height: 46px;
+    background: #0a0f16;
+    border-top: 1px solid var(--theme-line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--theme-ink-dim);
+  }
+
+  .qlink-bank-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .qlink-pill {
+    background: #111a24;
+    border: 1px solid #233140;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 10px;
+    color: var(--theme-ink-dim);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .qlink-pill b {
+    color: var(--theme-accent-hi);
+    background: #192736;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+
+  .qlink-bank-title {
+    color: var(--theme-accent);
+    font-weight: bold;
+    margin-right: 6px;
+  }
+
+  .mpc-native-spec {
+    color: var(--theme-ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mpc-native-spec b {
+    color: var(--theme-ink);
+  }
+</style>
+</head>
+<body>
+
+<div class="mpc-chassis">
+  <!-- MPC Header System Bar -->
+  <div class="mpc-top-bar">
+    <div class="brand-badge">
+      <div class="status-led"></div>
+      <span class="brand-title">AKAI MPC LIVE II</span>
+      <span class="brand-pill">MUTABLE INSTRUMENTS · BRAIDS</span>
+    </div>
+
+    <!-- 2 Pages / Q-Link Banks -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" id="tabBtnBraids" onclick="switchPage('BRAIDS')">1: BRAIDS</button>
+      <button class="tab-btn" id="tabBtnEnvelopes" onclick="switchPage('ENVELOPES')">2: ENVELOPES</button>
+    </div>
+
+    <div class="system-stats">
+      <div class="stat-item">DSP: <b>9%</b></div>
+      <div class="stat-item">RATE: <b>48.0 kHz</b></div>
+      <div class="stat-item">VOICE: <b>1/1 MACRO</b></div>
+      <button class="audition-btn" id="auditionTrigger" onclick="toggleAudition()">
+        <span>▶</span> AUDITION [C3]
+      </button>
+    </div>
+  </div>
+
+  <!-- Hardware Viewport: 1280 x 628 -->
+  <div class="hardware-viewport">
+    
+    <!-- ==================== TAB 1: BRAIDS ==================== -->
+    <div class="tab-view active" id="pageBraids">
+      
+      <!-- [frame x=10 y=92 w=626 h=304 title="PROGRAM"] -->
+      <!-- Adjusted relative to viewport top (header accounts for top 0) -->
+      <div class="hw-frame" style="left: 10px; top: 12px; width: 626px; height: 304px;">
+        <div class="hw-frame-header">
+          <span class="hw-frame-title">PROGRAM // PRESET STEPPER</span>
+          <span class="hw-frame-sub">ACTIVE MACRO OSCILLATOR</span>
+        </div>
+
+        <!-- stepper cx=323 cy=250 w=580 h=80 label="PATCH" key=preset style=dotmatrix -->
+        <div class="stepper-container">
+          <button class="stepper-nav-btn" onclick="prevPreset()">◀</button>
+          <div class="patch-display-body">
+            <span class="patch-id-tag" id="presetIdTag">PATCH 01 / 16 · MACRO OSC</span>
+            <span class="patch-name-text" id="presetNameText">CS-80 MULTI SAW</span>
+          </div>
+          <button class="stepper-nav-btn" onclick="nextPreset()">▶</button>
+        </div>
+
+        <!-- art file=images/caption_preset.svg x=33 y=310 w=580 h=30 + live wave viewer -->
+        <div class="patch-caption-art">
+          <div class="algorithm-visual-preview">
+            <canvas class="osc-wave-canvas" id="braidsWaveCanvas" width="410" height="95"></canvas>
+            <div class="braids-char-matrix">
+              <div class="matrix-engine-icon" id="matrixIcon">/|/|</div>
+              <div class="matrix-engine-desc" id="matrixDesc">CS-80 DUAL SAW TOOTH WITH VARIABLE SPREAD</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- [frame x=642 y=92 w=626 h=304 title="OSCILLATOR"] -->
+      <div class="hw-frame" style="left: 644px; top: 12px; width: 626px; height: 304px;">
+        <div class="hw-frame-header">
+          <span class="hw-frame-title">OSCILLATOR // MUTABLE ENGINE</span>
+          <span class="hw-frame-sub">47 ALGORITHMS · TIMBRE / COLOR</span>
+        </div>
+
+        <div class="control-group-row">
+          
+          <!-- popup cx=798 cy=242 w=200 h=48 label="ALGORITHM" key=engine -->
+          <div class="algorithm-popup-selector">
+            <span class="knob-label">ENGINE // ALGORITHM</span>
+            <div class="popup-trigger-btn" id="algoTriggerBtn" onclick="toggleAlgoMenu()">
+              <div>
+                <span class="label-sub">ACTIVE ENGINE</span>
+                <span id="selectedAlgoName">CS-80 DUAL SAW</span>
+              </div>
+              <span class="caret-icon">▼</span>
+            </div>
+
+            <!-- Algorithm Dropdown Drawer -->
+            <div class="algo-dropdown-menu" id="algoDropdown">
+              <div class="algo-option-item selected" onclick="selectAlgo('CS-80 DUAL SAW', '/|/|', 'CS-80 DUAL SAW TOOTH WITH VARIABLE SPREAD')">CSAW · CS-80 Saw</div>
+              <div class="algo-option-item" onclick="selectAlgo('MORPHING SQUARE', '∏_∏', 'VARIABLE PULSE WIDTH & SYMMETRY')">//_// · Square Morph</div>
+              <div class="algo-option-item" onclick="selectAlgo('TRIPLE SAW', '///', 'THREE DETUNED ANALOG SAW OSCILLATORS')">/// · Triple Saw</div>
+              <div class="algo-option-item" onclick="selectAlgo('FM 2-OPERATOR', 'FM2', 'PHASE MODULATION WITH HARMONIC RATIOS')">2-OP FM · Classic Chime</div>
+              <div class="algo-option-item" onclick="selectAlgo('VOCODER FORMANT', 'VOW', 'VOWEL / FORMANT SYNTHESIS MATRIX')">VOW · Singing Formants</div>
+              <div class="algo-option-item" onclick="selectAlgo('BELL & METALLIC', 'RING', 'RING MODULATED HARMONIC CHIMES')">RING · Additive Bell</div>
+              <div class="algo-option-item" onclick="selectAlgo('WTBL DIGITAL', 'WTBL', 'INTERPOLATED 8-BIT WAVETABLE BANK')">WTBL · Classic Wavetable</div>
+              <div class="algo-option-item" onclick="selectAlgo('PARTICLE NOISE', 'PRTC', 'FILTERED DUST & GRANULAR IMPULSES')">PRTC · Particle Cloud</div>
+            </div>
+          </div>
+
+          <!-- knob cx=1033 cy=237 r=38 label="TIMBRE" key=timbre -->
+          <div class="knob-widget" data-param="timbre" data-min="0" data-max="100" data-val="64" data-unit="%">
+            <span class="knob-label">TIMBRE</span>
+            <div class="knob-disc medium">
+              <div class="knob-bezel-ring"></div>
+              <div class="knob-metal-face">
+                <div class="knob-pointer-needle"></div>
+              </div>
+            </div>
+            <div class="knob-val-box">64 %</div>
+          </div>
+
+          <!-- knob cx=1189 cy=237 r=38 label="COLOR" key=color -->
+          <div class="knob-widget" data-param="color" data-min="0" data-max="100" data-val="48" data-unit="%">
+            <span class="knob-label">COLOR</span>
+            <div class="knob-disc medium">
+              <div class="knob-bezel-ring"></div>
+              <div class="knob-metal-face">
+                <div class="knob-pointer-needle"></div>
+              </div>
+            </div>
+            <div class="knob-val-box">48 %</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- [frame x=10 y=404 w=468 h=304 title="FILTER"] -->
+      <div class="hw-frame" style="left: 10px; top: 326px; width: 468px; height: 290px;">
+        <div class="hw-frame-header">
+          <span class="hw-frame-title">FILTER // POST PROCESSING</span>
+          <span class="hw-frame-sub">24dB LADDER & SVF</span>
+        </div>
+
+        <div class="control-group-row">
+          <!-- knob cx=88 cy=541 r=46 label="CUTOFF" key=cutoff -->
+          <div class="knob-widget" data-param="cutoff" data-min="20" data-max="20000" data-val="4200" data-unit="Hz">
+            <span class="knob-label">CUTOFF</span>
+            <div class="knob-disc large">
+              <div class="knob-bezel-ring"></div>
+              <div class="knob-metal-face">
+                <div class="knob-pointer-needle"></div>
+              </div>
+            </div>
+            <div class="knob-val-box">4.20 kHz</div>
+          </div>
+
+          <!-- knob cx=244 cy=549 r=38 label="RESONANCE" key=resonance -->
+          <div class="knob-widget" data-param="resonance" data-min="0" data-max="100" data-val="52" data-unit="%">
+            <span class="knob-label">RESONANCE</span>
+            <div class="knob-disc medium">
+              <div class="knob-bezel-ring"></div>
+              <div class="knob-metal-face">
+                <div class="knob-pointer-needle"></div>
+              </div>
+            </div>
+            <div class="knob-val-box">52 %</div>
+          </div>
+
+          <!-- knob cx=400 cy=549 r=38 label="FILTER ENV" key=filt_env -->
+          <div class="knob-widget" data-param="filt_env" data-min="-100" data-max="100" data-val="65" data-unit="%">
+            <span class="knob-label">FILTER ENV</span>
+            <div class="knob-disc medium">
+              <div class="knob-bezel-ring"></div>
+              <div class="knob-metal-face">
+                <div class="knob-pointer-needle"></div>
+              </div>
+            </div>
+            <div class="knob-val-box">+65 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- [frame x=484 y=404 w=152 h=304 title="MOD"] -->
+      <div class="hw-frame" style="left: 488px; top: 326px; width: 148px; height: 290px;">
+        <div class="hw-frame-header">
+          <span class="hw-frame-title">MOD</span>
+          <span class="hw-frame-sub">FM BUS</span>
+        </div>
+
+        <div class="control-group-row">
+          <!-- knob cx=560 cy=549 r=38 label="FM" key=fm -->
+          <div class="knob-widget" data-param="fm" data-min="0" data-max="100" data-val="35" data-unit="%">
+            <span class="knob-label">FM DEPTH</span>
+            <div class="knob-disc medium">
+              <div class="knob-bezel-ring"></div>
+              <div class="knob-metal-face">
+                <div class="knob-pointer-needle"></div>
+              </div>
+            </div>
+            <div class="knob-val-box">35 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- [frame x=642 y=404 w=310 h=304 title="OUTPUT"] -->
+      <div class="hw-frame" style="left: 646px; top: 326px; width: 310px; height: 290px;">
+        <div class="hw-frame-header">
+          <span class="hw-frame-title">OUTPUT // GAIN</span>
+          <span class="hw-frame-sub">OCTAVE & LEVEL</span>
+        </div>
+
+        <div class="control-group-row">
+          <!-- knob cx=719 cy=549 r=38 label="OCTAVE" key=octave_transpose -->
+          <div class="knob-widget" data-param="octave" data-min="-3" data-max="3" data-val="0" data-unit="OCT">
+            <span class="knob-label">OCTAVE</span>
+            <div class="knob-disc medium">
+              <div class="knob-bezel-ring"></div>
+              <div class="knob-metal-face">
+                <div class="knob-pointer-needle"></div>
+              </div>
+            </div>
+            <div class="knob-val-box">0 OCT</div>
+          </div>
+
+          <!-- knob cx=874 cy=549 r=38 label="VOLUME" key=volume -->
+          <div class="knob-widget" data-param="volume" data-min="0" data-max="100" data-val="84" data-unit="%">
+            <span class="knob-label">VOLUME</span>
+            <div class="knob-disc medium">
+              <div class="knob-bezel-ring"></div>
+              <div class="knob-metal-face">
+                <div class="knob-pointer-needle"></div>
+              </div>
+            </div>
+            <div class="knob-val-box">84 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- [art file=images/logo_310.svg x=958 y=404 w=310 h=304] -->
+      <div class="hw-frame" style="left: 966px; top: 326px; width: 304px; height: 290px;">
+        <div class="logo-310-panel">
+          <!-- Mutable Instruments Geometric Icon -->
+          <svg class="mi-icon-geom" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="44" stroke="#5cb3ff" stroke-width="2" stroke-dasharray="4 4" opacity="0.6"/>
+            <polygon points="50,14 84,76 16,76" stroke="#eef3f8" stroke-width="2.5" fill="rgba(47, 143, 224, 0.15)"/>
+            <circle cx="50" cy="52" r="16" fill="#2f8fe0" opacity="0.8"/>
+            <circle cx="50" cy="52" r="5" fill="#eef3f8"/>
+          </svg>
+          <div class="mi-brand-title">MUTABLE INSTRUMENTS</div>
+          <div class="mi-brand-sub">BRAIDS MACRO OSCILLATOR</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 2: ENVELOPES ==================== -->
+    <div class="tab-view" id="pageEnvelopes">
+      
+      <!-- [frame x=10 y=92 w=1258 h=304 title="AMP ENVELOPE"] -->
+      <div class="hw-frame" style="left: 10px; top: 12px; width: 1260px; height: 304px;">
+        <div class="hw-frame-header">
+          <span class="hw-frame-title">AMP ENVELOPE // DYNAMIC VCA SHAPE</span>
+          <span class="hw-frame-sub">LINEAR ATTACK & EXPONENTIAL DECAY/RELEASE</span>
+        </div>
+
+        <div class="envelope-bank-layout">
+          <!-- 4 Vertical Sliders: Attack, Decay, Sustain, Release -->
+          <div class="slider-rack">
+            <!-- slider_v cx=167 cy=232 w=44 h=150 label="AMP ATTACK" key=attack -->
+            <div class="slider-unit" data-param="amp_a" data-val="15">
+              <span class="slider-label">AMP ATTACK</span>
+              <div class="slider-track-wrap" onpointerdown="handleSliderDrag(event, 'amp_a')">
+                <div class="slider-center-groove">
+                  <div class="slider-fill-light" id="amp_a_fill" style="height: 15%;"></div>
+                </div>
+                <div class="slider-thumb-cap" id="amp_a_thumb" style="bottom: 15%;">
+                  <div class="thumb-notch"></div>
+                </div>
+              </div>
+              <span class="slider-value-readout" id="amp_a_val">15 ms</span>
+            </div>
+
+            <!-- slider_v cx=481 cy=232 w=44 h=150 label="AMP DECAY" key=decay -->
+            <div class="slider-unit" data-param="amp_d" data-val="45">
+              <span class="slider-label">AMP DECAY</span>
+              <div class="slider-track-wrap" onpointerdown="handleSliderDrag(event, 'amp_d')">
+                <div class="slider-center-groove">
+                  <div class="slider-fill-light" id="amp_d_fill" style="height: 45%;"></div>
+                </div>
+                <div class="slider-thumb-cap" id="amp_d_thumb" style="bottom: 45%;">
+                  <div class="thumb-notch"></div>
+                </div>
+              </div>
+              <span class="slider-value-readout" id="amp_d_val">380 ms</span>
+            </div>
+
+            <!-- slider_v cx=796 cy=232 w=44 h=150 label="AMP SUSTAIN" key=sustain -->
+            <div class="slider-unit" data-param="amp_s" data-val="70">
+              <span class="slider-label">AMP SUSTAIN</span>
+              <div class="slider-track-wrap" onpointerdown="handleSliderDrag(event, 'amp_s')">
+                <div class="slider-center-groove">
+                  <div class="slider-fill-light" id="amp_s_fill" style="height: 70%;"></div>
+                </div>
+                <div class="slider-thumb-cap" id="amp_s_thumb" style="bottom: 70%;">
+                  <div class="thumb-notch"></div>
+                </div>
+              </div>
+              <span class="slider-value-readout" id="amp_s_val">70 %</span>
+            </div>
+
+            <!-- slider_v cx=1110 cy=232 w=44 h=150 label="AMP RELEASE" key=release -->
+            <div class="slider-unit" data-param="amp_r" data-val="40">
+              <span class="slider-label">AMP RELEASE</span>
+              <div class="slider-track-wrap" onpointerdown="handleSliderDrag(event, 'amp_r')">
+                <div class="slider-center-groove">
+                  <div class="slider-fill-light" id="amp_r_fill" style="height: 40%;"></div>
+                </div>
+                <div class="slider-thumb-cap" id="amp_r_thumb" style="bottom: 40%;">
+                  <div class="thumb-notch"></div>
+                </div>
+              </div>
+              <span class="slider-value-readout" id="amp_r_val">520 ms</span>
+            </div>
+          </div>
+
+          <!-- Amp Envelope Live Curve Visualizer -->
+          <div class="curve-visualizer-box">
+            <div class="curve-header-tag">
+              <span>AMP ADSR VECTOR SPLINE</span>
+              <span id="ampCurveDuration">TIME: ~1.2s</span>
+            </div>
+            <canvas class="curve-canvas" id="ampCurveCanvas" width="300" height="130"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- [frame x=10 y=404 w=1258 h=304 title="FILTER ENVELOPE"] -->
+      <div class="hw-frame" style="left: 10px; top: 326px; width: 1260px; height: 290px;">
+        <div class="hw-frame-header">
+          <span class="hw-frame-title">FILTER ENVELOPE // FREQUENCY MODULATION CURVE</span>
+          <span class="hw-frame-sub">DYNAMIC BARK & CUTOFF SWEEP PROFILE</span>
+        </div>
+
+        <div class="envelope-bank-layout">
+          <!-- 4 Vertical Sliders: F_Attack, F_Decay, F_Sustain, F_Release -->
+          <div class="slider-rack">
+            <!-- slider_v cx=167 cy=544 w=44 h=150 label="FLT ATTACK" key=f_attack -->
+            <div class="slider-unit" data-param="flt_a" data-val="10">
+              <span class="slider-label">FLT ATTACK</span>
+              <div class="slider-track-wrap" onpointerdown="handleSliderDrag(event, 'flt_a')">
+                <div class="slider-center-groove">
+                  <div class="slider-fill-light" id="flt_a_fill" style="height: 10%;"></div>
+                </div>
+                <div class="slider-thumb-cap" id="flt_a_thumb" style="bottom: 10%;">
+                  <div class="thumb-notch"></div>
+                </div>
+              </div>
+              <span class="slider-value-readout" id="flt_a_val">8 ms</span>
+            </div>
+
+            <!-- slider_v cx=481 cy=544 w=44 h=150 label="FLT DECAY" key=f_decay -->
+            <div class="slider-unit" data-param="flt_d" data-val="55">
+              <span class="slider-label">FLT DECAY</span>
+              <div class="slider-track-wrap" onpointerdown="handleSliderDrag(event, 'flt_d')">
+                <div class="slider-center-groove">
+                  <div class="slider-fill-light" id="flt_d_fill" style="height: 55%;"></div>
+                </div>
+                <div class="slider-thumb-cap" id="flt_d_thumb" style="bottom: 55%;">
+                  <div class="thumb-notch"></div>
+                </div>
+              </div>
+              <span class="slider-value-readout" id="flt_d_val">460 ms</span>
+            </div>
+
+            <!-- slider_v cx=796 cy=544 w=44 h=150 label="FLT SUSTAIN" key=f_sustain -->
+            <div class="slider-unit" data-param="flt_s" data-val="30">
+              <span class="slider-label">FLT SUSTAIN</span>
+              <div class="slider-track-wrap" onpointerdown="handleSliderDrag(event, 'flt_s')">
+                <div class="slider-center-groove">
+                  <div class="slider-fill-light" id="flt_s_fill" style="height: 30%;"></div>
+                </div>
+                <div class="slider-thumb-cap" id="flt_s_thumb" style="bottom: 30%;">
+                  <div class="thumb-notch"></div>
+                </div>
+              </div>
+              <span class="slider-value-readout" id="flt_s_val">30 %</span>
+            </div>
+
+            <!-- slider_v cx=1110 cy=544 w=44 h=150 label="FLT RELEASE" key=f_release -->
+            <div class="slider-unit" data-param="flt_r" data-val="45">
+              <span class="slider-label">FLT RELEASE</span>
+              <div class="slider-track-wrap" onpointerdown="handleSliderDrag(event, 'flt_r')">
+                <div class="slider-center-groove">
+                  <div class="slider-fill-light" id="flt_r_fill" style="height: 45%;"></div>
+                </div>
+                <div class="slider-thumb-cap" id="flt_r_thumb" style="bottom: 45%;">
+                  <div class="thumb-notch"></div>
+                </div>
+              </div>
+              <span class="slider-value-readout" id="flt_r_val">610 ms</span>
+            </div>
+          </div>
+
+          <!-- Filter Envelope Live Curve Visualizer -->
+          <div class="curve-visualizer-box">
+            <div class="curve-header-tag">
+              <span>FILTER ADSR MODULATION</span>
+              <span id="fltCurvePeak">MAX: +65 %</span>
+            </div>
+            <canvas class="curve-canvas" id="fltCurveCanvas" width="300" height="130"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MPC Q-Link Bottom Status Strip -->
+  <div class="mpc-bottom-status">
+    <div class="qlink-bank-badges">
+      <span class="qlink-bank-title" id="qlinkBankTitle">Q-LINKS BANK [1: BRAIDS]:</span>
+      <div class="qlink-pill"><b>Q1</b> PRESET</div>
+      <div class="qlink-pill"><b>Q2</b> ENGINE</div>
+      <div class="qlink-pill"><b>Q3</b> TIMBRE</div>
+      <div class="qlink-pill"><b>Q4</b> COLOR</div>
+      <div class="qlink-pill"><b>Q5</b> CUTOFF</div>
+      <div class="qlink-pill"><b>Q6</b> RESO</div>
+      <div class="qlink-pill"><b>Q7</b> FM</div>
+      <div class="qlink-pill"><b>Q8</b> VOLUME</div>
+    </div>
+
+    <div class="mpc-native-spec">
+      <span>ARM64 LINUX: <b>1280×628 BUFFER</b></span>
+      <span>RENDERER: <b>HTML / BRAIDS.CSS</b></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* Audio Synthesis & Web Audio Context */
+  let audioCtx = null;
+  let oscNode = null;
+  let filterNode = null;
+  let gainNode = null;
+  let isAuditioning = false;
+
+  const presets = [
+    { name: "CS-80 MULTI SAW", algo: "CS-80 DUAL SAW", icon: "/|/|", desc: "CS-80 DUAL SAW TOOTH WITH VARIABLE SPREAD", timbre: 64, color: 48, cutoff: 4200, res: 52 },
+    { name: "SQUARE DUAL PULSE", algo: "MORPHING SQUARE", icon: "∏_∏", desc: "VARIABLE PULSE WIDTH & SYMMETRY", timbre: 40, color: 72, cutoff: 3100, res: 40 },
+    { name: "SUPERSAW DETUNE", algo: "TRIPLE SAW", icon: "///", desc: "THREE DETUNED ANALOG SAW OSCILLATORS", timbre: 78, color: 55, cutoff: 6400, res: 60 },
+    { name: "FM METALLIC CHIME", algo: "FM 2-OPERATOR", icon: "FM2", desc: "PHASE MODULATION WITH HARMONIC RATIOS", timbre: 85, color: 32, cutoff: 7800, res: 45 },
+    { name: "CYBER CHOIR AAH", algo: "VOCODER FORMANT", icon: "VOW", desc: "VOWEL / FORMANT SYNTHESIS MATRIX", timbre: 50, color: 68, cutoff: 2800, res: 75 },
+    { name: "TIBETAN COPPER BELL", algo: "BELL & METALLIC", icon: "RING", desc: "RING MODULATED HARMONIC CHIMES", timbre: 90, color: 80, cutoff: 5200, res: 82 }
+  ];
+  let currentPresetIndex = 0;
+
+  // Knob Parameters
+  const paramValues = {
+    timbre: 64,
+    color: 48,
+    cutoff: 4200,
+    resonance: 52,
+    filt_env: 65,
+    fm: 35,
+    octave: 0,
+    volume: 84
+  };
+
+  // Envelope Slider Parameters (0 to 100)
+  const envValues = {
+    amp_a: 15,
+    amp_d: 45,
+    amp_s: 70,
+    amp_r: 40,
+    flt_a: 10,
+    flt_d: 55,
+    flt_s: 30,
+    flt_r: 45
+  };
+
+  // Switch between BRAIDS and ENVELOPES tabs
+  function switchPage(pageKey) {
+    const isBraids = (pageKey === 'BRAIDS');
+    document.getElementById('pageBraids').classList.toggle('active', isBraids);
+    document.getElementById('pageEnvelopes').classList.toggle('active', !isBraids);
+    document.getElementById('tabBtnBraids').classList.toggle('active', isBraids);
+    document.getElementById('tabBtnEnvelopes').classList.toggle('active', !isBraids);
+
+    const qTitle = document.getElementById('qlinkBankTitle');
+    const badgesWrap = document.querySelector('.qlink-bank-badges');
+    
+    if (isBraids) {
+      qTitle.textContent = "Q-LINKS BANK [1: BRAIDS]:";
+      badgesWrap.innerHTML = `
+        <span class="qlink-bank-title">Q-LINKS BANK [1: BRAIDS]:</span>
+        <div class="qlink-pill"><b>Q1</b> PRESET</div>
+        <div class="qlink-pill"><b>Q2</b> ENGINE</div>
+        <div class="qlink-pill"><b>Q3</b> TIMBRE</div>
+        <div class="qlink-pill"><b>Q4</b> COLOR</div>
+        <div class="qlink-pill"><b>Q5</b> CUTOFF</div>
+        <div class="qlink-pill"><b>Q6</b> RESO</div>
+        <div class="qlink-pill"><b>Q7</b> FM</div>
+        <div class="qlink-pill"><b>Q8</b> VOLUME</div>
+      `;
+    } else {
+      badgesWrap.innerHTML = `
+        <span class="qlink-bank-title">Q-LINKS BANK [2: ENVELOPES]:</span>
+        <div class="qlink-pill"><b>Q1</b> AMP ATK</div>
+        <div class="qlink-pill"><b>Q2</b> AMP DCY</div>
+        <div class="qlink-pill"><b>Q3</b> AMP SUS</div>
+        <div class="qlink-pill"><b>Q4</b> AMP REL</div>
+        <div class="qlink-pill"><b>Q5</b> FLT ATK</div>
+        <div class="qlink-pill"><b>Q6</b> FLT DCY</div>
+        <div class="qlink-pill"><b>Q7</b> FLT SUS</div>
+        <div class="qlink-pill"><b>Q8</b> FLT REL</div>
+      `;
+      drawEnvelopeCurves();
+    }
+  }
+
+  // Preset Stepper
+  function prevPreset() {
+    currentPresetIndex = (currentPresetIndex - 1 + presets.length) % presets.length;
+    applyPreset(currentPresetIndex);
+  }
+
+  function nextPreset() {
+    currentPresetIndex = (currentPresetIndex + 1) % presets.length;
+    applyPreset(currentPresetIndex);
+  }
+
+  function applyPreset(idx) {
+    const p = presets[idx];
+    document.getElementById('presetIdTag').textContent = `PATCH 0${idx+1} / 16 · MACRO OSC`;
+    document.getElementById('presetNameText').textContent = p.name;
+    document.getElementById('selectedAlgoName').textContent = p.algo;
+    document.getElementById('matrixIcon').textContent = p.icon;
+    document.getElementById('matrixDesc').textContent = p.desc;
+
+    // Update knobs
+    updateKnobDisplay('timbre', p.timbre, p.timbre + ' %');
+    updateKnobDisplay('color', p.color, p.color + ' %');
+    updateKnobDisplay('cutoff', p.cutoff, (p.cutoff/1000).toFixed(2) + ' kHz');
+    updateKnobDisplay('resonance', p.res, p.res + ' %');
+
+    if (isAuditioning && filterNode) {
+      filterNode.frequency.setValueAtTime(p.cutoff, audioCtx.currentTime);
+      filterNode.Q.setValueAtTime(p.res / 5, audioCtx.currentTime);
+    }
+  }
+
+  // Algorithm Dropdown menu
+  function toggleAlgoMenu() {
+    const menu = document.getElementById('algoDropdown');
+    menu.classList.toggle('open');
+  }
+
+  function selectAlgo(name, icon, desc) {
+    document.getElementById('selectedAlgoName').textContent = name;
+    document.getElementById('matrixIcon').textContent = icon;
+    document.getElementById('matrixDesc').textContent = desc;
+    document.getElementById('algoDropdown').classList.remove('open');
+  }
+
+  // Knobs drag interaction
+  document.querySelectorAll('.knob-widget').forEach(widget => {
+    let startY = 0;
+    let startVal = 0;
+    const param = widget.dataset.param;
+    const min = parseFloat(widget.dataset.min);
+    const max = parseFloat(widget.dataset.max);
+    const unit = widget.dataset.unit || '';
+
+    widget.addEventListener('pointerdown', (e) => {
+      startY = e.clientY;
+      startVal = paramValues[param];
+      widget.setPointerCapture(e.pointerId);
+
+      const onPointerMove = (ev) => {
+        const delta = (startY - ev.clientY);
+        const range = max - min;
+        let newVal = startVal + (delta / 120) * range;
+        newVal = Math.max(min, Math.min(max, newVal));
+        paramValues[param] = newVal;
+
+        let displayStr = '';
+        if (unit === 'Hz') {
+          displayStr = (newVal >= 1000) ? (newVal / 1000).toFixed(2) + ' kHz' : Math.round(newVal) + ' Hz';
+        } else if (unit === '%') {
+          displayStr = (param === 'filt_env' && newVal > 0 ? '+' : '') + Math.round(newVal) + ' %';
+        } else if (unit === 'OCT') {
+          displayStr = (newVal > 0 ? '+' : '') + Math.round(newVal) + ' OCT';
+        }
+
+        updateKnobDisplay(param, newVal, displayStr);
+
+        // Web Audio dynamic update
+        if (isAuditioning) {
+          if (param === 'cutoff' && filterNode) {
+            filterNode.frequency.setValueAtTime(newVal, audioCtx.currentTime);
+          } else if (param === 'resonance' && filterNode) {
+            filterNode.Q.setValueAtTime(newVal / 5, audioCtx.currentTime);
+          } else if (param === 'volume' && gainNode) {
+            gainNode.gain.setValueAtTime((newVal / 100) * 0.4, audioCtx.currentTime);
+          }
+        }
+      };
+
+      const onPointerUp = (ev) => {
+        widget.releasePointerCapture(ev.pointerId);
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', onPointerUp);
+      };
+
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+    });
+  });
+
+  function updateKnobDisplay(param, val, formattedStr) {
+    paramValues[param] = val;
+    const widget = document.querySelector(`.knob-widget[data-param="${param}"]`);
+    if (!widget) return;
+    const min = parseFloat(widget.dataset.min);
+    const max = parseFloat(widget.dataset.max);
+    const pct = (val - min) / (max - min);
+
+    // Rotation from -135deg to +135deg
+    const deg = -135 + (pct * 270);
+    const face = widget.querySelector('.knob-metal-face');
+    if (face) face.style.transform = `rotate(${deg}deg)`;
+
+    const valBox = widget.querySelector('.knob-val-box');
+    if (valBox) valBox.textContent = formattedStr;
+  }
+
+  // Initial knob rotations
+  Object.keys(paramValues).forEach(k => {
+    const w = document.querySelector(`.knob-widget[data-param="${k}"]`);
+    if (w) {
+      const v = paramValues[k];
+      const unit = w.dataset.unit;
+      let s = v + ' ' + unit;
+      if (unit === 'Hz') s = (v >= 1000) ? (v/1000).toFixed(2) + ' kHz' : v + ' Hz';
+      else if (unit === '%') s = (k === 'filt_env' && v > 0 ? '+' : '') + Math.round(v) + ' %';
+      updateKnobDisplay(k, v, s);
+    }
+  });
+
+  // Vertical Slider Drags
+  function handleSliderDrag(e, param) {
+    const track = e.currentTarget;
+    const rect = track.getBoundingClientRect();
+
+    const setSliderPos = (clientY) => {
+      const offset = clientY - rect.top;
+      let pct = 1 - (offset / rect.height);
+      pct = Math.max(0, Math.min(1, pct));
+      envValues[param] = Math.round(pct * 100);
+
+      document.getElementById(`${param}_fill`).style.height = `${pct * 100}%`;
+      document.getElementById(`${param}_thumb`).style.bottom = `${pct * 100}%`;
+
+      // Formatted text readouts
+      let labelText = `${Math.round(pct * 100)} %`;
+      if (param.endsWith('_a') || param.endsWith('_d') || param.endsWith('_r')) {
+        const ms = Math.round(5 + Math.pow(pct, 2) * 1400);
+        labelText = `${ms} ms`;
+      }
+      document.getElementById(`${param}_val`).textContent = labelText;
+
+      drawEnvelopeCurves();
+    };
+
+    setSliderPos(e.clientY);
+
+    const onMove = (ev) => setSliderPos(ev.clientY);
+    const onUp = () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+
+  // Draw ADSR curves on Canvas
+  function drawEnvelopeCurves() {
+    // AMP Curve
+    const ampCanvas = document.getElementById('ampCurveCanvas');
+    if (ampCanvas) {
+      const ctx = ampCanvas.getContext('2d');
+      const w = ampCanvas.width;
+      const h = ampCanvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid Lines
+      ctx.strokeStyle = '#121d28';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let x = 30; x < w; x += 30) { ctx.moveTo(x, 0); ctx.lineTo(x, h); }
+      for (let y = 25; y < h; y += 25) { ctx.moveTo(0, y); ctx.lineTo(w, y); }
+      ctx.stroke();
+
+      const a = (envValues.amp_a / 100) * 0.25;
+      const d = (envValues.amp_d / 100) * 0.3;
+      const s = (envValues.amp_s / 100);
+      const r = (envValues.amp_r / 100) * 0.35;
+
+      const p0 = { x: 10, y: h - 10 };
+      const p1 = { x: 10 + a * (w - 30), y: 15 };
+      const p2 = { x: p1.x + d * (w - 30), y: h - 10 - s * (h - 25) };
+      const p3 = { x: p2.x + 50, y: p2.y };
+      const p4 = { x: Math.min(w - 10, p3.x + r * (w - 30)), y: h - 10 };
+
+      // Fill Gradient
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(92, 179, 255, 0.35)');
+      grad.addColorStop(1, 'rgba(47, 143, 224, 0.02)');
+
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.quadraticCurveTo((p1.x + p2.x)/2, p2.y, p2.x, p2.y);
+      ctx.lineTo(p3.x, p3.y);
+      ctx.quadraticCurveTo((p3.x + p4.x)/2, p4.y - 10, p4.x, p4.y);
+      ctx.lineTo(p0.x, p0.y);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Stroke Line
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.quadraticCurveTo((p1.x + p2.x)/2, p2.y, p2.x, p2.y);
+      ctx.lineTo(p3.x, p3.y);
+      ctx.quadraticCurveTo((p3.x + p4.x)/2, p4.y - 10, p4.x, p4.y);
+      ctx.strokeStyle = '#5cb3ff';
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = '#5cb3ff';
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Handle Nodes
+      [p1, p2, p3, p4].forEach(pt => {
+        ctx.fillStyle = '#eef3f8';
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    // Filter Curve
+    const fltCanvas = document.getElementById('fltCurveCanvas');
+    if (fltCanvas) {
+      const ctx = fltCanvas.getContext('2d');
+      const w = fltCanvas.width;
+      const h = fltCanvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = '#121d28';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let x = 30; x < w; x += 30) { ctx.moveTo(x, 0); ctx.lineTo(x, h); }
+      for (let y = 25; y < h; y += 25) { ctx.moveTo(0, y); ctx.lineTo(w, y); }
+      ctx.stroke();
+
+      const a = (envValues.flt_a / 100) * 0.25;
+      const d = (envValues.flt_d / 100) * 0.3;
+      const s = (envValues.flt_s / 100);
+      const r = (envValues.flt_r / 100) * 0.35;
+
+      const p0 = { x: 10, y: h - 10 };
+      const p1 = { x: 10 + a * (w - 30), y: 20 };
+      const p2 = { x: p1.x + d * (w - 30), y: h - 10 - s * (h - 30) };
+      const p3 = { x: p2.x + 45, y: p2.y };
+      const p4 = { x: Math.min(w - 10, p3.x + r * (w - 30)), y: h - 10 };
+
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(47, 143, 224, 0.4)');
+      grad.addColorStop(1, 'rgba(11, 26, 42, 0.05)');
+
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.quadraticCurveTo((p1.x + p2.x)/2, p2.y, p2.x, p2.y);
+      ctx.lineTo(p3.x, p3.y);
+      ctx.quadraticCurveTo((p3.x + p4.x)/2, p4.y, p4.x, p4.y);
+      ctx.lineTo(p0.x, p0.y);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.quadraticCurveTo((p1.x + p2.x)/2, p2.y, p2.x, p2.y);
+      ctx.lineTo(p3.x, p3.y);
+      ctx.quadraticCurveTo((p3.x + p4.x)/2, p4.y, p4.x, p4.y);
+      ctx.strokeStyle = '#2f8fe0';
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = '#2f8fe0';
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      [p1, p2, p3, p4].forEach(pt => {
+        ctx.fillStyle = '#6cc4ff';
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+  }
+
+  // Oscilloscope Animation Loop
+  const waveCanvas = document.getElementById('braidsWaveCanvas');
+  const waveCtx = waveCanvas.getContext('2d');
+  let phase = 0;
+
+  function renderWave() {
+    const w = waveCanvas.width;
+    const h = waveCanvas.height;
+    waveCtx.fillStyle = '#060b10';
+    waveCtx.fillRect(0, 0, w, h);
+
+    // Subtle oscilloscope graticule
+    waveCtx.strokeStyle = '#101a24';
+    waveCtx.lineWidth = 1;
+    waveCtx.beginPath();
+    waveCtx.moveTo(0, h/2); waveCtx.lineTo(w, h/2);
+    waveCtx.moveTo(w/2, 0); waveCtx.lineTo(w/2, h);
+    waveCtx.stroke();
+
+    waveCtx.beginPath();
+    waveCtx.strokeStyle = isAuditioning ? '#5cb3ff' : '#2f8fe0';
+    waveCtx.lineWidth = 2;
+    waveCtx.shadowColor = '#5cb3ff';
+    waveCtx.shadowBlur = isAuditioning ? 12 : 6;
+
+    const timbreMod = (paramValues.timbre / 100);
+    const colorMod = (paramValues.color / 100);
+
+    for (let x = 0; x < w; x++) {
+      const t = (x / w) * Math.PI * 4 + phase;
+      let y = Math.sin(t) * 0.45;
+      
+      // Harmonics depending on timbre and color
+      y += Math.sin(t * 2 + phase * 1.5) * (0.35 * timbreMod);
+      y += Math.sin(t * 3 - phase) * (0.2 * colorMod);
+
+      const py = (h / 2) + y * (h * 0.4);
+      if (x === 0) waveCtx.moveTo(x, py);
+      else waveCtx.lineTo(x, py);
+    }
+
+    waveCtx.stroke();
+    waveCtx.shadowBlur = 0;
+
+    phase += isAuditioning ? 0.08 : 0.02;
+    requestAnimationFrame(renderWave);
+  }
+  renderWave();
+
+  // Web Audio Audition
+  function toggleAudition() {
+    if (isAuditioning) {
+      stopAudition();
+    } else {
+      startAudition();
+    }
+  }
+
+  function startAudition() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    // Dual Oscillator + Resonant Lowpass Filter
+    oscNode = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    filterNode = audioCtx.createBiquadFilter();
+    gainNode = audioCtx.createGain();
+
+    oscNode.type = 'sawtooth';
+    oscNode.frequency.setValueAtTime(130.81, audioCtx.currentTime); // C3
+
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(130.81 * 1.008, audioCtx.currentTime);
+
+    filterNode.type = 'lowpass';
+    filterNode.frequency.setValueAtTime(paramValues.cutoff, audioCtx.currentTime);
+    filterNode.Q.setValueAtTime(paramValues.resonance / 6, audioCtx.currentTime);
+
+    const masterVol = (paramValues.volume / 100) * 0.35;
+    gainNode.gain.setValueAtTime(masterVol, audioCtx.currentTime);
+
+    oscNode.connect(filterNode);
+    osc2.connect(filterNode);
+    filterNode.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscNode.start();
+    osc2.start();
+
+    isAuditioning = true;
+    const btn = document.getElementById('auditionTrigger');
+    btn.classList.add('playing');
+    btn.innerHTML = '<span>■</span> STOP [C3]';
+  }
+
+  function stopAudition() {
+    if (gainNode) {
+      gainNode.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+      setTimeout(() => {
+        try {
+          if (oscNode) oscNode.stop();
+        } catch(e) {}
+      }, 60);
+    }
+    isAuditioning = false;
+    const btn = document.getElementById('auditionTrigger');
+    btn.classList.remove('playing');
+    btn.innerHTML = '<span>▶</span> AUDITION [C3]';
+  }
+
+  // Keyboard shortcut: Spacebar to audition
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target === document.body) {
+      e.preventDefault();
+      toggleAudition();
+    }
+  });
+
+  // Initial curve render
+  drawEnvelopeCurves();
+</script>
+</body>
+</html>

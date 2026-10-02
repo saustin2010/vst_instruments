@@ -1,0 +1,376 @@
+{
+  "id": "monksynth",
+  "name": "MonkSynth",
+  "version": "0.1.1",
+  "description": "Monophonic formant (FOF) vocal synthesizer with twelve singing characters - an homage to Delay Lama. Pad pressure sweeps the vowel.",
+  "author": "Jonathan Taylor (DSP), Charles Vestal (port)",
+  "component_type": "sound_generator",
+  "abbrev": "MK",
+  "api_version": 2,
+  "min_host_version": "1.2.1",
+  "dsp": "dsp.so",
+  "capabilities": {
+    "chainable": true,
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "aftertouch": true,
+    "canvas_script": "canvas.js",
+    "chain_params": [
+      {
+        "key": "face",
+        "name": "Character",
+        "short_name": "Char",
+        "type": "int",
+        "min": 0,
+        "max": 11,
+        "step": 1,
+        "default": 0,
+        "access": "read",
+        "show_value": false
+      },
+      {
+        "key": "vowel",
+        "name": "Vowel",
+        "short_name": "Vow",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.5,
+        "live": true,
+        "viz": {
+          "kind": "custom:monkmouth",
+          "extra_keys": [
+            "face"
+          ]
+        },
+        "card_script": "cards.js#vowel_card",
+        "card_w": 104,
+        "card_h": 46
+      },
+      {
+        "key": "head_size",
+        "name": "Head Size",
+        "short_name": "Head",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.5
+      },
+      {
+        "key": "aspiration",
+        "name": "Breath",
+        "short_name": "Brth",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.5
+      },
+      {
+        "key": "glide",
+        "name": "Glide",
+        "short_name": "Gld",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.5
+      },
+      {
+        "key": "vibrato",
+        "name": "Vibrato",
+        "short_name": "Vib",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0
+      },
+      {
+        "key": "delay",
+        "name": "Delay",
+        "short_name": "Dly",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.8
+      },
+      {
+        "key": "level",
+        "name": "Level",
+        "short_name": "Lvl",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 1
+      },
+      {
+        "key": "vibrato_rate",
+        "name": "Vibrato Rate",
+        "short_name": "VbRt",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.5
+      },
+      {
+        "key": "attack",
+        "name": "Attack",
+        "short_name": "Atk",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0
+      },
+      {
+        "key": "decay",
+        "name": "Decay",
+        "short_name": "Dec",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0
+      },
+      {
+        "key": "sustain",
+        "name": "Sustain",
+        "short_name": "Sus",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 1
+      },
+      {
+        "key": "release",
+        "name": "Release",
+        "short_name": "Rel",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0
+      },
+      {
+        "key": "unison",
+        "name": "Unison",
+        "short_name": "Uni",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0
+      },
+      {
+        "key": "unison_detune",
+        "name": "Detune",
+        "short_name": "Det",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0
+      },
+      {
+        "key": "unison_spread",
+        "name": "Spread",
+        "short_name": "Spr",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0
+      },
+      {
+        "key": "delay_rate",
+        "name": "Delay Rate",
+        "short_name": "DlRt",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.5
+      },
+      {
+        "key": "pressure_routing",
+        "name": "Pressure Target",
+        "short_name": "Prs",
+        "type": "enum",
+        "options": [
+          "Vowel",
+          "Pitch",
+          "Both",
+          "Both Inv"
+        ],
+        "default": 0
+      },
+      {
+        "key": "bend_range",
+        "name": "Bend Range",
+        "short_name": "Bend",
+        "type": "float",
+        "min": 0,
+        "max": 12,
+        "step": 0.5,
+        "default": 2,
+        "unit": "st"
+      },
+      {
+        "key": "pressure_depth",
+        "name": "Pressure Depth",
+        "short_name": "Dpth",
+        "type": "float",
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.5
+      },
+      {
+        "key": "big_face",
+        "name": "Face",
+        "short_name": "Face",
+        "type": "canvas",
+        "canvas_script": "canvas.js",
+        "as_page": true,
+        "preset_browser": true,
+        "show_value": false
+      }
+    ]
+  },
+  "ui_hierarchy": {
+    "pad_layout": "chromatic",
+    "levels": {
+      "root": {
+        "label": "MonkSynth",
+        "list_param": "preset",
+        "count_param": "preset_count",
+        "name_param": "preset_name",
+        "knobs": [
+          "vowel",
+          "head_size",
+          "aspiration",
+          "glide",
+          "vibrato",
+          "unison",
+          "delay",
+          "level"
+        ],
+        "params": [
+          {
+            "key": "big_face"
+          },
+          {
+            "key": "vowel"
+          },
+          {
+            "key": "head_size"
+          },
+          {
+            "key": "aspiration"
+          },
+          {
+            "key": "glide"
+          },
+          {
+            "key": "vibrato"
+          },
+          {
+            "key": "unison"
+          },
+          {
+            "key": "delay"
+          },
+          {
+            "key": "level"
+          },
+          {
+            "level": "effects",
+            "label": "Voice Effects"
+          },
+          {
+            "level": "envelope",
+            "label": "Envelope"
+          }
+        ]
+      },
+      "envelope": {
+        "label": "Envelope",
+        "knobs": [
+          "attack",
+          "decay",
+          "sustain",
+          "release",
+          "pressure_routing",
+          "pressure_depth",
+          "bend_range"
+        ],
+        "params": [
+          {
+            "key": "attack"
+          },
+          {
+            "key": "decay"
+          },
+          {
+            "key": "sustain"
+          },
+          {
+            "key": "release"
+          },
+          {
+            "key": "pressure_routing"
+          },
+          {
+            "key": "pressure_depth"
+          },
+          {
+            "key": "bend_range"
+          }
+        ]
+      },
+      "effects": {
+        "label": "Voice Effects",
+        "knobs": [
+          "vibrato",
+          "vibrato_rate",
+          "delay",
+          "delay_rate",
+          "unison",
+          "unison_detune",
+          "unison_spread"
+        ],
+        "params": [
+          {
+            "key": "vibrato"
+          },
+          {
+            "key": "vibrato_rate"
+          },
+          {
+            "key": "delay"
+          },
+          {
+            "key": "delay_rate"
+          },
+          {
+            "key": "unison"
+          },
+          {
+            "key": "unison_detune"
+          },
+          {
+            "key": "unison_spread"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=1280, height=628, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>RINGS FX // RESONATOR EFFECT</title>
+<!-- Material Symbols & Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary": "#ffb4a7",
+            "on-secondary": "#680300",
+            "on-surface": "#e3e2e6",
+            "surface-container": "#1f1f23",
+            "on-tertiary": "#373016",
+            "tertiary-container": "#beb38f",
+            "error-container": "#93000a",
+            "on-secondary-container": "#ff9a89",
+            "outline-variant": "#504535",
+            "on-tertiary-container": "#4c4529",
+            "background": "#121316",
+            "inverse-surface": "#e3e2e6",
+            "on-background": "#e3e2e6",
+            "primary": "#ffc665",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "inverse-on-surface": "#2f3034",
+            "on-secondary-fixed": "#400100",
+            "primary-fixed-dim": "#fabc4d",
+            "surface-bright": "#38393c",
+            "secondary-fixed-dim": "#ffb4a7",
+            "inverse-primary": "#7e5700",
+            "primary-container": "#e5a93c",
+            "on-secondary-fixed-variant": "#920801",
+            "surface-container-low": "#1b1b1f",
+            "surface-container-lowest": "#0d0e11",
+            "on-primary-fixed-variant": "#604100",
+            "tertiary": "#dacfa9",
+            "on-surface-variant": "#d4c4b0",
+            "on-primary-container": "#5e4000",
+            "tertiary-fixed": "#eee2bc",
+            "on-primary": "#432c00",
+            "error": "#ffb4ab",
+            "on-tertiary-fixed": "#211b04",
+            "outline": "#9d8f7c",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "on-primary-fixed": "#281900",
+            "primary-fixed": "#ffdead",
+            "surface": "#121316",
+            "surface-container-high": "#292a2d",
+            "surface-tint": "#fabc4d",
+            "on-error": "#690005",
+            "secondary-container": "#920801",
+            "secondary-fixed": "#ffdad4",
+            "surface-container-highest": "#343538",
+            "surface-variant": "#343538",
+            "surface-dim": "#121316"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "gutter": "0.75rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem"
+          },
+          fontFamily: {
+            "headline-lg": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "label-lg": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "label-md": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-md": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"]
+          },
+          fontSize: {
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Strict Hardware Viewport Lock */
+    body {
+      width: 1280px;
+      height: 628px;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      background-color: #0f0d0b;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Hardware relief shadows */
+    .recessed-well {
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.85), inset 0 0 1px rgba(0,0,0,0.9);
+    }
+    .milled-panel {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 2px 4px rgba(0,0,0,0.9);
+      background-color: #1a1714;
+    }
+    .knob-shadow {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
+    }
+    .hex-bolt {
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #2a2520 30%, #151311 90%);
+      border: 1px solid #463b30;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 1px 2px rgba(0,0,0,0.8);
+      position: absolute;
+    }
+    .hex-bolt::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 2px;
+      height: 2px;
+      background: #0d0b09;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface flex flex-col justify-between font-body-md select-none border border-outline-variant">
+<!-- TOP APP BAR / HEADER (Fixed 44px) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-11 bg-surface-container-lowest border-b border-outline-variant select-none">
+<!-- Brand / Title Anchor -->
+<div class="flex items-center space-x-space-md">
+<div class="flex items-center space-x-space-sm">
+<span class="w-2.5 h-2.5 bg-primary rounded-full shadow-[0_0_8px_#ffc665]"></span>
+<h1 class="text-headline-sm font-headline-sm text-primary tracking-wider uppercase">SYNTH ENGINE // MPC</h1>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant">MUTABLE INSTRUMENTS DSP // AUDIO EFFECT</span>
+<span class="text-label-sm font-label-sm text-tertiary">RINGS FX // RESONATOR EFFECT</span>
+</div>
+<!-- Center Navigation Links (from JSON) -->
+<nav class="flex items-center space-x- space-md">
+<span class="text-label-md font-label-md text-on-surface-variant hover:text-on-surface px-2 py-1 cursor-pointer">OSC</span>
+<span class="text-label-md font-label-md text-primary border-b-2 border-primary font-bold px-2 py-1 cursor-pointer">FILTER</span>
+<span class="text-label-md font-label-md text-on-surface-variant hover:text-on-surface px-2 py-1 cursor-pointer">ENV</span>
+<span class="text-label-md font-label-md text-on-surface-variant hover:text-on-surface px-2 py-1 cursor-pointer">LFO</span>
+<span class="text-label-md font-label-md text-on-surface-variant hover:text-on-surface px-2 py-1 cursor-pointer">FX</span>
+<span class="text-label-md font-label-md text-on-surface-variant hover:text-on-surface px-2 py-1 cursor-pointer">MOD</span>
+</nav>
+<!-- Trailing Hardware Status & System Actions -->
+<div class="flex items-center space-x-space-md">
+<div class="flex items-center space-x-space-xs text-label-sm font-label-sm text-on-surface-variant bg-surface-container-lowest px-2 py-0.5 rounded border border-outline-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span>STEREO IN</span>
+<span class="text-outline">|</span>
+<span>48kHz</span>
+<span class="text-outline">|</span>
+<span class="text-primary font-bold">DSP 8%</span>
+</div>
+<div class="flex items-center space-x-space-xs">
+<button class="px-space-md py-1 bg-surface-container hover:bg-surface-container-high text-primary border border-outline-variant rounded text-label-md font-label-md active:translate-y-0.5 transition-transform duration-75">
+          PRESET
+        </button>
+<button class="px-space-md py-1 bg-primary text-on-primary font-bold rounded text-label-md font-label-md hover:bg-primary-fixed-dim active:translate-y-0.5 transition-transform duration-75">
+          SAVE
+        </button>
+</div>
+<div class="flex items-center space-x-1 pl-1 border-l border-outline-variant">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS (1280 x 528 Workspace) -->
+<main class="w-full h-[528px] mt-11 mb-14 px-space-md py-space-xs flex flex-col justify-between box-border">
+<!-- TOP ROW (h: 248px) -->
+<div class="w-full flex justify-between h-[244px] gap-gutter">
+<!-- 1. MODEL FRAME (w=468px) -->
+<section class="w-[468px] h-full milled-panel border border-outline-variant rounded flex flex-col p-space-sm relative">
+<div class="hex-bolt top-1 left-1"></div>
+<div class="hex-bolt top-1 right-1"></div>
+<div class="hex-bolt bottom-1 left-1"></div>
+<div class="hex-bolt bottom-1 right-1"></div>
+<!-- Frame Header -->
+<div class="flex items-center justify-between pb-1 mb-1 border-b border-outline-variant px-1">
+<div class="flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 bg-primary"></span>
+<span class="text-label-md font-label-md text-on-surface tracking-wider font-bold">MODEL SELECTION</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary bg-surface-container-lowest px-1.5 py-0.2 rounded border border-outline-variant">BANK: 01</span>
+</div>
+<div class="flex-1 flex gap-space-sm">
+<!-- Left side: Model Dropdown & Modes Visualizer -->
+<div class="flex-1 flex flex-col justify-between">
+<!-- Model Selector Dropdown -->
+<div class="flex items-center justify-between bg-surface-container-lowest border border-outline-variant px-space-sm py-1 rounded cursor-pointer hover:border-primary">
+<div>
+<span class="block text-[8px] font-label-sm text-outline">RESONATOR ALGORITHM</span>
+<span class="text-label-md font-label-md text-primary font-bold">MODAL RESONATOR</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px]">unfold_more</span>
+</div>
+<!-- 64 Modal Dispersion Visualizer -->
+<div class="h-[126px] bg-[#0a0807] recessed-well rounded p-1.5 flex flex-col justify-between border border-[#2a221b] relative overflow-hidden">
+<div class="flex justify-between items-center text-[8px] font-label-sm text-outline z-10">
+<span>DISPERSION MATRIX (64 MODES)</span>
+<span class="text-primary font-mono">Q-FACT: 0.94</span>
+</div>
+<!-- Canvas-like simulated harmonic bars with glowing animated SVG curve -->
+<div class="relative w-full h-[88px] flex items-end justify-between px-1 z-0">
+<!-- 32 primary modal spectrum pins -->
+<div class="w-[2px] bg-primary/30 h-[30%]"></div>
+<div class="w-[2px] bg-primary/40 h-[50%]"></div>
+<div class="w-[2px] bg-primary/70 h-[88%] shadow-[0_0_4px_#ffc665]"></div>
+<div class="w-[2px] bg-primary/90 h-[72%] shadow-[0_0_4px_#ffc665]"></div>
+<div class="w-[2px] bg-primary h-[60%]"></div>
+<div class="w-[2px] bg-primary/60 h-[48%]"></div>
+<div class="w-[2px] bg-primary/80 h-[95%] shadow-[0_0_5px_#ffc665]"></div>
+<div class="w-[2px] bg-primary/40 h-[40%]"></div>
+<div class="w-[2px] bg-primary/50 h-[35%]"></div>
+<div class="w-[2px] bg-primary/75 h-[62%]"></div>
+<div class="w-[2px] bg-primary/90 h-[54%]"></div>
+<div class="w-[2px] bg-primary/40 h-[30%]"></div>
+<div class="w-[2px] bg-primary/30 h-[22%]"></div>
+<div class="w-[2px] bg-primary/70 h-[45%]"></div>
+<div class="w-[2px] bg-primary/60 h-[38%]"></div>
+<div class="w-[2px] bg-primary/80 h-[58%]"></div>
+<div class="w-[2px] bg-primary/50 h-[26%]"></div>
+<div class="w-[2px] bg-primary/30 h-[18%]"></div>
+<div class="w-[2px] bg-primary/60 h-[32%]"></div>
+<div class="w-[2px] bg-primary/40 h-[20%]"></div>
+<div class="w-[2px] bg-primary/30 h-[15%]"></div>
+<div class="w-[2px] bg-primary/50 h-[24%]"></div>
+<div class="w-[2px] bg-primary/30 h-[12%]"></div>
+<div class="w-[2px] bg-primary/20 h-[10%]"></div>
+<!-- Overlay Wave Curve -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-85" preserveaspectratio="none" viewbox="0 0 300 90">
+<path d="M 0,80 Q 20,10 50,30 T 110,15 T 170,45 T 230,25 T 300,85" fill="none" stroke="#ffc665" stroke-width="1.5"></path>
+<path d="M 0,80 Q 20,10 50,30 T 110,15 T 170,45 T 230,25 T 300,85 L 300,90 L 0,90 Z" fill="rgba(255,198,101,0.06)"></path>
+</svg>
+</div>
+<div class="flex justify-between items-center text-[7px] font-label-sm text-outline border-t border-[#1c1815] pt-0.5">
+<span>100Hz</span>
+<span>HARMONIC COUPLING</span>
+<span>12kHz</span>
+</div>
+</div>
+<!-- Model Options Reference -->
+<div class="flex justify-between text-[8px] font-label-sm text-on-surface-variant/80 px-1">
+<span class="text-primary font-bold">● MODAL</span>
+<span>○ SYMPATHETIC</span>
+<span>○ INHARMONIC</span>
+<span>○ CHORDS</span>
+</div>
+</div>
+<!-- Right side: Polyphony Switcher (Enum_V) -->
+<div class="w-28 flex flex-col justify-between bg-surface-container-lowest p-1.5 rounded border border-outline-variant">
+<span class="text-[8px] font-label-sm text-outline tracking-wider uppercase text-center">POLYPHONY</span>
+<div class="flex flex-col gap-1.5 my-auto">
+<!-- 1 VOICE -->
+<button class="w-full py-2 bg-surface-container text-on-surface-variant hover:text-primary rounded border border-outline-variant text-label-sm font-label-sm flex items-center justify-between px-2">
+<span>1 VOICE</span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+</button>
+<!-- 2 VOICES (Active) -->
+<button class="w-full py-2 bg-surface-container-high text-primary rounded border border-primary text-label-sm font-label-sm font-bold flex items-center justify-between px-2 shadow-[0_0_6px_rgba(255,198,101,0.2)]">
+<span>2 VOICES</span>
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_5px_#ffc665]"></span>
+</button>
+<!-- 4 VOICES -->
+<button class="w-full py-2 bg-surface-container text-on-surface-variant hover:text-primary rounded border border-outline-variant text-label-sm font-label-sm flex items-center justify-between px-2">
+<span>4 VOICES</span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+</button>
+</div>
+<div class="text-[8px] font-label-sm text-center text-outline">Q02 LINKED</div>
+</div>
+</div>
+</section>
+<!-- 2. RESONATOR MASTER FRAME (w=784px) -->
+<section class="flex-1 h-full milled-panel border border-outline-variant rounded flex flex-col p-space-sm relative">
+<div class="hex-bolt top-1 left-1"></div>
+<div class="hex-bolt top-1 right-1"></div>
+<div class="hex-bolt bottom-1 left-1"></div>
+<div class="hex-bolt bottom-1 right-1"></div>
+<!-- Frame Header -->
+<div class="flex items-center justify-between pb-1 mb-1 border-b border-outline-variant px-1">
+<div class="flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 bg-primary"></span>
+<span class="text-label-md font-label-md text-on-surface tracking-wider font-bold">RESONATOR PARAMETERS</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">CORE EXCITATION &amp; MODAL GEOMETRY</span>
+</div>
+<!-- 4 Large Master Knobs -->
+<div class="flex-1 grid grid-cols-4 items-center gap-space-sm px-2">
+<!-- Knob 1: STRUCTURE -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-outline tracking-wider mb-1">Q03: STRUCT</span>
+<!-- Tactile Dial Widget -->
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="w-24 h-24 -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2a241e" stroke-width="5"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#ffc665" stroke-dasharray="264" stroke-dashoffset="84" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<!-- Potentiometer Cap -->
+<div class="absolute w-[68px] h-[68px] rounded-full bg-gradient-to-b from-[#38332c] via-[#241f1a] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-[54px] h-[54px] rounded-full bg-[#1b1714] border border-[#3a3228] flex items-center justify-center relative">
+<!-- Needle pointer at 68% -->
+<div class="w-1 h-5 bg-primary rounded-full absolute -top-1 shadow-[0_0_4px_#ffc665]"></div>
+<span class="text-[9px] font-label-sm text-tertiary">STR</span>
+</div>
+</div>
+</div>
+<!-- Labels & Readout Box -->
+<div class="mt-1 text-center w-full">
+<div class="text-label-md font-label-md text-primary font-bold uppercase">STRUCTURE</div>
+<div class="mt-0.5 bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 rounded flex justify-between items-center text-[10px] font-label-sm">
+<span class="text-outline">HARM</span>
+<span class="text-primary font-bold font-mono">0.684</span>
+</div>
+</div>
+</div>
+<!-- Knob 2: BRIGHTNESS -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-outline tracking-wider mb-1">Q04: BRIGHT</span>
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="w-24 h-24 -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2a241e" stroke-width="5"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#ffc665" stroke-dasharray="264" stroke-dashoffset="150" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<div class="absolute w-[68px] h-[68px] rounded-full bg-gradient-to-b from-[#38332c] via-[#241f1a] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-[54px] h-[54px] rounded-full bg-[#1b1714] border border-[#3a3228] flex items-center justify-center relative">
+<div class="w-1 h-5 bg-primary rounded-full absolute -top-1 shadow-[0_0_4px_#ffc665]"></div>
+<span class="text-[9px] font-label-sm text-tertiary">LPF</span>
+</div>
+</div>
+</div>
+<div class="mt-1 text-center w-full">
+<div class="text-label-md font-label-md text-primary font-bold uppercase">BRIGHTNESS</div>
+<div class="mt-0.5 bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 rounded flex justify-between items-center text-[10px] font-label-sm">
+<span class="text-outline">CUTOFF</span>
+<span class="text-primary font-bold font-mono">0.420</span>
+</div>
+</div>
+</div>
+<!-- Knob 3: DAMPING -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-outline tracking-wider mb-1">Q05: DAMP</span>
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="w-24 h-24 -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2a241e" stroke-width="5"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#ffc665" stroke-dasharray="264" stroke-dashoffset="46" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<div class="absolute w-[68px] h-[68px] rounded-full bg-gradient-to-b from-[#38332c] via-[#241f1a] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-[54px] h-[54px] rounded-full bg-[#1b1714] border border-[#3a3228] flex items-center justify-center relative">
+<div class="w-1 h-5 bg-primary rounded-full absolute -top-1 shadow-[0_0_4px_#ffc665]"></div>
+<span class="text-[9px] font-label-sm text-tertiary">DMP</span>
+</div>
+</div>
+</div>
+<div class="mt-1 text-center w-full">
+<div class="text-label-md font-label-md text-primary font-bold uppercase">DAMPING</div>
+<div class="mt-0.5 bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 rounded flex justify-between items-center text-[10px] font-label-sm">
+<span class="text-outline">DECAY</span>
+<span class="text-primary font-bold font-mono">0.825</span>
+</div>
+</div>
+</div>
+<!-- Knob 4: POSITION -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-outline tracking-wider mb-1">Q06: POS</span>
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="w-24 h-24 -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2a241e" stroke-width="5"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#ffc665" stroke-dasharray="264" stroke-dashoffset="180" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<div class="absolute w-[68px] h-[68px] rounded-full bg-gradient-to-b from-[#38332c] via-[#241f1a] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-[54px] h-[54px] rounded-full bg-[#1b1714] border border-[#3a3228] flex items-center justify-center relative">
+<div class="w-1 h-5 bg-primary rounded-full absolute -top-1 shadow-[0_0_4px_#ffc665]"></div>
+<span class="text-[9px] font-label-sm text-tertiary">POS</span>
+</div>
+</div>
+</div>
+<div class="mt-1 text-center w-full">
+<div class="text-label-md font-label-md text-primary font-bold uppercase">POSITION</div>
+<div class="mt-0.5 bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 rounded flex justify-between items-center text-[10px] font-label-sm">
+<span class="text-outline">STRUM</span>
+<span class="text-primary font-bold font-mono">0.312</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- BOTTOM ROW (h: 260px) -->
+<div class="w-full flex justify-between h-[256px] gap-gutter">
+<!-- 3. PITCH FRAME (w=310px) -->
+<section class="w-[310px] h-full milled-panel border border-outline-variant rounded flex flex-col p-space-sm relative">
+<div class="hex-bolt top-1 left-1"></div>
+<div class="hex-bolt top-1 right-1"></div>
+<div class="hex-bolt bottom-1 left-1"></div>
+<div class="hex-bolt bottom-1 right-1"></div>
+<div class="flex items-center justify-between pb-1 mb-1 border-b border-outline-variant px-1">
+<div class="flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 bg-primary"></span>
+<span class="text-label-md font-label-md text-on-surface tracking-wider font-bold">PITCH / TUNING</span>
+</div>
+<span class="text-label-sm font-label-sm text-outline">V/OCT CALIB</span>
+</div>
+<div class="flex-1 flex items-center justify-around px-2">
+<!-- NOTE Knob -->
+<div class="flex flex-col items-center">
+<span class="text-[8px] font-label-sm text-outline">Q07: NOTE</span>
+<div class="relative w-16 h-16 flex items-center justify-center my-1">
+<svg class="w-16 h-16 -rotate-90" viewbox="0 0 64 64">
+<circle cx="32" cy="32" fill="none" r="27" stroke="#2a241e" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" r="27" stroke="#ffc665" stroke-dasharray="170" stroke-dashoffset="70" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute w-[46px] h-[46px] rounded-full bg-gradient-to-b from-[#38332c] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-1 h-3.5 bg-primary rounded absolute -top-0.5 shadow-[0_0_3px_#ffc665]"></div>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-bold">NOTE</span>
+<span class="text-[10px] font-mono text-primary bg-surface-container-lowest px-2 py-0.5 rounded border border-outline-variant mt-0.5">C 2 (65.4Hz)</span>
+</div>
+<!-- FINE Knob -->
+<div class="flex flex-col items-center">
+<span class="text-[8px] font-label-sm text-outline">Q08: FINE</span>
+<div class="relative w-16 h-16 flex items-center justify-center my-1">
+<svg class="w-16 h-16 -rotate-90" viewbox="0 0 64 64">
+<circle cx="32" cy="32" fill="none" r="27" stroke="#2a241e" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" r="27" stroke="#ffc665" stroke-dasharray="170" stroke-dashoffset="85" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute w-[46px] h-[46px] rounded-full bg-gradient-to-b from-[#38332c] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-1 h-3.5 bg-primary rounded absolute -top-0.5 shadow-[0_0_3px_#ffc665]"></div>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-bold">FINE</span>
+<span class="text-[10px] font-mono text-primary bg-surface-container-lowest px-2 py-0.5 rounded border border-outline-variant mt-0.5">+0.0 ct</span>
+</div>
+</div>
+<!-- Strum Detect LED indicator bar -->
+<div class="bg-surface-container-lowest p-2 rounded border border-outline-variant flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_#ffc665] animate-ping"></span>
+<span class="text-[9px] font-label-sm text-on-surface font-bold">AUDIO STRUM DETECT</span>
+</div>
+<span class="text-[8px] font-label-sm text-primary font-mono bg-surface-container-high px-1 rounded border border-outline-variant">TRIG: ONSET</span>
+</div>
+</section>
+<!-- 4. INPUT / OUTPUT MASTER FRAME (w=626px) -->
+<section class="w-[626px] h-full milled-panel border border-outline-variant rounded flex flex-col p-space-sm relative">
+<div class="hex-bolt top-1 left-1"></div>
+<div class="hex-bolt top-1 right-1"></div>
+<div class="hex-bolt bottom-1 left-1"></div>
+<div class="hex-bolt bottom-1 right-1"></div>
+<div class="flex items-center justify-between pb-1 mb-1 border-b border-outline-variant px-1">
+<div class="flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 bg-primary"></span>
+<span class="text-label-md font-label-md text-on-surface tracking-wider font-bold">INPUT &amp; OUTPUT STAGE</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">STEREO GAIN MATRIX</span>
+</div>
+<div class="flex-1 flex gap-space-sm items-center">
+<!-- 4 I/O Knobs -->
+<div class="flex-1 grid grid-cols-4 gap-2">
+<!-- INPUT -->
+<div class="flex flex-col items-center">
+<span class="text-[8px] font-label-sm text-outline">Q09: INPUT</span>
+<div class="relative w-16 h-16 flex items-center justify-center my-1">
+<svg class="w-16 h-16 -rotate-90" viewbox="0 0 64 64">
+<circle cx="32" cy="32" fill="none" r="27" stroke="#2a241e" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" r="27" stroke="#ffc665" stroke-dasharray="170" stroke-dashoffset="65" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute w-[46px] h-[46px] rounded-full bg-gradient-to-b from-[#38332c] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-1 h-3.5 bg-primary rounded absolute -top-0.5 shadow-[0_0_3px_#ffc665]"></div>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-bold">INPUT</span>
+<span class="text-[9px] font-mono text-primary bg-surface-container-lowest px-1 py-0.5 rounded border border-outline-variant mt-0.5">+1.5 dB</span>
+</div>
+<!-- MIX -->
+<div class="flex flex-col items-center">
+<span class="text-[8px] font-label-sm text-outline">Q10: MIX</span>
+<div class="relative w-16 h-16 flex items-center justify-center my-1">
+<svg class="w-16 h-16 -rotate-90" viewbox="0 0 64 64">
+<circle cx="32" cy="32" fill="none" r="27" stroke="#2a241e" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" r="27" stroke="#ffc665" stroke-dasharray="170" stroke-dashoffset="40" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute w-[46px] h-[46px] rounded-full bg-gradient-to-b from-[#38332c] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-1 h-3.5 bg-primary rounded absolute -top-0.5 shadow-[0_0_3px_#ffc665]"></div>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-bold">MIX</span>
+<span class="text-[9px] font-mono text-primary bg-surface-container-lowest px-1 py-0.5 rounded border border-outline-variant mt-0.5">75% WET</span>
+</div>
+<!-- WIDTH -->
+<div class="flex flex-col items-center">
+<span class="text-[8px] font-label-sm text-outline">Q11: WIDTH</span>
+<div class="relative w-16 h-16 flex items-center justify-center my-1">
+<svg class="w-16 h-16 -rotate-90" viewbox="0 0 64 64">
+<circle cx="32" cy="32" fill="none" r="27" stroke="#2a241e" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" r="27" stroke="#ffc665" stroke-dasharray="170" stroke-dashoffset="0" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute w-[46px] h-[46px] rounded-full bg-gradient-to-b from-[#38332c] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-1 h-3.5 bg-primary rounded absolute -top-0.5 shadow-[0_0_3px_#ffc665]"></div>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-bold">WIDTH</span>
+<span class="text-[9px] font-mono text-primary bg-surface-container-lowest px-1 py-0.5 rounded border border-outline-variant mt-0.5">100% SPREAD</span>
+</div>
+<!-- VOLUME -->
+<div class="flex flex-col items-center">
+<span class="text-[8px] font-label-sm text-outline">Q12: VOL</span>
+<div class="relative w-16 h-16 flex items-center justify-center my-1">
+<svg class="w-16 h-16 -rotate-90" viewbox="0 0 64 64">
+<circle cx="32" cy="32" fill="none" r="27" stroke="#2a241e" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" r="27" stroke="#ffc665" stroke-dasharray="170" stroke-dashoffset="55" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="absolute w-[46px] h-[46px] rounded-full bg-gradient-to-b from-[#38332c] to-[#141210] knob-shadow border border-[#504535] flex items-center justify-center">
+<div class="w-1 h-3.5 bg-primary rounded absolute -top-0.5 shadow-[0_0_3px_#ffc665]"></div>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-bold">VOLUME</span>
+<span class="text-[9px] font-mono text-primary bg-surface-container-lowest px-1 py-0.5 rounded border border-outline-variant mt-0.5">-2.0 dB</span>
+</div>
+</div>
+<!-- Dual Stereo Peak Ladder Meters (L / R) -->
+<div class="w-24 h-full bg-[#0a0807] recessed-well rounded p-2 border border-[#2a221b] flex flex-col justify-between">
+<span class="text-[8px] font-label-sm text-outline text-center">PEAK (L/R)</span>
+<div class="flex justify-around items-end h-[140px] px-2">
+<!-- Left Meter -->
+<div class="w-3 h-full bg-[#15120f] rounded-xs flex flex-col-reverse p-0.5 gap-[2px]">
+<div class="h-2 w-full bg-primary shadow-[0_0_3px_#ffc665] rounded-xs"></div>
+<div class="h-2 w-full bg-primary shadow-[0_0_3px_#ffc665] rounded-xs"></div>
+<div class="h-2 w-full bg-primary rounded-xs"></div>
+<div class="h-2 w-full bg-primary rounded-xs"></div>
+<div class="h-2 w-full bg-primary/70 rounded-xs"></div>
+<div class="h-2 w-full bg-primary/70 rounded-xs"></div>
+<div class="h-2 w-full bg-primary/40 rounded-xs"></div>
+<div class="h-2 w-full bg-primary/40 rounded-xs"></div>
+<div class="h-2 w-full bg-primary/20 rounded-xs"></div>
+<div class="h-2 w-full bg-outline-variant/30 rounded-xs"></div>
+</div>
+<!-- Right Meter -->
+<div class="w-3 h-full bg-[#15120f] rounded-xs flex flex-col-reverse p-0.5 gap-[2px]">
+<div class="h-2 w-full bg-primary shadow-[0_0_3px_#ffc665] rounded-xs"></div>
+<div class="h-2 w-full bg-primary shadow-[0_0_3px_#ffc665] rounded-xs"></div>
+<div class="h-2 w-full bg-primary shadow-[0_0_3px_#ffc665] rounded-xs"></div>
+<div class="h-2 w-full bg-primary rounded-xs"></div>
+<div class="h-2 w-full bg-primary/70 rounded-xs"></div>
+<div class="h-2 w-full bg-primary/70 rounded-xs"></div>
+<div class="h-2 w-full bg-primary/40 rounded-xs"></div>
+<div class="h-2 w-full bg-primary/40 rounded-xs"></div>
+<div class="h-2 w-full bg-outline-variant/30 rounded-xs"></div>
+<div class="h-2 w-full bg-outline-variant/30 rounded-xs"></div>
+</div>
+</div>
+<div class="flex justify-around text-[7px] font-label-sm text-outline">
+<span>L</span>
+<span>R</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. BRANDPLATE / HARDWARE REV FRAME (w=310px) -->
+<section class="w-[310px] h-full milled-panel border border-outline-variant rounded flex flex-col p-space-sm relative justify-between overflow-hidden bg-gradient-to-br from-[#241f1a] to-[#12100d]">
+<div class="hex-bolt top-1 left-1"></div>
+<div class="hex-bolt top-1 right-1"></div>
+<div class="hex-bolt bottom-1 left-1"></div>
+<div class="hex-bolt bottom-1 right-1"></div>
+<div class="flex items-center justify-between pb-1 border-b border-outline-variant px-1">
+<span class="text-[9px] font-label-sm text-outline uppercase tracking-wider">HARDWARE SPECIFICATION</span>
+<span class="text-[8px] font-label-sm text-primary">QC PASS: 09</span>
+</div>
+<!-- Laser-etched metallic brandplate center -->
+<div class="bg-surface-container-lowest/80 border border-outline-variant/60 rounded p-space-md text-center shadow-inner relative">
+<div class="w-8 h-[2px] bg-primary mx-auto mb-2 opacity-80"></div>
+<h2 class="text-headline-md font-headline-md text-primary tracking-tight font-extrabold uppercase">MUTABLE INSTRUMENTS</h2>
+<div class="text-label-lg font-label-lg text-on-surface tracking-wider font-bold mt-0.5">RINGS FX</div>
+<p class="text-[9px] font-label-sm text-outline mt-1 uppercase">AUDIO RESYNTHESIZER // HARDWARE EFFECT REV 2.4</p>
+<div class="w-8 h-[2px] bg-primary mx-auto mt-2 opacity-80"></div>
+</div>
+<!-- Hardware specs footer -->
+<div class="flex justify-between items-center text-[8px] font-label-sm text-outline border-t border-outline-variant pt-1 px-1">
+<span>HOST: MPC LIVE II</span>
+<span class="text-primary">EURORACK PORT</span>
+<span>48kHz / 24-BIT</span>
+</div>
+</section>
+</div>
+</main>
+<!-- BOTTOM CONTROL DOCK: Q-LINK HARDWARE STRIP (Fixed 56px) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-space-md h-14 bg-surface-container-lowest border-t border-outline-variant select-none">
+<!-- Left: Q-Link Bank Badge -->
+<div class="flex items-center space-x-2 mr-2">
+<div class="bg-surface-container-high border border-outline-variant px-2 py-1 rounded text-center">
+<span class="block text-[7px] font-label-sm text-outline">ENCODER BANK</span>
+<span class="text-label-md font-label-md text-primary font-bold">Q-LINK 1</span>
+</div>
+</div>
+<!-- Middle: 12 Mapped Hardware Q-Link Encoders -->
+<div class="flex-1 grid grid-cols-12 gap-1 h-10">
+<!-- Q01: MODEL -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q01</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">MODEL</span>
+</div>
+<!-- Q02: POLY -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q02</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">POLY</span>
+</div>
+<!-- Q03: STRUCT (Active focus) -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-1 rounded shadow-[0_0_6px_rgba(255,198,101,0.2)]">
+<span class="text-[7px] font-label-sm text-on-primary-container">Q03</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">STRUCT</span>
+</div>
+<!-- Q04: BRIGHT -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q04</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">BRIGHT</span>
+</div>
+<!-- Q05: DAMP -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q05</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">DAMP</span>
+</div>
+<!-- Q06: POS -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q06</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">POS</span>
+</div>
+<!-- Q07: NOTE -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q07</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">NOTE</span>
+</div>
+<!-- Q08: FINE -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q08</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">FINE</span>
+</div>
+<!-- Q09: INPUT -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q09</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">INPUT</span>
+</div>
+<!-- Q10: MIX -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q10</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">MIX</span>
+</div>
+<!-- Q11: WIDTH -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q11</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">WIDTH</span>
+</div>
+<!-- Q12: VOLUME -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-1 rounded bg-surface-container-low hover:border-primary">
+<span class="text-[7px] font-label-sm text-outline">Q12</span>
+<span class="text-[9px] font-label-sm text-primary font-bold truncate">VOLUME</span>
+</div>
+</div>
+<!-- Right: MPC Macro Quick Actions (BottomNavBar JSON compliant labels) -->
+<div class="flex items-center space-x-1 ml-2">
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-space-md py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+<span class="text-label-sm font-label-sm">Q3: DRIVE</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">speed</span>
+<span class="text-label-sm font-label-sm">Q4: TEMPO</span>
+</div>
+</div>
+</footer>
+</body></html>

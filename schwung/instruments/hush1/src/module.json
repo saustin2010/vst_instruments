@@ -1,0 +1,682 @@
+{
+  "id": "hush1",
+  "name": "HUSH ONE",
+  "abbrev": "HSH",
+  "version": "0.2.8",
+  "description": "Monophonic subtractive synthesizer emulating the Roland SH-101",
+  "author": "Move Everything Community",
+  "ui": "ui.js",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "ui_hierarchy": {
+      "levels": {
+        "root": {
+          "label": "HUSH ONE",
+          "params": [
+            {
+              "key": "preset",
+              "label": "Preset",
+              "type": "int",
+              "min": 0,
+              "max_param": "preset_count",
+              "default": 0
+            },
+            {
+              "key": "volume",
+              "label": "Volume",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.85,
+              "step": 0.01
+            },
+            {
+              "key": "bend_range",
+              "label": "Bend",
+              "type": "float",
+              "min": 0,
+              "max": 12,
+              "default": 2.0,
+              "step": 0.1
+            },
+            {
+              "level": "oscillator",
+              "label": "Oscillator"
+            },
+            {
+              "level": "filter",
+              "label": "Filter"
+            },
+            {
+              "level": "amp_env",
+              "label": "Amp Envelope"
+            },
+            {
+              "level": "filt_env",
+              "label": "Filter Envelope"
+            },
+            {
+              "level": "modulation",
+              "label": "Modulation"
+            },
+            {
+              "level": "performance",
+              "label": "Performance"
+            },
+            {
+              "level": "advanced",
+              "label": "Advanced"
+            }
+          ],
+          "knobs": [
+            "preset",
+            "volume",
+            "bend_range"
+          ]
+        },
+        "oscillator": {
+          "label": "Oscillator",
+          "params": [
+            {
+              "key": "saw",
+              "label": "Saw",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.7,
+              "step": 0.02
+            },
+            {
+              "key": "pulse",
+              "label": "Pulse",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.55,
+              "step": 0.02
+            },
+            {
+              "key": "sub",
+              "label": "Sub",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.35,
+              "step": 0.02
+            },
+            {
+              "key": "noise",
+              "label": "Noise",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.0,
+              "step": 0.02
+            },
+            {
+              "key": "sub_mode",
+              "label": "Sub Mode",
+              "type": "enum",
+              "options": [
+                "-2 Oct 50% PW",
+                "-2 Oct",
+                "-1 Oct"
+              ],
+              "default": 1
+            },
+            {
+              "key": "white_noise",
+              "short_name": "White",
+              "label": "White Noise",
+              "type": "enum",
+              "options": [
+                "Off",
+                "On"
+              ],
+              "default": 0
+            },
+            {
+              "key": "pulse_width",
+              "short_name": "Width",
+              "label": "Pulse Width",
+              "type": "float",
+              "min": 0.05,
+              "max": 0.95,
+              "default": 0.5,
+              "step": 0.01
+            },
+            {
+              "key": "pwm_mode",
+              "short_name": "PWM",
+              "label": "PWM Mode",
+              "type": "enum",
+              "options": [
+                "Env",
+                "Manual",
+                "LFO"
+              ],
+              "default": 1
+            },
+            {
+              "key": "pwm_depth",
+              "short_name": "Depth",
+              "label": "PWM Depth",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.0,
+              "step": 0.01
+            },
+            {
+              "key": "pwm_env_depth",
+              "short_name": "Env",
+              "label": "PWM Env",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.0,
+              "step": 0.01
+            }
+          ],
+          "knobs": [
+            "saw",
+            "pulse",
+            "sub",
+            "noise"
+          ]
+        },
+        "filter": {
+          "label": "Filter",
+          "params": [
+            {
+              "key": "cutoff",
+              "label": "Cutoff",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.55,
+              "step": 0.01
+            },
+            {
+              "key": "resonance",
+              "label": "Res",
+              "type": "float",
+              "min": 0,
+              "max": 1.2,
+              "default": 0.2,
+              "step": 0.01
+            },
+            {
+              "key": "env_amt",
+              "short_name": "Amt",
+              "label": "Env Amt",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.4,
+              "step": 0.01
+            },
+            {
+              "key": "key_follow",
+              "short_name": "Follow",
+              "label": "Key Follow",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.5,
+              "step": 0.01
+            },
+            {
+              "key": "filter_velocity_sens",
+              "short_name": "Vel",
+              "label": "Vel Filt",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.25,
+              "step": 0.01
+            }
+          ],
+          "knobs": [
+            "cutoff",
+            "resonance",
+            "env_amt",
+            "key_follow"
+          ]
+        },
+        "amp_env": {
+          "label": "Amp Env",
+          "params": [
+            {
+              "key": "attack",
+              "label": "Attack",
+              "type": "float",
+              "min": 0.001,
+              "max": 4.0,
+              "default": 0.005,
+              "step": 0.001
+            },
+            {
+              "key": "decay",
+              "label": "Decay",
+              "type": "float",
+              "min": 0.001,
+              "max": 6.0,
+              "default": 0.12,
+              "step": 0.001
+            },
+            {
+              "key": "sustain",
+              "label": "Sustain",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.7,
+              "step": 0.01
+            },
+            {
+              "key": "release",
+              "label": "Release",
+              "type": "float",
+              "min": 0.001,
+              "max": 8.0,
+              "default": 0.2,
+              "step": 0.001
+            },
+            {
+              "key": "velocity_sens",
+              "short_name": "Vel",
+              "label": "Vel Amp",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.7,
+              "step": 0.01
+            }
+          ],
+          "knobs": [
+            "attack",
+            "decay",
+            "sustain",
+            "release"
+          ]
+        },
+        "filt_env": {
+          "label": "Filter Env",
+          "params": [
+            {
+              "key": "f_attack",
+              "short_name": "Attack",
+              "label": "F Attack",
+              "type": "float",
+              "min": 0.001,
+              "max": 4.0,
+              "default": 0.008,
+              "step": 0.001
+            },
+            {
+              "key": "f_decay",
+              "short_name": "Decay",
+              "label": "F Decay",
+              "type": "float",
+              "min": 0.001,
+              "max": 6.0,
+              "default": 0.18,
+              "step": 0.001
+            },
+            {
+              "key": "f_sustain",
+              "short_name": "Sustain",
+              "label": "F Sustain",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.4,
+              "step": 0.01
+            },
+            {
+              "key": "f_release",
+              "short_name": "Release",
+              "label": "F Release",
+              "type": "float",
+              "min": 0.001,
+              "max": 8.0,
+              "default": 0.25,
+              "step": 0.001
+            }
+          ],
+          "knobs": [
+            "f_attack",
+            "f_decay",
+            "f_sustain",
+            "f_release"
+          ]
+        },
+        "modulation": {
+          "label": "Modulation",
+          "params": [
+            {
+              "key": "lfo_rate",
+              "short_name": "Rate",
+              "label": "LFO Rate",
+              "type": "float",
+              "min": 0.02,
+              "max": 40.0,
+              "default": 5.0,
+              "step": 0.05
+            },
+            {
+              "key": "lfo_waveform",
+              "short_name": "Wave",
+              "label": "LFO Wave",
+              "type": "enum",
+              "options": [
+                "Tri",
+                "Rect",
+                "Random",
+                "Noise"
+              ],
+              "default": 0
+            },
+            {
+              "key": "lfo_trigger",
+              "short_name": "Trig",
+              "label": "LFO Trig",
+              "type": "enum",
+              "options": [
+                "Free",
+                "Retrig"
+              ],
+              "default": 0
+            },
+            {
+              "key": "lfo_sync",
+              "short_name": "Sync",
+              "label": "LFO Sync",
+              "type": "enum",
+              "options": [
+                "Free",
+                "Sync"
+              ],
+              "default": 0
+            },
+            {
+              "key": "lfo_invert",
+              "short_name": "Inv",
+              "label": "LFO Inv",
+              "type": "enum",
+              "options": [
+                "Off",
+                "On"
+              ],
+              "default": 0
+            },
+            {
+              "key": "lfo_pitch_snap",
+              "short_name": "Snap",
+              "label": "Pitch Snap",
+              "type": "enum",
+              "options": [
+                "Off",
+                "On"
+              ],
+              "default": 0
+            },
+            {
+              "key": "lfo_pitch",
+              "label": "LFO Pitch",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0,
+              "step": 0.01
+            },
+            {
+              "key": "lfo_filter",
+              "short_name": "Filter",
+              "label": "LFO Filter",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0,
+              "step": 0.01
+            },
+            {
+              "key": "lfo_pwm",
+              "short_name": "PWM",
+              "label": "LFO PWM",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0,
+              "step": 0.01
+            }
+          ],
+          "knobs": [
+            "lfo_rate",
+            "lfo_pitch",
+            "lfo_filter",
+            "lfo_pwm"
+          ]
+        },
+        "performance": {
+          "label": "Performance",
+          "params": [
+            {
+              "key": "glide",
+              "label": "Glide",
+              "type": "float",
+              "min": 0,
+              "max": 500,
+              "default": 0,
+              "step": 1
+            },
+            {
+              "key": "portamento_mode",
+              "short_name": "Mode",
+              "label": "Porta Mode",
+              "type": "enum",
+              "options": [
+                "Off",
+                "On",
+                "Auto"
+              ],
+              "default": 2
+            },
+            {
+              "key": "portamento_linear",
+              "short_name": "Curve",
+              "label": "Porta Curve",
+              "type": "enum",
+              "options": [
+                "Expo",
+                "Linear"
+              ],
+              "default": 0
+            },
+            {
+              "key": "retrigger",
+              "label": "Retrigger",
+              "type": "enum",
+              "options": [
+                "Legato",
+                "Trig"
+              ],
+              "default": 0
+            },
+            {
+              "key": "hold",
+              "label": "Hold",
+              "type": "enum",
+              "options": [
+                "Off",
+                "On"
+              ],
+              "default": 0
+            },
+            {
+              "key": "transpose",
+              "label": "Transpose",
+              "type": "int",
+              "min": -24,
+              "max": 24,
+              "default": 0
+            },
+            {
+              "key": "octave_transpose",
+              "label": "Octave",
+              "type": "int",
+              "min": -2,
+              "max": 2,
+              "default": 0
+            },
+            {
+              "key": "fine_tune",
+              "label": "Fine Tune",
+              "type": "float",
+              "min": -100,
+              "max": 100,
+              "default": 0,
+              "step": 1
+            }
+          ],
+          "knobs": [
+            "glide",
+            "portamento_mode",
+            "transpose",
+            "octave_transpose"
+          ]
+        },
+        "advanced": {
+          "label": "Advanced",
+          "params": [
+            {
+              "key": "gate_trig_mode",
+              "short_name": "Gate",
+              "label": "Gate Mode",
+              "type": "enum",
+              "options": [
+                "Gate",
+                "Gate+Trig",
+                "LFO"
+              ],
+              "default": 0
+            },
+            {
+              "key": "vca_mode",
+              "short_name": "VCA",
+              "label": "VCA Mode",
+              "type": "enum",
+              "options": [
+                "Gate",
+                "Envelope"
+              ],
+              "default": 1
+            },
+            {
+              "key": "adsr_declick",
+              "short_name": "DeClick",
+              "label": "ADSR DeClick",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.65,
+              "step": 0.01
+            },
+            {
+              "key": "priority",
+              "short_name": "PRIO",
+              "label": "Priority",
+              "type": "enum",
+              "options": [
+                "Last",
+                "Low"
+              ],
+              "default": 0
+            },
+            {
+              "key": "velocity_mode",
+              "short_name": "Vel",
+              "label": "Vel Mode",
+              "type": "enum",
+              "options": [
+                "Off",
+                "Trigger",
+                "Active"
+              ],
+              "default": 0
+            },
+            {
+              "key": "same_note_quirk",
+              "short_name": "Note",
+              "label": "Same-Note",
+              "type": "enum",
+              "options": [
+                "Off",
+                "On"
+              ],
+              "default": 0
+            },
+            {
+              "key": "filter_env_full_range",
+              "short_name": "Full Range",
+              "label": "Env Full Range",
+              "type": "enum",
+              "options": [
+                "Off",
+                "On"
+              ],
+              "default": 0
+            },
+            {
+              "key": "filter_env_polarity",
+              "short_name": "Pola",
+              "label": "Env Polarity",
+              "type": "enum",
+              "options": [
+                "Positive",
+                "Negative"
+              ],
+              "default": 0
+            },
+            {
+              "key": "filter_volume_correction",
+              "short_name": "Correction",
+              "label": "Vol Correction",
+              "type": "float",
+              "min": 0,
+              "max": 1,
+              "default": 0.0,
+              "step": 0.01
+            }
+          ],
+          "knobs": [
+            "gate_trig_mode",
+            "priority",
+            "velocity_mode",
+            "same_note_quirk"
+          ]
+        }
+      }
+    }
+  },
+  "assets": {
+    "path": "presets",
+    "label": "Presets",
+    "extensions": [
+      ".vstpreset",
+      ".bassline"
+    ],
+    "optional": true,
+    "allowFolders": true,
+    "description": "Optionally upload TAL-BassLine .vstpreset or .bassline preset files. Built-in presets are included.",
+    "hint": "Supports TAL-BassLine-101 .vstpreset and .bassline format presets"
+  }
+}

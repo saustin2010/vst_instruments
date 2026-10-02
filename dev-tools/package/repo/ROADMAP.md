@@ -1,0 +1,43 @@
+# Roadmap
+
+Open items as of 2026-10-03, most useful first. Tick them off here (with the date) as they're done.
+
+## Presets and libraries ([docs/presets-and-libraries.md](docs/presets-and-libraries.md))
+
+New parameters always go at the **end** of a plugin's `params.json`: MPC saves projects and Q-Link assignments by
+parameter index, so existing projects keep working.
+
+- [ ] **Tablor factory presets.** Install `presets/tablor/not-installed/factory.tbl` to `/sdcard/vst/tablor/presets/`
+  with its wavetable paths rewritten from `/data/UserData/UserLibrary/Wavetables/` to `/sdcard/vst/tablor/wavetables/`; add a PRESET
+  stepper (with a name readout) that applies a preset's `TBLR2;...` state blob after resetting to defaults. Needs a
+  small engine patch under `MPC_PORT` (upstream selects presets through Move's preset browser, not a parameter).
+- [ ] **OB-Xd banks.** Add a BANK selector bound to the engine's `bank_index` (the list is `fxb_bank_list`, rescanned
+  on each query), so `.fxb` banks in `/sdcard/vst/obxd/presets/` can be chosen; PATCH then browses that bank.
+- [ ] **Noisemaker imports.** Set `"MODULE_DIR": "\"/sdcard/vst/noisemaker\""` in vst.json (the engine then imports
+  `.noisemakerpreset` folders from `<module_dir>/presets`), create that folder on install, add a bank selector.
+- [ ] **Hush One imports.** Set `MODULE_DIR` (`/sdcard/vst/hush1`) so `.bassline` / `.vstpreset` files in
+  `presets/` are imported, and widen PATCH beyond the 11 built-in presets (the engine reports `preset_count`).
+- [ ] **Libpo32 SAVE KIT** button (`save_kit`), and create its `presets/` folder on install for it to write to.
+- [ ] INSTALL.md / plugin READMEs: document each of the above once it works.
+
+## On a device (nothing below has been tried on hardware yet)
+
+- [ ] Install everything on an MPC and re-insert each plugin; check every page of the new Stitch screens (names,
+  values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays).
+- [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
+- [ ] Audio effects (Verglas, Warps, Rings FX): does MPC offer third-party VST effects in its insert list at all?
+- [ ] Plugin browser groups: Grids reports `category="Sequencer"`. If MPC groups it and it still loads on a plugin
+  track, set the same on the other sequencers (Eucalypso, Groove Bank, Maze Lite, MIDI Player, Pixel Walkers, Super
+  Arp, Marbles; maybe Rampage); otherwise remove it.
+- [ ] `install.sh` / `uninstall.sh` on a real MPC (so far tested only against a simulated one:
+  `dev-tools/fake-mpc/`).
+- [ ] CPU: run the framework's `tools/bench.sh` for the heavy ones (Helm, Chordism, Tablor, Mono Voice, Elements,
+  Verglas).
+
+## Repo
+
+- [ ] Choose a licence for this repo's own scripts and documents (the plugins keep theirs).
+- [ ] Hush One and Libpo32 state no licence upstream: ask their authors, or leave them out of releases.
+- [ ] GitHub releases: a zip per plugin (its `deploy/` + an on-device install script) for people without git.
+- [ ] Chiptune (Schwung GB + NES chips) isn't included: it doesn't link (two `Blip_Buffer` classes).
+- [ ] Offer the ports and the framework patch to sd88me for his repo.

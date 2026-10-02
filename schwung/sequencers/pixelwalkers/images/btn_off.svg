@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56" height="44" viewBox="0 0 56 44">
+ <defs><linearGradient id="pixelwalkers-cap-off" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#50507a"/><stop offset="0.45" stop-color="#38385a"/><stop offset="1" stop-color="#24243d"/></linearGradient></defs>
+ <circle cx="28" cy="8" r="4.5" fill="#3d1530" stroke="#000" stroke-width="1"/>
+ <rect x="3" y="18" width="50" height="25" rx="4" fill="#05050a"/>
+ <rect x="5" y="18.5" width="46" height="21" rx="3" fill="url(#pixelwalkers-cap-off)" stroke="#7474a8" stroke-width="0.8"/>
+</svg>

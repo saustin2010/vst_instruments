@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56" height="44" viewBox="0 0 56 44">
+ <defs><linearGradient id="denis-cap-off" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d84a2a"/><stop offset="0.45" stop-color="#b53a20"/><stop offset="1" stop-color="#8a2c18"/></linearGradient></defs>
+ <circle cx="28" cy="8" r="4.5" fill="#3a3008" stroke="#000" stroke-width="1"/>
+ <rect x="3" y="18" width="50" height="25" rx="4" fill="#050505"/>
+ <rect x="5" y="18.5" width="46" height="21" rx="3" fill="url(#denis-cap-off)" stroke="#5a2010" stroke-width="0.8"/>
+</svg>

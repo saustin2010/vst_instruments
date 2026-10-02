@@ -1,0 +1,1406 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<title>SYNTH ENGINE // MPC - Hera Juno-60 Engine</title>
+<meta content="width=1280, height=628, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind Script -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-container": "#5e4000",
+            "secondary-fixed": "#ffdad4",
+            "inverse-primary": "#7e5700",
+            "on-tertiary-fixed": "#211b04",
+            "surface-container": "#1f1f23",
+            "on-error": "#690005",
+            "outline-variant": "#504535",
+            "on-primary": "#432c00",
+            "background": "#121316",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-surface": "#e3e2e6",
+            "tertiary": "#dacfa9",
+            "surface-tint": "#fabc4d",
+            "surface-container-low": "#1b1b1f",
+            "on-surface-variant": "#d4c4b0",
+            "surface": "#121316",
+            "surface-container-high": "#292a2d",
+            "tertiary-fixed": "#eee2bc",
+            "tertiary-container": "#beb38f",
+            "inverse-surface": "#e3e2e6",
+            "on-error-container": "#ffdad6",
+            "on-secondary": "#680300",
+            "primary-fixed-dim": "#fabc4d",
+            "surface-variant": "#343538",
+            "on-primary-fixed": "#281900",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "inverse-on-surface": "#2f3034",
+            "on-primary-fixed-variant": "#604100",
+            "error": "#ffb4ab",
+            "primary": "#ffc665",
+            "error-container": "#93000a",
+            "on-tertiary": "#373016",
+            "secondary": "#ffb4a7",
+            "surface-bright": "#38393c",
+            "on-secondary-container": "#ff9a89",
+            "secondary-container": "#920801",
+            "on-background": "#e3e2e6",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary-container": "#4c4529",
+            "surface-container-highest": "#343538",
+            "surface-dim": "#121316",
+            "surface-container-lowest": "#0d0e11",
+            "on-secondary-fixed-variant": "#920801",
+            "on-secondary-fixed": "#400100",
+            "primary-fixed": "#ffdead",
+            "primary-container": "#e5a93c",
+            "outline": "#9d8f7c",
+            "juno-red": "#ff4a30",
+            "juno-orange": "#e2542b",
+            "juno-accent-hi": "#ff6b3d",
+            "juno-lcd": "#090909",
+            "juno-display-bg": "#180504"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "gutter": "0.75rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "body-md": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "headline-md": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["9px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "500" }],
+            "readout-numeric": ["20px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+            "body-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "headline-sm": ["15px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-lg": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "label-md": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "body-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    /* Physical Hardware Ergonomics and Non-Selectable Controls */
+    * {
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    body {
+      background-color: #0d0d0e;
+      color: #e3e2e6;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 1280px;
+      height: 628px;
+    }
+
+    /* Milled Enclosure Screws */
+    .hex-screw {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #504535 25%, #1b1b1f 80%);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.1);
+      position: absolute;
+    }
+
+    /* Recessed display bevels */
+    .recessed-well {
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.85), inset 0 0 1px rgba(0,0,0,0.9);
+      background-color: #090909;
+    }
+
+    /* LED Segment glow */
+    .led-glow-red {
+      color: #ff4a30;
+      text-shadow: 0 0 6px rgba(255, 74, 48, 0.7), 0 0 14px rgba(255, 74, 48, 0.35);
+    }
+
+    .led-glow-orange {
+      color: #ff6b3d;
+      text-shadow: 0 0 6px rgba(255, 107, 61, 0.75);
+    }
+
+    /* Rotary Knob styling */
+    .knob-face {
+      background: radial-gradient(circle at 40% 35%, #2a2a2e 0%, #151517 75%, #0b0b0d 100%);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.15);
+    }
+    .knob-cap {
+      background: radial-gradient(circle at 50% 50%, #222226 0%, #141416 100%);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -1px 1px rgba(0,0,0,0.8);
+    }
+
+    /* Vintage Tactile Push Button */
+    .tactile-btn {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 3px 0 #050506, 0 5px 6px rgba(0,0,0,0.6);
+      transition: all 0.08s ease;
+    }
+    .tactile-btn:active, .tactile-btn.active {
+      box-shadow: 0 1px 0 #050506, inset 0 2px 3px rgba(0,0,0,0.8);
+      transform: translateY(2px);
+    }
+
+    /* Vertical Fader Track & Cap */
+    .fader-slot {
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.9), inset 0 0 1px #000;
+    }
+    .fader-cap {
+      background: linear-gradient(180deg, #333338 0%, #202024 45%, #151517 55%, #28282c 100%);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.25);
+    }
+  </style>
+</head>
+<body class="w-[1280px] h-[628px] overflow-hidden select-none bg-surface-container-lowest font-body-md text-on-surface">
+<!-- TOP APP BAR (Shared Components JSON Anchor) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-11 bg-surface-container-lowest border-b border-outline-variant">
+<!-- Brand / Synth Engine identity -->
+<div class="flex items-center gap-space-md">
+<span class="text-headline-sm font-headline-sm text-primary tracking-wider uppercase flex items-center gap-2">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-juno-accent-hi shadow-[0_0_8px_#ff6b3d]"></span>
+        SYNTH ENGINE // MPC
+      </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded border border-outline-variant">
+        HERA V2.4 [JUNO-60]
+      </span>
+</div>
+<!-- Navigation Links & Engine Tabs -->
+<nav class="flex items-center space-x-1">
+<button class="text-primary border-b-2 border-primary font-bold py-1 px-3 text-label-md font-label-md flex items-center gap-1.5 transition-all" id="nav-btn-main" onclick="switchTab('main')">
+<span class="text-[10px] opacity-70">[1]</span> MAIN
+      </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 px-3 text-label-md font-label-md flex items-center gap-1.5 transition-all" id="nav-btn-dco" onclick="switchTab('dco')">
+<span class="text-[10px] opacity-70">[2]</span> DCO / LFO
+      </button>
+<div class="h-4 w-px bg-outline-variant mx-1"></div>
+<button class="text-on-surface-variant hover:text-on-surface py-1 px-2 text-label-md font-label-md">ENV</button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 px-2 text-label-md font-label-md">FX</button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 px-2 text-label-md font-label-md">MOD</button>
+</nav>
+<!-- Patch LCD Segment & Actions -->
+<div class="flex items-center gap-space-md">
+<!-- Vintage Juno Red LED Display Display Well -->
+<div class="recessed-well px-3 py-1 rounded border border-secondary-container/40 flex items-center gap-2 bg-juno-display-bg">
+<span class="text-label-sm font-label-sm text-secondary tracking-widest uppercase">PATCH:</span>
+<span class="font-label-md text-label-md led-glow-red font-bold tracking-wider" id="header-patch-name">01: JUNO BASS LEAD</span>
+</div>
+<!-- Audition Trigger Button -->
+<button class="tactile-btn bg-surface-container-high border border-outline px-3 py-1 rounded text-label-md font-label-md text-primary hover:bg-surface-bright flex items-center gap-1.5 active:translate-y-0.5" id="btn-audition">
+<span class="material-symbols-outlined text-sm text-juno-accent-hi">volume_up</span>
+<span>AUDITION CHORUS [SPACE]</span>
+</button>
+<!-- Trailing Action Icons -->
+<div class="flex items-center gap-1 border-l border-outline-variant pl-2">
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-transform active:translate-y-0.5" title="SAVE">
+<span class="material-symbols-outlined text-base">tune</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-transform active:translate-y-0.5" title="PRESET">
+<span class="material-symbols-outlined text-base">graphic_eq</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-transform active:translate-y-0.5" title="SETTINGS">
+<span class="material-symbols-outlined text-base">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS RACK: Strict Viewport (1280 x 518) -->
+<main class="fixed top-11 left-0 w-[1280px] h-[518px] p-space-md box-border overflow-hidden bg-background">
+<!-- ============================================== -->
+<!-- TAB 1: MAIN INTERFACE (hera.txt standard)       -->
+<!-- ============================================== -->
+<div class="w-full h-full flex flex-col justify-between" id="tab-content-main">
+<!-- TOP ROW MODULES (Height ~244px) -->
+<div class="w-full h-[240px] flex gap-gutter">
+<!-- MODULE 1: PROGRAM / OSCILLOSCOPE (626px wide approx) -->
+<section class="flex-1 bg-surface-container-low border border-outline-variant rounded relative flex flex-col p-2.5">
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<!-- Section Label -->
+<div class="flex justify-between items-center border-b border-outline-variant pb-1 mb-2 px-2">
+<span class="text-label-sm font-label-sm text-juno-accent-hi tracking-widest font-bold">PROGRAM &amp; ANALOG WAVE ANALYZER</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">STEREO BBD CHORUS MATRIX</span>
+</div>
+<div class="flex gap-3 flex-1 h-[184px]">
+<!-- Red dot-matrix LED stepper display for PATCH -->
+<div class="w-[210px] flex flex-col justify-between">
+<div class="recessed-well rounded p-2.5 border border-secondary-container/50 bg-juno-display-bg flex-1 flex flex-col justify-between">
+<div class="flex justify-between items-center text-[10px] text-secondary font-label-sm">
+<span>BANK A // POLY 6</span>
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-juno-red animate-pulse"></span>
+</div>
+<div class="my-1">
+<div class="font-label-lg text-label-lg led-glow-red tracking-wide leading-tight" id="main-patch-title">
+                    01: JUNO BASS LEAD
+                  </div>
+<div class="text-label-sm font-label-sm text-secondary/60 mt-1">DCO: SAW+SUB / VCF: 42%</div>
+</div>
+<div class="text-[9px] text-secondary/70 font-label-sm border-t border-secondary-container/30 pt-1 flex justify-between">
+<span>POLYPHONIC</span>
+<span>CLOCK: SYNC</span>
+</div>
+</div>
+<!-- Patch Stepper Controls -->
+<div class="grid grid-cols-2 gap-2 mt-2">
+<button class="tactile-btn bg-surface-container border border-outline-variant py-1.5 rounded text-label-md font-label-md text-on-surface hover:text-primary flex items-center justify-center gap-1 active:translate-y-0.5" onclick="stepPreset(-1)">
+<span class="material-symbols-outlined text-sm">chevron_left</span> PREV
+                </button>
+<button class="tactile-btn bg-surface-container border border-outline-variant py-1.5 rounded text-label-md font-label-md text-on-surface hover:text-primary flex items-center justify-center gap-1 active:translate-y-0.5" onclick="stepPreset(1)">
+                  NEXT <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Real-time Vintage Roland Oscilloscope -->
+<div class="flex-1 recessed-well rounded p-1 border border-outline-variant/60 flex flex-col relative overflow-hidden bg-black">
+<div class="absolute top-1 left-2 text-[9px] font-label-sm text-juno-accent-hi/80 z-10 flex gap-4">
+<span>VCF SPECTRUM: ACTIVE</span>
+<span id="chorus-status-tag">CHORUS: I + II MODE</span>
+</div>
+<canvas class="w-full h-full block" height="174" id="scopeCanvas" width="375"></canvas>
+</div>
+</div>
+</section>
+<!-- MODULE 2: CHORUS UNIT (310px) -->
+<section class="w-[310px] bg-surface-container-low border border-outline-variant rounded relative flex flex-col p-2.5">
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-1 mb-2 px-1">
+<span class="text-label-sm font-label-sm text-juno-accent-hi tracking-widest font-bold">CHORUS UNIT</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">DUAL BBD TACTILE</span>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1 px-2">
+<div class="text-[11px] text-on-surface-variant font-label-sm text-center">
+              MN3009 ANALOG EMULATION
+            </div>
+<!-- Classic Juno Dual Tactile Push Buttons -->
+<div class="grid grid-cols-2 gap-3 my-auto">
+<!-- CHORUS I BUTTON -->
+<button class="tactile-btn h-20 rounded bg-surface-container-high border border-outline flex flex-col items-center justify-center p-2 group transition-all" id="btn-chorus-1" onclick="toggleChorus(1)">
+<div class="w-3.5 h-3.5 rounded-full border border-secondary-container bg-surface-container-lowest mb-1.5 flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-surface-variant transition-colors" id="led-chorus-1"></div>
+</div>
+<span class="text-label-md font-label-md font-bold text-on-surface tracking-wider group-hover:text-primary">CHORUS I</span>
+<span class="text-[9px] font-label-sm text-on-surface-variant">SLOW // 0.4 Hz</span>
+</button>
+<!-- CHORUS II BUTTON -->
+<button class="tactile-btn active h-20 rounded bg-surface-container-high border border-primary flex flex-col items-center justify-center p-2 group transition-all" id="btn-chorus-2" onclick="toggleChorus(2)">
+<div class="w-3.5 h-3.5 rounded-full border border-secondary-container bg-surface-container-lowest mb-1.5 flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-juno-accent-hi shadow-[0_0_8px_#ff6b3d] transition-colors" id="led-chorus-2"></div>
+</div>
+<span class="text-label-md font-label-md font-bold text-primary tracking-wider">CHORUS II</span>
+<span class="text-[9px] font-label-sm text-juno-accent-hi">FAST // 0.6 Hz</span>
+</button>
+</div>
+<div class="recessed-well rounded p-1.5 text-center text-label-sm font-label-sm text-secondary border border-secondary-container/40 bg-juno-display-bg">
+              MODE: <span class="led-glow-red font-bold" id="chorus-mode-label">CHORUS II LATCHED</span>
+</div>
+</div>
+</section>
+<!-- MODULE 3: MASTER OUTPUT (310px) -->
+<section class="w-[310px] bg-surface-container-low border border-outline-variant rounded relative flex flex-col p-2.5">
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-1 mb-2 px-1">
+<span class="text-label-sm font-label-sm text-juno-accent-hi tracking-widest font-bold">MASTER OUTPUT</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">ANALOG STAGE</span>
+</div>
+<div class="flex-1 flex items-center justify-around py-1">
+<!-- OCTAVE TRANSPOSE KNOB -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-1">OCTAVE</span>
+<div class="relative w-14 h-14 cursor-ns-resize" data-max="2" data-min="-2" data-unit="OCT" data-val="0" id="knob-octave">
+<div class="w-14 h-14 rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-11 h-11 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1 h-3 rounded-full bg-juno-accent-hi shadow-[0_0_4px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<div class="mt-2 recessed-well px-2 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-primary text-center w-14">
+<span id="val-octave">0</span>
+</div>
+</div>
+<!-- MASTER VOLUME KNOB -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-1">VOLUME</span>
+<div class="relative w-16 h-16 cursor-ns-resize" data-max="100" data-min="0" data-unit="%" data-val="78" id="knob-vol">
+<div class="w-16 h-16 rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-12 h-12 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1 h-3.5 rounded-full bg-juno-accent-hi shadow-[0_0_6px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-2 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-primary text-center w-14">
+<span id="val-vol">78%</span>
+</div>
+</div>
+<!-- HPF Direct Button -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-1">HPF LEVEL</span>
+<button class="tactile-btn w-12 h-14 rounded bg-surface-container border border-outline-variant flex flex-col items-center justify-center" id="btn-hpf-step" onclick="cycleHpf()">
+<span class="text-label-sm font-label-sm text-on-surface-variant">STEP</span>
+<span class="font-label-lg text-label-lg led-glow-red font-bold" id="val-hpf-step">1</span>
+</button>
+<span class="text-[8px] font-label-sm text-on-surface-variant mt-1.5">0 - 3 BASS CUT</span>
+</div>
+</div>
+</section>
+</div>
+<!-- BOTTOM ROW MODULES (Height ~250px) -->
+<div class="w-full h-[252px] flex gap-gutter">
+<!-- MODULE 4: VCF FILTER SECTION (626px) -->
+<section class="flex-1 bg-surface-container-low border border-outline-variant rounded relative flex flex-col p-2.5">
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-1 mb-2 px-2">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-juno-accent-hi tracking-widest font-bold">VCF // VOLTAGE CONTROLLED FILTER</span>
+<span class="text-[9px] font-label-sm text-on-surface-variant bg-surface-container px-1 rounded">24dB/OCT OTA IR3109</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary">RESPONSE CURVE ACTIVE</span>
+</div>
+<div class="flex-1 flex gap-3 items-center">
+<!-- Knobs Cluster -->
+<div class="flex gap-3 items-center pl-1">
+<!-- CUTOFF FREQUENCY (Oversized Knob r=46) -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-primary font-bold mb-0.5">VCF FREQ</span>
+<div class="relative w-[76px] h-[76px] cursor-ns-resize" data-max="20000" data-min="20" data-scale="log" data-unit="Hz" data-val="1240" id="knob-cutoff">
+<div class="w-[76px] h-[76px] rounded-full knob-face border border-outline-variant flex items-center justify-center">
+<div class="w-[58px] h-[58px] rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1.5 w-1.5 h-4 rounded-full bg-juno-accent-hi shadow-[0_0_8px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-1.5 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-primary text-center min-w-[62px]">
+<span id="val-cutoff">1.24 kHz</span>
+</div>
+</div>
+<!-- RESONANCE (r=38) -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-0.5">RESONANCE</span>
+<div class="relative w-[60px] h-[60px] cursor-ns-resize" data-max="10" data-min="0" data-unit="" data-val="4.6" id="knob-res">
+<div class="w-[60px] h-[60px] rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-11 h-11 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1 h-3 rounded-full bg-juno-accent-hi shadow-[0_0_5px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-1.5 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-on-surface text-center min-w-[54px]">
+<span id="val-res">4.6</span>
+</div>
+</div>
+<!-- ENV AMOUNT -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-0.5">ENV DEPTH</span>
+<div class="relative w-12 h-12 cursor-ns-resize" data-max="100" data-min="0" data-unit="%" data-val="65" id="knob-env-depth">
+<div class="w-12 h-12 rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-9 h-9 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1 h-2.5 rounded-full bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-1 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-on-surface text-center min-w-[48px]">
+<span id="val-env-depth">65%</span>
+</div>
+</div>
+<!-- LFO DEPTH -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-0.5">LFO MOD</span>
+<div class="relative w-12 h-12 cursor-ns-resize" data-max="100" data-min="0" data-unit="%" data-val="22" id="knob-vcf-lfo">
+<div class="w-12 h-12 rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-9 h-9 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1 h-2.5 rounded-full bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-1 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-on-surface text-center min-w-[48px]">
+<span id="val-vcf-lfo">22%</span>
+</div>
+</div>
+</div>
+<!-- VCF Filter Response Curve Dynamic SVG Graphic -->
+<div class="flex-1 h-[178px] recessed-well rounded p-1.5 border border-outline-variant flex flex-col justify-between bg-black">
+<div class="flex justify-between items-center text-[9px] font-label-sm text-on-surface-variant px-1">
+<span>CUTOFF ENVELOPE SHAPE</span>
+<span class="text-juno-accent-hi">POLE: 4-POLE RES</span>
+</div>
+<svg class="w-full h-[140px]" id="vcfCurveSvg" viewBox="0 0 240 120">
+<defs>
+<linearGradient id="vcfGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ff4a30" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#ff4a30" stop-opacity="0.0"></stop>
+</linearGradient>
+</defs>
+<!-- Grid Lines -->
+<line stroke="#222" stroke-dasharray="2 2" x1="0" x2="240" y1="30" y2="30"></line>
+<line stroke="#222" stroke-dasharray="2 2" x1="0" x2="240" y1="60" y2="60"></line>
+<line stroke="#222" stroke-dasharray="2 2" x1="0" x2="240" y1="90" y2="90"></line>
+<line stroke="#222" stroke-dasharray="2 2" x1="60" x2="60" y1="0" y2="120"></line>
+<line stroke="#222" stroke-dasharray="2 2" x1="120" x2="120" y1="0" y2="120"></line>
+<line stroke="#222" stroke-dasharray="2 2" x1="180" x2="180" y1="0" y2="120"></line>
+<!-- Curve Fill and Line -->
+<path d="M 10 90 L 10 40 Q 120 38, 140 25 T 165 95 L 230 110 L 230 115 L 10 115 Z" fill="url(#vcfGrad)" id="vcfFillPath"></path>
+<path d="M 10 40 Q 120 38, 140 25 T 165 95 L 230 110" fill="none" id="vcfCurveLine" stroke="#ff6b3d" stroke-width="2.5"></path>
+<!-- Resonance Peak Point -->
+<circle class="shadow-[0_0_6px_#ff4a30]" cx="140" cy="25" fill="#ff4a30" id="vcfResPoint" r="3.5"></circle>
+</svg>
+</div>
+</div>
+</section>
+<!-- MODULE 5: ROLAND ENVELOPE ADSR (626px) -->
+<section class="flex-1 bg-surface-container-low border border-outline-variant rounded relative flex flex-col p-2.5">
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-1 mb-2 px-2">
+<span class="text-label-sm font-label-sm text-juno-accent-hi tracking-widest font-bold">ENV // ENVELOPE GENERATOR</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">DISCRETE ADSR FADERS</span>
+</div>
+<!-- Vertical Roland Sliders -->
+<div class="flex-1 flex justify-around items-center px-4">
+<!-- ATTACK SLIDER -->
+<div class="flex flex-col items-center h-[184px] justify-between">
+<span class="text-label-sm font-label-sm text-on-surface font-bold">A</span>
+<div class="relative w-11 h-[142px] fader-slot bg-surface-container-lowest rounded-sm flex justify-center items-end py-1 fader-container" data-param="attack" data-val="12">
+<div class="w-1.5 h-full bg-[#161618] rounded-full relative">
+<!-- Active colored track -->
+<div class="fader-fill absolute bottom-0 left-0 w-full bg-juno-orange/80 rounded-full" style="height: 12%;"></div>
+<!-- Tactile Cap -->
+<div class="fader-cap absolute -left-4 w-9 h-6 rounded flex items-center justify-center cursor-ns-resize shadow-md" style="bottom: calc(12% - 12px);">
+<div class="w-6 h-0.5 bg-juno-accent-hi shadow-[0_0_4px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-label-sm text-primary readout-a">12ms</span>
+</div>
+<!-- DECAY SLIDER -->
+<div class="flex flex-col items-center h-[184px] justify-between">
+<span class="text-label-sm font-label-sm text-on-surface font-bold">D</span>
+<div class="relative w-11 h-[142px] fader-slot bg-surface-container-lowest rounded-sm flex justify-center items-end py-1 fader-container" data-param="decay" data-val="64">
+<div class="w-1.5 h-full bg-[#161618] rounded-full relative">
+<div class="fader-fill absolute bottom-0 left-0 w-full bg-juno-orange/80 rounded-full" style="height: 64%;"></div>
+<div class="fader-cap absolute -left-4 w-9 h-6 rounded flex items-center justify-center cursor-ns-resize shadow-md" style="bottom: calc(64% - 12px);">
+<div class="w-6 h-0.5 bg-juno-accent-hi shadow-[0_0_4px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-label-sm text-primary readout-d">640ms</span>
+</div>
+<!-- SUSTAIN SLIDER -->
+<div class="flex flex-col items-center h-[184px] justify-between">
+<span class="text-label-sm font-label-sm text-on-surface font-bold">S</span>
+<div class="relative w-11 h-[142px] fader-slot bg-surface-container-lowest rounded-sm flex justify-center items-end py-1 fader-container" data-param="sustain" data-val="72">
+<div class="w-1.5 h-full bg-[#161618] rounded-full relative">
+<div class="fader-fill absolute bottom-0 left-0 w-full bg-juno-orange/80 rounded-full" style="height: 72%;"></div>
+<div class="fader-cap absolute -left-4 w-9 h-6 rounded flex items-center justify-center cursor-ns-resize shadow-md" style="bottom: calc(72% - 12px);">
+<div class="w-6 h-0.5 bg-juno-accent-hi shadow-[0_0_4px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-label-sm text-primary readout-s">72%</span>
+</div>
+<!-- RELEASE SLIDER -->
+<div class="flex flex-col items-center h-[184px] justify-between">
+<span class="text-label-sm font-label-sm text-on-surface font-bold">R</span>
+<div class="relative w-11 h-[142px] fader-slot bg-surface-container-lowest rounded-sm flex justify-center items-end py-1 fader-container" data-param="release" data-val="48">
+<div class="w-1.5 h-full bg-[#161618] rounded-full relative">
+<div class="fader-fill absolute bottom-0 left-0 w-full bg-juno-orange/80 rounded-full" style="height: 48%;"></div>
+<div class="fader-cap absolute -left-4 w-9 h-6 rounded flex items-center justify-center cursor-ns-resize shadow-md" style="bottom: calc(48% - 12px);">
+<div class="w-6 h-0.5 bg-juno-accent-hi shadow-[0_0_4px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-label-sm text-primary readout-r">480ms</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- ============================================== -->
+<!-- TAB 2: DCO / LFO INTERFACE                      -->
+<!-- ============================================== -->
+<div class="w-full h-full hidden flex-col justify-between" id="tab-content-dco">
+<!-- TOP DCO MODULE (Height ~240px) -->
+<section class="w-full h-[240px] bg-surface-container-low border border-outline-variant rounded relative flex flex-col p-2.5">
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-1 mb-2 px-2">
+<div class="flex items-center gap-3">
+<span class="text-label-sm font-label-sm text-juno-accent-hi tracking-widest font-bold">DCO // DIGITALLY CONTROLLED OSCILLATOR</span>
+<span class="text-[9px] font-label-sm text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">INTEL 8253 PROGRAMMABLE INTERVAL TIMER</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary">ANALOG JUNCTION ARRAY</span>
+</div>
+<div class="flex-1 flex gap-6 items-center px-4">
+<!-- RANGE SELECTOR (16', 8', 4') -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-2">OCTAVE RANGE</span>
+<div class="flex flex-col gap-2">
+<button class="range-btn tactile-btn px-4 py-1.5 rounded bg-surface-container text-label-md font-label-md text-on-surface-variant border border-outline-variant" id="btn-range-4" onclick="setDcoRange('4')">4'</button>
+<button class="range-btn tactile-btn active px-4 py-1.5 rounded bg-surface-container-high text-primary border border-primary font-bold" id="btn-range-8" onclick="setDcoRange('8')">8'</button>
+<button class="range-btn tactile-btn px-4 py-1.5 rounded bg-surface-container text-label-md font-label-md text-on-surface-variant border border-outline-variant" id="btn-range-16" onclick="setDcoRange('16')">16'</button>
+</div>
+</div>
+<!-- LFO MOD & PWM ROTARIES -->
+<div class="flex gap-4 items-center border-l border-r border-outline-variant/60 px-6">
+<!-- DCO LFO -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-1">DCO LFO</span>
+<div class="relative w-14 h-14 cursor-ns-resize" data-max="100" data-min="0" data-unit="%" data-val="14" id="knob-dco-lfo">
+<div class="w-14 h-14 rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-10 h-10 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1 h-3 rounded-full bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-2 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-primary text-center w-14">
+<span id="val-dco-lfo">14%</span>
+</div>
+</div>
+<!-- PWM DEPTH -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-1">PWM DEPTH</span>
+<div class="relative w-14 h-14 cursor-ns-resize" data-max="100" data-min="0" data-unit="%" data-val="55" id="knob-pwm-depth">
+<div class="w-14 h-14 rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-10 h-10 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1 h-3 rounded-full bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-2 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-primary text-center w-14">
+<span id="val-pwm-depth">55%</span>
+</div>
+</div>
+<!-- PWM MODE SWITCH -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-2">PWM SRC</span>
+<div class="flex flex-col gap-1.5">
+<button class="tactile-btn px-3 py-1 rounded bg-surface-container text-[10px] font-label-sm border border-outline-variant" id="btn-pwm-man" onclick="setPwmMode('MAN')">MAN</button>
+<button class="tactile-btn active px-3 py-1 rounded bg-surface-container-high text-[10px] font-label-sm text-primary border border-primary font-bold" id="btn-pwm-lfo" onclick="setPwmMode('LFO')">LFO</button>
+<button class="tactile-btn px-3 py-1 rounded bg-surface-container text-[10px] font-label-sm border border-outline-variant" id="btn-pwm-env" onclick="setPwmMode('ENV')">ENV</button>
+</div>
+</div>
+</div>
+<!-- WAVE MIXER VERTICAL SLIDERS -->
+<div class="flex-1 flex justify-around items-center">
+<!-- PULSE -->
+<div class="flex flex-col items-center h-[178px] justify-between">
+<span class="text-label-sm font-label-sm text-on-surface font-bold">PULSE</span>
+<div class="relative w-10 h-[138px] fader-slot bg-surface-container-lowest rounded-sm flex justify-center items-end py-1 fader-container" data-param="pulse" data-val="80">
+<div class="w-1.5 h-full bg-[#161618] rounded-full relative">
+<div class="fader-fill absolute bottom-0 left-0 w-full bg-juno-orange/80 rounded-full" style="height: 80%;"></div>
+<div class="fader-cap absolute -left-4 w-9 h-6 rounded flex items-center justify-center cursor-ns-resize shadow-md" style="bottom: calc(80% - 12px);">
+<div class="w-6 h-0.5 bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-label-sm text-primary">80%</span>
+</div>
+<!-- SAW -->
+<div class="flex flex-col items-center h-[178px] justify-between">
+<span class="text-label-sm font-label-sm text-on-surface font-bold">SAW</span>
+<div class="relative w-10 h-[138px] fader-slot bg-surface-container-lowest rounded-sm flex justify-center items-end py-1 fader-container" data-param="saw" data-val="95">
+<div class="w-1.5 h-full bg-[#161618] rounded-full relative">
+<div class="fader-fill absolute bottom-0 left-0 w-full bg-juno-orange/80 rounded-full" style="height: 95%;"></div>
+<div class="fader-cap absolute -left-4 w-9 h-6 rounded flex items-center justify-center cursor-ns-resize shadow-md" style="bottom: calc(95% - 12px);">
+<div class="w-6 h-0.5 bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-label-sm text-primary">95%</span>
+</div>
+<!-- SUB OSC -->
+<div class="flex flex-col items-center h-[178px] justify-between">
+<span class="text-label-sm font-label-sm text-on-surface font-bold">SUB</span>
+<div class="relative w-10 h-[138px] fader-slot bg-surface-container-lowest rounded-sm flex justify-center items-end py-1 fader-container" data-param="sub" data-val="60">
+<div class="w-1.5 h-full bg-[#161618] rounded-full relative">
+<div class="fader-fill absolute bottom-0 left-0 w-full bg-juno-orange/80 rounded-full" style="height: 60%;"></div>
+<div class="fader-cap absolute -left-4 w-9 h-6 rounded flex items-center justify-center cursor-ns-resize shadow-md" style="bottom: calc(60% - 12px);">
+<div class="w-6 h-0.5 bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-label-sm text-primary">60%</span>
+</div>
+<!-- NOISE -->
+<div class="flex flex-col items-center h-[178px] justify-between">
+<span class="text-label-sm font-label-sm text-on-surface font-bold">NOISE</span>
+<div class="relative w-10 h-[138px] fader-slot bg-surface-container-lowest rounded-sm flex justify-center items-end py-1 fader-container" data-param="noise" data-val="10">
+<div class="w-1.5 h-full bg-[#161618] rounded-full relative">
+<div class="fader-fill absolute bottom-0 left-0 w-full bg-juno-orange/80 rounded-full" style="height: 10%;"></div>
+<div class="fader-cap absolute -left-4 w-9 h-6 rounded flex items-center justify-center cursor-ns-resize shadow-md" style="bottom: calc(10% - 12px);">
+<div class="w-6 h-0.5 bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-label-sm text-primary">10%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- BOTTOM ROW: LFO ENGINE & VCA MODULATION (Height ~252px) -->
+<div class="w-full h-[252px] flex gap-gutter">
+<!-- LFO ENGINE (626px) -->
+<section class="flex-1 bg-surface-container-low border border-outline-variant rounded relative flex flex-col p-2.5">
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-1 mb-2 px-2">
+<span class="text-label-sm font-label-sm text-juno-accent-hi tracking-widest font-bold">LFO GENERATOR</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">0.1 Hz - 20 Hz TRIANGLE</span>
+</div>
+<div class="flex-1 flex items-center justify-around">
+<!-- LFO RATE -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-1">RATE</span>
+<div class="relative w-16 h-16 cursor-ns-resize" data-max="100" data-min="1" data-unit="Hz" data-val="35" id="knob-lfo-rate">
+<div class="w-16 h-16 rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-12 h-12 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1.5 h-3.5 rounded-full bg-juno-accent-hi shadow-[0_0_6px_#ff6b3d]"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-2 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-primary text-center min-w-[54px]">
+<span id="val-lfo-rate">3.5 Hz</span>
+</div>
+</div>
+<!-- LFO DELAY TIME -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-1">DELAY TIME</span>
+<div class="relative w-14 h-14 cursor-ns-resize" data-max="100" data-min="0" data-unit="ms" data-val="0" id="knob-lfo-delay">
+<div class="w-14 h-14 rounded-full knob-face border border-outline flex items-center justify-center">
+<div class="w-10 h-10 rounded-full knob-cap relative flex items-center justify-center">
+<div class="knob-pointer absolute top-1 w-1 h-3 rounded-full bg-juno-accent-hi"></div>
+</div>
+</div>
+</div>
+<div class="mt-1 recessed-well px-2 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-primary text-center min-w-[54px]">
+<span id="val-lfo-delay">0 ms</span>
+</div>
+</div>
+<!-- LFO PULSE LED & MONITOR -->
+<div class="recessed-well rounded p-3 border border-outline-variant flex flex-col items-center justify-center gap-2 w-44 h-32 bg-black">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full bg-juno-red shadow-[0_0_10px_#ff4a30]" id="lfo-blinker"></div>
+<span class="text-label-sm font-label-sm text-secondary">LFO PULSE</span>
+</div>
+<span class="text-[10px] font-label-sm text-on-surface-variant text-center">TRIANGLE MODULATION ROUTED TO DCO &amp; VCF</span>
+</div>
+</div>
+</section>
+<!-- VCA & MOD MATRIX (626px) -->
+<section class="flex-1 bg-surface-container-low border border-outline-variant rounded relative flex flex-col p-2.5">
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-1 mb-2 px-2">
+<span class="text-label-sm font-label-sm text-juno-accent-hi tracking-widest font-bold">VCA &amp; HPF CONTROLS</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">GATE / ENV SELECTOR</span>
+</div>
+<div class="flex-1 flex items-center justify-around px-4">
+<!-- VCA MODE SWITCH -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-2">VCA MODE</span>
+<div class="flex flex-col gap-2">
+<button class="tactile-btn active px-4 py-2 rounded bg-surface-container-high text-primary border border-primary text-label-md font-label-md font-bold" id="btn-vca-env" onclick="setVcaMode('ENV')">ENV (ADSR)</button>
+<button class="tactile-btn px-4 py-2 rounded bg-surface-container text-on-surface-variant border border-outline-variant text-label-md font-label-md" id="btn-vca-gate" onclick="setVcaMode('GATE')">GATE (ORGAN)</button>
+</div>
+</div>
+<!-- VCF POLARITY (NORMAL / INVERT) -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant mb-2">VCF ENV POLARITY</span>
+<div class="flex gap-2">
+<button class="tactile-btn active w-12 h-12 rounded bg-surface-container-high text-primary border border-primary text-label-lg font-bold flex items-center justify-center" id="btn-env-pos" onclick="setEnvPolarity('+')">+</button>
+<button class="tactile-btn w-12 h-12 rounded bg-surface-container text-on-surface-variant border border-outline-variant text-label-lg font-bold flex items-center justify-center" id="btn-env-neg" onclick="setEnvPolarity('-')">-</button>
+</div>
+</div>
+<!-- HPF BASS GAIN NOTCH -->
+<div class="recessed-well rounded p-3 border border-secondary-container/40 flex flex-col justify-between w-48 h-32 bg-juno-display-bg">
+<div class="text-[10px] font-label-sm text-secondary">ACTIVE CALIBRATION</div>
+<div class="text-label-md font-label-md led-glow-red font-bold">ANALOG LOW BOOST: ON (+3dB @ 60Hz)</div>
+<div class="text-[9px] font-label-sm text-secondary/60">JUNO-60 FILTER REVISION 2</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- BOTTOM BAR / Q-LINK STATUS STRIP (Shared Components JSON Anchor) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-space-md h-14 bg-surface-container-lowest border-t border-outline-variant">
+<!-- Q-Link Encoder Assignments (Bank 1: MAIN) -->
+<div class="flex items-center gap-2 overflow-hidden flex-1 mr-4">
+<div class="flex items-center gap-1.5 mr-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-primary font-bold">Q-LINKS</span>
+</div>
+<!-- Q-Link Strip Items conforming to Shared Components JSON -->
+<div class="flex items-center gap-2">
+<!-- Q1: CUTOFF (Active Navigation Anchor) -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-space-md py-1 rounded min-w-[96px] cursor-pointer">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="dialpad">dialpad</span>
+<span class="text-label-sm font-label-sm font-bold">Q1: CUTOFF</span>
+</div>
+<span class="text-[9px] font-label-sm text-primary/80" id="qlink-val-1">1.24 kHz</span>
+</div>
+<!-- Q2: RESO -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[96px] hover:bg-surface-container cursor-pointer">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="adjust">adjust</span>
+<span class="text-label-sm font-label-sm">Q2: RESO</span>
+</div>
+<span class="text-[9px] font-label-sm text-on-surface-variant/80" id="qlink-val-2">4.6</span>
+</div>
+<!-- Q3: DRIVE -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[96px] hover:bg-surface-container cursor-pointer">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="tune">tune</span>
+<span class="text-label-sm font-label-sm">Q3: DRIVE</span>
+</div>
+<span class="text-[9px] font-label-sm text-on-surface-variant/80">35%</span>
+</div>
+<!-- Q4: TEMPO -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[96px] hover:bg-surface-container cursor-pointer">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="speed">speed</span>
+<span class="text-label-sm font-label-sm">Q4: TEMPO</span>
+</div>
+<span class="text-[9px] font-label-sm text-on-surface-variant/80">120 BPM</span>
+</div>
+</div>
+<!-- Additional hardware mapping label readout -->
+<div class="hidden lg:flex items-center text-[10px] font-label-sm text-on-surface-variant/70 ml-2">
+<span>BANK 1: [preset, chorus_i, chorus_ii, volume, transpose, cutoff, reso, env, lfo, adsr]</span>
+</div>
+</div>
+<!-- Engine Status & Standalone MPC Badge -->
+<div class="flex items-center gap-3">
+<div class="recessed-well px-2.5 py-1 rounded border border-outline-variant flex items-center gap-2">
+<span class="text-[10px] font-label-sm text-on-surface-variant">VOICES: <span class="text-primary font-bold">6/6</span></span>
+<span class="text-[10px] font-label-sm text-on-surface-variant">DSP: <span class="text-primary font-bold">14%</span></span>
+</div>
+<div class="text-label-sm font-label-sm font-bold text-juno-accent-hi tracking-wider border border-secondary-container px-2 py-1 rounded bg-juno-display-bg">
+        AKAI LIVE II
+      </div>
+</div>
+</footer>
+<!-- ============================================== -->
+<!-- JAVASCRIPT: SYNTH ENGINE, AUDIO & UI LOGIC     -->
+<!-- ============================================== -->
+<script>
+    // --- SYNTH PRESETS ---
+    const PRESETS = [
+      { name: "01: JUNO BASS LEAD", cutoff: 1240, res: 4.6, env: 65, c1: false, c2: true, a: 12, d: 640, s: 72, r: 480 },
+      { name: "02: 80s POLYSYNTH PAD", cutoff: 2800, res: 2.1, env: 40, c1: true, c2: true, a: 180, d: 900, s: 85, r: 920 },
+      { name: "03: RESO PLUCK ARPEGGIO", cutoff: 820, res: 7.2, env: 85, c1: true, c2: false, a: 5, d: 320, s: 20, r: 180 },
+      { name: "04: NOSTALGIC STRING MACHINE", cutoff: 3600, res: 1.5, env: 30, c1: true, c2: true, a: 340, d: 1100, s: 90, r: 1200 },
+      { name: "05: VINTAGE FUNK WOBBLE", cutoff: 950, res: 6.8, env: 78, c1: false, c2: true, a: 25, d: 450, s: 40, r: 250 }
+    ];
+    let currentPresetIdx = 0;
+
+    // --- STATE VARIABLES ---
+    let chorus1Active = false;
+    let chorus2Active = true;
+    let hpfStep = 1;
+    let dcoRange = '8';
+    let pwmMode = 'LFO';
+    let vcaMode = 'ENV';
+    let envPolarity = '+';
+
+    // Parameters for Web Audio
+    let params = {
+      cutoff: 1240,
+      resonance: 4.6,
+      envDepth: 65,
+      vcfLfo: 22,
+      volume: 0.78,
+      octave: 0,
+      attack: 0.012,
+      decay: 0.64,
+      sustain: 0.72,
+      release: 0.48,
+      dcoLfo: 0.14,
+      pwmDepth: 0.55,
+      pulseMix: 0.8,
+      sawMix: 0.95,
+      subMix: 0.6,
+      noiseMix: 0.1,
+      lfoRate: 3.5
+    };
+
+    // --- TAB SWITCHING ---
+    function switchTab(tab) {
+      const tabMain = document.getElementById('tab-content-main');
+      const tabDco = document.getElementById('tab-content-dco');
+      const btnMain = document.getElementById('nav-btn-main');
+      const btnDco = document.getElementById('nav-btn-dco');
+
+      if (tab === 'main') {
+        tabMain.classList.remove('hidden');
+        tabMain.classList.add('flex');
+        tabDco.classList.add('hidden');
+        tabDco.classList.remove('flex');
+
+        btnMain.className = "text-primary border-b-2 border-primary font-bold py-1 px-3 text-label-md font-label-md flex items-center gap-1.5 transition-all";
+        btnDco.className = "text-on-surface-variant hover:text-on-surface py-1 px-3 text-label-md font-label-md flex items-center gap-1.5 transition-all";
+      } else {
+        tabMain.classList.add('hidden');
+        tabMain.classList.remove('flex');
+        tabDco.classList.remove('hidden');
+        tabDco.classList.add('flex');
+
+        btnDco.className = "text-primary border-b-2 border-primary font-bold py-1 px-3 text-label-md font-label-md flex items-center gap-1.5 transition-all";
+        btnMain.className = "text-on-surface-variant hover:text-on-surface py-1 px-3 text-label-md font-label-md flex items-center gap-1.5 transition-all";
+      }
+    }
+
+    // --- PRESET STEPPER ---
+    function stepPreset(dir) {
+      currentPresetIdx = (currentPresetIdx + dir + PRESETS.length) % PRESETS.length;
+      loadPreset(PRESETS[currentPresetIdx]);
+    }
+
+    function loadPreset(p) {
+      document.getElementById('header-patch-name').innerText = p.name;
+      document.getElementById('main-patch-title').innerText = p.name;
+      
+      params.cutoff = p.cutoff;
+      params.resonance = p.res;
+      params.envDepth = p.env;
+      params.attack = p.a / 1000;
+      params.decay = p.d / 1000;
+      params.sustain = p.s / 100;
+      params.release = p.r / 1000;
+      
+      chorus1Active = p.c1;
+      chorus2Active = p.c2;
+      updateChorusUI();
+
+      // Update Knobs UI
+      updateKnobVisual(document.getElementById('knob-cutoff'), p.cutoff);
+      updateKnobVisual(document.getElementById('knob-res'), p.res);
+      updateKnobVisual(document.getElementById('knob-env-depth'), p.env);
+      document.getElementById('val-cutoff').innerText = (p.cutoff > 999) ? (p.cutoff/1000).toFixed(2) + " kHz" : p.cutoff + " Hz";
+      document.getElementById('val-res').innerText = p.res.toFixed(1);
+      document.getElementById('val-env-depth').innerText = p.env + "%";
+      document.getElementById('qlink-val-1').innerText = (p.cutoff > 999) ? (p.cutoff/1000).toFixed(2) + " kHz" : p.cutoff + " Hz";
+      document.getElementById('qlink-val-2').innerText = p.res.toFixed(1);
+
+      // Update VCF SVG
+      updateVcfCurve();
+    }
+
+    // --- CHORUS LOGIC ---
+    function toggleChorus(btn) {
+      if (btn === 1) chorus1Active = !chorus1Active;
+      if (btn === 2) chorus2Active = !chorus2Active;
+      updateChorusUI();
+    }
+
+    function updateChorusUI() {
+      const btn1 = document.getElementById('btn-chorus-1');
+      const led1 = document.getElementById('led-chorus-1');
+      const btn2 = document.getElementById('btn-chorus-2');
+      const led2 = document.getElementById('led-chorus-2');
+      const modeLabel = document.getElementById('chorus-mode-label');
+      const scopeTag = document.getElementById('chorus-status-tag');
+
+      if (chorus1Active) {
+        btn1.classList.add('active', 'border-primary');
+        led1.className = "w-2 h-2 rounded-full bg-juno-accent-hi shadow-[0_0_8px_#ff6b3d] transition-colors";
+      } else {
+        btn1.classList.remove('active', 'border-primary');
+        led1.className = "w-2 h-2 rounded-full bg-surface-variant transition-colors";
+      }
+
+      if (chorus2Active) {
+        btn2.classList.add('active', 'border-primary');
+        led2.className = "w-2 h-2 rounded-full bg-juno-accent-hi shadow-[0_0_8px_#ff6b3d] transition-colors";
+      } else {
+        btn2.classList.remove('active', 'border-primary');
+        led2.className = "w-2 h-2 rounded-full bg-surface-variant transition-colors";
+      }
+
+      if (chorus1Active && chorus2Active) {
+        modeLabel.innerText = "CHORUS I + II (VIBRATO ROTARY)";
+        scopeTag.innerText = "CHORUS: I + II STEREO EXPANDED";
+      } else if (chorus1Active) {
+        modeLabel.innerText = "CHORUS I (SLOW LUSH)";
+        scopeTag.innerText = "CHORUS: I SLOW BBD";
+      } else if (chorus2Active) {
+        modeLabel.innerText = "CHORUS II (DEEP MOD)";
+        scopeTag.innerText = "CHORUS: II DEEP BBD";
+      } else {
+        modeLabel.innerText = "OFF (DRY ANALOG)";
+        scopeTag.innerText = "CHORUS: OFF (DIRECT)";
+      }
+    }
+
+    // --- HPF STEP CYCLER ---
+    function cycleHpf() {
+      hpfStep = (hpfStep + 1) % 4;
+      document.getElementById('val-hpf-step').innerText = hpfStep;
+    }
+
+    // --- DCO CONTROLS ---
+    function setDcoRange(r) {
+      dcoRange = r;
+      ['4', '8', '16'].forEach(val => {
+        const btn = document.getElementById('btn-range-' + val);
+        if (val === r) {
+          btn.className = "range-btn tactile-btn active px-4 py-1.5 rounded bg-surface-container-high text-primary border border-primary font-bold";
+        } else {
+          btn.className = "range-btn tactile-btn px-4 py-1.5 rounded bg-surface-container text-label-md font-label-md text-on-surface-variant border border-outline-variant";
+        }
+      });
+    }
+
+    function setPwmMode(mode) {
+      pwmMode = mode;
+      ['man', 'lfo', 'env'].forEach(m => {
+        const btn = document.getElementById('btn-pwm-' + m);
+        if (m === mode.toLowerCase()) {
+          btn.className = "tactile-btn active px-3 py-1 rounded bg-surface-container-high text-[10px] font-label-sm text-primary border border-primary font-bold";
+        } else {
+          btn.className = "tactile-btn px-3 py-1 rounded bg-surface-container text-[10px] font-label-sm border border-outline-variant text-on-surface-variant";
+        }
+      });
+    }
+
+    function setVcaMode(mode) {
+      vcaMode = mode;
+      const bEnv = document.getElementById('btn-vca-env');
+      const bGate = document.getElementById('btn-vca-gate');
+      if (mode === 'ENV') {
+        bEnv.className = "tactile-btn active px-4 py-2 rounded bg-surface-container-high text-primary border border-primary text-label-md font-label-md font-bold";
+        bGate.className = "tactile-btn px-4 py-2 rounded bg-surface-container text-on-surface-variant border border-outline-variant text-label-md font-label-md";
+      } else {
+        bGate.className = "tactile-btn active px-4 py-2 rounded bg-surface-container-high text-primary border border-primary text-label-md font-label-md font-bold";
+        bEnv.className = "tactile-btn px-4 py-2 rounded bg-surface-container text-on-surface-variant border border-outline-variant text-label-md font-label-md";
+      }
+    }
+
+    function setEnvPolarity(p) {
+      envPolarity = p;
+      const bPos = document.getElementById('btn-env-pos');
+      const bNeg = document.getElementById('btn-env-neg');
+      if (p === '+') {
+        bPos.className = "tactile-btn active w-12 h-12 rounded bg-surface-container-high text-primary border border-primary text-label-lg font-bold flex items-center justify-center";
+        bNeg.className = "tactile-btn w-12 h-12 rounded bg-surface-container text-on-surface-variant border border-outline-variant text-label-lg font-bold flex items-center justify-center";
+      } else {
+        bNeg.className = "tactile-btn active w-12 h-12 rounded bg-surface-container-high text-primary border border-primary text-label-lg font-bold flex items-center justify-center";
+        bPos.className = "tactile-btn w-12 h-12 rounded bg-surface-container text-on-surface-variant border border-outline-variant text-label-lg font-bold flex items-center justify-center";
+      }
+    }
+
+    // --- VCF RESPONSE CURVE UPDATE ---
+    function updateVcfCurve() {
+      const freqNorm = Math.min(1, Math.max(0.05, params.cutoff / 12000));
+      const resNorm = params.resonance / 10;
+      
+      const peakX = 40 + (freqNorm * 140);
+      const peakY = 65 - (resNorm * 45);
+
+      const pathStr = `M 10 95 L 10 65 Q ${peakX * 0.7} 64, ${peakX} ${peakY} T ${peakX + 25} 98 L 230 112`;
+      const fillStr = `${pathStr} L 230 115 L 10 115 Z`;
+
+      const curveLine = document.getElementById('vcfCurveLine');
+      const fillPath = document.getElementById('vcfFillPath');
+      const resPoint = document.getElementById('vcfResPoint');
+
+      if (curveLine) curveLine.setAttribute('d', pathStr);
+      if (fillPath) fillPath.setAttribute('d', fillStr);
+      if (resPoint) {
+        resPoint.setAttribute('cx', peakX);
+        resPoint.setAttribute('cy', peakY);
+      }
+    }
+
+    // --- ROTARY KNOB CONTROLS (Draggable NS touch/mouse) ---
+    function updateKnobVisual(el, val) {
+      const min = parseFloat(el.dataset.min);
+      const max = parseFloat(el.dataset.max);
+      const norm = (val - min) / (max - min);
+      const deg = -135 + (norm * 270);
+      const pointer = el.querySelector('.knob-pointer');
+      if (pointer) {
+        pointer.style.transformOrigin = "center 28px";
+        pointer.style.transform = `rotate(${deg}deg)`;
+      }
+    }
+
+    document.querySelectorAll('.cursor-ns-resize').forEach(knob => {
+      let isDragging = false;
+      let startY = 0;
+      let startVal = 0;
+
+      const onStart = (clientY) => {
+        isDragging = true;
+        startY = clientY;
+        startVal = parseFloat(knob.dataset.val);
+        document.body.style.cursor = 'ns-resize';
+      };
+
+      const onMove = (clientY) => {
+        if (!isDragging) return;
+        const delta = startY - clientY;
+        const min = parseFloat(knob.dataset.min);
+        const max = parseFloat(knob.dataset.max);
+        const range = max - min;
+        let newVal = startVal + (delta / 120) * range;
+        newVal = Math.max(min, Math.min(max, newVal));
+        knob.dataset.val = newVal;
+
+        updateKnobVisual(knob, newVal);
+
+        // Update corresponding parameter
+        const id = knob.id;
+        if (id === 'knob-cutoff') {
+          params.cutoff = newVal;
+          document.getElementById('val-cutoff').innerText = (newVal > 999) ? (newVal/1000).toFixed(2) + " kHz" : Math.round(newVal) + " Hz";
+          document.getElementById('qlink-val-1').innerText = (newVal > 999) ? (newVal/1000).toFixed(2) + " kHz" : Math.round(newVal) + " Hz";
+          updateVcfCurve();
+        } else if (id === 'knob-res') {
+          params.resonance = newVal;
+          document.getElementById('val-res').innerText = newVal.toFixed(1);
+          document.getElementById('qlink-val-2').innerText = newVal.toFixed(1);
+          updateVcfCurve();
+        } else if (id === 'knob-vol') {
+          params.volume = newVal / 100;
+          document.getElementById('val-vol').innerText = Math.round(newVal) + "%";
+        } else if (id === 'knob-octave') {
+          params.octave = Math.round(newVal);
+          document.getElementById('val-octave').innerText = (params.octave > 0 ? "+" : "") + params.octave;
+        } else if (id === 'knob-env-depth') {
+          params.envDepth = Math.round(newVal);
+          document.getElementById('val-env-depth').innerText = Math.round(newVal) + "%";
+        } else if (id === 'knob-vcf-lfo') {
+          params.vcfLfo = Math.round(newVal);
+          document.getElementById('val-vcf-lfo').innerText = Math.round(newVal) + "%";
+        } else if (id === 'knob-lfo-rate') {
+          params.lfoRate = (newVal / 10).toFixed(1);
+          document.getElementById('val-lfo-rate').innerText = params.lfoRate + " Hz";
+        }
+      };
+
+      const onEnd = () => {
+        isDragging = false;
+        document.body.style.cursor = 'default';
+      };
+
+      knob.addEventListener('mousedown', e => onStart(e.clientY));
+      window.addEventListener('mousemove', e => onMove(e.clientY));
+      window.addEventListener('mouseup', onEnd);
+
+      knob.addEventListener('touchstart', e => {
+        if (e.touches.length > 0) onStart(e.touches[0].clientY);
+      }, { passive: false });
+      window.addEventListener('touchmove', e => {
+        if (e.touches.length > 0) onMove(e.touches[0].clientY);
+      }, { passive: false });
+      window.addEventListener('touchend', onEnd);
+
+      // Initial visual angle
+      updateKnobVisual(knob, parseFloat(knob.dataset.val));
+    });
+
+    // --- FADER DRAGGING LOGIC ---
+    document.querySelectorAll('.fader-container').forEach(fader => {
+      let isDragging = false;
+
+      const updateFader = (clientY) => {
+        const rect = fader.getBoundingClientRect();
+        const height = rect.height;
+        let pct = (rect.bottom - clientY) / height;
+        pct = Math.max(0, Math.min(1, pct));
+        const val100 = Math.round(pct * 100);
+
+        const fill = fader.querySelector('.fader-fill');
+        const cap = fader.querySelector('.fader-cap');
+        if (fill) fill.style.height = val100 + '%';
+        if (cap) cap.style.bottom = `calc(${val100}% - 12px)`;
+
+        const param = fader.dataset.param;
+        if (param === 'attack') {
+          params.attack = (val100 * 12) / 1000;
+          document.querySelector('.readout-a').innerText = Math.round(val100 * 12) + "ms";
+        } else if (param === 'decay') {
+          params.decay = (val100 * 20) / 1000;
+          document.querySelector('.readout-d').innerText = Math.round(val100 * 20) + "ms";
+        } else if (param === 'sustain') {
+          params.sustain = val100 / 100;
+          document.querySelector('.readout-s').innerText = val100 + "%";
+        } else if (param === 'release') {
+          params.release = (val100 * 25) / 1000;
+          document.querySelector('.readout-r').innerText = Math.round(val100 * 25) + "ms";
+        }
+      };
+
+      fader.addEventListener('mousedown', e => {
+        isDragging = true;
+        updateFader(e.clientY);
+      });
+      window.addEventListener('mousemove', e => {
+        if (isDragging) updateFader(e.clientY);
+      });
+      window.addEventListener('mouseup', () => isDragging = false);
+
+      fader.addEventListener('touchstart', e => {
+        isDragging = true;
+        if (e.touches.length > 0) updateFader(e.touches[0].clientY);
+      }, { passive: false });
+      window.addEventListener('touchmove', e => {
+        if (isDragging && e.touches.length > 0) updateFader(e.touches[0].clientY);
+      }, { passive: false });
+      window.addEventListener('touchend', () => isDragging = false);
+    });
+
+    // --- OSCILLOSCOPE WAVE ANALYZER SIMULATION ---
+    const canvas = document.getElementById('scopeCanvas');
+    const ctx = canvas.getContext('2d');
+    let scopeTime = 0;
+
+    function renderScope() {
+      ctx.fillStyle = '#060608';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Vintage phosphor oscilloscope grid
+      ctx.strokeStyle = '#18181c';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += 30) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 30) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      // Draw real-time Juno Chorus Saw/Pulse Waveform
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#ff6b3d';
+      ctx.shadowColor = '#ff4a30';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+
+      const centerY = canvas.height / 2;
+      const freq = (params.cutoff / 800) * 0.05 + 0.02;
+      const chorusMod1 = chorus1Active ? Math.sin(scopeTime * 0.04) * 8 : 0;
+      const chorusMod2 = chorus2Active ? Math.cos(scopeTime * 0.07) * 14 : 0;
+
+      for (let x = 0; x < canvas.width; x++) {
+        const saw = (((x * freq + scopeTime * 0.05) % 1) - 0.5) * 50;
+        const sub = Math.sin(x * freq * 0.5 + scopeTime * 0.05) * 20;
+        const chorusOffset = Math.sin(x * 0.02 + scopeTime * 0.03) * (chorusMod1 + chorusMod2);
+        const y = centerY + saw + sub + chorusOffset;
+
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Pulse LFO indicator
+      const lfoBlinker = document.getElementById('lfo-blinker');
+      if (lfoBlinker) {
+        const lfoVal = (Math.sin(scopeTime * (params.lfoRate * 0.05)) + 1) / 2;
+        lfoBlinker.style.opacity = (0.2 + lfoVal * 0.8).toFixed(2);
+      }
+
+      scopeTime += 1;
+      requestAnimationFrame(renderScope);
+    }
+    renderScope();
+
+    // --- WEB AUDIO API: JUNO-60 VINTAGE CHORUS SYNTH ---
+    let audioCtx = null;
+    let activeNodes = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playJunoPad() {
+      initAudio();
+      if (activeNodes) return; // Note already playing
+
+      const now = audioCtx.currentTime;
+
+      // Master output
+      const masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(params.volume * 0.5, now);
+      masterGain.connect(audioCtx.destination);
+
+      // Filter (24dB Roland emulation approximation)
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(params.cutoff, now);
+      filter.Q.setValueAtTime(params.resonance * 1.5, now);
+
+      // ADSR Envelope applied to VCF Frequency
+      const envAmp = params.envDepth * 40;
+      filter.frequency.exponentialRampToValueAtTime(Math.min(20000, Math.max(40, params.cutoff + envAmp)), now + params.attack);
+      filter.frequency.exponentialRampToValueAtTime(Math.min(20000, Math.max(40, params.cutoff + (envAmp * params.sustain))), now + params.attack + params.decay);
+
+      // Oscillators (Saw + Sub + Detuned Twin for Juno heft)
+      const baseFreq = 110 * Math.pow(2, params.octave); // A2 note
+      
+      const oscSaw = audioCtx.createOscillator();
+      oscSaw.type = 'sawtooth';
+      oscSaw.frequency.setValueAtTime(baseFreq, now);
+
+      const oscSaw2 = audioCtx.createOscillator();
+      oscSaw2.type = 'sawtooth';
+      oscSaw2.frequency.setValueAtTime(baseFreq * 1.002, now); // slight chorus drift
+
+      const oscSub = audioCtx.createOscillator();
+      oscSub.type = 'square';
+      oscSub.frequency.setValueAtTime(baseFreq * 0.5, now); // 1 octave below
+
+      // VCA Gain with ADSR
+      const vcaGain = audioCtx.createGain();
+      vcaGain.gain.setValueAtTime(0.0001, now);
+      vcaGain.gain.linearRampToValueAtTime(1.0, now + Math.max(0.01, params.attack));
+      vcaGain.gain.exponentialRampToValueAtTime(Math.max(0.01, params.sustain), now + Math.max(0.01, params.attack) + params.decay);
+
+      // Stereo Chorus Emulation via Delay and LFO
+      const chorusDelay = audioCtx.createDelay();
+      chorusDelay.delayTime.setValueAtTime(0.015, now);
+
+      const chorusLFO = audioCtx.createOscillator();
+      chorusLFO.frequency.setValueAtTime(chorus2Active ? 0.6 : 0.4, now);
+
+      const chorusLFOGain = audioCtx.createGain();
+      chorusLFOGain.gain.setValueAtTime(chorus1Active || chorus2Active ? 0.003 : 0.0, now);
+
+      chorusLFO.connect(chorusLFOGain);
+      chorusLFOGain.connect(chorusDelay.delayTime);
+      chorusLFO.start(now);
+
+      // Routing
+      oscSaw.connect(filter);
+      oscSaw2.connect(filter);
+      oscSub.connect(filter);
+
+      filter.connect(vcaGain);
+      vcaGain.connect(masterGain);
+
+      if (chorus1Active || chorus2Active) {
+        vcaGain.connect(chorusDelay);
+        chorusDelay.connect(masterGain);
+      }
+
+      oscSaw.start(now);
+      oscSaw2.start(now);
+      oscSub.start(now);
+
+      activeNodes = { oscSaw, oscSaw2, oscSub, vcaGain, masterGain, chorusLFO, now };
+
+      // Button Visual State
+      const audBtn = document.getElementById('btn-audition');
+      audBtn.classList.add('bg-primary-container', 'text-on-primary-container');
+    }
+
+    function stopJunoPad() {
+      if (!activeNodes) return;
+      const now = audioCtx.currentTime;
+      const { oscSaw, oscSaw2, oscSub, vcaGain, chorusLFO } = activeNodes;
+
+      vcaGain.gain.cancelScheduledValues(now);
+      vcaGain.gain.setValueAtTime(vcaGain.gain.value, now);
+      vcaGain.gain.exponentialRampToValueAtTime(0.0001, now + Math.max(0.05, params.release));
+
+      setTimeout(() => {
+        try {
+          oscSaw.stop();
+          oscSaw2.stop();
+          oscSub.stop();
+          chorusLFO.stop();
+        } catch(e) {}
+        activeNodes = null;
+      }, (params.release + 0.1) * 1000);
+
+      const audBtn = document.getElementById('btn-audition');
+      audBtn.classList.remove('bg-primary-container', 'text-on-primary-container');
+    }
+
+    // Audition Trigger Listeners
+    const auditionBtn = document.getElementById('btn-audition');
+    auditionBtn.addEventListener('mousedown', playJunoPad);
+    window.addEventListener('mouseup', stopJunoPad);
+    auditionBtn.addEventListener('touchstart', e => { e.preventDefault(); playJunoPad(); });
+    window.addEventListener('touchend', stopJunoPad);
+
+    // Spacebar trigger support
+    window.addEventListener('keydown', e => {
+      if (e.code === 'Space' && !e.repeat) {
+        e.preventDefault();
+        playJunoPad();
+      }
+    });
+    window.addEventListener('keyup', e => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        stopJunoPad();
+      }
+    });
+
+    // Initial curve draw
+    updateVcfCurve();
+  </script>
+</body></html>

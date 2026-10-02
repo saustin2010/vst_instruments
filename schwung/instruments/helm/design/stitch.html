@@ -1,0 +1,729 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Akai MPC Live II - MONO VOICE Engine</title>
+<!-- Tailwind CSS v3 CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mpc: {
+              chassis: '#121316',
+              bezel: '#181a1f',
+              panel: '#1b1d22',
+              card: '#16171b',
+              inner: '#0d0e11',
+              amber: '#ffaa1d',
+              amberDim: '#b26e0b',
+              amberGlow: 'rgba(255, 170, 29, 0.25)',
+              lcd: '#121c13',
+              lcdText: '#6ee77e',
+              lcdGrid: '#172719',
+              border: '#2e323b',
+              divider: '#d88c1a'
+            }
+          },
+          fontFamily: {
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+            display: ['"Chakra Petch"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Google Fonts: Industrial Hardware & Technical LCD fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&amp;family=JetBrains+Mono:wght@400;500;700;800&amp;family=Share+Tech+Mono&amp;display=swap" rel="stylesheet">
+<style data-purpose="industrial-hardware-styling">
+    body {
+      background-color: #08090b;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Fine CRT & hardware textures */
+    .hardware-bezel {
+      box-shadow: 
+        inset 0 1px 1px 0 rgba(255,255,255,0.08),
+        inset 0 -2px 8px 0 rgba(0,0,0,0.8),
+        0 12px 36px rgba(0,0,0,0.85),
+        0 0 0 1px #22252d;
+    }
+
+    .crt-scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+
+    .amber-glow-text {
+      text-shadow: 0 0 10px rgba(255, 170, 29, 0.65), 0 0 20px rgba(255, 170, 29, 0.3);
+    }
+
+    .amber-glow-box {
+      box-shadow: 0 0 14px rgba(255, 170, 29, 0.25), inset 0 0 6px rgba(255, 170, 29, 0.15);
+    }
+
+    .lcd-screen-pattern {
+      background-color: #0b140e;
+      background-image: radial-gradient(#1f3825 15%, transparent 16%), radial-gradient(#172e1c 15%, transparent 16%);
+      background-size: 4px 4px;
+      background-position: 0 0, 2px 2px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* Rotary Knobs Custom Drag Handle Style */
+    .rotary-dial {
+      cursor: ns-resize;
+      transition: transform 0.05s ease-out;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-gray-200 antialiased font-mono p-4">
+<!-- BEGIN: MpcHardwareContainer -->
+<!-- Encapsulating 1280x628 native resolution touch chassis of Akai MPC Live II -->
+<main class="relative bg-mpc-chassis p-4 rounded-xl border border-neutral-800 hardware-bezel" data-purpose="mpc-live-bezel">
+<!-- Top Hardware Header Frame (Akai MPC Live Branding & Status Bar) -->
+<div class="flex items-center justify-between px-3 py-1.5 mb-2 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 rounded border border-neutral-800/80 text-[11px] tracking-wider text-neutral-400">
+<div class="flex items-center space-x-3">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-red-600 shadow-[0_0_8px_#ef4444]"></span>
+<span class="font-display font-bold text-neutral-200 tracking-widest text-xs">AKAI <span class="text-red-500">MPC</span> LIVE II</span>
+<span class="text-neutral-500">|</span>
+<span class="text-amber-500/90 font-semibold tracking-normal">MACHINE: MONO SYNTH OS v3.4.2</span>
+</div>
+<div class="flex items-center space-x-5 font-mono text-[10px]">
+<div class="flex items-center space-x-1.5">
+<span class="text-neutral-500">DSP:</span>
+<span class="text-emerald-400 font-bold">18%</span>
+</div>
+<div class="flex items-center space-x-1.5">
+<span class="text-neutral-500">FS:</span>
+<span class="text-amber-400">48.0 kHz</span>
+</div>
+<div class="flex items-center space-x-1.5">
+<span class="text-neutral-500">VOICE:</span>
+<span class="text-neutral-200">1/1 MONO</span>
+</div>
+<!-- Hardware status LEDs -->
+<div class="flex space-x-1 pl-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]" title="MIDI Active"></span>
+<span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_5px_#f59e0b]" title="Sync Master"></span>
+</div>
+</div>
+</div>
+<!-- BEGIN: NativeTouchscreenCanvas1280x628 -->
+<!-- Authentic 1280x628 Touchscreen Viewport -->
+<div class="relative w-[1280px] h-[628px] bg-mpc-inner rounded-md overflow-hidden border border-neutral-700/80 shadow-2xl flex flex-col justify-between" id="mpc-screen" style="box-sizing: border-box;">
+<!-- CRT Overlay for analog feel -->
+<div class="crt-scanlines absolute inset-0 z-40 opacity-40"></div>
+<!-- BEGIN: TouchHeaderBar -->
+<header class="relative z-30 h-10 bg-mpc-panel border-b border-neutral-800 flex items-center justify-between px-4 select-none">
+<div class="flex items-center space-x-3">
+<span class="px-2 py-0.5 rounded text-[10px] font-extrabold tracking-widest bg-amber-500 text-black">ELEKTRON / RETRO</span>
+<h1 class="text-base font-bold tracking-wider text-neutral-100 font-display flex items-center space-x-2">
+<span class="">MONO VOICE</span>
+<span class="text-neutral-500 text-xs font-mono">// SID-6581 HYBRID DIGITAL SYNTHESIS</span>
+</h1>
+</div>
+<!-- Mode Selectors and Master Level Indicator -->
+<div class="flex items-center space-x-3 text-xs">
+<div class="flex rounded border border-neutral-700 bg-neutral-900/80 p-0.5">
+<button class="px-3 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40">PAGE 1: MAIN</button>
+<button class="px-3 py-0.5 rounded text-[10px] font-medium text-neutral-400 hover:text-neutral-200">PAGE 2: OSC MIX</button>
+<button class="px-3 py-0.5 rounded text-[10px] font-medium text-neutral-400 hover:text-neutral-200">PAGE 3: FILTER</button>
+</div>
+<div class="flex items-center space-x-2 bg-neutral-900 px-2.5 py-1 rounded border border-neutral-800 text-[10px]">
+<span class="text-neutral-400">OUTPUT:</span>
+<span class="text-amber-400 font-bold">-3.2 dB</span>
+<div class="w-16 h-2 bg-neutral-800 rounded-sm overflow-hidden flex">
+<div class="w-3/4 bg-gradient-to-r from-emerald-500 via-amber-400 to-amber-500 h-full"></div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: TouchHeaderBar -->
+<!-- BEGIN: MainTouchWorkspace -->
+<!-- Workspace split into Top Matrix (Osc/Machine) and Bottom Matrix (Sub/LFO) -->
+<div class="relative z-20 flex-1 flex flex-col p-3 gap-2 overflow-hidden">
+<!-- TOP SECTION: Engine selection & Oscilloscope / OSC MIX -->
+<div class="flex-1 flex gap-2 min-h-0">
+<!-- LEFT BOX: Machine Selector & Popup Drawer -->
+<section class="w-[320px] bg-mpc-panel rounded-lg border border-neutral-800 p-3 flex flex-col relative" data-purpose="machine-engine-module">
+<div class="flex items-center justify-between border-b border-mpc-divider pb-1 mb-2">
+<span class="text-xs font-bold tracking-widest text-neutral-200">MACHINE</span>
+<span class="text-[10px] text-amber-500/80 font-mono tracking-tighter">DIGITAL CORE</span>
+</div>
+<!-- Machine Active Selection Header (Dropdown Trigger) -->
+<label class="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold mb-1">MACHINE ENGINE</label>
+<div class="relative flex items-center justify-between px-3 py-2 bg-neutral-950 border border-blue-900/60 rounded cursor-pointer hover:border-amber-500 transition-colors shadow-inner" id="machine-trigger">
+<span class="font-bold text-amber-400 text-sm tracking-wide" id="active-machine-name">SID 6581</span>
+<div class="w-4 h-4 rounded bg-amber-500/20 text-amber-400 flex items-center justify-center text-[10px]">▼</div>
+</div>
+<!-- Machine Info Card -->
+<div class="mt-3 flex-1 bg-neutral-950/60 rounded border border-neutral-800/80 p-2.5 flex flex-col justify-between">
+<div>
+<div class="text-[10px] text-neutral-500 uppercase tracking-widest">ARCHITECTURE</div>
+<div class="text-xs text-neutral-300 font-semibold mt-0.5">Commodore 64 Sound Synthesis</div>
+<p class="text-[10px] text-neutral-400 mt-1 leading-relaxed">
+                  Authentic 3-voice MOS Technology emulation with non-linear DAC saturation and stepped resonance.
+                </p>
+</div>
+<!-- Quick Machine Toggles -->
+<div class="grid grid-cols-2 gap-1.5 pt-2 border-t border-neutral-800/80 text-[10px]">
+<button class="bg-neutral-900 hover:bg-neutral-800 active:bg-amber-500 active:text-black text-amber-300/80 py-1.5 px-2 rounded border border-neutral-700 font-semibold transition text-center">
+                  NOISE GEN
+                </button>
+<button class="bg-neutral-900 hover:bg-neutral-800 text-neutral-300 py-1.5 px-2 rounded border border-neutral-700 font-semibold transition text-center">
+                  RING MOD
+                </button>
+</div>
+</div>
+<!-- BEGIN: RetroDropdownDrawer (Absolute Overlay inside Engine Matrix) -->
+<div class="absolute top-[82px] left-3 w-[296px] bg-neutral-950 border-2 border-amber-500 rounded shadow-2xl z-50 transition-all duration-150" id="machine-dropdown">
+<ul class="text-xs divide-y divide-neutral-800/90 font-mono">
+<li class="machine-opt px-3 py-2 text-neutral-300 hover:bg-amber-500 hover:text-black cursor-pointer font-bold flex justify-between items-center" data-val="SW SAW">
+<span class="">SW SAW</span>
+<span class="text-[9px] opacity-70">ANALOG PULSE</span>
+</li>
+<li class="machine-opt px-3 py-2 text-neutral-300 hover:bg-amber-500 hover:text-black cursor-pointer font-bold flex justify-between items-center" data-val="SW PULSE">
+<span class="">SW PULSE</span>
+<span class="text-[9px] opacity-70">VARIABLE WIDTH</span>
+</li>
+<li class="machine-opt px-3 py-2 text-neutral-300 hover:bg-amber-500 hover:text-black cursor-pointer font-bold flex justify-between items-center" data-val="SW ENSEMBLE">
+<span class="">SW ENSEMBLE</span>
+<span class="text-[9px] opacity-70">MULTI-OSC DETUNE</span>
+</li>
+<li class="machine-opt px-3 py-2 bg-amber-500 text-black cursor-pointer font-bold flex justify-between items-center" data-val="SID 6581">
+<span class="">SID 6581</span>
+<span class="text-[9px] font-black uppercase">ACTIVE</span>
+</li>
+<li class="machine-opt px-3 py-2 text-neutral-300 hover:bg-amber-500 hover:text-black cursor-pointer font-bold flex justify-between items-center" data-val="DIGIPRO">
+<span class="">DIGIPRO</span>
+<span class="text-[9px] opacity-70">WAVETABLE SYNC</span>
+</li>
+<li class="machine-opt px-3 py-2 text-neutral-300 hover:bg-amber-500 hover:text-black cursor-pointer font-bold flex justify-between items-center" data-val="FM+ STATIC">
+<span class="">FM+ STATIC</span>
+<span class="text-[9px] opacity-70">2-OP DIGITAL NOISE</span>
+</li>
+</ul>
+</div>
+<!-- END: RetroDropdownDrawer -->
+</section>
+<!-- RIGHT BOX: OSC MIX & Phosphor Waveform Monitor -->
+<section class="flex-1 bg-mpc-panel rounded-lg border border-neutral-800 p-3 flex flex-col" data-purpose="osc-mix-section">
+<div class="flex items-center justify-between border-b border-mpc-divider pb-1 mb-2">
+<span class="text-xs font-bold tracking-widest text-neutral-200">OSC MIX // HARMONIC VECTOR</span>
+<div class="flex items-center space-x-2">
+<span class="text-[9px] px-1.5 py-0.2 bg-amber-950 text-amber-300 border border-amber-800 rounded">Q-LINK ROW 1</span>
+</div>
+</div>
+<!-- Oscilloscope and Large Typography Display (from Image 4 & 2) -->
+<div class="relative flex items-center justify-between bg-neutral-950 rounded-lg p-3 border border-neutral-800/80 mb-3 overflow-hidden h-28">
+<!-- Background Ambient Waveform Canvas -->
+<canvas class="absolute left-0 top-0 w-full h-full opacity-30" height="110" id="osc-scope" width="500"></canvas>
+<!-- Giant Typography Hero Badge inspired by Image 4 -->
+<div class="relative z-10 flex flex-col justify-center">
+<div class="flex items-baseline">
+<span class="text-4xl font-extrabold tracking-tight font-display text-white">Mono Voic</span>
+<span class="text-4xl font-extrabold tracking-tight font-display text-amber-500 amber-glow-text">e</span>
+</div>
+<div class="w-24 h-0.5 bg-amber-500 mt-1"></div>
+<div class="text-[10px] tracking-widest text-neutral-400 mt-1 font-semibold uppercase">DIGITAL MACHINE VOICE</div>
+</div>
+<!-- Realtime Vintage Metering readout -->
+<div class="relative z-10 flex flex-col items-end justify-center font-mono">
+<div class="text-[10px] text-neutral-400">HARMONIC RATIO</div>
+<div class="text-xl font-bold text-amber-400 tracking-wider">1:1.774 SID</div>
+<div class="text-[10px] text-emerald-400 mt-0.5 tracking-tighter">PHASE LOCKED: 180° INV</div>
+</div>
+</div>
+<!-- 5 Rotary Knobs (CROSS MOD, OSC FBK AMT, OSC FBK TRAN, OSC FBK TUNE, OSC MIX) -->
+<div class="grid grid-cols-5 gap-2 flex-1 items-center px-1" data-purpose="rotary-knob-cluster-osc">
+<!-- Knob 1 -->
+<div class="flex flex-col items-center rotary-group" data-max="127" data-min="0" data-param="crossMod" data-val="64">
+<div class="relative w-14 h-14 rotary-dial" id="dial-crossMod">
+<!-- Rotary SVG track -->
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="50" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1.5 rounded-full bg-gradient-to-b from-neutral-700 via-neutral-900 to-black flex items-center justify-center border border-neutral-600 shadow-md">
+<div class="w-1 h-4 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(45deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight">CROSS MOD</span>
+<div class="w-14 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">64</span>
+</div>
+</div>
+<!-- Knob 2 -->
+<div class="flex flex-col items-center rotary-group" data-max="127" data-min="0" data-param="fbkAmt" data-val="28">
+<div class="relative w-14 h-14 rotary-dial" id="dial-fbkAmt">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="75" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1.5 rounded-full bg-gradient-to-b from-neutral-700 via-neutral-900 to-black flex items-center justify-center border border-neutral-600 shadow-md">
+<div class="w-1 h-4 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(-30deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight">OSC FBK AMT</span>
+<div class="w-14 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">28</span>
+</div>
+</div>
+<!-- Knob 3 -->
+<div class="flex flex-col items-center rotary-group" data-max="24" data-min="-24" data-param="fbkTran" data-val="0">
+<div class="relative w-14 h-14 rotary-dial" id="dial-fbkTran">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="50" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1.5 rounded-full bg-gradient-to-b from-neutral-700 via-neutral-900 to-black flex items-center justify-center border border-neutral-600 shadow-md">
+<div class="w-1 h-4 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(0deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight">OSC FBK TRAN</span>
+<div class="w-14 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">0 ST</span>
+</div>
+</div>
+<!-- Knob 4 -->
+<div class="flex flex-col items-center rotary-group" data-max="50" data-min="-50" data-param="fbkTune" data-val="12">
+<div class="relative w-14 h-14 rotary-dial" id="dial-fbkTune">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="40" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1.5 rounded-full bg-gradient-to-b from-neutral-700 via-neutral-900 to-black flex items-center justify-center border border-neutral-600 shadow-md">
+<div class="w-1 h-4 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(20deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight">OSC FBK TUNE</span>
+<div class="w-14 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">+12 C</span>
+</div>
+</div>
+<!-- Knob 5 -->
+<div class="flex flex-col items-center rotary-group" data-max="127" data-min="0" data-param="oscMix" data-val="100">
+<div class="relative w-14 h-14 rotary-dial" id="dial-oscMix">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="20" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1.5 rounded-full bg-gradient-to-b from-neutral-700 via-neutral-900 to-black flex items-center justify-center border border-neutral-600 shadow-md">
+<div class="w-1 h-4 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(80deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight">OSC MIX</span>
+<div class="w-14 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">100</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- BOTTOM SECTION: SUB / NOISE & LFO MODULATION MATRIX -->
+<section class="h-[210px] bg-mpc-panel rounded-lg border border-neutral-800 p-3 flex flex-col justify-between" data-purpose="sub-noise-lfo-matrix">
+<div class="flex items-center justify-between border-b border-mpc-divider pb-1">
+<span class="text-xs font-bold tracking-widest text-neutral-200">SUB / NOISE &amp; LFO ASSIGN</span>
+<div class="flex items-center space-x-3 text-[10px]">
+<span class="text-amber-500 font-mono font-semibold">HELM OSC // SUB MOD</span>
+<span class="text-neutral-500">|</span>
+<span class="text-neutral-400 font-mono">Q-LINK ROW 2</span>
+</div>
+</div>
+<!-- Bottom Grid: Left Controls (Knobs) + Right Controls (LFO Steppers & Sub Wave) -->
+<div class="grid grid-cols-12 gap-3 items-center pt-1">
+<!-- 4 SUB / NOISE Knobs (Span 6 columns) -->
+<div class="col-span-6 grid grid-cols-4 gap-2">
+<!-- Knob: NOISE VOLUME -->
+<div class="flex flex-col items-center rotary-group" data-max="127" data-min="0" data-param="noiseVol" data-val="18">
+<div class="relative w-13 h-13 rotary-dial">
+<svg class="w-12 h-12 transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="85" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center">
+<div class="w-1 h-3.5 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(-60deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight leading-3">NOISE VOL</span>
+<div class="w-12 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">18</span>
+</div>
+</div>
+<!-- Knob: SUB OCT DOWN -->
+<div class="flex flex-col items-center rotary-group" data-max="3" data-min="1" data-param="subOct" data-val="1">
+<div class="relative w-13 h-13 rotary-dial">
+<svg class="w-12 h-12 transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="66" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center">
+<div class="w-1 h-3.5 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(-20deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight leading-3">SUB OCT</span>
+<div class="w-12 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">-1 OCT</span>
+</div>
+</div>
+<!-- Knob: SUB OSC SHUF -->
+<div class="flex flex-col items-center rotary-group" data-max="99" data-min="0" data-param="subShuf" data-val="45">
+<div class="relative w-13 h-13 rotary-dial">
+<svg class="w-12 h-12 transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="55" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center">
+<div class="w-1 h-3.5 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(10deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight leading-3">SUB SHUF</span>
+<div class="w-12 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">45%</span>
+</div>
+</div>
+<!-- Knob: SUB OSC VOL -->
+<div class="flex flex-col items-center rotary-group" data-max="127" data-min="0" data-param="subVol" data-val="88">
+<div class="relative w-13 h-13 rotary-dial">
+<svg class="w-12 h-12 transform -rotate-90" viewBox="0 0 40 40">
+<circle cx="20" cy="20" fill="#14171d" r="16" stroke="#252833" stroke-width="3"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ffaa1d" stroke-dasharray="100" stroke-dashoffset="30" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-1 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center">
+<div class="w-1 h-3.5 bg-amber-400 rounded-full knob-pointer transform origin-bottom" style="transform: rotate(55deg);"></div>
+</div>
+</div>
+<span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase text-center tracking-tight leading-3">SUB VOL</span>
+<div class="w-12 bg-black/90 border border-blue-900/60 rounded text-center py-0.5 mt-0.5">
+<span class="text-[10px] text-amber-400 font-mono knob-val">88</span>
+</div>
+</div>
+</div>
+<!-- 3 LFO Steppers + Sub Waveform Selector (Span 6 columns) -->
+<div class="col-span-6 flex flex-col justify-between h-full pl-2 border-l border-neutral-800">
+<!-- Sub Osc Waveform Quick Dropdown / Selector -->
+<div class="flex items-center justify-between bg-neutral-950/70 p-1.5 rounded border border-neutral-800">
+<span class="text-[10px] font-bold text-neutral-300 uppercase tracking-wider">SUB OSC WAVE:</span>
+<div class="flex space-x-1">
+<button class="wave-btn active px-2.5 py-0.5 text-[10px] font-mono rounded bg-amber-500 text-black font-bold">SQUARE</button>
+<button class="wave-btn px-2.5 py-0.5 text-[10px] font-mono rounded bg-neutral-800 text-neutral-300 font-bold hover:bg-neutral-700">PULSE 25%</button>
+<button class="wave-btn px-2.5 py-0.5 text-[10px] font-mono rounded bg-neutral-800 text-neutral-300 font-bold hover:bg-neutral-700">TRIANGLE</button>
+</div>
+</div>
+<!-- Triple Vintage Dot-matrix LFO Destination Selectors (from Image 4) -->
+<div class="grid grid-cols-3 gap-2 mt-2" data-purpose="lfo-dest-selectors">
+<!-- LFO 1 DEST -->
+<div class="flex flex-col">
+<span class="text-[9px] font-mono font-bold text-neutral-400 uppercase tracking-tighter mb-0.5">LFO 1 DEST</span>
+<div class="flex items-center bg-black rounded border border-neutral-700/80 p-0.5">
+<button class="lfo-step-btn px-1 text-amber-500 hover:text-amber-300 text-xs active:scale-95" data-dir="-1" data-target="lfo1">◀</button>
+<div class="flex-1 lcd-screen-pattern py-1 px-1 rounded text-center border border-emerald-950 font-mono text-[9px] text-mpc-lcdText font-bold tracking-tight truncate" id="lfo1-display">
+                      PITCH VIB
+                    </div>
+<button class="lfo-step-btn px-1 text-amber-500 hover:text-amber-300 text-xs active:scale-95" data-dir="1" data-target="lfo1">▶</button>
+</div>
+</div>
+<!-- LFO 2 DEST -->
+<div class="flex flex-col">
+<span class="text-[9px] font-mono font-bold text-neutral-400 uppercase tracking-tighter mb-0.5">LFO 2 DEST</span>
+<div class="flex items-center bg-black rounded border border-neutral-700/80 p-0.5">
+<button class="lfo-step-btn px-1 text-amber-500 hover:text-amber-300 text-xs active:scale-95" data-dir="-1" data-target="lfo2">◀</button>
+<div class="flex-1 lcd-screen-pattern py-1 px-1 rounded text-center border border-emerald-950 font-mono text-[9px] text-mpc-lcdText font-bold tracking-tight truncate" id="lfo2-display">
+                      FLT CUTOFF
+                    </div>
+<button class="lfo-step-btn px-1 text-amber-500 hover:text-amber-300 text-xs active:scale-95" data-dir="1" data-target="lfo2">▶</button>
+</div>
+</div>
+<!-- LFO 3 DEST -->
+<div class="flex flex-col">
+<span class="text-[9px] font-mono font-bold text-neutral-400 uppercase tracking-tighter mb-0.5">LFO 3 DEST</span>
+<div class="flex items-center bg-black rounded border border-neutral-700/80 p-0.5">
+<button class="lfo-step-btn px-1 text-amber-500 hover:text-amber-300 text-xs active:scale-95" data-dir="-1" data-target="lfo3">◀</button>
+<div class="flex-1 lcd-screen-pattern py-1 px-1 rounded text-center border border-emerald-950 font-mono text-[9px] text-mpc-lcdText font-bold tracking-tight truncate" id="lfo3-display">
+                      PWM WIDTH
+                    </div>
+<button class="lfo-step-btn px-1 text-amber-500 hover:text-amber-300 text-xs active:scale-95" data-dir="1" data-target="lfo3">▶</button>
+</div>
+</div>
+</div>
+<!-- Sound Trigger Bar -->
+<div class="flex items-center justify-between pt-1">
+<span class="text-[9px] text-neutral-500">TEST OSC BUS [C3 - 130.81Hz]</span>
+
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- END: MainTouchWorkspace -->
+<!-- BEGIN: TouchFooterStatusBar -->
+<footer class="relative z-30 h-8 bg-neutral-950 border-t border-neutral-800 flex items-center justify-between px-4 text-[10px] font-mono text-neutral-400 select-none">
+<div class="flex items-center space-x-4">
+<span class="flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+<span class="text-neutral-300 font-bold">MONOMACHINE MATRIX ENGINE ACTIVE</span>
+</span>
+<span class="text-neutral-600">|</span>
+<span class="text-amber-500">SYS CLK: 120.00 BPM</span>
+</div>
+<div class="flex items-center space-x-4 text-neutral-400">
+<span class="">Q-LINK MODE: <strong class="text-white">PROJECT ASSIGN</strong></span>
+<span class="text-neutral-600">|</span>
+<span class="text-neutral-300">AKAI MPC OS 2.11 NATIVE TOUCH</span>
+</div>
+</footer>
+<!-- END: TouchFooterStatusBar -->
+</div>
+<!-- END: NativeTouchscreenCanvas1280x628 -->
+<!-- Hardware Bezel 4 Hardware Q-Link Badges (Right Flank Simulation) -->
+<div class="flex items-center justify-between px-2 pt-2 text-[10px] text-neutral-500 font-mono tracking-wider">
+<div class="flex space-x-4">
+<span class="">[Q1] CROSS / FBK</span>
+<span class="">[Q2] TRAN / TUNE</span>
+<span class="">[Q3] SUB NOISE</span>
+<span class="">[Q4] LFO DEPTH</span>
+</div>
+<div class="text-neutral-400">
+        HARDWARE SURFACE CALIBRATED
+      </div>
+</div>
+</main>
+<!-- END: MpcHardwareContainer -->
+<!-- BEGIN: InteractiveScripts -->
+<!-- Vector Oscilloscope Rendering -->
+<script data-purpose="oscilloscope-canvas">
+    const canvas = document.getElementById('osc-scope');
+    const ctx = canvas.getContext('2d');
+    let phase = 0;
+
+    function renderScope() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw phosphor grid
+      ctx.lineWidth = 0.5;
+      ctx.strokeStyle = 'rgba(255, 170, 29, 0.08)';
+      for (let x = 0; x < canvas.width; x += 25) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 20) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      // Draw SID stepped square / pulse wave with jitter
+      ctx.beginPath();
+      ctx.lineWidth = 2.0;
+      ctx.strokeStyle = '#ffaa1d';
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = '#ffaa1d';
+
+      const baseline = canvas.height / 2;
+      const amp = 36;
+      const freq = 0.035;
+
+      for (let x = 0; x < canvas.width; x++) {
+        const raw = Math.sin((x * freq) + phase);
+        // Step quantization to mimic 8-bit SID DAC
+        const quantized = Math.round(raw * 5) / 5;
+        const y = baseline + (quantized * amp);
+
+        if (x === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      phase += 0.06;
+      requestAnimationFrame(renderScope);
+    }
+    renderScope();
+  </script>
+<!-- Interactive Rotary Knobs and Dropdown Control -->
+<script data-purpose="rotary-controls-and-events">
+    // Machine Dropdown Toggle
+    const machineTrigger = document.getElementById('machine-trigger');
+    const machineDropdown = document.getElementById('machine-dropdown');
+    const activeMachineName = document.getElementById('active-machine-name');
+
+    machineTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      machineDropdown.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('.machine-opt').forEach(item => {
+      item.addEventListener('click', (e) => {
+        const val = item.getAttribute('data-val');
+        activeMachineName.textContent = val;
+        
+        // update active classes
+        document.querySelectorAll('.machine-opt').forEach(opt => {
+          opt.className = "machine-opt px-3 py-2 text-neutral-300 hover:bg-amber-500 hover:text-black cursor-pointer font-bold flex justify-between items-center";
+          const tag = opt.querySelector('span:last-child');
+          if (tag) tag.textContent = 'PRESET';
+        });
+
+        item.className = "machine-opt px-3 py-2 bg-amber-500 text-black cursor-pointer font-bold flex justify-between items-center";
+        item.querySelector('span:last-child').textContent = 'ACTIVE';
+        machineDropdown.classList.add('hidden');
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', () => {
+      machineDropdown.classList.add('hidden');
+    });
+
+    // Sub Osc Wave Selector Buttons
+    document.querySelectorAll('.wave-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.wave-btn').forEach(b => {
+          b.className = "wave-btn px-2.5 py-0.5 text-[10px] font-mono rounded bg-neutral-800 text-neutral-300 font-bold hover:bg-neutral-700";
+        });
+        btn.className = "wave-btn active px-2.5 py-0.5 text-[10px] font-mono rounded bg-amber-500 text-black font-bold";
+      });
+    });
+
+    // LFO Stepper Logic
+    const lfoDestinations = [
+      'PITCH VIB',
+      'FLT CUTOFF',
+      'PWM WIDTH',
+      'NOISE COLOR',
+      'RES BOOST',
+      'RING DEPTH',
+      'FBK RATIO'
+    ];
+
+    const lfoStates = {
+      lfo1: 0,
+      lfo2: 1,
+      lfo3: 2
+    };
+
+    document.querySelectorAll('.lfo-step-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        const dir = parseInt(btn.getAttribute('data-dir'), 10);
+        let curr = lfoStates[target] + dir;
+        if (curr < 0) curr = lfoDestinations.length - 1;
+        if (curr >= lfoDestinations.length) curr = 0;
+        lfoStates[target] = curr;
+        document.getElementById(`${target}-display`).textContent = lfoDestinations[curr];
+      });
+    });
+
+    // Rotary Knob Dragging Behavior
+    document.querySelectorAll('.rotary-group').forEach(group => {
+      let isDragging = false;
+      let startY = 0;
+      let initialVal = parseInt(group.getAttribute('data-val'), 10);
+      const min = parseInt(group.getAttribute('data-min'), 10);
+      const max = parseInt(group.getAttribute('data-max'), 10);
+      const param = group.getAttribute('data-param');
+      const valDisplay = group.querySelector('.knob-val');
+      const pointer = group.querySelector('.knob-pointer');
+
+      const dial = group.querySelector('.rotary-dial');
+
+      function updateKnob(val) {
+        // constrain
+        val = Math.max(min, Math.min(max, val));
+        group.setAttribute('data-val', val);
+
+        // calculate angle from -135 to +135 deg
+        const normalized = (val - min) / (max - min);
+        const angle = -135 + (normalized * 270);
+        if (pointer) {
+          pointer.style.transform = `rotate(${angle}deg)`;
+        }
+
+        // format display text
+        if (param === 'fbkTran') {
+          valDisplay.textContent = `${val > 0 ? '+' : ''}${val} ST`;
+        } else if (param === 'fbkTune') {
+          valDisplay.textContent = `${val > 0 ? '+' : ''}${val} C`;
+        } else if (param === 'subOct') {
+          valDisplay.textContent = `-${val} OCT`;
+        } else if (param === 'subShuf') {
+          valDisplay.textContent = `${val}%`;
+        } else {
+          valDisplay.textContent = val;
+        }
+      }
+
+      dial.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startY = e.clientY;
+        initialVal = parseInt(group.getAttribute('data-val'), 10);
+        document.body.style.cursor = 'ns-resize';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const delta = startY - e.clientY;
+        const range = max - min;
+        const step = Math.round((delta / 120) * range);
+        updateKnob(initialVal + step);
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          document.body.style.cursor = 'default';
+        }
+      });
+    });
+
+    // Audio Audition Click Synthesizer (Web Audio API)
+    const auditionBtn = document.getElementById('audition-key');
+    let audioCtx = null;
+
+    auditionBtn.addEventListener('mousedown', () => {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        // SID 6581 Pulse sound simulation
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(130.81, audioCtx.currentTime); // C3
+
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.6);
+      } catch (err) {
+        console.warn('AudioContext touch unlock pending user engagement.', err);
+      }
+    });
+  </script>
+<!-- END: InteractiveScripts -->
+
+
+</body></html>

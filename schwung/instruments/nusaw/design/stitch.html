@@ -1,0 +1,1016 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<title>NUSAW // DETUNED MULTI-SAW SYNTH</title>
+<meta content="width=1280, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-error": "#690005",
+            "on-secondary-fixed-variant": "#920801",
+            "surface-container-highest": "#343538",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary": "#373016",
+            "tertiary-container": "#beb38f",
+            "on-primary": "#432c00",
+            "error-container": "#93000a",
+            "primary": "#ffc665",
+            "surface-bright": "#38393c",
+            "background": "#121316",
+            "surface-container-low": "#1b1b1f",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "surface-container-lowest": "#0d0e11",
+            "on-secondary-container": "#ff9a89",
+            "surface-container": "#1f1f23",
+            "inverse-primary": "#7e5700",
+            "outline-variant": "#504535",
+            "surface": "#121316",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-secondary": "#680300",
+            "primary-fixed-dim": "#fabc4d",
+            "surface-container-high": "#292a2d",
+            "on-primary-container": "#5e4000",
+            "tertiary": "#dacfa9",
+            "tertiary-fixed": "#eee2bc",
+            "on-tertiary-fixed": "#211b04",
+            "outline": "#9d8f7c",
+            "secondary": "#ffb4a7",
+            "on-primary-fixed-variant": "#604100",
+            "surface-tint": "#fabc4d",
+            "on-surface": "#e3e2e6",
+            "surface-variant": "#343538",
+            "on-surface-variant": "#d4c4b0",
+            "error": "#ffb4ab",
+            "inverse-surface": "#e3e2e6",
+            "primary-container": "#e5a93c",
+            "inverse-on-surface": "#2f3034",
+            "on-tertiary-container": "#4c4529",
+            "on-secondary-fixed": "#400100",
+            "on-primary-fixed": "#281900",
+            "surface-dim": "#121316",
+            "secondary-fixed": "#ffdad4",
+            "on-background": "#e3e2e6",
+            "on-error-container": "#ffdad6",
+            "primary-fixed": "#ffdead",
+            "secondary-container": "#920801"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "gutter": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem"
+          },
+          fontFamily: {
+            "body-lg": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"],
+            "body-md": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"]
+          },
+          fontSize: {
+            "body-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "headline-sm": ["15px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-lg": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "label-md": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "readout-numeric": ["20px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+            "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-md": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["9px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    :root {
+      --color-theme-bg: #07060d;
+      --color-theme-panel: #110f1c;
+      --color-theme-line: #2f2a52;
+      --color-theme-ink: #f1efff;
+      --color-theme-accent: #19c6e6;
+      --color-theme-glow: #4fe6ff;
+      --color-lcd-bg: #02101a;
+      --color-lcd-cell: #051c2a;
+      --color-lcd-ink: #4fe6ff;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-theme-bg);
+      color: var(--color-theme-ink);
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+      width: 1280px;
+      height: 628px;
+    }
+    .mpc-stage {
+      width: 1280px;
+      height: 628px;
+      position: relative;
+      background: radial-gradient(circle at 50% 0%, #17122e 0%, #07060d 75%);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.9);
+      overflow: hidden;
+    }
+    .panel-box {
+      background: #110f1c;
+      border: 1px solid #2f2a52;
+      border-radius: 4px;
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(0,0,0,0.6);
+    }
+    .screw {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #232038;
+      box-shadow: inset 0 1px 1px #000, 0 1px 0 rgba(255,255,255,0.15);
+      position: absolute;
+    }
+    .knob-bezel {
+      background: radial-gradient(circle, #252238 0%, #151322 70%, #0d0c17 100%);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15);
+    }
+    .lcd-display {
+      background: var(--color-lcd-bg);
+      border: 1px solid #0d384d;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), inset 0 0 15px rgba(2, 16, 26, 0.8);
+    }
+    .slider-groove {
+      background: #080710;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.95), 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .slider-handle {
+      background: linear-gradient(180deg, #373356 0%, #1a172c 50%, #0d0c18 100%);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.8), inset 0 1px 0 rgba(79, 230, 255, 0.6);
+    }
+    .glow-cyan {
+      text-shadow: 0 0 8px rgba(79, 230, 255, 0.6);
+    }
+    .glow-cyan-box {
+      box-shadow: 0 0 12px rgba(25, 198, 230, 0.4);
+    }
+    .interactive-element {
+      touch-action: none;
+      cursor: pointer;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="dark font-body-md antialiased">
+<div class="mpc-stage flex flex-col justify-between p-space-md">
+<!-- Top Touch Header (Shared Component: TopAppBar docked full-width top-0 h-11) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-11 bg-surface-container-lowest dark:bg-surface-container-lowest border-b border-outline-variant dark:border-outline-variant select-none">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-primary dark:text-primary text-[20px]" data-icon="graphic_eq">graphic_eq</span>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm text-primary dark:text-primary tracking-wider uppercase">SYNTH ENGINE // MPC</span>
+<span class="text-[9px] font-label-sm text-[#4fe6ff] tracking-widest leading-none font-bold">NUSAW // DETUNED MULTI-SAW</span>
+</div>
+<!-- Navigation Tabs / Links from JSON -->
+<nav class="flex items-center ml-space-lg gap-space-md">
+<button class="text-primary dark:text-primary border-b-2 border-primary dark:border-primary font-bold py-1 text-label-md font-label-md flex items-center gap-1" id="nav-tab-1">
+<span class="text-[10px] text-[#4fe6ff]">[1]</span> OSC
+          </button>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface dark:hover:text-on-surface py-1 text-label-md font-label-md" id="nav-tab-filter">FILTER</button>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface dark:hover:text-on-surface py-1 text-label-md font-label-md" id="nav-tab-env">ENV</button>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface dark:hover:text-on-surface py-1 text-label-md font-label-md" id="nav-tab-lfo">LFO</button>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface dark:hover:text-on-surface py-1 text-label-md font-label-md" id="nav-tab-fx">FX</button>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface dark:hover:text-on-surface py-1 text-label-md font-label-md" id="nav-tab-mod">MOD</button>
+</nav>
+</div>
+<!-- Center Live Audition Button with spacebar trigger -->
+<div class="flex items-center gap-space-sm">
+<button class="interactive-element flex items-center gap-2 px-space-md py-1 bg-[#1a172b] border border-[#4fe6ff]/50 rounded text-label-md font-label-md text-[#4fe6ff] hover:bg-[#251f42] active:translate-y-0.5 active:bg-[#4fe6ff] active:text-[#07060d] transition-all" id="audition-btn">
+<span class="material-symbols-outlined text-[16px]" data-icon="tune">tune</span>
+<span class="tracking-wider">AUDITION HYPER-SAW [SPACE]</span>
+<span class="w-2 h-2 rounded-full bg-[#19c6e6]/30 border border-[#19c6e6]" id="audio-led"></span>
+</button>
+</div>
+<!-- Trailing Controls matching JSON: SAVE, PRESET, icons -->
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center bg-[#171424] border border-[#2f2a52] px-2 py-0.5 rounded text-label-sm font-label-sm text-[#4fe6ff]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4fe6ff] mr-1.5 animate-pulse"></span>
+<span>48kHz / 24b</span>
+</div>
+<button class="px-space-sm py-1 bg-surface-container-high dark:bg-surface-container-high hover:text-primary dark:hover:text-primary text-label-md font-label-md text-on-surface rounded border border-outline-variant active:translate-y-0.5">PRESET</button>
+<button class="px-space-sm py-1 bg-primary dark:bg-primary text-on-primary font-bold text-label-md font-label-md rounded shadow active:translate-y-0.5">SAVE</button>
+<div class="flex items-center text-on-surface-variant gap-1 ml-1">
+<button class="p-1 hover:text-primary"><span class="material-symbols-outlined text-[18px]" data-icon="settings">settings</span></button>
+</div>
+</div>
+</header>
+<!-- Main Rack Grid: Internal 1280x528 (Viewport inside borders) -->
+<main class="grid grid-cols-2 grid-rows-2 gap-[12px] w-full mt-10 mb-14" style="height: 504px;">
+<!-- FRAME 1: PROGRAM / OSCILLOSCOPE (626x244 scaled to container) -->
+<div class="panel-box flex flex-col p-2 relative overflow-hidden">
+<div class="screw top-1.5 left-1.5"></div>
+<div class="screw top-1.5 right-1.5"></div>
+<div class="screw bottom-1.5 left-1.5"></div>
+<div class="screw bottom-1.5 right-1.5"></div>
+<div class="flex items-center justify-between border-b border-[#2f2a52] pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-3 bg-[#4fe6ff] rounded-xs"></span>
+<span class="text-label-md font-label-md tracking-wider text-[#f1efff]">PROGRAM // WAVE ENGINE</span>
+</div>
+<span class="text-label-sm font-label-sm text-[#4fe6ff] bg-[#0d1624] px-1.5 py-0.5 border border-[#19c6e6]/30 rounded">DSP CORE: ACTIVE</span>
+</div>
+<div class="flex gap-2 flex-1 mt-1.5">
+<!-- Preset Stepper Display -->
+<div class="lcd-display w-1/2 rounded p-2 flex flex-col justify-between relative overflow-hidden">
+<div class="flex justify-between items-center text-label-sm font-label-sm text-[#4fe6ff]/60 border-b border-[#0d384d] pb-1">
+<span>PATCH BANK: TRANCE</span>
+<span id="patch-num">01 / 16</span>
+</div>
+<div class="my-auto text-center">
+<div class="text-label-sm font-label-sm text-[#4fe6ff]/70 tracking-widest">CURRENT PRESET</div>
+<div class="text-headline-md font-headline-md font-bold text-[#4fe6ff] tracking-tight leading-tight glow-cyan" id="patch-name">01: NEON ANTHEM</div>
+<div class="text-[10px] font-label-sm text-[#f1efff]/50 mt-0.5">DETUNED 7-VOICE HYPER-SAW</div>
+</div>
+<div class="flex items-center justify-between gap-1 mt-1">
+<button class="interactive-element flex-1 py-1 bg-[#051c2a] border border-[#19c6e6]/40 rounded text-label-sm font-label-sm text-[#4fe6ff] hover:bg-[#09324b] active:scale-95 text-center flex items-center justify-center gap-1" id="btn-prev-preset">
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_left">chevron_left</span> PREV
+              </button>
+<button class="interactive-element flex-1 py-1 bg-[#051c2a] border border-[#19c6e6]/40 rounded text-label-sm font-label-sm text-[#4fe6ff] hover:bg-[#09324b] active:scale-95 text-center flex items-center justify-center gap-1" id="btn-next-preset">
+                NEXT <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Real-Time Waveform Oscilloscope Screen -->
+<div class="lcd-display flex-1 rounded p-1.5 flex flex-col justify-between relative">
+<div class="flex justify-between text-[9px] font-label-sm text-[#4fe6ff]/60">
+<span>OSCILLOSCOPE (60 FPS)</span>
+<span class="animate-pulse text-[#4fe6ff]">TRIGGER: FREE</span>
+</div>
+<div class="w-full flex-1 relative flex items-center justify-center overflow-hidden my-1 bg-[#020b12] rounded border border-[#0d384d]/50">
+<canvas class="w-full h-full block" height="130" id="scopeCanvas" width="280"></canvas>
+</div>
+<div class="flex justify-between text-[9px] font-label-sm text-[#f1efff]/50 px-1">
+<span>SPREAD: <span id="scope-spread">84%</span></span>
+<span>PHASE DETUNE: <span id="scope-cents">+24c</span></span>
+</div>
+</div>
+</div>
+</div>
+<!-- FRAME 2: SAWS (626x244 scaled) 4 Tactile Rotary Dials -->
+<div class="panel-box flex flex-col p-2 relative">
+<div class="screw top-1.5 left-1.5"></div>
+<div class="screw top-1.5 right-1.5"></div>
+<div class="screw bottom-1.5 left-1.5"></div>
+<div class="screw bottom-1.5 right-1.5"></div>
+<div class="flex items-center justify-between border-b border-[#2f2a52] pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-3 bg-[#4fe6ff] rounded-xs"></span>
+<span class="text-label-md font-label-md tracking-wider text-[#f1efff]">SAWS // MULTI-OSCILLATOR BANK</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">ANALOG MODEL: SUPERSAW</span>
+</div>
+<div class="grid grid-cols-4 gap-2 flex-1 items-center px-2">
+<!-- Knob 1: SAWS COUNT (3-15) -->
+<div class="flex flex-col items-center justify-center interactive-element" id="knob-saws-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-1">SAWS</span>
+<div class="w-16 h-16 rounded-full knob-bezel relative flex items-center justify-center border border-[#3b3564]" id="knob-saws">
+<!-- SVG Arc Indicator -->
+<svg class="w-16 h-16 absolute -rotate-90 pointer-events-none">
+<circle cx="32" cy="32" fill="none" r="26" stroke="#171526" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" id="arc-saws" r="26" stroke="#4fe6ff" stroke-dasharray="163" stroke-dashoffset="80" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="w-1 h-6 bg-[#4fe6ff] rounded-full absolute origin-bottom transform -rotate-30 shadow-[0_0_8px_#4fe6ff]" id="needle-saws" style="bottom: 50%;"></div>
+<div class="w-6 h-6 rounded-full bg-[#110f1c] border border-[#4fe6ff]/40 flex items-center justify-center z-10 shadow">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4fe6ff]"></span>
+</div>
+</div>
+<div class="mt-1 px-2 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-16">
+<span class="text-readout-numeric font-readout-numeric text-[13px] text-[#4fe6ff]" id="val-saws">7 VOICES</span>
+</div>
+</div>
+<!-- Knob 2: DETUNE (cents) -->
+<div class="flex flex-col items-center justify-center interactive-element" id="knob-detune-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-1">DETUNE</span>
+<div class="w-16 h-16 rounded-full knob-bezel relative flex items-center justify-center border border-[#3b3564]" id="knob-detune">
+<svg class="w-16 h-16 absolute -rotate-90 pointer-events-none">
+<circle cx="32" cy="32" fill="none" r="26" stroke="#171526" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" id="arc-detune" r="26" stroke="#4fe6ff" stroke-dasharray="163" stroke-dashoffset="60" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="w-1 h-6 bg-[#4fe6ff] rounded-full absolute origin-bottom transform rotate-20 shadow-[0_0_8px_#4fe6ff]" id="needle-detune" style="bottom: 50%;"></div>
+<div class="w-6 h-6 rounded-full bg-[#110f1c] border border-[#4fe6ff]/40 flex items-center justify-center z-10 shadow">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4fe6ff]"></span>
+</div>
+</div>
+<div class="mt-1 px-2 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-16">
+<span class="text-readout-numeric font-readout-numeric text-[13px] text-[#4fe6ff]" id="val-detune">24.0 C</span>
+</div>
+</div>
+<!-- Knob 3: SPREAD (stereo pan width) -->
+<div class="flex flex-col items-center justify-center interactive-element" id="knob-spread-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-1">SPREAD</span>
+<div class="w-16 h-16 rounded-full knob-bezel relative flex items-center justify-center border border-[#3b3564]" id="knob-spread">
+<svg class="w-16 h-16 absolute -rotate-90 pointer-events-none">
+<circle cx="32" cy="32" fill="none" r="26" stroke="#171526" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" id="arc-spread" r="26" stroke="#4fe6ff" stroke-dasharray="163" stroke-dashoffset="40" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="w-1 h-6 bg-[#4fe6ff] rounded-full absolute origin-bottom transform rotate-60 shadow-[0_0_8px_#4fe6ff]" id="needle-spread" style="bottom: 50%;"></div>
+<div class="w-6 h-6 rounded-full bg-[#110f1c] border border-[#4fe6ff]/40 flex items-center justify-center z-10 shadow">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4fe6ff]"></span>
+</div>
+</div>
+<div class="mt-1 px-2 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-16">
+<span class="text-readout-numeric font-readout-numeric text-[13px] text-[#4fe6ff]" id="val-spread">84 %</span>
+</div>
+</div>
+<!-- Knob 4: SUB LEVEL (sub-oscillator blend) -->
+<div class="flex flex-col items-center justify-center interactive-element" id="knob-sub-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-1">SUB LEVEL</span>
+<div class="w-16 h-16 rounded-full knob-bezel relative flex items-center justify-center border border-[#3b3564]" id="knob-sub">
+<svg class="w-16 h-16 absolute -rotate-90 pointer-events-none">
+<circle cx="32" cy="32" fill="none" r="26" stroke="#171526" stroke-width="4"></circle>
+<circle cx="32" cy="32" fill="none" id="arc-sub" r="26" stroke="#4fe6ff" stroke-dasharray="163" stroke-dashoffset="110" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="w-1 h-6 bg-[#4fe6ff] rounded-full absolute origin-bottom transform -rotate-70 shadow-[0_0_8px_#4fe6ff]" id="needle-sub" style="bottom: 50%;"></div>
+<div class="w-6 h-6 rounded-full bg-[#110f1c] border border-[#4fe6ff]/40 flex items-center justify-center z-10 shadow">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4fe6ff]"></span>
+</div>
+</div>
+<div class="mt-1 px-2 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-16">
+<span class="text-readout-numeric font-readout-numeric text-[13px] text-[#4fe6ff]" id="val-sub">-6.0 dB</span>
+</div>
+</div>
+</div>
+</div>
+<!-- FRAME 3: FILTER (626x244) Oversized CUTOFF, RESO, F_ENV & Curve -->
+<div class="panel-box flex flex-col p-2 relative">
+<div class="screw top-1.5 left-1.5"></div>
+<div class="screw top-1.5 right-1.5"></div>
+<div class="screw bottom-1.5 left-1.5"></div>
+<div class="screw bottom-1.5 right-1.5"></div>
+<div class="flex items-center justify-between border-b border-[#2f2a52] pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-3 bg-[#4fe6ff] rounded-xs"></span>
+<span class="text-label-md font-label-md tracking-wider text-[#f1efff]">FILTER // 24dB 4-POLE LADDER</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-label-sm font-label-sm text-[#4fe6ff] px-2 py-0.5 bg-[#171424] border border-[#2f2a52] rounded">24dB LP</button>
+<span class="text-label-sm font-label-sm text-on-surface-variant">ANALOG SAT: ON</span>
+</div>
+</div>
+<div class="flex flex-1 items-center justify-between gap-3 px-1 mt-1">
+<!-- Oversized Master CUTOFF Dial (r=46 approx 92px) -->
+<div class="flex flex-col items-center justify-center interactive-element" id="knob-cutoff-wrap">
+<span class="text-label-sm font-label-sm text-[#4fe6ff] font-bold tracking-wider mb-0.5">CUTOFF [Q1]</span>
+<div class="w-24 h-24 rounded-full knob-bezel relative flex items-center justify-center border-2 border-[#3b3564]" id="knob-cutoff">
+<svg class="w-24 h-24 absolute -rotate-90 pointer-events-none">
+<circle cx="48" cy="48" fill="none" r="40" stroke="#161426" stroke-width="6"></circle>
+<circle cx="48" cy="48" fill="none" id="arc-cutoff" r="40" stroke="#4fe6ff" stroke-dasharray="251" stroke-dashoffset="80" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-1.5 h-9 bg-[#4fe6ff] rounded-full absolute origin-bottom transform rotate-45 shadow-[0_0_10px_#4fe6ff]" id="needle-cutoff" style="bottom: 50%;"></div>
+<div class="w-9 h-9 rounded-full bg-[#110f1c] border border-[#4fe6ff]/50 flex items-center justify-center z-10 shadow">
+<span class="w-2 h-2 rounded-full bg-[#4fe6ff] shadow-[0_0_5px_#4fe6ff]"></span>
+</div>
+</div>
+<div class="mt-1 px-2 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-20">
+<span class="text-readout-numeric font-readout-numeric text-[14px] text-[#4fe6ff]" id="val-cutoff">2840 Hz</span>
+</div>
+</div>
+<!-- RESONANCE dial (r=38 approx 76px) -->
+<div class="flex flex-col items-center justify-center interactive-element" id="knob-reso-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant tracking-wider mb-0.5">RESONANCE [Q2]</span>
+<div class="w-18 h-18 rounded-full knob-bezel relative flex items-center justify-center border border-[#3b3564]" id="knob-reso" style="width: 72px; height: 72px;">
+<svg class="w-18 h-18 absolute -rotate-90 pointer-events-none" style="width: 72px; height: 72px;">
+<circle cx="36" cy="36" fill="none" r="30" stroke="#161426" stroke-width="5"></circle>
+<circle cx="36" cy="36" fill="none" id="arc-reso" r="30" stroke="#4fe6ff" stroke-dasharray="188" stroke-dashoffset="100" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<div class="w-1 h-7 bg-[#4fe6ff] rounded-full absolute origin-bottom transform -rotate-15 shadow-[0_0_6px_#4fe6ff]" id="needle-reso" style="bottom: 50%;"></div>
+<div class="w-7 h-7 rounded-full bg-[#110f1c] border border-[#4fe6ff]/40 flex items-center justify-center z-10 shadow">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4fe6ff]"></span>
+</div>
+</div>
+<div class="mt-1 px-2 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-18" style="width: 72px;">
+<span class="text-readout-numeric font-readout-numeric text-[13px] text-[#4fe6ff]" id="val-reso">0.62 Q</span>
+</div>
+</div>
+<!-- FILTER ENV (f_amount) dial -->
+<div class="flex flex-col items-center justify-center interactive-element" id="knob-fenv-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant tracking-wider mb-0.5">ENV MOD</span>
+<div class="w-18 h-18 rounded-full knob-bezel relative flex items-center justify-center border border-[#3b3564]" id="knob-fenv" style="width: 72px; height: 72px;">
+<svg class="w-18 h-18 absolute -rotate-90 pointer-events-none" style="width: 72px; height: 72px;">
+<circle cx="36" cy="36" fill="none" r="30" stroke="#161426" stroke-width="5"></circle>
+<circle cx="36" cy="36" fill="none" id="arc-fenv" r="30" stroke="#4fe6ff" stroke-dasharray="188" stroke-dashoffset="75" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<div class="w-1 h-7 bg-[#4fe6ff] rounded-full absolute origin-bottom transform rotate-35 shadow-[0_0_6px_#4fe6ff]" id="needle-fenv" style="bottom: 50%;"></div>
+<div class="w-7 h-7 rounded-full bg-[#110f1c] border border-[#4fe6ff]/40 flex items-center justify-center z-10 shadow">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4fe6ff]"></span>
+</div>
+</div>
+<div class="mt-1 px-2 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-18" style="width: 72px;">
+<span class="text-readout-numeric font-readout-numeric text-[13px] text-[#4fe6ff]" id="val-fenv">+64 %</span>
+</div>
+</div>
+<!-- Filter Cutoff Response Curve Display -->
+<div class="lcd-display h-28 flex-1 rounded p-1 flex flex-col justify-between ml-1">
+<div class="flex justify-between text-[8px] font-label-sm text-[#4fe6ff]/70">
+<span>FREQ SPECTRUM</span>
+<span id="filter-type-tag">POLE-4 LPF</span>
+</div>
+<div class="w-full flex-1 relative flex items-center justify-center overflow-hidden my-0.5 bg-[#030d17] rounded">
+<canvas class="w-full h-full block" height="75" id="filterCanvas" width="160"></canvas>
+</div>
+<div class="flex justify-between text-[8px] font-label-sm text-[#f1efff]/40 px-0.5">
+<span>20Hz</span>
+<span>1kHz</span>
+<span>20kHz</span>
+</div>
+</div>
+</div>
+</div>
+<!-- FRAME 4: AMP ENVELOPE (626x244) 4 Discrete Vertical Sliders -->
+<div class="panel-box flex flex-col p-2 relative">
+<div class="screw top-1.5 left-1.5"></div>
+<div class="screw top-1.5 right-1.5"></div>
+<div class="screw bottom-1.5 left-1.5"></div>
+<div class="screw bottom-1.5 right-1.5"></div>
+<div class="flex items-center justify-between border-b border-[#2f2a52] pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-3 bg-[#4fe6ff] rounded-xs"></span>
+<span class="text-label-md font-label-md tracking-wider text-[#f1efff]">AMP ENVELOPE // ADSR STAGE</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">CURVE: EXPONENTIAL</span>
+</div>
+<div class="grid grid-cols-4 gap-2 flex-1 items-center px-4 pt-1">
+<!-- Slider 1: ATTACK -->
+<div class="flex flex-col items-center h-full justify-between" id="fader-attack-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant">ATTACK</span>
+<div class="slider-groove w-3 flex-1 rounded-full relative flex flex-col justify-end items-center my-1.5 interactive-element cursor-pointer" id="groove-attack">
+<div class="w-full bg-[#19c6e6]/30 rounded-b-full" id="bar-attack" style="height: 18%;"></div>
+<div class="slider-handle w-12 h-6 rounded border border-[#2f2a52] absolute flex items-center justify-center" id="thumb-attack" style="bottom: calc(18% - 12px);">
+<div class="w-6 h-0.5 bg-[#4fe6ff] shadow-[0_0_6px_#4fe6ff]"></div>
+</div>
+</div>
+<div class="px-1 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-full">
+<span class="text-readout-numeric font-readout-numeric text-[12px] text-[#4fe6ff]" id="val-attack">14 ms</span>
+</div>
+</div>
+<!-- Slider 2: DECAY -->
+<div class="flex flex-col items-center h-full justify-between" id="fader-decay-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant">DECAY</span>
+<div class="slider-groove w-3 flex-1 rounded-full relative flex flex-col justify-end items-center my-1.5 interactive-element cursor-pointer" id="groove-decay">
+<div class="w-full bg-[#19c6e6]/30 rounded-b-full" id="bar-decay" style="height: 52%;"></div>
+<div class="slider-handle w-12 h-6 rounded border border-[#2f2a52] absolute flex items-center justify-center" id="thumb-decay" style="bottom: calc(52% - 12px);">
+<div class="w-6 h-0.5 bg-[#4fe6ff] shadow-[0_0_6px_#4fe6ff]"></div>
+</div>
+</div>
+<div class="px-1 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-full">
+<span class="text-readout-numeric font-readout-numeric text-[12px] text-[#4fe6ff]" id="val-decay">340 ms</span>
+</div>
+</div>
+<!-- Slider 3: SUSTAIN -->
+<div class="flex flex-col items-center h-full justify-between" id="fader-sustain-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant">SUSTAIN</span>
+<div class="slider-groove w-3 flex-1 rounded-full relative flex flex-col justify-end items-center my-1.5 interactive-element cursor-pointer" id="groove-sustain">
+<div class="w-full bg-[#19c6e6]/30 rounded-b-full" id="bar-sustain" style="height: 75%;"></div>
+<div class="slider-handle w-12 h-6 rounded border border-[#2f2a52] absolute flex items-center justify-center" id="thumb-sustain" style="bottom: calc(75% - 12px);">
+<div class="w-6 h-0.5 bg-[#4fe6ff] shadow-[0_0_6px_#4fe6ff]"></div>
+</div>
+</div>
+<div class="px-1 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-full">
+<span class="text-readout-numeric font-readout-numeric text-[12px] text-[#4fe6ff]" id="val-sustain">75 %</span>
+</div>
+</div>
+<!-- Slider 4: RELEASE -->
+<div class="flex flex-col items-center h-full justify-between" id="fader-release-wrap">
+<span class="text-label-sm font-label-sm text-on-surface-variant">RELEASE</span>
+<div class="slider-groove w-3 flex-1 rounded-full relative flex flex-col justify-end items-center my-1.5 interactive-element cursor-pointer" id="groove-release">
+<div class="w-full bg-[#19c6e6]/30 rounded-b-full" id="bar-release" style="height: 44%;"></div>
+<div class="slider-handle w-12 h-6 rounded border border-[#2f2a52] absolute flex items-center justify-center" id="thumb-release" style="bottom: calc(44% - 12px);">
+<div class="w-6 h-0.5 bg-[#4fe6ff] shadow-[0_0_6px_#4fe6ff]"></div>
+</div>
+</div>
+<div class="px-1 py-0.5 bg-[#090812] border border-[#2f2a52] rounded text-center w-full">
+<span class="text-readout-numeric font-readout-numeric text-[12px] text-[#4fe6ff]" id="val-release">420 ms</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Q-Link Strip (Shared Component: BottomNavBar docked full-width bottom-0 h-14) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-space-md h-14 bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant select-none">
+<!-- Exact JSON Labels & Icons for Q1 to Q4 Macros with Hardware Encoders mapped -->
+<div class="flex items-center gap-2 flex-1 justify-between">
+<!-- Q1: CUTOFF (Active primary) -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high dark:bg-surface-container-high text-primary dark:text-primary border border-primary dark:border-primary px-space-md py-1 rounded w-48 active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="dialpad">dialpad</span>
+<span class="text-label-sm font-label-sm font-bold">Q1: CUTOFF</span>
+</div>
+<span class="text-[10px] font-label-sm text-[#4fe6ff]" id="qlink-val-1">2840 Hz</span>
+</div>
+<!-- Q2: RESO -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant border border-outline-variant dark:border-outline-variant px-space-md py-1 rounded w-48 hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="adjust">adjust</span>
+<span class="text-label-sm font-label-sm font-bold">Q2: RESO</span>
+</div>
+<span class="text-[10px] font-label-sm text-[#4fe6ff]" id="qlink-val-2">0.62 Q</span>
+</div>
+<!-- Q3: DRIVE -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant border border-outline-variant dark:border-outline-variant px-space-md py-1 rounded w-48 hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="tune">tune</span>
+<span class="text-label-sm font-label-sm font-bold">Q3: DRIVE</span>
+</div>
+<span class="text-[10px] font-label-sm text-[#4fe6ff]" id="qlink-val-3">3.2 dB</span>
+</div>
+<!-- Q4: TEMPO -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant border border-outline-variant dark:border-outline-variant px-space-md py-1 rounded w-48 hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="speed">speed</span>
+<span class="text-label-sm font-label-sm font-bold">Q4: TEMPO</span>
+</div>
+<span class="text-[10px] font-label-sm text-[#4fe6ff]" id="qlink-val-4">138.0 BPM</span>
+</div>
+<!-- Extra Hardware Bank Indicators (12 encoders overview badge) -->
+<div class="flex items-center gap-1 bg-[#141121] px-2 py-1 rounded border border-[#2f2a52] text-[10px] font-label-sm text-on-surface-variant">
+<span class="text-primary font-bold">BANK A</span>
+<span class="text-[#4fe6ff]">1-4</span>
+<span class="opacity-40">|</span>
+<span class="opacity-40">5-8</span>
+<span class="opacity-40">|</span>
+<span class="opacity-40">9-12</span>
+</div>
+</div>
+</footer>
+</div>
+<script>
+    /* NUSAW Synthesizer Core Engine & Interactive UI */
+    const synthState = {
+      presetIndex: 0,
+      presets: [
+        { name: "01: NEON ANTHEM", saws: 7, detune: 24, spread: 84, sub: -6, cutoff: 2840, reso: 0.62, fenv: 64, a: 14, d: 340, s: 75, r: 420 },
+        { name: "02: CYBER TRANCE", saws: 9, detune: 32, spread: 92, sub: -4, cutoff: 4200, reso: 0.70, fenv: 78, a: 22, d: 410, s: 80, r: 520 },
+        { name: "03: ULTRA LEAD", saws: 11, detune: 40, spread: 100, sub: -12, cutoff: 6800, reso: 0.55, fenv: 45, a: 5, d: 280, s: 65, r: 310 },
+        { name: "04: CHILL DUST", saws: 5, detune: 16, spread: 60, sub: -3, cutoff: 1450, reso: 0.40, fenv: 20, a: 80, d: 650, s: 85, r: 850 }
+      ],
+      saws: 7,
+      detune: 24,
+      spread: 84,
+      sub: -6,
+      cutoff: 2840,
+      reso: 0.62,
+      fenv: 64,
+      attack: 14,
+      decay: 340,
+      sustain: 75,
+      release: 420,
+      isPlaying: false
+    };
+
+    // Web Audio Synthesizer Setup
+    let audioCtx = null;
+    let masterGain = null;
+    let filterNode = null;
+    let activeOscs = [];
+    let isAuditioning = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+
+        filterNode = audioCtx.createBiquadFilter();
+        filterNode.type = "lowpass";
+        filterNode.frequency.setValueAtTime(synthState.cutoff, audioCtx.currentTime);
+        filterNode.Q.setValueAtTime(synthState.reso * 10, audioCtx.currentTime);
+
+        filterNode.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function startSynthVoice() {
+      initAudio();
+      stopSynthVoice();
+
+      const baseFreq = 130.81; // C3 note trance chord base
+      const chordNotes = [baseFreq, baseFreq * 1.2599, baseFreq * 1.4983]; // Minor triad / power trance chord
+
+      const numSaws = Math.min(synthState.saws, 9);
+      const detuneSpread = synthState.detune;
+
+      activeOscs = [];
+
+      chordNotes.forEach(freq => {
+        for (let i = 0; i < numSaws; i++) {
+          const osc = audioCtx.createOscillator();
+          osc.type = "sawtooth";
+
+          // Calculate detune in cents
+          const offsetCents = ((i / (numSaws - 1 || 1)) - 0.5) * 2 * detuneSpread;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          osc.detune.setValueAtTime(offsetCents, audioCtx.currentTime);
+
+          const oscGain = audioCtx.createGain();
+          oscGain.gain.setValueAtTime(0.2 / numSaws, audioCtx.currentTime);
+
+          osc.connect(oscGain);
+          oscGain.connect(filterNode);
+          osc.start();
+          activeOscs.push(osc);
+        }
+      });
+
+      // Sub Oscillator (Sine an octave below)
+      const subOsc = audioCtx.createOscillator();
+      subOsc.type = "sine";
+      subOsc.frequency.setValueAtTime(baseFreq * 0.5, audioCtx.currentTime);
+      const subGain = audioCtx.createGain();
+      const subAmp = Math.pow(10, synthState.sub / 20) * 0.25;
+      subGain.gain.setValueAtTime(subAmp, audioCtx.currentTime);
+      subOsc.connect(subGain);
+      subGain.connect(filterNode);
+      subOsc.start();
+      activeOscs.push(subOsc);
+
+      // Trigger Amp Envelope
+      const now = audioCtx.currentTime;
+      const attackSec = Math.max(0.005, synthState.attack / 1000);
+      const decaySec = Math.max(0.01, synthState.decay / 1000);
+      const sustainLevel = (synthState.sustain / 100) * 0.45;
+
+      masterGain.gain.cancelScheduledValues(now);
+      masterGain.gain.setValueAtTime(0.0001, now);
+      masterGain.gain.exponentialRampToValueAtTime(0.45, now + attackSec);
+      masterGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, sustainLevel), now + attackSec + decaySec);
+
+      // Trigger Filter Envelope
+      const fEnvMod = (synthState.fenv / 100) * 6000;
+      const targetCutoff = Math.min(18000, synthState.cutoff + fEnvMod);
+      filterNode.frequency.cancelScheduledValues(now);
+      filterNode.frequency.setValueAtTime(synthState.cutoff, now);
+      filterNode.frequency.exponentialRampToValueAtTime(Math.max(40, targetCutoff), now + attackSec);
+      filterNode.frequency.exponentialRampToValueAtTime(Math.max(40, synthState.cutoff + (fEnvMod * (synthState.sustain / 100))), now + attackSec + decaySec);
+
+      isAuditioning = true;
+      document.getElementById('audio-led').classList.replace('bg-[#19c6e6]/30', 'bg-[#4fe6ff]');
+      document.getElementById('audition-btn').classList.add('glow-cyan-box', 'border-[#4fe6ff]');
+    }
+
+    function stopSynthVoice() {
+      if (!audioCtx || activeOscs.length === 0) return;
+      const now = audioCtx.currentTime;
+      const releaseSec = Math.max(0.02, synthState.release / 1000);
+
+      masterGain.gain.cancelScheduledValues(now);
+      masterGain.gain.setValueAtTime(masterGain.gain.value, now);
+      masterGain.gain.exponentialRampToValueAtTime(0.0001, now + releaseSec);
+
+      setTimeout(() => {
+        activeOscs.forEach(o => {
+          try { o.stop(); o.disconnect(); } catch(e){}
+        });
+        activeOscs = [];
+      }, releaseSec * 1000 + 100);
+
+      isAuditioning = false;
+      document.getElementById('audio-led').classList.replace('bg-[#4fe6ff]', 'bg-[#19c6e6]/30');
+      document.getElementById('audition-btn').classList.remove('glow-cyan-box', 'border-[#4fe6ff]');
+    }
+
+    // Toggle Audition
+    const auditionBtn = document.getElementById('audition-btn');
+    auditionBtn.addEventListener('mousedown', () => {
+      startSynthVoice();
+    });
+    window.addEventListener('mouseup', () => {
+      if (isAuditioning) stopSynthVoice();
+    });
+
+    // Spacebar control
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && !e.repeat && !isAuditioning) {
+        e.preventDefault();
+        startSynthVoice();
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        stopSynthVoice();
+      }
+    });
+
+    // Preset Stepper Logic
+    function applyPreset(idx) {
+      synthState.presetIndex = (idx + synthState.presets.length) % synthState.presets.length;
+      const p = synthState.presets[synthState.presetIndex];
+      document.getElementById('patch-name').innerText = p.name;
+      document.getElementById('patch-num').innerText = `0${synthState.presetIndex + 1} / 16`;
+      
+      // Update values
+      synthState.saws = p.saws;
+      synthState.detune = p.detune;
+      synthState.spread = p.spread;
+      synthState.sub = p.sub;
+      synthState.cutoff = p.cutoff;
+      synthState.reso = p.reso;
+      synthState.fenv = p.fenv;
+      synthState.attack = p.a;
+      synthState.decay = p.d;
+      synthState.sustain = p.s;
+      synthState.release = p.r;
+
+      updateAllUI();
+    }
+
+    document.getElementById('btn-prev-preset').addEventListener('click', () => applyPreset(synthState.presetIndex - 1));
+    document.getElementById('btn-next-preset').addEventListener('click', () => applyPreset(synthState.presetIndex + 1));
+
+    // Update UI elements based on state
+    function updateAllUI() {
+      // Saws
+      document.getElementById('val-saws').innerText = `${synthState.saws} VOICES`;
+      const sawDeg = -135 + ((synthState.saws - 3) / 12) * 270;
+      document.getElementById('needle-saws').style.transform = `rotate(${sawDeg}deg)`;
+      const sawOffset = 163 - ((synthState.saws - 3) / 12) * 120;
+      document.getElementById('arc-saws').setAttribute('stroke-dashoffset', sawOffset);
+
+      // Detune
+      document.getElementById('val-detune').innerText = `${synthState.detune.toFixed(1)} C`;
+      const detuneDeg = -135 + (synthState.detune / 50) * 270;
+      document.getElementById('needle-detune').style.transform = `rotate(${detuneDeg}deg)`;
+      document.getElementById('arc-detune').setAttribute('stroke-dashoffset', 163 - (synthState.detune / 50) * 120);
+      document.getElementById('scope-cents').innerText = `+${synthState.detune}c`;
+
+      // Spread
+      document.getElementById('val-spread').innerText = `${synthState.spread} %`;
+      const spreadDeg = -135 + (synthState.spread / 100) * 270;
+      document.getElementById('needle-spread').style.transform = `rotate(${spreadDeg}deg)`;
+      document.getElementById('arc-spread').setAttribute('stroke-dashoffset', 163 - (synthState.spread / 100) * 120);
+      document.getElementById('scope-spread').innerText = `${synthState.spread}%`;
+
+      // Sub
+      document.getElementById('val-sub').innerText = `${synthState.sub.toFixed(1)} dB`;
+      const subNorm = (synthState.sub + 24) / 24; // -24 to 0 dB
+      const subDeg = -135 + subNorm * 270;
+      document.getElementById('needle-sub').style.transform = `rotate(${subDeg}deg)`;
+      document.getElementById('arc-sub').setAttribute('stroke-dashoffset', 163 - subNorm * 120);
+
+      // Cutoff
+      document.getElementById('val-cutoff').innerText = `${Math.round(synthState.cutoff)} Hz`;
+      const cutoffNorm = (Math.log10(synthState.cutoff) - Math.log10(40)) / (Math.log10(18000) - Math.log10(40));
+      const cutoffDeg = -135 + cutoffNorm * 270;
+      document.getElementById('needle-cutoff').style.transform = `rotate(${cutoffDeg}deg)`;
+      document.getElementById('arc-cutoff').setAttribute('stroke-dashoffset', 251 - cutoffNorm * 185);
+      document.getElementById('qlink-val-1').innerText = `${Math.round(synthState.cutoff)} Hz`;
+      if (filterNode && audioCtx) {
+        filterNode.frequency.setValueAtTime(synthState.cutoff, audioCtx.currentTime);
+      }
+
+      // Resonance
+      document.getElementById('val-reso').innerText = `${synthState.reso.toFixed(2)} Q`;
+      const resoDeg = -135 + synthState.reso * 270;
+      document.getElementById('needle-reso').style.transform = `rotate(${resoDeg}deg)`;
+      document.getElementById('arc-reso').setAttribute('stroke-dashoffset', 188 - synthState.reso * 135);
+      document.getElementById('qlink-val-2').innerText = `${synthState.reso.toFixed(2)} Q`;
+      if (filterNode && audioCtx) {
+        filterNode.Q.setValueAtTime(synthState.reso * 12, audioCtx.currentTime);
+      }
+
+      // Env Mod
+      document.getElementById('val-fenv').innerText = `+${Math.round(synthState.fenv)} %`;
+      const fenvDeg = -135 + (synthState.fenv / 100) * 270;
+      document.getElementById('needle-fenv').style.transform = `rotate(${fenvDeg}deg)`;
+      document.getElementById('arc-fenv').setAttribute('stroke-dashoffset', 188 - (synthState.fenv / 100) * 135);
+
+      // Faders
+      document.getElementById('val-attack').innerText = `${Math.round(synthState.attack)} ms`;
+      const aPct = Math.min(100, (synthState.attack / 500) * 100);
+      document.getElementById('bar-attack').style.height = `${aPct}%`;
+      document.getElementById('thumb-attack').style.bottom = `calc(${aPct}% - 12px)`;
+
+      document.getElementById('val-decay').innerText = `${Math.round(synthState.decay)} ms`;
+      const dPct = Math.min(100, (synthState.decay / 1000) * 100);
+      document.getElementById('bar-decay').style.height = `${dPct}%`;
+      document.getElementById('thumb-decay').style.bottom = `calc(${dPct}% - 12px)`;
+
+      document.getElementById('val-sustain').innerText = `${Math.round(synthState.sustain)} %`;
+      document.getElementById('bar-sustain').style.height = `${synthState.sustain}%`;
+      document.getElementById('thumb-sustain').style.bottom = `calc(${synthState.sustain}% - 12px)`;
+
+      document.getElementById('val-release').innerText = `${Math.round(synthState.release)} ms`;
+      const rPct = Math.min(100, (synthState.release / 1200) * 100);
+      document.getElementById('bar-release').style.height = `${rPct}%`;
+      document.getElementById('thumb-release').style.bottom = `calc(${rPct}% - 12px)`;
+
+      drawFilterCurve();
+    }
+
+    // Generic Drag Handler for Knobs
+    function setupKnobDrag(elementId, onDrag) {
+      const el = document.getElementById(elementId);
+      let startY = 0;
+      let isDragging = false;
+
+      el.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        startY = e.clientY;
+        el.setPointerCapture(e.pointerId);
+      });
+
+      el.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const deltaY = startY - e.clientY;
+        startY = e.clientY;
+        onDrag(deltaY);
+        updateAllUI();
+      });
+
+      el.addEventListener('pointerup', (e) => {
+        if (isDragging) {
+          isDragging = false;
+          try { el.releasePointerCapture(e.pointerId); } catch(err){}
+        }
+      });
+    }
+
+    // Connect Knobs
+    setupKnobDrag('knob-saws', (delta) => {
+      synthState.saws = Math.max(3, Math.min(15, Math.round(synthState.saws + delta * 0.1)));
+    });
+    setupKnobDrag('knob-detune', (delta) => {
+      synthState.detune = Math.max(0, Math.min(50, synthState.detune + delta * 0.3));
+    });
+    setupKnobDrag('knob-spread', (delta) => {
+      synthState.spread = Math.max(0, Math.min(100, synthState.spread + delta * 0.5));
+    });
+    setupKnobDrag('knob-sub', (delta) => {
+      synthState.sub = Math.max(-24, Math.min(0, synthState.sub + delta * 0.2));
+    });
+    setupKnobDrag('knob-cutoff', (delta) => {
+      synthState.cutoff = Math.max(40, Math.min(18000, synthState.cutoff * Math.pow(1.02, delta)));
+    });
+    setupKnobDrag('knob-reso', (delta) => {
+      synthState.reso = Math.max(0.05, Math.min(0.95, synthState.reso + delta * 0.01));
+    });
+    setupKnobDrag('knob-fenv', (delta) => {
+      synthState.fenv = Math.max(0, Math.min(100, synthState.fenv + delta * 0.5));
+    });
+
+    // Vertical Fader Sliders Handler
+    function setupFader(grooveId, onMove) {
+      const groove = document.getElementById(grooveId);
+      let isDragging = false;
+
+      const updatePos = (clientY) => {
+        const rect = groove.getBoundingClientRect();
+        const norm = Math.max(0, Math.min(1, (rect.bottom - clientY) / rect.height));
+        onMove(norm);
+        updateAllUI();
+      };
+
+      groove.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        groove.setPointerCapture(e.pointerId);
+        updatePos(e.clientY);
+      });
+
+      groove.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        updatePos(e.clientY);
+      });
+
+      groove.addEventListener('pointerup', (e) => {
+        if (isDragging) {
+          isDragging = false;
+          try { groove.releasePointerCapture(e.pointerId); } catch(err){}
+        }
+      });
+    }
+
+    setupFader('groove-attack', norm => { synthState.attack = Math.max(2, norm * 500); });
+    setupFader('groove-decay', norm => { synthState.decay = Math.max(10, norm * 1000); });
+    setupFader('groove-sustain', norm => { synthState.sustain = Math.round(norm * 100); });
+    setupFader('groove-release', norm => { synthState.release = Math.max(10, norm * 1200); });
+
+    // 60FPS Interactive Multi-Saw Oscilloscope Animation
+    const scopeCanvas = document.getElementById('scopeCanvas');
+    const scopeCtx = scopeCanvas.getContext('2d');
+    let scopePhase = 0;
+
+    function renderScope() {
+      scopeCtx.clearRect(0, 0, scopeCanvas.width, scopeCanvas.height);
+
+      // Background grid lines
+      scopeCtx.strokeStyle = '#051c2a';
+      scopeCtx.lineWidth = 1;
+      scopeCtx.beginPath();
+      for (let x = 0; x < scopeCanvas.width; x += 20) {
+        scopeCtx.moveTo(x, 0);
+        scopeCtx.lineTo(x, scopeCanvas.height);
+      }
+      for (let y = 0; y < scopeCanvas.height; y += 15) {
+        scopeCtx.moveTo(0, y);
+        scopeCtx.lineTo(scopeCanvas.width, y);
+      }
+      scopeCtx.stroke();
+
+      const midY = scopeCanvas.height / 2;
+      const numSaws = Math.min(synthState.saws, 11);
+      const detuneFactor = (synthState.detune / 50) * 0.08;
+
+      scopeCtx.lineWidth = 1.5;
+
+      for (let s = 0; s < numSaws; s++) {
+        const spreadOffset = ((s / (numSaws - 1 || 1)) - 0.5) * detuneFactor;
+        const alpha = isAuditioning ? 0.75 : 0.45;
+        scopeCtx.strokeStyle = s === Math.floor(numSaws / 2) ? '#ffffff' : `rgba(79, 230, 255, ${alpha})`;
+        scopeCtx.beginPath();
+
+        const speed = (0.04 + spreadOffset) * (isAuditioning ? 1.4 : 0.8);
+        for (let x = 0; x < scopeCanvas.width; x++) {
+          const t = (x * 0.05) + scopePhase * speed * 20;
+          // Sawtooth shape synthesis
+          const rawSaw = ((t % 2) - 1);
+          // Attenuate by cutoff emulation
+          const filterDamp = Math.min(1, synthState.cutoff / 6000);
+          const y = midY + (rawSaw * 38 * filterDamp);
+          if (x === 0) scopeCtx.moveTo(x, y);
+          else scopeCtx.lineTo(x, y);
+        }
+        scopeCtx.stroke();
+      }
+
+      scopePhase += 0.015;
+      requestAnimationFrame(renderScope);
+    }
+    renderScope();
+
+    // Draw Filter Response Curve
+    function drawFilterCurve() {
+      const fCanvas = document.getElementById('filterCanvas');
+      const ctx = fCanvas.getContext('2d');
+      ctx.clearRect(0, 0, fCanvas.width, fCanvas.height);
+
+      ctx.strokeStyle = '#051c2a';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, fCanvas.height - 10);
+      ctx.lineTo(fCanvas.width, fCanvas.height - 10);
+      ctx.stroke();
+
+      const cutoffNorm = (Math.log10(synthState.cutoff) - Math.log10(40)) / (Math.log10(18000) - Math.log10(40));
+      const cutoffX = Math.max(10, Math.min(fCanvas.width - 10, cutoffNorm * fCanvas.width));
+      const peakY = Math.max(10, 50 - (synthState.reso * 36));
+
+      ctx.strokeStyle = '#4fe6ff';
+      ctx.shadowColor = '#4fe6ff';
+      ctx.shadowBlur = 6;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 45);
+      ctx.lineTo(cutoffX - 12, 45);
+      // Resonance peak bump
+      ctx.quadraticCurveTo(cutoffX - 2, peakY, cutoffX + 2, peakY);
+      // 24dB steep roll-off
+      ctx.bezierCurveTo(cutoffX + 16, peakY + 8, cutoffX + 35, fCanvas.height - 4, fCanvas.width, fCanvas.height - 4);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Draw cutoff point dot
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(cutoffX, peakY + 2, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Initial render
+    updateAllUI();
+  </script>
+</body></html>

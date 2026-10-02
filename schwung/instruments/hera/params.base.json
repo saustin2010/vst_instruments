@@ -1,0 +1,85 @@
+{
+ "name": "Hera",
+ "params": [
+  {
+   "key": "preset",
+   "name": "Preset",
+   "min": 0,
+   "max": 1.0,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "volume",
+   "name": "Volume",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.8
+  },
+  {
+   "key": "vcf_cutoff",
+   "name": "Cutoff",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "vcf_resonance",
+   "name": "Resonance",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "vcf_env",
+   "name": "VCF Env",
+   "unit": "%",
+   "min": -1.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "attack",
+   "name": "Attack",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "decay",
+   "name": "Decay",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "sustain",
+   "name": "Sustain",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "release",
+   "name": "Release",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "lfo_rate",
+   "name": "LFO Rate",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  }
+ ]
+}

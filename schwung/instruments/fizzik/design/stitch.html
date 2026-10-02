@@ -1,0 +1,1083 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fizzik — Coupled Physical Modeling Synthesizer (MPC Live II)</title>
+<style>
+  :root {
+    --bg: #0d0b0a;
+    --panel: #181412;
+    --panel-border: #4a3a30;
+    --ink: #fbf1ea;
+    --ink-dim: #e1cfc3;
+    --ink-faint: #8a7466;
+    --accent: #c8743a;
+    --accent-hi: #f0925a;
+    --knob-face: #fbf1ea;
+    --knob-ring: #33281f;
+    --lcd: #090706;
+    --seg-active: #f0925a;
+    --seg-inactive: #2a221d;
+    --seg-active-tx: #0d0b0a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  body {
+    background: #050404;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Courier New", monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .mpc-bezel {
+    width: 1320px;
+    background: #110e0c;
+    border: 3px solid #2e241e;
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.08);
+    padding: 16px;
+    position: relative;
+  }
+  .header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    padding: 0 12px;
+    background: #130f0d;
+    border: 1px solid #332720;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .hw-tag {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .led-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent-hi);
+    box-shadow: 0 0 10px var(--accent-hi);
+  }
+  .title-brand {
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent-hi);
+    font-size: 15px;
+  }
+  .tabs-nav {
+    display: flex;
+    gap: 6px;
+  }
+  .tab-btn {
+    background: #201a16;
+    color: var(--ink-dim);
+    border: 1px solid #4a3a30;
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent-hi);
+    box-shadow: 0 0 12px rgba(240, 146, 90, 0.4);
+  }
+  .audition-btn {
+    background: linear-gradient(180deg, #c8743a 0%, #8c4214 100%);
+    color: #fff;
+    border: 1px solid var(--accent-hi);
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .audition-btn:active { transform: translateY(1px); }
+
+  /* 1280 x 628 Touchscreen area */
+  .touch-screen {
+    width: 1280px;
+    height: 628px;
+    background: var(--bg);
+    position: relative;
+    border: 2px solid #2a201a;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .tab-content {
+    display: none;
+    width: 1280px;
+    height: 628px;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .tab-content.active { display: block; }
+
+  /* Frame Box */
+  .frame-box {
+    position: absolute;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 8px;
+  }
+  .frame-title {
+    position: absolute;
+    top: -9px;
+    left: 14px;
+    background: var(--panel);
+    padding: 0 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-hi);
+    text-transform: uppercase;
+    border: 1px solid var(--panel-border);
+    border-radius: 3px;
+  }
+
+  /* Knobs & Controls */
+  .control-item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .control-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .knob-wrap {
+    position: relative;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .knob-body {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d8c8be 60%, #8c7668 100%);
+    border: 2px solid var(--knob-ring);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.7);
+    position: relative;
+  }
+  .knob-dot {
+    position: absolute;
+    width: 5px;
+    height: 12px;
+    background: var(--accent-hi);
+    border-radius: 2px;
+    top: 4px;
+    left: calc(50% - 2.5px);
+    transform-origin: center 26px;
+    box-shadow: 0 0 6px var(--accent-hi);
+  }
+  .val-badge {
+    font-size: 9px;
+    color: var(--accent-hi);
+    background: var(--lcd);
+    border: 1px solid #332720;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+    min-width: 38px;
+    text-align: center;
+  }
+
+  /* Segmented enum */
+  .enum-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background: var(--lcd);
+    padding: 3px;
+    border: 1px solid #332720;
+    border-radius: 4px;
+  }
+  .enum-opt {
+    font-size: 9px;
+    padding: 3px 8px;
+    font-weight: 700;
+    text-align: center;
+    background: var(--seg-inactive);
+    color: var(--ink-dim);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .enum-opt.active {
+    background: var(--seg-active);
+    color: var(--seg-active-tx);
+    box-shadow: 0 0 6px var(--accent-hi);
+  }
+
+  /* Popup / Stepper Box */
+  .popup-box {
+    background: var(--lcd);
+    border: 1px solid #4a3a30;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-hi);
+    position: relative;
+  }
+  .popup-box::after {
+    content: "▼";
+    font-size: 8px;
+    color: var(--accent);
+  }
+
+  /* Buttons */
+  .hw-button {
+    background: linear-gradient(180deg, #2b221d 0%, #1a1411 100%);
+    border: 1px solid #5a4538;
+    color: var(--ink);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 10px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+  }
+  .hw-button:active {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(1px);
+  }
+
+  /* Live Physical Resonator Simulation Visualizer */
+  .resonator-scope {
+    position: absolute;
+    width: 250px;
+    height: 120px;
+    background: #090706;
+    border: 1px solid #3d2f25;
+    border-radius: 4px;
+    right: 20px;
+    top: 50px;
+    overflow: hidden;
+  }
+  .scope-canvas { width: 100%; height: 100%; display: block; }
+  .scope-legend {
+    position: absolute;
+    bottom: 4px;
+    left: 8px;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+
+  /* Footer Q-Link Strip */
+  .qlink-bar {
+    margin-top: 10px;
+    background: #110e0c;
+    border: 1px solid #2e241e;
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+  }
+  .qlink-title {
+    color: var(--accent-hi);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .qlink-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1;
+  }
+  .qlink-chip {
+    background: #1c1613;
+    border: 1px solid #3d2f25;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--ink-dim);
+    font-family: monospace;
+    font-size: 9px;
+  }
+  .qlink-chip span { color: var(--accent-hi); font-weight: bold; margin-right: 3px; }
+</style>
+</head>
+<body>
+
+<div class="mpc-bezel">
+  <div class="header-bar">
+    <div class="hw-tag">
+      <div class="led-dot"></div>
+      <span>Akai MPC Live II // Skin Studio</span>
+      <span style="color:#5a4538;">|</span>
+      <span class="title-brand">FIZZIK // COUPLED PHYSICAL RESONATORS</span>
+    </div>
+
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="selectTab(0)">1: MAIN</button>
+      <button class="tab-btn" onclick="selectTab(1)">2: EXCITER</button>
+      <button class="tab-btn" onclick="selectTab(2)">3: RESONATOR B</button>
+      <button class="tab-btn" onclick="selectTab(3)">4: DELAY / FX</button>
+      <button class="tab-btn" onclick="selectTab(4)">5: LFO / AT</button>
+    </div>
+
+    <button class="audition-btn" id="auditionBtn">AUDITION STRUM [SPACE]</button>
+  </div>
+
+  <div class="touch-screen" id="touchScreen">
+    
+    <!-- PAGE 0: MAIN -->
+    <div class="tab-content active" id="tab0">
+      <!-- PATCH -->
+      <div class="frame-box" style="left:10px; top:12px; width:626px; height:290px;">
+        <span class="frame-title">PATCH</span>
+        <div style="position:absolute; left:26px; top:50px;">
+          <div style="font-size:9px; color:var(--ink-faint); margin-bottom:4px; font-weight:700;">PRESET SELECTION</div>
+          <div class="popup-box" style="width:280px; height:46px;" id="presetPopup">01: BRUSHED COPPER BELL</div>
+        </div>
+        <div style="position:absolute; left:330px; top:50px; display:flex; gap:12px;">
+          <button class="hw-button" onclick="randomizeAll()" style="height:46px;">RANDOM ALL</button>
+          <button class="hw-button" onclick="randomizeExciter()" style="height:46px;">RND EXCITER</button>
+        </div>
+
+        <!-- Real-Time Modal Vibration Simulation -->
+        <div class="resonator-scope" style="left:26px; top:120px; width:574px; height:140px;">
+          <canvas class="scope-canvas" id="canvasMain"></canvas>
+          <div class="scope-legend">COUPLED 2-POLE MASS-SPRING-DAMPER TRACE // STRING × BEAM</div>
+        </div>
+      </div>
+
+      <!-- RESONATORS -->
+      <div class="frame-box" style="left:644px; top:12px; width:626px; height:290px;">
+        <span class="frame-title">RESONATORS</span>
+        
+        <!-- MODEL A -->
+        <div class="control-item" style="left:76px; top:140px;">
+          <div class="control-label">MODEL A</div>
+          <div class="enum-group" id="enumModelA">
+            <div class="enum-opt active" onclick="setEnum(this)">STRING</div>
+            <div class="enum-opt" onclick="setEnum(this)">BEAM</div>
+            <div class="enum-opt" onclick="setEnum(this)">PLATE</div>
+            <div class="enum-opt" onclick="setEnum(this)">MEMBRANE</div>
+          </div>
+        </div>
+
+        <!-- MODEL B -->
+        <div class="control-item" style="left:232px; top:140px;">
+          <div class="control-label">MODEL B</div>
+          <div class="enum-group" id="enumModelB">
+            <div class="enum-opt" onclick="setEnum(this)">STRING</div>
+            <div class="enum-opt active" onclick="setEnum(this)">BEAM</div>
+            <div class="enum-opt" onclick="setEnum(this)">PLATE</div>
+            <div class="enum-opt" onclick="setEnum(this)">MEMBRANE</div>
+          </div>
+        </div>
+
+        <!-- COUPLE KNOB -->
+        <div class="control-item" style="left:390px; top:140px;">
+          <div class="control-label">COUPLE</div>
+          <div class="knob-wrap" data-key="couple" data-val="68">
+            <div class="knob-body" style="width:76px; height:76px;">
+              <div class="knob-dot" style="transform: rotate(50deg);"></div>
+            </div>
+          </div>
+          <div class="val-badge" id="val_couple">68 %</div>
+        </div>
+
+        <!-- BALANCE KNOB -->
+        <div class="control-item" style="left:530px; top:140px;">
+          <div class="control-label">BALANCE</div>
+          <div class="knob-wrap" data-key="balance" data-val="50">
+            <div class="knob-body" style="width:76px; height:76px;">
+              <div class="knob-dot" style="transform: rotate(0deg);"></div>
+            </div>
+          </div>
+          <div class="val-badge" id="val_balance">50:50</div>
+        </div>
+      </div>
+
+      <!-- FILTER -->
+      <div class="frame-box" style="left:10px; top:312px; width:626px; height:290px;">
+        <span class="frame-title">FILTER</span>
+        <div class="control-item" style="left:88px; top:135px;">
+          <div class="control-label" style="font-weight:700; color:var(--accent-hi);">CUTOFF</div>
+          <div class="knob-wrap" data-key="cutoff" data-val="2400">
+            <div class="knob-body" style="width:92px; height:92px; border-width:3px;">
+              <div class="knob-dot" style="transform: rotate(20deg); height:16px;"></div>
+            </div>
+          </div>
+          <div class="val-badge" id="val_cutoff" style="font-size:10px;">2.40 kHz</div>
+        </div>
+
+        <div class="control-item" style="left:244px; top:145px;">
+          <div class="control-label">RESONANCE</div>
+          <div class="knob-wrap" data-key="resonance" data-val="45">
+            <div class="knob-body" style="width:76px; height:76px;">
+              <div class="knob-dot" style="transform: rotate(-10deg);"></div>
+            </div>
+          </div>
+          <div class="val-badge" id="val_resonance">45 %</div>
+        </div>
+
+        <div class="control-item" style="left:401px; top:140px;">
+          <div class="control-label">FILTER TYPE</div>
+          <div class="enum-group" id="enumFiltType">
+            <div class="enum-opt active" onclick="setEnum(this)">LP</div>
+            <div class="enum-opt" onclick="setEnum(this)">HP</div>
+            <div class="enum-opt" onclick="setEnum(this)">BP</div>
+            <div class="enum-opt" onclick="setEnum(this)">NOTCH</div>
+          </div>
+        </div>
+
+        <div class="control-item" style="left:545px; top:145px;">
+          <div class="control-label">VOICING</div>
+          <div class="popup-box" style="width:120px; height:46px; margin-top:8px;" id="val_voicing">POLY (4)</div>
+        </div>
+      </div>
+
+      <!-- OUT -->
+      <div class="frame-box" style="left:644px; top:312px; width:626px; height:290px;">
+        <span class="frame-title">OUT</span>
+        <div class="control-item" style="left:76px; top:145px;">
+          <button class="hw-button" onclick="randomizeResonators()" style="width:90px; text-align:center;">RND RESON</button>
+        </div>
+
+        <div class="control-item" style="left:232px; top:145px;">
+          <div class="control-label">DRIVE</div>
+          <div class="knob-wrap" data-key="drive" data-val="32">
+            <div class="knob-body" style="width:76px; height:76px;">
+              <div class="knob-dot" style="transform: rotate(-40deg);"></div>
+            </div>
+          </div>
+          <div class="val-badge" id="val_drive">32 %</div>
+        </div>
+
+        <div class="control-item" style="left:390px; top:145px;">
+          <div class="control-label">WIDTH</div>
+          <div class="knob-wrap" data-key="width" data-val="75">
+            <div class="knob-body" style="width:76px; height:76px;">
+              <div class="knob-dot" style="transform: rotate(65deg);"></div>
+            </div>
+          </div>
+          <div class="val-badge" id="val_width">75 %</div>
+        </div>
+
+        <div class="control-item" style="left:530px; top:145px;">
+          <div class="control-label">LEVEL</div>
+          <div class="knob-wrap" data-key="level" data-val="85">
+            <div class="knob-body" style="width:76px; height:76px;">
+              <div class="knob-dot" style="transform: rotate(90deg);"></div>
+            </div>
+          </div>
+          <div class="val-badge" id="val_level">0.0 dB</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 1: EXCITER -->
+    <div class="tab-content" id="tab1">
+      <div class="frame-box" style="left:10px; top:12px; width:1258px; height:290px;">
+        <span class="frame-title">EXCITER ENGINE (IMPULSE, NOISE, BOW)</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">EXC MIX</div>
+            <div class="knob-wrap" data-key="exc_mix" data-val="55"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(12deg)"></div></div></div>
+            <div class="val-badge">55 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">CRACKLE</div>
+            <div class="knob-wrap" data-key="exc_crackle" data-val="20"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-70deg)"></div></div></div>
+            <div class="val-badge">20 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">COLOR</div>
+            <div class="knob-wrap" data-key="exc_color" data-val="72"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(55deg)"></div></div></div>
+            <div class="val-badge">72 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">ATTACK</div>
+            <div class="knob-wrap" data-key="exc_attack" data-val="12"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-90deg)"></div></div></div>
+            <div class="val-badge">12 ms</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DECAY</div>
+            <div class="knob-wrap" data-key="exc_decay" data-val="450"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(30deg)"></div></div></div>
+            <div class="val-badge">450 ms</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">EXC RESO</div>
+            <div class="knob-wrap" data-key="exc_reso" data-val="35"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-35deg)"></div></div></div>
+            <div class="val-badge">35 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">VEL LEVEL</div>
+            <div class="knob-wrap" data-key="vel_level" data-val="80"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(75deg)"></div></div></div>
+            <div class="val-badge">80 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">VEL COLOR</div>
+            <div class="knob-wrap" data-key="vel_color" data-val="40"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-20deg)"></div></div></div>
+            <div class="val-badge">40 %</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame-box" style="left:10px; top:312px; width:1258px; height:290px;">
+        <span class="frame-title">RESONATOR A (MODAL STRUCTURE)</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">STRUCTURE A</div>
+            <div class="knob-wrap" data-key="a_struct" data-val="64"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(40deg)"></div></div></div>
+            <div class="val-badge">64 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DECAY A</div>
+            <div class="knob-wrap" data-key="a_decay" data-val="1200"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(70deg)"></div></div></div>
+            <div class="val-badge">1.20 s</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DAMP A</div>
+            <div class="knob-wrap" data-key="a_damp" data-val="48"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-5deg)"></div></div></div>
+            <div class="val-badge">48 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">POSITION A</div>
+            <div class="knob-wrap" data-key="a_pos" data-val="32"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-45deg)"></div></div></div>
+            <div class="val-badge">0.32</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TONE A</div>
+            <div class="knob-wrap" data-key="a_tone" data-val="60"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(30deg)"></div></div></div>
+            <div class="val-badge">60 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TUNE A</div>
+            <div class="knob-wrap" data-key="a_tune" data-val="0"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(0deg)"></div></div></div>
+            <div class="val-badge">0 ST</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TENSION A</div>
+            <div class="knob-wrap" data-key="a_tension" data-val="78"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(70deg)"></div></div></div>
+            <div class="val-badge">78 %</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: RESONATOR B & REVERB -->
+    <div class="tab-content" id="tab2">
+      <div class="frame-box" style="left:10px; top:12px; width:1258px; height:290px;">
+        <span class="frame-title">RESONATOR B (COUPLED BODY)</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">STRUCTURE B</div>
+            <div class="knob-wrap" data-key="b_struct" data-val="82"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(80deg)"></div></div></div>
+            <div class="val-badge">82 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DECAY B</div>
+            <div class="knob-wrap" data-key="b_decay" data-val="850"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(40deg)"></div></div></div>
+            <div class="val-badge">850 ms</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DAMP B</div>
+            <div class="knob-wrap" data-key="b_damp" data-val="60"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(25deg)"></div></div></div>
+            <div class="val-badge">60 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">POSITION B</div>
+            <div class="knob-wrap" data-key="b_pos" data-val="68"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(45deg)"></div></div></div>
+            <div class="val-badge">0.68</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TONE B</div>
+            <div class="knob-wrap" data-key="b_tone" data-val="40"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-25deg)"></div></div></div>
+            <div class="val-badge">40 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TUNE B</div>
+            <div class="knob-wrap" data-key="b_tune" data-val="7"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(20deg)"></div></div></div>
+            <div class="val-badge">+7 ST</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TENSION B</div>
+            <div class="knob-wrap" data-key="b_tension" data-val="55"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(10deg)"></div></div></div>
+            <div class="val-badge">55 %</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame-box" style="left:10px; top:312px; width:784px; height:290px;">
+        <span class="frame-title">VOICE &amp; ENVELOPE</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">GLIDE</div>
+            <div class="knob-wrap" data-key="glide" data-val="0"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-120deg)"></div></div></div>
+            <div class="val-badge">OFF</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AMP ATK</div>
+            <div class="knob-wrap" data-key="amp_attack" data-val="8"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-100deg)"></div></div></div>
+            <div class="val-badge">8 ms</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AMP REL</div>
+            <div class="knob-wrap" data-key="amp_release" data-val="380"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(15deg)"></div></div></div>
+            <div class="val-badge">380 ms</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">SPREAD</div>
+            <div class="knob-wrap" data-key="spread" data-val="65"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(40deg)"></div></div></div>
+            <div class="val-badge">65 %</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame-box" style="left:802px; top:312px; width:466px; height:290px;">
+        <span class="frame-title">DIFFUSION REVERB</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">REVERB</div>
+            <div class="knob-wrap" data-key="rev_mix" data-val="40"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-20deg)"></div></div></div>
+            <div class="val-badge">40 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">REV SIZE</div>
+            <div class="knob-wrap" data-key="rev_size" data-val="78"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(70deg)"></div></div></div>
+            <div class="val-badge">78 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">REV DAMP</div>
+            <div class="knob-wrap" data-key="rev_damp" data-val="35"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-35deg)"></div></div></div>
+            <div class="val-badge">35 %</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: DELAY & TONE -->
+    <div class="tab-content" id="tab3">
+      <div class="frame-box" style="left:10px; top:12px; width:1258px; height:290px;">
+        <span class="frame-title">TAPE DELAY</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DELAY MIX</div>
+            <div class="knob-wrap" data-key="dly_mix" data-val="30"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-45deg)"></div></div></div>
+            <div class="val-badge">30 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DLY TIME</div>
+            <div class="knob-wrap" data-key="dly_time" data-val="350"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(10deg)"></div></div></div>
+            <div class="val-badge">350 ms</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DLY FBK</div>
+            <div class="knob-wrap" data-key="dly_fb" data-val="55"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(15deg)"></div></div></div>
+            <div class="val-badge">55 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DLY TONE</div>
+            <div class="knob-wrap" data-key="dly_tone" data-val="65"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(40deg)"></div></div></div>
+            <div class="val-badge">65 %</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame-box" style="left:10px; top:312px; width:1258px; height:290px;">
+        <span class="frame-title">MASTER TONE &amp; DYNAMICS</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TONE</div>
+            <div class="knob-wrap" data-key="eq_tone" data-val="50"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(0deg)"></div></div></div>
+            <div class="val-badge">0 dB</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">BODY</div>
+            <div class="knob-wrap" data-key="eq_body" data-val="60"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(25deg)"></div></div></div>
+            <div class="val-badge">+2.4 dB</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">CHORUS</div>
+            <div class="knob-wrap" data-key="cho_mix" data-val="25"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-60deg)"></div></div></div>
+            <div class="val-badge">25 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">CHO RATE</div>
+            <div class="knob-wrap" data-key="cho_rate" data-val="1.2"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-30deg)"></div></div></div>
+            <div class="val-badge">1.2 Hz</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">CHO DEPTH</div>
+            <div class="knob-wrap" data-key="cho_depth" data-val="40"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-20deg)"></div></div></div>
+            <div class="val-badge">40 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">GLUE</div>
+            <div class="knob-wrap" data-key="comp_amt" data-val="35"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-35deg)"></div></div></div>
+            <div class="val-badge">35 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">LIM DRIVE</div>
+            <div class="knob-wrap" data-key="lim_drive" data-val="15"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-80deg)"></div></div></div>
+            <div class="val-badge">15 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">LIM CEIL</div>
+            <div class="knob-wrap" data-key="lim_ceil" data-val="95"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(110deg)"></div></div></div>
+            <div class="val-badge">-0.3 dB</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: LFO & AFTERTOUCH -->
+    <div class="tab-content" id="tab4">
+      <div class="frame-box" style="left:10px; top:12px; width:626px; height:290px;">
+        <span class="frame-title">LFO 1 (MULTI-WAVE)</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">RATE</div>
+            <div class="knob-wrap" data-key="lfo1_rate" data-val="3.5"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-15deg)"></div></div></div>
+            <div class="val-badge">3.5 Hz</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DEPTH</div>
+            <div class="knob-wrap" data-key="lfo1_depth" data-val="65"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(40deg)"></div></div></div>
+            <div class="val-badge">65 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">SHAPE</div>
+            <div class="popup-box" style="width:110px; height:46px; margin-top:8px;">TRIANGLE</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TARGET</div>
+            <div class="popup-box" style="width:110px; height:46px; margin-top:8px;">CUTOFF</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame-box" style="left:644px; top:12px; width:626px; height:290px;">
+        <span class="frame-title">LFO 2</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">RATE</div>
+            <div class="knob-wrap" data-key="lfo2_rate" data-val="0.4"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-85deg)"></div></div></div>
+            <div class="val-badge">0.4 Hz</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DEPTH</div>
+            <div class="knob-wrap" data-key="lfo2_depth" data-val="40"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-20deg)"></div></div></div>
+            <div class="val-badge">40 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">SHAPE</div>
+            <div class="popup-box" style="width:110px; height:46px; margin-top:8px;">SINE</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">TARGET</div>
+            <div class="popup-box" style="width:110px; height:46px; margin-top:8px;">COUPLE</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame-box" style="left:10px; top:312px; width:1258px; height:290px;">
+        <span class="frame-title">POLYPHONIC AFTERTOUCH RESPONSE</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AT PRESET</div>
+            <div class="popup-box" style="width:110px; height:46px; margin-top:8px;">EXPRESSIVE</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AT BRIGHT</div>
+            <div class="knob-wrap" data-key="at_bright" data-val="55"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(15deg)"></div></div></div>
+            <div class="val-badge">55 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AT BOW</div>
+            <div class="knob-wrap" data-key="at_bow" data-val="30"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-45deg)"></div></div></div>
+            <div class="val-badge">30 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AT CUTOFF</div>
+            <div class="knob-wrap" data-key="at_cutoff" data-val="70"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(50deg)"></div></div></div>
+            <div class="val-badge">70 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AT VIB</div>
+            <div class="knob-wrap" data-key="at_vib" data-val="45"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-10deg)"></div></div></div>
+            <div class="val-badge">45 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AT BEND</div>
+            <div class="knob-wrap" data-key="at_bend" data-val="0"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(0deg)"></div></div></div>
+            <div class="val-badge">0 ST</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AT VIB RATE</div>
+            <div class="knob-wrap" data-key="at_vrate" data-val="5.2"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(20deg)"></div></div></div>
+            <div class="val-badge">5.2 Hz</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">AT CURVE</div>
+            <div class="knob-wrap" data-key="at_curve" data-val="EXP"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(40deg)"></div></div></div>
+            <div class="val-badge">EXP 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Q-LINK STATUS BAR -->
+  <div class="qlink-bar">
+    <div class="qlink-title">Q-LINKS [<span id="qlinkPageTitle">BANK 1: MAIN</span>]:</div>
+    <div class="qlink-chips" id="qlinkChips">
+      <div class="qlink-chip"><span>Q1</span>PRESET</div>
+      <div class="qlink-chip"><span>Q2</span>RND ALL</div>
+      <div class="qlink-chip"><span>Q3</span>RND EXC</div>
+      <div class="qlink-chip"><span>Q4</span>MODEL A</div>
+      <div class="qlink-chip"><span>Q5</span>MODEL B</div>
+      <div class="qlink-chip"><span>Q6</span>COUPLE</div>
+      <div class="qlink-chip"><span>Q7</span>BALANCE</div>
+      <div class="qlink-chip"><span>Q8</span>CUTOFF</div>
+      <div class="qlink-chip"><span>Q9</span>RESONANCE</div>
+      <div class="qlink-chip"><span>Q10</span>FILTER TYPE</div>
+      <div class="qlink-chip"><span>Q11</span>VOICING</div>
+      <div class="qlink-chip"><span>Q12</span>DRIVE</div>
+      <div class="qlink-chip"><span>Q13</span>WIDTH</div>
+      <div class="qlink-chip"><span>Q14</span>LEVEL</div>
+    </div>
+    <div style="color:var(--ink-faint); font-family:monospace; font-size:9px;">ARM64 NEON // DSP 8%</div>
+  </div>
+</div>
+
+<script>
+  let activeTabIdx = 0;
+  const tabTitles = ["BANK 1: MAIN", "BANK 2: EXCITER", "BANK 3: RESONATOR B", "BANK 4: DELAY", "BANK 5: LFO"];
+  const qlinkMaps = [
+    ["Q1: PRESET", "Q2: RND_PATCH", "Q3: RND_EXC", "Q4: A_MODEL", "Q5: B_MODEL", "Q6: COUPLE", "Q7: BALANCE", "Q8: CUTOFF", "Q9: RESONANCE", "Q10: FTYPE", "Q11: VOICING", "Q12: RND_RESON", "Q13: DRIVE", "Q14: WIDTH", "Q15: LEVEL"],
+    ["Q1: EXC MIX", "Q2: CRACKLE", "Q3: COLOR", "Q4: ATTACK", "Q5: DECAY", "Q6: EXC RESO", "Q7: VEL LEVEL", "Q8: VEL COLOR", "Q9: STRUCT A", "Q10: DECAY A", "Q11: DAMP A", "Q12: POS A", "Q13: TONE A", "Q14: TUNE A", "Q15: TENSION A"],
+    ["Q1: STRUCT B", "Q2: DECAY B", "Q3: DAMP B", "Q4: POS B", "Q5: TONE B", "Q6: TUNE B", "Q7: TENSION B", "Q8: GLIDE", "Q9: AMP ATK", "Q10: AMP REL", "Q11: SPREAD", "Q12: REV MIX", "Q13: REV SIZE", "Q14: REV DAMP"],
+    ["Q1: DLY MIX", "Q2: DLY TIME", "Q3: DLY FBK", "Q4: DLY TONE", "Q5: TONE", "Q6: BODY", "Q7: CHORUS", "Q8: CHO RATE", "Q9: CHO DEPTH", "Q10: GLUE", "Q11: LIM DRIVE", "Q12: LIM CEIL"],
+    ["Q1: LFO1 RATE", "Q2: LFO1 DEPTH", "Q3: LFO1 SHAPE", "Q4: LFO1 TARGET", "Q5: LFO2 RATE", "Q6: LFO2 DEPTH", "Q7: LFO2 SHAPE", "Q8: LFO2 TARGET", "Q9: AT PRESET", "Q10: AT BRIGHT", "Q11: AT BOW", "Q12: AT CUTOFF", "Q13: AT VIB", "Q14: AT BEND", "Q15: AT VRATE", "Q16: AT CURVE"]
+  ];
+
+  function selectTab(idx) {
+    activeTabIdx = idx;
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.tab-content').forEach((page, i) => {
+      page.classList.toggle('active', i === idx);
+    });
+    document.getElementById('qlinkPageTitle').innerText = tabTitles[idx];
+    const chipContainer = document.getElementById('qlinkChips');
+    chipContainer.innerHTML = '';
+    qlinkMaps[idx].forEach(q => {
+      const parts = q.split(': ');
+      const div = document.createElement('div');
+      div.className = 'qlink-chip';
+      div.innerHTML = `<span>${parts[0]}</span>${parts[1]}`;
+      chipContainer.appendChild(div);
+    });
+  }
+
+  function setEnum(el) {
+    const parent = el.parentElement;
+    parent.querySelectorAll('.enum-opt').forEach(opt => opt.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function randomizeAll() {
+    document.querySelectorAll('.knob-wrap').forEach(wrap => {
+      const angle = (Math.random() * 260) - 130;
+      const dot = wrap.querySelector('.knob-dot');
+      if (dot) dot.style.transform = `rotate(${angle}deg)`;
+    });
+  }
+  function randomizeExciter() {
+    triggerStrumAnimation(1.8);
+  }
+  function randomizeResonators() {
+    triggerStrumAnimation(2.4);
+  }
+
+  // Knob dragging mechanics
+  let activeKnob = null;
+  let startY = 0;
+  let startAngle = 0;
+
+  document.querySelectorAll('.knob-wrap').forEach(wrap => {
+    wrap.addEventListener('mousedown', (e) => {
+      activeKnob = wrap;
+      startY = e.clientY;
+      const dot = wrap.querySelector('.knob-dot');
+      const transform = dot.style.transform || 'rotate(0deg)';
+      const match = transform.match(/rotate\(([-0-9.]+)deg\)/);
+      startAngle = match ? parseFloat(match[1]) : 0;
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    });
+  });
+
+  function onMouseMove(e) {
+    if (!activeKnob) return;
+    const dy = startY - e.clientY;
+    let newAngle = Math.max(-130, Math.min(130, startAngle + dy * 1.5));
+    const dot = activeKnob.querySelector('.knob-dot');
+    dot.style.transform = `rotate(${newAngle}deg)`;
+  }
+  function onMouseUp() {
+    activeKnob = null;
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
+  }
+
+  // Web Audio Physical Simulation Strum
+  let audioCtx = null;
+  let excitationAmt = 0;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+
+  function playPhysicalPluck() {
+    initAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const t = audioCtx.currentTime;
+    // Exciter burst (Karplus / noise filtered impulse)
+    const bufferSize = audioCtx.sampleRate * 0.05;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+    }
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+
+    // Resonator A (String modal filter bank)
+    const filterA = audioCtx.createBiquadFilter();
+    filterA.type = "bandpass";
+    filterA.frequency.setValueAtTime(220, t);
+    filterA.Q.setValueAtTime(28, t);
+
+    // Resonator B (Coupled metallic body)
+    const filterB = audioCtx.createBiquadFilter();
+    filterB.type = "peaking";
+    filterB.frequency.setValueAtTime(440 * 1.414, t);
+    filterB.Q.setValueAtTime(15, t);
+    filterB.gain.setValueAtTime(12, t);
+
+    const masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0.7, t);
+    masterGain.gain.exponentialRampToValueAtTime(0.001, t + 1.6);
+
+    noise.connect(filterA);
+    filterA.connect(filterB);
+    filterB.connect(masterGain);
+    masterGain.connect(audioCtx.destination);
+
+    noise.start(t);
+    noise.stop(t + 0.05);
+
+    triggerStrumAnimation(1.5);
+  }
+
+  function triggerStrumAnimation(intensity) {
+    excitationAmt = intensity;
+  }
+
+  document.getElementById('auditionBtn').addEventListener('click', playPhysicalPluck);
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      playPhysicalPluck();
+    }
+  });
+
+  // Physical Resonator Coupled Waveform Simulation Canvas
+  const canvas = document.getElementById('canvasMain');
+  const ctx = canvas.getContext('2d');
+  let phase = 0;
+
+  function renderWave() {
+    canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    
+    ctx.fillStyle = '#090706';
+    ctx.fillRect(0, 0, w, h);
+
+    // Graticule lines
+    ctx.strokeStyle = '#221914';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 30) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let y = 0; y < h; y += 20) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+
+    // Modal wave animation
+    phase += 0.04;
+    excitationAmt *= 0.96;
+    const baseAmp = 12 + excitationAmt * 35;
+
+    ctx.strokeStyle = '#f0925a';
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = '#f0925a';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+
+    const midY = h / 2;
+    for (let x = 0; x < w; x++) {
+      const normX = x / w;
+      // Coupled equation: primary fundamental + inharmonic beam partials
+      const stringMode = Math.sin(normX * Math.PI * 2 + phase * 2) * Math.sin(normX * Math.PI);
+      const beamMode = 0.45 * Math.sin(normX * Math.PI * 5.4 - phase * 3.8);
+      const coupleMod = 0.25 * Math.sin(normX * Math.PI * 11 + phase * 6.2);
+      const y = midY + (stringMode + beamMode + coupleMod) * baseAmp;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    requestAnimationFrame(renderWave);
+  }
+  requestAnimationFrame(renderWave);
+</script>
+
+
+
+</body></html>

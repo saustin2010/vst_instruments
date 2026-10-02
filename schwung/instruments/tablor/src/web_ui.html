@@ -1,0 +1,707 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tablor</title>
+<style>
+/* Laid out after the original Wavetable plugin (SocaLabs / Roland Rabien,
+ * reference/wavetable/Screenshots): near-black ground, one boxed panel per
+ * section with a lighter title bar, real knobs with an amber value arc, and
+ * the curve displays sitting inside the panel they belong to.
+ *
+ * The CONTROLS are ours — no FX row, no step sequencer
+ * Tablor adds. Ranges, option names and page grouping all come from
+ * ui_pages.json, the same file the hardware pages are generated from, so this
+ * cannot drift from the device. */
+:root{
+  --bg:#0e1013; --panel:#191b20; --bar:#23262c; --edge:#2e323a;
+  --txt:#c3c8d1; --dim:#767c88; --acc:#d2884f; --acc-d:#8a5a37;
+  --wave:#4fd06a; --wave-hi:#e8e04a;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--txt); margin:0; padding:8px;
+  font:11px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+/* ---- top bar ---- */
+#top{
+  display:flex; align-items:center; gap:10px; background:var(--bar);
+  border:1px solid var(--edge); border-radius:5px; padding:6px 10px; margin-bottom:6px;
+}
+#top .brand{font-size:13px; letter-spacing:.34em; font-weight:700; color:var(--txt)}
+#top .brand small{color:var(--dim); letter-spacing:.08em; font-weight:400; margin-left:8px; font-size:10px}
+buttonbutton.step:hover{color:var(--acc); border-color:var(--acc-d)}
+buttonbutton.act:hover{background:#241a12}
+input/* ---- rack ---- */
+#rack{display:grid; grid-template-columns:repeat(12,1fr); gap:6px; align-items:start}
+.panel{
+  background:var(--panel); border:1px solid var(--edge); border-radius:5px;
+  display:flex; flex-direction:column; overflow:hidden; min-width:0;
+}
+.panel > .bar{
+  background:var(--bar); border-bottom:1px solid var(--edge);
+  padding:5px 9px; display:flex; align-items:center; gap:8px;
+  font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim);
+}
+.panel > .bar .dot{width:7px; height:7px; border-radius:50%; background:var(--acc-d); flex:none}
+.panel > .bar .pick{
+  margin-left:auto; display:flex; gap:5px; align-items:center; min-width:0;
+}
+.panel > .bar .pick select{
+  appearance:none; -webkit-appearance:none; text-align:center;
+  background:#0d0f12; color:var(--acc); border:1px solid var(--edge);
+  border-radius:10px; padding:2px 8px; font-size:10px; cursor:pointer;
+  max-width:190px; text-overflow:ellipsis;
+}
+.panel > .bar .pick select.pack{color:var(--dim); max-width:100px}
+.panel > .bar .pick select:hover{border-color:var(--acc-d)}
+.panel > .bar .name{
+  color:var(--acc); letter-spacing:.12em; text-transform:none; font-size:11px;
+  margin-left:auto; max-width:60%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.body{padding:8px 9px 9px; display:flex; gap:10px; flex:1; min-width:0}
+.col{display:flex; flex-direction:column; gap:8px; min-width:0}
+.knobs{display:flex; gap:2px; flex-wrap:wrap}
+/* ---- knob ---- */
+.knob{width:52px; text-align:center; flex:none; user-select:none}
+.knob svg{display:block; margin:0 auto; cursor:ns-resize; touch-action:none}
+.knob .lab{color:var(--dim); font-size:10px; margin-top:1px;
+           overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.knob .val{color:var(--acc); font-size:10px; height:11px; visibility:hidden;
+           font-variant-numeric:tabular-nums}
+.knob:hover .val,.knob.live .val{visibility:visible}
+.knob:hover .lab,.knob.live .lab{visibility:hidden}
+.knob .stack{position:relative; height:11px; margin-top:1px}
+.knob .stack > *{position:absolute; left:0; right:0; top:0}
+/* ---- enum pill ---- */
+.pill{width:76px; text-align:center; flex:none}
+.pill select{
+  width:100%; appearance:none; -webkit-appearance:none; text-align:center;
+  background:#0d0f12; color:var(--acc); border:1px solid var(--edge);
+  border-radius:10px; padding:3px 4px; font-size:10px; cursor:pointer;
+  text-overflow:ellipsis;
+}
+.pill select:hover{border-color:var(--acc-d)}
+.pill .lab{color:var(--dim); font-size:10px; margin-top:2px}
+/* ---- displays ---- */
+canvas.disp{
+  background:#0a0b0d; border:1px solid #23262c; border-radius:3px;
+  display:block; width:100%; flex:none; min-width:0;
+}
+.row{display:flex; align-items:center; gap:5px; margin-bottom:4px}
+.row .n{color:var(--dim); width:14px; flex:none; text-align:right}
+.row .pill{width:auto; flex:1 1 0; min-width:0; max-width:150px}
+.row .pill.sw{flex:0 0 46px; max-width:46px}
+.row .pill .lab{display:none}
+.arrow{color:var(--dim); flex:none}
+.hint{color:var(--dim); font-size:10px; padding:2px 9px 8px}
+/* ---- spans ---- */
+.s2{grid-column:span 2}.s3{grid-column:span 3}.s4{grid-column:span 4}
+.s6{grid-column:span 6}.s8{grid-column:span 8}.s12{grid-column:span 12}
+@media (max-width:1240px){
+  .s2,.s3,.s4{grid-column:span 6}.s6,.s8{grid-column:span 12}
+}
+@media (max-width:640px){ .s2,.s3,.s4,.s6,.s8{grid-column:span 12} }
+</style>
+</head>
+<body>
+
+<div id="top">
+  <div class="brand">TABLOR<small>2-osc wavetable</small></div>
+</div>
+
+<div id="rack"></div>
+
+<script src="/static/schwung-remote-api.js"></script>
+<script>
+(function () {
+"use strict";
+
+var K = "synth:";
+var META = {};      /* key -> slot from ui_pages.json */
+var CTL  = {};      /* key -> { set(valueString) }    */
+var VAL  = {};      /* key -> current numeric/string  */
+var placed = {};
+
+function send(key, v) { schwungRemote.setParam(K + key, String(v)); }
+function el(tag, cls, parent) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+/* ------------------------------------------------------------------ knob */
+/* -135deg .. +135deg, amber arc from the minimum, grey pointer. Drag
+ * vertically; 160 px covers the range, Shift for fine. */
+var A0 = -135, A1 = 135, R = 16;
+
+function polar(cx, cy, r, deg) {
+  var a = (deg - 90) * Math.PI / 180;
+  return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+}
+function arcPath(cx, cy, r, from, to) {
+  var p0 = polar(cx, cy, r, from), p1 = polar(cx, cy, r, to);
+  var big = Math.abs(to - from) > 180 ? 1 : 0;
+  return "M" + p0[0].toFixed(2) + "," + p0[1].toFixed(2) +
+         "A" + r + "," + r + " 0 " + big + " 1 " + p1[0].toFixed(2) + "," + p1[1].toFixed(2);
+}
+
+function makeKnob(slot, label, into) {
+  var min = slot.min, max = slot.max, span = (max - min) || 1;
+  var wrap = el("div", "knob", into);
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("width", 44); svg.setAttribute("height", 44);
+  svg.setAttribute("viewBox", "0 0 44 44");
+  wrap.appendChild(svg);
+
+  function node(t, attrs) {
+    var n = document.createElementNS(NS, t);
+    for (var a in attrs) n.setAttribute(a, attrs[a]);
+    svg.appendChild(n);
+    return n;
+  }
+  node("circle", { cx: 22, cy: 22, r: 13, fill: "#2b2e35", stroke: "#3a3e46" });
+  node("path", { d: arcPath(22, 22, R, A0, A1), stroke: "#33373e",
+                 "stroke-width": 3, fill: "none", "stroke-linecap": "round" });
+  var arc = node("path", { stroke: "var(--acc)", "stroke-width": 3, fill: "none",
+                           "stroke-linecap": "round" });
+  var ptr = node("line", { stroke: "#a2a8b3", "stroke-width": 2.5,
+                           "stroke-linecap": "round" });
+
+  var stack = el("div", "stack", wrap);
+  var lab = el("div", "lab", stack); lab.textContent = label;
+  var out = el("div", "val", stack);
+  wrap.title = slot.full + "  (" + slot.k + ")";
+
+  var v = min;
+  function paint() {
+    var f = (v - min) / span, deg = A0 + f * (A1 - A0);
+    arc.setAttribute("d", f <= 0.001 ? "" : arcPath(22, 22, R, A0, deg));
+    var a = polar(22, 22, 12.5, deg), b = polar(22, 22, 5, deg);
+    ptr.setAttribute("x1", b[0]); ptr.setAttribute("y1", b[1]);
+    ptr.setAttribute("x2", a[0]); ptr.setAttribute("y2", a[1]);
+    out.textContent = Math.round(v);
+  }
+  function setLocal(nv, push) {
+    nv = Math.max(min, Math.min(max, nv));
+    if (nv === v) return;
+    v = nv; VAL[slot.k] = v; paint(); redrawSoon();
+    if (push) send(slot.k, Math.round(v));
+  }
+
+  /* Drag state is a plain flag with document-level listeners for the pointer's
+   * lifetime, not pointer capture: capture is the nicer API but it throws or
+   * silently no-ops in enough embedded web views that keying the handler off
+   * hasPointerCapture would leave every knob dead in exactly the browser this
+   * page has to work in. Capture is still requested, just never depended on. */
+  var dragY = 0, dragV = 0, dragging = false;
+  function onMove(e) {
+    if (!dragging) return;
+    var k = e.shiftKey ? 4 : 1;
+    setLocal(Math.round(dragV + (dragY - e.clientY) * (span / 160) / k), true);
+    e.preventDefault();
+  }
+  function end() {
+    if (!dragging) return;
+    dragging = false;
+    wrap.classList.remove("live");
+    document.removeEventListener("pointermove", onMove);
+    document.removeEventListener("pointerup", end);
+    document.removeEventListener("pointercancel", end);
+  }
+  svg.addEventListener("pointerdown", function (e) {
+    dragging = true; dragY = e.clientY; dragV = v;
+    wrap.classList.add("live");
+    try { svg.setPointerCapture(e.pointerId); } catch (_) {}
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", end);
+    document.addEventListener("pointercancel", end);
+    e.preventDefault();
+  });
+  svg.addEventListener("wheel", function (e) {
+    e.preventDefault();
+    setLocal(v + (e.deltaY < 0 ? 1 : -1) * (e.shiftKey ? 1 : Math.max(1, Math.round(span / 64))), true);
+  }, { passive: false });
+
+  paint();
+  CTL[slot.k] = { set: function (s) {
+    var nv = parseFloat(s); if (isNaN(nv)) return;
+    v = Math.max(min, Math.min(max, nv)); VAL[slot.k] = v; paint(); redrawSoon();
+  } };
+}
+
+/* ------------------------------------------------------------------ enum */
+function makePill(slot, label, into, cls) {
+  var wrap = el("div", "pill" + (cls ? " " + cls : ""), into);
+  var sel = el("select", null, wrap);
+  wrap.title = slot.full + "  (" + slot.k + ")";
+  slot.options.forEach(function (o, i) {
+    var op = el("option", null, sel); op.value = String(i); op.textContent = o;
+  });
+  sel.addEventListener("change", function () {
+    VAL[slot.k] = parseInt(sel.value, 10); send(slot.k, sel.value); redrawSoon();
+  });
+  if (label) { var l = el("div", "lab", wrap); l.textContent = label; }
+  CTL[slot.k] = { set: function (s) {
+    var i = slot.options.indexOf(s);
+    if (i < 0) { i = parseInt(s, 10); if (isNaN(i)) return; }
+    sel.value = String(i); VAL[slot.k] = i; redrawSoon();
+  } };
+}
+
+/* ------------------------------------------------------- generic control */
+function control(key, label, into, cls) {
+  var slot = META[key];
+  if (!slot) return;
+  placed[key] = 1;
+  if (slot.t === "int") makeKnob(slot, label || slot.n, into);
+  else if (slot.t === "enum") makePill(slot, label, into, cls);
+}
+function controls(keys, into) {
+  keys.forEach(function (spec) {
+    if (typeof spec === "string") control(spec, null, into);
+    else control(spec[0], spec[1], into);
+  });
+}
+
+/* -------------------------------------------------------------- displays */
+var canvases = [];
+function addCanvas(into, draw, h) {
+  var c = el("canvas", "disp", into);
+  c.style.height = (h || 72) + "px";
+  canvases.push({ c: c, draw: draw });
+  return c;
+}
+var pending = false;
+function redrawSoon() {
+  if (pending) return;
+  pending = true;
+  requestAnimationFrame(function () { pending = false; drawAll(); });
+}
+function drawAll() {
+  canvases.forEach(function (o) {
+    var c = o.c, dpr = window.devicePixelRatio || 1;
+    var w = c.clientWidth, h = c.clientHeight;
+    if (!w || !h) return;
+    if (c.width !== w * dpr || c.height !== h * dpr) {
+      c.width = w * dpr; c.height = h * dpr;
+    }
+    var g = c.getContext("2d");
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, w, h);
+    o.draw(g, w, h);
+  });
+}
+window.addEventListener("resize", redrawSoon);
+
+function num(key, dflt) {
+  var v = VAL[key];
+  return (v === undefined || v === null || isNaN(v)) ? (dflt || 0) : v;
+}
+function frac(key) {
+  var s = META[key];
+  if (!s || s.t !== "int") return 0;
+  var span = (s.max - s.min) || 1;
+  return (num(key, s.min) - s.min) / span;
+}
+
+/* ADSR, exactly as the original draws it: line with round handles. */
+function drawAdsr(a, d, s, r) {
+  return function (g, w, h) {
+    var pad = 8, x0 = pad, x1 = w - pad, y0 = pad, y1 = h - pad;
+    var fa = frac(a), fd = frac(d), fr = frac(r), fs = frac(s);
+    var tot = fa + fd + fr + 0.9;
+    var xa = x0 + (x1 - x0) * (fa / tot);
+    var xd = xa + (x1 - x0) * (fd / tot);
+    var xs = xd + (x1 - x0) * (0.9 / tot);
+    var ys = y1 - (y1 - y0) * fs;
+    g.strokeStyle = "#c8834f"; g.lineWidth = 1.5; g.lineJoin = "round";
+    g.beginPath();
+    g.moveTo(x0, y1); g.lineTo(xa, y0); g.lineTo(xd, ys); g.lineTo(xs, ys); g.lineTo(x1, y1);
+    g.stroke();
+    [[xa, y0], [xd, ys], [x1, y1]].forEach(function (p) {
+      g.beginPath(); g.arc(p[0], p[1], 3, 0, 7);
+      g.fillStyle = "#0a0b0d"; g.fill();
+      g.strokeStyle = "#e6e9ee"; g.lineWidth = 1.4; g.stroke();
+    });
+  };
+}
+
+/* Wavetable waterfall, drawn from the REAL table. wtN_shape is
+ * "<frames>,<samples>,<data>" with one character per sample, quantised to 64
+ * levels over [-1,1] -- built on the module's worker when a table lands, so
+ * asking for it costs a string copy. Until it arrives (or on a module that
+ * does not serve it) nothing is drawn but the frame marker, rather than a
+ * shape that would be a lie about what is loaded. */
+var SHAPE = {};        /* osc -> {frames, samples, data:[Float32Array]} */
+var QI = {};
+(function () {
+  var A = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+  for (var i = 0; i < A.length; i++) QI[A.charAt(i)] = i;
+})();
+
+function parseShape(str) {
+  if (!str) return null;
+  var c1 = str.indexOf(","), c2 = str.indexOf(",", c1 + 1);
+  if (c1 < 0 || c2 < 0) return null;
+  var nf = parseInt(str.substring(0, c1), 10);
+  var ns = parseInt(str.substring(c1 + 1, c2), 10);
+  var body = str.substring(c2 + 1);
+  if (!(nf > 0 && ns > 0) || body.length < nf * ns) return null;
+  var out = [];
+  for (var f = 0; f < nf; f++) {
+    var a = new Float32Array(ns);
+    for (var i = 0; i < ns; i++) {
+      var q = QI[body.charAt(f * ns + i)];
+      a[i] = (q === undefined ? 31 : q) / 63 * 2 - 1;
+    }
+    out.push(a);
+  }
+  return { frames: nf, samples: ns, data: out };
+}
+
+/* Keeping the display live without reloading the page.
+ *
+ * A module web UI cannot pull a value: getParam answers from the manager's
+ * cache in both the standalone and iframe paths (remote-ui.js
+ * handleIframeGetParam: "not currently supported by the WS protocol, so read
+ * from local state"). Values only ARRIVE -- on subscribe, on the notify ring,
+ * or on a 30 s refresh. The ring only carries keys the DEVICE set, so a table
+ * change pushes wtN_select (the index) and never the new digest.
+ *
+ * resubscribe() would force a re-read, but the manager answers it with a
+ * chain_params message and remote-ui.js re-renders the slot unconditionally
+ * on that (unlike its hierarchy handler, which guards on the structure being
+ * unchanged) -- which rebuilds the iframe and reloads this page. That is the
+ * flash, and it is too blunt to use per table change.
+ *
+ * So the page reads the wavetable ITSELF. wt_paths gives the file behind
+ * every wtN_select index, the manager serves files over /files/download, and
+ * decodeAudioData handles the FLAC these tables are stored as. A change from
+ * either side lands as an index or a path, and both resolve to a file we can
+ * draw. The module's digest still paints first and covers any browser that
+ * will not decode the file. */
+var PATHS = [];
+
+function wtRootRelative(path) {
+  return "/files/download?path=" + encodeURIComponent(path);
+}
+
+/* .wt2048 names its own frame size; a plain .wav gets the usual 2048. */
+function frameSizeOf(path) {
+  var m = /\.wt(\d+)$/i.exec(path || "");
+  var n = m ? parseInt(m[1], 10) : 0;
+  return (n >= 256 && n <= 4096 && (n & (n - 1)) === 0) ? n : 2048;
+}
+
+var audioCtx = null;
+var shapeReq = {};      /* osc -> path currently being fetched */
+
+function loadShapeFromFile(osc, path) {
+  if (!path || shapeReq[osc] === path) return;
+  shapeReq[osc] = path;
+  if (!window.fetch || !(window.AudioContext || window.webkitAudioContext)) return;
+  fetch(wtRootRelative(path)).then(function (r) {
+    if (!r.ok) throw 0;
+    return r.arrayBuffer();
+  }).then(function (buf) {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx.decodeAudioData(buf);
+  }).then(function (ab) {
+    var pcm = ab.getChannelData(0);
+    var fs = frameSizeOf(path);
+    var nf = Math.floor(pcm.length / fs);
+    if (nf < 1) return;
+    var OF = Math.min(24, nf), OS = 64, out = [];
+    for (var f = 0; f < OF; f++) {
+      var src = (OF === 1) ? 0 : Math.round(f * (nf - 1) / (OF - 1));
+      var a = new Float32Array(OS);
+      for (var i = 0; i < OS; i++) a[i] = pcm[src * fs + Math.floor(i * fs / OS)] || 0;
+      out.push(a);
+    }
+    SHAPE[osc] = { frames: OF, samples: OS, data: out };
+    redrawSoon();
+  }).catch(function () {
+    /* no decode: whatever the module's digest gave us stays on screen */
+    shapeReq[osc] = null;
+  });
+}
+
+/* A select index resolves through wt_paths; a filepath is already a path. */
+function shapeFromIndex(osc, idx) {
+  var i = parseInt(idx, 10);
+  if (!isNaN(i) && PATHS[i]) loadShapeFromFile(osc, PATHS[i]);
+}
+
+function ingestShape(osc, v) {
+  var sh = parseShape(v);
+  if (sh) { SHAPE[osc] = sh; redrawSoon(); }
+}
+[1, 2].forEach(function (osc) {
+  CTL["wt" + osc + "_shape"] = { set: function (v) { ingestShape(osc, v); } };
+});
+CTL.wt_paths = { set: function (v) {
+  try { var a = JSON.parse(v); if (a && a.length) PATHS = a; } catch (e) {}
+} };
+function fetchShape(osc) {
+  if (!schwungRemote.getParam) return;
+  schwungRemote.getParam(K + "wt" + osc + "_shape").then(function (v) {
+    ingestShape(osc, v);
+  }).catch(function () {});
+}
+
+function drawWaterfall(osc, pos) {
+  return function (g, w, h) {
+    var sh = SHAPE[osc];
+    var pad = 6, fp = frac(pos);
+    if (!sh) {
+      g.fillStyle = "#3a3f47"; g.font = "10px system-ui";
+      g.fillText("waiting for table…", pad + 2, h / 2);
+      return;
+    }
+    var rows = sh.frames, cur = Math.round(fp * (rows - 1));
+    for (var i = 0; i < rows; i++) {
+      var t = i / (rows - 1 || 1);
+      var y = pad + (h - pad * 2) * (0.16 + t * 0.84);
+      var xs = pad + (h - pad * 2) * (1 - t) * 0.30;
+      var amp = (h - pad * 2) * 0.17;
+      var d = sh.data[i], n = d.length;
+      g.beginPath();
+      for (var x = 0; x < n; x++) {
+        var px = xs + (w - pad - xs) * (x / (n - 1));
+        var py = y - d[x] * amp;
+        x ? g.lineTo(px, py) : g.moveTo(px, py);
+      }
+      if (i === cur) { g.strokeStyle = "#e8e04a"; g.lineWidth = 1.6; }
+      else { g.strokeStyle = "rgba(79,208,106," + (0.12 + t * 0.5).toFixed(2) + ")"; g.lineWidth = 1; }
+      g.stroke();
+    }
+  };
+}
+
+/* ---------------------------------------------------------------- panels */
+function panel(cls, title, nameEl) {
+  var p = el("div", "panel " + cls, document.getElementById("rack"));
+  var bar = el("div", "bar", p);
+  el("div", "dot", bar);
+  var t = el("div", null, bar); t.textContent = title;
+  if (nameEl) { var n = el("div", "name", bar); n.id = nameEl; n.textContent = "Init"; }
+  return el("div", "body", p);
+}
+
+function buildOsc(n) {
+  var b = panel("s6", "OSC " + n, "wtname" + n);
+  var left = el("div", "col", b);
+  var r1 = el("div", "knobs", left), r2 = el("div", "knobs", left);
+  controls([["wt" + n + "_pos", "Pos"], ["wt" + n + "_tune", "Tune"],
+            ["wt" + n + "_level", "Level"], ["wt" + n + "_pan", "Pan"]], r1);
+  controls([["wt" + n + "_uni", "Unison"], ["wt" + n + "_detune", "Detune"],
+            ["wt" + n + "_spread", "Spread"], ["wt" + n + "_formant", "Formant"],
+            ["wt" + n + "_bend", "Bend"]], r2);
+  var right = el("div", "col", b);
+  right.style.flex = "1"; right.style.minWidth = "0";
+  addCanvas(right, drawWaterfall(n, "wt" + n + "_pos"), 104);
+  placed["wt" + n + "_table"] = 1;
+  CTL["wt" + n + "_table"] = { set: function (p) {
+    var e = document.getElementById("wtname" + n);
+    if (!e) return;
+    if (!p) { e.textContent = "Init"; return; }
+    var s = p.substring(p.lastIndexOf("/") + 1), d = s.lastIndexOf(".");
+    e.textContent = d > 0 ? s.substring(0, d) : s;
+  } };
+  /* A path that changed under us -- the pot, or the device's own browser --
+   * means a new digest exists that nothing will push until the slow refresh.
+   * Ask for it. */
+  var prevPath = null;
+  var watch = CTL["wt" + n + "_table"].set;
+  CTL["wt" + n + "_table"] = { set: function (p) {
+    watch(p);
+    if (p !== prevPath) { prevPath = p; if (p) loadShapeFromFile(n, p); }
+  } };
+}
+
+function build() {
+  buildOsc(1); buildOsc(2);
+
+  var nb = panel("s2", "Noise");
+  var nk = el("div", "knobs", el("div", "col", nb));
+  controls([["noise_level", "Level"]], nk);
+  control("noise_type", "Type", nk);
+
+  var sb = panel("s2", "Sub");
+  var sc = el("div", "col", sb);
+  control("sub_wave", "Wave", el("div", "knobs", sc));
+  var sk = el("div", "knobs", sc);
+  controls([["sub_tune", "Tune"], ["sub_level", "Level"]], sk);
+
+  var fb = panel("s4", "Filter");
+  var fc = el("div", "col", fb);
+  var f1 = el("div", "knobs", fc);
+  control("flt_type", "Type", f1);
+  controls([["flt_freq", "Freq"], ["flt_res", "Res"]], f1);
+  var f2 = el("div", "knobs", fc);
+  controls([["flt_key", "Key"], ["flt_vel", "Vel"], ["flt_env", "Amnt"],
+            ["flt_a", "A"], ["flt_d", "D"], ["flt_s", "S"], ["flt_r", "R"]], f2);
+  var fr = el("div", "col", fb); fr.style.flex = "1"; fr.style.minWidth = "0";
+  addCanvas(fr, drawAdsr("flt_a", "flt_d", "flt_s", "flt_r"), 104);
+
+  var ab = panel("s4", "ADSR");
+  var al = el("div", "col", ab);
+  var ak = el("div", "knobs", al);
+  controls([["vca_a", "A"], ["vca_d", "D"], ["vca_s", "S"], ["vca_r", "R"],
+            ["vca_vel", "Vel"]], ak);
+  var ar = el("div", "col", ab); ar.style.flex = "1"; ar.style.minWidth = "0";
+  addCanvas(ar, drawAdsr("vca_a", "vca_d", "vca_s", "vca_r"), 104);
+
+  /* the two spare envelopes, each with where it points and how far */
+  [1, 2].forEach(function (n) {
+    var mb = panel("s4", "Env " + n);
+    var ml = el("div", "col", mb);
+    var mk = el("div", "knobs", ml);
+    controls([["me" + n + "_a", "A"], ["me" + n + "_d", "D"],
+              ["me" + n + "_s", "S"], ["me" + n + "_r", "R"]], mk);
+    var mr = el("div", "knobs", ml);
+    control("me" + n + "_dst", "To", mr);
+    control("me" + n + "_amt", "Amt", mr);
+    var mc = el("div", "col", mb); mc.style.flex = "1"; mc.style.minWidth = "0";
+    addCanvas(mc, drawAdsr("me" + n + "_a", "me" + n + "_d",
+                           "me" + n + "_s", "me" + n + "_r"), 104);
+  });
+
+  var gb = panel("s4", "Global");
+  var gk = el("div", "knobs", el("div", "col", gb));
+  control("voice_mode", "Mode", gk);
+  control("legato", "Legato", gk);
+  control("glide_mode", "Glide", gk);
+  controls([["glide", "Rate"], ["voices", "Voices"], ["pb_range", "PB"],
+            ["volume", "Level"]], gk);
+
+  /* Anything ui_pages.json declares that the layout above did not place —
+   * a new control lands here rather than silently vanishing from the UI. */
+  var rest = Object.keys(META).filter(function (k) {
+    return !placed[k] && META[k].t !== "file";
+  });
+  if (rest.length) {
+    var ob = panel("s12", "Other");
+    var ok = el("div", "knobs", el("div", "col", ob));
+    rest.forEach(function (k) { control(k, META[k].n, ok); });
+  }
+}
+
+/* ------------------------------------------------------- wavetable picker */
+/* wt_pack / wt1_select / wt2_select are not in ui_pages.json: the module
+ * builds them into chain_params at runtime, because their options ARE the
+ * files currently on the device. getChainParams() is the only way to see
+ * them, and the lists change whenever the pack does, so the pack commit
+ * re-reads the contract the way the hardware pages do. */
+var packSels = [], tableSels = [];
+
+function fillSelect(sel, options, cur) {
+  sel.textContent = "";
+  options.forEach(function (o, i) {
+    var op = el("option", null, sel); op.value = String(i); op.textContent = o;
+  });
+  if (cur !== undefined && cur !== null) sel.value = String(cur);
+}
+
+function findParam(list, key) {
+  for (var i = 0; i < list.length; i++) if (list[i] && list[i].key === key) return list[i];
+  return null;
+}
+
+function buildPickers(cp) {
+  var pack = findParam(cp, "wt_pack");
+  if (!pack || !pack.options) return false;      /* older module: leave the name */
+
+  [1, 2].forEach(function (n) {
+    var sel = findParam(cp, "wt" + n + "_select");
+    if (!sel || !sel.options) return;
+    var nameEl = document.getElementById("wtname" + n);
+    if (!nameEl) return;
+    var host = el("div", "pick");
+    nameEl.parentNode.replaceChild(host, nameEl);
+
+    var ps = el("select", "pack", host);
+    ps.title = "Wavetable pack — filters the list beside it";
+    fillSelect(ps, pack.options, 0);
+    packSels.push(ps);
+
+    var ts = el("select", null, host);
+    ts.title = "Wavetable for oscillator " + n;
+    fillSelect(ts, sel.options, 0);
+    tableSels.push({ n: n, sel: ts });
+
+    ts.addEventListener("change", function () {
+      send("wt" + n + "_select", ts.value);
+      shapeFromIndex(n, ts.value);
+    });
+    ps.addEventListener("change", function () {
+      packSels.forEach(function (o) { o.value = ps.value; });
+      send("wt_pack", ps.value);
+      refreshPickers();                 /* the table lists just changed */
+    });
+
+    CTL["wt" + n + "_select"] = { set: function (v) {
+      var i = ts.options.length ? [].findIndex.call(ts.options, function (o) {
+        return o.textContent === v;
+      }) : -1;
+      if (i < 0) { i = parseInt(v, 10); if (isNaN(i)) return; }
+      ts.value = String(i);
+      shapeFromIndex(n, i);          /* the pot moved on the device */
+    } };
+  });
+
+  CTL.wt_pack = { set: function (v) {
+    var i = pack.options.indexOf(v);
+    if (i < 0) { i = parseInt(v, 10); if (isNaN(i)) return; }
+    packSels.forEach(function (o) { o.value = String(i); });
+  } };
+  return true;
+}
+
+/* The module republishes on its worker, so the new lists are not ready the
+ * instant the pack is committed. It serves is_loading for exactly this. */
+function refreshPickers(tries) {
+  tries = tries || 0;
+  schwungRemote.getParam(K + "is_loading").then(function (busy) {
+    if (busy === "1" && tries < 12)
+      return setTimeout(function () { refreshPickers(tries + 1); }, 150);
+    return schwungRemote.getChainParams().then(function (cp) {
+      var pack = findParam(cp, "wt_pack");
+      if (pack && pack.options)
+        packSels.forEach(function (o) {
+          var keep = o.value; fillSelect(o, pack.options, keep);
+        });
+      tableSels.forEach(function (t) {
+        var sel = findParam(cp, "wt" + t.n + "_select");
+        if (sel && sel.options) fillSelect(t.sel, sel.options, t.sel.value);
+      });
+    });
+  }).catch(function () { /* host without these keys: pickers stay as they are */ });
+}
+
+fetch("ui_pages.json").then(function (r) { return r.json(); }).then(function (d) {
+  d.pages.forEach(function (page) {
+    page.slots.forEach(function (s) { if (s) META[s.k] = s; });
+  });
+  build();
+  drawAll();
+  if (schwungRemote.getChainParams)
+    schwungRemote.getChainParams().then(buildPickers).catch(function () {});
+  fetchShape(1); fetchShape(2);
+  schwungRemote.onParamChange(function (p) {
+    for (var key in p) {
+      if (key.indexOf(K) !== 0) continue;
+      var c = CTL[key.substring(K.length)];
+      if (c) c.set(p[key]);
+    }
+  });
+});
+})();
+</script>
+</body>
+</html>

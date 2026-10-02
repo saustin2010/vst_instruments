@@ -1,0 +1,24 @@
+{
+    "name": "Braids Bells",
+    "version": 1,
+    "chain": {
+        "synth": {
+            "module": "braids",
+            "config": {
+                "state": {
+                    "engine": 31,
+                    "timbre": 0.6,
+                    "color": 0.4,
+                    "attack": 0.0,
+                    "decay": 0.8,
+                    "fm": 0.0,
+                    "cutoff": 1.0,
+                    "resonance": 0.0,
+                    "volume": 0.7
+                }
+            }
+        },
+        "audio_fx": [],
+        "input": "both"
+    }
+}

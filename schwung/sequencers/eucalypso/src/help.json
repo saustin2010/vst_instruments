@@ -1,0 +1,182 @@
+{
+  "global": {
+    "purpose": "Defines transport sync, timing feel, voice limits, and shared velocity/gate behavior for all lanes.",
+    "when_to_use": "Start here when pattern timing is off, notes are too dense, or overall dynamics and gate length need shaping.",
+    "param_effects": {
+      "play_mode": "`hold` outputs only while keys are down; `latch` keeps output from the last captured note set until replaced.",
+      "rate": "Sets sequencer step division from very fast (`1/32`) to slow (`1`).",
+      "retrigger_mode": "`restart` restarts rhythm phase on a new trigger; `cont` keeps phase running continuously.",
+      "sync": "Selects internal clock or external MIDI clock transport.",
+      "bpm": "Sets internal tempo when `sync=internal`.",
+      "swing": "Adds timing offset to off-beats for groove.",
+      "max_voices": "Caps simultaneous outgoing notes to control density and CPU.",
+      "global_velocity": "Base velocity used when a lane velocity override is 0.",
+      "global_v_rnd": "Adds deterministic velocity variation around the global base.",
+      "global_gate": "Base gate length used when a lane gate override is 0.",
+      "global_g_rnd": "Adds deterministic gate-length variation around the global base.",
+      "global_rnd_seed": "Shared seed root for global random engines so results are repeatable.",
+      "rand_cycle": "Sets deterministic random loop length before variation repeats."
+    },
+    "examples": [
+      "For tight clocked playback, set `sync=clock`, moderate `swing`, and keep `retrigger_mode=cont`.",
+      "For punchier accents, raise `global_velocity`, add small `global_v_rnd`, and keep lane velocities at 0.",
+      "To prevent note floods with all lanes active, lower `max_voices` and shorten `global_gate`."
+    ],
+    "troubleshooting": {
+      "No output while notes are released": "Use `play_mode=latch` if you want playback to continue after key release.",
+      "Tempo does not follow DAW/gear": "Set `sync=clock` and ensure external MIDI clock start/tick is present.",
+      "Pattern feels rushed or too sparse": "Check `rate` first, then adjust `swing` and `retrigger_mode`."
+    }
+  },
+  "note_register": {
+    "purpose": "Controls how playable note pools are built and how lane note indices resolve into actual pitches.",
+    "when_to_use": "Adjust this section when note choices, scale behavior, or out-of-range lane notes are not behaving as expected.",
+    "param_effects": {
+      "register_mode": "`held` uses currently active notes; `scale` builds notes from scale/root/range settings; `drumpad` uses fixed pads 1-16 (`36-51`) and gates lanes by held/latching pad 1-4 for lanes 1-4.",
+      "held_order": "Orders held-note register by pitch up/down, play order, or seeded random order.",
+      "held_order_seed": "Sets deterministic order when `held_order=rand`.",
+      "missing_note_policy": "Defines handling for lane note indices beyond register size (`skip`, `fold`, `wrap`, `random`).",
+      "missing_note_seed": "Controls deterministic results for `missing_note_policy=random`.",
+      "scale_mode": "Selects the scale template used when `register_mode=scale`.",
+      "scale_rng": "Sets register size: scale steps in `scale` mode, or included drumpad count (`1-16`) in `drumpad` mode.",
+      "root_note": "Sets scale root pitch class (`0-11`).",
+      "octave": "Global register octave offset applied before lane octave offsets."
+    },
+    "examples": [
+      "For chord-following arps, use `register_mode=held`, `held_order=up`, and lane notes between 1 and register size.",
+      "For scale-locked melodies, use `register_mode=scale`, set `scale_mode`, `root_note`, and a larger `scale_rng`.",
+      "When lanes miss notes, switch to `missing_note_policy=wrap` for circular indexing.",
+      "For lane-gated drum patterns, use `register_mode=drumpad`; hold/latch pad 1-4 to gate lanes 1-4, and set each lane `Note` to choose emitted pad note."
+    ],
+    "troubleshooting": {
+      "Unexpected pitches": "Verify `register_mode`, then check `held_order` or `scale_mode/root_note/scale_rng`.",
+      "Random behavior changes every trigger": "Use fixed seeds (`held_order_seed`, `missing_note_seed`) for repeatable output.",
+      "High lane note indices produce silence": "Set `missing_note_policy` to `fold`, `wrap`, or `random` instead of `skip`.",
+      "Drumpad lane is silent": "In `register_mode=drumpad`, hold/latch drumpad 1-4 to gate lanes 1-4, and keep `scale_rng` high enough to include the lane note index."
+    }
+  },
+  "lane1": {
+    "purpose": "Defines Euclidean rhythm, note selection, and per-lane articulation for Lane 1.",
+    "when_to_use": "Use this lane for the primary pattern voice or rhythmic anchor.",
+    "param_effects": {
+      "lane1_enabled": "Turns Lane 1 output on or off.",
+      "lane1_steps": "Sets pattern length in steps.",
+      "lane1_pulses": "Sets number of active Euclidean triggers distributed across `lane1_steps`.",
+      "lane1_rotation": "Offsets pattern start position.",
+      "lane1_drop": "Randomly drops triggers by percentage.",
+      "lane1_drop_seed": "Sets deterministic drop pattern variation.",
+      "lane1_note": "Selects register index used for this lane's pitch source.",
+      "lane1_n_rnd": "Adds random note substitution amount/chance around `lane1_note`.",
+      "lane1_n_seed": "Sets deterministic lane note-randomization behavior.",
+      "lane1_octave": "Adds lane-specific octave offset.",
+      "lane1_oct_rnd": "Adds random octave movement amount.",
+      "lane1_oct_seed": "Sets deterministic octave-randomization behavior.",
+      "lane1_oct_rng": "Constrains octave random set (`+1`, `-1`, `+-1`, `+2`, `-2`, `+-2`).",
+      "lane1_velocity": "Lane velocity override; `0` falls back to `global_velocity`.",
+      "lane1_gate": "Lane gate override; `0` falls back to `global_gate`."
+    },
+    "examples": [
+      "Use `steps=16`, `pulses=5`, and small `rotation` to create a stable Euclidean backbone.",
+      "For subtle variation, keep `drop` low and add modest `n_rnd` with a fixed `n_seed`.",
+      "Set lane velocity/gate to 0 to inherit global dynamics."
+    ],
+    "troubleshooting": {
+      "Lane is silent": "Check `lane1_enabled=on`, ensure `lane1_pulses > 0`, and verify active held/latched notes.",
+      "Too chaotic": "Reduce `lane1_drop`, `lane1_n_rnd`, and `lane1_oct_rnd`, then lock seeds.",
+      "Too repetitive": "Increase `lane1_rotation` or add light note/octave randomization with fixed seeds."
+    }
+  },
+  "lane2": {
+    "purpose": "Defines Euclidean rhythm, note selection, and per-lane articulation for Lane 2.",
+    "when_to_use": "Use this lane for a complementary rhythm or countermelody.",
+    "param_effects": {
+      "lane2_enabled": "Turns Lane 2 output on or off.",
+      "lane2_steps": "Sets pattern length in steps.",
+      "lane2_pulses": "Sets number of active Euclidean triggers distributed across `lane2_steps`.",
+      "lane2_rotation": "Offsets pattern start position.",
+      "lane2_drop": "Randomly drops triggers by percentage.",
+      "lane2_drop_seed": "Sets deterministic drop pattern variation.",
+      "lane2_note": "Selects register index used for this lane's pitch source.",
+      "lane2_n_rnd": "Adds random note substitution amount/chance around `lane2_note`.",
+      "lane2_n_seed": "Sets deterministic lane note-randomization behavior.",
+      "lane2_octave": "Adds lane-specific octave offset.",
+      "lane2_oct_rnd": "Adds random octave movement amount.",
+      "lane2_oct_seed": "Sets deterministic octave-randomization behavior.",
+      "lane2_oct_rng": "Constrains octave random set (`+1`, `-1`, `+-1`, `+2`, `-2`, `+-2`).",
+      "lane2_velocity": "Lane velocity override; `0` falls back to `global_velocity`.",
+      "lane2_gate": "Lane gate override; `0` falls back to `global_gate`."
+    },
+    "examples": [
+      "Offset against Lane 1 by changing `steps`, `pulses`, or `rotation`.",
+      "Use a different `lane2_note` with slight `octave` shift for harmonic layering.",
+      "Keep `lane2_gate=0` if you want consistent gate behavior from global settings."
+    ],
+    "troubleshooting": {
+      "Lane competes with Lane 1": "Lower `lane2_velocity`, reduce `pulses`, or choose a different note index.",
+      "Lane never accents": "Raise `lane2_velocity` above 0 instead of inheriting global velocity.",
+      "Timing feels too similar": "Adjust `lane2_rotation` or use a different step count than other lanes."
+    }
+  },
+  "lane3": {
+    "purpose": "Defines Euclidean rhythm, note selection, and per-lane articulation for Lane 3.",
+    "when_to_use": "Use this lane for extra movement, fills, or secondary rhythmic texture.",
+    "param_effects": {
+      "lane3_enabled": "Turns Lane 3 output on or off.",
+      "lane3_steps": "Sets pattern length in steps.",
+      "lane3_pulses": "Sets number of active Euclidean triggers distributed across `lane3_steps`.",
+      "lane3_rotation": "Offsets pattern start position.",
+      "lane3_drop": "Randomly drops triggers by percentage.",
+      "lane3_drop_seed": "Sets deterministic drop pattern variation.",
+      "lane3_note": "Selects register index used for this lane's pitch source.",
+      "lane3_n_rnd": "Adds random note substitution amount/chance around `lane3_note`.",
+      "lane3_n_seed": "Sets deterministic lane note-randomization behavior.",
+      "lane3_octave": "Adds lane-specific octave offset.",
+      "lane3_oct_rnd": "Adds random octave movement amount.",
+      "lane3_oct_seed": "Sets deterministic octave-randomization behavior.",
+      "lane3_oct_rng": "Constrains octave random set (`+1`, `-1`, `+-1`, `+2`, `-2`, `+-2`).",
+      "lane3_velocity": "Lane velocity override; `0` falls back to `global_velocity`.",
+      "lane3_gate": "Lane gate override; `0` falls back to `global_gate`."
+    },
+    "examples": [
+      "Set lower pulses with higher drop for occasional syncopated ghost notes.",
+      "Use a higher note index and octave offset for top-line embellishments.",
+      "Blend with global dynamics by keeping velocity/gate overrides at 0."
+    ],
+    "troubleshooting": {
+      "Lane disappears in mix": "Increase `lane3_velocity` or reduce drop/random settings.",
+      "Lane is too busy": "Lower `lane3_pulses` or increase step length for sparser distribution.",
+      "Pitch jumps too wide": "Reduce `lane3_oct_rnd` or narrow `lane3_oct_rng`."
+    }
+  },
+  "lane4": {
+    "purpose": "Defines Euclidean rhythm, note selection, and per-lane articulation for Lane 4.",
+    "when_to_use": "Use this lane as a high-variation accent lane or low-density rhythmic counterpoint.",
+    "param_effects": {
+      "lane4_enabled": "Turns Lane 4 output on or off.",
+      "lane4_steps": "Sets pattern length in steps.",
+      "lane4_pulses": "Sets number of active Euclidean triggers distributed across `lane4_steps`.",
+      "lane4_rotation": "Offsets pattern start position.",
+      "lane4_drop": "Randomly drops triggers by percentage.",
+      "lane4_drop_seed": "Sets deterministic drop pattern variation.",
+      "lane4_note": "Selects register index used for this lane's pitch source.",
+      "lane4_n_rnd": "Adds random note substitution amount/chance around `lane4_note`.",
+      "lane4_n_seed": "Sets deterministic lane note-randomization behavior.",
+      "lane4_octave": "Adds lane-specific octave offset.",
+      "lane4_oct_rnd": "Adds random octave movement amount.",
+      "lane4_oct_seed": "Sets deterministic octave-randomization behavior.",
+      "lane4_oct_rng": "Constrains octave random set (`+1`, `-1`, `+-1`, `+2`, `-2`, `+-2`).",
+      "lane4_velocity": "Lane velocity override; `0` falls back to `global_velocity`.",
+      "lane4_gate": "Lane gate override; `0` falls back to `global_gate`."
+    },
+    "examples": [
+      "Keep `lane4_pulses` low and `lane4_drop` moderate for sparse accents.",
+      "Use different seeds from other lanes to avoid correlated random results.",
+      "Assign a contrasting octave and gate to create call-and-response phrasing."
+    ],
+    "troubleshooting": {
+      "Accent lane overwhelms groove": "Lower `lane4_velocity`, reduce `lane4_pulses`, or shorten `lane4_gate`.",
+      "Random accents repeat too quickly": "Increase `rand_cycle` globally and adjust lane seeds.",
+      "Lane never triggers": "Confirm `lane4_enabled=on`, `lane4_pulses > 0`, and active note register availability."
+    }
+  }
+}

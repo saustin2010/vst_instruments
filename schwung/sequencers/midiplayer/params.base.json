@@ -1,0 +1,22 @@
+{
+ "name": "midiplayer",
+ "params": [
+  {
+   "key": "loop",
+   "name": "loop",
+   "options": [
+    "off",
+    "on"
+   ],
+   "default": 1
+  }
+ ],
+ "sections": [
+  {
+   "label": "root",
+   "keys": [
+    "loop"
+   ]
+  }
+ ]
+}

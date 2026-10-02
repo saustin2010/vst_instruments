@@ -1,0 +1,23 @@
+{
+  "name": "Rampage",
+  "vendor": "Befaco",
+  "uid": "BfRp",
+  "so": "rampage.so",
+  "build": {
+    "sources": [
+      "mpc/rampage_engine.cc"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Isrc",
+      "-std=gnu++14"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

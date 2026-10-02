@@ -1,0 +1,25 @@
+{
+  "name": "OB-Xd",
+  "vendor": "reales",
+  "uid": "ObXd",
+  "so": "obxd.so",
+  "module": "src/module.json",
+  "params": "params.json",
+  "build": {
+    "sources": [
+      "src/dsp/obxd_plugin.cpp"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-std=gnu++14"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "defines": {
+    "MODULE_DIR": "\"/sdcard/vst/obxd\""
+  },
+  "layout": "layout.conf",
+  "art": "html"
+}

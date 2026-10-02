@@ -1,0 +1,31 @@
+{
+  "name": "Warps",
+  "vendor": "Mutable Instruments",
+  "uid": "MIwp",
+  "so": "warps.so",
+  "effect": true,
+  "build": {
+    "sources": [
+      "mpc/warps_engine.cc",
+      "src/warps/dsp/filter_bank.cc",
+      "src/warps/dsp/modulator.cc",
+      "src/warps/dsp/oscillator.cc",
+      "src/warps/dsp/vocoder.cc",
+      "src/warps/resources.cc",
+      "src/stmlib/dsp/units.cc",
+      "src/stmlib/utils/random.cc"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Isrc",
+      "-DTEST", "-DMPC_PORT",
+      "-std=gnu++14"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

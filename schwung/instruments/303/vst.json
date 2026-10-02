@@ -1,0 +1,42 @@
+{
+  "name": "303",
+  "vendor": "Robin Schmidt",
+  "uid": "A303",
+  "so": "acid303.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/plugin.cpp",
+      "src/dsp/open303/GlobalFunctions.cpp",
+      "src/dsp/open303/rosic_AcidPattern.cpp",
+      "src/dsp/open303/rosic_AcidSequencer.cpp",
+      "src/dsp/open303/rosic_AnalogEnvelope.cpp",
+      "src/dsp/open303/rosic_BiquadFilter.cpp",
+      "src/dsp/open303/rosic_BlendOscillator.cpp",
+      "src/dsp/open303/rosic_Complex.cpp",
+      "src/dsp/open303/rosic_DecayEnvelope.cpp",
+      "src/dsp/open303/rosic_EllipticQuarterBandFilter.cpp",
+      "src/dsp/open303/rosic_FourierTransformerRadix2.cpp",
+      "src/dsp/open303/rosic_FunctionTemplates.cpp",
+      "src/dsp/open303/rosic_LeakyIntegrator.cpp",
+      "src/dsp/open303/rosic_MidiNoteEvent.cpp",
+      "src/dsp/open303/rosic_MipMappedWaveTable.cpp",
+      "src/dsp/open303/rosic_NumberManipulations.cpp",
+      "src/dsp/open303/rosic_OnePoleFilter.cpp",
+      "src/dsp/open303/rosic_Open303.cpp",
+      "src/dsp/open303/rosic_RealFunctions.cpp",
+      "src/dsp/open303/rosic_TeeBeeFilter.cpp"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-Isrc/dsp/open303",
+      "-std=gnu++17", "-DMPC_PORT"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

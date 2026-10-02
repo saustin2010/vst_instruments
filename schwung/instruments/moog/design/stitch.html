@@ -1,0 +1,1493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raffo Synth — 4-Oscillator Ladder Filter Moog (MPC Live II)</title>
+<style>
+  :root {
+    --theme-bg: #2a1a0f;
+    --theme-panel: #131313;
+    --theme-line: #3c3c3c;
+    --theme-ink: #f4f3ef;
+    --theme-ink-dim: #cfcdc6;
+    --theme-ink-faint: #85827a;
+    --theme-accent: #e0782a;
+    --theme-accent-hi: #ff9440;
+    --theme-knob-face: #efeee9;
+    --theme-knob-ring: #2a2a2a;
+    --theme-knob-dot: #ff9440;
+    --theme-lcd: #0a0a0a;
+    --theme-seg-active: #f4f3ef;
+    --theme-seg-inactive: #232323;
+    --theme-seg-active-tx: #131313;
+    --theme-box: #131313;
+    --theme-display-bg: #170b03;
+    --theme-display-cell: #261305;
+    --theme-display-off: #3a1d08;
+    --theme-display-ink: #ff9440;
+    --theme-display-bezel: #060606;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+
+  body {
+    background: #080706;
+    color: var(--theme-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "SF Pro Display", monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow-x: hidden;
+  }
+
+  /* Hardware Chassis Housing representing MPC Live II 1280x628 display buffer */
+  .mpc-chassis {
+    width: 1280px;
+    height: 720px;
+    background: linear-gradient(180deg, #1f1f21 0%, #111112 100%);
+    border: 3px solid #2f3034;
+    border-radius: 12px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.85), inset 0 1px 1px rgba(255,255,255,0.1);
+    position: relative;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header status bar */
+  .mpc-topbar {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    background: #0d0d0e;
+    border-radius: 6px;
+    border: 1px solid #232427;
+    margin-bottom: 8px;
+  }
+
+  .mpc-brand-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #8c8e94;
+  }
+
+  .mpc-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--theme-accent);
+    box-shadow: 0 0 10px var(--theme-accent-hi);
+  }
+
+  .synth-title {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: #f4f3ef;
+  }
+  .synth-title span {
+    color: var(--theme-accent);
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .tab-btn {
+    background: #18191c;
+    border: 1px solid #33363d;
+    color: var(--theme-ink-dim);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 6px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover {
+    border-color: #555a66;
+    color: #fff;
+  }
+  .tab-btn.active {
+    background: linear-gradient(180deg, #f08232 0%, #ca5b12 100%);
+    border-color: var(--theme-accent-hi);
+    color: #0d0d0f;
+    box-shadow: 0 0 14px rgba(224, 120, 42, 0.45);
+  }
+
+  .mpc-sys-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+    color: #7c7e84;
+    font-family: monospace;
+  }
+  .mpc-sys-info b { color: #cfcdc6; }
+
+  .audition-btn {
+    background: linear-gradient(180deg, #e0782a 0%, #b25310 100%);
+    border: 1px solid #ff9440;
+    color: #0b0704;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(224,120,42,0.4);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .audition-btn:active {
+    transform: translateY(1px);
+    background: #ff9440;
+  }
+
+  /* 1280 x 628 Active MPC Plugin Screen Viewport */
+  .plugin-screen {
+    width: 1248px;
+    height: 618px;
+    background: var(--theme-bg);
+    background-image: 
+      radial-gradient(ellipse at 50% 0%, rgba(224, 120, 42, 0.08) 0%, transparent 75%),
+      linear-gradient(180deg, #24140b 0%, #150a04 100%);
+    border: 2px solid #3c3c3c;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+  }
+
+  .tab-page {
+    display: none;
+    width: 100%;
+    height: 566px;
+    position: relative;
+  }
+  .tab-page.active {
+    display: block;
+  }
+
+  /* Structural Hardware Frames */
+  .panel-frame {
+    position: absolute;
+    background: var(--theme-panel);
+    border: 1px solid var(--theme-line);
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 12px rgba(0,0,0,0.5);
+  }
+
+  .frame-title {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: var(--theme-accent);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .frame-title::after {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--theme-line);
+  }
+
+  .frame-badge {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 10px;
+    color: var(--theme-ink-faint);
+    letter-spacing: 0.08em;
+  }
+
+  /* Moog Vintage Collet Knobs */
+  .knob-control {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: ns-resize;
+  }
+
+  .knob-housing {
+    position: relative;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #444 0%, #1a1a1a 80%);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .knob-notches {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px dashed rgba(255, 148, 64, 0.25);
+    pointer-events: none;
+  }
+
+  .knob-face {
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, var(--theme-knob-face) 0%, #bfbcb0 90%);
+    box-shadow: inset 0 2px 3px rgba(255,255,255,0.8), 0 2px 5px rgba(0,0,0,0.6);
+    position: relative;
+    transform: rotate(0deg);
+    transition: transform 0.03s linear;
+  }
+
+  .knob-pointer {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    width: 3px;
+    transform: translateX(-50%);
+    background: var(--theme-knob-dot);
+    box-shadow: 0 0 6px var(--theme-accent-hi);
+    border-radius: 2px;
+  }
+
+  .knob-label {
+    margin-top: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--theme-ink-dim);
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .knob-val {
+    margin-top: 2px;
+    background: var(--theme-lcd);
+    border: 1px solid #292929;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    color: var(--theme-accent-hi);
+    font-family: monospace;
+    font-weight: 600;
+  }
+
+  /* Segmented Vertical Selector (enum_v) */
+  .enum-control {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .enum-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--theme-ink-dim);
+    margin-bottom: 6px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .enum-box {
+    display: flex;
+    flex-direction: column;
+    background: #0c0c0d;
+    border: 1px solid var(--theme-line);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 88px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+  }
+  .enum-opt {
+    padding: 4px 6px;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--theme-ink-faint);
+    background: var(--theme-seg-inactive);
+    border-bottom: 1px solid #1a1a1a;
+    cursor: pointer;
+    transition: background 0.12s ease;
+  }
+  .enum-opt:last-child { border-bottom: none; }
+  .enum-opt.selected {
+    background: var(--theme-seg-active);
+    color: var(--theme-seg-active_tx);
+    font-weight: 800;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+
+  /* Dotmatrix LCD Patch Stepper */
+  .patch-stepper {
+    position: absolute;
+    background: var(--theme-display-bg);
+    border: 2px solid var(--theme-line);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 14px;
+    box-shadow: inset 0 4px 14px #000, 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .patch-lcd-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #3a1d08;
+    padding-bottom: 4px;
+  }
+  .patch-lcd-sub {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: #b25310;
+    font-family: monospace;
+    font-weight: 700;
+  }
+  .patch-stepper-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .patch-stepper-btn {
+    background: #261305;
+    border: 1px solid #572909;
+    color: #ff9440;
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 800;
+  }
+  .patch-stepper-btn:active {
+    background: #ff9440;
+    color: #170b03;
+  }
+  .patch-lcd-name {
+    font-size: 17px;
+    letter-spacing: 0.12em;
+    color: var(--theme-display-ink);
+    font-family: monospace;
+    font-weight: 800;
+    text-shadow: 0 0 10px rgba(255, 148, 64, 0.6);
+  }
+
+  /* Live Real-time Oscilloscope & Ladder Filter Analyzer */
+  .moog-scope-box {
+    position: absolute;
+    background: #0a0806;
+    border: 1px solid #331e10;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 8px #000;
+  }
+  .scope-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Dedicated Moog Brand Vector Artwork */
+  .moog-art-container {
+    position: absolute;
+    background: radial-gradient(ellipse at 50% 50%, #1c140d 0%, #100b07 100%);
+    border: 1px solid #3d2d1f;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow: hidden;
+  }
+  .moog-art-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(224, 120, 42, 0.03) 0px, rgba(224, 120, 42, 0.03) 1px, transparent 1px, transparent 4px);
+    pointer-events: none;
+  }
+
+  /* Bottom Q-Link Hardware Strip (Live Updates with active bank) */
+  .mpc-qlink-bar {
+    height: 44px;
+    background: #09090b;
+    border-top: 1px solid #23252b;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+    font-family: monospace;
+    font-size: 10px;
+    overflow-x: auto;
+  }
+  .qlink-bank-tag {
+    background: #1e2026;
+    border: 1px solid #3a3e48;
+    color: var(--theme-accent);
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .qlink-item {
+    display: flex;
+    align-items: center;
+    background: #131417;
+    border: 1px solid #252830;
+    border-radius: 3px;
+    padding: 2px 6px;
+    gap: 4px;
+    color: #9da1ad;
+    white-space: nowrap;
+  }
+  .qlink-idx {
+    color: var(--theme-accent-hi);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<div class="mpc-chassis">
+  <!-- Top Hardware Bar -->
+  <div class="mpc-topbar">
+    <div class="mpc-brand-badge">
+      <div class="mpc-led"></div>
+      <span>AKAI MPC LIVE II</span>
+      <span style="color:#555963">//</span>
+      <span class="synth-title">RAFFO <span>// 4-OSC MOOG SYNTHESIZER</span></span>
+    </div>
+
+    <!-- 3-Page Tab Navigation matching Skin Studio -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('MAIN')">1: MAIN</button>
+      <button class="tab-btn" onclick="switchTab('OSCILLATORS')">2: OSCILLATORS</button>
+      <button class="tab-btn" onclick="switchTab('MODULATION')">3: MODULATION</button>
+    </div>
+
+    <div class="mpc-sys-info">
+      <span>DSP: <b>8%</b></span>
+      <span>RATE: <b>48.0 kHz</b></span>
+      <span>VOICE: <b>4/4 MONO</b></span>
+      <button class="audition-btn" id="auditionBtn" onclick="auditionMoog()">
+        <span>▶</span> AUDITION MOOG [SPACE]
+      </button>
+    </div>
+  </div>
+
+  <!-- Plugin 1280 x 628 Touchscreen Viewport -->
+  <div class="plugin-screen">
+
+    <!-- ========================================================
+         PAGE 1: [tab MAIN]
+         Frames: PROGRAM (626x304), FILTER (626x304), 
+                 FILTER CONTOUR (626x304), LOUDNESS CONTOUR (626x304)
+         ======================================================== -->
+    <div id="page-MAIN" class="tab-page active">
+      
+      <!-- FRAME 1: PROGRAM (x=10, y=92-80=12, w=626, h=266 approx scale) -->
+      <div class="panel-frame" style="left: 10px; top: 8px; width: 610px; height: 268px;">
+        <div class="frame-title">PROGRAM <span>// RAFFO ENGINE</span></div>
+        <div class="frame-badge">PATCH MEMORY · 32 PRESETS</div>
+
+        <!-- Dotmatrix Patch Stepper -->
+        <div class="patch-stepper" style="left: 20px; top: 40px; width: 566px; height: 78px;">
+          <div class="patch-lcd-top">
+            <span class="patch-lcd-sub">BANK A // MODEL D VINTAGE REPLICA</span>
+            <span class="patch-lcd-sub">DSP ARM64 64-BIT</span>
+          </div>
+          <div class="patch-stepper-controls">
+            <button class="patch-stepper-btn" onclick="changePreset(-1)">◀ PREV</button>
+            <div class="patch-lcd-name" id="patchDisplay">01: FAT WARM MINI BASS</div>
+            <button class="patch-stepper-btn" onclick="changePreset(1)">NEXT ▶</button>
+          </div>
+        </div>
+
+        <!-- Interactive Real-time Waveform Scope for MAIN -->
+        <div class="moog-scope-box" style="left: 20px; top: 130px; width: 566px; height: 122px;">
+          <canvas id="scopeCanvasMain" class="scope-canvas" width="566" height="122"></canvas>
+          <div style="position:absolute; bottom:6px; right:10px; font-size:9px; color:#ff9440; font-family:monospace;">
+            24dB TRANSISTOR LADDER // REAL-TIME TRACE
+          </div>
+        </div>
+      </div>
+
+      <!-- FRAME 2: FILTER (x=642, y=92, w=626, h=304) -->
+      <div class="panel-frame" style="left: 628px; top: 8px; width: 610px; height: 268px;">
+        <div class="frame-title">FILTER <span>// 24dB RESONANT LADDER</span></div>
+        <div class="frame-badge">MOOG LADDER VCF</div>
+
+        <!-- CUTOFF (r=46 large knob) -->
+        <div class="knob-control" style="left: 45px; top: 52px;" onmousedown="startKnob(event, 'cutoff', 20, 20000, 'Hz')">
+          <div class="knob-housing" style="width: 86px; height: 86px;">
+            <div class="knob-notches"></div>
+            <div class="knob-face" id="knob-cutoff" style="width: 70px; height: 70px;">
+              <div class="knob-pointer" style="height: 24px;"></div>
+            </div>
+          </div>
+          <div class="knob-label" style="font-size:11px; font-weight:800; color:#fff;">CUTOFF</div>
+          <div class="knob-val" id="val-cutoff">1.25 kHz</div>
+        </div>
+
+        <!-- EMPHASIS / RESONANCE (r=38) -->
+        <div class="knob-control" style="left: 195px; top: 62px;" onmousedown="startKnob(event, 'resonance', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-resonance" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">EMPHASIS</div>
+          <div class="knob-val" id="val-resonance">68 %</div>
+        </div>
+
+        <!-- CONTOUR (r=38) -->
+        <div class="knob-control" style="left: 335px; top: 62px;" onmousedown="startKnob(event, 'contour', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-contour" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">CONTOUR</div>
+          <div class="knob-val" id="val-contour">75 %</div>
+        </div>
+
+        <!-- KEY TRACK (r=38) -->
+        <div class="knob-control" style="left: 475px; top: 62px;" onmousedown="startKnob(event, 'key_follow', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-key_follow" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">KEY TRACK</div>
+          <div class="knob-val" id="val-key_follow">50 %</div>
+        </div>
+      </div>
+
+      <!-- FRAME 3: FILTER CONTOUR (ENVELOPE) (x=10, y=404, w=626, h=304) -->
+      <div class="panel-frame" style="left: 10px; top: 284px; width: 610px; height: 274px;">
+        <div class="frame-title">FILTER CONTOUR <span>// VCF ENVELOPE</span></div>
+        <div class="frame-badge">ADS / RELEASE SWITCH</div>
+
+        <!-- Envelope curve preview -->
+        <div style="position:absolute; left:20px; top:36px; width:566px; height:68px; background:#0c0906; border:1px solid #331f12; border-radius:4px;">
+          <svg id="fltEnvSvg" width="566" height="68" style="display:block;">
+            <path id="fltEnvPath" d="M 20 60 L 90 12 L 240 35 L 420 35 L 540 60" fill="none" stroke="#e0782a" stroke-width="2.5" />
+            <circle id="fltP1" cx="90" cy="12" r="3.5" fill="#ff9440" />
+            <circle id="fltP2" cx="240" cy="35" r="3.5" fill="#ff9440" />
+            <circle id="fltP3" cx="420" cy="35" r="3.5" fill="#ff9440" />
+          </svg>
+        </div>
+
+        <!-- 4 Knobs: FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE -->
+        <div class="knob-control" style="left: 40px; top: 124px;" onmousedown="startKnob(event, 'f_attack', 1, 2000, 'ms')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-f_attack" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">FLT ATTACK</div>
+          <div class="knob-val" id="val-f_attack">12 ms</div>
+        </div>
+
+        <div class="knob-control" style="left: 185px; top: 124px;" onmousedown="startKnob(event, 'f_decay', 10, 4000, 'ms')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-f_decay" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">FLT DECAY</div>
+          <div class="knob-val" id="val-f_decay">480 ms</div>
+        </div>
+
+        <div class="knob-control" style="left: 330px; top: 124px;" onmousedown="startKnob(event, 'f_sustain', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-f_sustain" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">FLT SUSTAIN</div>
+          <div class="knob-val" id="val-f_sustain">45 %</div>
+        </div>
+
+        <div class="knob-control" style="left: 475px; top: 124px;" onmousedown="startKnob(event, 'f_release', 10, 5000, 'ms')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-f_release" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">FLT RELEASE</div>
+          <div class="knob-val" id="val-f_release">350 ms</div>
+        </div>
+      </div>
+
+      <!-- FRAME 4: LOUDNESS CONTOUR (AMP ENVELOPE) (x=642, y=404, w=626, h=304) -->
+      <div class="panel-frame" style="left: 628px; top: 284px; width: 610px; height: 274px;">
+        <div class="frame-title">LOUDNESS CONTOUR <span>// VCA ENVELOPE</span></div>
+        <div class="frame-badge">AMPLIFIER STAGE</div>
+
+        <!-- Amp Envelope preview -->
+        <div style="position:absolute; left:20px; top:36px; width:566px; height:68px; background:#0c0906; border:1px solid #331f12; border-radius:4px;">
+          <svg id="ampEnvSvg" width="566" height="68" style="display:block;">
+            <path id="ampEnvPath" d="M 20 60 L 60 10 L 220 25 L 430 25 L 540 60" fill="none" stroke="#ff9440" stroke-width="2.5" />
+            <circle id="ampP1" cx="60" cy="10" r="3.5" fill="#f4f3ef" />
+            <circle id="ampP2" cx="220" cy="25" r="3.5" fill="#f4f3ef" />
+            <circle id="ampP3" cx="430" cy="25" r="3.5" fill="#f4f3ef" />
+          </svg>
+        </div>
+
+        <!-- 4 Knobs: AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE -->
+        <div class="knob-control" style="left: 40px; top: 124px;" onmousedown="startKnob(event, 'attack', 1, 2000, 'ms')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-attack" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">AMP ATTACK</div>
+          <div class="knob-val" id="val-attack">8 ms</div>
+        </div>
+
+        <div class="knob-control" style="left: 185px; top: 124px;" onmousedown="startKnob(event, 'decay', 10, 4000, 'ms')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-decay" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">AMP DECAY</div>
+          <div class="knob-val" id="val-decay">620 ms</div>
+        </div>
+
+        <div class="knob-control" style="left: 330px; top: 124px;" onmousedown="startKnob(event, 'sustain', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-sustain" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">AMP SUSTAIN</div>
+          <div class="knob-val" id="val-sustain">80 %</div>
+        </div>
+
+        <div class="knob-control" style="left: 475px; top: 124px;" onmousedown="startKnob(event, 'release', 10, 5000, 'ms')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-release" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">AMP RELEASE</div>
+          <div class="knob-val" id="val-release">420 ms</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         PAGE 2: [tab OSCILLATORS]
+         Frames: OSC 1 (468x304), OSC 2 (626x304), NOISE (152x304)
+                 OSC 3 (626x304), OSC 4 (626x304)
+         ======================================================== -->
+    <div id="page-OSCILLATORS" class="tab-page">
+      
+      <!-- OSC 1 (after NOISE, 2026-10-02) -->
+      <div class="panel-frame" style="left: 166px; top: 8px; width: 454px; height: 268px;">
+        <div class="frame-title">OSC 1 <span>// MASTER OSCILLATOR</span></div>
+        
+        <!-- OSC1 WAVE -->
+        <div class="enum-control" style="left: 30px; top: 50px;">
+          <div class="enum-label">OSC1 WAVE</div>
+          <div class="enum-box" id="enum-osc1_wave">
+            <div class="enum-opt" onclick="setEnum('osc1_wave', 'TRIANGLE')">TRIANGLE</div>
+            <div class="enum-opt selected" onclick="setEnum('osc1_wave', 'SAW')">SAW</div>
+            <div class="enum-opt" onclick="setEnum('osc1_wave', 'SQUARE')">SQUARE</div>
+            <div class="enum-opt" onclick="setEnum('osc1_wave', 'PULSE')">PULSE</div>
+          </div>
+        </div>
+
+        <!-- OSC1 RANGE -->
+        <div class="enum-control" style="left: 165px; top: 40px;">
+          <div class="enum-label">OSC1 RANGE</div>
+          <div class="enum-box" id="enum-osc1_range">
+            <div class="enum-opt" onclick="setEnum('osc1_range', '32\'')">32'</div>
+            <div class="enum-opt selected" onclick="setEnum('osc1_range', '16\'')">16'</div>
+            <div class="enum-opt" onclick="setEnum('osc1_range', '8\'')">8'</div>
+            <div class="enum-opt" onclick="setEnum('osc1_range', '4\'')">4'</div>
+            <div class="enum-opt" onclick="setEnum('osc1_range', '2\'')">2'</div>
+          </div>
+        </div>
+
+        <!-- OSC1 LEVEL -->
+        <div class="knob-control" style="left: 310px; top: 70px;" onmousedown="startKnob(event, 'osc1_volume', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-osc1_volume" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">OSC1 LEVEL</div>
+          <div class="knob-val" id="val-osc1_volume">85 %</div>
+        </div>
+      </div>
+
+      <!-- OSC 2 -->
+      <div class="panel-frame" style="left: 628px; top: 8px; width: 610px; height: 268px;">
+        <div class="frame-title">OSC 2 <span>// DETUNABLE</span></div>
+
+        <!-- OSC2 WAVE -->
+        <div class="enum-control" style="left: 30px; top: 50px;">
+          <div class="enum-label">OSC2 WAVE</div>
+          <div class="enum-box" id="enum-osc2_wave">
+            <div class="enum-opt" onclick="setEnum('osc2_wave', 'TRIANGLE')">TRIANGLE</div>
+            <div class="enum-opt selected" onclick="setEnum('osc2_wave', 'SAW')">SAW</div>
+            <div class="enum-opt" onclick="setEnum('osc2_wave', 'SQUARE')">SQUARE</div>
+            <div class="enum-opt" onclick="setEnum('osc2_wave', 'PULSE')">PULSE</div>
+          </div>
+        </div>
+
+        <!-- OSC2 RANGE -->
+        <div class="enum-control" style="left: 165px; top: 40px;">
+          <div class="enum-label">OSC2 RANGE</div>
+          <div class="enum-box" id="enum-osc2_range">
+            <div class="enum-opt" onclick="setEnum('osc2_range', '32\'')">32'</div>
+            <div class="enum-opt" onclick="setEnum('osc2_range', '16\'')">16'</div>
+            <div class="enum-opt selected" onclick="setEnum('osc2_range', '8\'')">8'</div>
+            <div class="enum-opt" onclick="setEnum('osc2_range', '4\'')">4'</div>
+            <div class="enum-opt" onclick="setEnum('osc2_range', '2\'')">2'</div>
+          </div>
+        </div>
+
+        <!-- OSC2 DETUNE -->
+        <div class="knob-control" style="left: 310px; top: 70px;" onmousedown="startKnob(event, 'osc2_detune', -50, 50, 'ct')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-osc2_detune" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">OSC2 DETUNE</div>
+          <div class="knob-val" id="val-osc2_detune">+7 ct</div>
+        </div>
+
+        <!-- OSC2 LEVEL -->
+        <div class="knob-control" style="left: 460px; top: 70px;" onmousedown="startKnob(event, 'osc2_volume', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-osc2_volume" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">OSC2 LEVEL</div>
+          <div class="knob-val" id="val-osc2_volume">75 %</div>
+        </div>
+      </div>
+
+      <!-- NOISE: first, in its own box, as it applies to every voice (was at the right edge, under MPC's Q-Link
+           sidebar; moved 2026-10-02) -->
+      <div class="panel-frame" style="left: 10px; top: 8px; width: 148px; height: 268px;">
+        <div class="frame-title">NOISE</div>
+        <div class="knob-control" style="left: 38px; top: 70px;" onmousedown="startKnob(event, 'noise', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-noise" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">NOISE</div>
+          <div class="knob-val" id="val-noise">15 %</div>
+        </div>
+      </div>
+
+      <!-- OSC 3 (x=10, y=404, w=626, h=304) -->
+      <div class="panel-frame" style="left: 10px; top: 284px; width: 610px; height: 274px;">
+        <div class="frame-title">OSC 3 <span>// SUB / MOD OSC</span></div>
+
+        <!-- OSC3 WAVE -->
+        <div class="enum-control" style="left: 30px; top: 50px;">
+          <div class="enum-label">OSC3 WAVE</div>
+          <div class="enum-box" id="enum-osc3_wave">
+            <div class="enum-opt" onclick="setEnum('osc3_wave', 'TRIANGLE')">TRIANGLE</div>
+            <div class="enum-opt" onclick="setEnum('osc3_wave', 'SAW')">SAW</div>
+            <div class="enum-opt selected" onclick="setEnum('osc3_wave', 'SQUARE')">SQUARE</div>
+            <div class="enum-opt" onclick="setEnum('osc3_wave', 'PULSE')">PULSE</div>
+          </div>
+        </div>
+
+        <!-- OSC3 RANGE -->
+        <div class="enum-control" style="left: 165px; top: 40px;">
+          <div class="enum-label">OSC3 RANGE</div>
+          <div class="enum-box" id="enum-osc3_range">
+            <div class="enum-opt selected" onclick="setEnum('osc3_range', '32\'')">32'</div>
+            <div class="enum-opt" onclick="setEnum('osc3_range', '16\'')">16'</div>
+            <div class="enum-opt" onclick="setEnum('osc3_range', '8\'')">8'</div>
+            <div class="enum-opt" onclick="setEnum('osc3_range', '4\'')">4'</div>
+            <div class="enum-opt" onclick="setEnum('osc3_range', '2\'')">2'</div>
+          </div>
+        </div>
+
+        <!-- OSC3 DETUNE -->
+        <div class="knob-control" style="left: 310px; top: 70px;" onmousedown="startKnob(event, 'osc3_detune', -50, 50, 'ct')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-osc3_detune" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">OSC3 DETUNE</div>
+          <div class="knob-val" id="val-osc3_detune">-5 ct</div>
+        </div>
+
+        <!-- OSC3 LEVEL -->
+        <div class="knob-control" style="left: 460px; top: 70px;" onmousedown="startKnob(event, 'osc3_volume', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-osc3_volume" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">OSC3 LEVEL</div>
+          <div class="knob-val" id="val-osc3_volume">60 %</div>
+        </div>
+      </div>
+
+      <!-- OSC 4 (x=642, y=404, w=626, h=304) -->
+      <div class="panel-frame" style="left: 628px; top: 284px; width: 610px; height: 274px;">
+        <div class="frame-title">OSC 4 <span>// QUAD OSC ADDITION</span></div>
+
+        <!-- OSC4 WAVE -->
+        <div class="enum-control" style="left: 30px; top: 50px;">
+          <div class="enum-label">OSC4 WAVE</div>
+          <div class="enum-box" id="enum-osc4_wave">
+            <div class="enum-opt selected" onclick="setEnum('osc4_wave', 'TRIANGLE')">TRIANGLE</div>
+            <div class="enum-opt" onclick="setEnum('osc4_wave', 'SAW')">SAW</div>
+            <div class="enum-opt" onclick="setEnum('osc4_wave', 'SQUARE')">SQUARE</div>
+            <div class="enum-opt" onclick="setEnum('osc4_wave', 'PULSE')">PULSE</div>
+          </div>
+        </div>
+
+        <!-- OSC4 RANGE -->
+        <div class="enum-control" style="left: 165px; top: 40px;">
+          <div class="enum-label">OSC4 RANGE</div>
+          <div class="enum-box" id="enum-osc4_range">
+            <div class="enum-opt" onclick="setEnum('osc4_range', '32\'')">32'</div>
+            <div class="enum-opt" onclick="setEnum('osc4_range', '16\'')">16'</div>
+            <div class="enum-opt" onclick="setEnum('osc4_range', '8\'')">8'</div>
+            <div class="enum-opt selected" onclick="setEnum('osc4_range', '4\'')">4'</div>
+            <div class="enum-opt" onclick="setEnum('osc4_range', '2\'')">2'</div>
+          </div>
+        </div>
+
+        <!-- OSC4 DETUNE -->
+        <div class="knob-control" style="left: 310px; top: 70px;" onmousedown="startKnob(event, 'osc4_detune', -50, 50, 'ct')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-osc4_detune" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">OSC4 DETUNE</div>
+          <div class="knob-val" id="val-osc4_detune">+12 ct</div>
+        </div>
+
+        <!-- OSC4 LEVEL -->
+        <div class="knob-control" style="left: 460px; top: 70px;" onmousedown="startKnob(event, 'osc4_volume', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-osc4_volume" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">OSC4 LEVEL</div>
+          <div class="knob-val" id="val-osc4_volume">40 %</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         PAGE 3: [tab MODULATION]
+         Frames: LFO (468x304), MOD WHEEL (310x304), PLAYING (468x304)
+                 OUTPUT (310x304), art file=images/logo_942.svg (942x304)
+         ======================================================== -->
+    <div id="page-MODULATION" class="tab-page">
+
+      <!-- LFO (x=10, y=92, w=468, h=304) -->
+      <div class="panel-frame" style="left: 10px; top: 8px; width: 450px; height: 268px;">
+        <div class="frame-title">LFO <span>// LOW FREQUENCY OSC</span></div>
+
+        <div class="knob-control" style="left: 35px; top: 65px;" onmousedown="startKnob(event, 'lfo_rate', 0.1, 30, 'Hz')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-lfo_rate" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">LFO RATE</div>
+          <div class="knob-val" id="val-lfo_rate">4.5 Hz</div>
+        </div>
+
+        <div class="knob-control" style="left: 180px; top: 65px;" onmousedown="startKnob(event, 'lfo_pitch', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-lfo_pitch" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">LFO PITCH</div>
+          <div class="knob-val" id="val-lfo_pitch">15 %</div>
+        </div>
+
+        <div class="knob-control" style="left: 325px; top: 65px;" onmousedown="startKnob(event, 'lfo_filter', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-lfo_filter" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">LFO FILTER</div>
+          <div class="knob-val" id="val-lfo_filter">40 %</div>
+        </div>
+      </div>
+
+      <!-- MOD WHEEL (x=484, y=92, w=310, h=304) -->
+      <div class="panel-frame" style="left: 470px; top: 8px; width: 300px; height: 268px;">
+        <div class="frame-title">MOD WHEEL <span>// ASSIGN</span></div>
+
+        <div class="knob-control" style="left: 35px; top: 65px;" onmousedown="startKnob(event, 'mod_filter', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-mod_filter" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">WHEEL FILTER</div>
+          <div class="knob-val" id="val-mod_filter">60 %</div>
+        </div>
+
+        <div class="knob-control" style="left: 175px; top: 65px;" onmousedown="startKnob(event, 'mod_pitch', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-mod_pitch" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">WHEEL PITCH</div>
+          <div class="knob-val" id="val-mod_pitch">20 %</div>
+        </div>
+      </div>
+
+      <!-- PLAYING (x=800, y=92, w=468, h=304) -->
+      <div class="panel-frame" style="left: 780px; top: 8px; width: 458px; height: 268px;">
+        <div class="frame-title">PLAYING <span>// PERFORMANCE</span></div>
+
+        <div class="knob-control" style="left: 35px; top: 65px;" onmousedown="startKnob(event, 'glide', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-glide" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">GLIDE (PORTA)</div>
+          <div class="knob-val" id="val-glide">25 %</div>
+        </div>
+
+        <div class="knob-control" style="left: 180px; top: 65px;" onmousedown="startKnob(event, 'bend_range', 1, 12, 'ST')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-bend_range" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">BEND RANGE</div>
+          <div class="knob-val" id="val-bend_range">±2 ST</div>
+        </div>
+
+        <div class="knob-control" style="left: 325px; top: 65px;" onmousedown="startKnob(event, 'vel_sens', 0, 100, '%')">
+          <div class="knob-housing" style="width: 72px; height: 72px;">
+            <div class="knob-face" id="knob-vel_sens" style="width: 58px; height: 58px;">
+              <div class="knob-pointer" style="height: 18px;"></div>
+            </div>
+          </div>
+          <div class="knob-label">VELOCITY</div>
+          <div class="knob-val" id="val-vel_sens">65 %</div>
+        </div>
+      </div>
+
+      <!-- OUTPUT (x=10, y=404, w=310, h=304) -->
+      <div class="panel-frame" style="left: 10px; top: 284px; width: 300px; height: 274px;">
+        <div class="frame-title">OUTPUT <span>// MASTER GAIN</span></div>
+
+        <div class="knob-control" style="left: 110px; top: 80px;" onmousedown="startKnob(event, 'volume', 0, 100, '%')">
+          <div class="knob-housing" style="width: 80px; height: 80px;">
+            <div class="knob-face" id="knob-volume" style="width: 66px; height: 66px;">
+              <div class="knob-pointer" style="height: 22px;"></div>
+            </div>
+          </div>
+          <div class="knob-label" style="font-size:11px; font-weight:800;">MASTER VOLUME</div>
+          <div class="knob-val" id="val-volume">82 %</div>
+        </div>
+      </div>
+
+      <!-- ART: logo_942.svg (x=326, y=404, w=942, h=304) -->
+      <div class="moog-art-container" style="left: 320px; top: 284px; width: 918px; height: 274px;">
+        <svg width="860" height="230" viewBox="0 0 860 230" fill="none">
+          <!-- Subtle Moog style woodgrain cabinet background accents -->
+          <rect x="10" y="10" width="840" height="210" rx="8" fill="#180e07" stroke="#4a2e16" stroke-width="2" />
+          <path d="M 10 70 Q 430 85 850 70" stroke="#2d1c0e" stroke-width="1.5" />
+          <path d="M 10 150 Q 430 135 850 150" stroke="#2d1c0e" stroke-width="1.5" />
+          
+          <!-- Classic Moog Style Typography Insignia -->
+          <g transform="translate(140, 45)">
+            <!-- Stylized Moog / Raffo cursive-analog logo -->
+            <text x="290" y="55" text-anchor="middle" font-family="'Brush Script MT', 'Palatino', serif" font-size="76" font-style="italic" font-weight="bold" fill="#f4f3ef" letter-spacing="4">
+              Raffo Synth
+            </text>
+            <text x="290" y="85" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="12" font-weight="800" fill="#e0782a" letter-spacing="8">
+              FOUR OSCILLATOR MONOPHONIC SYNTHESIZER
+            </text>
+            <text x="290" y="105" text-anchor="middle" font-family="monospace" font-size="10" fill="#85827a" letter-spacing="3">
+              TRANSISTOR LADDER VCF · MOOG MODEL D TOPOLOGY · LINUX ARM64
+            </text>
+          </g>
+
+          <!-- Vintage Analog Meter & Schematic Graphic -->
+          <g transform="translate(60, 50)">
+            <circle cx="45" cy="55" r="32" fill="#0c0704" stroke="#e0782a" stroke-width="1.5" />
+            <path d="M 30 70 Q 45 35 60 70" fill="none" stroke="#ff9440" stroke-width="2" />
+            <line x1="45" y1="55" x2="62" y2="35" stroke="#f4f3ef" stroke-width="2" />
+            <text x="45" y="80" text-anchor="middle" font-family="monospace" font-size="8" fill="#85827a">VU / VCF</text>
+          </g>
+
+          <g transform="translate(720, 50)">
+            <circle cx="45" cy="55" r="32" fill="#0c0704" stroke="#e0782a" stroke-width="1.5" />
+            <path d="M 25 55 L 35 40 L 45 70 L 55 40 L 65 55" fill="none" stroke="#ff9440" stroke-width="2" />
+            <text x="45" y="80" text-anchor="middle" font-family="monospace" font-size="8" fill="#85827a">4× OSC</text>
+          </g>
+        </svg>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Bottom MPC Q-Links Hardware Bar (Live assignment reflecting Skin Studio qlinks) -->
+  <div class="mpc-qlink-bar" id="qlinkBar">
+    <div class="qlink-bank-tag" id="qlinkBankTag">Q-LINKS [BANK 1: MAIN]</div>
+    <div class="qlink-item"><span class="qlink-idx">Q1</span> PRESET</div>
+    <div class="qlink-item"><span class="qlink-idx">Q2</span> CUTOFF</div>
+    <div class="qlink-item"><span class="qlink-idx">Q3</span> EMPHASIS</div>
+    <div class="qlink-item"><span class="qlink-idx">Q4</span> CONTOUR</div>
+    <div class="qlink-item"><span class="qlink-idx">Q5</span> KEY TRACK</div>
+    <div class="qlink-item"><span class="qlink-idx">Q6</span> FLT ATTACK</div>
+    <div class="qlink-item"><span class="qlink-idx">Q7</span> FLT DECAY</div>
+    <div class="qlink-item"><span class="qlink-idx">Q8</span> FLT SUSTAIN</div>
+    <div class="qlink-item"><span class="qlink-idx">Q9</span> FLT RELEASE</div>
+    <div class="qlink-item"><span class="qlink-idx">Q10</span> AMP ATTACK</div>
+    <div class="qlink-item"><span class="qlink-idx">Q11</span> AMP DECAY</div>
+    <div class="qlink-item"><span class="qlink-idx">Q12</span> AMP SUSTAIN</div>
+    <div class="qlink-item"><span class="qlink-idx">Q13</span> AMP RELEASE</div>
+  </div>
+</div>
+
+<script>
+  // State management
+  const presets = [
+    "01: FAT WARM MINI BASS",
+    "02: FUNK LEAD 1974",
+    "03: COSMIC DRONE 4-OSC",
+    "04: KRAFTWERK PLUCK",
+    "05: SCREAMING RESONANCE",
+    "06: DETUNED SAW MONSTER",
+    "07: MELLOW FLUTE LEAD",
+    "08: SUBSONIC EARTHQUAKE"
+  ];
+  let curPresetIdx = 0;
+
+  const qlinkDefinitions = {
+    "MAIN": [
+      "preset", "cutoff", "resonance", "contour", "key_follow",
+      "f_attack", "f_decay", "f_sustain", "f_release",
+      "attack", "decay", "sustain", "release"
+    ],
+    "OSCILLATORS": [
+      "osc1_wave", "osc1_range", "osc1_volume",
+      "osc2_wave", "osc2_range", "osc2_detune", "osc2_volume",
+      "noise",
+      "osc3_wave", "osc3_range", "osc3_detune", "osc3_volume",
+      "osc4_wave", "osc4_range", "osc4_detune", "osc4_volume"
+    ],
+    "MODULATION": [
+      "lfo_rate", "lfo_pitch", "lfo_filter",
+      "mod_filter", "mod_pitch",
+      "glide", "bend_range", "vel_sens", "volume"
+    ]
+  };
+
+  const paramValues = {
+    cutoff: 1250,
+    resonance: 68,
+    contour: 75,
+    key_follow: 50,
+    f_attack: 12,
+    f_decay: 480,
+    f_sustain: 45,
+    f_release: 350,
+    attack: 8,
+    decay: 620,
+    sustain: 80,
+    release: 420,
+    osc1_volume: 85,
+    osc2_volume: 75,
+    osc2_detune: 7,
+    noise: 15,
+    osc3_volume: 60,
+    osc3_detune: -5,
+    osc4_volume: 40,
+    osc4_detune: 12,
+    lfo_rate: 4.5,
+    lfo_pitch: 15,
+    lfo_filter: 40,
+    mod_filter: 60,
+    mod_pitch: 20,
+    glide: 25,
+    bend_range: 2,
+    vel_sens: 65,
+    volume: 82
+  };
+
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-page').forEach(pg => pg.classList.remove('active'));
+
+    const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes(tabName));
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const activePage = document.getElementById('page-' + tabName);
+    if (activePage) activePage.classList.add('active');
+
+    // Update Q-Link strip
+    const bar = document.getElementById('qlinkBar');
+    const tag = document.getElementById('qlinkBankTag');
+    const bankNum = tabName === 'MAIN' ? '1' : tabName === 'OSCILLATORS' ? '2' : '3';
+    tag.textContent = `Q-LINKS [BANK ${bankNum}: ${tabName}]`;
+
+    const qlinks = qlinkDefinitions[tabName] || [];
+    let html = `<div class="qlink-bank-tag">${tag.textContent}</div>`;
+    qlinks.forEach((key, i) => {
+      const cleanLabel = key.replace(/_/g, ' ').toUpperCase();
+      html += `<div class="qlink-item"><span class="qlink-idx">Q${i+1}</span> ${cleanLabel}</div>`;
+    });
+    bar.innerHTML = html;
+  }
+
+  function changePreset(delta) {
+    curPresetIdx = (curPresetIdx + delta + presets.length) % presets.length;
+    document.getElementById('patchDisplay').textContent = presets[curPresetIdx];
+  }
+
+  function setEnum(groupKey, optValue) {
+    const parent = document.getElementById('enum-' + groupKey);
+    if (!parent) return;
+    parent.querySelectorAll('.enum-opt').forEach(opt => {
+      if (opt.textContent.trim() === optValue.trim()) {
+        opt.classList.add('selected');
+      } else {
+        opt.classList.remove('selected');
+      }
+    });
+  }
+
+  // Interactive Knob Dragging System
+  let activeKnob = null;
+  function startKnob(e, key, min, max, unit) {
+    e.preventDefault();
+    activeKnob = {
+      key: key,
+      min: min,
+      max: max,
+      unit: unit,
+      startY: e.clientY,
+      startVal: paramValues[key] || min
+    };
+    window.addEventListener('mousemove', onKnobMove);
+    window.addEventListener('mouseup', endKnob);
+  }
+
+  function onKnobMove(e) {
+    if (!activeKnob) return;
+    const dy = activeKnob.startY - e.clientY;
+    const range = activeKnob.max - activeKnob.min;
+    const step = range / 160;
+    let newVal = activeKnob.startVal + dy * step;
+    newVal = Math.max(activeKnob.min, Math.min(activeKnob.max, newVal));
+    paramValues[activeKnob.key] = newVal;
+    updateKnobUI(activeKnob.key, newVal, activeKnob.min, activeKnob.max, activeKnob.unit);
+  }
+
+  function endKnob() {
+    activeKnob = null;
+    window.removeEventListener('mousemove', onKnobMove);
+    window.removeEventListener('mouseup', endKnob);
+  }
+
+  function updateKnobUI(key, val, min, max, unit) {
+    const knobFace = document.getElementById('knob-' + key);
+    const valElem = document.getElementById('val-' + key);
+    if (!knobFace || !valElem) return;
+
+    // Angle from -135deg to +135deg
+    const ratio = (val - min) / (max - min);
+    const deg = -135 + ratio * 270;
+    knobFace.style.transform = `rotate(${deg}deg)`;
+
+    let displayStr = "";
+    if (unit === 'Hz') {
+      displayStr = val >= 1000 ? (val / 1000).toFixed(2) + " kHz" : Math.round(val) + " Hz";
+    } else if (unit === 'ms') {
+      displayStr = Math.round(val) + " ms";
+    } else if (unit === '%') {
+      displayStr = Math.round(val) + " %";
+    } else if (unit === 'ct') {
+      displayStr = (val > 0 ? "+" : "") + Math.round(val) + " ct";
+    } else if (unit === 'ST') {
+      displayStr = "±" + Math.round(val) + " ST";
+    } else {
+      displayStr = val.toFixed(1);
+    }
+    valElem.textContent = displayStr;
+
+    // Trigger curve updates if envelope knobs change
+    if (key.startsWith('f_')) updateFltEnv();
+    if (['attack', 'decay', 'sustain', 'release'].includes(key)) updateAmpEnv();
+  }
+
+  function updateFltEnv() {
+    const a = paramValues['f_attack'] || 12;
+    const d = paramValues['f_decay'] || 480;
+    const s = paramValues['f_sustain'] || 45;
+    const r = paramValues['f_release'] || 350;
+
+    const p1x = 20 + Math.min(120, a * 0.08 + 20);
+    const p2x = p1x + Math.min(160, d * 0.05 + 40);
+    const p2y = 60 - (s / 100) * 45;
+    const p3x = p2x + 160;
+    const p4x = Math.min(540, p3x + Math.min(140, r * 0.04 + 30));
+
+    const path = document.getElementById('fltEnvPath');
+    if (path) {
+      path.setAttribute('d', `M 20 60 L ${p1x} 12 L ${p2x} ${p2y} L ${p3x} ${p2y} L ${p4x} 60`);
+      document.getElementById('fltP1').setAttribute('cx', p1x);
+      document.getElementById('fltP2').setAttribute('cx', p2x);
+      document.getElementById('fltP2').setAttribute('cy', p2y);
+      document.getElementById('fltP3').setAttribute('cx', p3x);
+      document.getElementById('fltP3').setAttribute('cy', p2y);
+    }
+  }
+
+  function updateAmpEnv() {
+    const a = paramValues['attack'] || 8;
+    const d = paramValues['decay'] || 620;
+    const s = paramValues['sustain'] || 80;
+    const r = paramValues['release'] || 420;
+
+    const p1x = 20 + Math.min(120, a * 0.08 + 15);
+    const p2x = p1x + Math.min(160, d * 0.05 + 40);
+    const p2y = 60 - (s / 100) * 48;
+    const p3x = p2x + 160;
+    const p4x = Math.min(540, p3x + Math.min(140, r * 0.04 + 30));
+
+    const path = document.getElementById('ampEnvPath');
+    if (path) {
+      path.setAttribute('d', `M 20 60 L ${p1x} 10 L ${p2x} ${p2y} L ${p3x} ${p2y} L ${p4x} 60`);
+      document.getElementById('ampP1').setAttribute('cx', p1x);
+      document.getElementById('ampP2').setAttribute('cx', p2x);
+      document.getElementById('ampP2').setAttribute('cy', p2y);
+      document.getElementById('ampP3').setAttribute('cx', p3x);
+      document.getElementById('ampP3').setAttribute('cy', p2y);
+    }
+  }
+
+  // Initialize all knobs rotation on load
+  const knobConfigs = [
+    { key: 'cutoff', min: 20, max: 20000, unit: 'Hz' },
+    { key: 'resonance', min: 0, max: 100, unit: '%' },
+    { key: 'contour', min: 0, max: 100, unit: '%' },
+    { key: 'key_follow', min: 0, max: 100, unit: '%' },
+    { key: 'f_attack', min: 1, max: 2000, unit: 'ms' },
+    { key: 'f_decay', min: 10, max: 4000, unit: 'ms' },
+    { key: 'f_sustain', min: 0, max: 100, unit: '%' },
+    { key: 'f_release', min: 10, max: 5000, unit: 'ms' },
+    { key: 'attack', min: 1, max: 2000, unit: 'ms' },
+    { key: 'decay', min: 10, max: 4000, unit: 'ms' },
+    { key: 'sustain', min: 0, max: 100, unit: '%' },
+    { key: 'release', min: 10, max: 5000, unit: 'ms' },
+    { key: 'osc1_volume', min: 0, max: 100, unit: '%' },
+    { key: 'osc2_volume', min: 0, max: 100, unit: '%' },
+    { key: 'osc2_detune', min: -50, max: 50, unit: 'ct' },
+    { key: 'noise', min: 0, max: 100, unit: '%' },
+    { key: 'osc3_volume', min: 0, max: 100, unit: '%' },
+    { key: 'osc3_detune', min: -50, max: 50, unit: 'ct' },
+    { key: 'osc4_volume', min: 0, max: 100, unit: '%' },
+    { key: 'osc4_detune', min: -50, max: 50, unit: 'ct' },
+    { key: 'lfo_rate', min: 0.1, max: 30, unit: 'Hz' },
+    { key: 'lfo_pitch', min: 0, max: 100, unit: '%' },
+    { key: 'lfo_filter', min: 0, max: 100, unit: '%' },
+    { key: 'mod_filter', min: 0, max: 100, unit: '%' },
+    { key: 'mod_pitch', min: 0, max: 100, unit: '%' },
+    { key: 'glide', min: 0, max: 100, unit: '%' },
+    { key: 'bend_range', min: 1, max: 12, unit: 'ST' },
+    { key: 'vel_sens', min: 0, max: 100, unit: '%' },
+    { key: 'volume', min: 0, max: 100, unit: '%' }
+  ];
+
+  knobConfigs.forEach(cfg => {
+    updateKnobUI(cfg.key, paramValues[cfg.key] || cfg.min, cfg.min, cfg.max, cfg.unit);
+  });
+
+  // Oscilloscope Animation Loop
+  const scopeCanvas = document.getElementById('scopeCanvasMain');
+  const scopeCtx = scopeCanvas.getContext('2d');
+  let phase = 0;
+
+  function renderScope() {
+    scopeCtx.fillStyle = '#0a0806';
+    scopeCtx.fillRect(0, 0, scopeCanvas.width, scopeCanvas.height);
+
+    // Draw Graticule
+    scopeCtx.strokeStyle = 'rgba(224, 120, 42, 0.12)';
+    scopeCtx.lineWidth = 1;
+    for (let x = 0; x < scopeCanvas.width; x += 40) {
+      scopeCtx.beginPath();
+      scopeCtx.moveTo(x, 0);
+      scopeCtx.lineTo(x, scopeCanvas.height);
+      scopeCtx.stroke();
+    }
+    for (let y = 0; y < scopeCanvas.height; y += 24) {
+      scopeCtx.beginPath();
+      scopeCtx.moveTo(0, y);
+      scopeCtx.lineTo(scopeCanvas.width, y);
+      scopeCtx.stroke();
+    }
+
+    // Dynamic 4-oscillator composite waveform trace
+    scopeCtx.beginPath();
+    scopeCtx.lineWidth = 2.5;
+    scopeCtx.strokeStyle = '#ff9440';
+    scopeCtx.shadowColor = '#e0782a';
+    scopeCtx.shadowBlur = 10;
+
+    const midY = scopeCanvas.height / 2;
+    const cutoffNorm = (paramValues['cutoff'] || 1200) / 20000;
+    const resNorm = (paramValues['resonance'] || 50) / 100;
+
+    for (let x = 0; x < scopeCanvas.width; x++) {
+      const t = (x / scopeCanvas.width) * Math.PI * 6 + phase;
+      // Multi-saw + sub harmonic calculation
+      const osc1 = ((t % Math.PI) / Math.PI) * 2 - 1;
+      const osc2 = Math.sin(t * 1.01) * 0.6;
+      const osc3 = Math.sin(t * 0.5) * 0.7;
+      const resonanceRing = Math.sin(t * (4 + resNorm * 12)) * (resNorm * 0.45);
+      
+      const combined = (osc1 + osc2 + osc3 + resonanceRing) * (0.35 + cutoffNorm * 0.4);
+      const y = midY - combined * (scopeCanvas.height * 0.38);
+
+      if (x === 0) scopeCtx.moveTo(x, y);
+      else scopeCtx.lineTo(x, y);
+    }
+    scopeCtx.stroke();
+    scopeCtx.shadowBlur = 0;
+
+    phase += 0.04;
+    requestAnimationFrame(renderScope);
+  }
+  renderScope();
+
+  // Web Audio Synthesizer Auditioning
+  let audioCtx = null;
+  function auditionMoog() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const btn = document.getElementById('auditionBtn');
+    btn.style.background = '#ff9440';
+    btn.style.color = '#000';
+    setTimeout(() => {
+      btn.style.background = 'linear-gradient(180deg, #e0782a 0%, #b25310 100%)';
+      btn.style.color = '#0b0704';
+    }, 400);
+
+    const now = audioCtx.currentTime;
+    const rootFreq = 65.41; // C2 fundamental
+
+    // 4 Oscillators
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const osc3 = audioCtx.createOscillator();
+    const osc4 = audioCtx.createOscillator();
+
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(rootFreq, now);
+
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(rootFreq * 1.004, now); // Detuned
+
+    osc3.type = 'square';
+    osc3.frequency.setValueAtTime(rootFreq * 0.5, now); // Sub octave
+
+    osc4.type = 'triangle';
+    osc4.frequency.setValueAtTime(rootFreq * 2.008, now); // Octave up + detune
+
+    const oscMix = audioCtx.createGain();
+    oscMix.gain.setValueAtTime(0.25, now);
+
+    // Moog Ladder emulation with cascaded biquads
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    const cutoff = paramValues['cutoff'] || 1200;
+    const res = (paramValues['resonance'] || 68) * 0.22;
+    filter.frequency.setValueAtTime(cutoff, now);
+    filter.Q.setValueAtTime(res, now);
+
+    // Envelope sweep
+    filter.frequency.exponentialRampToValueAtTime(Math.min(18000, cutoff * 3.5), now + 0.05);
+    filter.frequency.exponentialRampToValueAtTime(Math.max(80, cutoff * 0.4), now + 0.8);
+
+    // VCA Amp Envelope
+    const vca = audioCtx.createGain();
+    vca.gain.setValueAtTime(0.001, now);
+    vca.gain.linearRampToValueAtTime(0.3, now + 0.02);
+    vca.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+
+    osc1.connect(oscMix);
+    osc2.connect(oscMix);
+    osc3.connect(oscMix);
+    osc4.connect(oscMix);
+
+    oscMix.connect(filter);
+    filter.connect(vca);
+    vca.connect(audioCtx.destination);
+
+    osc1.start(now);
+    osc2.start(now);
+    osc3.start(now);
+    osc4.start(now);
+
+    osc1.stop(now + 0.9);
+    osc2.stop(now + 0.9);
+    osc3.stop(now + 0.9);
+    osc4.stop(now + 0.9);
+  }
+
+  // Keyboard shortcut: Space triggers audition
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target === document.body) {
+      e.preventDefault();
+      auditionMoog();
+    }
+  });
+</script>
+</body>
+</html>

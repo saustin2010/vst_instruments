@@ -1,0 +1,16 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored. Each is described in README.md under "Changes for the MPC".
+--- a/src/dsp/hank_engine.cpp
++++ b/src/dsp/hank_engine.cpp
+@@ -29,6 +29,11 @@
+     ph -= floorf(ph);
+     float f = ph * (float)SINE_SIZE;
+     int   i = (int)f;
++#ifdef MPC_PORT
++    /* MPC port (2026-10-02): a tiny negative phase minus its floor rounds to exactly 1.0 in float, so i hit SINE_SIZE
++     * and read g_sine[SINE_SIZE + 1], one past the table (found with steve/tools/fuzz). Phase 1.0 is phase 0. */
++    if (i >= SINE_SIZE) { i = 0; f = 0.0f; }
++#endif
+     float frac = f - (float)i;
+     return g_sine[i] + (g_sine[i + 1] - g_sine[i]) * frac;
+ }

@@ -1,0 +1,235 @@
+{
+ "name": "Moog",
+ "params": [
+  {
+   "key": "osc1_wave",
+   "name": "Osc1 Wave",
+   "min": 0.0,
+   "max": 3.0,
+   "display": "int"
+  },
+  {
+   "key": "osc1_volume",
+   "name": "Osc1 Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc1_range",
+   "name": "Osc1 Range",
+   "min": -2.0,
+   "max": 2.0,
+   "display": "int"
+  },
+  {
+   "key": "osc2_wave",
+   "name": "Osc2 Wave",
+   "min": 0.0,
+   "max": 3.0,
+   "display": "int"
+  },
+  {
+   "key": "osc2_volume",
+   "name": "Osc2 Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc2_range",
+   "name": "Osc2 Range",
+   "min": -2.0,
+   "max": 2.0,
+   "display": "int"
+  },
+  {
+   "key": "osc2_detune",
+   "name": "Osc2 Detune",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc3_wave",
+   "name": "Osc3 Wave",
+   "min": 0.0,
+   "max": 3.0,
+   "display": "int"
+  },
+  {
+   "key": "osc3_volume",
+   "name": "Osc3 Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc3_range",
+   "name": "Osc3 Range",
+   "min": -2.0,
+   "max": 2.0,
+   "display": "int"
+  },
+  {
+   "key": "osc3_detune",
+   "name": "Osc3 Detune",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc4_wave",
+   "name": "Osc4 Wave",
+   "min": 0.0,
+   "max": 3.0,
+   "display": "int"
+  },
+  {
+   "key": "osc4_volume",
+   "name": "Osc4 Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc4_range",
+   "name": "Osc4 Range",
+   "min": -2.0,
+   "max": 2.0,
+   "display": "int"
+  },
+  {
+   "key": "osc4_detune",
+   "name": "Osc4 Detune",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "noise",
+   "name": "Noise",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff",
+   "name": "Cutoff",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "resonance",
+   "name": "Resonance",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "contour",
+   "name": "Contour",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "key_follow",
+   "name": "Key Follow",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "attack",
+   "name": "Attack",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "decay",
+   "name": "Decay",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "sustain",
+   "name": "Sustain",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "release",
+   "name": "Release",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "f_attack",
+   "name": "F Attack",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "f_decay",
+   "name": "F Decay",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "f_sustain",
+   "name": "F Sustain",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "f_release",
+   "name": "F Release",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "glide",
+   "name": "Glide",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "volume",
+   "name": "Volume",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lfo_rate",
+   "name": "LFO Rate",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lfo_pitch",
+   "name": "LFO>Pitch",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lfo_filter",
+   "name": "LFO>Filter",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_filter",
+   "name": "Mod>Filter",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_pitch",
+   "name": "Mod>Pitch",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "bend_range",
+   "name": "Bend Range",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "vel_sens",
+   "name": "Vel Sens",
+   "min": 0.0,
+   "max": 1.0
+  }
+ ]
+}

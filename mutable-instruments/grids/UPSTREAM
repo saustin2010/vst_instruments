@@ -1,0 +1,6 @@
+https://github.com/pichenettes/eurorack (grids/)
+commit 08460a69a7e1f7a81c5a2abcc7189c9a6b7208d4 2023-08-16
+ported 2026-10-01: src/grids_maps.h = the drum maps and Euclidean table from grids/resources.cc (unchanged values);
+src/grids_fx.c = grids/pattern_generator.cc rewritten as a per-instance MIDI FX module. Both GPL-3.0-or-later (Grids is
+AVR code: GPL-3.0 per the eurorack README; Copyright 2011-2012 Emilie Gillet). LICENSE = GPL-3.0 text.
+mpc/ = steve/tools/midifx adapter (MIDI out via an ALSA port, host transport as MIDI clock) + Schwung host headers + wrapper/engine.h

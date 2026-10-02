@@ -1,0 +1,94 @@
+{
+  "title": "Verglas",
+  "children": [
+    {
+      "title": "Verglas",
+      "lines": [
+        "Port of Mutable Instruments",
+        " Clouds granular processor.",
+        "4 modes: Granular, Stretch,",
+        " Looper, and Spectral.",
+        "",
+        "Position: Buffer read pos",
+        "Size: Grain/window size",
+        "Pitch: -24 to +24 semitones",
+        "Density: Grain overlap",
+        " <50% periodic, >50% random",
+        "Texture: Window shape /",
+        " filter / spectral quant",
+        "Feedback: Processed signal",
+        " fed back into input",
+        "Reverb: Post-processing",
+        " reverb (Dattorro)",
+        "Mix: Dry/wet crossfade"
+      ]
+    },
+    {
+      "title": "Modes",
+      "lines": [
+        "Granular: Overlapping grains",
+        " pitch-shifted & scattered.",
+        " Classic Clouds shimmer.",
+        "",
+        "Stretch: WSOLA time-stretch.",
+        " Smooth, tape-like drones.",
+        "",
+        "Looper: Delay + pitch shift.",
+        " Harmonizer & rhythmic FX.",
+        "",
+        "Spectral: Phase vocoder.",
+        " Metallic, crystalline,",
+        " alien textures.",
+        "",
+        "Freeze: Locks buffer.",
+        " No new audio captured.",
+        "Quality: 16-bit or Lo-Fi",
+        " (8-bit mu-law + 2x down)",
+        "Spread: Stereo width"
+      ]
+    },
+    {
+      "title": "Filters",
+      "lines": [
+        "HPF: Highpass 0-1000 Hz",
+        " Removes low-end rumble",
+        " from feedback buildup.",
+        " 0 = off.",
+        "",
+        "LPF: Lowpass 1k-20k Hz",
+        " Tames harsh granular",
+        " artifacts. 20k = off.",
+        "",
+        "Limiter: Tape soft clipper",
+        " On/Off toggle.",
+        "Pre Gain: -6 to +6 dB",
+        " Drive into the clipper.",
+        "Post Gain: -6 to +6 dB",
+        " Output compensation."
+      ]
+    },
+    {
+      "title": "Tips",
+      "lines": [
+        "Ambient pad: Granular mode,",
+        " Size 75%, Pitch +12,",
+        " Reverb 50%, Mix 80%.",
+        "",
+        "Frozen drone: Spectral mode,",
+        " enable Freeze, sweep Pos.",
+        "",
+        "Lo-fi tape: Looper mode,",
+        " Lo-Fi quality, Feedback",
+        " 60%, sweep Texture.",
+        "",
+        "Glitch: Granular, tiny Size,",
+        " low Density, sweep Pos.",
+        "",
+        "Use HPF to clean up bass",
+        " buildup from feedback.",
+        "Use Limiter to tame peaks",
+        " from high feedback."
+      ]
+    }
+  ]
+}

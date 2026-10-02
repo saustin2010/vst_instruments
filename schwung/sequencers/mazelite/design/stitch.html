@@ -1,0 +1,1069 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Maze Lite for MPC - Standalone Touch UI</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-container": "#920801",
+            "surface": "#121316",
+            "on-primary-fixed": "#281900",
+            "error-container": "#93000a",
+            "tertiary-fixed": "#eee2bc",
+            "primary-fixed": "#ffdead",
+            "primary-container": "#e5a93c",
+            "on-tertiary": "#373016",
+            "secondary": "#ffb4a7",
+            "outline-variant": "#504535",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary-fixed": "#211b04",
+            "on-surface-variant": "#d4c4b0",
+            "on-secondary-fixed": "#400100",
+            "on-secondary-container": "#ff9a89",
+            "inverse-on-surface": "#2f3034",
+            "surface-variant": "#343538",
+            "inverse-primary": "#7e5700",
+            "surface-container-low": "#1b1b1f",
+            "surface-dim": "#121316",
+            "surface-bright": "#38393c",
+            "surface-container-lowest": "#0d0e11",
+            "surface-tint": "#fabc4d",
+            "on-error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#604100",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "secondary-fixed-dim": "#ffb4a7",
+            "tertiary-container": "#beb38f",
+            "error": "#ffb4ab",
+            "on-secondary": "#680300",
+            "on-primary": "#432c00",
+            "surface-container-highest": "#343538",
+            "on-primary-container": "#5e4000",
+            "on-error": "#690005",
+            "on-secondary-fixed-variant": "#920801",
+            "primary": "#ffc665",
+            "on-tertiary-container": "#4c4529",
+            "on-surface": "#e3e2e6",
+            "tertiary": "#dacfa9",
+            "surface-container": "#1f1f23",
+            "secondary-fixed": "#ffdad4",
+            "outline": "#9d8f7c",
+            "surface-container-high": "#292a2d",
+            "on-background": "#e3e2e6",
+            "inverse-surface": "#e3e2e6",
+            "primary-fixed-dim": "#fabc4d",
+            "background": "#121316"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem"
+          },
+          fontFamily: {
+            "body-md": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"]
+          },
+          fontSize: {
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Physical Hardware Faceplate Simulation */
+    body {
+      background-color: #0c0c0c;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Fixed 1280x628 MPC Enclosure Canvas */
+    #mpc-enclosure {
+      width: 1280px;
+      height: 628px;
+      position: relative;
+      background-color: #0c0c0c;
+      box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 3px rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #202020;
+    }
+
+    /* Recessed Display Wells */
+    .recessed-well {
+      background-color: #090a0c;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.95), inset 0 0 2px rgba(0,0,0,0.9);
+      border: 1px solid #28282b;
+    }
+
+    /* Tactile Rotary Potentiometers */
+    .knob-container {
+      position: relative;
+      touch-action: none;
+      cursor: ns-resize;
+    }
+    .knob-dial {
+      background: radial-gradient(circle at 35% 35%, #2a2a2e 0%, #151518 70%, #0c0c0e 100%);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.15);
+      border: 1px solid #3c3c40;
+    }
+    .knob-pointer {
+      position: absolute;
+      top: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 9px;
+      background-color: #ffc665;
+      border-radius: 1px;
+      box-shadow: 0 0 4px #ffc665;
+    }
+
+    /* Tactile Push Buttons */
+    .mpc-button {
+      background: linear-gradient(180deg, #2a2a2d 0%, #1b1b1e 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 0 #050506, 0 3px 4px rgba(0,0,0,0.6);
+      border: 1px solid #3d3d42;
+      transition: all 0.05s ease-out;
+    }
+    .mpc-button:active, .mpc-button.latched {
+      transform: translateY(2px);
+      box-shadow: inset 0 2px 3px rgba(0,0,0,0.8), 0 0 0 #050506;
+      border-color: #ffc665;
+      color: #ffc665;
+    }
+
+    /* Shift Register Bit Matrix */
+    .bit-cell {
+      transition: all 0.08s ease-out;
+    }
+    .bit-cell.active {
+      background-color: #ffc665;
+      box-shadow: 0 0 8px rgba(255, 198, 101, 0.9), inset 0 0 2px #fff;
+      border-color: #ffdead;
+    }
+    .bit-cell.inactive {
+      background-color: #121316;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+      border-color: #2b2b30;
+    }
+
+    /* Faux Hex Screw Head */
+    .hex-screw {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #555 30%, #1f1f23 90%);
+      border: 0.5px solid #111;
+      position: absolute;
+    }
+    .hex-screw::after {
+      content: '';
+      position: absolute;
+      top: 2.5px;
+      left: 1px;
+      width: 4px;
+      height: 1px;
+      background: #000;
+    }
+  </style>
+</head>
+<body class="dark font-body-md text-on-surface bg-background antialiased">
+<!-- STANDALONE HARDWARE CHASSIS FRAME (1280 x 628) -->
+<main id="mpc-enclosure">
+<!-- TOP BAR (Derived from Shared Components: TopNavBar) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-11 bg-surface-container-lowest border-b border-outline-variant select-none">
+<!-- Left: Brand / Hardware Engine Anchor -->
+<div class="flex items-center space-x-3">
+<span class="text-headline-sm font-headline-sm text-primary tracking-wider uppercase flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">memory</span>
+          SYNTH ENGINE // MPC
+        </span>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex items-baseline space-x-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight font-bold">MAZE LITE</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">// DUAL TURING SHIFT REGISTER</span>
+</div>
+</div>
+<!-- Center: Navigation Links from JSON (OSC, FILTER, ENV, LFO, FX, MOD) + SPEC TABS ([1: MAIN], [2: SEQUENCES]) -->
+<nav class="flex items-center space-x-4">
+<!-- Spec Tabs (Mapped to UI Active States) -->
+<div class="flex items-center space-x-1 bg-surface-container-low px-1 py-0.5 rounded border border-outline-variant">
+<button class="text-primary border-b-2 border-primary font-bold py-1 px-2.5 font-label-md text-label-md tracking-wider flex items-center gap-1 transition-transform active:translate-y-0.5" id="tab-main-btn" onclick="switchTab('main')">
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+            1: MAIN
+          </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 px-2.5 font-label-md text-label-md tracking-wider flex items-center gap-1 transition-transform active:translate-y-0.5" id="tab-seq-btn" onclick="switchTab('seq')">
+            2: SEQUENCES
+          </button>
+</div>
+<div class="h-4 w-px bg-outline-variant"></div>
+<!-- JSON TopNavBar Navigation Links -->
+<div class="hidden md:flex items-center space-x-3 text-label-md font-label-md">
+<span class="text-primary border-b-2 border-primary font-bold py-1">OSC</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">FILTER</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">ENV</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">LFO</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">FX</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">MOD</span>
+</div>
+</nav>
+<!-- Right: Action Trigger & Status Indicators -->
+<div class="flex items-center space-x-2">
+<!-- RUN SEQUENCER Spacebar Button -->
+<button class="mpc-button px-3 py-1.5 rounded flex items-center gap-1.5 font-label-md text-label-md text-on-surface tracking-wider" id="play-btn" onclick="toggleEngine()">
+<span class="material-symbols-outlined text-[15px] text-primary" id="play-icon">play_arrow</span>
+<span class="font-bold" id="play-text">RUN SEQUENCER [SPACE]</span>
+</button>
+<div class="h-4 w-px bg-outline-variant"></div>
+<!-- Readout Indicators -->
+<div class="flex items-center space-x-2 font-label-sm text-label-sm text-on-surface-variant bg-surface-container-lowest px-2 py-1 rounded border border-outline-variant">
+<span>CLOCK: <strong class="text-primary">16th</strong></span>
+<span>RANGE: <strong class="text-primary">2 OCT</strong></span>
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            LOCKED
+          </span>
+</div>
+<!-- Trailing JSON Icons -->
+<div class="flex items-center text-on-surface-variant space-x-1 pl-1">
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">tune</span></button>
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">graphic_eq</span></button>
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[16px]">settings</span></button>
+</div>
+<!-- Trailing Primary Actions from JSON -->
+<button class="font-label-md text-label-md bg-surface-container-high hover:bg-surface-bright text-primary px-2 py-1 rounded border border-outline-variant uppercase">PRESET</button>
+<button class="font-label-md text-label-md bg-primary-container text-on-primary-container font-bold px-2.5 py-1 rounded uppercase">SAVE</button>
+</div>
+</header>
+<!-- MAIN TOUCH VIEWPORT AREA (Y=44 to Y=572, H=528) -->
+<div class="relative w-full flex-1 pt-12 pb-16 px-3 bg-surface grid grid-cols-2 gap-3 overflow-hidden select-none">
+<!-- ======================================================== -->
+<!-- FRAME 1: OUTPUT (x=10 y=92 w=626 h=304) -->
+<!-- ======================================================== -->
+<section class="recessed-well rounded relative flex flex-col p-3 border border-outline-variant">
+<!-- Screw Accents -->
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-outline-variant pb-1.5 mb-2">
+<div class="flex items-center space-x-2 pl-2">
+<span class="w-2 h-2 bg-primary rounded-xs inline-block"></span>
+<h2 class="font-label-lg text-label-lg font-bold tracking-wider text-on-surface">OUTPUT // GLOBAL QUANTIZER</h2>
+</div>
+<div class="font-label-sm text-label-sm text-primary bg-surface-container-high px-2 py-0.5 rounded border border-outline-variant">
+            CORE ENGINE RUNNING
+          </div>
+</div>
+<!-- Top Parameter Selectors Row (SCALE, NOTE RATE, NOTE LENGTH, RESET BOTH) -->
+<div class="grid grid-cols-4 gap-2 mb-3">
+<!-- SCALE SELECTOR -->
+<div class="bg-surface-container p-1.5 rounded border border-outline-variant flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">SCALE</span>
+<div class="flex items-center justify-between mt-1">
+<select class="bg-surface-container-lowest text-primary font-label-md text-label-md py-0.5 px-1 rounded border border-outline-variant w-full focus:outline-none focus:border-primary" id="param-scale" onchange="updateScale(this.value)">
+<option selected="" value="minor">Minor (Aeolian)</option>
+<option value="major">Major (Ionian)</option>
+<option value="dorian">Dorian Mode</option>
+<option value="pentatonic">Pentatonic Min</option>
+</select>
+</div>
+</div>
+<!-- NOTE RATE -->
+<div class="bg-surface-container p-1.5 rounded border border-outline-variant flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">NOTE RATE</span>
+<div class="flex items-center justify-between mt-1">
+<select class="bg-surface-container-lowest text-primary font-label-md text-label-md py-0.5 px-1 rounded border border-outline-variant w-full focus:outline-none focus:border-primary" id="param-rate" onchange="updateRate(this.value)">
+<option selected="" value="16n">1/16 Standard</option>
+<option value="8n">1/8 Groove</option>
+<option value="4n">1/4 Steady</option>
+<option value="16t">1/16 Triplet</option>
+</select>
+</div>
+</div>
+<!-- NOTE LENGTH -->
+<div class="bg-surface-container p-1.5 rounded border border-outline-variant flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">NOTE LENGTH</span>
+<div class="flex items-center justify-between mt-1">
+<select class="bg-surface-container-lowest text-primary font-label-md text-label-md py-0.5 px-1 rounded border border-outline-variant w-full focus:outline-none focus:border-primary" id="param-len" onchange="updateGateLen(this.value)">
+<option value="0.5">50% Gate</option>
+<option selected="" value="0.75">75% Normal</option>
+<option value="1.0">100% Legato</option>
+</select>
+</div>
+</div>
+<!-- RESET BOTH TRIGGER -->
+<div class="bg-surface-container p-1 rounded border border-outline-variant flex flex-col justify-center">
+<button class="mpc-button h-full w-full rounded flex flex-col items-center justify-center py-1" onclick="triggerResetBoth()">
+<span class="material-symbols-outlined text-secondary text-[16px]">restart_alt</span>
+<span class="font-label-sm text-label-sm font-bold text-on-surface tracking-wider">RESET BOTH</span>
+</button>
+</div>
+</div>
+<!-- 16-BIT SHIFT REGISTER DUAL DISPLAY WELL -->
+<div class="bg-surface-container-lowest rounded p-2.5 border border-outline-variant flex-1 flex flex-col justify-between shadow-inner">
+<!-- Shift Register 1 Display -->
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-sm text-label-sm text-primary font-mono tracking-widest flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">developer_board</span>
+                REGISTER S1 (TURING A // 16-BIT)
+              </span>
+<span class="font-label-sm text-label-sm font-mono text-on-surface-variant bg-surface-container px-1 rounded border border-outline-variant" id="s1-hex">0x3A9F</span>
+</div>
+<!-- Bit Matrix Cells -->
+<div class="grid grid-cols-16 gap-1 h-7" id="s1-bits">
+<!-- Dynamically populated 16 cells -->
+</div>
+</div>
+<!-- Divider with Pulse Wave Display -->
+<div class="h-6 flex items-center justify-between px-2 bg-surface-container rounded border border-outline-variant/50 my-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">PARALLEL BUS</span>
+<div class="flex items-center space-x-1">
+<span class="w-1 h-3 bg-primary/40 rounded-full animate-pulse"></span>
+<span class="w-1 h-4 bg-primary rounded-full animate-pulse"></span>
+<span class="w-1 h-2 bg-primary/60 rounded-full"></span>
+<span class="w-1 h-5 bg-primary rounded-full animate-pulse"></span>
+<span class="w-1 h-3 bg-primary/50 rounded-full"></span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-mono" id="prob-feedback">CORRUPT PROB: 14%</span>
+</div>
+<!-- Shift Register 2 Display -->
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-sm text-label-sm text-secondary font-mono tracking-widest flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">developer_board</span>
+                REGISTER S2 (TURING B // 16-BIT)
+              </span>
+<span class="font-label-sm text-label-sm font-mono text-on-surface-variant bg-surface-container px-1 rounded border border-outline-variant" id="s2-hex">0x8C14</span>
+</div>
+<!-- Bit Matrix Cells -->
+<div class="grid grid-cols-16 gap-1 h-7" id="s2-bits">
+<!-- Dynamically populated 16 cells -->
+</div>
+</div>
+</div>
+<!-- Shift Register Quick Performance Touch Actions -->
+<div class="grid grid-cols-4 gap-2 mt-2 pt-1 border-t border-outline-variant/60">
+<button class="mpc-button py-1 rounded text-center font-label-sm text-label-sm text-on-surface font-mono active:scale-95" onclick="triggerBitFlip(1)">
+            S1 BIT FLIP
+          </button>
+<button class="mpc-button py-1 rounded text-center font-label-sm text-label-sm text-on-surface font-mono active:scale-95" onclick="triggerAdvance(1)">
+            S1 ADVANCE &gt;
+          </button>
+<button class="mpc-button py-1 rounded text-center font-label-sm text-label-sm text-on-surface font-mono active:scale-95" onclick="triggerBitFlip(2)">
+            S2 BIT FLIP
+          </button>
+<button class="mpc-button py-1 rounded text-center font-label-sm text-label-sm text-on-surface font-mono active:scale-95" onclick="triggerAdvance(2)">
+            S2 ADVANCE &gt;
+          </button>
+</div>
+</section>
+<!-- ======================================================== -->
+<!-- FRAME 2: MIDI OUT & ROUTING MONITOR (x=642 y=92 w=626 h=304) -->
+<!-- ======================================================== -->
+<section class="recessed-well rounded relative flex flex-col p-3 border border-outline-variant">
+<!-- Screw Accents -->
+<div class="hex-screw top-1.5 left-1.5"></div>
+<div class="hex-screw top-1.5 right-1.5"></div>
+<div class="hex-screw bottom-1.5 left-1.5"></div>
+<div class="hex-screw bottom-1.5 right-1.5"></div>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-outline-variant pb-1.5 mb-2">
+<div class="flex items-center space-x-2 pl-2">
+<span class="w-2 h-2 bg-secondary rounded-xs inline-block"></span>
+<h2 class="font-label-lg text-label-lg font-bold tracking-wider text-on-surface">MIDI OUT // DUAL ROUTING &amp; PROBABILITY</h2>
+</div>
+<div class="flex items-center space-x-2 font-label-sm text-label-sm">
+<span class="text-on-surface-variant font-mono">CH1: <strong class="text-primary">NOTE A3</strong></span>
+<span class="text-on-surface-variant font-mono">CH2: <strong class="text-secondary">NOTE E4</strong></span>
+</div>
+</div>
+<!-- Pitch Quantizer Grid & Realtime Visualizer -->
+<div class="grid grid-cols-2 gap-2 flex-1">
+<!-- Channel 1 Status & Turing Branching Maze Map -->
+<div class="bg-surface-container-lowest rounded p-2 border border-outline-variant flex flex-col justify-between">
+<div class="flex justify-between items-center mb-1 border-b border-outline-variant/60 pb-1">
+<span class="font-label-md text-label-md font-mono text-primary font-bold">SEQ 1 (CH 1)</span>
+<span class="font-readout-numeric text-[14px] text-primary" id="s1-active-pitch">C3 [60]</span>
+</div>
+<!-- Maze Decision Path Branch Canvas -->
+<div class="relative w-full h-24 bg-surface-container-low rounded border border-outline-variant/50 overflow-hidden flex items-center justify-center">
+<canvas class="w-full h-full block" height="96" id="maze-canvas-s1" width="280"></canvas>
+<div class="absolute bottom-1 left-2 font-label-sm text-label-sm text-on-surface-variant font-mono">
+                LOOP: 16 STEPS
+              </div>
+</div>
+<!-- Gate & Velocity Monitor -->
+<div class="mt-1 flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface-variant font-mono">GATE LENGTH:</span>
+<div class="w-28 bg-surface-container h-2 rounded overflow-hidden">
+<div class="h-full bg-primary" id="s1-gate-bar" style="width: 75%;"></div>
+</div>
+<span class="text-primary font-mono" id="s1-gate-text">75%</span>
+</div>
+</div>
+<!-- Channel 2 Status & Turing Branching Maze Map -->
+<div class="bg-surface-container-lowest rounded p-2 border border-outline-variant flex flex-col justify-between">
+<div class="flex justify-between items-center mb-1 border-b border-outline-variant/60 pb-1">
+<span class="font-label-md text-label-md font-mono text-secondary font-bold">SEQ 2 (CH 2)</span>
+<span class="font-readout-numeric text-[14px] text-secondary" id="s2-active-pitch">G3 [67]</span>
+</div>
+<!-- Maze Decision Path Branch Canvas -->
+<div class="relative w-full h-24 bg-surface-container-low rounded border border-outline-variant/50 overflow-hidden flex items-center justify-center">
+<canvas class="w-full h-full block" height="96" id="maze-canvas-s2" width="280"></canvas>
+<div class="absolute bottom-1 left-2 font-label-sm text-label-sm text-on-surface-variant font-mono">
+                LOOP: 12 STEPS
+              </div>
+</div>
+<!-- Gate & Velocity Monitor -->
+<div class="mt-1 flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface-variant font-mono">GATE LENGTH:</span>
+<div class="w-28 bg-surface-container h-2 rounded overflow-hidden">
+<div class="h-full bg-secondary" id="s2-gate-bar" style="width: 50%;"></div>
+</div>
+<span class="text-secondary font-mono" id="s2-gate-text">50%</span>
+</div>
+</div>
+</div>
+<!-- MIDI Hardware Port Assignment Matrix -->
+<div class="mt-2 bg-surface-container-low p-1.5 rounded border border-outline-variant flex items-center justify-between text-label-sm font-label-sm font-mono">
+<div class="flex items-center space-x-2">
+<span class="text-on-surface-variant">PORT ROUTE:</span>
+<span class="bg-surface-container px-2 py-0.5 rounded text-on-surface border border-outline-variant">INTERNAL SYNTH</span>
+<span class="bg-surface-container px-2 py-0.5 rounded text-on-surface border border-outline-variant">DIN MIDI A</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-on-surface-variant">SYNC:</span>
+<span class="text-primary font-bold">INTERNAL 120.00 BPM</span>
+</div>
+</div>
+</section>
+<!-- ======================================================== -->
+<!-- HARDWARE TACTILE POTENTIOMETERS & ENCODER ROW -->
+<!-- S1 & S2 CONTROLS: CORRUPT, RANGE, LENGTH, TRIG MIX -->
+<!-- ======================================================== -->
+<section class="col-span-2 bg-surface-container-low rounded border border-outline-variant p-2 flex items-center justify-between relative shadow">
+<!-- MODULE CARD ACCENT -->
+<div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-outline to-secondary"></div>
+<!-- S1 CONTROLS GROUP -->
+<div class="flex items-center space-x-5 pl-2">
+<span class="font-label-md text-label-md font-bold text-primary font-mono tracking-wider">S1 PARAMS:</span>
+<!-- S1 CORRUPT KNOB -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-11 h-11 knob-dial rounded-full flex items-center justify-center" data-val="14" id="knob-s1-corrupt" onpointerdown="startKnobDrag(event, 's1-corrupt', 0, 100)">
+<div class="knob-pointer" style="transform: rotate(-100deg) translateY(-2px);"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono mt-1">CORRUPT</span>
+<span class="font-label-sm text-label-sm text-primary font-mono font-bold" id="val-s1-corrupt">14%</span>
+</div>
+<!-- S1 RANGE KNOB -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-11 h-11 knob-dial rounded-full flex items-center justify-center" data-val="2" id="knob-s1-range" onpointerdown="startKnobDrag(event, 's1-range', 1, 4)">
+<div class="knob-pointer" style="transform: rotate(0deg) translateY(-2px);"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono mt-1">RANGE</span>
+<span class="font-label-sm text-label-sm text-primary font-mono font-bold" id="val-s1-range">2 OCT</span>
+</div>
+<!-- S1 LENGTH KNOB -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-11 h-11 knob-dial rounded-full flex items-center justify-center" data-val="16" id="knob-s1-len" onpointerdown="startKnobDrag(event, 's1-len', 4, 16)">
+<div class="knob-pointer" style="transform: rotate(120deg) translateY(-2px);"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono mt-1">LENGTH</span>
+<span class="font-label-sm text-label-sm text-primary font-mono font-bold" id="val-s1-len">16 STEPS</span>
+</div>
+<!-- S1 TRIG MIX KNOB -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-11 h-11 knob-dial rounded-full flex items-center justify-center" data-val="80" id="knob-s1-trig" onpointerdown="startKnobDrag(event, 's1-trig', 0, 100)">
+<div class="knob-pointer" style="transform: rotate(60deg) translateY(-2px);"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono mt-1">TRIG MIX</span>
+<span class="font-label-sm text-label-sm text-primary font-mono font-bold" id="val-s1-trig">80%</span>
+</div>
+</div>
+<!-- CENTER HARDWARE BUS STATUS -->
+<div class="flex flex-col items-center px-4 border-x border-outline-variant/60">
+<span class="font-label-sm text-label-sm font-mono text-on-surface-variant">HARDWARE BUS</span>
+<span class="font-readout-numeric text-[16px] text-primary my-0.5 tracking-wider font-bold">MAZE//TURING</span>
+<span class="font-label-sm text-label-sm font-mono text-on-surface-variant">AKAI MPC LIVE II</span>
+</div>
+<!-- S2 CONTROLS GROUP -->
+<div class="flex items-center space-x-5 pr-2">
+<!-- S2 CORRUPT KNOB -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-11 h-11 knob-dial rounded-full flex items-center justify-center" data-val="28" id="knob-s2-corrupt" onpointerdown="startKnobDrag(event, 's2-corrupt', 0, 100)">
+<div class="knob-pointer" style="transform: rotate(-60deg) translateY(-2px); background-color: #ffb4a7; box-shadow: 0 0 4px #ffb4a7;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono mt-1">CORRUPT</span>
+<span class="font-label-sm text-label-sm text-secondary font-mono font-bold" id="val-s2-corrupt">28%</span>
+</div>
+<!-- S2 RANGE KNOB -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-11 h-11 knob-dial rounded-full flex items-center justify-center" data-val="3" id="knob-s2-range" onpointerdown="startKnobDrag(event, 's2-range', 1, 4)">
+<div class="knob-pointer" style="transform: rotate(40deg) translateY(-2px); background-color: #ffb4a7; box-shadow: 0 0 4px #ffb4a7;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono mt-1">RANGE</span>
+<span class="font-label-sm text-label-sm text-secondary font-mono font-bold" id="val-s2-range">3 OCT</span>
+</div>
+<!-- S2 LENGTH KNOB -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-11 h-11 knob-dial rounded-full flex items-center justify-center" data-val="12" id="knob-s2-len" onpointerdown="startKnobDrag(event, 's2-len', 4, 16)">
+<div class="knob-pointer" style="transform: rotate(40deg) translateY(-2px); background-color: #ffb4a7; box-shadow: 0 0 4px #ffb4a7;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono mt-1">LENGTH</span>
+<span class="font-label-sm text-label-sm text-secondary font-mono font-bold" id="val-s2-len">12 STEPS</span>
+</div>
+<!-- S2 TRIG MIX KNOB -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-11 h-11 knob-dial rounded-full flex items-center justify-center" data-val="65" id="knob-s2-trig" onpointerdown="startKnobDrag(event, 's2-trig', 0, 100)">
+<div class="knob-pointer" style="transform: rotate(20deg) translateY(-2px); background-color: #ffb4a7; box-shadow: 0 0 4px #ffb4a7;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono mt-1">TRIG MIX</span>
+<span class="font-label-sm text-label-sm text-secondary font-mono font-bold" id="val-s2-trig">65%</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-secondary font-mono tracking-wider">S2 PARAMS:</span>
+</div>
+</section>
+</div>
+<!-- BOTTOM HARDWARE Q-LINK BAR (Derived from Shared Components: BottomNavBar) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-space-md h-14 bg-surface-container-lowest border-t border-outline-variant select-none">
+<!-- Bank Indicator / Touch Toggle -->
+<div class="flex items-center space-x-2">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono uppercase">Q-LINK BANK</span>
+<div class="flex space-x-1 mt-0.5">
+<button class="px-2 py-0.5 rounded font-label-sm text-label-sm font-mono font-bold bg-primary text-on-primary-container" id="qlink-bank-1" onclick="switchQLinkBank(1)">
+              BANK 1
+            </button>
+<button class="px-2 py-0.5 rounded font-label-sm text-label-sm font-mono text-on-surface-variant bg-surface-container hover:text-on-surface" id="qlink-bank-2" onclick="switchQLinkBank(2)">
+              BANK 2
+            </button>
+</div>
+</div>
+</div>
+<!-- Q-LINK ENCODER SLOTS 1 TO 4 (Derived from JSON labels & icons) -->
+<div class="flex items-center space-x-3">
+<!-- Q1: CUTOFF / SCALE (Active item according to spec) -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-space-md py-1 rounded min-w-[130px] active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">dialpad</span>
+<span class="font-bold" id="q1-label">Q1: CUTOFF</span>
+</div>
+<span class="font-label-md text-label-md font-mono text-primary font-bold mt-0.5" id="q1-val">MIN (AEOLIAN)</span>
+</div>
+<!-- Q2: RESO / NOTE RATE -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[130px] hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">adjust</span>
+<span id="q2-label">Q2: RESO</span>
+</div>
+<span class="font-label-md text-label-md font-mono text-on-surface mt-0.5" id="q2-val">1/16 RATE</span>
+</div>
+<!-- Q3: DRIVE / GATE LEN -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[130px] hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+<span id="q3-label">Q3: DRIVE</span>
+</div>
+<span class="font-label-md text-label-md font-mono text-on-surface mt-0.5" id="q3-val">75% GATE</span>
+</div>
+<!-- Q4: TEMPO / CORRUPT -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[130px] hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">speed</span>
+<span id="q4-label">Q4: TEMPO</span>
+</div>
+<span class="font-label-md text-label-md font-mono text-on-surface mt-0.5" id="q4-val">120.0 BPM</span>
+</div>
+</div>
+<!-- Right Touch Utilities -->
+<div class="flex items-center space-x-2">
+<button class="px-3 py-1.5 rounded font-label-sm text-label-sm font-bold bg-secondary-container text-on-secondary-container border border-secondary flex items-center gap-1 active:scale-95 transition-transform" onclick="triggerResetBoth()">
+<span class="material-symbols-outlined text-[15px]">sync_problem</span>
+          G_RESET
+        </button>
+</div>
+</footer>
+</main>
+<!-- ======================================================== -->
+<!-- JAVASCRIPT: ENGINE LOGIC, WEB AUDIO API, TACTILE TOUCH -->
+<!-- ======================================================== -->
+<script>
+    // --- STATE MACHINE ---
+    const engine = {
+      running: false,
+      bpm: 120,
+      scale: 'minor',
+      rate: '16n',
+      gateLength: 0.75,
+      // Turing Register 1 (16 bits)
+      s1: {
+        register: 0x3A9F,
+        length: 16,
+        corrupt: 14,
+        range: 2,
+        trigMix: 80,
+        activeStep: 0,
+        pitchHistory: []
+      },
+      // Turing Register 2 (16 bits)
+      s2: {
+        register: 0x8C14,
+        length: 12,
+        corrupt: 28,
+        range: 3,
+        trigMix: 65,
+        activeStep: 0,
+        pitchHistory: []
+      },
+      activeTab: 'main',
+      qlinkBank: 1
+    };
+
+    // Musical Scale Pitch Tables (MIDI Note mappings)
+    const scaleTables = {
+      minor: [48, 50, 51, 53, 55, 56, 58, 60, 62, 63, 65, 67, 68, 70, 72, 74], // C Minor
+      major: [48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72, 74], // C Major
+      dorian: [48, 50, 51, 53, 55, 57, 58, 60, 62, 63, 65, 67, 69, 70, 72, 74], // C Dorian
+      pentatonic: [48, 51, 53, 55, 58, 60, 63, 65, 67, 70, 72, 75, 77, 79, 82, 84] // C Minor Pent
+    };
+
+    const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+    function midiToNoteName(midi) {
+      const octave = Math.floor(midi / 12) - 1;
+      const note = noteNames[midi % 12];
+      return `${note}${octave} [${midi}]`;
+    }
+
+    // --- WEB AUDIO API INITIALIZATION ---
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSynthVoice(freq, duration, type = 'sawtooth') {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      // Lowpass Filter for MPC character
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1400, audioCtx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + duration);
+
+      // Fast percussive envelope
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function midiToFreq(midi) {
+      return 440 * Math.pow(2, (midi - 69) / 12);
+    }
+
+    // --- INITIALIZE SHIFT REGISTER GRID CELLS ---
+    function renderShiftRegisters() {
+      const s1Container = document.getElementById('s1-bits');
+      const s2Container = document.getElementById('s2-bits');
+      s1Container.innerHTML = '';
+      s2Container.innerHTML = '';
+
+      for (let i = 0; i < 16; i++) {
+        // Bit 15 on left down to Bit 0 on right
+        const bit1 = (engine.s1.register >> (15 - i)) & 1;
+        const cell1 = document.createElement('div');
+        cell1.id = `s1-bit-${15 - i}`;
+        cell1.className = `bit-cell rounded-xs border flex items-center justify-center font-label-sm text-label-sm font-mono cursor-pointer ${bit1 ? 'active text-surface-container-lowest font-bold' : 'inactive text-on-surface-variant'}`;
+        cell1.innerText = bit1 ? '1' : '0';
+        cell1.onclick = () => toggleManualBit(1, 15 - i);
+        s1Container.appendChild(cell1);
+
+        const bit2 = (engine.s2.register >> (15 - i)) & 1;
+        const cell2 = document.createElement('div');
+        cell2.id = `s2-bit-${15 - i}`;
+        cell2.className = `bit-cell rounded-xs border flex items-center justify-center font-label-sm text-label-sm font-mono cursor-pointer ${bit2 ? 'active text-surface-container-lowest font-bold' : 'inactive text-on-surface-variant'}`;
+        cell2.innerText = bit2 ? '1' : '0';
+        cell2.onclick = () => toggleManualBit(2, 15 - i);
+        s2Container.appendChild(cell2);
+      }
+
+      document.getElementById('s1-hex').innerText = '0x' + (engine.s1.register.toString(16).toUpperCase().padStart(4, '0'));
+      document.getElementById('s2-hex').innerText = '0x' + (engine.s2.register.toString(16).toUpperCase().padStart(4, '0'));
+    }
+
+    function toggleManualBit(seq, bitIndex) {
+      const target = seq === 1 ? engine.s1 : engine.s2;
+      target.register ^= (1 << bitIndex);
+      renderShiftRegisters();
+    }
+
+    // --- TURING MACHINE SHIFT REGISTER LOGIC ---
+    function clockTuring(seqObj) {
+      // Step the Turing Shift register with probabilistic inversion of the recirculated bit
+      const length = seqObj.length;
+      const mask = (1 << length) - 1;
+      
+      // Tap the bit at current length boundary
+      const outBit = (seqObj.register >> (length - 1)) & 1;
+      
+      // Determine if mutation / bit corrupt occurs
+      const willCorrupt = (Math.random() * 100) < seqObj.corrupt;
+      const feedbackBit = willCorrupt ? (outBit ^ 1) : outBit;
+
+      // Shift left by 1 and inject feedback bit at LSB (Bit 0)
+      seqObj.register = ((seqObj.register << 1) & mask) | feedbackBit;
+
+      // Compute Quantized Musical Pitch from the lowest 8 bits of register
+      const byteValue = seqObj.register & 0xFF;
+      const scale = scaleTables[engine.scale];
+      const scaleIndex = Math.floor((byteValue / 256) * Math.min(scale.length, seqObj.range * 4));
+      const pitch = scale[scaleIndex % scale.length];
+
+      return { pitch, outBit, willCorrupt };
+    }
+
+    // --- SEQUENCER CLOCK TICK ---
+    let clockInterval = null;
+
+    function tick() {
+      // 1. Clock Turing Machine S1
+      const res1 = clockTuring(engine.s1);
+      const freq1 = midiToFreq(res1.pitch);
+      
+      // Trigger voice if probability matches trigger mix
+      if (Math.random() * 100 <= engine.s1.trigMix) {
+        playSynthVoice(freq1, 0.14 * engine.gateLength, 'sawtooth');
+      }
+
+      // Update S1 Visualizers
+      document.getElementById('s1-active-pitch').innerText = midiToNoteName(res1.pitch);
+      engine.s1.pitchHistory.push(res1.pitch);
+      if (engine.s1.pitchHistory.length > 20) engine.s1.pitchHistory.shift();
+
+      // 2. Clock Turing Machine S2
+      const res2 = clockTuring(engine.s2);
+      const freq2 = midiToFreq(res2.pitch);
+      if (Math.random() * 100 <= engine.s2.trigMix) {
+        playSynthVoice(freq2, 0.18 * engine.gateLength, 'square');
+      }
+
+      // Update S2 Visualizers
+      document.getElementById('s2-active-pitch').innerText = midiToNoteName(res2.pitch);
+      engine.s2.pitchHistory.push(res2.pitch);
+      if (engine.s2.pitchHistory.length > 20) engine.s2.pitchHistory.shift();
+
+      // Re-render glowing register bits
+      renderShiftRegisters();
+      drawMazeBranching();
+    }
+
+    function toggleEngine() {
+      initAudio();
+      engine.running = !engine.running;
+      const playIcon = document.getElementById('play-icon');
+      const playText = document.getElementById('play-text');
+      const playBtn = document.getElementById('play-btn');
+
+      if (engine.running) {
+        playIcon.innerText = 'stop';
+        playText.innerText = 'STOP SEQUENCER';
+        playBtn.classList.add('latched');
+        const msPerBeat = (60000 / engine.bpm) / 4; // 16th notes
+        clockInterval = setInterval(tick, msPerBeat);
+      } else {
+        playIcon.innerText = 'play_arrow';
+        playText.innerText = 'RUN SEQUENCER [SPACE]';
+        playBtn.classList.remove('latched');
+        clearInterval(clockInterval);
+      }
+    }
+
+    // SPACEBAR SHORTCUT FOR STANDALONE HARDWARE ACTION
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        toggleEngine();
+      }
+    });
+
+    // --- MANUAL HARDWARE PERFORMANCE TRIGGERS ---
+    function triggerResetBoth() {
+      engine.s1.register = 0x3A9F;
+      engine.s2.register = 0x8C14;
+      renderShiftRegisters();
+    }
+
+    function triggerBitFlip(seq) {
+      if (seq === 1) engine.s1.register ^= 0x0001;
+      if (seq === 2) engine.s2.register ^= 0x0001;
+      renderShiftRegisters();
+    }
+
+    function triggerAdvance(seq) {
+      if (seq === 1) clockTuring(engine.s1);
+      if (seq === 2) clockTuring(engine.s2);
+      renderShiftRegisters();
+    }
+
+    function updateScale(val) {
+      engine.scale = val;
+      if (engine.qlinkBank === 1) {
+        document.getElementById('q1-val').innerText = val.toUpperCase();
+      }
+    }
+
+    function updateRate(val) {
+      engine.rate = val;
+      if (engine.running) {
+        clearInterval(clockInterval);
+        const msPerBeat = (60000 / engine.bpm) / (val === '8n' ? 2 : 4);
+        clockInterval = setInterval(tick, msPerBeat);
+      }
+    }
+
+    function updateGateLen(val) {
+      engine.gateLength = parseFloat(val);
+      document.getElementById('s1-gate-bar').style.width = `${engine.gateLength * 100}%`;
+      document.getElementById('s1-gate-text').innerText = `${Math.round(engine.gateLength * 100)}%`;
+      document.getElementById('s2-gate-bar').style.width = `${engine.gateLength * 100}%`;
+      document.getElementById('s2-gate-text').innerText = `${Math.round(engine.gateLength * 100)}%`;
+    }
+
+    // --- REALTIME MAZE BRANCHING VISUALIZER (60 FPS Canvas) ---
+    function drawMazeBranching() {
+      const c1 = document.getElementById('maze-canvas-s1');
+      const c2 = document.getElementById('maze-canvas-s2');
+      if (!c1 || !c2) return;
+
+      const ctx1 = c1.getContext('2d');
+      const ctx2 = c2.getContext('2d');
+
+      // Draw Sequence 1 Decision Tree
+      ctx1.fillStyle = '#0d0e11';
+      ctx1.fillRect(0, 0, c1.width, c1.height);
+
+      ctx1.strokeStyle = '#ffc665';
+      ctx1.lineWidth = 1.5;
+      ctx1.beginPath();
+      const hist1 = engine.s1.pitchHistory;
+      for (let i = 0; i < hist1.length; i++) {
+        const x = (i / 20) * c1.width;
+        const y = c1.height - ((hist1[i] - 48) / 36) * c1.height;
+        if (i === 0) ctx1.moveTo(x, y);
+        else ctx1.lineTo(x, y);
+        // Draw node
+        ctx1.fillStyle = '#ffc665';
+        ctx1.fillRect(x - 2, y - 2, 4, 4);
+      }
+      ctx1.stroke();
+
+      // Draw Sequence 2 Decision Tree
+      ctx2.fillStyle = '#0d0e11';
+      ctx2.fillRect(0, 0, c2.width, c2.height);
+
+      ctx2.strokeStyle = '#ffb4a7';
+      ctx2.lineWidth = 1.5;
+      ctx2.beginPath();
+      const hist2 = engine.s2.pitchHistory;
+      for (let i = 0; i < hist2.length; i++) {
+        const x = (i / 20) * c2.width;
+        const y = c2.height - ((hist2[i] - 48) / 36) * c2.height;
+        if (i === 0) ctx2.moveTo(x, y);
+        else ctx2.lineTo(x, y);
+        ctx2.fillStyle = '#ffb4a7';
+        ctx2.fillRect(x - 2, y - 2, 4, 4);
+      }
+      ctx2.stroke();
+    }
+
+    // --- TACTILE ROTARY KNOB TOUCH/DRAG HANDLER ---
+    let activeDrag = null;
+
+    function startKnobDrag(e, paramName, min, max) {
+      e.preventDefault();
+      activeDrag = {
+        param: paramName,
+        min: min,
+        max: max,
+        startY: e.clientY || (e.touches && e.touches[0].clientY),
+        startVal: parseFloat(document.getElementById(`knob-${paramName}`).dataset.val)
+      };
+      window.addEventListener('pointermove', onKnobDrag);
+      window.addEventListener('pointerup', endKnobDrag);
+    }
+
+    function onKnobDrag(e) {
+      if (!activeDrag) return;
+      const currentY = e.clientY || (e.touches && e.touches[0].clientY);
+      const deltaY = activeDrag.startY - currentY;
+      const range = activeDrag.max - activeDrag.min;
+      const step = range / 120; // 120px full travel
+      let newVal = Math.round(activeDrag.startVal + deltaY * step);
+      newVal = Math.max(activeDrag.min, Math.min(activeDrag.max, newVal));
+
+      const knob = document.getElementById(`knob-${activeDrag.param}`);
+      knob.dataset.val = newVal;
+
+      // Update Rotation Pointer (-135deg to +135deg)
+      const pct = (newVal - activeDrag.min) / (activeDrag.max - activeDrag.min);
+      const deg = -135 + pct * 270;
+      const ptr = knob.querySelector('.knob-pointer');
+      if (ptr) ptr.style.transform = `rotate(${deg}deg) translateY(-2px)`;
+
+      // Update Values in Engine and Readout
+      const valElem = document.getElementById(`val-${activeDrag.param}`);
+      if (activeDrag.param === 's1-corrupt') {
+        engine.s1.corrupt = newVal;
+        valElem.innerText = `${newVal}%`;
+        document.getElementById('prob-feedback').innerText = `CORRUPT PROB: ${newVal}%`;
+      } else if (activeDrag.param === 's1-range') {
+        engine.s1.range = newVal;
+        valElem.innerText = `${newVal} OCT`;
+      } else if (activeDrag.param === 's1-len') {
+        engine.s1.length = newVal;
+        valElem.innerText = `${newVal} STEPS`;
+      } else if (activeDrag.param === 's1-trig') {
+        engine.s1.trigMix = newVal;
+        valElem.innerText = `${newVal}%`;
+      } else if (activeDrag.param === 's2-corrupt') {
+        engine.s2.corrupt = newVal;
+        valElem.innerText = `${newVal}%`;
+      } else if (activeDrag.param === 's2-range') {
+        engine.s2.range = newVal;
+        valElem.innerText = `${newVal} OCT`;
+      } else if (activeDrag.param === 's2-len') {
+        engine.s2.length = newVal;
+        valElem.innerText = `${newVal} STEPS`;
+      } else if (activeDrag.param === 's2-trig') {
+        engine.s2.trigMix = newVal;
+        valElem.innerText = `${newVal}%`;
+      }
+    }
+
+    function endKnobDrag() {
+      activeDrag = null;
+      window.removeEventListener('pointermove', onKnobDrag);
+      window.removeEventListener('pointerup', endKnobDrag);
+    }
+
+    // --- TAB SWITCHING (PAGE 1 MAIN vs PAGE 2 SEQUENCES) ---
+    function switchTab(tab) {
+      engine.activeTab = tab;
+      const mainBtn = document.getElementById('tab-main-btn');
+      const seqBtn = document.getElementById('tab-seq-btn');
+      if (tab === 'main') {
+        mainBtn.className = "text-primary border-b-2 border-primary font-bold py-1 px-2.5 font-label-md text-label-md tracking-wider flex items-center gap-1 transition-transform active:translate-y-0.5";
+        seqBtn.className = "text-on-surface-variant hover:text-on-surface py-1 px-2.5 font-label-md text-label-md tracking-wider flex items-center gap-1 transition-transform active:translate-y-0.5";
+      } else {
+        seqBtn.className = "text-primary border-b-2 border-primary font-bold py-1 px-2.5 font-label-md text-label-md tracking-wider flex items-center gap-1 transition-transform active:translate-y-0.5";
+        mainBtn.className = "text-on-surface-variant hover:text-on-surface py-1 px-2.5 font-label-md text-label-md tracking-wider flex items-center gap-1 transition-transform active:translate-y-0.5";
+      }
+    }
+
+    // --- Q-LINK BANK TOGGLE ---
+    function switchQLinkBank(bank) {
+      engine.qlinkBank = bank;
+      const b1 = document.getElementById('qlink-bank-1');
+      const b2 = document.getElementById('qlink-bank-2');
+
+      if (bank === 1) {
+        b1.className = "px-2 py-0.5 rounded font-label-sm text-label-sm font-mono font-bold bg-primary text-on-primary-container";
+        b2.className = "px-2 py-0.5 rounded font-label-sm text-label-sm font-mono text-on-surface-variant bg-surface-container hover:text-on-surface";
+        
+        document.getElementById('q1-label').innerText = "Q1: CUTOFF";
+        document.getElementById('q1-val').innerText = "MIN (AEOLIAN)";
+        document.getElementById('q2-label').innerText = "Q2: RESO";
+        document.getElementById('q2-val').innerText = "1/16 RATE";
+        document.getElementById('q3-label').innerText = "Q3: DRIVE";
+        document.getElementById('q3-val').innerText = "75% GATE";
+        document.getElementById('q4-label').innerText = "Q4: TEMPO";
+        document.getElementById('q4-val').innerText = "120.0 BPM";
+      } else {
+        b2.className = "px-2 py-0.5 rounded font-label-sm text-label-sm font-mono font-bold bg-primary text-on-primary-container";
+        b1.className = "px-2 py-0.5 rounded font-label-sm text-label-sm font-mono text-on-surface-variant bg-surface-container hover:text-on-surface";
+
+        document.getElementById('q1-label').innerText = "Q1: S1 CORRUPT";
+        document.getElementById('q1-val').innerText = `${engine.s1.corrupt}%`;
+        document.getElementById('q2-label').innerText = "Q2: S1 RANGE";
+        document.getElementById('q2-val').innerText = `${engine.s1.range} OCT`;
+        document.getElementById('q3-label').innerText = "Q3: S2 CORRUPT";
+        document.getElementById('q3-val').innerText = `${engine.s2.corrupt}%`;
+        document.getElementById('q4-label').innerText = "Q4: S2 LENGTH";
+        document.getElementById('q4-val').innerText = `${engine.s2.length} STEPS`;
+      }
+    }
+
+    // --- INITIALIZE SYSTEM ON LOAD ---
+    window.addEventListener('DOMContentLoaded', () => {
+      renderShiftRegisters();
+      drawMazeBranching();
+    });
+  </script>
+</body></html>

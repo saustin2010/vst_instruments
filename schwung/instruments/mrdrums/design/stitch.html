@@ -1,0 +1,944 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>MR DRUMS // MPC LIVE II STANDALONE</title>
+<!-- Tailwind CSS & Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-error": "#690005",
+            "on-secondary-fixed-variant": "#920801",
+            "surface-container-highest": "#343538",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary": "#373016",
+            "tertiary-container": "#beb38f",
+            "on-primary": "#432c00",
+            "error-container": "#93000a",
+            "primary": "#ffc665",
+            "surface-bright": "#38393c",
+            "background": "#0d0a0d", /* theme_bg: dark eggplant */
+            "surface-container-low": "#150e17",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "surface-container-lowest": "#0a070a",
+            "on-secondary-container": "#ff9a89",
+            "surface-container": "#191219", /* theme_panel */
+            "inverse-primary": "#7e5700",
+            "outline-variant": "#45304a", /* theme_line */
+            "surface": "#120e14",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-secondary": "#680300",
+            "primary-fixed-dim": "#fabc4d",
+            "surface-container-high": "#231826",
+            "on-primary-container": "#5e4000",
+            "tertiary": "#dacfa9",
+            "tertiary-fixed": "#eee2bc",
+            "on-tertiary-fixed": "#211b04",
+            "outline": "#85608d",
+            "secondary": "#ff5cb8", /* theme_accent highlight */
+            "on-primary-fixed-variant": "#604100",
+            "surface-tint": "#fabc4d",
+            "on-surface": "#f8f0f6", /* theme_ink */
+            "surface-variant": "#2b1c2e",
+            "on-surface-variant": "#d9c2d7",
+            "error": "#ffb4ab",
+            "inverse-surface": "#f8f0f6",
+            "primary-container": "#d23c93", /* theme_accent core */
+            "inverse-on-surface": "#231826",
+            "on-tertiary-container": "#4c4529",
+            "on-secondary-fixed": "#400100",
+            "on-primary-fixed": "#281900",
+            "surface-dim": "#0d0a0d",
+            "secondary-fixed": "#ffdad4",
+            "on-background": "#f8f0f6",
+            "on-error-container": "#ffdad6",
+            "primary-fixed": "#ffdead",
+            "secondary-container": "#920801",
+            /* Custom token bridges matching mrdrums.txt */
+            "mpc-lcd-bg": "#170512",
+            "mpc-lcd-cell": "#270a1f",
+            "mpc-lcd-ink": "#ff5cb8",
+            "mpc-pink": "#ff5cb8",
+            "mpc-hotpink": "#d23c93"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "gutter": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem"
+          },
+          fontFamily: {
+            "body-lg": ["Space Grotesk", "sans-serif"],
+            "headline-sm": ["Space Grotesk", "sans-serif"],
+            "label-lg": ["JetBrains Mono", "monospace"],
+            "label-md": ["JetBrains Mono", "monospace"],
+            "readout-numeric": ["JetBrains Mono", "monospace"],
+            "headline-lg": ["Space Grotesk", "sans-serif"],
+            "body-md": ["Space Grotesk", "sans-serif"],
+            "headline-md": ["Space Grotesk", "sans-serif"],
+            "label-sm": ["JetBrains Mono", "monospace"]
+          },
+          fontSize: {
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }],
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Physical Hardware Depth & Bevels */
+    .mpc-well {
+      background: #170512;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.95), inset 0 0 1px rgba(0, 0, 0, 0.9);
+      border: 1px solid #45304a;
+    }
+    .mpc-panel-bevel {
+      border: 1px solid #45304a;
+      box-shadow: inset 0 1px 0 rgba(255, 92, 184, 0.12), 0 2px 6px rgba(0, 0, 0, 0.6);
+    }
+    .mpc-screw {
+      width: 6px;
+      height: 6px;
+      background: radial-gradient(circle, #2b1f2d 30%, #0d0a0d 100%);
+      border: 1px solid #45304a;
+      border-radius: 50%;
+      position: relative;
+    }
+    .mpc-screw::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 15%;
+      width: 70%;
+      height: 1px;
+      background: #73507b;
+      transform: translateY(-50%) rotate(42deg);
+    }
+    /* Moog Tactile Knurled Potentiometer */
+    .moog-knob-housing {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 45% 45%, #2a1b2d 0%, #120914 75%, #050206 100%);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.85), inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 2px rgba(0,0,0,0.8);
+      position: relative;
+      cursor: ns-resize;
+      touch-action: none;
+    }
+    .moog-indicator {
+      position: absolute;
+      top: 3px;
+      left: calc(50% - 1.5px);
+      width: 3px;
+      height: 14px;
+      background: #ff5cb8;
+      box-shadow: 0 0 6px #ff5cb8;
+      border-radius: 1px;
+      transform-origin: center 19px;
+    }
+    /* Touch Pad Styling */
+    .mpc-pad-btn {
+      position: relative;
+      background: linear-gradient(180deg, #241624 0%, #150d16 100%);
+      border: 1px solid #45304a;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 3px 0 #080408, 0 4px 5px rgba(0,0,0,0.8);
+      transition: all 0.05s ease-out;
+      user-select: none;
+    }
+    .mpc-pad-btn:active, .mpc-pad-btn.pad-struck {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #080408, 0 0 14px #ff5cb8;
+      border-color: #ff5cb8;
+      background: #3d1433;
+    }
+    /* Dot Matrix LCD Grid Simulation */
+    .lcd-grid-pattern {
+      background-size: 4px 4px;
+      background-image: 
+        linear-gradient(to right, rgba(39, 10, 31, 0.5) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(39, 10, 31, 0.5) 1px, transparent 1px);
+    }
+    /* Custom Scrollbar suppression */
+    ::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md select-none overflow-hidden m-0 p-0 flex items-center justify-center min-h-screen">
+<!-- STANDALONE HARDWARE CHASSIS BOUND TO MPC LIVE II SCREEN (1280x628) -->
+<main class="w-[1280px] h-[628px] max-w-[1280px] max-h-[628px] bg-background relative flex flex-col justify-between overflow-hidden border border-outline-variant shadow-2xl p-0">
+<!-- 1. TOP STATUS & NAVIGATION BAR (44px) -->
+<header class="h-[44px] w-full bg-surface-container-lowest border-b border-outline-variant px-space-md flex items-center justify-between z-30 shrink-0">
+<!-- Brand & Title -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 px-2 py-0.5 bg-surface-container border border-outline-variant rounded">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-headline-sm text-headline-sm text-secondary tracking-wider">MR DRUMS</span>
+</div>
+<span class="font-label-md text-label-md text-outline tracking-wider">16-PAD SAMPLE &amp; SYNTH DRUM ENGINE</span>
+</div>
+<!-- Navigation Tabs & Master Kit Trigger Space Action -->
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-surface-container p-0.5 rounded border border-outline-variant">
+<button class="px-space-md py-1 font-label-md text-label-md rounded font-bold transition-all bg-primary-container text-on-surface shadow-[0_0_8px_rgba(210,60,147,0.5)]" id="tab-kit" onclick="switchTab('KIT')">
+            [1: KIT]
+          </button>
+<button class="px-space-md py-1 font-label-md text-label-md rounded text-on-surface-variant hover:text-on-surface transition-all" id="tab-pad" onclick="switchTab('PAD')">
+            [2: PAD]
+          </button>
+</div>
+<button class="flex items-center gap-1 px-3 py-1 bg-surface-container-high hover:bg-surface-variant border border-outline-variant active:scale-95 transition-transform rounded text-secondary font-label-md text-label-md" id="btn-audition-all">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+<span>TRIGGER DRUM KIT [SPACE]</span>
+</button>
+</div>
+<!-- Master Meters & Transport Status -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-surface-container px-2.5 py-1 border border-outline-variant rounded">
+<span class="font-label-sm text-label-sm text-outline">BPM</span>
+<span class="font-readout-numeric text-label-lg text-secondary">124.00</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</div>
+<!-- Master Peak Meter -->
+<div class="flex flex-col gap-0.5 w-16">
+<div class="flex justify-between items-center text-[8px] font-label-sm text-outline">
+<span>OUT L/R</span>
+<span class="text-secondary" id="peak-db">-3.2dB</span>
+</div>
+<div class="w-full h-2 bg-surface-container-lowest border border-outline-variant rounded-none overflow-hidden flex gap-0.5 p-0.5">
+<div class="h-full bg-secondary w-[72%] transition-all duration-75" id="meter-bar-l"></div>
+<div class="h-full bg-secondary w-[68%] transition-all duration-75" id="meter-bar-r"></div>
+</div>
+</div>
+<!-- Master Hardware Icons -->
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-outline hover:text-secondary cursor-pointer">graphic_eq</span>
+<span class="material-symbols-outlined text-[18px] text-outline hover:text-secondary cursor-pointer">tune</span>
+<span class="material-symbols-outlined text-[18px] text-outline hover:text-secondary cursor-pointer">settings</span>
+</div>
+</div>
+</header>
+<!-- 2. MAIN MODULAR RACK GRID VIEWPORT (1280x528) -->
+<!-- Contains the 4 main modules (2x2 grid) configured strictly within native hardware bounds -->
+<div class="flex-1 w-full grid grid-cols-2 grid-rows-2 gap-[12px] p-[12px] overflow-hidden" id="page-kit">
+<!-- FRAME 1: 'KIT' SELECTION & TRANSIENT VIEWER (622 x 252 inside grid) -->
+<section class="bg-surface-container mpc-panel-bevel rounded relative flex flex-col p-3 justify-between overflow-hidden">
+<!-- Screws -->
+<div class="mpc-screw absolute top-1.5 left-1.5"></div>
+<div class="mpc-screw absolute top-1.5 right-1.5"></div>
+<div class="mpc-screw absolute bottom-1.5 left-1.5"></div>
+<div class="mpc-screw absolute bottom-1.5 right-1.5"></div>
+<!-- Module Header -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1.5 px-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-3 bg-secondary rounded-xs"></span>
+<h2 class="font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface">MODULE 1 // KIT PRESET</h2>
+</div>
+<span class="font-label-sm text-label-sm text-outline">ENGINE: ANALOG HARDWARE TAPE</span>
+</div>
+<!-- Magenta Dot Matrix LCD Kit Stepper Display -->
+<div class="mpc-well rounded p-2.5 flex items-center justify-between lcd-grid-pattern relative">
+<button class="w-9 h-9 bg-surface-container-high active:bg-secondary border border-outline-variant rounded flex items-center justify-center text-secondary active:text-on-primary transition-all" onclick="changeKit(-1)">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline tracking-widest uppercase">ACTIVE DRUM PRESET</span>
+<div class="font-readout-numeric text-headline-md text-secondary tracking-widest drop-shadow-[0_0_8px_rgba(255,92,184,0.6)]" id="kit-name-display">
+              01: 909 ANALOG TAPE
+            </div>
+<span class="font-label-sm text-label-sm text-outline">16 SLOTS LOADED // 24-BIT 96kHz SAMPLES</span>
+</div>
+<button class="w-9 h-9 bg-surface-container-high active:bg-secondary border border-outline-variant rounded flex items-center justify-center text-secondary active:text-on-primary transition-all" onclick="changeKit(1)">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<!-- Interactive Waveform Transient Viewer Display Canvas -->
+<div class="mpc-well h-24 rounded relative overflow-hidden flex flex-col justify-between p-2">
+<div class="flex items-center justify-between text-[10px] font-label-sm text-outline z-10">
+<span id="transient-label">TRANSIENT WAVE ANALYZER: PAD 01 (KICK)</span>
+<span class="text-secondary tracking-widest">LIVE AUDIO BUS</span>
+</div>
+<!-- Canvas Waveform Line -->
+<canvas class="w-full h-[60px]" height="60" id="waveform-canvas" width="580"></canvas>
+<div class="flex justify-between items-center text-[9px] font-label-sm text-outline/80 z-10 border-t border-outline-variant/30 pt-0.5">
+<span>ATTACK: 1.2ms</span>
+<span>DECAY: 340ms</span>
+<span>PUNCH DETECT: ACTIVE</span>
+</div>
+</div>
+</section>
+<!-- FRAME 2: 'MASTER' ENGINE PARAMETERS (4 TACTILE MOOG KNOBS) -->
+<section class="bg-surface-container mpc-panel-bevel rounded relative flex flex-col p-3 justify-between">
+<!-- Screws -->
+<div class="mpc-screw absolute top-1.5 left-1.5"></div>
+<div class="mpc-screw absolute top-1.5 right-1.5"></div>
+<div class="mpc-screw absolute bottom-1.5 left-1.5"></div>
+<div class="mpc-screw absolute bottom-1.5 right-1.5"></div>
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1.5 px-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-3 bg-secondary rounded-xs"></span>
+<h2 class="font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface">MODULE 2 // MASTER ENGINE</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">GLOBAL DYNAMICS</span>
+</div>
+<!-- 4 Tactile Knobs Container -->
+<div class="grid grid-cols-4 gap-2 items-center justify-items-center py-2">
+<!-- Knob 1: Master Vol -->
+<div class="flex flex-col items-center gap-1.5 w-full">
+<span class="font-label-sm text-label-sm text-outline">MASTER VOL</span>
+<div class="moog-knob-housing" data-param="vol" data-val="85" id="knob-vol">
+<div class="moog-indicator" style="transform: rotate(35deg);"></div>
+</div>
+<div class="px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded font-readout-numeric text-label-md text-secondary" id="val-vol">
+              0.0 dB
+            </div>
+</div>
+<!-- Knob 2: Polyphony -->
+<div class="flex flex-col items-center gap-1.5 w-full">
+<span class="font-label-sm text-label-sm text-outline">POLYPHONY</span>
+<div class="moog-knob-housing" data-param="poly" data-val="64" id="knob-poly">
+<div class="moog-indicator" style="transform: rotate(0deg);"></div>
+</div>
+<div class="px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded font-readout-numeric text-label-md text-secondary" id="val-poly">
+              16 VOICES
+            </div>
+</div>
+<!-- Knob 3: Vel Curve Enum -->
+<div class="flex flex-col items-center gap-1.5 w-full">
+<span class="font-label-sm text-label-sm text-outline">VEL CURVE</span>
+<div class="moog-knob-housing" data-param="vel" data-val="0" id="knob-vel">
+<div class="moog-indicator" style="transform: rotate(-60deg);"></div>
+</div>
+<button class="px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded font-readout-numeric text-label-md text-secondary hover:border-secondary transition-colors" id="val-vel" onclick="cycleVelCurve()">
+              LINEAR
+            </button>
+</div>
+<!-- Knob 4: Humanize Jitter -->
+<div class="flex flex-col items-center gap-1.5 w-full">
+<span class="font-label-sm text-label-sm text-outline">HUMANIZE</span>
+<div class="moog-knob-housing" data-param="jitter" data-val="25" id="knob-jitter">
+<div class="moog-indicator" style="transform: rotate(-30deg);"></div>
+</div>
+<div class="px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded font-readout-numeric text-label-md text-secondary" id="val-jitter">
+              4.2 ms
+            </div>
+</div>
+</div>
+<!-- Master Tone Polish & Limiter Strip -->
+<div class="mpc-well rounded p-2 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-outline">BRICKWALL LIMITER: ON</span>
+</div>
+<div class="flex items-center gap-1.5 border-l border-outline-variant pl-3">
+<span class="font-label-sm text-label-sm text-outline">TAPE WARMTH: +2.4 dB</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2 py-0.5 text-[10px] font-label-md bg-secondary text-surface-container-lowest font-bold rounded" onclick="toggleWarmth(this)">
+              ANALOG SAT
+            </button>
+</div>
+</div>
+</section>
+<!-- FRAME 3: 'PAD SELECT' & INTERACTIVE 4x4 VELOCITY PADS -->
+<section class="bg-surface-container mpc-panel-bevel rounded relative flex flex-col p-3 justify-between">
+<!-- Screws -->
+<div class="mpc-screw absolute top-1.5 left-1.5"></div>
+<div class="mpc-screw absolute top-1.5 right-1.5"></div>
+<div class="mpc-screw absolute bottom-1.5 left-1.5"></div>
+<div class="mpc-screw absolute bottom-1.5 right-1.5"></div>
+<!-- Pad Header & Stepper Selection -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 px-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-3 bg-secondary rounded-xs"></span>
+<h2 class="font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface">MODULE 3 // 16-PAD MATRIX</h2>
+</div>
+<!-- Auto Select Toggle Switch -->
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-outline">AUTO SELECT:</span>
+<button class="px-2 py-0.5 rounded text-[10px] font-label-md bg-primary-container text-on-surface font-bold border border-secondary shadow-[0_0_6px_rgba(255,92,184,0.4)]" id="toggle-autoselect" onclick="toggleAutoSelect()">
+              ON
+            </button>
+</div>
+</div>
+<!-- Sub LCD for Active Pad -->
+<div class="mpc-well px-3 py-1 rounded flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">FOCUSED PAD:</span>
+<span class="font-label-lg text-label-lg text-secondary" id="active-pad-display">PAD 01: 909 BASS DRUM</span>
+<span class="font-label-sm text-label-sm text-outline">NOTE: C1 (36)</span>
+</div>
+<!-- 4x4 DRUM PAD MATRIX (Interactive Web Audio Trigger) -->
+<div class="grid grid-cols-4 gap-1.5 h-36 w-full">
+<!-- Row 4: Hats & Cymbals (Pads 13-16) -->
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(13, 'CRASH CYMBAL', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">13</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">CRASH</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(14, 'RIDE CYMBAL', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">14</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">RIDE</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(15, 'OPEN HIHAT 2', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">15</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">OPEN 2</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(16, 'PERC FX', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">16</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">FX ZAP</span>
+</button>
+<!-- Row 3: Toms & Perc (Pads 9-12) -->
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(9, 'HI TOM', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">09</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">HI TOM</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(10, 'MID TOM', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">10</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">MID TOM</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(11, 'LOW TOM', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">11</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">LOW TOM</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(12, 'COWBELL', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">12</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">COWBELL</span>
+</button>
+<!-- Row 2: Claps & Hats (Pads 5-8) -->
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(5, 'HAND CLAP', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">05</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">CLAP</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(6, 'RIM SHOT', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">06</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">RIM</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(7, 'CLOSED HIHAT', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">07</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">CLOSED HH</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(8, 'OPEN HIHAT', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">08</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">OPEN HH</span>
+</button>
+<!-- Row 1: Core Kicks & Snares (Pads 1-4) -->
+<button class="mpc-pad-btn border-secondary rounded flex flex-col justify-between p-1.5" onclick="hitPad(1, '909 BASS DRUM', 1.0)">
+<span class="font-label-sm text-[8px] text-secondary">01</span>
+<span class="font-label-md text-[10px] text-secondary text-center font-bold">KICK 1</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(2, '909 BASS SUB', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">02</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">KICK 2</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(3, '909 SNARE TIGHT', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">03</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">SNARE 1</span>
+</button>
+<button class="mpc-pad-btn rounded flex flex-col justify-between p-1.5" onclick="hitPad(4, '909 SNARE SNAP', 1.0)">
+<span class="font-label-sm text-[8px] text-outline">04</span>
+<span class="font-label-md text-[10px] text-on-surface text-center font-bold">SNARE 2</span>
+</button>
+</div>
+</section>
+<!-- FRAME 4: 'LOGO & DSP STATUS' (VINTAGE MPC BADGE & SATURATION STAGE) -->
+<section class="bg-surface-container mpc-panel-bevel rounded relative flex flex-col p-3 justify-between">
+<!-- Screws -->
+<div class="mpc-screw absolute top-1.5 left-1.5"></div>
+<div class="mpc-screw absolute top-1.5 right-1.5"></div>
+<div class="mpc-screw absolute bottom-1.5 left-1.5"></div>
+<div class="mpc-screw absolute bottom-1.5 right-1.5"></div>
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1.5 px-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-3 bg-secondary rounded-xs"></span>
+<h2 class="font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface">MODULE 4 // PUNCH &amp; DSP STAGE</h2>
+</div>
+<span class="font-label-sm text-label-sm text-outline">VOICE ALLOCATION: 04/16</span>
+</div>
+<!-- Vintage Hardware MPC Emblems & Voice Meter -->
+<div class="grid grid-cols-2 gap-3 items-center">
+<!-- Vintage MPC Emblem Plate -->
+<div class="mpc-well rounded p-2.5 flex flex-col justify-between h-24">
+<div class="flex items-center justify-between border-b border-outline-variant/40 pb-1">
+<span class="font-label-sm text-[9px] text-secondary font-bold tracking-widest">AKAI PROFESSIONAL MPC</span>
+<span class="font-label-sm text-[8px] text-outline">64-BIT DSP</span>
+</div>
+<div class="flex flex-col py-1">
+<span class="font-headline-lg text-[19px] leading-tight font-extrabold tracking-tight text-on-surface">
+                MR DRUMS <span class="text-secondary font-mono text-sm">// MKII</span>
+</span>
+<span class="text-[9px] font-label-sm text-outline">DISCRETE TRANSIENT MODELING</span>
+</div>
+<div class="flex justify-between items-center text-[8px] font-label-sm text-secondary">
+<span>FIRMWARE: 2.11.4</span>
+<span>BUFFER: 64 SAMPLES</span>
+</div>
+</div>
+<!-- Master Punch & Saturation Controls -->
+<div class="flex items-center justify-around bg-surface-container-high border border-outline-variant rounded p-2 h-24">
+<!-- Saturation Drive Knob -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-sm text-[9px] text-outline">PUNCH DRIVE</span>
+<div class="moog-knob-housing" data-param="drive" data-val="40" id="knob-drive">
+<div class="moog-indicator" style="transform: rotate(-10deg);"></div>
+</div>
+<span class="font-readout-numeric text-[10px] text-secondary" id="val-drive">+3.4 dB</span>
+</div>
+<!-- Crisp Tone Knob -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-sm text-[9px] text-outline">CRISP AIR</span>
+<div class="moog-knob-housing" data-param="crisp" data-val="65" id="knob-crisp">
+<div class="moog-indicator" style="transform: rotate(25deg);"></div>
+</div>
+<span class="font-readout-numeric text-[10px] text-secondary" id="val-crisp">12.5 kHz</span>
+</div>
+<!-- Warmth Saturation Switch -->
+<div class="flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-[9px] text-outline">CLIP MODE</span>
+<button class="px-2 py-2 bg-surface-container-lowest border border-secondary text-secondary rounded text-[9px] font-label-md font-bold shadow-[0_0_6px_rgba(255,92,184,0.3)]" onclick="toggleClipMode(this)">
+                HARD
+              </button>
+</div>
+</div>
+</div>
+<!-- Voice Polyphony Active Activity Grid -->
+<div class="mpc-well rounded px-3 py-1.5 flex items-center justify-between">
+<span class="font-label-sm text-[9px] text-outline uppercase tracking-wider">ACTIVE VOICES:</span>
+<div class="flex items-center gap-1.5" id="voice-dots">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_4px_#ff5cb8]"></span>
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_4px_#ff5cb8]"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-high border border-outline-variant"></span>
+</div>
+<span class="font-label-sm text-[9px] text-secondary">DSP: 14%</span>
+</div>
+</section>
+</div>
+<!-- 3. LOWER Q-LINK HARDWARE STRIP (56px) - 7 Physical MPC Live II Encoders -->
+<footer class="h-[56px] w-full bg-surface-container-lowest border-t border-outline-variant px-space-md flex items-center justify-between z-30 shrink-0">
+<!-- Bank 1 Indicator -->
+<div class="flex items-center gap-1.5 pr-2 border-r border-outline-variant">
+<span class="px-1.5 py-0.5 bg-secondary text-surface-container-lowest font-label-md text-label-sm font-extrabold rounded">Q1</span>
+<span class="font-label-sm text-[9px] text-outline uppercase tracking-wider">BANK 1</span>
+</div>
+<!-- 7 Q-Link Active Value Encoders from mrdrums.txt -->
+<div class="flex-1 grid grid-cols-7 gap-2 px-2">
+<!-- Q-Link 1: kit -->
+<div class="flex flex-col items-center justify-center bg-surface-container border border-outline-variant rounded py-0.5 px-1">
+<span class="font-label-sm text-[8px] text-outline">kit</span>
+<span class="font-label-md text-[10px] text-secondary font-bold truncate max-w-full" id="qlink-kit">01: 909 ANALOG</span>
+</div>
+<!-- Q-Link 2: g_master_vol -->
+<div class="flex flex-col items-center justify-center bg-surface-container border border-outline-variant rounded py-0.5 px-1">
+<span class="font-label-sm text-[8px] text-outline">g_master_vol</span>
+<span class="font-label-md text-[10px] text-secondary font-bold" id="qlink-vol">0.0 dB</span>
+</div>
+<!-- Q-Link 3: g_polyphony -->
+<div class="flex flex-col items-center justify-center bg-surface-container border border-outline-variant rounded py-0.5 px-1">
+<span class="font-label-sm text-[8px] text-outline">g_polyphony</span>
+<span class="font-label-md text-[10px] text-secondary font-bold" id="qlink-poly">16 VOICES</span>
+</div>
+<!-- Q-Link 4: g_vel_curve -->
+<div class="flex flex-col items-center justify-center bg-surface-container border border-outline-variant rounded py-0.5 px-1">
+<span class="font-label-sm text-[8px] text-outline">g_vel_curve</span>
+<span class="font-label-md text-[10px] text-secondary font-bold" id="qlink-vel">LINEAR</span>
+</div>
+<!-- Q-Link 5: g_humanize_ms -->
+<div class="flex flex-col items-center justify-center bg-surface-container border border-outline-variant rounded py-0.5 px-1">
+<span class="font-label-sm text-[8px] text-outline">g_humanize_ms</span>
+<span class="font-label-md text-[10px] text-secondary font-bold" id="qlink-humanize">4.2 ms</span>
+</div>
+<!-- Q-Link 6: ui_current_pad -->
+<div class="flex flex-col items-center justify-center bg-surface-container border border-outline-variant rounded py-0.5 px-1">
+<span class="font-label-sm text-[8px] text-outline">ui_current_pad</span>
+<span class="font-label-md text-[10px] text-secondary font-bold" id="qlink-curpad">PAD 01</span>
+</div>
+<!-- Q-Link 7: ui_auto_select_pad -->
+<div class="flex flex-col items-center justify-center bg-surface-container border border-outline-variant rounded py-0.5 px-1">
+<span class="font-label-sm text-[8px] text-outline">ui_auto_select</span>
+<span class="font-label-md text-[10px] text-secondary font-bold" id="qlink-autoselect">ON</span>
+</div>
+</div>
+<!-- Trailing Hardware Encoder Action -->
+<div class="flex items-center pl-2 border-l border-outline-variant">
+<button class="px-3 py-1.5 bg-primary-container hover:bg-secondary active:scale-95 transition-transform text-on-surface font-label-md text-label-sm font-bold rounded shadow-[0_0_8px_rgba(210,60,147,0.5)]" onclick="saveKitPreset()">
+          STORE KIT
+        </button>
+</div>
+</footer>
+</main>
+<!-- WEB AUDIO SYNTHESIS & INTERACTIVE HARDWARE ENGINE -->
+<script>
+    // Web Audio Synthesizer Context
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Sound Generator (Analog 909 Punch Kick, Snare, and Metallic Hats)
+    function playDrumSound(padNum, velocity = 1.0) {
+      const ctx = getAudioContext();
+      const now = ctx.currentTime;
+
+      // Master Out Gain
+      const masterGain = ctx.createGain();
+      masterGain.gain.setValueAtTime(velocity * 0.8, now);
+      masterGain.connect(ctx.destination);
+
+      if (padNum === 1 || padNum === 2) {
+        // ANALOG 909 PUNCH KICK
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        
+        // Pitch drop envelope for authentic transient thump
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(45, now + 0.08);
+        osc.frequency.exponentialRampToValueAtTime(32, now + 0.28);
+
+        gain.gain.setValueAtTime(1.0, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+
+        // Click transient generator
+        const clickOsc = ctx.createOscillator();
+        const clickGain = ctx.createGain();
+        clickOsc.type = 'triangle';
+        clickOsc.frequency.setValueAtTime(800, now);
+        clickOsc.frequency.exponentialRampToValueAtTime(40, now + 0.02);
+        clickGain.gain.setValueAtTime(0.7, now);
+        clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+
+        osc.connect(gain);
+        gain.connect(masterGain);
+        clickOsc.connect(clickGain);
+        clickGain.connect(masterGain);
+
+        osc.start(now);
+        osc.stop(now + 0.4);
+        clickOsc.start(now);
+        clickOsc.stop(now + 0.03);
+
+      } else if (padNum === 3 || padNum === 4 || padNum === 5) {
+        // ANALOG 909 SNAPPY SNARE & CLAP
+        const osc = ctx.createOscillator();
+        const oscGain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(185, now);
+        osc.frequency.exponentialRampToValueAtTime(130, now + 0.09);
+        oscGain.gain.setValueAtTime(0.6, now);
+        oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+        osc.connect(oscGain);
+        oscGain.connect(masterGain);
+        osc.start(now);
+        osc.stop(now + 0.18);
+
+        // Noise body
+        const bufferSize = ctx.sampleRate * 0.2;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.value = 1000;
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.8, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        noise.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(masterGain);
+        noise.start(now);
+        noise.stop(now + 0.25);
+
+      } else {
+        // CRISP METALLIC HI-HATS / CYMBALS
+        const bufferSize = ctx.sampleRate * 0.12;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 8500;
+        filter.Q.value = 4.0;
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.7, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + (padNum === 8 || padNum === 15 ? 0.35 : 0.08));
+        noise.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(masterGain);
+        noise.start(now);
+        noise.stop(now + 0.4);
+      }
+
+      // Trigger transient visualizer
+      drawTransientWaveform();
+    }
+
+    // Interactive Pad Hit Handler
+    let activePad = 1;
+    let autoSelectActive = true;
+
+    function hitPad(padNumber, padName, velocity = 1.0) {
+      playDrumSound(padNumber, velocity);
+
+      if (autoSelectActive) {
+        activePad = padNumber;
+        document.getElementById('active-pad-display').textContent = `PAD ${padNumber < 10 ? '0' + padNumber : padNumber}: ${padName}`;
+        document.getElementById('transient-label').textContent = `TRANSIENT WAVE ANALYZER: PAD ${padNumber < 10 ? '0' + padNumber : padNumber} (${padName.split(' ')[0]})`;
+        document.getElementById('qlink-curpad').textContent = `PAD ${padNumber < 10 ? '0' + padNumber : padNumber}`;
+      }
+
+      // Visual Glow on Struck Pad
+      const pads = document.querySelectorAll('.mpc-pad-btn');
+      pads.forEach(btn => {
+        if (btn.textContent.includes(padNumber < 10 ? '0' + padNumber : '' + padNumber)) {
+          btn.classList.add('pad-struck');
+          setTimeout(() => btn.classList.remove('pad-struck'), 110);
+        }
+      });
+
+      // Fluctuate Master Meter
+      triggerMasterMeter(velocity);
+    }
+
+    // Dynamic Master Meter Bounce
+    function triggerMasterMeter(vel) {
+      const left = document.getElementById('meter-bar-l');
+      const right = document.getElementById('meter-bar-r');
+      const pct = Math.min(100, Math.floor(vel * 92));
+      left.style.width = pct + '%';
+      right.style.width = Math.max(10, pct - 5) + '%';
+      setTimeout(() => {
+        left.style.width = '64%';
+        right.style.width = '58%';
+      }, 150);
+    }
+
+    // Keyboard Spacebar Audition Trigger
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        // Audition 4-piece groove
+        hitPad(1, '909 BASS DRUM', 1.0);
+        setTimeout(() => hitPad(7, 'CLOSED HIHAT', 0.8), 75);
+        setTimeout(() => hitPad(3, '909 SNARE TIGHT', 0.95), 180);
+      }
+    });
+
+    document.getElementById('btn-audition-all').addEventListener('click', () => {
+      hitPad(1, '909 BASS DRUM', 1.0);
+      setTimeout(() => hitPad(7, 'CLOSED HIHAT', 0.85), 90);
+      setTimeout(() => hitPad(5, 'HAND CLAP', 0.9), 180);
+    });
+
+    // Waveform Analyzer Canvas Rendering
+    const canvas = document.getElementById('waveform-canvas');
+    const ctxCanvas = canvas.getContext('2d');
+
+    function drawTransientWaveform() {
+      const w = canvas.width;
+      const h = canvas.height;
+      ctxCanvas.clearRect(0, 0, w, h);
+
+      // Gradient Line
+      ctxCanvas.lineWidth = 2;
+      ctxCanvas.strokeStyle = '#ff5cb8';
+      ctxCanvas.shadowBlur = 8;
+      ctxCanvas.shadowColor = '#ff5cb8';
+
+      ctxCanvas.beginPath();
+      const mid = h / 2;
+      ctxCanvas.moveTo(0, mid);
+
+      for (let x = 0; x < w; x++) {
+        const decay = Math.exp(-x / 80);
+        const freq = 0.15;
+        const amp = (Math.sin(x * freq) * (h * 0.45) * decay) + ((Math.random() - 0.5) * 6 * decay);
+        ctxCanvas.lineTo(x, mid + amp);
+      }
+      ctxCanvas.stroke();
+    }
+    // Initial static waveform trace
+    drawTransientWaveform();
+
+    // Kit Stepper Logic
+    const kitList = [
+      '01: 909 ANALOG TAPE',
+      '02: 808 SUB BASS DRIVE',
+      '03: CR78 VINTAGE LOFI',
+      '04: DMX ELECTRO BOOM',
+      '05: LINNDRUM SOLID PUNCH'
+    ];
+    let currentKitIdx = 0;
+
+    function changeKit(dir) {
+      currentKitIdx = (currentKitIdx + dir + kitList.length) % kitList.length;
+      document.getElementById('kit-name-display').textContent = kitList[currentKitIdx];
+      document.getElementById('qlink-kit').textContent = kitList[currentKitIdx];
+      // Audition Kick on Kit Switch
+      hitPad(1, '909 BASS DRUM', 0.9);
+    }
+
+    // Velocity Curve Enum
+    const velCurves = ['LINEAR', 'SOFT', 'HARD', 'EXPONENTIAL'];
+    let velIdx = 0;
+    function cycleVelCurve() {
+      velIdx = (velIdx + 1) % velCurves.length;
+      const val = velCurves[velIdx];
+      document.getElementById('val-vel').textContent = val;
+      document.getElementById('qlink-vel').textContent = val;
+    }
+
+    // Auto Select Toggle
+    function toggleAutoSelect() {
+      autoSelectActive = !autoSelectActive;
+      const btn = document.getElementById('toggle-autoselect');
+      btn.textContent = autoSelectActive ? 'ON' : 'OFF';
+      btn.className = autoSelectActive 
+        ? 'px-2 py-0.5 rounded text-[10px] font-label-md bg-primary-container text-on-surface font-bold border border-secondary shadow-[0_0_6px_rgba(255,92,184,0.4)]'
+        : 'px-2 py-0.5 rounded text-[10px] font-label-md bg-surface-container text-outline font-bold border border-outline-variant';
+      document.getElementById('qlink-autoselect').textContent = autoSelectActive ? 'ON' : 'OFF';
+    }
+
+    // Saturation and Clip Mode Toggles
+    function toggleWarmth(btn) {
+      if (btn.classList.contains('bg-secondary')) {
+        btn.classList.remove('bg-secondary', 'text-surface-container-lowest');
+        btn.classList.add('bg-surface-container-lowest', 'text-outline');
+      } else {
+        btn.classList.add('bg-secondary', 'text-surface-container-lowest');
+        btn.classList.remove('bg-surface-container-lowest', 'text-outline');
+      }
+    }
+
+    function toggleClipMode(btn) {
+      btn.textContent = btn.textContent.trim() === 'HARD' ? 'SOFT' : 'HARD';
+    }
+
+    // Tab Switcher Simulator
+    function switchTab(tab) {
+      const tabKit = document.getElementById('tab-kit');
+      const tabPad = document.getElementById('tab-pad');
+      if (tab === 'KIT') {
+        tabKit.className = 'px-space-md py-1 font-label-md text-label-md rounded font-bold transition-all bg-primary-container text-on-surface shadow-[0_0_8px_rgba(210,60,147,0.5)]';
+        tabPad.className = 'px-space-md py-1 font-label-md text-label-md rounded text-on-surface-variant hover:text-on-surface transition-all';
+      } else {
+        tabPad.className = 'px-space-md py-1 font-label-md text-label-md rounded font-bold transition-all bg-primary-container text-on-surface shadow-[0_0_8px_rgba(210,60,147,0.5)]';
+        tabKit.className = 'px-space-md py-1 font-label-md text-label-md rounded text-on-surface-variant hover:text-on-surface transition-all';
+      }
+    }
+
+    function saveKitPreset() {
+      const btn = event.target;
+      const prev = btn.textContent;
+      btn.textContent = 'STORED!';
+      setTimeout(() => btn.textContent = prev, 800);
+    }
+
+    // Rotary Knob Drag Interaction Controller
+    let activeKnob = null;
+    let startY = 0;
+    let startVal = 0;
+
+    document.querySelectorAll('.moog-knob-housing').forEach(knob => {
+      knob.addEventListener('pointerdown', (e) => {
+        activeKnob = knob;
+        startY = e.clientY;
+        startVal = parseFloat(knob.dataset.val);
+        knob.setPointerCapture(e.pointerId);
+      });
+
+      knob.addEventListener('pointermove', (e) => {
+        if (!activeKnob || activeKnob !== knob) return;
+        const delta = (startY - e.clientY) * 0.8;
+        let newVal = Math.min(100, Math.max(0, startVal + delta));
+        knob.dataset.val = newVal;
+
+        // Angle rotation from -135deg to +135deg
+        const deg = -135 + (newVal / 100) * 270;
+        const indicator = knob.querySelector('.moog-indicator');
+        if (indicator) {
+          indicator.style.transform = `rotate(${deg}deg)`;
+        }
+
+        // Update Text Readout values
+        const param = knob.dataset.param;
+        if (param === 'vol') {
+          const db = ((newVal / 100) * 12 - 6).toFixed(1);
+          document.getElementById('val-vol').textContent = `${db > 0 ? '+' : ''}${db} dB`;
+          document.getElementById('qlink-vol').textContent = `${db > 0 ? '+' : ''}${db} dB`;
+        } else if (param === 'poly') {
+          const v = Math.round((newVal / 100) * 31 + 1);
+          document.getElementById('val-poly').textContent = `${v} VOICES`;
+          document.getElementById('qlink-poly').textContent = `${v} VOICES`;
+        } else if (param === 'jitter') {
+          const ms = ((newVal / 100) * 15).toFixed(1);
+          document.getElementById('val-jitter').textContent = `${ms} ms`;
+          document.getElementById('qlink-humanize').textContent = `${ms} ms`;
+        } else if (param === 'drive') {
+          const drv = ((newVal / 100) * 12).toFixed(1);
+          document.getElementById('val-drive').textContent = `+${drv} dB`;
+        } else if (param === 'crisp') {
+          const khz = (4 + (newVal / 100) * 14).toFixed(1);
+          document.getElementById('val-crisp').textContent = `${khz} kHz`;
+        }
+      });
+
+      knob.addEventListener('pointerup', (e) => {
+        if (activeKnob) {
+          activeKnob.releasePointerCapture(e.pointerId);
+          activeKnob = null;
+        }
+      });
+    });
+  </script>
+</body></html>

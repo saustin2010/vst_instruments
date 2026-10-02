@@ -1,0 +1,6 @@
+https://github.com/VCVRack/Befaco (src/Rampage.cpp, src/plugin.hpp)
+commit bf03788cf11668ba4d371291d6b6dc8377393a24 2026-09-17
+vendored 2026-10-02: src/befaco/ = the originals; src/Rampage_dsp.hpp = Rampage.cpp up to its panel widget + PulseGenerator_4,
+unchanged (steve/tools/rack/extract_module.py). LICENSE.md + LICENSE-GPLv3.txt from the repo: code GPL-3.0-or-later;
+Befaco's panel graphics (not used here) are theirs. mpc/ = the MPC engine (new, GPL-3.0-or-later) + steve/tools/rack/rack_shim.hpp,
+steve/tools/midiout/alsa_midi_out.h, steve/tools/mi/mi_engine.h, wrapper/engine.h

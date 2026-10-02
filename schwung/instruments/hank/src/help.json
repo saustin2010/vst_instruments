@@ -1,0 +1,109 @@
+{
+ "title": "Hank",
+ "children": [
+  {
+   "title": "What it is",
+   "lines": [
+    "Two-operator FM on eight",
+    "knobs, one page. OP2 bends",
+    "OP1's pitch thousands of",
+    "times a second; that bending",
+    "is the timbre.",
+    "",
+    "There is no manual mode. The",
+    "eight knobs are the whole",
+    "instrument."
+   ]
+  },
+  {
+   "title": "Ratio / Bright / Bite",
+   "lines": [
+    "RATIO steps through 16 chosen",
+    "ratios. Whole numbers give",
+    "harmonic tones, the rest give",
+    "bells and metal.",
+    "",
+    "BRIGHT is how hard OP2 bends",
+    "OP1. It is the main timbre",
+    "control.",
+    "",
+    "BITE adds feedback first,",
+    "then drive: warm, then an",
+    "octave underneath, then dirt.",
+    "",
+    "The wave above these three",
+    "shows what OP2 is doing."
+   ]
+  },
+  {
+   "title": "Attack / Decay / Sustain",
+   "lines": [
+    "One set of envelope knobs",
+    "drives BOTH operators.",
+    "",
+    "The modulator is always 2.2x",
+    "shorter than the carrier, at",
+    "every setting, so brightness",
+    "fades before loudness does.",
+    "That is what makes FM sound",
+    "right, and it cannot be set",
+    "wrong.",
+    "",
+    "It never closes completely,",
+    "so RATIO still colours the",
+    "tail of a short note.",
+    "",
+    "DECAY is also the release:",
+    "1.5ms to a 8 second pad."
+   ]
+  },
+  {
+   "title": "Noise / Tone",
+   "lines": [
+    "NOISE crossfades noise in on",
+    "the modulator envelope, so a",
+    "little is an attack chiff and",
+    "a lot is a hat or a snare.",
+    "Raise SUSTAIN to hold it.",
+    "",
+    "TONE is one filter sweep,",
+    "dark to open, with a little",
+    "resonance in the middle. It",
+    "shapes the noise too."
+   ]
+  },
+  {
+   "title": "Setup",
+   "lines": [
+    "Voices, glide, transpose,",
+    "volume and the preset list.",
+    "",
+    "VOLUME is a plain multiplier:",
+    "full is unity, it only turns",
+    "down. Preset loudness is",
+    "matched for you.",
+    "",
+    "VOICES at 1 is mono, with",
+    "glide between overlapping",
+    "notes. Release the top note",
+    "and it returns to the one",
+    "still held, without",
+    "retriggering."
+   ]
+  },
+  {
+   "title": "Presets",
+   "lines": [
+    "32 across bass, keys, bells,",
+    "leads, pads, percussion and",
+    "effects.",
+    "",
+    "Levels are matched on a five",
+    "note chord, so chords have",
+    "headroom rather than single",
+    "notes being as loud as",
+    "possible."
+   ]
+  }
+ ]
+}

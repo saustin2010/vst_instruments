@@ -1,0 +1,29 @@
+{
+  "name": "Eucalypso",
+  "vendor": "handcraftedcc",
+  "uid": "Euca",
+  "so": "eucalypso.so",
+  "build": {
+    "sources": [
+      "src/dsp/eucalypso.c",
+      "mpc/schwung_midi_fx.c"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Impc/host",
+      "-Isrc",
+      "-Isrc/dsp",
+      "-Isrc/host"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "MIDIFX_INIT": "\"sync=clock\""
+  }
+}

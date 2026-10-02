@@ -1,0 +1,88 @@
+{
+ "name": "MIDI Player",
+ "params": [
+  {
+   "key": "loop",
+   "name": "LOOP",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "file_index",
+   "name": "FILE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "file_index_prev",
+   "name": "PREV FILE",
+   "momentary": true,
+   "step_of": "file_index",
+   "step_delta": -1
+  },
+  {
+   "key": "file_index_next",
+   "name": "NEXT FILE",
+   "momentary": true,
+   "step_of": "file_index",
+   "step_delta": 1
+  },
+  {
+   "key": "file_name_display",
+   "name": "FILE NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "track",
+   "name": "TRACK",
+   "options": [
+    "ALL",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16"
+   ],
+   "values": [
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "default": 0
+  }
+ ]
+}

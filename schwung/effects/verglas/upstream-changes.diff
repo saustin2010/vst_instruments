@@ -1,0 +1,47 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored. Each is described in README.md under "Changes for the MPC".
+--- a/src/clouds_move.cpp
++++ b/src/clouds_move.cpp
+@@ -308,7 +308,7 @@
+     p->reverb = clampf(inst->reverb, 0.0f, 1.0f);
+     // Bypass Clouds internal dry/wet — its equal-power LUT attenuates dry by
+     // -3dB at mix=0 (lut_xfade_out[0]=0.7071). We do our own mix after Process.
+-    p->dry_wet = 1.0f;
++    p->dry_wet = 0.99999f;   // MPC port: 1.0 makes Interpolate(lut_xfade_in, 1.0, 16) read lut[17], one past the table (ASan)
+     p->stereo_spread = clampf(inst->stereo_spread, 0.0f, 1.0f);
+     p->freeze = inst->freeze;
+     p->trigger = false;
+--- a/src/clouds/dsp/grain.h
++++ b/src/clouds/dsp/grain.h
+@@ -98,7 +98,8 @@
+       if (use_lut_for_envelope) {
+         if (quality == GRAIN_QUALITY_HIGH) {
+           float window = 0.0f;
+-          window = stmlib::Interpolate(lut_window, gain, 4096.0f);
++          // MPC port: gain reaches exactly 1.0 at the grain's peak, which reads lut_window[4097], one past it
++          window = stmlib::Interpolate(lut_window, gain < 0.99999f ? gain : 0.99999f, 4096.0f);
+           gain += smoothness * (window - gain);
+         }
+       } else {
+--- a/src/stmlib/dsp/dsp.h
++++ b/src/stmlib/dsp/dsp.h
+@@ -16,7 +16,19 @@
+ 
+ inline float Interpolate(const float* table, float index, float size) {
+   index *= size;
++#ifdef MPC_PORT
++  // MPC port (2026-10-02): the hardware's ADCs stop just short of full scale, but a host parameter at exactly 1.0, or a
++  // modulation sum past it, read one past the end of the table (size + 1 entries; found with steve/tools/fuzz).
++  if (!(index > 0.0f)) index = 0.0f;  // also NaN
++  if (index > size) index = size;
+   MAKE_INTEGRAL_FRACTIONAL(index)
++  if (index_integral >= static_cast<int32_t>(size)) {
++    index_integral = static_cast<int32_t>(size) - 1;
++    index_fractional = index - static_cast<float>(index_integral);
++  }
++#else
++  MAKE_INTEGRAL_FRACTIONAL(index)
++#endif
+   float a = table[index_integral];
+   float b = table[index_integral + 1];
+   return a + (b - a) * index_fractional;

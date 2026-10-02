@@ -1,0 +1,170 @@
+{
+  "title": "Helm",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "Helm polyphonic",
+        "subtractive synth.",
+        "",
+        "2 oscillators, 1",
+        "sub oscillator,",
+        "1 noise source,",
+        "1 multi-mode filter,",
+        "3 envelopes, and",
+        "3 LFOs.",
+        "",
+        "Includes a step",
+        "sequencer, deep",
+        "modulation matrix,",
+        "and 5 FX units."
+      ]
+    },
+    {
+      "title": "Controls",
+      "children": [
+        {
+          "title": "Knob Mapping",
+          "lines": [
+            "Knob 1: Cutoff",
+            " Filter cutoff freq",
+            "",
+            "Knob 2: Resonance",
+            " Filter resonance",
+            "",
+            "Knob 3: Filt Env",
+            " Filt Env Depth",
+            "",
+            "Knob 4: Attack",
+            "Knob 5: Decay",
+            "Knob 6: Sustain",
+            "Knob 7: Release",
+            " Amp envelope ADSR",
+            "",
+            "Knob 8: Volume",
+            " Global volume"
+          ]
+        },
+        {
+          "title": "Oscillators",
+          "lines": [
+            "Osc 1 & 2 have:",
+            " Waveform, Volume,",
+            " Transpose, Tune,",
+            " Unison Voices, and",
+            " Unison Detune.",
+            "",
+            "Sub Osc has:",
+            " Waveform, Volume,",
+            " Octave, Shuffle.",
+            "",
+            "Noise/Feedback:",
+            " Noise level and",
+            " feedback controls."
+          ]
+        },
+        {
+          "title": "Filter",
+          "lines": [
+            "Multi-mode filter",
+            "with controls for:",
+            " On/Off, Style,",
+            " Blend, Shelf,",
+            " Cutoff, Resonance,",
+            " Keytrack, and",
+            " Drive."
+          ]
+        },
+        {
+          "title": "Envelopes",
+          "lines": [
+            "3 ADSR Envelopes:",
+            " Amp Envelope",
+            " Filter Envelope",
+            " Mod Envelope",
+            "",
+            "Adjust Attack,",
+            "Decay, Sustain,",
+            "and Release for",
+            "each envelope."
+          ]
+        },
+        {
+          "title": "LFOs",
+          "lines": [
+            "3 LFOs available:",
+            " Mono LFO 1 & 2",
+            " Poly LFO",
+            "",
+            "Each has Waveform,",
+            "Sync (Free/Tempo),",
+            "Tempo Division,",
+            "Frequency,",
+            "Amplitude, and",
+            "Retrigger mode."
+          ]
+        },
+        {
+          "title": "Sequencer",
+          "lines": [
+            "Step Sequencer",
+            "with up to 32 steps.",
+            "",
+            "Adjust Num Steps,",
+            "Frequency, Sync,",
+            "Tempo, Smoothing,",
+            "and Retrigger.",
+            "",
+            "Edit individual",
+            "steps directly",
+            "via mapped knobs."
+          ]
+        },
+        {
+          "title": "Mod Matrix",
+          "lines": [
+            "16 modulation",
+            "routing slots.",
+            "",
+            "Configure:",
+            " - Slot Enabled",
+            " - Source selector",
+            " - Destination (70",
+            "   targets)",
+            " - Mod Amount",
+            "   (-100% to +100%)"
+          ]
+        },
+        {
+          "title": "Effects",
+          "lines": [
+            "5 built-in effects:",
+            " Formant (vocal)",
+            " Distortion (drive)",
+            " Delay (echo)",
+            " Reverb (space)",
+            " Stutter (looper)",
+            "",
+            "Enable and tweak",
+            "each effect in its",
+            "respective menu."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Settings",
+      "lines": [
+        "Global parameters:",
+        " BPM (20 to 300)",
+        " Volume",
+        " Polyphony",
+        " Portamento",
+        " Portamento Type",
+        " Legato mode",
+        " Pitch Bend Range",
+        " Velocity Track"
+      ]
+    }
+  ]
+}

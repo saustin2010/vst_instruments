@@ -1,0 +1,213 @@
+{
+ "name": "NuSaw",
+ "params": [
+  {
+   "key": "preset",
+   "name": "Preset",
+   "min": 0,
+   "max": 1.0,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "cutoff",
+   "name": "Cutoff",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  },
+  {
+   "key": "resonance",
+   "name": "Resonance",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "detune",
+   "name": "Detune",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "spread",
+   "name": "Spread",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  },
+  {
+   "key": "f_amount",
+   "name": "Filt Env",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "attack",
+   "name": "Attack",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.01
+  },
+  {
+   "key": "decay",
+   "name": "Decay",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "sustain",
+   "name": "Sustain",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  },
+  {
+   "key": "release",
+   "name": "Release",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.2
+  },
+  {
+   "key": "f_attack",
+   "name": "F Attack",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.01
+  },
+  {
+   "key": "f_decay",
+   "name": "F Decay",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "f_sustain",
+   "name": "F Sustain",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "f_release",
+   "name": "F Release",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.2
+  },
+  {
+   "key": "volume",
+   "name": "Volume",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  },
+  {
+   "key": "vel_sens",
+   "name": "Vel Sens",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "bend_range",
+   "name": "Bend Range",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.167
+  },
+  {
+   "key": "sub_level",
+   "name": "Sub",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "sub_octave",
+   "name": "Sub Oct",
+   "min": -2,
+   "max": 0,
+   "default": -1,
+   "display": "int"
+  },
+  {
+   "key": "saw_count",
+   "name": "Saws",
+   "min": 3,
+   "max": 25,
+   "default": 7,
+   "display": "int"
+  },
+  {
+   "key": "chorus_mix",
+   "name": "Chorus",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "chorus_depth",
+   "name": "Chr Depth",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "delay_time",
+   "name": "Dly Time",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.35
+  },
+  {
+   "key": "delay_fback",
+   "name": "Dly Fback",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.4
+  },
+  {
+   "key": "delay_mix",
+   "name": "Delay",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "delay_tone",
+   "name": "Dly Tone",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.6
+  }
+ ]
+}

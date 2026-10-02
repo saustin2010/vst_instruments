@@ -1,0 +1,32 @@
+/* OB-Xd skin: an OB-X-style black panel with white legends and red accents. Loaded after
+ * tools/html_art/default.css; colours come from layout.conf's theme_* lines. */
+:root {
+  --title-size: 22px;
+  --label-size: 17px;
+  --seg-size: 16px;
+  --button-size: 16px;
+  --radius: 5px;
+  --sheen: 0.06;
+}
+
+/* panels: filled, rounded, with a red rule under a white title */
+.frame-border { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; rx: 8px; }
+.frame-title { fill: var(--ink); letter-spacing: 0.16em; }
+.frame-rule { stroke: var(--accent); stroke-width: 2; }
+
+/* group labels and box labels (LEGATO, PATCH): readable, not dim */
+.text { fill: var(--ink); letter-spacing: 0.1em; }
+.box-label { fill: var(--ink); letter-spacing: 0.14em; }
+
+/* option segments: dark keys, the selected one lit white */
+.seg-tx { letter-spacing: 0.08em; }
+
+/* stepper arrows: red on dark */
+.arrow-bg { fill: #1b1c1f; }
+.arrow { fill: var(--accent-hi); }
+
+/* group labels (LEGATO) are coloured inline by the builder; keep them white like the box labels */
+.text { fill: var(--ink) !important; }
+
+/* the dot-matrix patch display's arrows: lit red, so they read as buttons */
+.dot-arrow { fill: var(--accent-hi); }

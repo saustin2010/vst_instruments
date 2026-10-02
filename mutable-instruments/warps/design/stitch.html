@@ -1,0 +1,918 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=1280, height=628, initial-scale=1.0, user-scalable=no" name="viewport">
+<title>WARPS // META-MODULATOR</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-background": "#e3e2e6",
+            "outline-variant": "#504535",
+            "primary-fixed": "#ffdead",
+            "on-secondary-fixed": "#400100",
+            "surface-container-high": "#292a2d",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "surface-container": "#1f1f23",
+            "on-surface": "#e3e2e6",
+            "inverse-primary": "#7e5700",
+            "on-error-container": "#ffdad6",
+            "on-error": "#690005",
+            "on-primary-fixed-variant": "#604100",
+            "secondary-fixed": "#ffdad4",
+            "on-tertiary": "#373016",
+            "tertiary": "#dacfa9",
+            "primary-fixed-dim": "#fabc4d",
+            "tertiary-container": "#beb38f",
+            "tertiary-fixed": "#eee2bc",
+            "outline": "#9d8f7c",
+            "secondary": "#ffb4a7",
+            "on-tertiary-fixed": "#211b04",
+            "surface": "#121316",
+            "surface-container-lowest": "#0d0e11",
+            "on-secondary": "#680300",
+            "error-container": "#93000a",
+            "on-secondary-fixed-variant": "#920801",
+            "inverse-on-surface": "#2f3034",
+            "primary": "#ffc665",
+            "surface-bright": "#38393c",
+            "background": "#121316",
+            "primary-container": "#e5a93c",
+            "inverse-surface": "#e3e2e6",
+            "secondary-container": "#920801",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-primary": "#432c00",
+            "on-primary-container": "#5e4000",
+            "on-secondary-container": "#ff9a89",
+            "surface-variant": "#343538",
+            "error": "#ffb4ab",
+            "surface-container-low": "#1b1b1f",
+            "on-tertiary-container": "#4c4529",
+            "surface-tint": "#fabc4d",
+            "surface-dim": "#121316",
+            "on-surface-variant": "#d4c4b0",
+            "surface-container-highest": "#343538",
+            "on-primary-fixed": "#281900"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "gutter": "0.75rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem",
+            "margin": "0.75rem",
+            "space-xl": "1.5rem"
+          },
+          fontFamily: {
+            "headline-sm": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-md": ["Space Grotesk"],
+            "label-md": ["JetBrains Mono"],
+            "headline-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"]
+          },
+          fontSize: {
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    :root {
+      --th-bg: #0a0e10;
+      --th-panel: #12191c;
+      --th-line: #2c4148;
+      --th-ink: #eef8fa;
+      --th-ink-dim: #c3d8dd;
+      --th-ink-faint: #6d868d;
+      --th-accent: #35b6d6;
+      --th-accent-hi: #68d8f2;
+      --th-knob-face: #eef5f7;
+      --th-knob-ring: #20303a;
+      --th-knob-dot: #68d8f2;
+    }
+    body {
+      background-color: var(--th-bg);
+      color: var(--th-ink);
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+      width: 1280px;
+      height: 628px;
+      margin: 0;
+      padding: 0;
+    }
+    .panel-cut {
+      background: var(--th-panel);
+      border: 1px solid var(--th-line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 4px rgba(0,0,0,0.85);
+    }
+    .screen-well {
+      background: #06090a;
+      border: 1px solid #1a2a30;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.9), inset 0 0 1px rgba(0,0,0,0.9);
+    }
+    .hex-screw {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #485c63 30%, #162024 90%);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.1);
+      position: relative;
+    }
+    .hex-screw::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 1px;
+      width: 4px;
+      height: 1.5px;
+      background: #090e10;
+    }
+    .knob-shadow {
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.8));
+    }
+    .qlink-active {
+      box-shadow: 0 0 8px rgba(104,216,242,0.4), inset 0 0 4px rgba(53,182,214,0.3);
+    }
+  </style>
+</head>
+<body class="flex flex-col justify-between font-label-md antialiased select-none">
+<!-- TOP APP BAR -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-11 bg-surface-container-lowest border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="text-headline-sm font-headline-sm text-primary tracking-wider uppercase">SYNTH ENGINE // MPC</span>
+<span class="text-[#2c4148] font-bold">|</span>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#10191c] border border-[#2c4148]">
+<span class="text-[#68d8f2] font-label-sm font-bold tracking-widest uppercase">MUTABLE INSTRUMENTS</span>
+<span class="text-[#6d868d] text-[10px]">// DUAL AUDIO PROCESSOR</span>
+</div>
+<div class="px-2 py-0.5 bg-[#17252b] border border-[#35b6d6] text-[#68d8f2] font-label-sm font-bold tracking-wider rounded">
+        [WARPS]
+      </div>
+</div>
+<!-- Active Navigation tabs according to Shared Component JSON -->
+<nav class="flex items-center gap-4 text-label-md font-label-md">
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">OSC</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">FILTER</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">ENV</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">LFO</span>
+<span class="text-on-surface-variant hover:text-on-surface py-1 cursor-pointer">FX</span>
+<!-- MOD is closest to WARPS Meta-Modulator intent -->
+<span class="text-primary border-b-2 border-primary font-bold py-1 cursor-pointer">MOD</span>
+</nav>
+<!-- Status & Trailing Actions -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-3 px-2 py-0.5 bg-[#0a0e10] border border-[#22353c] text-label-sm font-label-sm text-[#8fa7af]">
+<span>ROUTING: <strong class="text-[#eef8fa]">IN-LINE</strong></span>
+<span>RATE: <strong class="text-[#35b6d6]">48kHz</strong></span>
+<span>DSP: <strong class="text-[#68d8f2]">8%</strong></span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2 py-1 bg-surface-container-high hover:bg-[#203038] text-primary text-label-sm font-label-sm border border-[#3e484d] rounded active:translate-y-0.5 transition-transform duration-75">PRESET</button>
+<button class="px-2 py-1 bg-[#1c2c33] hover:bg-[#253a43] text-[#68d8f2] text-label-sm font-label-sm border border-[#35b6d6] rounded font-bold active:translate-y-0.5 transition-transform duration-75">SAVE</button>
+</div>
+<div class="flex items-center gap-1 text-[#8fa7af]">
+<span class="material-symbols-outlined text-[18px] cursor-pointer hover:text-primary">tune</span>
+<span class="material-symbols-outlined text-[18px] cursor-pointer hover:text-primary">graphic_eq</span>
+<span class="material-symbols-outlined text-[18px] cursor-pointer hover:text-primary">settings</span>
+</div>
+</div>
+</header>
+<!-- MAIN TOUCH CANVAS (528px high: top 44px to 572px) -->
+<main class="w-full mt-11 px-3 pt-2 h-[516px] grid grid-cols-12 gap-2 relative bg-[#0a0e10] text-[#eef8fa]">
+<!-- 1. MODULATION MODULE (Left top: col-span-6) -->
+<section class="col-span-6 panel-cut rounded p-2 flex flex-col justify-between relative">
+<div class="hex-screw absolute top-1.5 left-1.5"></div>
+<div class="hex-screw absolute top-1.5 right-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 left-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 right-1.5"></div>
+<!-- Module Header -->
+<div class="flex justify-between items-center px-2 border-b border-[#22333a] pb-1">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-[#35b6d6] shadow-[0_0_6px_#35b6d6]"></div>
+<span class="font-headline-sm text-headline-sm text-[#eef8fa] tracking-wider">MODULATION</span>
+<span class="text-label-sm font-label-sm text-[#6d868d]">[META-MODULATOR CORE]</span>
+</div>
+<!-- Mode Switcher -->
+<div class="flex items-center bg-[#070b0c] p-0.5 rounded border border-[#23383f]">
+<button class="px-2.5 py-0.5 rounded text-label-sm font-label-sm font-bold bg-[#35b6d6] text-[#061114] shadow-sm" id="btn-mode-meta">META MOD</button>
+<button class="px-2.5 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]" id="btn-mode-freq">FREQ SHIFTER</button>
+</div>
+</div>
+<!-- Main Mod Controls Area -->
+<div class="grid grid-cols-12 gap-2 my-auto px-1 items-center">
+<!-- Knob 1: ALGORITHM (r=46) -->
+<div class="col-span-4 flex flex-col items-center justify-center">
+<div class="relative w-[92px] h-[92px] flex items-center justify-center cursor-pointer group" id="ctrl-algo">
+<!-- Knob Dial Track -->
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-algo" r="42" stroke="#68d8f2" stroke-dasharray="210" stroke-dashoffset="120" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<!-- Collet Cap -->
+<div class="w-[74px] h-[74px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<!-- Pointer Dot / Needle -->
+<div class="w-1.5 h-6 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_8px_#68d8f2] transform origin-bottom transition-transform" id="needle-algo" style="transform: rotate(35deg) translateY(-8px);"></div>
+<span class="text-[9px] font-bold text-[#8fa7af] tracking-tight">ALGO</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">ALGORITHM</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#68d8f2] font-bold" id="txt-algo">Diode Ring Mod</span>
+</div>
+</div>
+<!-- Knob 2: TIMBRE (r=46) -->
+<div class="col-span-4 flex flex-col items-center justify-center">
+<div class="relative w-[92px] h-[92px] flex items-center justify-center cursor-pointer" id="ctrl-timbre">
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-timbre" r="42" stroke="#35b6d6" stroke-dasharray="210" stroke-dashoffset="75" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-[74px] h-[74px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<div class="w-1.5 h-6 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_8px_#68d8f2] transform origin-bottom transition-transform" id="needle-timbre" style="transform: rotate(85deg) translateY(-8px);"></div>
+<span class="text-[9px] font-bold text-[#8fa7af] tracking-tight">WARP</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">TIMBRE</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#35b6d6] font-bold" id="txt-timbre">64.2 %</span>
+</div>
+</div>
+<!-- Knob 3: SHIFT (r=38) -->
+<div class="col-span-4 flex flex-col items-center justify-center">
+<div class="relative w-[76px] h-[76px] flex items-center justify-center cursor-pointer" id="ctrl-shift">
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-shift" r="42" stroke="#68d8f2" stroke-dasharray="210" stroke-dashoffset="135" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-[60px] h-[60px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<div class="w-1 h-5 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_6px_#68d8f2] transform origin-bottom transition-transform" id="needle-shift" style="transform: rotate(-15deg) translateY(-6px);"></div>
+<span class="text-[8px] font-bold text-[#8fa7af]">HZ</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">SHIFT</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#c3d8dd] font-bold" id="txt-shift">+120 Hz</span>
+</div>
+</div>
+</div>
+<!-- Real-time Lissajous Scope (Visual Carrier x Modulator) -->
+<div class="screen-well rounded h-[76px] px-2 py-1 flex items-center justify-between relative overflow-hidden">
+<div class="absolute left-2 top-1 text-[8px] font-label-sm text-[#35b6d6] tracking-wider z-10">LISSAJOUS // CARRIER × MODULATOR PHASE</div>
+<div class="absolute right-2 top-1 text-[8px] font-label-sm text-[#6d868d] z-10">48kHz DUAL-ADC</div>
+<canvas class="w-full h-full" height="74" id="lissajousCanvas" width="580"></canvas>
+</div>
+</section>
+<!-- 2. CARRIER MODULE (Right top: col-span-6) -->
+<section class="col-span-6 panel-cut rounded p-2 flex flex-col justify-between relative">
+<div class="hex-screw absolute top-1.5 left-1.5"></div>
+<div class="hex-screw absolute top-1.5 right-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 left-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 right-1.5"></div>
+<!-- Header -->
+<div class="flex justify-between items-center px-2 border-b border-[#22333a] pb-1">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-[#68d8f2] shadow-[0_0_6px_#68d8f2]"></div>
+<span class="font-headline-sm text-headline-sm text-[#eef8fa] tracking-wider">CARRIER</span>
+<span class="text-label-sm font-label-sm text-[#6d868d]">[INTERNAL OSC / EXTERNAL IN 1]</span>
+</div>
+<!-- Carrier Type Select -->
+<div class="flex items-center bg-[#070b0c] p-0.5 rounded border border-[#23383f]" id="carrier-selector">
+<button class="carrier-btn px-2 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]" data-val="EXTERNAL">EXT</button>
+<button class="carrier-btn px-2 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]" data-val="SINE">SINE</button>
+<button class="carrier-btn px-2 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]" data-val="TRIANGLE">TRI</button>
+<button class="carrier-btn px-2 py-0.5 rounded text-label-sm font-label-sm font-bold bg-[#35b6d6] text-[#061114] shadow-sm" data-val="SAW">SAW</button>
+</div>
+</div>
+<!-- Controls: Note, Fine, Level_1 -->
+<div class="grid grid-cols-12 gap-2 my-auto px-1 items-center">
+<!-- NOTE (r=38) -->
+<div class="col-span-4 flex flex-col items-center justify-center">
+<div class="relative w-[76px] h-[76px] flex items-center justify-center cursor-pointer" id="ctrl-note">
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-note" r="42" stroke="#35b6d6" stroke-dasharray="210" stroke-dashoffset="100" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-[60px] h-[60px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<div class="w-1 h-5 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_6px_#68d8f2] transform origin-bottom transition-transform" id="needle-note" style="transform: rotate(20deg) translateY(-6px);"></div>
+<span class="text-[8px] font-bold text-[#8fa7af]">SEMI</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">NOTE</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#68d8f2] font-bold" id="txt-note">C 2 (65.4Hz)</span>
+</div>
+</div>
+<!-- FINE (r=38) -->
+<div class="col-span-4 flex flex-col items-center justify-center">
+<div class="relative w-[76px] h-[76px] flex items-center justify-center cursor-pointer" id="ctrl-fine">
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-fine" r="42" stroke="#35b6d6" stroke-dasharray="210" stroke-dashoffset="125" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-[60px] h-[60px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<div class="w-1 h-5 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_6px_#68d8f2] transform origin-bottom transition-transform" id="needle-fine" style="transform: rotate(0deg) translateY(-6px);"></div>
+<span class="text-[8px] font-bold text-[#8fa7af]">CENT</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">FINE</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#c3d8dd] font-bold" id="txt-fine">+0.0 ct</span>
+</div>
+</div>
+<!-- CARRIER LVL (r=38) -->
+<div class="col-span-4 flex flex-col items-center justify-center">
+<div class="relative w-[76px] h-[76px] flex items-center justify-center cursor-pointer" id="ctrl-lvl1">
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-lvl1" r="42" stroke="#68d8f2" stroke-dasharray="210" stroke-dashoffset="65" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-[60px] h-[60px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<div class="w-1 h-5 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_6px_#68d8f2] transform origin-bottom transition-transform" id="needle-lvl1" style="transform: rotate(100deg) translateY(-6px);"></div>
+<span class="text-[8px] font-bold text-[#8fa7af]">GAIN</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">CARRIER LVL</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#68d8f2] font-bold" id="txt-lvl1">0.0 dB</span>
+</div>
+</div>
+</div>
+<!-- Carrier Frequency Spectrum Graph -->
+<div class="screen-well rounded h-[76px] px-2 py-1 flex items-center justify-between relative overflow-hidden">
+<div class="absolute left-2 top-1 text-[8px] font-label-sm text-[#68d8f2] tracking-wider z-10">CARRIER HARMONIC SPECTRUM // 16-BAND FFT</div>
+<div class="absolute right-2 top-1 text-[8px] font-label-sm text-[#6d868d] z-10">ANALOG VCA SIM</div>
+<canvas class="w-full h-full" height="74" id="spectrumCanvas" width="580"></canvas>
+</div>
+</section>
+<!-- 3. INPUT MODULE (Bottom-left: col-span-2) -->
+<section class="col-span-2 panel-cut rounded p-2 flex flex-col justify-between relative">
+<div class="hex-screw absolute top-1.5 left-1.5"></div>
+<div class="hex-screw absolute top-1.5 right-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 left-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 right-1.5"></div>
+<!-- Header -->
+<div class="flex items-center gap-1.5 border-b border-[#22333a] pb-1">
+<div class="w-1.5 h-1.5 bg-[#35b6d6]"></div>
+<span class="font-headline-sm text-headline-sm text-[#eef8fa] tracking-wider">INPUT</span>
+</div>
+<!-- MOD LEVEL Knob + Overload Indicators -->
+<div class="flex flex-col items-center justify-center my-auto">
+<!-- Dual Overload LED cluster -->
+<div class="flex items-center gap-4 mb-2">
+<div class="flex flex-col items-center">
+<span class="text-[7px] text-[#6d868d] font-bold">SIG</span>
+<div class="w-2.5 h-2.5 rounded-full bg-[#183925] border border-[#2b593b] mt-0.5" id="led-sig" style="background-color: rgb(24, 57, 37); box-shadow: none;"></div>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[7px] text-[#ffb4a7] font-bold">CLIP</span>
+<div class="w-2.5 h-2.5 rounded-full bg-[#3d0e0e] border border-[#6b1e1e] mt-0.5" id="led-clip" style="background-color: rgb(61, 14, 14); box-shadow: none;"></div>
+</div>
+</div>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center cursor-pointer" id="ctrl-lvl2">
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-lvl2" r="42" stroke="#35b6d6" stroke-dasharray="210" stroke-dashoffset="95" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-[60px] h-[60px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<div class="w-1 h-5 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_6px_#68d8f2] transform origin-bottom transition-transform" id="needle-lvl2" style="transform: rotate(45deg) translateY(-6px);"></div>
+<span class="text-[8px] font-bold text-[#8fa7af]">IN 2</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">MOD LEVEL</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#35b6d6] font-bold" id="txt-lvl2">+2.4 dB</span>
+</div>
+</div>
+<div class="text-[9px] text-[#6d868d] text-center border-t border-[#1b272c] pt-1">
+        EXTERNAL AUDIO
+      </div>
+</section>
+<!-- 4. OUTPUT MODULE (Bottom-mid: col-span-4) -->
+<section class="col-span-4 panel-cut rounded p-2 flex flex-col justify-between relative">
+<div class="hex-screw absolute top-1.5 left-1.5"></div>
+<div class="hex-screw absolute top-1.5 right-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 left-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 right-1.5"></div>
+<!-- Header -->
+<div class="flex justify-between items-center px-1 border-b border-[#22333a] pb-1">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-[#68d8f2]"></div>
+<span class="font-headline-sm text-headline-sm text-[#eef8fa] tracking-wider">OUTPUT</span>
+</div>
+<!-- Routing: OUT / OUT + AUX -->
+<div class="flex items-center bg-[#070b0c] p-0.5 rounded border border-[#23383f]" id="output-selector">
+<button class="output-btn px-2 py-0.5 rounded text-label-sm font-label-sm font-bold bg-[#35b6d6] text-[#061114] shadow-sm" data-val="OUT">OUT</button>
+<button class="output-btn px-2 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]" data-val="OUT + AUX">OUT + AUX</button>
+</div>
+</div>
+<!-- Knobs: MIX & VOLUME + Stereo Peak Meter -->
+<div class="grid grid-cols-12 gap-2 my-auto px-1 items-center">
+<!-- MIX (r=38) -->
+<div class="col-span-5 flex flex-col items-center justify-center">
+<div class="relative w-[76px] h-[76px] flex items-center justify-center cursor-pointer" id="ctrl-mix">
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-mix" r="42" stroke="#35b6d6" stroke-dasharray="210" stroke-dashoffset="90" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-[60px] h-[60px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<div class="w-1 h-5 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_6px_#68d8f2] transform origin-bottom transition-transform" id="needle-mix" style="transform: rotate(50deg) translateY(-6px);"></div>
+<span class="text-[8px] font-bold text-[#8fa7af]">WET</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">MIX</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#68d8f2] font-bold" id="txt-mix">78 %</span>
+</div>
+</div>
+<!-- VOLUME (r=38) -->
+<div class="col-span-5 flex flex-col items-center justify-center">
+<div class="relative w-[76px] h-[76px] flex items-center justify-center cursor-pointer" id="ctrl-vol">
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#162329" stroke-dasharray="210" stroke-dashoffset="40" stroke-width="6"></circle>
+<circle cx="50" cy="50" fill="none" id="ring-vol" r="42" stroke="#35b6d6" stroke-dasharray="210" stroke-dashoffset="70" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="w-[60px] h-[60px] rounded-full bg-gradient-to-b from-[#eef5f7] via-[#b6c7cc] to-[#8fa2a8] p-1 knob-shadow flex items-center justify-center border border-[#3b4c53]">
+<div class="w-full h-full rounded-full bg-[#18252a] relative flex items-center justify-center">
+<div class="w-1 h-5 bg-[#68d8f2] rounded-full absolute -top-1 shadow-[0_0_6px_#68d8f2] transform origin-bottom transition-transform" id="needle-vol" style="transform: rotate(95deg) translateY(-6px);"></div>
+<span class="text-[8px] font-bold text-[#8fa7af]">MAIN</span>
+</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-[#6d868d] mt-1 font-bold">VOLUME</span>
+<div class="px-2 py-0.5 mt-0.5 bg-[#080d0f] border border-[#22353c] text-center w-full rounded">
+<span class="text-label-sm font-label-sm text-[#c3d8dd] font-bold" id="txt-vol">-2.1 dB</span>
+</div>
+</div>
+<!-- Stereo Output Meter (col-span-2) -->
+<div class="col-span-2 flex flex-col items-center justify-center">
+<span class="text-[8px] text-[#6d868d] font-bold mb-1">METERS</span>
+<div class="screen-well p-1 rounded flex gap-1 h-[78px] w-9 justify-center">
+<!-- Left Meter -->
+<div class="w-2.5 bg-[#0d1619] rounded-sm flex flex-col justify-end gap-0.5 p-0.5" id="meter-l">
+<div class="h-1 w-full bg-[#203038] rounded-xs"></div>
+<div class="h-1 w-full bg-[#203038] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#203038] rounded-xs"></div>
+<div class="h-1 w-full bg-[#203038] rounded-xs"></div>
+</div>
+<!-- Right Meter -->
+<div class="w-2.5 bg-[#0d1619] rounded-sm flex flex-col justify-end gap-0.5 p-0.5" id="meter-r">
+<div class="h-1 w-full bg-[#203038] rounded-xs"></div>
+<div class="h-1 w-full bg-[#203038] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#35b6d6] rounded-xs"></div>
+<div class="h-1 w-full bg-[#203038] rounded-xs"></div>
+</div>
+</div>
+<span class="text-[7px] text-[#6d868d] mt-1">L // R</span>
+</div>
+</div>
+</section>
+<!-- 5. WORDMARK / EMBLEM PLATE (Bottom-right: col-span-6) -->
+<section class="col-span-6 panel-cut rounded p-2.5 flex flex-col justify-between relative bg-gradient-to-br from-[#10171a] to-[#0c1214]">
+<div class="hex-screw absolute top-1.5 left-1.5"></div>
+<div class="hex-screw absolute top-1.5 right-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 left-1.5"></div>
+<div class="hex-screw absolute bottom-1.5 right-1.5"></div>
+<!-- Top Title & Engraving Header -->
+<div class="flex justify-between items-start border-b border-[#22343a] pb-1.5">
+<div>
+<div class="text-[17px] font-extrabold tracking-wider text-[#eef8fa] font-headline-md flex items-center gap-2">
+<span>MUTABLE INSTRUMENTS</span>
+<span class="text-xs px-1.5 py-0.2 border border-[#35b6d6] text-[#68d8f2] rounded font-label-sm">WARPS</span>
+</div>
+<div class="text-[9px] text-[#6d868d] font-label-sm tracking-widest uppercase mt-0.5">
+            Meta-Modulator / Hybrid Wavefolder &amp; Analog Cross-Processor
+          </div>
+</div>
+<div class="text-right">
+<div class="text-[10px] text-[#68d8f2] font-label-md font-bold">HW REV 2.4</div>
+<div class="text-[8px] text-[#6d868d]">STM32F4 CORTEX-M4</div>
+</div>
+</div>
+<!-- Schematic / Signal Flow Routing Diagram -->
+<div class="my-auto py-1 px-2 border border-[#1b2a30] rounded bg-[#090e11] flex items-center justify-between text-[8px] font-label-sm text-[#8fa7af]">
+<!-- Block 1 -->
+<div class="flex flex-col items-center">
+<span class="text-[#68d8f2] font-bold">CARRIER IN</span>
+<div class="w-14 h-6 border border-[#2c4148] rounded bg-[#10191d] flex items-center justify-center text-[7px] text-[#c3d8dd] mt-1">
+            VCO / EXT 1
+          </div>
+</div>
+<span class="text-[#35b6d6]">──▶</span>
+<!-- Block 2 -->
+<div class="flex flex-col items-center">
+<span class="text-[#eef8fa] font-bold">VCA / OVERLOAD</span>
+<div class="w-16 h-6 border border-[#35b6d6] rounded bg-[#14232a] flex items-center justify-center text-[7px] text-[#68d8f2] font-bold mt-1">
+            ANALOG GAIN
+          </div>
+</div>
+<span class="text-[#35b6d6]">──▶</span>
+<!-- Block 3 -->
+<div class="flex flex-col items-center">
+<span class="text-[#68d8f2] font-bold">DSP CORE</span>
+<div class="w-18 h-6 border border-[#2c4148] rounded bg-[#10191d] flex items-center justify-center text-[7px] text-[#eef8fa] px-1 mt-1">
+            ALGO [1..8]
+          </div>
+</div>
+<span class="text-[#35b6d6]">──▶</span>
+<!-- Block 4 -->
+<div class="flex flex-col items-center">
+<span class="text-[#c3d8dd] font-bold">DRY/WET</span>
+<div class="w-12 h-6 border border-[#2c4148] rounded bg-[#10191d] flex items-center justify-center text-[7px] text-[#68d8f2] mt-1">
+            STEREO OUT
+          </div>
+</div>
+</div>
+<!-- Bottom Specs / Laser-Etched Text -->
+<div class="flex justify-between items-center text-[8px] font-label-sm text-[#6d868d] pt-1 border-t border-[#1b2a30]">
+<span>CALIBRATED: ±10V BERYLLIUM-COPPER JACKS</span>
+<span>DESIGNED IN PARIS, FRANCE // STANDALONE FIRMWARE</span>
+</div>
+</section>
+</main>
+<!-- BOTTOM Q-LINK STRIP (56px docked full-width) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex items-center justify-between px-2 h-14 bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex items-center gap-1.5 pr-2 border-r border-[#22353c]">
+<div class="w-2 h-2 rounded-full bg-[#35b6d6] animate-pulse"></div>
+<span class="text-label-sm font-label-sm font-bold text-[#68d8f2]">Q-LINK<br><span class="text-[#6d868d]">BANK 1</span></span>
+</div>
+<!-- 12 Mapped Hardware Encoders -->
+<div class="grid grid-cols-12 gap-1 flex-1 px-2 text-center">
+<!-- 1: Mode -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q01:MODE</span>
+<span class="text-[9px] font-label-sm text-[#68d8f2] font-bold truncate w-full" id="ql-mode">META</span>
+</div>
+<!-- 2: Algorithm -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#35b6d6] rounded qlink-active cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#35b6d6]">Q02:ALGO</span>
+<span class="text-[9px] font-label-sm text-[#eef8fa] font-bold truncate w-full" id="ql-algo">DIODE</span>
+</div>
+<!-- 3: Timbre -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q03:TIMBRE</span>
+<span class="text-[9px] font-label-sm text-[#68d8f2] font-bold truncate w-full" id="ql-timbre">64%</span>
+</div>
+<!-- 4: Shift -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q04:SHIFT</span>
+<span class="text-[9px] font-label-sm text-[#c3d8dd] font-bold truncate w-full" id="ql-shift">+120</span>
+</div>
+<!-- 5: Carrier -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q05:CARR</span>
+<span class="text-[9px] font-label-sm text-[#68d8f2] font-bold truncate w-full" id="ql-carr">SAW</span>
+</div>
+<!-- 6: Note -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q06:NOTE</span>
+<span class="text-[9px] font-label-sm text-[#c3d8dd] font-bold truncate w-full" id="ql-note">C 2</span>
+</div>
+<!-- 7: Fine -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q07:FINE</span>
+<span class="text-[9px] font-label-sm text-[#c3d8dd] font-bold truncate w-full" id="ql-fine">+0ct</span>
+</div>
+<!-- 8: Level 1 -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q08:LVL 1</span>
+<span class="text-[9px] font-label-sm text-[#68d8f2] font-bold truncate w-full" id="ql-lvl1">0dB</span>
+</div>
+<!-- 9: Level 2 -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q09:LVL 2</span>
+<span class="text-[9px] font-label-sm text-[#35b6d6] font-bold truncate w-full" id="ql-lvl2">+2.4</span>
+</div>
+<!-- 10: Output -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q10:OUT</span>
+<span class="text-[9px] font-label-sm text-[#c3d8dd] font-bold truncate w-full" id="ql-out">MAIN</span>
+</div>
+<!-- 11: Mix -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q11:MIX</span>
+<span class="text-[9px] font-label-sm text-[#68d8f2] font-bold truncate w-full" id="ql-mix">78%</span>
+</div>
+<!-- 12: Volume -->
+<div class="flex flex-col items-center justify-center py-0.5 px-1 bg-[#10171a] border border-[#22353c] rounded hover:border-[#35b6d6] cursor-pointer">
+<span class="text-[8px] font-label-sm text-[#6d868d]">Q12:VOL</span>
+<span class="text-[9px] font-label-sm text-[#c3d8dd] font-bold truncate w-full" id="ql-vol">-2.1</span>
+</div>
+</div>
+<!-- Quick Macros defined in BottomNavBar JSON -->
+<div class="flex items-center gap-1 pl-2 border-l border-[#22353c]">
+<button class="px-2 py-1 bg-surface-container-high text-primary border border-primary rounded flex flex-col items-center justify-center active:scale-95 transition-transform duration-75">
+<span class="material-symbols-outlined text-[16px]">dialpad</span>
+<span class="text-[8px] font-label-sm font-bold">Q1: CUTOFF</span>
+</button>
+<button class="px-2 py-1 text-on-surface-variant border border-outline-variant rounded flex flex-col items-center justify-center active:scale-95 transition-transform duration-75">
+<span class="material-symbols-outlined text-[16px]">adjust</span>
+<span class="text-[8px] font-label-sm">Q2: RESO</span>
+</button>
+<button class="px-2 py-1 text-on-surface-variant border border-outline-variant rounded flex flex-col items-center justify-center active:scale-95 transition-transform duration-75">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span class="text-[8px] font-label-sm">Q3: DRIVE</span>
+</button>
+<button class="px-2 py-1 text-on-surface-variant border border-outline-variant rounded flex flex-col items-center justify-center active:scale-95 transition-transform duration-75">
+<span class="material-symbols-outlined text-[16px]">speed</span>
+<span class="text-[8px] font-label-sm">Q4: TEMPO</span>
+</button>
+</div>
+</footer>
+<!-- TACTILE INTERACTION & OSCILLOSCOPE LOGIC -->
+<script>
+    // State Store
+    const state = {
+      mode: 'META MOD',
+      algorithms: ['Crossfade', 'Wavefolding', 'Diode Ring Mod', 'Digital Ring Mod', 'XOR', 'Comparators', 'Vocoder'],
+      algoIdx: 2,
+      timbre: 64,
+      shift: 120,
+      carrier: 'SAW',
+      note: 36, // C2
+      fine: 0,
+      lvl1: 0,
+      lvl2: 2.4,
+      output: 'OUT',
+      mix: 78,
+      volume: -2.1
+    };
+
+    // Mode Selector Buttons
+    const btnMeta = document.getElementById('btn-mode-meta');
+    const btnFreq = document.getElementById('btn-mode-freq');
+    const qlMode = document.getElementById('ql-mode');
+
+    btnMeta.addEventListener('click', () => {
+      state.mode = 'META MOD';
+      btnMeta.className = "px-2.5 py-0.5 rounded text-label-sm font-label-sm font-bold bg-[#35b6d6] text-[#061114] shadow-sm";
+      btnFreq.className = "px-2.5 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]";
+      qlMode.textContent = "META";
+    });
+
+    btnFreq.addEventListener('click', () => {
+      state.mode = 'FREQ SHIFTER';
+      btnFreq.className = "px-2.5 py-0.5 rounded text-label-sm font-label-sm font-bold bg-[#35b6d6] text-[#061114] shadow-sm";
+      btnMeta.className = "px-2.5 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]";
+      qlMode.textContent = "FREQ";
+    });
+
+    // Carrier selector
+    const carrierBtns = document.querySelectorAll('.carrier-btn');
+    const qlCarr = document.getElementById('ql-carr');
+    carrierBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        carrierBtns.forEach(b => {
+          b.className = "carrier-btn px-2 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]";
+        });
+        btn.className = "carrier-btn px-2 py-0.5 rounded text-label-sm font-label-sm font-bold bg-[#35b6d6] text-[#061114] shadow-sm";
+        state.carrier = btn.getAttribute('data-val');
+        qlCarr.textContent = state.carrier;
+      });
+    });
+
+    // Output routing
+    const outBtns = document.querySelectorAll('.output-btn');
+    const qlOut = document.getElementById('ql-out');
+    outBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        outBtns.forEach(b => {
+          b.className = "output-btn px-2 py-0.5 rounded text-label-sm font-label-sm text-[#6d868d] hover:text-[#c3d8dd]";
+        });
+        btn.className = "output-btn px-2 py-0.5 rounded text-label-sm font-label-sm font-bold bg-[#35b6d6] text-[#061114] shadow-sm";
+        state.output = btn.getAttribute('data-val');
+        qlOut.textContent = state.output === 'OUT' ? 'MAIN' : 'AUX';
+      });
+    });
+
+    // Helper for interactive knob dragging
+    function makeKnob(elemId, onDrag) {
+      const el = document.getElementById(elemId);
+      let startY = 0;
+      let active = false;
+
+      const down = (e) => {
+        active = true;
+        startY = e.clientY || (e.touches && e.touches[0].clientY);
+        window.addEventListener('mousemove', move);
+        window.addEventListener('touchmove', move);
+        window.addEventListener('mouseup', up);
+        window.addEventListener('touchend', up);
+      };
+
+      const move = (e) => {
+        if (!active) return;
+        const currentY = e.clientY || (e.touches && e.touches[0].clientY);
+        const delta = startY - currentY;
+        startY = currentY;
+        onDrag(delta);
+      };
+
+      const up = () => {
+        active = false;
+        window.removeEventListener('mousemove', move);
+        window.removeEventListener('touchmove', move);
+        window.removeEventListener('mouseup', up);
+        window.removeEventListener('touchend', up);
+      };
+
+      el.addEventListener('mousedown', down);
+      el.addEventListener('touchstart', down, { passive: true });
+    }
+
+    // Connect ALGORITHM Knob
+    makeKnob('ctrl-algo', (delta) => {
+      if (Math.abs(delta) > 2) {
+        if (delta > 0 && state.algoIdx < state.algorithms.length - 1) state.algoIdx++;
+        else if (delta < 0 && state.algoIdx > 0) state.algoIdx--;
+        const algoName = state.algorithms[state.algoIdx];
+        document.getElementById('txt-algo').textContent = algoName;
+        document.getElementById('ql-algo').textContent = algoName.split(' ')[0].toUpperCase();
+        const rot = -120 + (state.algoIdx / (state.algorithms.length - 1)) * 240;
+        document.getElementById('needle-algo').style.transform = `rotate(${rot}deg) translateY(-8px)`;
+      }
+    });
+
+    // Connect TIMBRE Knob
+    makeKnob('ctrl-timbre', (delta) => {
+      state.timbre = Math.min(100, Math.max(0, state.timbre + delta * 0.5));
+      document.getElementById('txt-timbre').textContent = state.timbre.toFixed(1) + ' %';
+      document.getElementById('ql-timbre').textContent = Math.round(state.timbre) + '%';
+      const rot = -120 + (state.timbre / 100) * 240;
+      document.getElementById('needle-timbre').style.transform = `rotate(${rot}deg) translateY(-8px)`;
+    });
+
+    // Connect SHIFT Knob
+    makeKnob('ctrl-shift', (delta) => {
+      state.shift = Math.min(1000, Math.max(-1000, state.shift + delta * 4));
+      document.getElementById('txt-shift').textContent = (state.shift >= 0 ? '+' : '') + Math.round(state.shift) + ' Hz';
+      document.getElementById('ql-shift').textContent = (state.shift >= 0 ? '+' : '') + Math.round(state.shift);
+      const rot = -120 + ((state.shift + 1000) / 2000) * 240;
+      document.getElementById('needle-shift').style.transform = `rotate(${rot}deg) translateY(-6px)`;
+    });
+
+    // Connect MIX Knob
+    makeKnob('ctrl-mix', (delta) => {
+      state.mix = Math.min(100, Math.max(0, state.mix + delta * 0.5));
+      document.getElementById('txt-mix').textContent = Math.round(state.mix) + ' %';
+      document.getElementById('ql-mix').textContent = Math.round(state.mix) + '%';
+      const rot = -120 + (state.mix / 100) * 240;
+      document.getElementById('needle-mix').style.transform = `rotate(${rot}deg) translateY(-6px)`;
+    });
+
+    // Connect VOLUME Knob
+    makeKnob('ctrl-vol', (delta) => {
+      state.volume = Math.min(6, Math.max(-60, state.volume + delta * 0.3));
+      document.getElementById('txt-vol').textContent = (state.volume >= 0 ? '+' : '') + state.volume.toFixed(1) + ' dB';
+      document.getElementById('ql-vol').textContent = state.volume.toFixed(1);
+      const rot = -120 + ((state.volume + 60) / 66) * 240;
+      document.getElementById('needle-vol').style.transform = `rotate(${rot}deg) translateY(-6px)`;
+    });
+
+    // Real-time Lissajous Scope Visualizer
+    const scopeCanvas = document.getElementById('lissajousCanvas');
+    const ctxScope = scopeCanvas.getContext('2d');
+    let phase = 0;
+
+    function renderScope() {
+      ctxScope.fillStyle = 'rgba(6, 9, 10, 0.28)';
+      ctxScope.fillRect(0, 0, scopeCanvas.width, scopeCanvas.height);
+
+      ctxScope.lineWidth = 1.5;
+      ctxScope.strokeStyle = '#35b6d6';
+      ctxScope.shadowColor = '#68d8f2';
+      ctxScope.shadowBlur = 4;
+
+      ctxScope.beginPath();
+      const cx = scopeCanvas.width / 2;
+      const cy = scopeCanvas.height / 2;
+      const points = 180;
+      const algoMod = (state.algoIdx + 1) * 0.4;
+      const timbreScale = (state.timbre / 100);
+
+      for (let i = 0; i < points; i++) {
+        const t = (i / points) * Math.PI * 2;
+        const x = cx + Math.sin(t * 2 + phase) * (70 * (0.4 + timbreScale * 0.6));
+        const y = cy + Math.cos(t * (2 + algoMod) + phase * 1.5) * 28;
+        if (i === 0) ctxScope.moveTo(x, y);
+        else ctxScope.lineTo(x, y);
+      }
+      ctxScope.stroke();
+      ctxScope.shadowBlur = 0;
+
+      phase += 0.04;
+      requestAnimationFrame(renderScope);
+    }
+    renderScope();
+
+    // Carrier Harmonic Spectrum Visualizer
+    const specCanvas = document.getElementById('spectrumCanvas');
+    const ctxSpec = specCanvas.getContext('2d');
+    let specPhase = 0;
+
+    function renderSpectrum() {
+      ctxSpec.fillStyle = 'rgba(6, 9, 10, 0.35)';
+      ctxSpec.fillRect(0, 0, specCanvas.width, specCanvas.height);
+
+      const bands = 24;
+      const barWidth = (specCanvas.width / bands) - 4;
+
+      for (let i = 0; i < bands; i++) {
+        let baseHeight;
+        if (state.carrier === 'SINE') {
+          baseHeight = i === 2 ? 55 : (i === 4 ? 8 : 2);
+        } else if (state.carrier === 'TRIANGLE') {
+          baseHeight = Math.max(3, 60 / ((i + 1) * 1.6));
+        } else if (state.carrier === 'SAW') {
+          baseHeight = Math.max(4, 62 / (i * 0.8 + 1));
+        } else {
+          baseHeight = 15 + Math.sin(i * 0.8 + specPhase) * 12;
+        }
+
+        const flicker = Math.sin(specPhase * 3 + i) * 3;
+        const h = Math.min(64, Math.max(3, baseHeight + flicker));
+        const x = i * (barWidth + 4) + 6;
+        const y = specCanvas.height - h - 4;
+
+        ctxSpec.fillStyle = i < 8 ? '#68d8f2' : (i < 16 ? '#35b6d6' : '#225566');
+        ctxSpec.fillRect(x, y, barWidth, h);
+      }
+
+      specPhase += 0.05;
+      requestAnimationFrame(renderSpectrum);
+    }
+    renderSpectrum();
+
+    // Signal & Clip LED simulation
+    setInterval(() => {
+      const sig = document.getElementById('led-sig');
+      const clip = document.getElementById('led-clip');
+      if (Math.random() > 0.15) {
+        sig.style.backgroundColor = '#38e078';
+        sig.style.boxShadow = '0 0 6px #38e078';
+      } else {
+        sig.style.backgroundColor = '#183925';
+        sig.style.boxShadow = 'none';
+      }
+
+      if (state.lvl2 > 4.5 || Math.random() > 0.88) {
+        clip.style.backgroundColor = '#ff4444';
+        clip.style.boxShadow = '0 0 6px #ff4444';
+      } else {
+        clip.style.backgroundColor = '#3d0e0e';
+        clip.style.boxShadow = 'none';
+      }
+    }, 180);
+  </script>
+</body></html>

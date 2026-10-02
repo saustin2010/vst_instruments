@@ -1,0 +1,996 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>VERGLAS // GRANULAR AUDIO PROCESSOR - MPC LIVE II</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#e3e2e6",
+            "outline-variant": "#2c3a4c",
+            "primary-fixed": "#ffdead",
+            "on-secondary-fixed": "#400100",
+            "surface-container-high": "#18202c",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "surface-container": "#111720",
+            "on-surface": "#eef5fc",
+            "inverse-primary": "#7e5700",
+            "on-error-container": "#ffdad6",
+            "on-error": "#690005",
+            "on-primary-fixed-variant": "#604100",
+            "secondary-fixed": "#ffdad4",
+            "on-tertiary": "#373016",
+            "tertiary": "#dacfa9",
+            "primary-fixed-dim": "#fabc4d",
+            "tertiary-container": "#beb38f",
+            "tertiary-fixed": "#eee2bc",
+            "outline": "#6c7f94",
+            "secondary": "#ffb4a7",
+            "on-tertiary-fixed": "#211b04",
+            "surface": "#090c10",
+            "surface-container-lowest": "#06080b",
+            "on-secondary": "#680300",
+            "error-container": "#93000a",
+            "on-secondary-fixed-variant": "#920801",
+            "inverse-on-surface": "#2f3034",
+            "primary": "#6fb6ff",
+            "surface-bright": "#222d3d",
+            "background": "#090c10",
+            "primary-container": "#1b4474",
+            "inverse-surface": "#e3e2e6",
+            "secondary-container": "#920801",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-primary": "#041b33",
+            "on-primary-container": "#d4e7ff",
+            "on-secondary-container": "#ff9a89",
+            "surface-variant": "#1a2330",
+            "error": "#ffb4ab",
+            "surface-container-low": "#0d1218",
+            "on-tertiary-container": "#4c4529",
+            "surface-tint": "#6fb6ff",
+            "surface-dim": "#090c10",
+            "on-surface-variant": "#c3d2e2",
+            "surface-container-highest": "#232e3e",
+            "on-primary-fixed": "#281900"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "gutter": "0.75rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem",
+            "margin": "0.75rem",
+            "space-xl": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-md": ["Space Grotesk"],
+            "label-md": ["JetBrains Mono"],
+            "headline-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "headline-sm": ["15px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-lg": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "body-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "readout-numeric": ["20px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+            "body-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "label-md": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["9px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Fixed 1280x628 Hardware Display Chassis Shielding */
+    body {
+      background-color: #05070a;
+      color: #eef5fc;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #hardware-chassis {
+      position: relative;
+      width: 1280px;
+      height: 628px;
+      min-width: 1280px;
+      min-height: 628px;
+      max-width: 1280px;
+      max-height: 628px;
+      background: #090c10;
+      box-shadow: 0 0 0 1px #202b38, 0 30px 60px rgba(0,0,0,0.95);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* Milled Enclosure Panel Bevels */
+    .milled-panel {
+      background: #111720;
+      border: 1px solid #2c3a4c;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .milled-screw {
+      width: 6px;
+      height: 6px;
+      background: radial-gradient(circle, #485c72 30%, #151d26 80%);
+      border: 1px solid #0b1016;
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+    }
+
+    /* Display Wells & Sunken Analyzers */
+    .recessed-well {
+      background: #06090e;
+      border: 1px solid #1f2a36;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.9), inset 0 0 1px rgba(0,0,0,1);
+    }
+
+    /* Tactile Rotary Potentiometers */
+    .knob-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+      cursor: ns-resize;
+    }
+
+    .knob-body {
+      border-radius: 50%;
+      position: relative;
+      background: conic-gradient(from 180deg, #eef4fa, #c7d6e6, #f3f8fc, #c7d6e6, #eef4fa);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -2px 3px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.05s ease-out;
+    }
+
+    .knob-cap-groove {
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 45% 45%, #2a3848, #111720 70%);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    .knob-pointer {
+      position: absolute;
+      top: 3px;
+      left: calc(50% - 1.5px);
+      width: 3px;
+      height: 38%;
+      background: #6fb6ff;
+      border-radius: 2px;
+      box-shadow: 0 0 6px #6fb6ff, 0 0 10px #a3d2ff;
+      transform-origin: 50% 100%;
+    }
+
+    .knob-dial-ring {
+      position: absolute;
+      inset: -5px;
+      pointer-events: none;
+    }
+
+    /* Industrial Tactile Pushbuttons */
+    .tactile-btn {
+      background: linear-gradient(180deg, #1c2633 0%, #111720 100%);
+      border: 1px solid #2c3a4c;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 3px 0 #070a0e, 0 5px 6px rgba(0,0,0,0.6);
+      transition: all 0.08s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .tactile-btn:active, .tactile-btn.active {
+      transform: translateY(2px);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 #070a0e;
+    }
+
+    .freeze-latched {
+      background: linear-gradient(180deg, #1d3a58 0%, #11283d 100%) !important;
+      border-color: #6fb6ff !important;
+      color: #eef5fc !important;
+      box-shadow: inset 0 0 12px rgba(111,182,255,0.45), 0 0 14px rgba(111,182,255,0.3) !important;
+    }
+
+    /* CRT / LED Matrix Scanline Accent */
+    .scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+      background-size: 100% 3px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="dark font-body-md">
+<div class="flex flex-col justify-between" id="hardware-chassis">
+<!-- 1. TOP STATUS & PRESET BAR (H=44px) -->
+<header class="h-11 w-full bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-space-md z-30 select-none shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]">
+<!-- Left: Engine Branding & Clouds Badge -->
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="text-primary font-headline-sm tracking-wider uppercase">VERGLAS // GRANULAR AUDIO PROCESSOR</span>
+<span class="px-1.5 py-0.5 rounded text-label-sm font-label-sm bg-surface-container-high border border-outline-variant text-primary font-bold tracking-tight">
+            MUTABLE INSTRUMENTS CLOUDS ENGINE
+          </span>
+</div>
+</div>
+<!-- Center: Tab Selectors -->
+<div class="flex items-center gap-1 h-full pt-1">
+<button class="text-primary border-b-2 border-primary font-headline-sm text-headline-sm px-space-md h-full flex items-center gap-1.5 font-bold tracking-wider" id="tab-verglas">
+<span class="text-label-sm font-label-sm opacity-60">TAB 1:</span> VERGLAS
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface font-headline-sm text-headline-sm px-space-md h-full flex items-center gap-1.5 tracking-wider transition-colors" id="tab-tone">
+<span class="text-label-sm font-label-sm opacity-40">TAB 2:</span> TONE
+        </button>
+</div>
+<!-- Right: Real-time Audio Buffer Status Readout -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container-low border border-outline-variant/80 text-label-sm font-label-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_6px_#6fb6ff]"></span>
+<span class="text-on-surface font-bold">1 SEC STEREO BUFFER / ACTIVE RECORD</span>
+<span class="text-outline">|</span>
+<span class="text-primary">48kHz</span>
+<span class="text-outline">|</span>
+<span class="text-on-surface-variant">DSP: <span class="text-on-surface font-bold" id="dsp-meter">12%</span></span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-6 h-6 rounded flex items-center justify-center bg-surface-container border border-outline-variant text-primary hover:bg-surface-container-high active:translate-y-0.5" title="Audio Input Level Peak Indicator">
+<span class="material-symbols-outlined text-[14px]">graphic_eq</span>
+</button>
+<button class="w-6 h-6 rounded flex items-center justify-center bg-surface-container border border-outline-variant text-on-surface-variant hover:text-on-surface active:translate-y-0.5" title="System Routing Settings">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+</button>
+</div>
+</div>
+</header>
+<!-- 2. MAIN MODULAR CONTROL CANVAS (H=528px) -->
+<main class="relative w-full h-[528px] p-space-md grid grid-cols-12 gap-space-md bg-surface">
+<!-- ==============================================
+           MODULE 1: GRAINS (Left Master Bay, Cols 1-8)
+           ============================================== -->
+<div class="col-span-8 milled-panel rounded flex flex-col justify-between p-2.5">
+<!-- Faux Industrial Hex Screws -->
+<span class="milled-screw top-1.5 left-1.5"></span>
+<span class="milled-screw top-1.5 right-1.5"></span>
+<span class="milled-screw bottom-1.5 left-1.5"></span>
+<span class="milled-screw bottom-1.5 right-1.5"></span>
+<!-- Module Header -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-sm shadow-[0_0_5px_#6fb6ff]"></span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface tracking-wider">GRAIN DISPERSION &amp; SYNTHESIS</h2>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span>BURST GRAIN DENSITY: <span class="text-primary font-bold" id="disp-density-readout">8.2 Hz</span></span>
+<span class="text-outline">/</span>
+<span>OVERLAP: <span class="text-on-surface font-bold" id="disp-overlap-readout">64ms</span></span>
+</div>
+</div>
+<!-- Upper: 60 FPS Granular Particle Cloud Visualizer & Freeze Scope -->
+<div class="relative w-full h-36 recessed-well rounded overflow-hidden flex flex-col justify-between p-2">
+<canvas class="absolute inset-0 w-full h-full z-10" height="144" id="particle-cloud-canvas" width="810"></canvas>
+<div class="scanlines absolute inset-0 z-20 pointer-events-none"></div>
+<!-- Glass UI Overlays inside display well -->
+<div class="relative z-30 flex justify-between items-start pointer-events-none">
+<div class="bg-surface-container-lowest/90 border border-outline-variant/80 px-2 py-0.5 rounded text-label-sm font-label-sm text-primary flex items-center gap-1.5 backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+              GRAIN POSITION POOL [CIRCULAR STEREO BUFFER]
+            </div>
+<div class="hidden bg-primary/20 border border-primary text-primary px-2.5 py-0.5 rounded text-label-sm font-label-sm font-bold tracking-widest backdrop-blur-sm shadow-[0_0_8px_rgba(111,182,255,0.4)]" id="freeze-banner">
+              BUFFER FROZEN // RECIRCULATING GRAINS
+            </div>
+</div>
+<div class="relative z-30 flex justify-between items-end text-label-sm font-label-sm pointer-events-none">
+<span class="text-outline font-mono">0.00ms (HEAD)</span>
+<div class="flex items-center gap-3">
+<span class="text-on-surface-variant font-mono">TEXTURE BLUR: <span class="text-primary" id="scope-blur-val">22%</span></span>
+<span class="text-outline font-mono">ACTIVE PARTICLES: <span class="text-on-surface font-bold" id="particle-count">38</span></span>
+</div>
+<span class="text-outline font-mono">1000.00ms (TAIL)</span>
+</div>
+</div>
+<!-- Lower: Potentiometers Control Matrix -->
+<div class="grid grid-cols-5 gap-2 items-center justify-items-center pt-2">
+<!-- Knob: POSITION (r=46 -> 64px) -->
+<div class="knob-container" data-knob="position" data-max="100" data-min="0" data-unit="%" data-val="34">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">POSITION</div>
+<div class="w-16 h-16 knob-body" id="knob-position">
+<svg class="knob-dial-ring" viewBox="0 0 74 74">
+<circle cx="37" cy="37" fill="none" r="33" stroke="#1f2a36" stroke-dasharray="160 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+<circle class="knob-arc-active" cx="37" cy="37" fill="none" r="33" stroke="#6fb6ff" stroke-dasharray="55 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(-45deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">34</span>%
+            </div>
+</div>
+<!-- Knob: SIZE (r=46 -> 64px) -->
+<div class="knob-container" data-knob="size" data-max="500" data-min="10" data-unit="ms" data-val="140">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">SIZE</div>
+<div class="w-16 h-16 knob-body" id="knob-size">
+<svg class="knob-dial-ring" viewBox="0 0 74 74">
+<circle cx="37" cy="37" fill="none" r="33" stroke="#1f2a36" stroke-dasharray="160 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+<circle class="knob-arc-active" cx="37" cy="37" fill="none" r="33" stroke="#6fb6ff" stroke-dasharray="72 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(0deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">140</span>ms
+            </div>
+</div>
+<!-- Knob: PITCH (r=38 -> 52px) -->
+<div class="knob-container" data-knob="pitch" data-max="24" data-min="-24" data-unit="st" data-val="0">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">PITCH</div>
+<div class="w-[52px] h-[52px] knob-body" id="knob-pitch">
+<svg class="knob-dial-ring" viewBox="0 0 62 62">
+<circle cx="31" cy="31" fill="none" r="27" stroke="#1f2a36" stroke-dasharray="130 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+<circle class="knob-arc-active" cx="31" cy="31" fill="none" r="27" stroke="#6fb6ff" stroke-dasharray="65 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(0deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">0</span>st
+            </div>
+</div>
+<!-- Knob: DENSITY (r=46 -> 64px) -->
+<div class="knob-container" data-knob="density" data-max="100" data-min="0" data-unit="%" data-val="58">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">DENSITY</div>
+<div class="w-16 h-16 knob-body" id="knob-density">
+<svg class="knob-dial-ring" viewBox="0 0 74 74">
+<circle cx="37" cy="37" fill="none" r="33" stroke="#1f2a36" stroke-dasharray="160 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+<circle class="knob-arc-active" cx="37" cy="37" fill="none" r="33" stroke="#6fb6ff" stroke-dasharray="94 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(40deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">58</span>%
+            </div>
+</div>
+<!-- Knob: TEXTURE (r=46 -> 64px) -->
+<div class="knob-container" data-knob="texture" data-max="100" data-min="0" data-unit="%" data-val="22">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">TEXTURE</div>
+<div class="w-16 h-16 knob-body" id="knob-texture">
+<svg class="knob-dial-ring" viewBox="0 0 74 74">
+<circle cx="37" cy="37" fill="none" r="33" stroke="#1f2a36" stroke-dasharray="160 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+<circle class="knob-arc-active" cx="37" cy="37" fill="none" r="33" stroke="#6fb6ff" stroke-dasharray="35 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(-65deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">22</span>%
+            </div>
+</div>
+</div>
+</div>
+<!-- ==============================================
+           MODULE 2: MODE & TOPOLOGY (Right Bay, Cols 9-12)
+           ============================================== -->
+<div class="col-span-4 milled-panel rounded flex flex-col justify-between p-2.5">
+<span class="milled-screw top-1.5 left-1.5"></span>
+<span class="milled-screw top-1.5 right-1.5"></span>
+<span class="milled-screw bottom-1.5 left-1.5"></span>
+<span class="milled-screw bottom-1.5 right-1.5"></span>
+<!-- Module Header -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-sm shadow-[0_0_5px_#6fb6ff]"></span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface tracking-wider">ENGINE TOPOLOGY &amp; MODE</h2>
+</div>
+<span class="text-label-sm font-label-sm text-primary font-mono font-bold">CLOUDS DSP</span>
+</div>
+<!-- Mode Buttons Matrix (Granular, Stretch, Looper, Spectral) -->
+<div class="flex flex-col gap-1.5 my-auto">
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center justify-between px-1">
+<span>PROCESSING ALGORITHM</span>
+<span class="text-outline font-mono">CC #14</span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<button class="mode-btn tactile-btn active flex items-center justify-center gap-2 py-2 px-3 rounded border border-primary text-primary font-label-md text-label-md font-bold tracking-wider" data-mode="GRANULAR">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_6px_#6fb6ff]"></span>
+              GRANULAR
+            </button>
+<button class="mode-btn tactile-btn flex items-center justify-center gap-2 py-2 px-3 rounded text-on-surface-variant font-label-md text-label-md tracking-wider" data-mode="STRETCH">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+              STRETCH
+            </button>
+<button class="mode-btn tactile-btn flex items-center justify-center gap-2 py-2 px-3 rounded text-on-surface-variant font-label-md text-label-md tracking-wider" data-mode="LOOPER">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+              LOOPER
+            </button>
+<button class="mode-btn tactile-btn flex items-center justify-center gap-2 py-2 px-3 rounded text-on-surface-variant font-label-md text-label-md tracking-wider" data-mode="SPECTRAL">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+              SPECTRAL
+            </button>
+</div>
+</div>
+<!-- Tactile Freeze Rocker / Push Button -->
+<div class="flex flex-col gap-1.5 my-auto">
+<button class="tactile-btn w-full py-2.5 px-4 rounded flex items-center justify-between border border-outline-variant active:translate-y-0.5" id="freeze-toggle-btn">
+<div class="flex items-center gap-3">
+<span class="w-3.5 h-3.5 rounded-full bg-surface-container-high border border-outline-variant shadow-inner" id="freeze-led"></span>
+<div class="flex flex-col text-left">
+<span class="text-label-lg font-label-lg font-bold tracking-wider text-on-surface">FREEZE BUFFER</span>
+<span class="text-label-sm font-label-sm text-outline">STOPS LIVE RECORDING / LOCKS TAIL</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container-lowest border border-outline-variant text-primary font-mono font-bold">
+              GATE IN
+            </span>
+</button>
+</div>
+<!-- Sample Quality / Bit Depth -->
+<div class="flex items-center justify-between bg-surface-container-lowest p-2 rounded border border-outline-variant">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface font-semibold">CONVERTER QUALITY</span>
+<span class="text-label-sm font-label-sm text-outline">SAMPLE RESOLUTION</span>
+</div>
+<div class="flex gap-1.5">
+<button class="quality-btn px-3 py-1 rounded text-label-sm font-label-sm font-bold bg-surface-container-high text-primary border border-primary" data-quality="16-BIT">
+              16-BIT
+            </button>
+<button class="quality-btn px-3 py-1 rounded text-label-sm font-label-sm font-bold bg-surface-container text-on-surface-variant border border-outline-variant" data-quality="LO-FI">
+              LO-FI (8-BIT)
+            </button>
+</div>
+</div>
+</div>
+<!-- ==============================================
+           MODULE 3: BLEND & DIFFUSION (Bottom Left Bay, Cols 1-6)
+           ============================================== -->
+<div class="col-span-6 milled-panel rounded flex flex-col justify-between p-2.5">
+<span class="milled-screw top-1.5 left-1.5"></span>
+<span class="milled-screw top-1.5 right-1.5"></span>
+<span class="milled-screw bottom-1.5 left-1.5"></span>
+<span class="milled-screw bottom-1.5 right-1.5"></span>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-sm shadow-[0_0_5px_#6fb6ff]"></span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface tracking-wider">BLEND // STEREO REVERB</h2>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-mono">DIFFUSIVE CAVITY</span>
+</div>
+<div class="grid grid-cols-4 gap-2 items-center justify-items-center py-1">
+<!-- DRY/WET (r=46 -> 64px) -->
+<div class="knob-container" data-knob="dry_wet" data-max="100" data-min="0" data-unit="%" data-val="65">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">DRY/WET</div>
+<div class="w-16 h-16 knob-body" id="knob-dry_wet">
+<svg class="knob-dial-ring" viewBox="0 0 74 74">
+<circle cx="37" cy="37" fill="none" r="33" stroke="#1f2a36" stroke-dasharray="160 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+<circle class="knob-arc-active" cx="37" cy="37" fill="none" r="33" stroke="#6fb6ff" stroke-dasharray="104 200" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 37 37)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(50deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">65</span>%
+            </div>
+</div>
+<!-- FEEDBACK (r=38 -> 52px) -->
+<div class="knob-container" data-knob="feedback" data-max="100" data-min="0" data-unit="%" data-val="38">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">FEEDBACK</div>
+<div class="w-[52px] h-[52px] knob-body" id="knob-feedback">
+<svg class="knob-dial-ring" viewBox="0 0 62 62">
+<circle cx="31" cy="31" fill="none" r="27" stroke="#1f2a36" stroke-dasharray="130 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+<circle class="knob-arc-active" cx="31" cy="31" fill="none" r="27" stroke="#6fb6ff" stroke-dasharray="49 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(-30deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">38</span>%
+            </div>
+</div>
+<!-- REVERB (r=38 -> 52px) -->
+<div class="knob-container" data-knob="reverb" data-max="100" data-min="0" data-unit="%" data-val="78">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">REVERB</div>
+<div class="w-[52px] h-[52px] knob-body" id="knob-reverb">
+<svg class="knob-dial-ring" viewBox="0 0 62 62">
+<circle cx="31" cy="31" fill="none" r="27" stroke="#1f2a36" stroke-dasharray="130 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+<circle class="knob-arc-active" cx="31" cy="31" fill="none" r="27" stroke="#6fb6ff" stroke-dasharray="101 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(80deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">78</span>%
+            </div>
+</div>
+<!-- SPREAD (r=38 -> 52px) -->
+<div class="knob-container" data-knob="stereo_spread" data-max="100" data-min="0" data-unit="%" data-val="90">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">SPREAD</div>
+<div class="w-[52px] h-[52px] knob-body" id="knob-spread">
+<svg class="knob-dial-ring" viewBox="0 0 62 62">
+<circle cx="31" cy="31" fill="none" r="27" stroke="#1f2a36" stroke-dasharray="130 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+<circle class="knob-arc-active" cx="31" cy="31" fill="none" r="27" stroke="#6fb6ff" stroke-dasharray="117 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(105deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">90</span>%
+            </div>
+</div>
+</div>
+</div>
+<!-- ==============================================
+           MODULE 4: FILTER (Bottom Mid Bay, Cols 7-9)
+           ============================================== -->
+<div class="col-span-3 milled-panel rounded flex flex-col justify-between p-2.5">
+<span class="milled-screw top-1.5 left-1.5"></span>
+<span class="milled-screw top-1.5 right-1.5"></span>
+<span class="milled-screw bottom-1.5 left-1.5"></span>
+<span class="milled-screw bottom-1.5 right-1.5"></span>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-sm shadow-[0_0_5px_#6fb6ff]"></span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface tracking-wider">COLOR FILTER</h2>
+</div>
+<span class="text-label-sm font-label-sm text-outline font-mono">12dB/OCT</span>
+</div>
+<div class="grid grid-cols-2 gap-2 items-center justify-items-center py-1">
+<!-- HIGH PASS (r=38 -> 52px) -->
+<div class="knob-container" data-knob="filter_hp" data-max="2000" data-min="20" data-unit="Hz" data-val="60">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">HIGH PASS</div>
+<div class="w-[52px] h-[52px] knob-body" id="knob-filter_hp">
+<svg class="knob-dial-ring" viewBox="0 0 62 62">
+<circle cx="31" cy="31" fill="none" r="27" stroke="#1f2a36" stroke-dasharray="130 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+<circle class="knob-arc-active" cx="31" cy="31" fill="none" r="27" stroke="#6fb6ff" stroke-dasharray="25 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(-90deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">60</span>Hz
+            </div>
+</div>
+<!-- LOW PASS (r=38 -> 52px) -->
+<div class="knob-container" data-knob="filter_lp" data-max="20000" data-min="1000" data-unit="Hz" data-val="16500">
+<div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">LOW PASS</div>
+<div class="w-[52px] h-[52px] knob-body" id="knob-filter_lp">
+<svg class="knob-dial-ring" viewBox="0 0 62 62">
+<circle cx="31" cy="31" fill="none" r="27" stroke="#1f2a36" stroke-dasharray="130 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+<circle class="knob-arc-active" cx="31" cy="31" fill="none" r="27" stroke="#6fb6ff" stroke-dasharray="112 180" stroke-linecap="round" stroke-width="2.5" transform="rotate(135 31 31)"></circle>
+</svg>
+<div class="knob-cap-groove"></div>
+<div class="knob-pointer" style="transform: rotate(95deg);"></div>
+</div>
+<div class="mt-1.5 px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+<span class="knob-val">16.5</span>k
+            </div>
+</div>
+</div>
+</div>
+<!-- ==============================================
+           MODULE 5: BRAND EMBLEM & STEREO VU METERS (Cols 10-12)
+           ============================================== -->
+<div class="col-span-3 milled-panel rounded flex flex-col justify-between p-2.5">
+<span class="milled-screw top-1.5 left-1.5"></span>
+<span class="milled-screw top-1.5 right-1.5"></span>
+<span class="milled-screw bottom-1.5 left-1.5"></span>
+<span class="milled-screw bottom-1.5 right-1.5"></span>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 px-1">
+<span class="text-headline-sm font-headline-sm text-on-surface-variant tracking-wider">HARDWARE I/O</span>
+<span class="text-label-sm font-label-sm text-primary font-mono font-bold">STEREO IN</span>
+</div>
+<!-- Laser Etched Frosted Emblem & Dual VU Meters -->
+<div class="flex items-center justify-between gap-2.5 py-1">
+<!-- Frosted Vector Emblem -->
+<div class="flex flex-col items-center justify-center p-2 rounded bg-surface-container-lowest/80 border border-outline-variant/60 flex-1">
+<svg class="w-10 h-10 text-primary/80 mb-1" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
+<path d="M17.5 19c2.5 0 4.5-2 4.5-4.5 0-2.3-1.7-4.2-4-4.5-0.5-3.4-3.4-6-7-6-3.9 0-7 3.1-7 7 0 0.3 0 0.7 0.1 1-2.4 0.5-4.1 2.6-4.1 5 0 2.8 2.2 5 5 5h12.5z" stroke-dasharray="2 1"></path>
+<circle cx="10" cy="13" fill="currentColor" r="1.5"></circle>
+<circle cx="14" cy="14" fill="currentColor" r="1.5"></circle>
+<circle cx="12" cy="16" fill="currentColor" r="1.5"></circle>
+</svg>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-bold tracking-widest uppercase">MUTABLE</span>
+<span class="text-[8px] font-mono text-outline">CLOUDS // VERGLAS</span>
+</div>
+<!-- Dual Channel Real-Time Segmented LED VU Meters -->
+<div class="flex items-center gap-2 bg-surface-container-lowest p-2 rounded border border-outline-variant">
+<!-- Left Channel -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-2.5 h-16 flex flex-col justify-between py-0.5" id="meter-l">
+<span class="w-full h-1 rounded-sm bg-error opacity-20"></span>
+<span class="w-full h-1 rounded-sm bg-primary opacity-20"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+</div>
+<span class="text-[9px] font-mono text-outline">L</span>
+</div>
+<!-- Right Channel -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-2.5 h-16 flex flex-col justify-between py-0.5" id="meter-r">
+<span class="w-full h-1 rounded-sm bg-error opacity-20"></span>
+<span class="w-full h-1 rounded-sm bg-primary opacity-20"></span>
+<span class="w-full h-1 rounded-sm bg-primary opacity-20"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+<span class="w-full h-1 rounded-sm bg-primary shadow-[0_0_4px_#6fb6ff]"></span>
+</div>
+<span class="text-[9px] font-mono text-outline">R</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-outline px-1 border-t border-outline-variant/60 pt-1">
+<span>AUX AUDIO BUS</span>
+<span class="text-primary font-mono">+4 dBu BAL</span>
+</div>
+</div>
+</main>
+<!-- 3. LOWER Q-LINK CONTROL DOCK (H=56px) -->
+<nav class="h-14 w-full bg-surface-container-lowest border-t border-outline-variant flex items-center justify-between px-space-md z-30 select-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.85)]">
+<!-- Left: Active Q-Link Bank Badge -->
+<div class="flex items-center gap-2">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-outline font-bold tracking-widest">Q-LINK STRIP</span>
+<span class="text-label-md font-label-md text-primary font-bold font-mono">BANK 1 [VERGLAS]</span>
+</div>
+<div class="h-6 w-px bg-outline-variant ml-1"></div>
+</div>
+<!-- Center: 14 Hardware Encoders Quick Mapping Strip -->
+<div class="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none">
+<!-- Q1: Position (Active Focus) -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-space-md py-1 rounded min-w-[76px] cursor-pointer">
+<span class="text-label-sm font-label-sm opacity-70">Q01</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">POSITION</span>
+</div>
+<!-- Q2: Size -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q02</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">SIZE</span>
+</div>
+<!-- Q3: Pitch -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q03</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">PITCH</span>
+</div>
+<!-- Q4: Density -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q04</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">DENSITY</span>
+</div>
+<!-- Q5: Texture -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q05</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">TEXTURE</span>
+</div>
+<!-- Q6: Mode -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q06</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">MODE</span>
+</div>
+<!-- Q7: Freeze -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q07</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">FREEZE</span>
+</div>
+<!-- Q8: Dry/Wet -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q08</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">DRY/WET</span>
+</div>
+<!-- Q9: Feedback -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q09</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">FDBK</span>
+</div>
+<!-- Q10: Reverb -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded min-w-[76px] cursor-pointer hover:bg-surface-container">
+<span class="text-label-sm font-label-sm opacity-70">Q10</span>
+<span class="text-label-md font-label-md font-bold tracking-tight">REVERB</span>
+</div>
+</div>
+<!-- Right: Master Preset Actions -->
+<div class="flex items-center gap-2 pl-2">
+<button class="tactile-btn px-3 py-1.5 rounded text-label-sm font-label-sm font-bold tracking-wider text-on-surface border border-outline-variant hover:bg-surface-container-high">
+          PRESET
+        </button>
+<button class="tactile-btn px-3 py-1.5 rounded text-label-sm font-label-sm font-bold tracking-wider bg-primary/20 text-primary border border-primary shadow-[0_0_8px_rgba(111,182,255,0.3)]">
+          SAVE
+        </button>
+</div>
+</nav>
+</div>
+<!-- Real-time Physical Dial & Particle Cloud Visualizer Controller -->
+<script>
+    // --- State Storage for all 14 DSP Parameters ---
+    const engineState = {
+      position: 34,
+      size: 140,
+      pitch: 0,
+      density: 58,
+      texture: 22,
+      mode: "GRANULAR",
+      freeze: false,
+      quality: "16-BIT",
+      dry_wet: 65,
+      feedback: 38,
+      reverb: 78,
+      stereo_spread: 90,
+      filter_hp: 60,
+      filter_lp: 16500
+    };
+
+    // --- Particle Cloud Visualizer (60 FPS Canvas) ---
+    const canvas = document.getElementById('particle-cloud-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const maxParticles = 64;
+
+    class GrainParticle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        // Base positioning centered around position parameter
+        const centerPos = (engineState.position / 100) * canvas.width;
+        const spreadFactor = (engineState.texture / 100) * 120 + 20;
+        this.x = centerPos + (Math.random() - 0.5) * spreadFactor;
+        this.y = Math.random() * (canvas.height - 20) + 10;
+        
+        // Size linked to Size parameter
+        this.size = (engineState.size / 500) * 16 + 2;
+        this.baseWidth = this.size;
+        
+        // Speed linked to Density & Freeze
+        this.speedX = (Math.random() - 0.5) * (engineState.freeze ? 0.3 : 1.8);
+        this.speedY = (Math.random() - 0.5) * (engineState.freeze ? 0.2 : 1.2);
+        
+        // Life & Opacity
+        this.life = Math.random() * 80 + 40;
+        this.maxLife = this.life;
+        this.alpha = Math.random() * 0.7 + 0.3;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life--;
+
+        if (this.life <= 0 || this.x < 0 || this.x > canvas.width) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        const progress = this.life / this.maxLife;
+        const currentAlpha = Math.sin(progress * Math.PI) * this.alpha;
+        
+        // Particle grain capsule representation
+        ctx.save();
+        ctx.fillStyle = engineState.freeze ? `rgba(163, 210, 255, ${currentAlpha})` : `rgba(111, 182, 255, ${currentAlpha})`;
+        ctx.shadowColor = '#6fb6ff';
+        ctx.shadowBlur = engineState.freeze ? 10 : 4;
+        
+        ctx.beginPath();
+        const grainW = this.baseWidth * (engineState.size / 200);
+        ctx.roundRect(this.x - grainW / 2, this.y - 2, grainW, 4, 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // Initialize particle pool
+    for (let i = 0; i < maxParticles; i++) {
+      particles.push(new GrainParticle());
+    }
+
+    // Render loop
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Buffer Playhead Marker
+      const playheadX = (engineState.position / 100) * canvas.width;
+      ctx.strokeStyle = engineState.freeze ? 'rgba(163, 210, 255, 0.9)' : 'rgba(111, 182, 255, 0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(playheadX, 0);
+      ctx.lineTo(playheadX, canvas.height);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw Active Window (Size Window)
+      const windowWidth = (engineState.size / 500) * 160;
+      ctx.fillStyle = 'rgba(111, 182, 255, 0.05)';
+      ctx.fillRect(playheadX - windowWidth/2, 0, windowWidth, canvas.height);
+
+      // Update & Draw Grains
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+    requestAnimationFrame(animateParticles);
+
+    // --- Interactive Rotary Potentiometers (Knobs) ---
+    const knobElements = document.querySelectorAll('.knob-container');
+
+    knobElements.forEach(container => {
+      let isDragging = false;
+      let startY = 0;
+      let currentVal = parseFloat(container.dataset.val);
+      const min = parseFloat(container.dataset.min);
+      const max = parseFloat(container.dataset.max);
+      const key = container.dataset.knob;
+      const unit = container.dataset.unit;
+      const body = container.querySelector('.knob-body');
+      const pointer = container.querySelector('.knob-pointer');
+      const valDisplay = container.querySelector('.knob-val');
+      const arc = container.querySelector('.knob-arc-active');
+
+      function updateKnobVisual(val) {
+        // Map min-max to -135deg to +135deg (270 deg rotation span)
+        const pct = (val - min) / (max - min);
+        const deg = -135 + pct * 270;
+        pointer.style.transform = `rotate(${deg}deg)`;
+
+        // Update Arc in SVG if present
+        if (arc) {
+          const totalDash = 200;
+          const filled = pct * 140;
+          arc.setAttribute('stroke-dasharray', `${filled} ${totalDash}`);
+        }
+
+        // Format label
+        if (key === 'filter_lp') {
+          valDisplay.textContent = (val / 1000).toFixed(1);
+        } else {
+          valDisplay.textContent = Math.round(val);
+        }
+
+        engineState[key] = val;
+
+        // Dynamic updates for headers
+        if (key === 'density') {
+          document.getElementById('disp-density-readout').textContent = (val * 0.18 + 1).toFixed(1) + ' Hz';
+        }
+        if (key === 'size') {
+          document.getElementById('disp-overlap-readout').textContent = Math.round(val * 0.45) + 'ms';
+        }
+        if (key === 'texture') {
+          document.getElementById('scope-blur-val').textContent = Math.round(val) + '%';
+        }
+      }
+
+      container.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        startY = e.clientY;
+        container.setPointerCapture(e.pointerId);
+      });
+
+      container.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const deltaY = startY - e.clientY;
+        startY = e.clientY;
+
+        const range = max - min;
+        const step = range / 120; // 120px drag travel for full span
+        currentVal = Math.min(max, Math.max(min, currentVal + deltaY * step));
+        updateKnobVisual(currentVal);
+      });
+
+      container.addEventListener('pointerup', (e) => {
+        if (isDragging) {
+          isDragging = false;
+          container.releasePointerCapture(e.pointerId);
+        }
+      });
+
+      container.addEventListener('pointercancel', () => {
+        isDragging = false;
+      });
+    });
+
+    // --- Tactile Freeze Button Lock ---
+    const freezeBtn = document.getElementById('freeze-toggle-btn');
+    const freezeLed = document.getElementById('freeze-led');
+    const freezeBanner = document.getElementById('freeze-banner');
+
+    freezeBtn.addEventListener('click', () => {
+      engineState.freeze = !engineState.freeze;
+      if (engineState.freeze) {
+        freezeBtn.classList.add('freeze-latched');
+        freezeLed.classList.remove('bg-surface-container-high');
+        freezeLed.classList.add('bg-primary', 'shadow-[0_0_8px_#6fb6ff]');
+        freezeBanner.classList.remove('hidden');
+      } else {
+        freezeBtn.classList.remove('freeze-latched');
+        freezeLed.classList.add('bg-surface-container-high');
+        freezeLed.classList.remove('bg-primary', 'shadow-[0_0_8px_#6fb6ff]');
+        freezeBanner.classList.add('hidden');
+      }
+    });
+
+    // --- Processing Algorithm Buttons ---
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    modeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modeBtns.forEach(b => {
+          b.classList.remove('active', 'border-primary', 'text-primary');
+          b.classList.add('text-on-surface-variant');
+          b.querySelector('span').classList.remove('bg-primary', 'shadow-[0_0_6px_#6fb6ff]');
+          b.querySelector('span').classList.add('bg-outline-variant');
+        });
+        btn.classList.add('active', 'border-primary', 'text-primary');
+        btn.classList.remove('text-on-surface-variant');
+        btn.querySelector('span').classList.remove('bg-outline-variant');
+        btn.querySelector('span').classList.add('bg-primary', 'shadow-[0_0_6px_#6fb6ff]');
+        engineState.mode = btn.dataset.mode;
+      });
+    });
+
+    // --- Converter Quality Mode ---
+    const qualityBtns = document.querySelectorAll('.quality-btn');
+    qualityBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        qualityBtns.forEach(b => {
+          b.classList.remove('bg-surface-container-high', 'text-primary', 'border-primary');
+          b.classList.add('bg-surface-container', 'text-on-surface-variant', 'border-outline-variant');
+        });
+        btn.classList.add('bg-surface-container-high', 'text-primary', 'border-primary');
+        btn.classList.remove('bg-surface-container', 'text-on-surface-variant', 'border-outline-variant');
+        engineState.quality = btn.dataset.quality;
+      });
+    });
+
+    // --- Lightweight VU Meter & DSP fluctuation ---
+    setInterval(() => {
+      const dsp = 11 + Math.floor(Math.random() * 3);
+      document.getElementById('dsp-meter').textContent = `${dsp}%`;
+    }, 1200);
+  </script>
+</body></html>

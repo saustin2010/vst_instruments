@@ -1,0 +1,32 @@
+{
+  "id": "helm",
+  "name": "Helm",
+  "abbrev": "HLM",
+  "version": "1.5",
+  "description": "Helm polyphonic synthesizer - subtractive synth engine",
+  "author": "Matt Tytel (port: andree182 & antigravity)",
+  "license": "GPL-3.0",
+  "ui": "ui.js",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "aftertouch": true,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "default_forward_channel": -1,
+    "chain_params": [
+      {
+        "key": "preset",
+        "name": "Preset",
+        "type": "int",
+        "min": 0,
+        "max_param": "preset_count",
+        "default": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "api_version": 1,
+  "id": "maze_seq_lite",
+  "name": "Maze Lite",
+  "abbrev": "MZL",
+  "version": "1.3.4",
+  "author": "sd88me",
+  "description": "Dual generative clock-synced sequencer (Moog Labyrinth style). Slot MIDI FX.",
+  "dsp": "dsp.so",
+  "help": "help.json",
+  "builtin": false,
+  "capabilities": {
+    "chainable": true,
+    "component_type": "midi_fx",
+    "midi_in": true,
+    "ui_hierarchy": {
+      "levels": {
+        "root": {
+          "name": "Sequencer 1",
+          "params": [
+            "s1_corrupt", "s1_cv_range", "s1_length", "s1_bit_flip", "s1_advance", "s1_reset", "trig_mix",
+            { "label": "Seq 2", "level": "seq2" },
+            { "label": "Global", "level": "global" }
+          ],
+          "knobs": ["s1_corrupt","s1_cv_range","s1_length","s1_bit_flip","s1_advance","s1_reset","trig_mix"]
+        },
+        "seq2": {
+          "name": "Sequencer 2",
+          "params": ["s2_corrupt","s2_cv_range","s2_length","s2_bit_flip","s2_advance","s2_reset","trig_mix_b"],
+          "knobs": ["s2_corrupt","s2_cv_range","s2_length","s2_bit_flip","s2_advance","s2_reset","trig_mix_b"]
+        },
+        "global": {
+          "name": "Global",
+          "params": ["scale","note_rate","note_length","g_reset"],
+          "knobs": ["scale","note_rate","note_length","g_reset"]
+        }
+      }
+    }
+  },
+  "chain_params": [
+    { "key": "s1_corrupt",  "name": "1 Corrupt", "type": "int", "min": 0, "max": 100, "step": 1 },
+    { "key": "s1_cv_range", "name": "1 Range",   "type": "int", "min": 0, "max": 100, "step": 1 },
+    { "key": "s1_length",   "name": "1 Length",  "type": "int", "min": 1, "max": 8,   "step": 1 },
+    { "key": "s1_bit_flip", "name": "1 Bit Flip","type": "enum", "options": ["off","go"], "access": "write" },
+    { "key": "s1_advance",  "name": "1 Advance", "type": "enum", "options": ["off","go"], "access": "write" },
+    { "key": "s1_reset",    "name": "1 Reset",   "type": "enum", "options": ["1 bar","2 bars","4 bars","8 bars","Off"], "default": 4 },
+
+    { "key": "s2_corrupt",  "name": "2 Corrupt", "type": "int", "min": 0, "max": 100, "step": 1 },
+    { "key": "s2_cv_range", "name": "2 Range",   "type": "int", "min": 0, "max": 100, "step": 1 },
+    { "key": "s2_length",   "name": "2 Length",  "type": "int", "min": 1, "max": 8,   "step": 1 },
+    { "key": "s2_bit_flip", "name": "2 Bit Flip","type": "enum", "options": ["off","go"], "access": "write" },
+    { "key": "s2_advance",  "name": "2 Advance", "type": "enum", "options": ["off","go"], "access": "write" },
+    { "key": "s2_reset",    "name": "2 Reset",   "type": "enum", "options": ["1 bar","2 bars","4 bars","8 bars","Off"], "default": 4 },
+
+    { "key": "trig_mix",    "name": "Trig Mix",  "type": "int", "min": -63, "max": 64, "step": 1 },
+    { "key": "trig_mix_b",  "name": "Trig Mix",  "type": "int", "min": -63, "max": 64, "step": 1 },
+
+    { "key": "g_reset",     "name": "Reset Both","type": "enum", "options": ["1 bar","2 bars","4 bars","8 bars","Off"], "default": 4 },
+
+    { "key": "scale",       "name": "Scale",     "type": "enum", "options": ["Chromatic","Major","Minor","Pentatonic Maj","Pentatonic Min","Melodic Minor","Harmonic Minor","Whole Tone","Hirajoshi","Major 7","Minor 7","Unquantized"] },
+    { "key": "note_rate",   "name": "Note Rate", "type": "enum", "options": ["1/32","1/16","1/8","1/4","1/2","1 bar"] },
+    { "key": "note_length", "name": "Note Len",  "type": "enum", "options": ["1/4","2/4","3/4","4/4","5/4","6/4","7/4","8/4"] },
+
+    { "key": "running", "name": "Running", "type": "int", "min": 0, "max": 1, "access": "read" },
+    { "key": "s1_bits", "name": "1 Bits",  "type": "string", "access": "read" },
+    { "key": "s2_bits", "name": "2 Bits",  "type": "string", "access": "read" },
+    { "key": "s1_play", "name": "1 Play",  "type": "int", "min": -1, "max": 7, "access": "read" },
+    { "key": "s2_play", "name": "2 Play",  "type": "int", "min": -1, "max": 7, "access": "read" }
+  ]
+}

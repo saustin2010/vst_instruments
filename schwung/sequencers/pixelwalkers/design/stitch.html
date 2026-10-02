@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pixel Walkers // Akai MPC Live II</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed-dim": "#fabc4d",
+            "surface-dim": "#0a0a14",
+            "surface-bright": "#38393c",
+            "on-secondary-fixed": "#400100",
+            "inverse-surface": "#e3e2e6",
+            "surface-container": "#13132a",
+            "tertiary-fixed": "#eee2bc",
+            "on-primary-fixed-variant": "#604100",
+            "surface-container-lowest": "#06060c",
+            "inverse-primary": "#7e5700",
+            "inverse-on-surface": "#2f3034",
+            "on-primary-fixed": "#281900",
+            "tertiary": "#dacfa9",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "secondary": "#ffb4a7",
+            "on-primary-container": "#5e4000",
+            "surface-variant": "#232345",
+            "on-tertiary-container": "#4c4529",
+            "surface-container-high": "#1c1c38",
+            "surface-tint": "#ff7cc0",
+            "on-primary": "#432c00",
+            "primary-container": "#e5a93c",
+            "primary-fixed": "#ffdead",
+            "on-surface": "#f0f0ff",
+            "on-surface-variant": "#a7a7c7",
+            "outline-variant": "#34345e",
+            "surface-container-low": "#0e0e1f",
+            "on-error": "#690005",
+            "secondary-fixed": "#ffdad4",
+            "error-container": "#93000a",
+            "background": "#0a0a14",
+            "tertiary-container": "#beb38f",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-secondary": "#680300",
+            "on-secondary-fixed-variant": "#920801",
+            "error": "#ffb4ab",
+            "on-secondary-container": "#ff9a89",
+            "surface": "#13132a",
+            "surface-container-highest": "#34345e",
+            "on-tertiary-fixed": "#211b04",
+            "secondary-container": "#920801",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary": "#373016",
+            "primary": "#ff4fa3",
+            "outline": "#ff7cc0",
+            "on-error-container": "#ffdad6",
+            "on-background": "#f0f0ff"
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg: "0.25rem",
+            xl: "0.5rem",
+            full: "0.75rem"
+          },
+          spacing: {
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem",
+            "space-lg": "1rem",
+            "margin": "0.75rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem"
+          },
+          fontFamily: {
+            "body-lg": ["Space Grotesk", "sans-serif"],
+            "label-md": ["JetBrains Mono", "monospace"],
+            "readout-numeric": ["JetBrains Mono", "monospace"],
+            "body-md": ["Space Grotesk", "sans-serif"],
+            "headline-md": ["Space Grotesk", "sans-serif"],
+            "label-sm": ["JetBrains Mono", "monospace"],
+            "headline-sm": ["Space Grotesk", "sans-serif"],
+            "label-lg": ["JetBrains Mono", "monospace"],
+            "headline-lg": ["Space Grotesk", "sans-serif"]
+          },
+          fontSize: {
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }],
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      background-color: #05050a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+    }
+    .mpc-frame {
+      width: 1280px;
+      height: 628px;
+      position: relative;
+      background: #0a0a14;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 0 1px #1f1f35, inset 0 0 12px rgba(0,0,0,0.8);
+      overflow: hidden;
+    }
+    .recessed-well {
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.9), inset 0 0 2px rgba(0,0,0,0.8);
+    }
+    .knob-shadow {
+      box-shadow: 0 4px 7px rgba(0, 0, 0, 0.75), 0 1px 2px rgba(0, 0, 0, 0.9);
+    }
+    .neon-glow-pink {
+      box-shadow: 0 0 10px rgba(255, 79, 163, 0.45);
+    }
+    .hex-screw {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #1e1e38;
+      box-shadow: inset 0 1px 1px #05050c, 0 1px 0 rgba(255,255,255,0.08);
+      position: relative;
+    }
+    .hex-screw::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 1px;
+      width: 4px;
+      height: 1.5px;
+      background: #0d0d1a;
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface">
+<!-- STANDALONE HARDWARE SCREEN CHASSIS (1280x628) -->
+<div class="mpc-frame flex flex-col justify-between p-margin text-on-surface">
+<!-- TOP HEADER BAR (44px) -->
+<header class="h-11 w-full bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-space-md z-40 relative">
+<!-- Left: Engine Title & System Status -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-primary neon-glow-pink animate-pulse"></span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-wider">AKAI MPC LIVE II // SCHWUNG MIDI FX</span>
+</div>
+<span class="text-outline-variant">|</span>
+<span class="font-label-md text-label-md text-primary font-bold tracking-widest">PIXEL WALKERS // PHYSICS GENERATOR</span>
+</div>
+<!-- Center: Navigation Tabs -->
+<nav class="flex items-center gap-space-sm h-full">
+<button class="h-7 px-space-md bg-surface-container-high text-primary border border-primary font-label-md text-label-md font-bold rounded flex items-center shadow-[0_0_8px_rgba(255,79,163,0.3)]">
+          [ 1: MAIN ]
+        </button>
+<button class="h-7 px-space-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-bold rounded hover:bg-surface-container border border-transparent">
+          2: PLATFORMS
+        </button>
+<button class="h-7 px-space-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-bold rounded hover:bg-surface-container border border-transparent">
+          3: SCALE MATRIX
+        </button>
+<button class="h-7 px-space-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-bold rounded hover:bg-surface-container border border-transparent">
+          4: SETUP
+        </button>
+</nav>
+<!-- Right: Clock, Simulation & Engine Trigger -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center bg-surface-container px-space-sm py-0.5 rounded border border-outline-variant">
+<span class="text-label-sm font-label-sm text-on-surface-variant mr-1">BPM</span>
+<span class="text-label-md font-label-md font-bold text-primary" id="bpm-val">124.0</span>
+</div>
+</div>
+</header>
+<!-- MAIN TOUCH WORKSPACE (504px Grid Canvas) -->
+<main class="w-full flex-1 grid grid-cols-12 gap-gutter my-2.5 overflow-hidden">
+<!-- LEFT COLUMN: WALKERS MODULE (Col 1-6) -->
+<section class="col-span-6 bg-surface-container border border-outline-variant rounded flex flex-col relative overflow-hidden">
+<!-- Module Screws -->
+<div class="hex-screw absolute top-1.5 left-1.5 z-10"></div>
+<div class="hex-screw absolute top-1.5 right-1.5 z-10"></div>
+<!-- Module Header Strip -->
+<div class="h-7 bg-surface-container-low border-b border-outline-variant flex items-center justify-between px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-primary"></span>
+<span class="font-headline-sm text-headline-sm font-bold tracking-wider text-on-surface">WALKERS // VERLET PHYSICS</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary tracking-widest">[ ACTIVE COUNT: <span id="walker-count-num">4</span> ]</span>
+</div>
+<!-- Upper Sub-controls: Birth Note Toggle + Knobs -->
+<div class="px-space-md py-2 flex items-center justify-between border-b border-outline-variant/60 bg-surface-container-low/40">
+<!-- Tactile Rocker Switch (Birth Note) -->
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1 font-bold">BIRTH NOTE</span>
+<div class="w-12 h-6 bg-surface-container-lowest border border-outline-variant rounded-full p-0.5 cursor-pointer flex items-center transition-all" id="toggle-birth-note">
+<div class="w-5 h-5 rounded-full bg-primary shadow-[0_0_8px_#ff4fa3] transform translate-x-6 transition-transform" id="birth-thumb"></div>
+</div>
+<span class="font-label-sm text-label-sm text-primary mt-1 font-bold" id="birth-note-label">LATCH ON</span>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant"></div>
+<!-- Rotary: BIRTH LEVEL -->
+<div class="flex flex-col items-center group knob-container" data-max="127" data-min="0" data-param="birthLevel" data-val="78">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1 font-bold">BIRTH LEVEL</span>
+<div class="w-11 h-11 rounded-full bg-[#232345] border border-outline-variant flex items-center justify-center knob-shadow relative cursor-ns-resize">
+<!-- LED Arc Indicator -->
+<svg class="w-11 h-11 absolute inset-0 -rotate-90 pointer-events-none">
+<circle cx="22" cy="22" fill="none" r="18" stroke="#13132a" stroke-width="3"></circle>
+<circle class="knob-arc" cx="22" cy="22" fill="none" r="18" stroke="#ff4fa3" stroke-dasharray="113" stroke-dashoffset="35" stroke-width="3"></circle>
+</svg>
+<div class="w-7 h-7 rounded-full bg-[#f0f0ff] relative flex items-center justify-center pointer-events-none knob-cap" style="transform: rotate(55deg);">
+<div class="w-1 h-3 bg-[#ff4fa3] rounded-full absolute top-0.5"></div>
+</div>
+</div>
+<div class="recessed-well bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 rounded mt-1">
+<span class="font-label-md text-label-md text-primary font-bold knob-readout">78</span>
+</div>
+</div>
+<!-- Rotary: HIT LEVEL -->
+<div class="flex flex-col items-center group knob-container" data-max="127" data-min="0" data-param="hitLevel" data-val="104">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1 font-bold">HIT LEVEL</span>
+<div class="w-11 h-11 rounded-full bg-[#232345] border border-outline-variant flex items-center justify-center knob-shadow relative cursor-ns-resize">
+<svg class="w-11 h-11 absolute inset-0 -rotate-90 pointer-events-none">
+<circle cx="22" cy="22" fill="none" r="18" stroke="#13132a" stroke-width="3"></circle>
+<circle class="knob-arc" cx="22" cy="22" fill="none" r="18" stroke="#ff4fa3" stroke-dasharray="113" stroke-dashoffset="20" stroke-width="3"></circle>
+</svg>
+<div class="w-7 h-7 rounded-full bg-[#f0f0ff] relative flex items-center justify-center pointer-events-none knob-cap" style="transform: rotate(115deg);">
+<div class="w-1 h-3 bg-[#ff4fa3] rounded-full absolute top-0.5"></div>
+</div>
+</div>
+<div class="recessed-well bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 rounded mt-1">
+<span class="font-label-md text-label-md text-primary font-bold knob-readout">104</span>
+</div>
+</div>
+<!-- Rotary: HIT DECAY -->
+<div class="flex flex-col items-center group knob-container" data-max="999" data-min="10" data-param="hitDecay" data-unit="ms" data-val="320">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1 font-bold">HIT DECAY</span>
+<div class="w-11 h-11 rounded-full bg-[#232345] border border-outline-variant flex items-center justify-center knob-shadow relative cursor-ns-resize">
+<svg class="w-11 h-11 absolute inset-0 -rotate-90 pointer-events-none">
+<circle cx="22" cy="22" fill="none" r="18" stroke="#13132a" stroke-width="3"></circle>
+<circle class="knob-arc" cx="22" cy="22" fill="none" r="18" stroke="#ff4fa3" stroke-dasharray="113" stroke-dashoffset="65" stroke-width="3"></circle>
+</svg>
+<div class="w-7 h-7 rounded-full bg-[#f0f0ff] relative flex items-center justify-center pointer-events-none knob-cap" style="transform: rotate(-30deg);">
+<div class="w-1 h-3 bg-[#ff4fa3] rounded-full absolute top-0.5"></div>
+</div>
+</div>
+<div class="recessed-well bg-surface-container-lowest border border-outline-variant px-1.5 py-0.5 rounded mt-1">
+<span class="font-label-md text-label-md text-primary font-bold knob-readout">320ms</span>
+</div>
+</div>
+</div>
+<!-- Real-Time Interactive Physics Canvas Sandbox -->
+<div class="flex-1 w-full bg-[#06060c] recessed-well relative p-1">
+<canvas class="w-full h-full block rounded" height="335" id="sandboxCanvas" width="612"></canvas>
+<div class="absolute bottom-2 left-3 pointer-events-none flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-[#ff7cc0] tracking-wider font-bold">COLLISION SENSORS // 4 PLATFORMS</span>
+</div>
+<div class="absolute bottom-2 right-3 pointer-events-none text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant/80">INTERACTIVE MULTI-TOUCH SANDBOX</span>
+</div>
+</div>
+</section>
+<!-- RIGHT COLUMN: MODULAR RACK TILES (Col 7-12) -->
+<div class="col-span-6 flex flex-col gap-gutter">
+<!-- UPPER TILE: MIDI OUT & BUS MONITOR -->
+<section class="flex-1 bg-surface-container border border-outline-variant rounded flex flex-col relative overflow-hidden">
+<div class="hex-screw absolute top-1.5 left-1.5 z-10"></div>
+<div class="hex-screw absolute top-1.5 right-1.5 z-10"></div>
+<div class="h-7 bg-surface-container-low border-b border-outline-variant flex items-center justify-between px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-outline"></span>
+<span class="font-headline-sm text-headline-sm font-bold tracking-wider text-on-surface">MIDI OUT / BUS MONITOR</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">PORT: DIN-A // 0.1ms JITTER</span>
+</div>
+<div class="p-2 flex-1 flex flex-col justify-between bg-surface-container-lowest/80 recessed-well">
+<!-- Event Log List / Grid -->
+<div class="w-full grid grid-cols-4 font-label-sm text-label-sm text-on-surface-variant border-b border-outline-variant pb-1 mb-1 px-1">
+<span>TIME</span>
+<span>NOTE</span>
+<span>VELOCITY</span>
+<span class="text-right">ROUTING</span>
+</div>
+<div class="space-y-1 overflow-hidden font-label-md text-label-md" id="midi-log"><div class="grid grid-cols-4 px-1 py-0.5 bg-surface-container/50 border border-outline-variant/40 rounded text-on-surface animate-pulse">
+<span class="text-on-surface-variant">00:55.41</span>
+<span class="text-primary font-bold">B3 (59)</span>
+<span class="text-outline font-bold">107</span>
+<span class="text-right text-on-surface-variant">TRK 01 / CH 10</span>
+</div><div class="grid grid-cols-4 px-1 py-0.5 bg-surface-container/50 border border-outline-variant/40 rounded text-on-surface animate-pulse">
+<span class="text-on-surface-variant">00:55.41</span>
+<span class="text-primary font-bold">G3 (55)</span>
+<span class="text-outline font-bold">125</span>
+<span class="text-right text-on-surface-variant">TRK 01 / CH 10</span>
+</div><div class="grid grid-cols-4 px-1 py-0.5 bg-surface-container/50 border border-outline-variant/40 rounded text-on-surface animate-pulse">
+<span class="text-on-surface-variant">00:55.41</span>
+<span class="text-primary font-bold">B3 (59)</span>
+<span class="text-outline font-bold">119</span>
+<span class="text-right text-on-surface-variant">TRK 01 / CH 10</span>
+</div><div class="grid grid-cols-4 px-1 py-0.5 bg-surface-container/50 border border-outline-variant/40 rounded text-on-surface animate-pulse">
+<span class="text-on-surface-variant">00:55.39</span>
+<span class="text-primary font-bold">B3 (59)</span>
+<span class="text-outline font-bold">93</span>
+<span class="text-right text-on-surface-variant">TRK 01 / CH 10</span>
+</div><div class="grid grid-cols-4 px-1 py-0.5 bg-surface-container/50 border border-outline-variant/40 rounded text-on-surface animate-pulse">
+<span class="text-on-surface-variant">00:55.39</span>
+<span class="text-primary font-bold">G3 (55)</span>
+<span class="text-outline font-bold">98</span>
+<span class="text-right text-on-surface-variant">TRK 01 / CH 10</span>
+</div><div class="grid grid-cols-4 px-1 py-0.5 bg-surface-container/50 border border-outline-variant/40 rounded text-on-surface animate-pulse">
+<span class="text-on-surface-variant">00:55.39</span>
+<span class="text-primary font-bold">B3 (59)</span>
+<span class="text-outline font-bold">99</span>
+<span class="text-right text-on-surface-variant">TRK 01 / CH 10</span>
+</div><div class="grid grid-cols-4 px-1 py-0.5 bg-surface-container/50 border border-outline-variant/40 rounded text-on-surface animate-pulse">
+<span class="text-on-surface-variant">00:55.36</span>
+<span class="text-primary font-bold">B3 (59)</span>
+<span class="text-outline font-bold">110</span>
+<span class="text-right text-on-surface-variant">TRK 01 / CH 10</span>
+</div></div>
+<!-- LED Meter Arrays -->
+<div class="grid grid-cols-4 gap-2 pt-1 border-t border-outline-variant/60">
+<div class="bg-surface-container-low p-1 rounded border border-outline-variant/40 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">P1: C3</span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary" id="led-p1" style="background-color: rgb(52, 52, 94);"></span>
+</div>
+<div class="bg-surface-container-low p-1 rounded border border-outline-variant/40 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">P2: E3</span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#34345e]" id="led-p2" style="background-color: rgb(52, 52, 94);"></span>
+</div>
+<div class="bg-surface-container-low p-1 rounded border border-outline-variant/40 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">P3: G3</span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary neon-glow-pink" id="led-p3" style="background-color: rgb(255, 79, 163);"></span>
+</div>
+<div class="bg-surface-container-low p-1 rounded border border-outline-variant/40 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">P4: B3</span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#34345e] neon-glow-pink" id="led-p4" style="background-color: rgb(255, 79, 163);"></span>
+</div>
+</div>
+</div>
+</section>
+<!-- LOWER TILES: WORLD & ACTIONS MODULES -->
+<div class="grid grid-cols-12 gap-gutter h-36">
+<!-- WORLD MODULE (Col 1-7) -->
+<section class="col-span-7 bg-surface-container border border-outline-variant rounded flex flex-col relative">
+<div class="hex-screw absolute top-1.5 left-1.5 z-10"></div>
+<div class="hex-screw absolute top-1.5 right-1.5 z-10"></div>
+<div class="h-6 bg-surface-container-low border-b border-outline-variant flex items-center justify-between px-space-md">
+<span class="font-headline-sm text-[12px] font-bold tracking-wider text-on-surface">WORLD DYNAMICS</span>
+<span class="font-label-sm text-[8px] text-primary">GRAVITY 9.81 m/s²</span>
+</div>
+<div class="flex-1 flex items-center justify-around px-space-xs py-1">
+<!-- BOUNCE -->
+<div class="flex flex-col items-center knob-container" data-max="1.0" data-min="0.1" data-param="bounce" data-step="0.01" data-val="0.86">
+<span class="font-label-sm text-[9px] text-on-surface-variant mb-0.5 font-bold">BOUNCE</span>
+<div class="w-10 h-10 rounded-full bg-[#232345] border border-outline-variant flex items-center justify-center knob-shadow relative cursor-ns-resize">
+<svg class="w-10 h-10 absolute inset-0 -rotate-90 pointer-events-none">
+<circle cx="20" cy="20" fill="none" r="16" stroke="#13132a" stroke-width="2.5"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ff4fa3" stroke-dasharray="100" stroke-dashoffset="24" stroke-width="2.5"></circle>
+</svg>
+<div class="w-6 h-6 rounded-full bg-[#f0f0ff] relative flex items-center justify-center pointer-events-none knob-cap" style="transform: rotate(85deg);">
+<div class="w-1 h-2.5 bg-[#ff4fa3] rounded-full absolute top-0.5"></div>
+</div>
+</div>
+<div class="recessed-well bg-surface-container-lowest border border-outline-variant px-1 mt-0.5 rounded">
+<span class="font-label-sm text-label-sm text-primary font-bold knob-readout">0.86</span>
+</div>
+</div>
+<!-- HARDNESS -->
+<div class="flex flex-col items-center knob-container" data-max="100" data-min="0" data-param="hardness" data-unit="%" data-val="64">
+<span class="font-label-sm text-[9px] text-on-surface-variant mb-0.5 font-bold">HARDNESS</span>
+<div class="w-10 h-10 rounded-full bg-[#232345] border border-outline-variant flex items-center justify-center knob-shadow relative cursor-ns-resize">
+<svg class="w-10 h-10 absolute inset-0 -rotate-90 pointer-events-none">
+<circle cx="20" cy="20" fill="none" r="16" stroke="#13132a" stroke-width="2.5"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ff4fa3" stroke-dasharray="100" stroke-dashoffset="40" stroke-width="2.5"></circle>
+</svg>
+<div class="w-6 h-6 rounded-full bg-[#f0f0ff] relative flex items-center justify-center pointer-events-none knob-cap" style="transform: rotate(35deg);">
+<div class="w-1 h-2.5 bg-[#ff4fa3] rounded-full absolute top-0.5"></div>
+</div>
+</div>
+<div class="recessed-well bg-surface-container-lowest border border-outline-variant px-1 mt-0.5 rounded">
+<span class="font-label-sm text-label-sm text-primary font-bold knob-readout">64%</span>
+</div>
+</div>
+<!-- TOMBOLA -->
+<div class="flex flex-col items-center knob-container" data-max="100" data-min="0" data-param="tombola" data-unit="°" data-val="42">
+<span class="font-label-sm text-[9px] text-on-surface-variant mb-0.5 font-bold">TOMBOLA</span>
+<div class="w-10 h-10 rounded-full bg-[#232345] border border-outline-variant flex items-center justify-center knob-shadow relative cursor-ns-resize">
+<svg class="w-10 h-10 absolute inset-0 -rotate-90 pointer-events-none">
+<circle cx="20" cy="20" fill="none" r="16" stroke="#13132a" stroke-width="2.5"></circle>
+<circle class="knob-arc" cx="20" cy="20" fill="none" r="16" stroke="#ff4fa3" stroke-dasharray="100" stroke-dashoffset="60" stroke-width="2.5"></circle>
+</svg>
+<div class="w-6 h-6 rounded-full bg-[#f0f0ff] relative flex items-center justify-center pointer-events-none knob-cap" style="transform: rotate(-15deg);">
+<div class="w-1 h-2.5 bg-[#ff4fa3] rounded-full absolute top-0.5"></div>
+</div>
+</div>
+<div class="recessed-well bg-surface-container-lowest border border-outline-variant px-1 mt-0.5 rounded">
+<span class="font-label-sm text-label-sm text-primary font-bold knob-readout">42°</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ACTIONS & BADGE MODULE (Col 8-12) -->
+<section class="col-span-5 bg-surface-container border border-outline-variant rounded flex flex-col relative justify-between p-2">
+<div class="hex-screw absolute top-1.5 left-1.5 z-10"></div>
+<div class="hex-screw absolute top-1.5 right-1.5 z-10"></div>
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">ACTIONS</span>
+<span class="font-label-sm text-[9px] text-outline">60 FPS VERLET</span>
+</div>
+<!-- Tactile Buttons -->
+<div class="grid grid-cols-2 gap-2 my-1">
+<button class="h-9 bg-surface-container-high hover:bg-surface-variant border border-outline-variant hover:border-primary active:translate-y-0.5 transition-all rounded flex flex-col items-center justify-center shadow-[0_2px_0_#050506]" id="btn-randomize">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary neon-glow-pink"></span>
+<span class="font-label-sm text-[10px] font-bold text-on-surface">RANDOMIZE</span>
+</div>
+</button>
+<button class="h-9 bg-surface-container-high hover:bg-surface-variant border border-outline-variant hover:border-error active:translate-y-0.5 transition-all rounded flex flex-col items-center justify-center shadow-[0_2px_0_#050506]" id="btn-killall">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="font-label-sm text-[10px] font-bold text-error">KILL ALL</span>
+</div>
+</button>
+</div>
+<!-- Schwung Engine Badge Footer -->
+<div class="bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary">motion_photos_on</span>
+<span class="font-label-sm text-[9px] text-on-surface-variant">ENGINE STATUS:</span>
+</div>
+<span class="font-label-sm text-[9px] font-bold text-primary">ARMED // REC</span>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- BOTTOM Q-LINK ENCODER STRIP (56px) - 9 Macro Targets for Bank 1 (MAIN) -->
+<footer class="h-14 w-full bg-surface-container-lowest border-t border-outline-variant flex items-center justify-between px-space-md z-40 relative">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-bold text-primary bg-surface-container-high px-1.5 py-0.5 rounded border border-outline-variant">Q-LINK: BANK 1</span>
+</div>
+<div class="flex-1 grid grid-cols-9 gap-1.5 mx-space-md">
+<!-- Q1 -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q1</span>
+<span class="font-label-sm text-[9px] font-bold truncate">BIRTH NOTE</span>
+</div>
+<!-- Q2 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q2</span>
+<span class="font-label-sm text-[9px] truncate">BIRTH LVL</span>
+</div>
+<!-- Q3 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q3</span>
+<span class="font-label-sm text-[9px] truncate">HIT LEVEL</span>
+</div>
+<!-- Q4 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q4</span>
+<span class="font-label-sm text-[9px] truncate">HIT DECAY</span>
+</div>
+<!-- Q5 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q5</span>
+<span class="font-label-sm text-[9px] truncate">BOUNCE</span>
+</div>
+<!-- Q6 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q6</span>
+<span class="font-label-sm text-[9px] truncate">HARDNESS</span>
+</div>
+<!-- Q7 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q7</span>
+<span class="font-label-sm text-[9px] truncate">TOMBOLA</span>
+</div>
+<!-- Q8 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q8</span>
+<span class="font-label-sm text-[9px] truncate">RANDOM</span>
+</div>
+<!-- Q9 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-xs py-0.5 rounded">
+<span class="font-label-sm text-[8px] text-on-surface-variant">Q9</span>
+<span class="font-label-sm text-[9px] truncate">KILL ALL</span>
+</div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">dialpad</span>
+<span class="font-label-sm text-[9px]">ENCODERS LIVE</span>
+</div>
+</footer>
+</div>
+<!-- EMBEDDED REAL-TIME VISUAL SIMULATION & VERLET PHYSICS JAVASCRIPT (AUDIO COMPLETELY DISABLED) -->
+<script>
+    // Canvas & Physics State
+    const canvas = document.getElementById('sandboxCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = 0;
+    let height = 0;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      width = rect.width;
+      height = rect.height;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    let isSimulationRunning = true;
+    let birthNoteActive = true;
+    let bounceElasticity = 0.86;
+
+    // Platform definitions
+    const platforms = [
+      { x1: 0.1, y: 0.45, x2: 0.45, note: 'C3', midi: 48, ledId: 'led-p1' },
+      { x1: 0.55, y: 0.35, x2: 0.9, note: 'E3', midi: 52, ledId: 'led-p2' },
+      { x1: 0.25, y: 0.72, x2: 0.75, note: 'G3', midi: 55, ledId: 'led-p3' },
+      { x1: 0.05, y: 0.92, x2: 0.95, note: 'B3', midi: 59, ledId: 'led-p4' }
+    ];
+
+    // Shockwave particle pool
+    const shockwaves = [];
+
+    // Verlet Walker Class
+    class Walker {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.oldX = x + (Math.random() - 0.5) * 4;
+        this.oldY = y + (Math.random() - 0.5) * 2;
+        this.radius = 6;
+        this.color = '#ff7cc0';
+        this.trail = [];
+      }
+
+      update(gravity, friction) {
+        const vx = (this.x - this.oldX) * friction;
+        const vy = (this.y - this.oldY) * friction;
+
+        this.oldX = this.x;
+        this.oldY = this.y;
+
+        this.x += vx;
+        this.y += vy + gravity;
+
+        // Screen boundary collisions
+        if (this.x - this.radius < 0) {
+          this.x = this.radius;
+          this.oldX = this.x + vx * bounceElasticity;
+        } else if (this.x + this.radius > width) {
+          this.x = width - this.radius;
+          this.oldX = this.x + vx * bounceElasticity;
+        }
+
+        if (this.y + this.radius > height) {
+          this.y = height - this.radius;
+          this.oldY = this.y + vy * bounceElasticity;
+        }
+
+        // Platform collision checks
+        platforms.forEach(p => {
+          const px1 = p.x1 * width;
+          const px2 = p.x2 * width;
+          const py = p.y * height;
+
+          if (this.x >= px1 && this.x <= px2) {
+            if (this.oldY + this.radius <= py && this.y + this.radius >= py) {
+              this.y = py - this.radius;
+              this.oldY = this.y + vy * bounceElasticity;
+              
+              // Trigger visual collision shockwave & LED/MIDI bus monitor log (Silent)
+              triggerCollision(p, this.x, py);
+            }
+          }
+        });
+
+        // Store trail points
+        this.trail.push({ x: this.x, y: this.y, alpha: 1 });
+        if (this.trail.length > 8) this.trail.shift();
+      }
+
+      draw(c) {
+        // Draw Trail
+        this.trail.forEach((t, i) => {
+          c.beginPath();
+          c.arc(t.x, t.y, this.radius * (i / this.trail.length), 0, Math.PI * 2);
+          c.fillStyle = `rgba(255, 79, 163, ${(i / this.trail.length) * 0.4})`;
+          c.fill();
+        });
+
+        // Core Walker
+        c.beginPath();
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        c.fillStyle = '#f0f0ff';
+        c.shadowColor = '#ff4fa3';
+        c.shadowBlur = 10;
+        c.fill();
+        c.shadowBlur = 0;
+      }
+    }
+
+    let walkers = [];
+    function spawnWalkers(num = 4) {
+      walkers = [];
+      for (let i = 0; i < num; i++) {
+        walkers.push(new Walker(width * (0.2 + (i * 0.18)), 30 + Math.random() * 40));
+      }
+      document.getElementById('walker-count-num').innerText = walkers.length;
+    }
+
+    function triggerCollision(platform, x, y) {
+      shockwaves.push({ x, y, r: 2, maxR: 28, alpha: 1 });
+
+      // Flash LED on monitor
+      const led = document.getElementById(platform.ledId);
+      if (led) {
+        led.style.backgroundColor = '#ff4fa3';
+        led.classList.add('neon-glow-pink');
+        setTimeout(() => {
+          led.style.backgroundColor = '#34345e';
+          led.classList.remove('neon-glow-pink');
+        }, 120);
+      }
+
+      // Add entry to MIDI Event log
+      const logContainer = document.getElementById('midi-log');
+      if (logContainer) {
+        const vel = Math.floor(90 + Math.random() * 37);
+        const row = document.createElement('div');
+        row.className = "grid grid-cols-4 px-1 py-0.5 bg-surface-container/50 border border-outline-variant/40 rounded text-on-surface animate-pulse";
+        row.innerHTML = `
+          <span class="text-on-surface-variant">00:${(performance.now() / 1000).toFixed(2).slice(-5)}</span>
+          <span class="text-primary font-bold">${platform.note} (${platform.midi})</span>
+          <span class="text-outline font-bold">${vel}</span>
+          <span class="text-right text-on-surface-variant">TRK 01 / CH 10</span>
+        `;
+        logContainer.prepend(row);
+        if (logContainer.children.length > 7) {
+          logContainer.removeChild(logContainer.lastChild);
+        }
+      }
+    }
+
+    // Main Physics Loop
+    function render() {
+      if (width === 0) resizeCanvas();
+
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw subtle grid
+      ctx.strokeStyle = '#1a1a32';
+      ctx.lineWidth = 1;
+      const step = 20;
+      for (let x = 0; x < width; x += step) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += step) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Draw Platforms
+      platforms.forEach(p => {
+        const px1 = p.x1 * width;
+        const px2 = p.x2 * width;
+        const py = p.y * height;
+
+        ctx.strokeStyle = '#34345e';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(px1, py);
+        ctx.lineTo(px2, py);
+        ctx.stroke();
+
+        // Neon Top Rail
+        ctx.strokeStyle = '#ff7cc0';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(px1, py - 1);
+        ctx.lineTo(px2, py - 1);
+        ctx.stroke();
+
+        // Label
+        ctx.fillStyle = '#ff7cc0';
+        ctx.font = '9px "JetBrains Mono"';
+        ctx.fillText(p.note, px1, py - 6);
+      });
+
+      // Update & Draw Shockwaves
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        const s = shockwaves[i];
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 79, 163, ${s.alpha})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        s.r += 2.2;
+        s.alpha -= 0.06;
+        if (s.alpha <= 0) shockwaves.splice(i, 1);
+      }
+
+      // Update & Draw Walkers
+      if (isSimulationRunning) {
+        walkers.forEach(w => w.update(0.38, 0.995));
+      }
+      walkers.forEach(w => w.draw(ctx));
+
+      requestAnimationFrame(render);
+    }
+
+    // Interaction Listeners
+    window.addEventListener('DOMContentLoaded', () => {
+      resizeCanvas();
+      spawnWalkers(4);
+      requestAnimationFrame(render);
+
+      // Simulation Pause / Play via Spacebar
+      window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          isSimulationRunning = !isSimulationRunning;
+        }
+      });
+
+      // Tactile Birth Note Toggle Switch
+      const birthToggle = document.getElementById('toggle-birth-note');
+      const birthThumb = document.getElementById('birth-thumb');
+      const birthLabel = document.getElementById('birth-note-label');
+
+      birthToggle.addEventListener('click', () => {
+        birthNoteActive = !birthNoteActive;
+        if (birthNoteActive) {
+          birthThumb.classList.add('translate-x-6');
+          birthThumb.classList.remove('translate-x-0', 'bg-surface-variant');
+          birthThumb.classList.add('bg-primary');
+          birthLabel.innerText = "LATCH ON";
+          birthLabel.classList.replace('text-on-surface-variant', 'text-primary');
+        } else {
+          birthThumb.classList.remove('translate-x-6');
+          birthThumb.classList.add('translate-x-0', 'bg-surface-variant');
+          birthThumb.classList.remove('bg-primary');
+          birthLabel.innerText = "MUTED";
+          birthLabel.classList.replace('text-primary', 'text-on-surface-variant');
+        }
+      });
+
+      // Push Buttons: Randomize & Kill All
+      document.getElementById('btn-randomize').addEventListener('click', () => {
+        spawnWalkers(4 + Math.floor(Math.random() * 3));
+      });
+
+      document.getElementById('btn-killall').addEventListener('click', () => {
+        walkers = [];
+        document.getElementById('walker-count-num').innerText = '0';
+      });
+
+      // Draggable Rotary Knobs Handler
+      document.querySelectorAll('.knob-container').forEach(container => {
+        let isDragging = false;
+        let startY = 0;
+        let currentVal = parseFloat(container.dataset.val);
+        const min = parseFloat(container.dataset.min);
+        const max = parseFloat(container.dataset.max);
+        const step = parseFloat(container.dataset.step || 1);
+        const unit = container.dataset.unit || '';
+        const cap = container.querySelector('.knob-cap');
+        const readout = container.querySelector('.knob-readout');
+
+        function updateKnob(deltaY) {
+          const range = max - min;
+          const change = (-deltaY / 100) * range;
+          currentVal = Math.min(max, Math.max(min, currentVal + change));
+          container.dataset.val = currentVal;
+
+          // Update rotation (-135deg to +135deg)
+          const pct = (currentVal - min) / range;
+          const deg = -135 + pct * 270;
+          if (cap) cap.style.transform = `rotate(${deg}deg)`;
+
+          // Readout formatting
+          if (readout) {
+            readout.innerText = (step < 1 ? currentVal.toFixed(2) : Math.round(currentVal)) + unit;
+          }
+
+          if (container.dataset.param === 'bounce') {
+            bounceElasticity = currentVal;
+          }
+        }
+
+        container.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          startY = e.clientY;
+          document.body.style.cursor = 'ns-resize';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          const deltaY = e.clientY - startY;
+          startY = e.clientY;
+          updateKnob(deltaY);
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            document.body.style.cursor = 'default';
+          }
+        });
+      });
+
+      // Multi-Touch Click to Spawn Walker on Sandbox Canvas
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+        walkers.push(new Walker(clickX, clickY));
+        document.getElementById('walker-count-num').innerText = walkers.length;
+      });
+    });
+  </script>
+</body></html>

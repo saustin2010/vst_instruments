@@ -1,0 +1,27 @@
+{
+  "name": "Mrdrums",
+  "vendor": "Move Everything",
+  "uid": "MrDr",
+  "so": "mrdrums.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/mrdrums_plugin.cpp",
+      "src/dsp/mrdrums_engine.cpp",
+      "src/dsp/mrdrums_params.cpp"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-std=gnu++14"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "MODULE_DIR": "\"/sdcard/vst/mrdrums\""
+  }
+}

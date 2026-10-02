@@ -1,0 +1,125 @@
+# Chordism
+
+**Synth** · One key in, a four-voice chord out: morphing oscillators, FM, filter, lo-fi, delay, reverb and an arpeggiator. · maker in MPC: Charles Vestal · licence: MIT
+
+<img src="screenshots/page_0.png" width="760" alt="Chordism on the MPC touchscreen">
+
+A chord machine: every note you play becomes a four-voice chord (octaves, fifths, minor, major, sevenths, ninths, elevenths and more). Each voice has its own waveform (sine, triangle, saw, square, pulse or wavetable) and shape; MORPH and PAN MORPH move the level and stereo position across the voices, and FM and a shape LFO animate them. Then a 12/24 dB multimode filter with its own envelope and LFO, vibrato, a pitch sweep, a lo-fi section (grind, bit shift, decimator), delay, reverb, glide and an arpeggiator that plays the chord's notes for you. Ten pages, 135 parameters; the MAIN page gathers what you reach for most.
+
+## On the MPC
+
+- In the plugin browser: **Chordism** by **Charles Vestal** (Synth)
+- Files: `/sdcard/vst/chordism.so`, screen in `/sdcard/Synths/Charles Vestal - VST - Chordism/`
+- 135 parameters (all automatable) on 10 pages
+
+## Playing it
+
+Add it to a **plugin track** and play it from the pads, a keyboard or a MIDI clip. Every control can be turned with the Q-Links and automated, and the settings are saved with your project.
+
+## Pages
+
+Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
+
+### 1. MAIN
+
+<img src="screenshots/page_0.png" width="760" alt="Chordism, page MAIN">
+
+Q-Link columns: **1** CHORD, TUNING, SCALE, ROOT  ·  **2** DETUNE, WIDTH, SPREAD, ROTATION  ·  **3** CUTOFF, RESONANCE, FILTER MODE, SLOPE  ·  **4** ATTACK, RELEASE, VCA MODE, VOLUME
+
+### 2. OSCILLATORS
+
+<img src="screenshots/page_1.png" width="760" alt="Chordism, page OSCILLATORS">
+
+Q-Link columns: **1** WAVE 1, MIX 1, WAVE 2, MIX 2  ·  **2** WAVE 3, MIX 3, WAVE 4, MIX 4  ·  **3** SHAPE, SHAPE 1, SHAPE 2, SHAPE 3  ·  **4** SHAPE 4, LFO PHASE 1, LFO PHASE 2, LFO MODE
+
+### 3. SHAPE
+
+<img src="screenshots/page_2.png" width="760" alt="Chordism, page SHAPE">
+
+Q-Link columns: **1** LFO PHASE 3, LFO PHASE 4, PAN MORPH, PAN MORPH IN  ·  **2** FM MOD, FM AMT, MORPH INDEX, MORPH INT  ·  **3** FM AMT 1, FM AMT 2, FM AMT 3, FM AMT 4  ·  **4** FM POSITION
+
+### 4. FILTER ENV
+
+<img src="screenshots/page_3.png" width="760" alt="Chordism, page FILTER ENV">
+
+Q-Link columns: **1** ENV A, ENV D, ENV AMT, DRIVE  ·  **2** FLT ENV MODE, FENV RESET, LOFI POS, FLT LFO RATE  ·  **3** FLT LFO DPTH, FLT LFO SPRD, FLT LFO WAVE, FLT LFO MODE  ·  **4** SHP LFO WAVE, SHP LFO RATE, SHP LFO DPTH
+
+### 5. VIBRATO
+
+<img src="screenshots/page_4.png" width="760" alt="Chordism, page VIBRATO">
+
+Q-Link columns: **1** VIB DEPTH, VIB SPEED, VIB DELAY, SWEEP  ·  **2** SWEEP RATE, VIBRAT STRAY, VIB OSCS, SWEEP OSCS  ·  **3** LVL LFO RATE, LVL LFO DPTH, LVL LFO WAVE, LVL LFO MODE  ·  **4** PAN LFO RATE, PAN LFO DPTH, PAN LFO WAVE, PAN LFO MODE
+
+### 6. TREMOLO
+
+<img src="screenshots/page_5.png" width="760" alt="Chordism, page TREMOLO">
+
+Q-Link columns: **1** TREM RATE, TREM DEPTH, GLIDE, TREMOLO WAVE  ·  **2** GLIDE LEGATO, VCA RESET, DRONE, GRIND  ·  **3** BIT SHIFT, DECIMATOR
+
+### 7. DELAY
+
+<img src="screenshots/page_6.png" width="760" alt="Chordism, page DELAY">
+
+Q-Link columns: **1** DELAY MIX, DLY TIME, DLY FBK, DLY TONE  ·  **2** DLY MOD DPTH, DELAY MODE, DLY TONE HI, DLY TONE LO  ·  **3** DLY MOD RATE
+
+### 8. REVERB
+
+<img src="screenshots/page_7.png" width="760" alt="Chordism, page REVERB">
+
+Q-Link columns: **1** REVERB MIX, REV DECAY, REV DAMPING, SHIMMER  ·  **2** ROOM SIZE, REV LOW CUT, REV MOD RATE, REV MOD DPTH
+
+### 9. CHORD MAP
+
+<img src="screenshots/page_8.png" width="760" alt="Chordism, page CHORD MAP">
+
+Q-Link columns (bank 1): **1** C, C#, D, D#  ·  **2** E, F, F#, G  ·  **3** G#, A, A#, B  ·  **4** INTERVAL 1, INTERVAL 2, INTERVAL 3, CTRL SRC
+
+Q-Link columns (bank 2): **1** CTRL CC, CTRL>CUTOFF, CTRL>MORPH, CTRL>VIBRATO  ·  **2** CTRL>SHAPE, CTRL>FM
+
+### 10. ARPEGGIATOR
+
+<img src="screenshots/page_9.png" width="760" alt="Chordism, page ARPEGGIATOR">
+
+Q-Link columns: **1** EUCLID STEPS, EUCLID BEATS, ARP TEMPO, VAR COUNT  ·  **2** ARP STATUS, ARP HOLD, ARP DIRECTIO, ARP VAR INT  ·  **3** CLOCK SYNC, CLOCK DIVISI
+
+## Install
+
+From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
+
+```
+./install.sh <mpc-address> chordism
+```
+
+## Where it comes from
+
+- Upstream: https://github.com/charlesvestal/schwung-chordism
+- Vendored at commit 1ddbe63a64db89fbd316d9a1150d0d051e0e1f38 2026-08-31
+- Schwung module "Chordism" v0.3.15 by charlesvestal
+- Licence: MIT ([`LICENSE`](LICENSE))
+- MPC port and screen: this repo, built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
+
+## Changes for the MPC
+
+- `params.base.json` comes from the module's `chain_params` (what the engine actually takes, saved as `chain_params.engine.json`), not its menu tree.
+- New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+
+## Files
+
+| Path | What |
+|---|---|
+| `screenshots/` | the pages as MPC draws them |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (its presets/kits are in the repo's `presets/` folder, not here) |
+| `vst.json` | build settings: name, maker, sources, compiler flags |
+| `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
+| `params.base.json` | the engine's own parameter list it was derived from |
+| `params.pre-stitch.json` | the parameter list before the Stitch screen renamed controls |
+| `chain_params.engine.json` | what the engine reports it takes (its `chain_params`) |
+| `layout.conf` | the screen: control positions, art, Q-Links (generated from the Stitch design) |
+| `layout.grid.conf` | the plan of pages and controls the Stitch conversion fills in |
+| `chordism.css` | the artwork stylesheet |
+| `images/` | artwork: backgrounds, knobs, displays |
+| `design/` | the Google Stitch design this screen was converted from (`stitch.html`, as Stitch wrote it) |
+| `src/` | the engine's source, vendored from upstream |
+| `UPSTREAM` | where the source came from, and at which commit |
+
+To rebuild from source see [BUILDING.md](../../../BUILDING.md); to change the screen, [RESKINNING.md](../../../RESKINNING.md).

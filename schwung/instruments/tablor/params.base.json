@@ -1,0 +1,513 @@
+{
+ "name": "tablor",
+ "params": [
+  {
+   "key": "wt1_pos",
+   "name": "WT1 Pos",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt2_pos",
+   "name": "WT2 Pos",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_level",
+   "name": "WT1 Level",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "display": "int"
+  },
+  {
+   "key": "wt2_level",
+   "name": "WT2 Level",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_tune",
+   "name": "WT1 Tune",
+   "min": -24,
+   "max": 24,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt2_tune",
+   "name": "WT2 Tune",
+   "min": -24,
+   "max": 24,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_uni",
+   "name": "WT1 Unison",
+   "min": 1,
+   "max": 4,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "wt1_detune",
+   "name": "WT1 Detune",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_spread",
+   "name": "WT1 Spread",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_pan",
+   "name": "WT1 Pan",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt2_uni",
+   "name": "WT2 Unison",
+   "min": 1,
+   "max": 4,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "wt2_detune",
+   "name": "WT2 Detune",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt2_spread",
+   "name": "WT2 Spread",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt2_pan",
+   "name": "WT2 Pan",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt1_bend",
+   "name": "WT1 Bend",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt1_formant",
+   "name": "WT1 Formant",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt2_bend",
+   "name": "WT2 Bend",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt2_formant",
+   "name": "WT2 Formant",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "sub_tune",
+   "name": "Sub Tune",
+   "min": -24,
+   "max": 24,
+   "default": -12,
+   "display": "int"
+  },
+  {
+   "key": "flt_freq",
+   "name": "Filter Freq",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "display": "int"
+  },
+  {
+   "key": "flt_res",
+   "name": "Filter Res",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "flt_type",
+   "name": "Filter Type",
+   "options": [
+    "LP 12",
+    "LP 24",
+    "HP 12",
+    "HP 24",
+    "BP 12",
+    "BP 24",
+    "Notch 12",
+    "Notch 24"
+   ],
+   "default": 1
+  },
+  {
+   "key": "sub_level",
+   "name": "Sub Level",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "sub_wave",
+   "name": "Sub Wave",
+   "options": [
+    "Sine",
+    "Triangle",
+    "Saw",
+    "Square",
+    "Pulse",
+    "Pulse Tr"
+   ],
+   "default": 0
+  },
+  {
+   "key": "noise_level",
+   "name": "Noise Level",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "noise_type",
+   "name": "Noise Type",
+   "options": [
+    "White",
+    "Pink"
+   ],
+   "default": 0
+  },
+  {
+   "key": "vca_a",
+   "name": "VCA Attack",
+   "min": 0,
+   "max": 127,
+   "default": 51,
+   "display": "int"
+  },
+  {
+   "key": "vca_d",
+   "name": "VCA Decay",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "vca_s",
+   "name": "VCA Sustain",
+   "min": 0,
+   "max": 127,
+   "default": 102,
+   "display": "int"
+  },
+  {
+   "key": "vca_r",
+   "name": "VCA Release",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "flt_a",
+   "name": "Flt Attack",
+   "min": 0,
+   "max": 127,
+   "default": 51,
+   "display": "int"
+  },
+  {
+   "key": "flt_d",
+   "name": "Flt Decay",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "flt_s",
+   "name": "Flt Sustain",
+   "min": 0,
+   "max": 127,
+   "default": 102,
+   "display": "int"
+  },
+  {
+   "key": "flt_r",
+   "name": "Flt Release",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me1_a",
+   "name": "EG1 A",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "me1_d",
+   "name": "EG1 D",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me1_s",
+   "name": "EG1 S",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "me1_r",
+   "name": "EG1 R",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me2_a",
+   "name": "EG2 A",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "me2_d",
+   "name": "EG2 D",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me2_s",
+   "name": "EG2 S",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "me2_r",
+   "name": "EG2 R",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "vca_vel",
+   "name": "VCA Velocity",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "display": "int"
+  },
+  {
+   "key": "flt_key",
+   "name": "Key Track",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "flt_vel",
+   "name": "Vel Track",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "flt_env",
+   "name": "Filter EG Amt",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me1_dst",
+   "name": "EG1 Dst",
+   "options": [
+    "None",
+    "WT1 Pos",
+    "WT2 Pos",
+    "WT1 Level",
+    "WT2 Level",
+    "WT1 Tune",
+    "WT2 Tune",
+    "WT1 Bend",
+    "WT2 Bend",
+    "WT1 Formant",
+    "WT2 Formant",
+    "WT1 Pan",
+    "WT2 Pan",
+    "Filter Freq",
+    "Filter Res",
+    "Sub Level",
+    "Noise Level",
+    "Amp"
+   ],
+   "default": 0
+  },
+  {
+   "key": "me1_amt",
+   "name": "EG1 Amt",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me2_dst",
+   "name": "EG2 Dst",
+   "options": [
+    "None",
+    "WT1 Pos",
+    "WT2 Pos",
+    "WT1 Level",
+    "WT2 Level",
+    "WT1 Tune",
+    "WT2 Tune",
+    "WT1 Bend",
+    "WT2 Bend",
+    "WT1 Formant",
+    "WT2 Formant",
+    "WT1 Pan",
+    "WT2 Pan",
+    "Filter Freq",
+    "Filter Res",
+    "Sub Level",
+    "Noise Level",
+    "Amp"
+   ],
+   "default": 0
+  },
+  {
+   "key": "me2_amt",
+   "name": "EG2 Amt",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "voice_mode",
+   "name": "Voice Mode",
+   "options": [
+    "Poly",
+    "Mono"
+   ],
+   "default": 0
+  },
+  {
+   "key": "voices",
+   "name": "Voices",
+   "min": 1,
+   "max": 8,
+   "default": 8,
+   "display": "int"
+  },
+  {
+   "key": "glide",
+   "name": "Glide",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "glide_mode",
+   "name": "Glide Mode",
+   "options": [
+    "Off",
+    "Glissando",
+    "Portamento"
+   ],
+   "default": 0
+  },
+  {
+   "key": "legato",
+   "name": "Legato",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "pb_range",
+   "name": "PB Range",
+   "min": 0,
+   "max": 24,
+   "default": 2,
+   "display": "int"
+  },
+  {
+   "key": "volume",
+   "name": "Volume",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "display": "int"
+  }
+ ],
+ "note": "from the engine's own chain_params (get_param), 2026-10-01"
+}

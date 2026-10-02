@@ -1,0 +1,1571 @@
+diff --git a/adapters/schwung/module_params.py b/adapters/schwung/module_params.py
+index d0a4ff6..155566f 100644
+--- a/adapters/schwung/module_params.py
++++ b/adapters/schwung/module_params.py
+@@ -1,35 +1,95 @@
+ """Schwung module.json -> the generic parameter list (docs/PORTING.md "Parameters").
+ 
+-chain_params are already close to the generic shape; `access: "write"` becomes `momentary`, and
+-ui_hierarchy levels become the skin studio's sections."""
++Two module.json layouts are supported:
++
++- **Older** (Maze Voice): a `chain_params` list (top-level or under `capabilities`) already close to
++  the generic shape -- `access: "write"` becomes `momentary`; `ui_hierarchy` levels list param KEYS.
++- **Newer** (Braids, OB-Xd, Mr Hyde, ...): no `chain_params`; the param OBJECTS live directly under
++  `capabilities.ui_hierarchy.levels.<level>.params`, each `{key, label, short_name?, type: enum|
++  float|int, options|min|max, default?, unit?}`. Translated to the generic shape here.
++"""
+ import json
+ 
+ 
++def _levels(d):
++    caps = d.get("capabilities", d)
++    return (caps.get("ui_hierarchy") or {}).get("levels") or {}
++
++
++def _ordered(levels):
++    return ["root"] + [k for k in levels if k != "root"]
++
++
+ def is_module(d):
+-    return "chain_params" in d or "chain_params" in d.get("capabilities", {})
++    if "chain_params" in d or "chain_params" in d.get("capabilities", {}):
++        return True
++    for lv in _levels(d).values():                     # newer schema: level params are objects
++        ps = lv.get("params") or []
++        if ps and isinstance(ps[0], dict):
++            return True
++    return False
++
++
++def _translate(p):
++    """A newer-schema param object -> the generic param shape (tools/params.py)."""
++    q = {"key": p["key"], "name": p.get("label") or p.get("short_name") or p["key"]}
++    if p.get("unit"):
++        q["unit"] = p["unit"]
++    if p.get("type") == "enum":
++        q["options"] = list(p.get("options") or [])
++        q["default"] = p.get("default", 0)
++    else:
++        q["min"] = p.get("min", 0.0)
++        q["max"] = p.get("max", 1.0)
++        if "default" in p:
++            q["default"] = p["default"]
++        if p.get("type") == "int":
++            q["display"] = "int"                        # whole-number readout, any range
++    if p.get("access") == "write":
++        q["momentary"] = True
++    return q
+ 
+ 
+ def load(path):
+     """-> (params, sections [(label, [keys])] or None when the module has no ui_hierarchy)"""
+     d = json.load(open(path))
+     caps = d.get("capabilities", d)
++    levels = _levels(d)
+     raw = caps.get("chain_params") or d.get("chain_params")
+-    if not raw:
+-        raise SystemExit("%s: no chain_params" % path)
+-    params = []
+-    for p in raw:
+-        q = {k: v for k, v in p.items() if k != "access"}
+-        if p.get("access") == "write":
+-            q["momentary"] = True
+-        params.append(q)
+-    keys = {p["key"] for p in params}
+-    levels = (caps.get("ui_hierarchy") or {}).get("levels") or {}
+-    sections, seen = [], set()
+-    for lv in ["root"] + [k for k in levels if k != "root"]:
++
++    if raw:                                             # ---- older schema ----
++        params = []
++        for p in raw:
++            q = {k: v for k, v in p.items() if k != "access"}
++            if p.get("access") == "write":
++                q["momentary"] = True
++            params.append(q)
++        keys = {p["key"] for p in params}
++        sections, seen = [], set()
++        for lv in _ordered(levels):
++            if lv not in levels:
++                continue
++            ks = [k for k in levels[lv].get("params", []) if isinstance(k, str) and k in keys and k not in seen]
++            seen.update(ks)
++            if ks:
++                sections.append((levels[lv].get("label", lv), ks))
++        return params, sections or None
++
++    # ---- newer schema: param objects live inside ui_hierarchy levels ----
++    params, sections, seen = [], [], set()
++    for lv in _ordered(levels):
+         if lv not in levels:
+             continue
+-        ks = [k for k in levels[lv].get("params", []) if isinstance(k, str) and k in keys and k not in seen]
+-        seen.update(ks)
++        ks = []
++        for p in levels[lv].get("params", []):
++            # skip navigation entries ({level, label}) and string keys -- only real param objects
++            if not isinstance(p, dict) or "key" not in p or p["key"] in seen:
++                continue
++            seen.add(p["key"])
++            params.append(_translate(p))
++            ks.append(p["key"])
+         if ks:
+             sections.append((levels[lv].get("label", lv), ks))
++    if not params:
++        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
+     return params, sections or None
+diff --git a/docs/NOTES.md b/docs/NOTES.md
+index 6e0f9d4..20606e0 100644
+--- a/docs/NOTES.md
++++ b/docs/NOTES.md
+@@ -596,7 +596,234 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+ engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
+ MPC limitation.
+ 
++## Declared range ≠ the DSP's own units silences a port; host_test now checks it (2026-09-30, OB-Xd)
++OB-Xd (Schwung) made no sound on a Live II. Its `set_param`/`get_param` speak native integers (`atoi`: knobs
++0..100, voices 1..8), but the port's hand-extracted params list declared every knob 0..1. `get_param`'s
++"70" clamps to norm 1.0; MPC sets a param back from its last-read norm (project restore, Q-Link, a knob
++touch), so 1.0 goes out as `"1"` and the DSP takes 1%: cutoff, volume, sustain etc. all collapse and the
++synth goes silent. `tools/host_test.c` passed it anyway (the set/get tolerance was one whole declared range,
++and silence is only a warn). It now also runs `restore_check()` on a fresh instance: every numeric param's
++DSP value must lie inside its declared min/max, `set(get())` for every param must leave every display
++unchanged, and a patch that sounded before must still sound after. Checked offline: FAILs the old OB-Xd params (15 out of
++range, 15 changed, rms 0.018 → 0), PASSes the fixed ones. Across the Schwung ports it also flags mrdrums
++(`pad_decay_ms`/`pad_chance_pct` are ms/% in the DSP, 0..1 declared) and a one-step drift on Noisemaker's
++`osc2_tune`. Two related adapter gaps it can't see: a module param with `"max_param": "<count key>"` (Hera,
++Hank, Hush One's `preset`) and one with no type/range at all (libpo32's `kit`) both fall back to 0..1 in
++`adapters/schwung/module_params.py`, so only presets 0 and 1 are reachable.
++
++Also found porting OB-Xd: an engine that loads a bank from `<module_dir>/presets` needs `"defines":
++{"MODULE_DIR": "\"/sdcard/vst/<port>\""}` plus the bank shipped there, else it finds nothing (PORTING.md's
++`MODULE_DIR` item); and its fallback "Init" patch was silent because it never called `processBrightness`.
++
++`tools/test_port.sh` on macOS: Apple clang's ASan hangs in its own startup on macOS 26 (before `main`), so the
++script uses the gcc:12 container on Darwin. After a Colima restart the arm32 binfmt handler is gone
++(`exec format error` from `build_port.sh`); `docker run --privileged --rm tonistiigi/binfmt --install arm`
++restores it. LeakSanitizer exits via `_exit` on a leak (Noisemaker's upstream `FilterHandler`), which drops
++host_test's buffered stdout; rerun with `ASAN_OPTIONS=detect_leaks=0` to read the checks.
++
++## Porting audit of ten Schwung modules: what to check per engine (2026-10-01, offline)
++Checked with each engine built for Linux and driven directly (get/set/notes), then host_test incl. the restore check:
++- Engines that read `<module_dir>/presets` or `/kits` (Braids, Hera, OB-Xd, libpo32) load nothing without a
++  `MODULE_DIR` define and the folder shipped there. `tools/test_port.sh` now takes `TEST_DOCKER_ARGS` (extra
++  `docker run` args), so the test can mount that folder at its device path and exercise the presets.
++- Some engines report enum values as **text** from `get_param` (Hush One, Mr Hyde, mrdrums: "Manual", "lp",
++  "oneshot"); the wrapper maps them back with `strcasecmp`, so a port may change only their case. A layout's
++  `options=` on a `popup`/`enum_v` changes only the drawn labels, so friendlier text can go there.
++- A module param with a run-time range (`max_param`) or with no range at all falls back to 0..1 in the adapter:
++  give the port an explicit params list (see the 2026-09-30 entry).
++- Move-UI macro params that write through to others (Noisemaker `wave`/`tune2`) break a restore (osc 2 tune moved a
++  step); keep their VST slot but rename the key so the engine ignores it.
++- "Current item" editors (libpo32 `inst` + `inst_*`, mrdrums `ui_current_pad` + `pad_*`) work as one editor page:
++  the wrapper's deferred `audioMasterUpdateDisplay` after every set re-polls the other knobs (display refresh on a
++  device still to be confirmed).
++- A text-path param (mrdrums `pad_sample_path`) can't be set from the MPC and a numeric restore of it clears the
++  pad; such an engine needs another way to reach its files (for mrdrums, kit folders).
++
++## Q-Links on stepped values and switches: accumulate, don't round back (2026-10-01, reported on a Live II)
++Symptom (user, Live II): Q-Links "behave poorly" on stepped controls, e.g. Moog's OSC RANGE (-2..2) and Noisemaker's
++envelope sliders (its engine reports whole percents). Same cause as the jv880 "Q-Links stuck on integer params"
++finding on the owner's unmerged `claude/verify-native-components` branch (commit eb2ee55, verified on a Force): MPC
++sends a slow turn as ticks smaller than one step and re-reads `getParameter` between ticks, so a tick that rounds
++back is lost. That fix covered only `"display": "int"` params. `wrapper/vst2_wrap.c` here now keeps the host's
++unrounded position (`shadow[i]`) for **every** numeric param, returned while the DSP still holds the step that
++position gives, where a step is one unit for int params, else the DSP's own reported resolution (its decimals: none
++= whole units, as Noisemaker's percentages), and rounds int params on the way out (as eb2ee55). **Options** now
++work the same way: a between-options value is kept as the shadow and the option it rounds to is selected, so a
++turn moves one option per option-width of travel like a detented switch; they used to step one option per tick,
++which raced through a list on a slow turn (touch picks and automation land exactly on an option and are unchanged).
++`tools/host_test.c` checks both (50 ticks of 0.0004 must add up; 20 ticks worth 0.6 option must move one option).
++New param opt-in `"values": [...]` (gen_vst -> `param_t.values`): an option sends that value instead of its index
++and maps the DSP's number back to the nearest option, so a DSP that takes the value itself can still be a switch
++(Moog's -2..2 ranges as 32'/16'/8'/4'/2'). Offline-tested; the feel on the device is still to be confirmed.
++
+ ## CPU layout (Force, 2026-09-24)
+ RK3288, 4x Cortex-A17 @ 1.8 GHz (governor `performance`), `isolcpus=2-3`. MPC runs `AudioWorker0-3` (SCHED_FIFO),
+ one pinned per core, plus `Audio Processing` (prio 20). Plugins run on these workers, so tracks spread across
+ cores. `tools/bench.sh` measures a plugin against the 2902 µs block (docs/BENCH.md).
++
++## Schwung MIDI FX modules as sequencers for other tracks; engine quirks from 16 more ports (2026-10-01, offline)
++**MIDI out.** A Schwung `midi_fx_api_v1` module (arps, Euclidean/generative sequencers, a MIDI file player) ports as a
++silent instrument whose notes leave through its own ALSA sequencer port (client = plugin name, port "MIDI Out";
++second instance " 2"), libasound `dlopen`ed so the build needs no ALSA headers. Verified on a Live II with a probe
++client: MPC subscribes to a new port within ~5 s, no restart. The user then turns **Track** on for the port in
++Preferences → MIDI and picks it as another track's MIDI input (never on the sequencer's own track, which would hear
++itself). Clock: new optional engine hook `mpc_engine_transport(inst, bpm, ppq, playing)` (`wrapper/engine.h`, weak), called
++by the wrapper each block from `audioMasterGetTime` (tempo, ppqPos, transport-playing flags); the adapter turns it into
++24-PPQN `0xF8` ticks plus Start/Stop and the module's `get_bpm`/`get_clock_status`/`get_beat_position` callbacks.
++Modules that default to an internal clock (`sync=internal`) need a start-up `sync=clock` to follow MPC. Offline
++(probe, host transport simulated): Eucalypso, Super Arp, Groove Bank, Pixel Walkers, Maze Lite, MIDI Player all emit
++correct note on/off pairs. Not yet heard on a device.
++- Schwung's `host/plugin_api_v1.h` asserts `offsetof(host_api_v1_t, reserved) == 120`: a 64-bit (Move) layout fact
++  that fails on 32-bit ARM. The module and adapter compile from one header, so skip the assert when pointers are
++  4 bytes. Older modules ship shorter copies of `host_api_v1_t`; they are prefixes of the current one (same order),
++  so they read their fields at the same offsets.
++
++**Options as text.** Some modules parse only their own option words (`strcmp(val, "natural_minor")`): Eucalypso, Super
++Arp. The wrapper sends an option's index, which they ignore. New param opt-in `"send": [...]` (gen_vst →
++`param_t.send`, one string per option): the option sends that string, and a `get_param` that returns it maps back,
++so the shown labels (`options`) can be friendlier. Others (Denis, Mr Hyde, Maze Lite, MIDI Player, Pixel Walkers)
++also take the index; check each engine's `set_param` before porting.
++
++**Other engine quirks found by host_test.**
++- Labels that start with a digit (Aphex's footage "8'", "16'") were read as option index 8: the wrapper matches an
++  option's own text before treating the value as a number, and clamps an index to the option count.
++- Wurl reapplies its preset on every `preset` set, so restoring a project (MPC sets every param back) undid edits:
++  the wrapper skips a set when the DSP already reports the same value.
++- Option lists too long for a pop-up (Mono Voice LFO destinations: 114) work as steppers: `step_of` now also
++  targets an option param (steps one option, clamped).
++- Tablor (upstream) deletes its instance while its loader thread may still publish into members declared after
++  the loader (ASan heap-use-after-free on a quick insert/remove); join the loader first.
++- host_test's option check now picks an option param that takes its last option. A list that depends on what's
++  loaded (MIDI Player's track of the current file) is skipped with a `warn` line instead of failing.
++
++## Audio effects through the wrapper; Mutable Instruments DSP as plugins (2026-10-01, offline)
++**Effects.** vst.json `"effect": true` makes gen_vst define `PLUG_EFFECT`: the wrapper then reports two inputs, the
++effect category (1) and no `effFlagsIsSynth`, and the plugin-list entry is `category="Effect" isInstrument="0"
++numInputs="2"`. Input reaches the engine through a new optional weak hook `mpc_engine_input(inst, in_lr, frames)`
++(`wrapper/engine.h`), called with each 128-frame block just before that block's render; frames are gathered as they
++arrive, so an effect adds one block (2.9 ms) of latency. A missing input buffer counts as silence. host_test, for an
++effect, feeds a 220 Hz tone and requires output. **Not yet checked on a device:** whether MPC OS lists a third-party
++VST effect from `pluginList-arm` and runs it in an insert slot. A Schwung `audio_fx_api_v2` module (in-place
++`process_block` on the same 128-frame int16 buffers) maps straight onto it.
++
++**Mutable Instruments code without a Move port** works as a small C++ engine around the module's own DSP classes
++(the eurorack repo's desktop tests show the calls): Rings `Part` (strums per MIDI note), Elements `Part` (MIDI drives
++gate, pitch, strength), Warps `Modulator`. Their native rates differ from MPC's 44.1 kHz: Rings 48 kHz and Elements
++32 kHz run at their own rate with a cubic resampler on the output (pitch checked: 1000.09 Hz for a 1 kHz tone);
++Warps' `Init(sample_rate)` takes 44.1 kHz directly; Marbles' generators take the rate as well. A C++ engine must
++include engine.h inside `extern "C"`, or `mpc_engine` is name-mangled and the link fails.
++- Grids (AVR, GPL-3.0) keeps all its state in static members of one class: as a plugin, two instances would share a
++  pattern, so its generator is rewritten per instance (same maps and rules). Steps on 24-PPQN MIDI clock: every
++  6 ticks = the module on a 4 PPQN clock (sixteenths, even map steps), every 3 = its 24 PPQN mode (all 32 steps).
++- Marbles' T generator in external-clock mode follows a gate made from the MIDI clock; its RATE knob then picks a
++  multiply/divide ratio from 9 (index from `1.05 * rate / 96 + 0.5`).
++- Schwung's `plugin_api_v1.h` `_Static_assert` doesn't compile as C++ (Marbles' module is C++): skip it there too.
++- Found by host_test (ASan): Clouds `grain.h` reads `lut_window[4097]` at a grain's exact peak (one past the table;
++  harmless on the module's flash), and the Verglas port's fully-wet `dry_wet = 1.0` reads one past `lut_xfade_in`;
++  Helm's mopo frees a `new[]` buffer with `delete` and copies an uninitialised flag, and its oscillator phases rely
++  on signed overflow (`-fwrapv`). Blades has no code in the repo (analog module).
++
++## Skins from HTML mockups; displays that follow their knobs (2026-10-02, offline)
++HTML screen mockups (1280-wide, e.g. from Google Stitch) convert to layouts with the browser renderer's own Chromium:
++render each tab with the live parts hidden as the page background (`art file=`, the whole 1280x628 area), place our
++widgets at the mockup's control positions, and render each distinct knob look as a filmstrip from the mockup's own
++knob element at each angle (`knob ... strip= frames=`). Knob and slider names/values stay MPC's live labels; the
++mockup's static captions (switch and pop-up titles) stay in the background. Additions to `tools/shadow_skin.py` for
++this: `sw=`/`sh=` on `enum_v` too (segment size), `ns=`/`vs=` on knobs and sliders (name and value font px, for
++controls packed closer than the 130 px labels), and `when=<param>:<i>/<N>` (band i of N of a continuous parameter,
++e.g. sustain), which emits the same `IndexedEnabling/<i>/<N>/Parameter <p>` handle as an option's when= (verified on a
++device for labels following a knob, 2026-09-24).
++- Waveform displays: one picture per option (`picture`), each drawn from the engine's own output for that option.
++- Envelope displays: four `meter` filmstrip columns, A / D / S / R, each bound to its own parameter; D and R come once
++  per sustain band so the curve meets the sustain line. On a Live II the displays follow their knobs and a preset
++  change (2026-10-02), once the strips are laid out as stock (see "FilmStrip `numFrames` is the frame count" below);
++  the second version draws straight segments, with D, S and R all per sustain band.
++
++## VCV Rack modules through a Rack API stand-in (2026-10-02, offline)
++A Rack module's DSP (its `Module` subclass, without the panel widget) runs inside an `mpc_engine_t` with a small
++stand-in for the Rack API: Module config/params/ports/lights, ProcessArgs, `simd::float_4` written portably (four
++floats; comparison results as all-ones lanes, which `ifelse`/`&`/`|`/`~` select on), `dsp::TSchmittTrigger` and
++`PulseGenerator`. First port: Befaco Rampage, as a modulation source whose outputs leave as MIDI CC through the
++plugin's own ALSA port. Two Rack behaviours to remember: `TSchmittTrigger` starts armed-high, so a trigger on the
++very first sample is ignored (feed one low sample first); Rampage's CYCLE only re-fires at the end of a cycle, so a
++loop needs one trigger to start. Not checked on a device: MIDI-learning an incoming CC onto another track's parameter.
++
++## One engine call at a time per instance; a stress test for ports (2026-10-02, crash reported on a Live II)
++Reported on a Live II: Noisemaker took MPC down when VOICES was changed from 1. Reproduced offline: upstream's
++`VoiceManager::setNumberOfVoices` empties the playing-notes list while voices keep sounding (a mono note is never in
++it), so once every voice is busy the next note's "steal the oldest" reads `playingNotes.at(size() - 1)` on an empty
++list: an uncaught `std::out_of_range`, which aborts the host process. Fixed in the port (a real voice-count change
++releases every voice and resets both note lists; a steal with an empty list takes the first voice).
++- Engine calls come from two threads: a JUCE host (MPC's included) sets parameters from the screen on its message
++  thread, and reads displays and chunks there too, while `processReplacing`/`effProcessEvents` run on the audio thread.
++  Most engines here (Schwung modules, ports of single-threaded apps) assume one caller; Noisemaker's VOICES change
++  emptied a vector the audio thread was inserting into. `wrapper/vst2_wrap.c` now takes a per-instance mutex around
++  every engine call (create/destroy excepted): recursive (a host calling back on the same thread can't deadlock) and
++  priority-inheriting (the audio thread waiting on a short screen-side call lifts that thread to its priority). The
++  host is never called with it held. Uncontended it costs one atomic operation; contended, the audio thread waits for
++  one set/get. A slow `set_param` (a file load) now holds audio for its duration instead of racing it, so keep such
++  work as discrete triggers (already the rule above) or move it to a worker thread.
++- Offline stress test (local tool, not in this repo yet): three instances under ASan/UBSan, random values at the ends,
++  middle and anywhere, slow Q-Link-sized ticks, triggers and steppers, every display read, chords/bend/CC/all-off,
++  chunk save on one instance and restore on another, instances closed and reopened; once on one thread and once with
++  audio and control on two threads. Optionally half the steps on one parameter. It found Noisemaker's crash in seconds
++  with VOICES as the focus; the host test (`tools/host_test.c`) doesn't, as it never changes a voice count mid-note.
++- What the stress test found across 36 ports, as patterns to check in any port: a parameter at exactly 1.0 reading
++  one past a lookup table sized for hardware ADCs that never reach full scale (every Mutable stmlib `Interpolate`);
++  pitch sums (note + sample-rate correction + bend + FM) past the range the module's firmware clamped to (Braids);
++  `x - floorf(x)` rounding to exactly 1.0 for tiny negatives, then indexing a table with it (two ports); a scratch
++  buffer shrunk when a port dropped voices but still written at its old size, overwriting the next allocation (a
++  Plaits port's 6-op engine); a sample freed by a state restore while a voice still played it (a drum port). Each was
++  silent in the host test.
++
++## FilmStrip `numFrames` is the frame count; display filmstrips laid out as stock (2026-10-02, verified on a Live II)
++Stock skins set a FilmStrip's `numFrames` to the **number of frames**, and frames need not be square: frame height =
++image height / numFrames (Bassline `knob_phase` 76x258, 3 frames of 86; DrumSynth Multi `drum_names` 190x344, 8 of
++43; Electric `slider_distance` 250x6969, 101 of 69; AIR Flavor 251x8032, 32 square). This repo's display meters had
++been square-padded and resampled to 128 frames with `numFrames` 127, the knob layout: on a device each frame was drawn
++displaced by a few pixels per frame step (~4.5 px per step with 32 square 141 px frames, measured from a screen grab),
++so only value 0 sat right and envelope pieces landed above or below their box. `tools/shadow_skin.py` now writes a
++`meter` as stock does: frames of the meter's own w x h, the strip's own frame count (`frames=`), `numFrames` = that
++count, bounds = w x h. Envelope displays built that way drew correctly on the Live II (screen grab). Knob filmstrips
++(128 square frames, `numFrames` 127) draw correctly as they are and were left alone.
++- Screen grabs: MPC OS draws through a DRM plane, so `/dev/fb0` is black; the scanout buffer can be mapped read-only
++  as root (`/dev/dri/card0`, GETPLANE -> GETFB -> MAP_DUMB): 800 x 1280 XRGB, portrait.
++- Value pictures across two parameters (an envelope's decay segment depends on decay time and the sustain level):
++  one filmstrip per band of the second parameter, shown with `when=<param>:<i>/<N>` (IndexedEnabling), switches
++  cleanly with the knob.
++
++## Q-Link columns, the Q-Link sidebar, and VST programs in MPC's PRESET menu (2026-10-02, verified on a Live II)
++- **One Q-Link rectangle per column.** A 4-knob MPC (Live II) drives one column of the 4x4 Q-Link grid at a time
++  (the Q-Link button moves along) and outlines that column's rectangle from the page's `qlinkBoundsData`, with a "Q"
++  badge. Stock pages give one rectangle per column (AIR Filter Gate, Fuzz-Wah, Channel Strip: four); with one
++  rectangle round the whole page the outline can't show which four controls the knobs are on. `tools/shadow_skin.py`
++  now writes one per column (slots 4c..4c+3 of a page's `qlinks` line = column c, top knob first; an empty column gets
++  `0 0 0 0`). Lay each column's four controls out together: the rectangle is their bounding box, so a column spread
++  across panels outlines other columns' controls too. `qbox=no` on a control keeps it out of its column's box.
++- **The Q-Link sidebar covers the right 255 px.** Touching a Q-Link slides MPC's panel in over x >= ~1025 of the
++  1280-wide screen (four rings with names and values), hiding anything there. Keep controls whose Q-Link you want to
++  see turning out of that strip (Moog's NOISE knob sat at x 1192; moved into the OSC 1 panel).
++- **MPC's PRESET menu lists VST programs.** The plugin header's PRESET dropdown stayed empty because the wrapper
++  reported no programs. With `numPrograms` and `effGetProgramNameIndexed`/`effSetProgram`/`effGetProgram`, it lists
++  them by name and loading one changes the plugin (the page follows). vst.json `"programs": {"param": <preset key>,
++  "name": <name key>}` turns an engine's preset parameter into programs (`wrapper/vst2_wrap.c` reads the names at
++  creation and puts the engine's state back). Moog: 14 patches.
++
++## Animated displays cost MPC's screen thread too much; keep skin pictures still (2026-10-02, measured on a Live II)
++A plugin can animate a skin: a display-only parameter the wrapper changes while it sounds, a filmstrip bound to it,
++and a host call so MPC repaints (MPC does repaint: the "engine-driven changes never reach the display" gap above is
++closed by `audioMasterUpdateDisplay` or `audioMasterAutomate` from `processReplacing`). It works, but MPC's main
++(screen) thread pays for every repaint. Measured with per-thread `/proc` ticks (`steve/tools/screengrab/cpuwatch.sh`),
++idle on the page ~5-12% of one core:
++- one 566x122 filmstrip scrolled at 15 fps, `audioMasterUpdateDisplay`: main thread 25-55%;
++- a 48-column dot scope (48 display parameters, 10 fps, UpdateDisplay): 46-58%, peaks ~95%; 96 columns: 35-51%;
++- the 96-column scope with one `audioMasterAutomate` per moved column instead: 107-113% (a whole core);
++- a shape bank (191 recorded shapes in two 566x11712 strips, one or two parameter changes per redraw, 12 fps):
++  26-76%, and it looked steppy (user: "looks and feels kinda shit").
++Audio threads were unaffected in every case. Conclusion: MPC's skin renderer is built for controls that change when
++touched, not for animation; repainting a large picture several times a second is expensive however it is driven.
++Waveform displays stay still pictures that follow their switches (`picture`, IndexedEnabling: free). The wrapper
++keeps the opt-in vst.json `"scope"` (`wrapper/scope.h`, a shape bank from `steve/tools/scope`) for small or rare
++displays; nothing ships with it.
++- Memory: MPC decodes skin images to 4 bytes a pixel; a 566x122 x 384-frame strip set is ~106 MB (the Live II had
++  ~970 MB available and no swap). Keep filmstrips small.
+diff --git a/tools/gen_vst.py b/tools/gen_vst.py
+index 7a91d54..95234e2 100644
+--- a/tools/gen_vst.py
++++ b/tools/gen_vst.py
+@@ -12,6 +12,7 @@ vst.json (paths are relative to the vst.json's folder):
+       "params": "params.json",                   # parameter list (tools/params.py), in VST index order
+       "layout": "layout.conf",                   # optional; without it the skin studio's auto-layout is used
+       "short_names": {"LFO1 > ": "L1 "},          # optional on-screen name shortening
++      "category": "Sequencer",                   # optional plugin-list category (default Synth, or Effect)
+       "art": "html",                             # optional: draw the skin artwork in a browser (tools/html_art.py)
+       "defines": {"HAS_LFO_BPM": 1},             # optional extra #defines in params.h
+       "build": {"root": "..", "sources": ["src/engine.c"], "cflags": ["-Isrc"], "libs": ["-lm"]}
+@@ -62,7 +63,7 @@ def gen_params(cfg, params, out):
+              "#pragma once",
+              "typedef struct { const char *key, *name, *unit; float min, max, def; int nopts; "
+              "const char *const *opts; int momentary; int string_display; int int_display; "
+-             "int step_target; float step_delta; int popup_of; } param_t;"]
++             "int step_target; float step_delta; int popup_of; const float *values; const char *const *send; } param_t;"]
+     key_to_index = {p["key"]: i for i, p in enumerate(params)}
+     rows = []
+     for i, p in enumerate(params):
+@@ -93,29 +94,85 @@ def gen_params(cfg, params, out):
+             if isinstance(d, str):
+                 d = opts.index(d) if d in opts else 0
+             norm = d / (len(opts) - 1) if len(opts) > 1 else 0
+-            rows.append("    {%s, %s, \"\", 0, 0, %s, %d, OPTS_%d, %d, %d, %d, %d, %s, %d}," % (
++            # "values" -- what each option sends the DSP (and reads back) instead of its index, for a DSP that
++            # takes the value itself (e.g. a -2..2 octave range shown as 32'/16'/8'/4'/2' switches).
++            vals = p.get("values")
++            if vals:
++                if len(vals) != len(opts):
++                    raise SystemExit("%s: %d values for %d options" % (p["key"], len(vals), len(opts)))
++                lines.append("static const float VALS_%d[] = {%s};" % (i, ", ".join(fl(v) for v in vals)))
++            # "send" -- the text each option sends the DSP (and reads back) instead of its index, for a DSP that
++            # only parses its own option words (Schwung's Eucalypso/Super Arp: strcmp(val, "natural_minor")), so
++            # the labels shown ("options") can differ from them.
++            send = p.get("send")
++            if send:
++                if len(send) != len(opts):
++                    raise SystemExit("%s: %d send strings for %d options" % (p["key"], len(send), len(opts)))
++                lines.append("static const char *const SEND_%d[] = {%s};" % (i, ", ".join(c_str(o) for o in send)))
++            rows.append("    {%s, %s, \"\", 0, 0, %s, %d, OPTS_%d, %d, %d, %d, %d, %s, %d, %s, %s}," % (
+                 c_str(p["key"]), name, fl(norm), len(opts), i, bool(p.get("momentary")), is_str, is_int,
+-                step_target, fl(step_delta), popup_of))
++                step_target, fl(step_delta), popup_of, "VALS_%d" % i if vals else "0", "SEND_%d" % i if send else "0"))
+         else:
+             lo, hi = p.get("min", 0), p.get("max", 1)
+             d = p.get("default", lo)
+             norm = (d - lo) / (hi - lo) if hi > lo else 0
+-            rows.append("    {%s, %s, %s, %s, %s, %s, 0, 0, %d, %d, %d, %d, %s, %d}," % (
++            rows.append("    {%s, %s, %s, %s, %s, %s, 0, 0, %d, %d, %d, %d, %s, %d, 0, 0}," % (
+                 c_str(p["key"]), name, c_str(p.get("unit", "")), fl(lo), fl(hi), fl(norm),
+                 bool(p.get("momentary")), is_str, is_int, step_target, fl(step_delta), popup_of))
+     lines += ["static const param_t PARAMS[] = {"] + rows + ["};", "#define NPARAMS %d" % len(params),
+               "#define PLUG_NAME %s" % c_str(cfg["name"]), "#define PLUG_VENDOR %s" % c_str(cfg["vendor"]),
+               "#define PLUG_UID 0x%08x /* '%s' */" % (int.from_bytes(cfg["uid"].encode(), "big"), cfg["uid"]),
+               "#define PLUG_VERSION %d" % cfg.get("version", 1000)]
++    if cfg.get("effect"):   # an audio effect: stereo in, effect category, no synth flag (vst2_wrap.c PLUG_EFFECT)
++        lines.append("#define PLUG_EFFECT 1")
++    # "programs": {"param": <preset key>, "name": <key whose display text names it>} -- the presets become VST
++    # programs, so MPC's own PRESET menu (the plugin header) lists and loads them (vst2_wrap.c program_names()).
++    # "scope": {"bank": <option key>, "frame": <key>, "codebook": <header>, "per_bank": N, "fps": F} -- a scope that
++    # follows the real sound: the wrapper matches its own output to the nearest shape of a bank recorded from this
++    # engine (steve/tools/scope makes the header and the filmstrips) and shows it through two display-only parameters,
++    # the bank (which filmstrip) and the frame (vst2_wrap.c scope_tick). The header is copied next to params.h.
++    sc = cfg.get("scope")
++    if sc:
++        keys = [q["key"] for q in params]
++        for k in ("bank", "frame"):
++            if sc.get(k) not in keys:
++                raise SystemExit("scope: %s %r is not a parameter" % (k, sc.get(k)))
++        banks = len(params[keys.index(sc["bank"])].get("options") or [])
++        port_dir = os.path.dirname(os.path.dirname(os.path.abspath(out)))
++        book = os.path.join(port_dir, sc["codebook"])
++        if banks < 1 or not os.path.exists(book):
++            raise SystemExit("scope: %r needs options and %s must exist (steve/tools/scope)" % (sc["bank"], book))
++        import shutil
++        shutil.copy(book, os.path.join(os.path.dirname(os.path.abspath(out)), "scope_codebook.h"))
++        lines += ["#define PLUG_SCOPE_BANK %d" % keys.index(sc["bank"]),
++                  "#define PLUG_SCOPE_FRAME %d" % keys.index(sc["frame"]),
++                  "#define PLUG_SCOPE_BANKS %d" % banks,
++                  "#define PLUG_SCOPE_PER_BANK %d" % int(sc.get("per_bank", 96)),
++                  "#define PLUG_SCOPE_FPS %d" % int(sc.get("fps", 12)),
++                  "#define PLUG_SCOPE_AUTOMATE %d" % (0 if sc.get("notify", "automate") == "display" else 1)]
++    pr = cfg.get("programs")
++    if pr:
++        keys = [q["key"] for q in params]
++        if pr["param"] not in keys or (pr.get("name") and pr["name"] not in keys):
++            raise SystemExit("programs: %r / %r is not a parameter" % (pr["param"], pr.get("name")))
++        pp = params[keys.index(pr["param"])]
++        count = len(pp["options"]) if pp.get("options") else int(pp.get("max", 0)) - int(pp.get("min", 0)) + 1
++        lines += ["#define PLUG_PROGRAM_PARAM %d" % keys.index(pr["param"]),
++                  "#define PLUG_PROGRAM_NAME_PARAM %d" % (keys.index(pr["name"]) if pr.get("name") else -1),
++                  "#define PLUG_PROGRAM_COUNT %d" % count,
++                  "#define PLUG_PROGRAM_MIN %d" % (0 if pp.get("options") else int(pp.get("min", 0)))]
+     lines += ["#define %s %s" % (k, v) for k, v in cfg.get("defines", {}).items()]
+     open(out, "w").write("\n".join(lines) + "\n")
+ 
+ 
+ def entry(cfg):
+-    return ('<PLUGIN name="{n}" descriptiveName="{n}" format="VST" category="Synth" manufacturer="{v}" version="1.0" '
+-            'file="/sdcard/vst/{so}" uid="{u:x}" isInstrument="1" fileTime="0" infoUpdateTime="0" numInputs="0" '
++    fx = bool(cfg.get("effect"))
++    return ('<PLUGIN name="{n}" descriptiveName="{n}" format="VST" category="{c}" manufacturer="{v}" version="1.0" '
++            'file="/sdcard/vst/{so}" uid="{u:x}" isInstrument="{i}" fileTime="0" infoUpdateTime="0" numInputs="{ni}" '
+             'numOutputs="2" isShell="0"/>').format(n=cfg["name"], v=cfg["vendor"], so=cfg["so"],
+-                                                  u=int.from_bytes(cfg["uid"].encode(), "big"))
++                                                  u=int.from_bytes(cfg["uid"].encode(), "big"),
++                                                  c=cfg.get("category") or ("Effect" if fx else "Synth"),
++                                                  i=0 if fx else 1, ni=2 if fx else 0)
+ 
+ 
+ def main():
+@@ -140,23 +197,25 @@ def main():
+         return
+     plist, sections = params.load(os.path.join(here, src))
+     import shadow_skin
+-    if cfg.get("layout"):
+-        plist = plist + shadow_skin.popup_params(os.path.join(here, cfg["layout"]), plist)
+     os.makedirs(build, exist_ok=True)
+-    gen_params(cfg, plist, os.path.join(build, "params.h"))
+-    print("params.h: %d params" % len(plist))
+-    if sys.argv[2:] == ["--params-h"]:
+-        return
+-    open(os.path.join(build, "pluginlist-entry.xml"), "w").write(entry(cfg) + "\n")
+-
++    # Resolve the layout FIRST: an auto-layout can add popups (7+ option enums) whose hidden
++    # "<key>__open" params must be in the list before params.h and the skin are generated -- else
++    # write_skin fails "popup '<k>' needs param '<k>__open'". (The explicit-layout path already did
++    # this; the auto-layout path used to generate params.h before the layout existed.)
+     if cfg.get("layout"):
+         layout = os.path.join(here, cfg["layout"])
+     else:
+         import studio
+-        ps, sections = studio.load_params(os.path.join(here, src))
++        ps, secs = studio.load_params(os.path.join(here, src))
+         layout = os.path.join(build, "layout.auto.conf")
+-        open(layout, "w").write(studio.auto_layout(ps, sections))
++        open(layout, "w").write(studio.auto_layout(ps, secs))
+         print("no layout in vst.json: auto-layout written to", layout)
++    plist = plist + shadow_skin.popup_params(layout, plist)
++    gen_params(cfg, plist, os.path.join(build, "params.h"))
++    print("params.h: %d params" % len(plist))
++    if sys.argv[2:] == ["--params-h"]:
++        return
++    open(os.path.join(build, "pluginlist-entry.xml"), "w").write(entry(cfg) + "\n")
+     import shutil
+     shutil.rmtree(os.path.join(build, "skin"), ignore_errors=True)   # no stale images from older builds
+     art = os.environ.get("SHADOW_ART") or (os.path.join(TOOLS, "html_art.py") if cfg.get("art") == "html"
+diff --git a/tools/host_test.c b/tools/host_test.c
+index 0435619..13ef004 100644
+--- a/tools/host_test.c
++++ b/tools/host_test.c
+@@ -4,6 +4,7 @@
+  * trip, option selection, popup open/close, note -> audio, and chunk save/restore. Exit 1 on failure. */
+ #include <stdio.h>
+ #include <stdint.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <math.h>
+ #include "params.h"
+@@ -26,6 +27,45 @@ static intptr_t host(AEffect*e,int32_t op,int32_t i,intptr_t v,void*p,float o){
+ }
+ #define CHECK(c, ...) do { printf("%s ", (c) ? "ok  " : "FAIL"); printf(__VA_ARGS__); printf("\n"); if (!(c)) fails++; } while (0)
+ static void run(AEffect *a, int blocks) { float L[128], R[128], *o[2] = {L, R}; for (int k = 0; k < blocks; k++) a->pr(a, 0, o, 128); }
++static double note_rms(AEffect *a) {   /* note 60 on for 40 blocks, then off and let it ring out */
++    ME m = {1, sizeof(ME), 0, 0, 0, 0, {0x90, 60, 100, 0}}; EV ev = {1, 0, {&m, 0}};
++    float L[128], R[128], *o[2] = {L, R}; double e = 0;
++    a->d(a, 25, 0, 0, &ev, 0);
++    for (int k = 0; k < 40; k++) { a->pr(a, 0, o, 128); for (int i = 0; i < 128; i++) e += L[i] * L[i] + R[i] * R[i]; }
++    m.m[0] = 0x80; a->d(a, 25, 0, 0, &ev, 0); run(a, 400);
++    return sqrt(e / (40 * 256));
++}
++static int restorable(const param_t *p) { return !p->momentary && p->step_target < 0 && p->popup_of < 0; }
++
++/* MPC restores a project (and pushes Q-Link/automation state) by calling setParameter with the
++ * normalized values it last read, so set(get()) must be a no-op. It isn't when the DSP speaks other
++ * units than the declared min/max (OB-Xd: DSP 0..100 behind a declared 0..1): get_param's "70" clamps
++ * to 1.0, and 1.0 goes back as "1", which zeroed every knob and silenced the synth on the device. */
++static void restore_check(void) {
++    AEffect *c = VSTPluginMain(host);
++    char d[64], before[NPARAMS > 0 ? NPARAMS : 1][64];
++    int out = 0, changed = 0;
++    double rms0 = note_rms(c);
++    for (int i = 0; i < NPARAMS; i++) {
++        const param_t *p = &PARAMS[i];
++        before[i][0] = 0; c->d(c, 7, i, 0, before[i], 0);
++        if (!restorable(p) || p->nopts || p->string_display || p->max <= p->min) continue;
++        float v = atof(before[i]), tol = (p->max - p->min) * 0.005f + 0.05f;
++        if (v < p->min - tol || v > p->max + tol) {
++            if (out++ < 5) printf("     %s = \"%s\", declared %g..%g\n", p->key, before[i], p->min, p->max);
++        }
++    }
++    CHECK(!out, "every numeric param's DSP value is inside its declared range (%d outside)", out);
++    for (int i = 0; i < NPARAMS; i++) if (restorable(&PARAMS[i])) c->setP(c, i, c->getP(c, i));
++    for (int i = 0; i < NPARAMS; i++) {
++        d[0] = 0; c->d(c, 7, i, 0, d, 0);
++        if (restorable(&PARAMS[i]) && strcmp(d, before[i]) && changed++ < 5) printf("     %s: \"%s\" -> \"%s\"\n", PARAMS[i].key, before[i], d);
++    }
++    CHECK(!changed, "restoring every param to its own value changes nothing (%d changed)", changed);
++    double rms1 = note_rms(c);
++    CHECK(rms0 < 1e-5 || rms1 > 1e-5, "still sounds after the restore (rms %.4f -> %.4f)", rms0, rms1);
++    c->d(c, 1, 0, 0, 0, 0);
++}
+ 
+ int main(void) {
+     AEffect *a = VSTPluginMain(host), *b = VSTPluginMain(host);
+@@ -44,8 +84,22 @@ int main(void) {
+     int cont = -1, en = -1, pop = -1;
+     for (int i = 0; i < NPARAMS; i++) {
+         const param_t *p = &PARAMS[i];
+-        if (cont < 0 && !p->nopts && !p->momentary && !p->string_display && p->step_target < 0 && p->max > p->min) cont = i;
+-        if (en < 0 && p->nopts > 2 && !p->momentary && p->popup_of < 0) en = i;
++        if (cont < 0 && !p->nopts && !p->momentary && !p->string_display && p->step_target < 0 && p->max > p->min) {
++            /* one the engine answers (a retired slot, kept for its VST index, isn't) */
++            b->setP(b, i, 0.8f); float hi = b->getP(b, i);
++            b->setP(b, i, 0.2f); float lo = b->getP(b, i);
++            b->setP(b, i, p->def);
++            if (hi > 0.5f && lo < 0.5f) cont = i;
++        }
++        if (en < 0 && p->nopts > 2 && !p->momentary && p->popup_of < 0) {
++            /* one whose whole option list the engine takes: a list that depends on what's loaded (MIDI Player's
++             * track of the current file) can't reach its last option here, which is a warning, not a failure */
++            char s[64] = "";
++            b->setP(b, i, 1.0f); b->d(b, 7, i, 0, s, 0);
++            b->setP(b, i, p->def);
++            if (!strcmp(s, p->opts[p->nopts - 1])) en = i;
++            else printf("warn option %s doesn't take its last option (\"%s\" -> \"%s\"): skipped\n", p->key, p->opts[p->nopts - 1], s);
++        }
+         if (pop < 0 && p->popup_of >= 0) pop = i;
+     }
+     if (cont >= 0) {
+@@ -53,13 +107,22 @@ int main(void) {
+         a->setP(a, cont, 0.25f); a->d(a, 7, cont, 0, d, 0);
+         CHECK(fabsf(a->getP(a, cont) - 0.25f) <= tol, "set %s 0.25 -> get %.3f (\"%s\")", PARAMS[cont].key, a->getP(a, cont), d);
+         CHECK(fabsf(b->getP(b, cont) - 0.25f) > 1e-4f || PARAMS[cont].def == 0.25f, "instance b unaffected");
++        /* 50 Q-Link ticks of 0.0004 (far below one step of an int/percent param), re-reading in between: they must
++         * add up to ~0.02, not round back to where they started */
++        float x = a->getP(a, cont), x0 = x;
++        for (int k = 0; k < 50; k++) { x += 0.0004f; a->setP(a, cont, x); x = a->getP(a, cont); }
++        CHECK(fabsf(x - x0 - 0.02f) < 0.011f, "slow Q-Link ticks accumulate on %s (%.3f -> %.3f)", PARAMS[cont].key, x0, x);
+     }
+     if (en >= 0) {
+         int n = PARAMS[en].nopts;
+         a->setP(a, en, 1.0f); a->d(a, 7, en, 0, d, 0);
+         CHECK(!strcmp(d, PARAMS[en].opts[n - 1]), "option %s -> \"%s\" (want \"%s\")", PARAMS[en].key, d, PARAMS[en].opts[n - 1]);
+-        a->setP(a, en, (n - 1.5f) / (n - 1));   /* a Q-Link nudge down from the last option: one step */
+-        CHECK(fabsf(a->getP(a, en) - (float)(n - 2) / (n - 1)) < 1e-3f, "nudge steps one option (%.3f)", a->getP(a, en));
++        /* a slow Q-Link turn down from the last option: 20 ticks re-reading getParameter in between (as MPC does),
++         * 0.6 of an option's width in all: exactly one option down (ticks accumulate, no racing through the list) */
++        float x = a->getP(a, en);
++        for (int k = 0; k < 20; k++) { x -= 0.6f / (n - 1) / 20; a->setP(a, en, x); x = a->getP(a, en); }
++        d[0] = 0; a->d(a, 7, en, 0, d, 0);
++        CHECK(!strcmp(d, PARAMS[en].opts[n - 2]), "slow Q-Link turn moves one option (\"%s\")", d);
+     }
+     if (pop >= 0) {
+         int t = PARAMS[pop].popup_of, n = PARAMS[t].nopts;
+@@ -76,6 +139,19 @@ int main(void) {
+     for (int k = 0; k < 40; k++) { a->pr(a, 0, o, 128); for (int i = 0; i < 128; i++) e += L[i] * L[i] + R[i] * R[i]; }
+     double rms = sqrt(e / (40 * 256));
+     printf("%s note 60 -> rms %.4f\n", rms > 1e-5 ? "ok  " : "warn", rms);   /* an effect or a silent patch may be legitimately 0 */
++#if defined(PLUG_EFFECT) && PLUG_EFFECT
++    {   /* an effect: a tone in must give something out */
++        float IL[128], IR[128], *ip[2] = {IL, IR};
++        double fe = 0;
++        for (int k = 0; k < 80; k++) {
++            for (int i = 0; i < 128; i++) IL[i] = IR[i] = 0.3f * sinf(6.2831853f * 220.0f * (k * 128 + i) / 44100.0f);
++            a->pr(a, ip, o, 128);
++            if (k >= 40) for (int i = 0; i < 128; i++) fe += L[i] * L[i] + R[i] * R[i];
++        }
++        double frms = sqrt(fe / (40 * 256));
++        CHECK(frms > 1e-4, "effect: a 220 Hz tone in -> rms %.4f out", frms);
++    }
++#endif
+ 
+     {   /* instance b never got a note: the legacy process() must add silence, leaving 1.0 */
+         float L1[128], R1[128], *o1[2] = {L1, R1}; int kept = 1;
+@@ -87,11 +163,26 @@ int main(void) {
+     void *ch = 0; intptr_t n = a->d(a, 23, 0, 0, &ch, 0);
+     if (n > 0) {
+         b->d(b, 24, 0, n, ch, 0);
+-        if (cont >= 0) CHECK(fabsf(b->getP(b, cont) - a->getP(a, cont)) < 1e-3f, "chunk (%ld bytes) restores %s on instance b", (long)n, PARAMS[cont].key);
++        if (cont >= 0) {   /* compare what each shows: a may report its unrounded Q-Link position, b the exact step */
++            char da[64] = "", db[64] = "";
++            a->d(a, 7, cont, 0, da, 0); b->d(b, 7, cont, 0, db, 0);
++            CHECK(!strcmp(da, db), "chunk (%ld bytes) restores %s on instance b (\"%s\")", (long)n, PARAMS[cont].key, db);
++        }
+         if (pop >= 0) CHECK(!strstr((char *)ch, PARAMS[pop].key), "popup flag not saved in the chunk");
+     } else printf("warn no chunk (engine has no \"state\" param)\n");
+ 
++    if (a->np > 0) {   /* vst.json "programs": names for every program, and picking one selects it */
++        char nm[64] = "", cur[64] = "";
++        int named = 1;
++        for (int i = 0; i < a->np; i++) { nm[0] = 0; a->d(a, 29, i, 0, nm, 0); named &= nm[0] != 0; }
++        int last = a->np - 1;
++        a->d(a, 2, 0, last, 0, 0);
++        a->d(a, 29, last, 0, nm, 0); a->d(a, 5, 0, 0, cur, 0);
++        CHECK(named && a->d(a, 3, 0, 0, 0, 0) == last && !strcmp(nm, cur),
++              "%d programs named; program %d (\"%s\") selected reads back", a->np, last, cur);
++    }
+     a->d(a, 1, 0, 0, 0, 0); b->d(b, 1, 0, 0, 0, 0);
++    restore_check();
+     printf("%s\n", fails ? "FAILED" : "PASSED");
+     return fails ? 1 : 0;
+ }
+diff --git a/tools/params.py b/tools/params.py
+index 0d8dfa9..017eac1 100644
+--- a/tools/params.py
++++ b/tools/params.py
+@@ -30,9 +30,14 @@ def load(path):
+ 
+ 
+ def source(cfg):
+-    """vst.json -> (params file path relative to it, adapter name or None)"""
++    """vst.json -> (params file path relative to it, adapter name or None)
++
++    A "module" names an adapter engine (schwung). Its parameter list normally comes from the
++    module.json, but a port may give an explicit "params" file alongside "module" to override it --
++    e.g. OB-Xd, whose module.json carries only bare keys while the real types/ranges/options live in
++    a hand-built params.json. The adapter is still linked either way."""
++    if cfg.get("module"):
++        return cfg.get("params") or cfg["module"], "schwung"
+     if cfg.get("params"):
+         return cfg["params"], None
+-    if cfg.get("module"):
+-        return cfg["module"], "schwung"
+     raise SystemExit('vst.json: needs "params" (or an adapter\'s source, e.g. "module")')
+diff --git a/tools/shadow_skin.py b/tools/shadow_skin.py
+index 5faa2a8..6bdb524 100644
+--- a/tools/shadow_skin.py
++++ b/tools/shadow_skin.py
+@@ -8,11 +8,11 @@ backgrounds, knob filmstrips and button states; MPC draws live values.
+ Layout file:
+     [tab NAME]
+     frame   x= y= w= h= title="..."
+-    knob    cx= cy= r= label="..." key=<param>
++    knob    cx= cy= r= label="..." key=<param> [ns=<name px>] [vs=<value px>]
+     toggle  cx= cy= label="..." key=<param>
+     button  cx= cy= label="..." key=<param>          (trigger)
+-    enum_h  cx= cy= label="..." key=<param> [options="A,B,.."] [sw=<px>] [rows=<n>]
+-    enum_v  cx= cy= label="..." key=<param> [options="A,B,.."]   (options default to the param's)
++    enum_h  cx= cy= label="..." key=<param> [options="A,B,.."] [sw=<px>] [sh=<px>] [rows=<n>]
++    enum_v  cx= cy= label="..." key=<param> [options="A,B,.."] [sw=<px>] [sh=<px>]   (options default to the param's)
+     slider_v cx= cy= w= h= label="..." key=<param>     (vertical slider; value text below)
+     slider_h cx= cy= w= h= label="..." key=<param>     (horizontal slider; value text below)
+     readout cx= cy= w= h= label="..." key=<param>      (live value text)
+@@ -41,7 +41,8 @@ Controls can have looks: built-in drawings or images (look=, img=, img_on=, base
+ frames and popups take img=), per line or as top-level defaults (knob_look=moog): see tools/skin_assets.py. Looks,
+ images and pictures need the browser renderer.
+     qlinks  "PAGE NAME" = key,key,...                  (optional, repeatable)
+-Any widget line (frames too) can end in `when=<param>:<option>` (option name or index): it is shown only
++Any widget line (frames too) can end in `when=<param>:<option>` (option name or index), or for a continuous
++parameter `when=<param>:<i>/<N>` (band i of N of its range): it is shown only
+ while that option parameter is at that option (MPC's IndexedEnabling), so a tab can swap control sets per
+ mode. Its baked parts (frame, title, text boxes, group labels) go into a per-mode image over the background.
+ Top level: `qlinks_track = key,...` sets the Q-Links used outside page-follow mode (default: page 1's).
+@@ -130,7 +131,7 @@ def parse_layout(path):
+     return tabs, top
+ 
+ 
+-INT_KEYS = ("x", "y", "w", "h", "cx", "cy", "r", "sw", "rows", "cols", "th", "gap")
++INT_KEYS = ("x", "y", "w", "h", "cx", "cy", "r", "sw", "sh", "rows", "cols", "th", "gap", "ns", "vs", "bw")
+ 
+ 
+ def parse_widget(line):
+@@ -271,10 +272,10 @@ def qlink_for_slot(slot):
+ def seg_rects(w):
+     n = len(w["options"])
+     if w["kind"] == "enum_v":
+-        sw, sh, gap = 135, 30, 2
++        sw, sh, gap = w.get("sw") or 135, w.get("sh") or 30, 2
+         y0 = w["cy"] - (n * (sh + gap)) // 2
+         return [(w["cx"] - sw // 2, y0 + i * (sh + gap), sw, sh) for i in range(n)]
+-    sw, sh, gap = w.get("sw") or 117, 33, 2
++    sw, sh, gap = w.get("sw") or 117, w.get("sh") or 33, 2
+     rows = w.get("rows", 1)
+     per = -(-n // rows)
+     out = []
+@@ -462,6 +463,11 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+         if not w.get("when"):
+             return None
+         k, _, o = w["when"].partition(":")
++        if "/" in o and k in index:   # when=<param>:<i>/<N>: band i of N of a continuous parameter (e.g. sustain)
++            bi, bn = (int(x) for x in o.split("/"))
++            if not 0 <= bi < bn:
++                raise SystemExit("layout: when=%s: band %d of %d" % (w["when"], bi, bn))
++            return "IndexedEnabling/%d/%d/Parameter %d" % (bi, bn, index[k])
+         opts = [str(x).lower() for x in (params[index[k]].get("options") or [])] if k in index else []
+         if len(opts) < 2:
+             raise SystemExit("layout: when=%s: %r is not an option parameter" % (w["when"], k))
+@@ -496,6 +502,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+         return ppm
+ 
+     radii, sliders, looks = set(), set(), {}   # knob (r, look id), slider (image, w, h, vert, look id); look id -> look
++    meter_frames = {}   # meter image -> its strip's own frame count (see the meter branch)
+     for t, tab in enumerate(tabs_in):
+         kids, controls = [], []
+         for w in tab["widgets"]:
+@@ -596,14 +603,22 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+             sfx = "_" + lid if lk else ""
+             if lk:
+                 looks[lid] = lk
++            ns, vs = w.get("ns") or 17, w.get("vs") or 22   # name / value font px (smaller where controls sit close)
++            nsfx = "_n%dv%d" % (ns, vs) if (ns, vs) != (17, 22) else ""
++            # bw=: the touch box (and name/value width) of a knob or slider, narrower than the usual 130 px where
++            # neighbours sit closer (otherwise their boxes overlap and MPC gives a touch to the wrong one)
++            if w.get("bw"):
++                nsfx += "_b%d" % w["bw"]
+             if kind == "knob":
+                 r = w["r"]
+                 s, cw = 2 * r + 10, max(130, 2 * r + 10)   # value label width; LFO knobs sit 138 px apart
++                if w.get("bw"):
++                    cw = max(s, w["bw"])
+                 name_y, name_h = s // 2 + r + 2, 20
+                 value_y = name_y + name_h + 2
+                 ch = value_y + 26 + 6
+                 radii.add((r, lid))
+-                key = "shKnob%d%s" % (r, sfx)
++                key = "shKnob%d%s%s" % (r, sfx, nsfx)
+                 defs.setdefault(key, _local(key, [_action("Mouse Down", "Q-Link"),
+                                                   _action("Double Click", "Show Overlay", "knob overlay"),
+                                                   _action("Enter Pressed", "Show Overlay", "knob overlay")], [
+@@ -611,9 +626,9 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                     _sub("Knob", {"version": 5, "knobType": "FilmStrip", "filmStrip": "sh_knob_r%d%s.png" % (r, sfx),
+                                   "numFrames": FRAMES - 1, "invert": False, "dragOrientation": "Vertical",
+                                   "handleName": "Data"}, _bounds((cw - s) // 2, 0, s, s), "Knob"),
+-                    _name_label(0, name_y, cw, name_h, 17.0, INK),
++                    _name_label(0, name_y, cw, name_h, float(ns), INK),
+                     _sub("Label", {"version": 1, "textStyle": {"version": 1, "font": {"version": 1, "name": "Titillium Web",
+-                                                                                     "style": "SemiBold", "height": 22.0},
++                                                                                     "style": "SemiBold", "height": float(vs)},
+                                                                "colour": "ff" + INK_DIM,
+                                                                "justification": "horizontallyCentred verticallyCentred",
+                                                                "case": "Upper Case"},
+@@ -663,10 +678,12 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 sliders.add((img, sw_, sh_, vert, lid))
+                 sq = max(sw_, sh_)   # filmstrip frames are square (as stock); padding is transparent
+                 cw = max(130, sq)
++                if w.get("bw") and vert:   # (a vertical slider's square frame is transparent beside the slider)
++                    cw = max(sw_ + 20, w["bw"])
+                 name_y, name_h = (sq - sh_) // 2 + sh_ + 2, 20
+                 value_y = name_y + name_h + 2
+                 ch = value_y + 26 + 6
+-                key = "shSlider_%s_%dx%d%s" % ("v" if vert else "h", sw_, sh_, sfx)
++                key = "shSlider_%s_%dx%d%s%s" % ("v" if vert else "h", sw_, sh_, sfx, nsfx)
+                 defs.setdefault(key, _local(key, [_action("Mouse Down", "Q-Link"),
+                                                   _action("Double Click", "Show Overlay", "knob overlay"),
+                                                   _action("Enter Pressed", "Show Overlay", "knob overlay")], [
+@@ -675,8 +692,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                                   "numFrames": FRAMES - 1, "invert": False,
+                                   "dragOrientation": "Vertical" if vert else "Horizontal",
+                                   "handleName": "Data"}, _bounds((cw - sq) // 2, 0, sq, sq), "Slider"),
+-                    _name_label(0, name_y, cw, name_h, 17.0, INK),
+-                    _value_label(0, value_y, cw, 26, 22.0, INK_DIM)]))
++                    _name_label(0, name_y, cw, name_h, float(ns), INK),
++                    _value_label(0, value_y, cw, 26, float(vs), INK_DIM)]))
+                 kids.append(_placed(key, name, i, w["cx"] - cw // 2, w["cy"] - sq // 2, cw, ch))
+             elif kind == "meter" and lk and lk.get("look") == "native":
+                 # EXPERIMENTAL, unverified (docs/ROADMAP.md "A native Meter component"): a real Meter component
+@@ -704,13 +721,17 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 mw, mh = w["w"], w["h"]
+                 img = "sh_meter_%dx%d%s" % (mw, mh, sfx)
+                 sliders.add((img, mw, mh, 1, lid))
+-                sq = max(mw, mh)
++                # Laid out as Akai's own skins do (Bassline knob_phase 76x86 x3, DrumSynth names 190x43 x8, Electric
++                # sliders 250x69 x101): frames of the meter's own w x h, numFrames = the frame count, the strip's own
++                # count (frames=). Square-padded frames resampled to 128 with numFrames 127 (the knobs' layout) drew
++                # each frame displaced by a few px per frame on a Live II (2026-10-02, measured from a screen grab).
++                nf = meter_frames[img] = int((lk or {}).get("frames") or FRAMES)
+                 key = "shMeter_%dx%d%s" % (mw, mh, sfx)
+                 defs.setdefault(key, _local(key, [], [
+-                    _sub("Knob", {"version": 5, "knobType": "FilmStrip", "filmStrip": img + ".png", "numFrames": FRAMES - 1,
++                    _sub("Knob", {"version": 5, "knobType": "FilmStrip", "filmStrip": img + ".png", "numFrames": nf,
+                                   "invert": False, "dragOrientation": "Vertical", "handleName": "Data"},
+-                         _bounds(0, 0, sq, sq), "Meter")]))
+-                kids.append(_placed(key, name, i, w["cx"] - sq // 2, w["cy"] - sq // 2, sq, sq, focus="No"))
++                         _bounds(0, 0, mw, mh), "Meter")]))
++                kids.append(_placed(key, name, i, w["cx"] - mw // 2, w["cy"] - mh // 2, mw, mh, focus="No"))
+             elif kind == "menu":
+                 x, y, rw, rh = w["cx"] - w["w"] // 2, w["cy"] - w["h"] // 2, w["w"], w["h"]
+                 key = "shMenu_%dx%d" % (rw, rh)
+@@ -827,7 +848,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 ql["Q-Link %d" % qlink_for_slot(s)] = index[k]
+             comp = "%s|%s" % (tab["name"], title)
+             pages.append({"version": 3, "tabName": title, "fnKeyIndex": t, "fnKeySubIndex": sp,
+-                          "qlinkBoundsData": [qlink_bounds(tab, keys)], "componentName": comp,
++                          "qlinkBoundsData": qlink_columns(tab, keys), "componentName": comp,
+                           "initialSize": "0 0 %d %d" % (W, H), "scale": 1.0})
+             qmap.append({"Tab": t + 1, "SubTab": sp + 1, "Bank Direction": "Column", "Q-Links": ql})
+             defs[comp] = {"key": comp, "value": {
+@@ -839,7 +860,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+ 
+     for img, sw_, sh_, vert, lid in sorted(sliders):
+         if lid:
+-            script.append("lsstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, FRAMES, 1 if vert else 0, skin_assets.encode(looks[lid])))
++            script.append("lsstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, meter_frames.get(img, FRAMES), 1 if vert else 0,
++                                                          skin_assets.encode(looks[lid])))
+         else:
+             script.append("sstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, FRAMES, 1 if vert else 0, under()))
+     for r, lid in sorted(radii):
+@@ -867,7 +889,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+             dr.polygon([(x - 8, y - 4), (x + 8, y - 4), (x, y + 5)], fill="#" + ACCENT)
+         im.save(path)
+     for img, sw_, sh_, vert, lid in sliders:
+-        square_strip(os.path.join(skin_dir, img + ".png"), sw_, sh_)
++        if img not in meter_frames:   # meters keep their own w x h frames (see the meter branch)
++            square_strip(os.path.join(skin_dir, img + ".png"), sw_, sh_)
+     for f in os.listdir(work):
+         os.remove(os.path.join(work, f))
+     os.rmdir(work)
+@@ -885,6 +908,30 @@ def square_strip(path, w, h):
+     out.save(path)
+ 
+ 
++def qlink_columns(tab, keys):
++    """One rectangle per Q-Link column, as stock skins have (AIR Filter Gate, Fuzz-Wah, Channel Strip: 4 per page).
++    A 4-knob MPC (Live, One) works one column of the 4x4 grid at a time, the Q-Link button moving it along, and
++    highlights that column's rectangle; with one rectangle round the whole page it can't show which four controls
++    the knobs are on. Slots 4c..4c+3 are column c (qlink_for_slot: Q-Links 13,9,5,1 / 14,10,6,2 / ...). A column with
++    no control gets an empty rectangle, so the list stays in column order. (2026-10-02)"""
++    cols = [keys[4 * c:4 * c + 4] for c in range((len(keys) + 3) // 4)] or [[]]
++    # qbox=no on a control keeps it out of its column's box (it still has its Q-Link; MPC's own Q-Link panel names it):
++    # for a control placed away from the rest of its column, whose box would otherwise take in another column's panel.
++    out = set(w.get("key") for w in tab["widgets"] if str(w.get("qbox", "")).lower() in ("no", "0", "off"))
++    return [qlink_bounds(tab, set(c) - out) if any(_drives(tab, k) for k in set(c) - out) else "0 0 0 0" for c in cols]
++
++
++def _drives(tab, key):
++    """Does the page show a control (not a meter or a bare button) for this key?"""
++    for w in tab["widgets"]:
++        if w["kind"] == "list":
++            if key in list_keys(w):
++                return True
++        elif w.get("key") == key and w["kind"] not in ("button", "meter"):
++            return True
++    return False
++
++
+ def qlink_bounds(tab, keys):
+     """Rectangle around the controls a page's Q-Links drive (plugin coords)."""
+     xs, ys = [], []
+diff --git a/tools/studio.py b/tools/studio.py
+index f13ac8a..c988bdb 100644
+--- a/tools/studio.py
++++ b/tools/studio.py
+@@ -132,6 +132,7 @@ def auto_layout(params, sections, title=None):
+         tabs.append(cur)
+ 
+     out = ["# first-pass layout from studio.py auto; edit freely (or round-trip through to-svg)"]
++    used_names = set()
+     for t, trows in enumerate(tabs):
+         names = []
+         for r in trows:
+@@ -141,6 +142,13 @@ def auto_layout(params, sections, title=None):
+         tab_name = " / ".join(names).upper()
+         if len(tab_name) > 28:
+             tab_name = names[0].upper() + " +%d" % (len(names) - 1)
++        # a single section that overflows several tabs repeats the name; write_skin keys pages by
++        # tab name, so a repeat would collide (only the last survives). Number repeats uniquely.
++        base, n = tab_name, 2
++        while tab_name in used_names:
++            tab_name = "%s %d" % (base, n)
++            n += 1
++        used_names.add(tab_name)
+         out += ["", "[tab %s]" % tab_name]
+         qkeys = []
+         for r_i, r in enumerate(trows):
+diff --git a/tools/test_port.sh b/tools/test_port.sh
+index 83da9db..d29ff8c 100755
+--- a/tools/test_port.sh
++++ b/tools/test_port.sh
+@@ -2,8 +2,8 @@
+ # Offline x86 test of a port, before anything goes to a device:
+ #   tools/test_port.sh path/to/vst.json
+ # Generates the port's params.h, builds tools/host_test.c with the wrapper, the port's sources and its
+-# adapter under ASan/UBSan, and runs it (exit status = the test's). Uses the host gcc/g++ when present,
+-# else the gcc:12 Docker image. Ports with their own hand-written wrapper have their own host test.
++# adapter under ASan/UBSan, and runs it (exit status = the test's). Uses the host gcc/g++ on Linux,
++# else (and always on macOS) the gcc:12 Docker image. Ports with their own hand-written wrapper have their own host test.
+ set -euo pipefail
+ MV="$(cd "$(dirname "$0")/.." && pwd)"
+ CFG="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+@@ -34,10 +34,15 @@ build='
+ '
+ export SOURCES CFLAGS PORT LIBS SAN MV ADAPTER_SRC OUT
+ cd "$ROOT"
+-if command -v gcc >/dev/null && command -v g++ >/dev/null; then
++# macOS: Apple clang's ASan runtime spins forever in its own startup (InitializeShadowMemory walking
++# the dyld shared cache) on macOS 26, before main() runs, so use the Linux container there.
++if [ "$(uname)" != Darwin ] && command -v gcc >/dev/null && command -v g++ >/dev/null; then
+   bash -c "$build"
+   "$OUT"
+ else
+-  docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT":"$ROOT" -v "$MV":"$MV":ro -w "$ROOT" \
+-    -e SOURCES -e CFLAGS -e PORT -e LIBS -e SAN -e MV -e ADAPTER_SRC -e OUT gcc:12 bash -c "$build && \"\$OUT\""
++  # TEST_DOCKER_ARGS: extra docker run arguments, e.g. "-v <port>/data:/sdcard/vst/<port>:ro" so an engine that
++  # loads presets from its MODULE_DIR finds them in the container too.
++  # shellcheck disable=SC2086
++  docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT":"$ROOT" -v "$MV":"$MV":ro -w "$ROOT" ${TEST_DOCKER_ARGS:-} \
++    -e SOURCES -e CFLAGS -e PORT -e LIBS -e SAN -e MV -e ADAPTER_SRC -e OUT gcc:12 bash -c "$build"'"$OUT"'   # $build ends in a newline and runs under set -e
+ fi
+diff --git a/wrapper/engine.h b/wrapper/engine.h
+index d3a8942..44739ae 100644
+--- a/wrapper/engine.h
++++ b/wrapper/engine.h
+@@ -15,3 +15,13 @@ typedef struct {
+ } mpc_engine_t;
+ 
+ const mpc_engine_t *mpc_engine(void);
++
++/* Optional: an engine that follows the host transport (e.g. a MIDI sequencer) defines this; the wrapper calls it once
++ * per host audio buffer, before rendering it, with the tempo (BPM, 0 if unknown), the song position in quarter notes
++ * at the start of the buffer (<0 if unknown) and whether the transport is playing. Weak: engines that don't define
++ * it are unaffected. */
++void mpc_engine_transport(void *inst, double bpm, double ppq, int playing) __attribute__((weak));
++
++/* Optional, for audio effects (vst.json "effect": true): the wrapper hands over the next block's input (interleaved
++ * int16 stereo, `frames` = 128) just before calling render for it. Weak, like the transport hook. */
++void mpc_engine_input(void *inst, const int16_t *in_lr, int frames) __attribute__((weak));
+diff --git a/wrapper/vst2_wrap.c b/wrapper/vst2_wrap.c
+index 720ce46..2d51a34 100644
+--- a/wrapper/vst2_wrap.c
++++ b/wrapper/vst2_wrap.c
+@@ -15,10 +15,30 @@
+ #include <stdio.h>
+ #include <math.h>
+ #include <ctype.h>
++#include <pthread.h>
+ #include "params.h"
+ #ifndef HAS_LFO_BPM
+ #define HAS_LFO_BPM 0 /* 1: pass the host tempo to the DSP as "lfo_bpm" */
+ #endif
++#ifndef PLUG_PROGRAM_PARAM   /* vst.json "programs" (gen_vst.py): a preset parameter shown as VST programs */
++#define PLUG_PROGRAM_PARAM -1
++#define PLUG_PROGRAM_NAME_PARAM -1
++#define PLUG_PROGRAM_COUNT 0
++#define PLUG_PROGRAM_MIN 0
++#endif
++#ifndef PLUG_SCOPE_BANK      /* vst.json "scope" (gen_vst.py): a shape-bank scope in two display-only parameters */
++#define PLUG_SCOPE_BANK -1
++#define PLUG_SCOPE_FRAME -1
++#define PLUG_SCOPE_BANKS 1
++#define PLUG_SCOPE_PER_BANK 2
++#define PLUG_SCOPE_FPS 12
++#define PLUG_SCOPE_AUTOMATE 1
++#endif
++#if PLUG_SCOPE_BANK >= 0
++#include "scope.h"
++#include "scope_codebook.h"   /* SCOPE_K shapes SCOPE_BOOK[k][SCOPE_PTS] (x127), from steve/tools/scope; build dir */
++#endif
++#define is_scope(i) (PLUG_SCOPE_BANK >= 0 && ((i) == PLUG_SCOPE_BANK || (i) == PLUG_SCOPE_FRAME))
+ #ifndef MODULE_DIR
+ #define MODULE_DIR NULL /* set via vst.json "defines" for a DSP that reads its own files
+                           * (ROMs, etc.) from "<module_dir>/..." (see jv880's create_instance) */
+@@ -28,6 +48,9 @@
+ #include "popup.h"
+ 
+ #define DSP_BLOCK 128
++#ifndef PLUG_EFFECT   /* vst.json "effect": true -> an audio effect (stereo in), not an instrument */
++#define PLUG_EFFECT 0
++#endif
+ 
+ /* ---- VST2 ABI (hand-written; no Steinberg SDK) -------------------------- */
+ typedef struct AEffect AEffect;
+@@ -61,13 +84,15 @@ typedef struct {
+ } VstTimeInfo;
+ 
+ enum {
+-    effOpen = 0, effClose = 1, effGetParamLabel = 6, effGetParamDisplay = 7, effGetParamName = 8,
++    effOpen = 0, effClose = 1, effSetProgram = 2, effGetProgram = 3, effSetProgramName = 4, effGetProgramName = 5,
++    effGetProgramNameIndexed = 29, effGetParamLabel = 6, effGetParamDisplay = 7, effGetParamName = 8,
+     effSetSampleRate = 10, effSetBlockSize = 11, effMainsChanged = 12, effGetChunk = 23,
+     effSetChunk = 24, effProcessEvents = 25, effCanBeAutomated = 26, effGetPlugCategory = 35,
+     effGetEffectName = 45, effGetVendorString = 47, effGetProductString = 48,
+     effGetVendorVersion = 49, effCanDo = 51, effGetVstVersion = 58,
+ };
+-enum { audioMasterAutomate = 0, audioMasterGetTime = 7, audioMasterUpdateDisplay = 42, kVstTempoValid = 1 << 10 };
++enum { audioMasterAutomate = 0, audioMasterGetTime = 7, audioMasterUpdateDisplay = 42, kVstTempoValid = 1 << 10,
++       kVstPpqPosValid = 1 << 9, kVstTransportPlaying = 1 << 1 };
+ enum { effFlagsCanReplacing = 1 << 4, effFlagsProgramChunks = 1 << 5, effFlagsIsSynth = 1 << 8 };
+ 
+ /* ---- per-instance state ------------------------------------------------- */
+@@ -76,53 +101,131 @@ typedef struct {
+     audioMasterCallback master;
+     void *dsp;
+     int16_t block[DSP_BLOCK * 2];
++    int16_t inblock[DSP_BLOCK * 2];   /* effects: input gathered for the next render (one DSP_BLOCK of latency) */
+     int pos;                 /* read position in block; DSP_BLOCK = empty */
+     double bpm;
+     volatile char release[NPARAMS];  /* momentary params to report back to 0 */
++    float shadow[NPARAMS];   /* host's unrounded position on a param the DSP steps; <0 = none (see get_norm) */
+     volatile char need_update_display;  /* deferred audioMasterUpdateDisplay -- see setParameter() */
+     float open[NPARAMS];     /* popup "open" flags (popup.h): kept here, never sent to the DSP or saved */
+     char chunk[8192];
++    pthread_mutex_t lock;    /* one engine call at a time (see engine_lock) */
++    char (*prog)[25];        /* program (preset) names, PLUG_PROGRAM_COUNT of them (see program_names) */
++    int nprog;
++#if PLUG_SCOPE_BANK >= 0
++    float scope_ring[SCOPE_RING];   /* the last ~93 ms of output (see scope_tick) */
++    unsigned scope_pos;
++    int scope_clock, scope_g;       /* scope_g: the shape shown, 0 = silent, k + 1 = SCOPE_BOOK[k] */
++#endif
+ } wrap_t;
+ 
++/* MPC calls setParameter/getParameter, the parameter display and the chunk on its message thread while
++ * processReplacing and effProcessEvents run on the audio thread, but engines (Schwung modules, ports of
++ * single-threaded apps) assume one caller. Noisemaker, for one, cleared its note list from a VOICES change on the
++ * screen while the audio thread was adding notes to it. So every engine call goes through this per-instance lock.
++ * Recursive, so a host that calls back into us on the same thread can't deadlock, and priority-inheriting, so the
++ * audio thread waiting on a short screen-side call lifts that thread to its own priority. The host is never
++ * called with the lock held. Uncontended it is one atomic op; contended, the audio thread waits for at most one
++ * set/get (microseconds), and a screen read waits for at most one block. */
++static void engine_lock(wrap_t *w) { pthread_mutex_lock(&w->lock); }
++static void engine_unlock(wrap_t *w) { pthread_mutex_unlock(&w->lock); }
++
+ static const mpc_engine_t *g_api;
+ 
+ static float clamp01(float v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+ 
+-/* normalized 0..1 -> DSP display value string */
++/* normalized 0..1 -> DSP display value string. An option sends its index, its own value when the port gives
++ * "values" (e.g. a -2..2 range drawn as 32'..2' switches), or the DSP's own word for it when the port gives "send". "display": "int" params are rounded: a bare %g that the
++ * DSP atoi()s truncates ("5.99999" -> 5). */
+ static void norm_to_str(const param_t *p, float n, char *buf, int len) {
+-    if (p->nopts) snprintf(buf, len, "%d", (int)lroundf(clamp01(n) * (p->nopts - 1)));
++    if (p->nopts) {
++        int idx = (int)lroundf(clamp01(n) * (p->nopts - 1));
++        if (p->values) snprintf(buf, len, "%g", p->values[idx]);
++        else if (p->send) snprintf(buf, len, "%s", p->send[idx]);
++        else snprintf(buf, len, "%d", idx);
++    }
++    else if (p->int_display) snprintf(buf, len, "%ld", lroundf(p->min + (p->max - p->min) * clamp01(n)));
+     else snprintf(buf, len, "%g", p->min + (p->max - p->min) * clamp01(n));
+ }
+ 
+ /* DSP display value string (number or enum label) -> normalized 0..1 */
+ static float str_to_norm(const param_t *p, const char *s) {
++    if (p->nopts && p->values) {   /* the DSP reports the value itself: pick the nearest option's */
++        float v = (float)atof(s), best = 1e30f;
++        int idx = 0;
++        for (int i = 0; i < p->nopts; i++)
++            if (fabsf(p->values[i] - v) < best) { best = fabsf(p->values[i] - v); idx = i; }
++        return p->nopts > 1 ? (float)idx / (p->nopts - 1) : 0;
++    }
+     if (p->nopts) {
+         int idx = -1;
+-        if (isdigit((unsigned char)s[0])) idx = atoi(s);
+-        else
+-            for (int i = 0; i < p->nopts; i++)
+-                if (!strcasecmp(s, p->opts[i])) idx = i;
++        for (int i = 0; p->send && i < p->nopts && idx < 0; i++)   /* the DSP's own word for the option */
++            if (!strcasecmp(s, p->send[i])) idx = i;
++        for (int i = 0; i < p->nopts && idx < 0; i++)   /* the option's own text first: "8'" is a label, not index 8 */
++            if (!strcasecmp(s, p->opts[i])) idx = i;
++        if (idx < 0 && isdigit((unsigned char)s[0])) idx = atoi(s);
+         if (idx < 0) idx = 0;
++        if (idx > p->nopts - 1) idx = p->nopts - 1;   /* an engine reporting past its own option list must not index past ours */
+         return p->nopts > 1 ? (float)idx / (p->nopts - 1) : 0;
+     }
+     return p->max > p->min ? clamp01((float)((atof(s) - p->min) / (p->max - p->min))) : 0;
+ }
+ 
+-static float get_norm(wrap_t *w, int i) {
++static float get_norm_locked(wrap_t *w, int i) {
+     char buf[64];
+     if (i < 0 || i >= NPARAMS) return 0;
+     if (popup_is(i)) return w->open[i];
++#if PLUG_SCOPE_BANK >= 0
++    if (i == PLUG_SCOPE_BANK) return PLUG_SCOPE_BANKS > 1 ? (float)(w->scope_g / PLUG_SCOPE_PER_BANK) / (PLUG_SCOPE_BANKS - 1) : 0.0f;
++    if (i == PLUG_SCOPE_FRAME) return (float)(w->scope_g % PLUG_SCOPE_PER_BANK) / (PLUG_SCOPE_PER_BANK - 1);
++#endif
+     if (g_api->get_param(w->dsp, PARAMS[i].key, buf, sizeof buf) <= 0) return PARAMS[i].def;
+-    return str_to_norm(&PARAMS[i], buf);
++    float v = str_to_norm(&PARAMS[i], buf);
++    /* Q-Links: MPC sends a slow turn as ticks smaller than one step of the DSP's value and reads the value back
++     * between ticks (docs/NOTES.md), so a tick that rounds back to the old value is lost and the control sticks.
++     * While the DSP still holds the step that the host's last position gives, hand the host that unrounded
++     * position (shadow) so ticks accumulate; drop it once something else changes the value. A step is one option,
++     * one whole unit for an int param, else the DSP's own resolution: the decimals it reports (none = whole units,
++     * as with Noisemaker's percentages). */
++    const param_t *p = &PARAMS[i];
++    if (w->shadow[i] >= 0 && (p->nopts > 1 || p->max > p->min)) {
++        float half;
++        if (p->nopts > 1) half = 0.5f / (p->nopts - 1);
++        else {
++            const char *dot = strchr(buf, '.');
++            int dec = 0;
++            if (dot && !p->int_display)
++                for (const char *c = dot + 1; isdigit((unsigned char)*c) && dec < 6; c++) dec++;
++            half = 0.5f * powf(10.0f, (float)-dec) / (p->max - p->min);
++        }
++        if (fabsf(v - w->shadow[i]) <= half + 1e-4f) return w->shadow[i];
++        w->shadow[i] = -1;
++    }
++    return v;
+ }
+ 
++static float get_norm(wrap_t *w, int i) {
++    engine_lock(w);
++    float v = get_norm_locked(w, i);
++    engine_unlock(w);
++    return v;
++}
++
++static void set_parameter_locked(wrap_t *w, int32_t i, float n);
+ static void setParameter(AEffect *e, int32_t i, float n) {
+     wrap_t *w = e->object;
++    engine_lock(w);
++    set_parameter_locked(w, i, n);
++    engine_unlock(w);
++}
++
++static void set_parameter_locked(wrap_t *w, int32_t i, float n) {
+     char buf[64];
+     if (i < 0 || i >= NPARAMS) return;
+     const param_t *p = &PARAMS[i];
+     int nudge = 0;
+     if (popup_set(w->open, i, n)) return;
++    if (is_scope(i)) return;   /* display only: a touch on the scope changes nothing */
+     if (p->step_target >= 0) {
+         /* A momentary nudge of ANOTHER param (see gen_vst.py's step_of/step_delta comment). Reads
+          * the target's CURRENT value straight from the DSP, not our own cached norm, so it's
+@@ -131,11 +234,19 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+         if (n > 0.5f) {
+             const param_t *tp = &PARAMS[p->step_target];
+             if (g_api->get_param(w->dsp, tp->key, buf, sizeof buf) > 0) {
+-                float cur = (float)atof(buf) + p->step_delta;
+-                if (cur < tp->min) cur = tp->min;
+-                if (cur > tp->max) cur = tp->max;
+-                snprintf(buf, sizeof buf, "%g", cur);
++                if (tp->nopts > 1) {   /* an option list (e.g. a long destination list shown as a stepper) */
++                    int idx = (int)lroundf(str_to_norm(tp, buf) * (tp->nopts - 1)) + (int)p->step_delta;
++                    if (idx < 0) idx = 0;
++                    if (idx > tp->nopts - 1) idx = tp->nopts - 1;
++                    norm_to_str(tp, (float)idx / (tp->nopts - 1), buf, sizeof buf);
++                } else {
++                    float cur = (float)atof(buf) + p->step_delta;
++                    if (cur < tp->min) cur = tp->min;
++                    if (cur > tp->max) cur = tp->max;
++                    snprintf(buf, sizeof buf, "%g", cur);
++                }
+                 g_api->set_param(w->dsp, tp->key, buf);
++                w->shadow[p->step_target] = -1;
+             }
+             w->release[i] = 1;
+         }
+@@ -150,22 +261,28 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+         w->need_update_display = 1;
+         return;
+     }
++    float shadow = -1;
+     if (p->nopts > 1) {
+-        /* A value on an option (button press, preset, automation) selects it. A value
+-         * between options is a Q-Link/encoder nudge from the current one: step one
+-         * option that way, else small nudges round back and never change state. */
++        /* A value on an option (button press, preset, automation) selects it. A value between options is a
++         * Q-Link/encoder turn: keep it as the shadow position (get_norm hands it back, so ticks accumulate) and
++         * select the option it rounds to, so a turn moves one option per option's width of travel, like a
++         * detented switch. (It used to step one option per tick, which raced through a list on a slow turn.) */
+         float pos = clamp01(n) * (p->nopts - 1);
+         if (fabsf(pos - roundf(pos)) > 0.001f) {
+             nudge = 1;
+-            float cur = get_norm(w, i) * (p->nopts - 1);
+-            int idx = (int)lroundf(cur) + (pos > cur ? 1 : -1);
+-            if (idx < 0) idx = 0;
+-            if (idx > p->nopts - 1) idx = p->nopts - 1;
+-            n = (float)idx / (p->nopts - 1);
++            shadow = clamp01(n);
++            n = roundf(pos) / (p->nopts - 1);
+         }
++    } else if (!p->momentary && !p->string_display) {
++        shadow = clamp01(n);
+     }
+     norm_to_str(p, n, buf, sizeof buf);
+-    g_api->set_param(w->dsp, PARAMS[i].key, buf);
++    /* Setting a param to the value the DSP already reports is a no-op: some engines reload on any set (Wurl's preset
++     * re-applies the patch over the knobs a host restore just set). Triggers always go through. */
++    char cur[64];
++    if (p->momentary || g_api->get_param(w->dsp, PARAMS[i].key, cur, sizeof cur) <= 0 || strcmp(cur, buf))
++        g_api->set_param(w->dsp, PARAMS[i].key, buf);
++    w->shadow[i] = shadow;
+     if (PARAMS[i].momentary && n > 0.5f) w->release[i] = 1;
+     if (!nudge) popup_picked(w->open, w->release, i);   /* a list pick closes it; a Q-Link nudge doesn't */
+     w->need_update_display = 1;   /* deferred to processReplacing(), see the step_target branch above */
+@@ -173,6 +290,42 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+ 
+ static float getParameter(AEffect *e, int32_t i) { return get_norm(e->object, i); }
+ 
++/* VST programs from a preset parameter (vst.json "programs"), so MPC's PRESET menu in the plugin header lists and
++ * loads the engine's presets; without programs that menu stays empty. Names are read once, at creation, by
++ * stepping the preset parameter through every value and reading the name parameter's text (or the option label);
++ * the engine's state is then put back from its own "state", so a new instance starts as it would have. */
++static void copy_str(void *dst, const char *src, size_t max);
++static void program_names(wrap_t *w) {
++    if (PLUG_PROGRAM_PARAM < 0 || PLUG_PROGRAM_COUNT <= 0) return;
++    const param_t *pp = &PARAMS[PLUG_PROGRAM_PARAM];
++    int n = PLUG_PROGRAM_COUNT > 1024 ? 1024 : PLUG_PROGRAM_COUNT;
++    char *saved = malloc(sizeof w->chunk), cur[64] = "";
++    int have = saved && g_api->get_param(w->dsp, "state", saved, sizeof w->chunk) > 0;
++    g_api->get_param(w->dsp, pp->key, cur, sizeof cur);
++    w->prog = calloc((size_t)n, sizeof *w->prog);
++    for (int i = 0; w->prog && i < n; i++) {
++        char v[64], name[64] = "";
++        if (pp->nopts > 1) norm_to_str(pp, (float)i / (pp->nopts - 1), v, sizeof v);
++        else snprintf(v, sizeof v, "%d", PLUG_PROGRAM_MIN + i);
++        g_api->set_param(w->dsp, pp->key, v);
++        if (PLUG_PROGRAM_NAME_PARAM >= 0) g_api->get_param(w->dsp, PARAMS[PLUG_PROGRAM_NAME_PARAM].key, name, sizeof name);
++        else if (pp->nopts > 1) snprintf(name, sizeof name, "%s", pp->opts[i]);
++        if (!name[0]) snprintf(name, sizeof name, "%d", PLUG_PROGRAM_MIN + i);
++        copy_str(w->prog[i], name, sizeof w->prog[i]);
++    }
++    if (have) g_api->set_param(w->dsp, "state", saved);
++    else if (cur[0]) g_api->set_param(w->dsp, pp->key, cur);
++    free(saved);
++    w->nprog = w->prog ? n : 0;
++}
++
++static int current_program(wrap_t *w) {
++    const param_t *pp = &PARAMS[PLUG_PROGRAM_PARAM];
++    float n = get_norm(w, PLUG_PROGRAM_PARAM);
++    int i = pp->nopts > 1 ? (int)lroundf(n * (pp->nopts - 1)) : (int)lroundf(pp->min + n * (pp->max - pp->min)) - PLUG_PROGRAM_MIN;
++    return i < 0 ? 0 : i >= w->nprog ? w->nprog - 1 : i;
++}
++
+ static void update_tempo(wrap_t *w) {
+     VstTimeInfo *ti = (VstTimeInfo *)w->master(&w->fx, audioMasterGetTime, 0, kVstTempoValid, 0, 0);
+     if (!ti || !(ti->flags & kVstTempoValid) || ti->tempo <= 0) return;
+@@ -180,18 +333,77 @@ static void update_tempo(wrap_t *w) {
+         char buf[32];
+         w->bpm = ti->tempo;
+         snprintf(buf, sizeof buf, "%.2f", w->bpm);
++        engine_lock(w);
+         g_api->set_param(w->dsp, "lfo_bpm", buf);
++        engine_unlock(w);
++    }
++}
++
++/* A scope that follows the real sound at the cost of one or two parameter changes per redraw (vst.json "scope").
++ * MPC spends ~1 ms of its screen thread per parameter change it is told about and ~40 ms per "re-read everything"
++ * (measured on a Live II, 2026-10-02), so a scope drawn from many display parameters (one per column) was far too
++ * heavy. Instead the plugin's own output is cut into a window as a scope triggers (scope.h) and matched to the nearest
++ * of SCOPE_K shapes recorded offline from this engine across its settings (steve/tools/scope); the skin holds those
++ * shapes as filmstrips, a bank parameter picks the strip and a frame parameter the shape. Silence shows shape 0, a flat
++ * line. A small hysteresis keeps the picture from flickering between near-equal shapes. Audio thread, after the
++ * block; the host is called without the engine lock held. */
++static void scope_tick(wrap_t *w, float **out, int32_t n) {
++#if PLUG_SCOPE_BANK >= 0
++    if (!out || !out[0]) return;
++    for (int32_t i = 0; i < n; i++)
++        w->scope_ring[w->scope_pos++ & (SCOPE_RING - 1)] = out[1] ? 0.5f * (out[0][i] + out[1][i]) : out[0][i];
++    w->scope_clock += n;
++    if (w->scope_clock < 44100 / PLUG_SCOPE_FPS) return;
++    w->scope_clock = 0;
++    float win[SCOPE_PTS];
++    int g = 0;
++    if (scope_window(w->scope_ring, w->scope_pos, win)) {
++        int q[SCOPE_PTS];
++        for (int c = 0; c < SCOPE_PTS; c++) q[c] = (int)lroundf(win[c] * 127.0f);
++        long best = -1, cur = -1;
++        int kb = 0;
++        for (int k = 0; k < SCOPE_K; k++) {
++            long d = 0;
++            for (int c = 0; c < SCOPE_PTS; c++) { long e = q[c] - SCOPE_BOOK[k][c]; d += e * e; }
++            if (best < 0 || d < best) { best = d; kb = k; }
++            if (k == w->scope_g - 1) cur = d;
++        }
++        g = (cur >= 0 && cur <= best + best / 8) ? w->scope_g : kb + 1;   /* keep the shape shown if nearly as close */
+     }
++    if (g == w->scope_g) return;
++    int ob = w->scope_g / PLUG_SCOPE_PER_BANK, of = w->scope_g % PLUG_SCOPE_PER_BANK;
++    w->scope_g = g;
++    int nb = g / PLUG_SCOPE_PER_BANK, nf = g % PLUG_SCOPE_PER_BANK;
++    if (!PLUG_SCOPE_AUTOMATE) { w->master(&w->fx, audioMasterUpdateDisplay, 0, 0, 0, 0.0f); return; }
++    if (nf != of)
++        w->master(&w->fx, audioMasterAutomate, PLUG_SCOPE_FRAME, 0, 0, (float)nf / (PLUG_SCOPE_PER_BANK - 1));
++    if (nb != ob && PLUG_SCOPE_BANKS > 1)
++        w->master(&w->fx, audioMasterAutomate, PLUG_SCOPE_BANK, 0, 0, (float)nb / (PLUG_SCOPE_BANKS - 1));
++#else
++    (void)w; (void)out; (void)n;
++#endif
+ }
+ 
+ /* accumulate=1 is VST2's legacy process(), which must ADD to the output buffers; hosts here call
+  * processReplacing, but a NULL e->process would crash any host that tried the old call. */
+-static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
++static inline int16_t to_s16(float x) {
++    x = x > 1.0f ? 1.0f : (x < -1.0f ? -1.0f : x);
++    return (int16_t)lrintf(x * 32767.0f);
++}
++
++static void render_frames(wrap_t *w, float **in, float **out, int32_t n, int accumulate) {
+     for (int32_t i = 0; i < n; i++) {
+         if (w->pos >= DSP_BLOCK) {
++            engine_lock(w);
++            if (PLUG_EFFECT && mpc_engine_input) mpc_engine_input(w->dsp, w->inblock, DSP_BLOCK);
+             g_api->render(w->dsp, w->block, DSP_BLOCK);
++            engine_unlock(w);
+             w->pos = 0;
+         }
++        if (PLUG_EFFECT) {   /* this frame goes into the next block the engine processes; no input = silence */
++            w->inblock[w->pos * 2] = in && in[0] ? to_s16(in[0][i]) : 0;
++            w->inblock[w->pos * 2 + 1] = in && in[1] ? to_s16(in[1][i]) : 0;
++        }
+         float l = w->block[w->pos * 2] * (1.0f / 32768.0f), r = w->block[w->pos * 2 + 1] * (1.0f / 32768.0f);
+         if (accumulate) { out[0][i] += l; out[1][i] += r; }
+         else { out[0][i] = l; out[1][i] = r; }
+@@ -199,9 +411,17 @@ static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
+     }
+ }
+ 
+-static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
++static void run_block(AEffect *e, float **in, float **out, int32_t n, int accumulate) {
+     wrap_t *w = e->object;
+     if (HAS_LFO_BPM) update_tempo(w);
++    if (mpc_engine_transport) {   /* engines that follow the transport (engine.h) */
++        VstTimeInfo *ti = (VstTimeInfo *)w->master(&w->fx, audioMasterGetTime, 0, kVstTempoValid | kVstPpqPosValid, 0, 0);
++        engine_lock(w);
++        if (ti)
++            mpc_engine_transport(w->dsp, (ti->flags & kVstTempoValid) ? ti->tempo : 0,
++                                 (ti->flags & kVstPpqPosValid) ? ti->ppqPos : -1, (ti->flags & kVstTransportPlaying) != 0);
++        engine_unlock(w);
++    }
+     /* A trigger param (e.g. Generate) fired: tell the host it is back to 0 so
+      * buttons bound to it drop their highlight. Done here, not inside
+      * setParameter, so the host is not re-entered from its own call. */
+@@ -211,11 +431,12 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
+         w->need_update_display = 0;
+         w->master(&w->fx, audioMasterUpdateDisplay, 0, 0, 0, 0.0f);
+     }
+-    render_frames(w, out, n, accumulate);
++    render_frames(w, in, out, n, accumulate);
++    scope_tick(w, out, n);
+ }
+ 
+-static void processReplacing(AEffect *e, float **in, float **out, int32_t n) { (void)in; run_block(e, out, n, 0); }
+-static void process(AEffect *e, float **in, float **out, int32_t n) { (void)in; run_block(e, out, n, 1); }
++static void processReplacing(AEffect *e, float **in, float **out, int32_t n) { run_block(e, in, out, n, 0); }
++static void process(AEffect *e, float **in, float **out, int32_t n) { run_block(e, in, out, n, 1); }
+ 
+ static void copy_str(void *dst, const char *src, size_t max) {
+     strncpy(dst, src, max - 1);
+@@ -227,11 +448,32 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+     (void)o;
+     switch (op) {
+     case effOpen: return 1;
++    case effSetProgram:
++        if (w->nprog > 0 && v >= 0 && v < w->nprog) {
++            const param_t *pp = &PARAMS[PLUG_PROGRAM_PARAM];
++            float n = pp->nopts > 1 ? (float)v / (pp->nopts - 1)
++                    : pp->max > pp->min ? (float)(PLUG_PROGRAM_MIN + v - pp->min) / (pp->max - pp->min) : 0.0f;
++            engine_lock(w);
++            set_parameter_locked(w, PLUG_PROGRAM_PARAM, n);   /* as a touch on the preset control: the engine loads it */
++            engine_unlock(w);
++        }
++        return 0;
++    case effGetProgram: return w->nprog > 0 ? current_program(w) : 0;
++    case effGetProgramName:
++        copy_str(p, w->nprog > 0 ? w->prog[current_program(w)] : "", 24);
++        return 1;
++    case effGetProgramNameIndexed:
++        if (idx < 0 || idx >= w->nprog) return 0;
++        copy_str(p, w->prog[idx], 24);
++        return 1;
++    case effSetProgramName: return 0;
+     case effClose:
+         g_api->destroy(w->dsp);
++        free(w->prog);
++        pthread_mutex_destroy(&w->lock);
+         free(w);
+         return 1;
+-    case effGetPlugCategory: return 2; /* kPlugCategSynth */
++    case effGetPlugCategory: return PLUG_EFFECT ? 1 : 2; /* kPlugCategEffect / kPlugCategSynth */
+     case effGetEffectName:
+     case effGetProductString: copy_str(p, PLUG_NAME, 32); return 1;
+     case effGetVendorString: copy_str(p, PLUG_VENDOR, 32); return 1;
+@@ -247,31 +489,38 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+     case effGetParamDisplay: {
+         char buf[64];
+         if (idx < 0 || idx >= NPARAMS) return 0;
++        if (is_scope(idx)) { copy_str(p, "", 24); return 1; }
+         const param_t *pp = &PARAMS[idx];
++        engine_lock(w);
+         if (pp->nopts) {
+-            int k = (int)lroundf(get_norm(w, idx) * (pp->nopts - 1));
++            int k = (int)lroundf(get_norm_locked(w, idx) * (pp->nopts - 1));
+             copy_str(p, pp->opts[k], 24);
+         } else if (g_api->get_param(w->dsp, pp->key, buf, sizeof buf) > 0) {
+             if (pp->string_display) copy_str(p, buf, 24);   /* real text (a name, a status), not a number */
+             else snprintf(p, 24, "%.*f", (pp->int_display || fabs(pp->max - pp->min) > 20) ? 0 : 1, atof(buf));
+         }
++        engine_unlock(w);
+         return 1;
+     }
+     case effSetSampleRate: case effSetBlockSize: case effMainsChanged: return 1;
+     case effProcessEvents: {
+         VstEvents *ev = p;
++        engine_lock(w);
+         for (int i = 0; i < ev->numEvents; i++)
+             if (ev->events[i]->type == 1) {
+                 VstMidiEvent *m = (VstMidiEvent *)ev->events[i];
+                 g_api->midi(w->dsp, m->midiData, 3);
+             }
++        engine_unlock(w);
+         return 1;
+     }
+     case effCanDo:
+         return (!strcmp(p, "receiveVstEvents") || !strcmp(p, "receiveVstMidiEvent") ||
+                 !strcmp(p, "receiveVstTimeInfo")) ? 1 : -1;
+     case effGetChunk: {
++        engine_lock(w);
+         int len = g_api->get_param(w->dsp, "state", w->chunk, sizeof w->chunk);
++        engine_unlock(w);
+         if (len <= 0) return 0;
+         *(void **)p = w->chunk;
+         return (intptr_t)strlen(w->chunk) + 1;
+@@ -280,7 +529,9 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+         if (v <= 0 || (size_t)v > sizeof w->chunk) return 0;
+         memcpy(w->chunk, p, v);
+         w->chunk[v - 1] = 0;
++        engine_lock(w);
+         g_api->set_param(w->dsp, "state", w->chunk);
++        engine_unlock(w);
+         return 1;
+     }
+     default: return 0;
+@@ -292,10 +543,18 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+     if (!g_api) return NULL;
+     wrap_t *w = calloc(1, sizeof *w);
+     if (!w) return NULL;
++    for (int i = 0; i < NPARAMS; i++) w->shadow[i] = -1;
++    pthread_mutexattr_t ma;
++    pthread_mutexattr_init(&ma);
++    pthread_mutexattr_settype(&ma, PTHREAD_MUTEX_RECURSIVE);
++    pthread_mutexattr_setprotocol(&ma, PTHREAD_PRIO_INHERIT);
++    pthread_mutex_init(&w->lock, &ma);
++    pthread_mutexattr_destroy(&ma);
+     w->dsp = g_api->create(MODULE_DIR);
+-    if (!w->dsp) { free(w); return NULL; }
++    if (!w->dsp) { pthread_mutex_destroy(&w->lock); free(w); return NULL; }
+     w->master = master;
+     w->pos = DSP_BLOCK;
++    program_names(w);
+     AEffect *e = &w->fx;
+     e->magic = 0x56737450; /* 'VstP' */
+     e->dispatcher = dispatcher;
+@@ -304,9 +563,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+     e->getParameter = getParameter;
+     e->processReplacing = processReplacing;
+     e->numParams = NPARAMS;
+-    e->numInputs = 0;
++    e->numPrograms = w->nprog;
++    e->numInputs = PLUG_EFFECT ? 2 : 0;
+     e->numOutputs = 2;
+-    e->flags = effFlagsCanReplacing | effFlagsIsSynth | effFlagsProgramChunks;
++    e->flags = effFlagsCanReplacing | (PLUG_EFFECT ? 0 : effFlagsIsSynth) | effFlagsProgramChunks;
+     e->uniqueID = PLUG_UID;
+     e->version = PLUG_VERSION;
+     e->object = w;
+diff --git a/wrapper/scope.h b/wrapper/scope.h
+new file mode 100644
+index 0000000..f93b940
+--- /dev/null
++++ b/wrapper/scope.h
+@@ -0,0 +1,51 @@
++/* scope.h -- the scope's window on a plugin's own output, shared by vst2_wrap.c (vst.json "scope") and the offline
++ * shape-bank builder, so both cut the sound up the same way.
++ *
++ * The output goes into a ring of the last SCOPE_RING samples. A window is taken the way a scope triggers: the period
++ * is measured between two rising zero crossings (with hysteresis), then two periods are taken from the latest rising
++ * crossing that still fits, resampled to SCOPE_PTS points and scaled to their own peak (so a shape is compared by
++ * its form, not its level). Silence (peak under SCOPE_QUIET) has no window. */
++#ifndef MPC_SCOPE_H
++#define MPC_SCOPE_H
++#include <math.h>
++
++#define SCOPE_RING 4096   /* ~93 ms at 44.1 kHz; a power of two */
++#define SCOPE_PTS 128
++#define SCOPE_QUIET 0.003f
++
++static inline int scope_window(const float *ring, unsigned pos, float out[SCOPE_PTS]) {
++#define SR(k) ring[(pos + (unsigned)(k)) & (SCOPE_RING - 1)]   /* k = 0: the oldest sample */
++    float pk = 0;
++    for (int k = SCOPE_RING / 2; k < SCOPE_RING; k++) { float a = fabsf(SR(k)); if (a > pk) pk = a; }
++    if (pk < SCOPE_QUIET) return 0;
++    float h = 0.08f * pk;
++    int armed = 0, t0 = -1, t1 = -1;
++    for (int k = 0; k < SCOPE_RING && t1 < 0; k++) {
++        float v = SR(k);
++        if (v < -h) armed = 1;
++        else if (armed && v > h) { if (t0 < 0) t0 = k; else t1 = k; armed = 0; }
++    }
++    int win = t1 > t0 && t0 >= 0 ? 2 * (t1 - t0) : 1024;
++    if (win < 64) win = 64;
++    if (win > SCOPE_RING / 2) win = SCOPE_RING / 2;
++    int start = SCOPE_RING - win;
++    armed = 0;
++    for (int k = 0; k + win <= SCOPE_RING; k++) {
++        float v = SR(k);
++        if (v < -h) armed = 1;
++        else if (armed && v > h) { start = k; armed = 0; }
++    }
++    float wp = 1e-9f;
++    for (int c = 0; c < SCOPE_PTS; c++) {
++        float x = start + (c + 0.5f) * win / SCOPE_PTS;
++        int i = (int)x;
++        float f = x - i, v = SR(i) + f * (SR(i + 1) - SR(i));
++        out[c] = v;
++        if (fabsf(v) > wp) wp = fabsf(v);
++    }
++    for (int c = 0; c < SCOPE_PTS; c++) out[c] /= wp;
++#undef SR
++    return 1;
++}
++
++#endif

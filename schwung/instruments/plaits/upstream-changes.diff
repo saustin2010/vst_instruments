@@ -1,0 +1,67 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored. Each is described in README.md under "Changes for the MPC".
+--- a/src/dsp/plaits_plugin.cpp
++++ b/src/dsp/plaits_plugin.cpp
+@@ -493,6 +493,11 @@
+ 
+ static void set_param(void* instance, const char* key, const char* val) {
+     plaits_instance_t* inst = (plaits_instance_t*)instance;
++#ifdef MPC_PORT
++    /* MPC port: the FM patch as a plain index (the names differ per 6-Op bank, so a browser steps the number and
++     * shows "fm_preset"'s name) */
++    if (strcmp(key, "fm_preset_index") == 0) key = "fm_preset";
++#endif
+ 
+     // State restore from patch save/load
+     if (strcmp(key, "state") == 0) {
+@@ -662,6 +667,10 @@
+                              char* buf, int buf_len) {
+     if (strcmp(key, "engine") == 0)
+         return snprintf(buf, buf_len, "%s", kEngineNames[inst->engine]);
++#ifdef MPC_PORT
++    if (strcmp(key, "fm_preset_index") == 0)
++        return snprintf(buf, buf_len, "%d", inst->fm_preset);
++#endif
+     if (strcmp(key, "harmonics") == 0)
+         return snprintf(buf, buf_len, "%.3f", inst->harmonics);
+     if (strcmp(key, "timbre") == 0)
+--- a/src/dsp/plaits/dsp/engine2/six_op_engine.cc
++++ b/src/dsp/plaits/dsp/engine2/six_op_engine.cc
+@@ -79,7 +79,15 @@
+   for (int i = 0; i < kNumSixOpVoices; ++i) {
+     voice_[i].Init(&algorithms_, kCorrectedSampleRate);
+   }
++#ifdef MPC_PORT
++  // MPC port (2026-10-02): fm::Voice<6>::Render(params, temp, size) uses temp, temp + size and temp + 2 * size, so
++  // the scratch needs 3 * kMaxBlockSize; with one block it wrote 48 floats into patches_, allocated right after it,
++  // and FM patches 0-1 of the bank played garbage operator data (out-of-range table reads; found with
++  // steve/tools/fuzz). Four blocks, to leave a spare.
++  temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize * 4);
++#else
+   temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
++#endif
+   patches_ = allocator->Allocate<fm::Patch>(kNumPatchesPerBank);
+ }
+ 
+--- a/src/dsp/stmlib/dsp/dsp.h
++++ b/src/dsp/stmlib/dsp/dsp.h
+@@ -42,7 +42,19 @@
+ 
+ inline float Interpolate(const float* table, float index, float size) {
+   index *= size;
++#ifdef MPC_PORT
++  // MPC port (2026-10-02): the hardware's ADCs stop just short of full scale, but a host parameter at exactly 1.0, or a
++  // modulation sum past it, read one past the end of the table (size + 1 entries; found with steve/tools/fuzz).
++  if (!(index > 0.0f)) index = 0.0f;  // also NaN
++  if (index > size) index = size;
+   MAKE_INTEGRAL_FRACTIONAL(index)
++  if (index_integral >= static_cast<int32_t>(size)) {
++    index_integral = static_cast<int32_t>(size) - 1;
++    index_fractional = index - static_cast<float>(index_integral);
++  }
++#else
++  MAKE_INTEGRAL_FRACTIONAL(index)
++#endif
+   float a = table[index_integral];
+   float b = table[index_integral + 1];
+   return a + (b - a) * index_fractional;

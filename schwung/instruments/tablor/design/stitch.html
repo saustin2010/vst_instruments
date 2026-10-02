@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<title>Tablor // 2-Oscillator Wavetable Synthesizer</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "tertiary-fixed-dim": "#d1c6a1",
+            "primary-fixed-dim": "#fabc4d",
+            "on-secondary-container": "#ff9a89",
+            "secondary-fixed-dim": "#ffb4a7",
+            "surface-container-lowest": "#0d0e11",
+            "on-primary-fixed-variant": "#604100",
+            "surface-container-highest": "#343538",
+            "tertiary": "#dacfa9",
+            "surface-bright": "#38393c",
+            "on-background": "#e3e2e6",
+            "secondary-container": "#920801",
+            "secondary": "#ffb4a7",
+            "primary-container": "#e5a93c",
+            "surface-variant": "#343538",
+            "outline": "#9d8f7c",
+            "on-primary": "#432c00",
+            "surface-dim": "#121316",
+            "inverse-on-surface": "#2f3034",
+            "outline-variant": "#504535",
+            "tertiary-container": "#beb38f",
+            "on-secondary-fixed-variant": "#920801",
+            "on-primary-fixed": "#281900",
+            "surface": "#121316",
+            "secondary-fixed": "#ffdad4",
+            "on-error-container": "#ffdad6",
+            "on-surface": "#e3e2e6",
+            "on-primary-container": "#5e4000",
+            "inverse-primary": "#7e5700",
+            "inverse-surface": "#e3e2e6",
+            "surface-container": "#1f1f23",
+            "surface-tint": "#fabc4d",
+            "error-container": "#93000a",
+            "primary-fixed": "#ffdead",
+            "on-tertiary-container": "#4c4529",
+            "on-surface-variant": "#d4c4b0",
+            "error": "#ffb4ab",
+            "surface-container-low": "#1b1b1f",
+            "tertiary-fixed": "#eee2bc",
+            "on-tertiary": "#373016",
+            "primary": "#ffc665",
+            "surface-container-high": "#292a2d",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "background": "#121316",
+            "on-secondary-fixed": "#400100",
+            "on-secondary": "#680300",
+            "on-tertiary-fixed": "#211b04",
+            "on-error": "#690005"
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg: "0.25rem",
+            xl: "0.5rem",
+            full: "0.75rem"
+          },
+          spacing: {
+            gutter: "0.75rem",
+            "space-sm": "0.5rem",
+            margin: "0.75rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem"
+          },
+          fontFamily: {
+            "body-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "headline-sm": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"],
+            "body-lg": ["Space Grotesk"]
+          },
+          fontSize: {
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }],
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Fixed Touch Enclosure Bounds (1280x628) */
+    body {
+      background-color: #030807;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #hardware-viewport {
+      width: 1280px;
+      height: 628px;
+      background: #05100f;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 2px #0e2724, 0 10px 40px rgba(0,0,0,0.9);
+      border-radius: 4px;
+    }
+
+    /* Recessed Industrial wells */
+    .recessed-display {
+      background: #031512;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.9), inset 0 0 1px rgba(0,0,0,0.9);
+      border: 1px solid #143834;
+    }
+
+    .module-card {
+      background: #0b1c1b;
+      border: 1px solid #21504b;
+      box-shadow: inset 0 1px 0 rgba(95, 240, 207, 0.08), 0 3px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Rivet screw aesthetic */
+    .hex-rivet {
+      width: 6px;
+      height: 6px;
+      background: #183d38;
+      border-radius: 50%;
+      box-shadow: inset 0 1px 1px #000, 0 1px 0 rgba(255,255,255,0.15);
+      position: absolute;
+    }
+
+    /* Dial Potentiometer Styles */
+    .knob-cap {
+      background: radial-gradient(circle at 35% 35%, #183834 0%, #0d2220 60%, #061110 100%);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.85), inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.9);
+    }
+
+    /* Phosphor Dot Grid Background */
+    .dot-grid {
+      background-image: radial-gradient(#16413a 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+  </style>
+</head>
+<body class="dark font-body-md text-on-surface">
+<!-- STANDALONE HARDWARE SCREEN CONTAINER (1280 x 628) -->
+<main class="flex flex-col justify-between selection:bg-transparent" id="hardware-viewport">
+<!-- TOP STATUS / NAVIGATION BAR (Height: 44px) -->
+<header class="h-[44px] w-full px-space-md bg-surface-container-lowest flex items-center justify-between border-b border-outline-variant z-50">
+<!-- Brand & Synth Engine Title -->
+<div class="flex items-center space-x-3">
+<span class="text-headline-sm font-headline-sm tracking-wider uppercase text-[#5ff0cf] font-bold">TABLOR // WAVETABLE SYNTHESIZER</span>
+<span class="bg-[#0b1c1b] text-[#5ff0cf] text-label-sm font-label-sm px-2 py-0.5 rounded border border-[#21504b]">2-OSC ENGINE</span>
+</div>
+<!-- Center Navigation Tabs (Strictly casing intact, MAIN active) -->
+<nav aria-label="Synthesis Engine Pages" class="flex items-center space-x-1 h-full pt-1">
+<button aria-current="page" class="px-space-md py-1 text-label-md font-label-md font-bold text-[#5ff0cf] border-b-2 border-[#5ff0cf] transition-all bg-[#09221f]">MAIN</button>
+<button class="px-space-md py-1 text-label-md font-label-md text-on-surface-variant hover:text-on-surface transition-all">FILTER</button>
+<button class="px-space-md py-1 text-label-md font-label-md text-on-surface-variant hover:text-on-surface transition-all">SHAPE</button>
+<button class="px-space-md py-1 text-label-md font-label-md text-on-surface-variant hover:text-on-surface transition-all">ENVELOPES</button>
+<button class="px-space-md py-1 text-label-md font-label-md text-on-surface-variant hover:text-on-surface transition-all">MOD ENVS</button>
+<button class="px-space-md py-1 text-label-md font-label-md text-on-surface-variant hover:text-on-surface transition-all">VOICE</button>
+</nav>
+<!-- Hardware Telemetry (NO Audition / Play Buttons) -->
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1.5 font-label-sm text-label-sm text-[#bfe9e2]">
+<span class="inline-block w-2 h-2 rounded-full bg-[#2ec4a6] shadow-[0_0_6px_#2ec4a6]"></span>
+<span>48kHz / 24-bit</span>
+</div>
+<div class="bg-[#031512] px-2.5 py-1 rounded border border-[#21504b] flex items-center space-x-2">
+<span class="text-label-sm font-label-sm text-outline">DSP:</span>
+<span class="text-label-sm font-label-sm font-bold text-[#5ff0cf]">11%</span>
+</div>
+<div class="flex items-center space-x-1 text-[#bfe9e2]">
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors" title="Settings">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors" title="EQ">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors" title="Configuration">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN SYNTH CANVAS: 2 RACK FRAMES (Fixed 1280x528 Active Envelope) -->
+<div class="w-full flex-1 px-[10px] py-[6px] grid grid-rows-2 gap-[8px] overflow-hidden">
+<!-- FRAME 1: OSCILLATOR 1 (y=92 equivalent module) -->
+<section aria-label="Oscillator 1 Engine" class="module-card relative rounded p-2 flex flex-col justify-between">
+<!-- Screw Rivets for Hardware Chassis Feel -->
+<span class="hex-rivet top-1.5 left-1.5"></span>
+<span class="hex-rivet top-1.5 right-1.5"></span>
+<span class="hex-rivet bottom-1.5 left-1.5"></span>
+<span class="hex-rivet bottom-1.5 right-1.5"></span>
+<!-- Module Header Accent Bar -->
+<div class="flex items-center justify-between border-b border-[#1b433f] pb-1 px-3">
+<div class="flex items-center space-x-2">
+<div class="w-2.5 h-2.5 bg-[#5ff0cf] rounded-sm shadow-[0_0_8px_#5ff0cf]"></div>
+<h2 class="text-label-lg font-label-lg tracking-wider text-[#eafffb] font-bold">OSC 1 // PRIMARY WAVETABLE</h2>
+</div>
+<div class="flex space-x-3 text-label-sm font-label-sm text-[#bfe9e2]">
+<span>ROUTING: <strong class="text-[#5ff0cf]">VCF 1</strong></span>
+<span>SYNC: <strong class="text-outline">OFF</strong></span>
+<span class="text-[#5ff0cf] font-bold">ACTV</span>
+</div>
+</div>
+<!-- OSC 1 Content: Wavetable Stepper + Scope & Rotary Collet Array -->
+<div class="flex items-center justify-between px-3 gap-4 flex-1 mt-1">
+<!-- Stepper Wavetable Selector & Visualizer Ribbon (cx=324, cy=220, w=600) -->
+<div class="flex flex-col w-[600px] h-[190px] justify-between">
+<!-- Stepper LCD Title Strip (h=42) -->
+<div class="recessed-display h-[42px] px-2 flex items-center justify-between rounded">
+<button class="h-8 px-3 flex items-center justify-center bg-[#09221f] text-[#5ff0cf] hover:bg-[#123934] active:scale-95 border border-[#21504b] text-label-md font-label-md rounded font-bold transition-all">
+                &lt; PREV
+              </button>
+<div class="flex flex-col items-center justify-center">
+<span class="text-label-sm font-label-sm text-outline tracking-widest">WAVETABLE BANK A</span>
+<span class="text-label-lg font-label-lg font-bold text-[#5ff0cf] tracking-wide">WT1: 01-SERUM_HYBRID_SAW</span>
+</div>
+<button class="h-8 px-3 flex items-center justify-center bg-[#09221f] text-[#5ff0cf] hover:bg-[#123934] active:scale-95 border border-[#21504b] text-label-md font-label-md rounded font-bold transition-all">
+                NEXT &gt;
+              </button>
+</div>
+<!-- Real-time 3D Wavetable Canvas Ribbon Visualizer -->
+<div class="recessed-display dot-grid relative h-[140px] rounded overflow-hidden flex items-center justify-center">
+<canvas class="w-full h-full block" height="136" id="osc1-canvas" width="596"></canvas>
+<div class="absolute top-1.5 left-2 text-[9px] font-label-sm text-[#2ec4a6] bg-[#031512]/80 px-1 border border-[#1b433f] rounded">
+                FRAME: 042 / 256
+              </div>
+<div class="absolute bottom-1 right-2 text-[9px] font-label-sm text-[#5ff0cf]/60">
+                SPECTRAL HARMONICS 1-64
+              </div>
+</div>
+</div>
+<!-- OSC 1 Potentiometers: 4 Precision Rotary Collet Knobs -->
+<div class="flex-1 grid grid-cols-4 gap-2 h-[190px] items-center">
+<!-- Knob 1: WT1 POSITION -->
+<div class="flex flex-col items-center justify-center group cursor-pointer">
+<span class="text-label-sm font-label-sm text-[#bfe9e2] tracking-wider mb-1">WT1 POSITION</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<!-- SVG Arc Indicator -->
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#08221f" stroke-width="7"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2ec4a6" stroke-dasharray="264" stroke-dashoffset="153" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<!-- Physical Turned Knob Cap -->
+<div class="knob-cap w-[56px] h-[56px] rounded-full border border-[#21504b] flex items-center justify-center relative">
+<div class="w-1.5 h-4 bg-[#5ff0cf] absolute top-1 rounded-sm shadow-[0_0_6px_#5ff0cf]"></div>
+<div class="w-3 h-3 rounded-full bg-[#05100f] border border-[#21504b]"></div>
+</div>
+</div>
+<div class="recessed-display mt-2 px-2 py-0.5 rounded border border-[#21504b] w-[70px] text-center">
+<span class="text-label-md font-readout-numeric text-[#5ff0cf]">42%</span>
+</div>
+</div>
+<!-- Knob 2: WT1 LEVEL -->
+<div class="flex flex-col items-center justify-center group cursor-pointer">
+<span class="text-label-sm font-label-sm text-[#bfe9e2] tracking-wider mb-1">WT1 LEVEL</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#08221f" stroke-width="7"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2ec4a6" stroke-dasharray="264" stroke-dashoffset="66" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<div class="knob-cap w-[56px] h-[56px] rounded-full border border-[#21504b] flex items-center justify-center relative">
+<div class="w-1.5 h-4 bg-[#5ff0cf] absolute top-1 rounded-sm shadow-[0_0_6px_#5ff0cf]"></div>
+<div class="w-3 h-3 rounded-full bg-[#05100f] border border-[#21504b]"></div>
+</div>
+</div>
+<div class="recessed-display mt-2 px-2 py-0.5 rounded border border-[#21504b] w-[70px] text-center">
+<span class="text-label-md font-readout-numeric text-[#5ff0cf]">0.0 dB</span>
+</div>
+</div>
+<!-- Knob 3: WT1 TUNE -->
+<div class="flex flex-col items-center justify-center group cursor-pointer">
+<span class="text-label-sm font-label-sm text-[#bfe9e2] tracking-wider mb-1">WT1 TUNE</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#08221f" stroke-width="7"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2ec4a6" stroke-dasharray="264" stroke-dashoffset="132" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<div class="knob-cap w-[56px] h-[56px] rounded-full border border-[#21504b] flex items-center justify-center relative">
+<div class="w-1.5 h-4 bg-[#5ff0cf] absolute top-1 rounded-sm shadow-[0_0_6px_#5ff0cf]"></div>
+<div class="w-3 h-3 rounded-full bg-[#05100f] border border-[#21504b]"></div>
+</div>
+</div>
+<div class="recessed-display mt-2 px-2 py-0.5 rounded border border-[#21504b] w-[70px] text-center">
+<span class="text-label-md font-readout-numeric text-[#5ff0cf]">0 ST</span>
+</div>
+</div>
+<!-- Knob 4: WT1 UNISON -->
+<div class="flex flex-col items-center justify-center group cursor-pointer">
+<span class="text-label-sm font-label-sm text-[#bfe9e2] tracking-wider mb-1">WT1 UNISON</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#08221f" stroke-width="7"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2ec4a6" stroke-dasharray="264" stroke-dashoffset="180" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<div class="knob-cap w-[56px] h-[56px] rounded-full border border-[#21504b] flex items-center justify-center relative">
+<div class="w-1.5 h-4 bg-[#5ff0cf] absolute top-1 rounded-sm shadow-[0_0_6px_#5ff0cf]"></div>
+<div class="w-3 h-3 rounded-full bg-[#05100f] border border-[#21504b]"></div>
+</div>
+</div>
+<div class="recessed-display mt-2 px-2 py-0.5 rounded border border-[#21504b] w-[70px] text-center">
+<span class="text-label-md font-readout-numeric text-[#5ff0cf]">4 VOX</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FRAME 2: OSCILLATOR 2 (y=404 equivalent module) -->
+<section aria-label="Oscillator 2 Engine" class="module-card relative rounded p-2 flex flex-col justify-between">
+<!-- Screw Rivets for Hardware Chassis Feel -->
+<span class="hex-rivet top-1.5 left-1.5"></span>
+<span class="hex-rivet top-1.5 right-1.5"></span>
+<span class="hex-rivet bottom-1.5 left-1.5"></span>
+<span class="hex-rivet bottom-1.5 right-1.5"></span>
+<!-- Module Header Accent Bar -->
+<div class="flex items-center justify-between border-b border-[#1b433f] pb-1 px-3">
+<div class="flex items-center space-x-2">
+<div class="w-2.5 h-2.5 bg-[#2ec4a6] rounded-sm shadow-[0_0_8px_#2ec4a6]"></div>
+<h2 class="text-label-lg font-label-lg tracking-wider text-[#eafffb] font-bold">OSC 2 // SECONDARY WAVETABLE</h2>
+</div>
+<div class="flex space-x-3 text-label-sm font-label-sm text-[#bfe9e2]">
+<span>ROUTING: <strong class="text-[#5ff0cf]">VCF 2</strong></span>
+<span>RING MOD: <strong class="text-outline">OFF</strong></span>
+<span class="text-[#5ff0cf] font-bold">ACTV</span>
+</div>
+</div>
+<!-- OSC 2 Content: Wavetable Stepper + Dual-cycle Scope & Rotary Collet Array -->
+<div class="flex items-center justify-between px-3 gap-4 flex-1 mt-1">
+<!-- Stepper Wavetable Selector & Dual Scope (cx=324, cy=532, w=600) -->
+<div class="flex flex-col w-[600px] h-[190px] justify-between">
+<!-- Stepper LCD Title Strip (h=42) -->
+<div class="recessed-display h-[42px] px-2 flex items-center justify-between rounded">
+<button class="h-8 px-3 flex items-center justify-center bg-[#09221f] text-[#5ff0cf] hover:bg-[#123934] active:scale-95 border border-[#21504b] text-label-md font-label-md rounded font-bold transition-all">
+                &lt; PREV
+              </button>
+<div class="flex flex-col items-center justify-center">
+<span class="text-label-sm font-label-sm text-outline tracking-widest">WAVETABLE BANK B</span>
+<span class="text-label-lg font-label-lg font-bold text-[#5ff0cf] tracking-wide">WT2: 14-DIGITAL_SPECTRAL</span>
+</div>
+<button class="h-8 px-3 flex items-center justify-center bg-[#09221f] text-[#5ff0cf] hover:bg-[#123934] active:scale-95 border border-[#21504b] text-label-md font-label-md rounded font-bold transition-all">
+                NEXT &gt;
+              </button>
+</div>
+<!-- Real-time Dual-cycle Vector Oscilloscope -->
+<div class="recessed-display dot-grid relative h-[140px] rounded overflow-hidden flex items-center justify-center">
+<canvas class="w-full h-full block" height="136" id="osc2-canvas" width="596"></canvas>
+<div class="absolute top-1.5 left-2 text-[9px] font-label-sm text-[#2ec4a6] bg-[#031512]/80 px-1 border border-[#1b433f] rounded">
+                FRAME: 199 / 256
+              </div>
+<div class="absolute bottom-1 right-2 text-[9px] font-label-sm text-[#5ff0cf]/60">
+                PHASE OFFSET: +90°
+              </div>
+</div>
+</div>
+<!-- OSC 2 Potentiometers: 4 Precision Rotary Collet Knobs -->
+<div class="flex-1 grid grid-cols-4 gap-2 h-[190px] items-center">
+<!-- Knob 1: WT2 POSITION -->
+<div class="flex flex-col items-center justify-center group cursor-pointer">
+<span class="text-label-sm font-label-sm text-[#bfe9e2] tracking-wider mb-1">WT2 POSITION</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#08221f" stroke-width="7"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2ec4a6" stroke-dasharray="264" stroke-dashoffset="58" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<div class="knob-cap w-[56px] h-[56px] rounded-full border border-[#21504b] flex items-center justify-center relative">
+<div class="w-1.5 h-4 bg-[#5ff0cf] absolute top-1 rounded-sm shadow-[0_0_6px_#5ff0cf]"></div>
+<div class="w-3 h-3 rounded-full bg-[#05100f] border border-[#21504b]"></div>
+</div>
+</div>
+<div class="recessed-display mt-2 px-2 py-0.5 rounded border border-[#21504b] w-[70px] text-center">
+<span class="text-label-md font-readout-numeric text-[#5ff0cf]">78%</span>
+</div>
+</div>
+<!-- Knob 2: WT2 LEVEL -->
+<div class="flex flex-col items-center justify-center group cursor-pointer">
+<span class="text-label-sm font-label-sm text-[#bfe9e2] tracking-wider mb-1">WT2 LEVEL</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#08221f" stroke-width="7"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2ec4a6" stroke-dasharray="264" stroke-dashoffset="100" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<div class="knob-cap w-[56px] h-[56px] rounded-full border border-[#21504b] flex items-center justify-center relative">
+<div class="w-1.5 h-4 bg-[#5ff0cf] absolute top-1 rounded-sm shadow-[0_0_6px_#5ff0cf]"></div>
+<div class="w-3 h-3 rounded-full bg-[#05100f] border border-[#21504b]"></div>
+</div>
+</div>
+<div class="recessed-display mt-2 px-2 py-0.5 rounded border border-[#21504b] w-[70px] text-center">
+<span class="text-label-md font-readout-numeric text-[#5ff0cf]">-3.5 dB</span>
+</div>
+</div>
+<!-- Knob 3: WT2 TUNE -->
+<div class="flex flex-col items-center justify-center group cursor-pointer">
+<span class="text-label-sm font-label-sm text-[#bfe9e2] tracking-wider mb-1">WT2 TUNE</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#08221f" stroke-width="7"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2ec4a6" stroke-dasharray="264" stroke-dashoffset="85" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<div class="knob-cap w-[56px] h-[56px] rounded-full border border-[#21504b] flex items-center justify-center relative">
+<div class="w-1.5 h-4 bg-[#5ff0cf] absolute top-1 rounded-sm shadow-[0_0_6px_#5ff0cf]"></div>
+<div class="w-3 h-3 rounded-full bg-[#05100f] border border-[#21504b]"></div>
+</div>
+</div>
+<div class="recessed-display mt-2 px-2 py-0.5 rounded border border-[#21504b] w-[70px] text-center">
+<span class="text-label-md font-readout-numeric text-[#5ff0cf]">+7 ST</span>
+</div>
+</div>
+<!-- Knob 4: WT2 UNISON -->
+<div class="flex flex-col items-center justify-center group cursor-pointer">
+<span class="text-label-sm font-label-sm text-[#bfe9e2] tracking-wider mb-1">WT2 UNISON</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="#08221f" stroke-width="7"></circle>
+<circle cx="50" cy="50" fill="none" r="42" stroke="#2ec4a6" stroke-dasharray="264" stroke-dashoffset="210" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<div class="knob-cap w-[56px] h-[56px] rounded-full border border-[#21504b] flex items-center justify-center relative">
+<div class="w-1.5 h-4 bg-[#5ff0cf] absolute top-1 rounded-sm shadow-[0_0_6px_#5ff0cf]"></div>
+<div class="w-3 h-3 rounded-full bg-[#05100f] border border-[#21504b]"></div>
+</div>
+</div>
+<div class="recessed-display mt-2 px-2 py-0.5 rounded border border-[#21504b] w-[70px] text-center">
+<span class="text-label-md font-readout-numeric text-[#5ff0cf]">2 VOX</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- BOTTOM HARDWARE ENCODER DOCK: Q-LINK HARDWARE STRIP (Height: 56px) -->
+<footer class="h-[56px] w-full px-2 bg-surface-container-lowest flex items-center justify-between border-t border-outline-variant z-50">
+<!-- Bank indicator tag -->
+<div class="flex flex-col justify-center items-center px-2 py-1 bg-[#09221f] border border-[#21504b] rounded mr-2">
+<span class="text-[8px] font-label-sm text-outline">BANK</span>
+<span class="text-label-md font-label-md font-bold text-[#5ff0cf]">1 [MAIN]</span>
+</div>
+<!-- 10 Q-Link Quick-Access Hardware Encoders mapped to OSC 1 & OSC 2 -->
+<div class="flex-1 grid grid-cols-10 gap-1.5 h-full py-1">
+<!-- Q1 -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-[#5ff0cf] border border-[#5ff0cf] px-1 py-0.5 rounded active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm font-bold text-[#bfe9e2]">Q1: WT1 SELECT</span>
+<span class="text-[10px] font-label-md font-bold text-[#5ff0cf]">01-HYBRID</span>
+</div>
+<!-- Q2 -->
+<div class="flex flex-col items-center justify-center border border-outline-variant px-1 py-0.5 rounded hover:bg-surface-container active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm text-on-surface-variant">Q2: WT1 POS</span>
+<span class="text-[10px] font-label-md font-bold text-[#eafffb]">42%</span>
+</div>
+<!-- Q3 -->
+<div class="flex flex-col items-center justify-center border border-outline-variant px-1 py-0.5 rounded hover:bg-surface-container active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm text-on-surface-variant">Q3: WT1 LEVEL</span>
+<span class="text-[10px] font-label-md font-bold text-[#eafffb]">0.0 dB</span>
+</div>
+<!-- Q4 -->
+<div class="flex flex-col items-center justify-center border border-outline-variant px-1 py-0.5 rounded hover:bg-surface-container active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm text-on-surface-variant">Q4: WT1 TUNE</span>
+<span class="text-[10px] font-label-md font-bold text-[#eafffb]">0 ST</span>
+</div>
+<!-- Q5 -->
+<div class="flex flex-col items-center justify-center border border-outline-variant px-1 py-0.5 rounded hover:bg-surface-container active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm text-on-surface-variant">Q5: WT1 UNI</span>
+<span class="text-[10px] font-label-md font-bold text-[#eafffb]">4 VOX</span>
+</div>
+<!-- Q6 -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-[#5ff0cf] border border-[#21504b] px-1 py-0.5 rounded active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm font-bold text-[#bfe9e2]">Q6: WT2 SELECT</span>
+<span class="text-[10px] font-label-md font-bold text-[#5ff0cf]">14-SPECTRAL</span>
+</div>
+<!-- Q7 -->
+<div class="flex flex-col items-center justify-center border border-outline-variant px-1 py-0.5 rounded hover:bg-surface-container active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm text-on-surface-variant">Q7: WT2 POS</span>
+<span class="text-[10px] font-label-md font-bold text-[#eafffb]">78%</span>
+</div>
+<!-- Q8 -->
+<div class="flex flex-col items-center justify-center border border-outline-variant px-1 py-0.5 rounded hover:bg-surface-container active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm text-on-surface-variant">Q8: WT2 LEVEL</span>
+<span class="text-[10px] font-label-md font-bold text-[#eafffb]">-3.5 dB</span>
+</div>
+<!-- Q9 -->
+<div class="flex flex-col items-center justify-center border border-outline-variant px-1 py-0.5 rounded hover:bg-surface-container active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm text-on-surface-variant">Q9: WT2 TUNE</span>
+<span class="text-[10px] font-label-md font-bold text-[#eafffb]">+7 ST</span>
+</div>
+<!-- Q10 -->
+<div class="flex flex-col items-center justify-center border border-outline-variant px-1 py-0.5 rounded hover:bg-surface-container active:scale-95 transition-transform cursor-pointer">
+<span class="text-[9px] font-label-sm text-on-surface-variant">Q10: WT2 UNI</span>
+<span class="text-[10px] font-label-md font-bold text-[#eafffb]">2 VOX</span>
+</div>
+</div>
+<!-- Akai MPC Quick Macro Utility Button -->
+<button class="h-8 px-2.5 ml-2 bg-[#0b1c1b] border border-[#21504b] rounded flex items-center space-x-1 hover:bg-[#133732] active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[16px] text-[#5ff0cf]">speed</span>
+<span class="text-[10px] font-label-md font-bold text-[#bfe9e2]">FINE</span>
+</button>
+</footer>
+</main>
+<!-- Interactive 60fps Multi-Cycle Wavetable Visualizers -->
+<script>
+    (function initSynthesizerVisualizers() {
+      // 1. Oscillator 1: 3D Isometric Ribbon Multi-Frame Waveform
+      const canvas1 = document.getElementById('osc1-canvas');
+      if (canvas1) {
+        const ctx1 = canvas1.getContext('2d');
+        let t1 = 0;
+
+        function renderOsc1() {
+          const w = canvas1.width;
+          const h = canvas1.height;
+          ctx1.clearRect(0, 0, w, h);
+
+          // Draw stacked wavetable frames
+          const totalFrames = 8;
+          for (let f = totalFrames - 1; f >= 0; f--) {
+            const yOffset = 18 + f * 13;
+            const xOffset = 30 + f * 18;
+            const scaleW = w - 180;
+            const isFront = f === 0;
+
+            ctx1.beginPath();
+            if (isFront) {
+              ctx1.strokeStyle = '#5ff0cf';
+              ctx1.lineWidth = 2.2;
+              ctx1.shadowColor = '#5ff0cf';
+              ctx1.shadowBlur = 8;
+            } else {
+              ctx1.strokeStyle = `rgba(46, 196, 166, ${0.15 + (1 - f / totalFrames) * 0.35})`;
+              ctx1.lineWidth = 1;
+              ctx1.shadowBlur = 0;
+            }
+
+            for (let x = 0; x <= scaleW; x += 3) {
+              const normX = x / scaleW;
+              // Morphing wavetable harmonics formula (Hybrid Saw + Harmonics)
+              const morph = Math.sin(t1 * 0.03 + f * 0.4);
+              const fundamental = Math.sin(normX * Math.PI * 4 + t1 * 0.05);
+              const harmonic2 = 0.5 * Math.sin(normX * Math.PI * 8 - t1 * 0.03);
+              const spike = (normX % 0.25) * 4 * (1 - morph * 0.3);
+              const amp = (fundamental * 0.6 + harmonic2 * 0.4 + spike * 0.3) * (20 - f * 1.2);
+              
+              const plotX = xOffset + x;
+              const plotY = yOffset + 24 - amp;
+              if (x === 0) ctx1.moveTo(plotX, plotY);
+              else ctx1.lineTo(plotX, plotY);
+            }
+            ctx1.stroke();
+          }
+
+          t1 += 0.8;
+          requestAnimationFrame(renderOsc1);
+        }
+        renderOsc1();
+      }
+
+      // 2. Oscillator 2: Dual-Cycle Spectral Vector Scope
+      const canvas2 = document.getElementById('osc2-canvas');
+      if (canvas2) {
+        const ctx2 = canvas2.getContext('2d');
+        let t2 = 0;
+
+        function renderOsc2() {
+          const w = canvas2.width;
+          const h = canvas2.height;
+          ctx2.clearRect(0, 0, w, h);
+
+          // Center reference horizontal zero-line
+          ctx2.beginPath();
+          ctx2.strokeStyle = 'rgba(33, 80, 75, 0.4)';
+          ctx2.setLineDash([4, 4]);
+          ctx2.moveTo(20, h / 2);
+          ctx2.lineTo(w - 20, h / 2);
+          ctx2.stroke();
+          ctx2.setLineDash([]);
+
+          // Dual-Cycle Digital Spectral Wave
+          ctx2.beginPath();
+          ctx2.strokeStyle = '#2ec4a6';
+          ctx2.lineWidth = 2.0;
+          ctx2.shadowColor = '#2ec4a6';
+          ctx2.shadowBlur = 6;
+
+          const points = 180;
+          for (let i = 0; i <= points; i++) {
+            const px = 20 + (i / points) * (w - 40);
+            const rad = (i / points) * Math.PI * 4; // 2 Full Cycles
+            
+            // Digital spectral overtone series + Phase modulate
+            const primary = Math.sin(rad + t2 * 0.04);
+            const tertiary = 0.35 * Math.sin(rad * 3 - t2 * 0.08);
+            const fold = Math.cos(rad * 5 + t2 * 0.02) * 0.2;
+            const py = (h / 2) + (primary + tertiary + fold) * 44;
+
+            if (i === 0) ctx2.moveTo(px, py);
+            else ctx2.lineTo(px, py);
+          }
+          ctx2.stroke();
+
+          // Phase comparison ghost trace
+          ctx2.beginPath();
+          ctx2.strokeStyle = 'rgba(95, 240, 207, 0.25)';
+          ctx2.lineWidth = 1;
+          ctx2.shadowBlur = 0;
+          for (let i = 0; i <= points; i++) {
+            const px = 20 + (i / points) * (w - 40);
+            const rad = (i / points) * Math.PI * 4 + Math.PI / 2; // +90deg offset
+            const primary = Math.sin(rad + t2 * 0.04);
+            const py = (h / 2) + primary * 32;
+            if (i === 0) ctx2.moveTo(px, py);
+            else ctx2.lineTo(px, py);
+          }
+          ctx2.stroke();
+
+          t2 += 0.6;
+          requestAnimationFrame(renderOsc2);
+        }
+        renderOsc2();
+      }
+    })();
+  </script>
+</body></html>

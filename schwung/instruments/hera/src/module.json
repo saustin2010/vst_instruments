@@ -1,0 +1,142 @@
+{
+  "id": "hera",
+  "name": "Hera",
+  "abbrev": "HE",
+  "version": "0.1.7",
+  "description": "Juno-60 emulation synthesizer based on Hera by jpcima",
+  "author": "jpcima (port: charlesvestal)",
+  "license": "GPL-3.0",
+  "ui": "ui.js",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "aftertouch": false,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "ui_hierarchy": {
+      "levels": {
+        "root": {
+          "name": "Hera",
+          "params": [
+            {
+              "key": "preset",
+              "label": "Preset",
+              "type": "int",
+              "min": 0,
+              "max_param": "preset_count",
+              "default": 0
+            },
+            {
+              "key": "volume",
+              "label": "Volume",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.8,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "vcf_cutoff",
+              "short_name": "Cutoff",
+              "label": "Cutoff",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.5,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "vcf_resonance",
+              "short_name": "Reso",
+              "label": "Resonance",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "vcf_env",
+              "short_name": "Env",
+              "label": "VCF Env",
+              "type": "float",
+              "min": -1.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "attack",
+              "label": "Attack",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "decay",
+              "label": "Decay",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "sustain",
+              "label": "Sustain",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "release",
+              "label": "Release",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            },
+            {
+              "key": "lfo_rate",
+              "short_name": "Rate",
+              "label": "LFO Rate",
+              "type": "float",
+              "min": 0.0,
+              "max": 1.0,
+              "default": 0.0,
+              "step": 0.02,
+              "unit": "%"
+            }
+          ],
+          "knobs": [
+            "preset",
+            "volume",
+            "vcf_cutoff",
+            "vcf_resonance",
+            "attack",
+            "decay",
+            "sustain",
+            "release"
+          ]
+        }
+      }
+    }
+  }
+}

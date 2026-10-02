@@ -1,0 +1,29 @@
+{
+  "name": "MIDI Player",
+  "vendor": "Charles Vestal",
+  "uid": "MidP",
+  "so": "midiplayer.so",
+  "build": {
+    "sources": [
+      "src/dsp/midi_player.c",
+      "mpc/schwung_midi_fx.c"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Impc/host",
+      "-Isrc",
+      "-Isrc/dsp",
+      "-Isrc/host"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "MODULE_DIR": "\"/sdcard/vst/midiplayer\""
+  }
+}

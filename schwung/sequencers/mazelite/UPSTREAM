@@ -1,0 +1,4 @@
+https://github.com/sd88me/schwung-maze
+commit e774a674eef281248282ab47f69a9456bf6631fc 2026-09-20
+vendored 2026-10-01: upstream src/maze_seq_lite/ as src/ + LICENSE;
+mpc/ = steve/tools/midifx adapter (MIDI out via an ALSA port, host transport as MIDI clock) + Schwung host headers + wrapper/engine.h

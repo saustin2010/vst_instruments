@@ -1,0 +1,558 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=1280, height=628, initial-scale=1.0, user-scalable=no" name="viewport">
+<title>SUPER ARP // SCHWUNG MIDI FX - MPC LIVE II</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#d1c6a1",
+            "primary-fixed-dim": "#fabc4d",
+            "on-secondary-container": "#ff9a89",
+            "secondary-fixed-dim": "#ffb4a7",
+            "surface-container-lowest": "#0d0e11",
+            "on-primary-fixed-variant": "#604100",
+            "surface-container-highest": "#343538",
+            "tertiary": "#dacfa9",
+            "surface-bright": "#38393c",
+            "on-background": "#e3e2e6",
+            "secondary-container": "#920801",
+            "secondary": "#ffb4a7",
+            "primary-container": "#e5a93c",
+            "surface-variant": "#343538",
+            "outline": "#9d8f7c",
+            "on-primary": "#432c00",
+            "surface-dim": "#121316",
+            "inverse-on-surface": "#2f3034",
+            "outline-variant": "#504535",
+            "tertiary-container": "#beb38f",
+            "on-secondary-fixed-variant": "#920801",
+            "on-primary-fixed": "#281900",
+            "surface": "#121316",
+            "secondary-fixed": "#ffdad4",
+            "on-error-container": "#ffdad6",
+            "on-surface": "#e3e2e6",
+            "on-primary-container": "#5e4000",
+            "inverse-primary": "#7e5700",
+            "inverse-surface": "#e3e2e6",
+            "surface-container": "#1f1f23",
+            "surface-tint": "#fabc4d",
+            "error-container": "#93000a",
+            "primary-fixed": "#ffdead",
+            "on-tertiary-container": "#4c4529",
+            "on-surface-variant": "#d4c4b0",
+            "error": "#ffb4ab",
+            "surface-container-low": "#1b1b1f",
+            "tertiary-fixed": "#eee2bc",
+            "on-tertiary": "#373016",
+            "primary": "#ffc665",
+            "surface-container-high": "#292a2d",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "background": "#121316",
+            "on-secondary-fixed": "#400100",
+            "on-secondary": "#680300",
+            "on-tertiary-fixed": "#211b04",
+            "on-error": "#690005"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "0.75rem",
+            "space-sm": "0.5rem",
+            "margin": "0.75rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem"
+          },
+          "fontFamily": {
+            "body-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "headline-sm": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"],
+            "body-lg": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "label-sm": ["9px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "500" }],
+            "label-md": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "readout-numeric": ["20px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+            "headline-sm": ["15px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Fixed 1280x628 Standalone Touchscreen Canvas */
+    body {
+      width: 1280px;
+      height: 628px;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      background-color: #0e0a12;
+      color: #f6effc;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .chassis-screws::before, .chassis-screws::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #2d2338 30%, #08050c 100%);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.15), 0 1px 1px rgba(0,0,0,0.8);
+      z-index: 20;
+    }
+    .chassis-screws::before { top: 6px; left: 6px; }
+    .chassis-screws::after { top: 6px; right: 6px; }
+
+    /* Industrial Potentiometer Styling */
+    .dial-knob {
+      background: radial-gradient(circle at 40% 35%, #2a1f38 0%, #150f1d 70%, #0c0812 100%);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.18), inset 0 -2px 3px rgba(0,0,0,0.85);
+    }
+    .dial-indicator {
+      transform-origin: bottom center;
+    }
+    .recessed-well {
+      background-color: #0d0716;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.95), inset 0 0 2px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05);
+    }
+  </style>
+</head>
+<body class="font-body-md select-none relative bg-[#0e0a12] text-[#f6effc]">
+<!-- TOP APP BAR / HEADER (h=44px) -->
+<header class="w-full h-11 bg-surface-container-lowest flex items-center justify-between px-space-md border-b border-outline-variant z-40 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]">
+<!-- Brand / Title -->
+<div class="flex items-center space-x-3">
+<div class="w-2.5 h-2.5 rounded-full bg-[#c993ff] shadow-[0_0_8px_#c993ff]"></div>
+<h1 class="text-headline-sm font-headline-sm text-primary tracking-wider uppercase">SUPER ARP // SCHWUNG MIDI FX</h1>
+<span class="text-label-sm font-label-sm text-[#d5c7e3] opacity-60">STANDALONE HARDWARE v2.4</span>
+</div>
+<!-- Central Mode Tabs -->
+<nav class="flex items-center space-x-2">
+<button class="px-3 py-1 text-label-md font-label-md rounded border-b-2 border-primary text-primary font-bold bg-[#1e1329] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+        MAIN
+      </button>
+<button class="px-3 py-1 text-label-md font-label-md rounded border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-transform duration-75">
+        PATTERN
+      </button>
+<button class="px-3 py-1 text-label-md font-label-md rounded border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-transform duration-75">
+        MODIFY
+      </button>
+</nav>
+<!-- Hardware Status Badges (Strictly No Audio Audition) -->
+<div class="flex items-center space-x-2">
+<div class="px-2 py-0.5 rounded bg-[#160d22] border border-[#3f3150] flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#c993ff] animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-[#c993ff]">MIDI ROUTE: ACTIVE</span>
+</div>
+<div class="px-2 py-0.5 rounded bg-[#160d22] border border-[#3f3150] flex items-center space-x-1.5">
+<span class="text-label-sm font-label-sm text-[#d5c7e3]">CLOCK: INTERNAL 124 BPM</span>
+</div>
+<div class="px-2 py-0.5 rounded bg-[#160d22] border border-[#3f3150] flex items-center space-x-1.5">
+<span class="text-label-sm font-label-sm text-[#fabc4d]">PORT: DIN-A</span>
+</div>
+<div class="flex items-center space-x-1 pl-1">
+<button class="w-7 h-7 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:translate-y-0.5">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="w-7 h-7 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:translate-y-0.5">
+<span class="material-symbols-outlined text-[16px]">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- WORKSPACE RACK (1280 x 528 internal area) -->
+<main class="relative w-full h-[528px] p-[10px] grid grid-cols-12 gap-[10px]">
+<!-- ========================================== -->
+<!-- FRAME 1: CLOCK (x=10, y=92, w=626, h=304) -->
+<!-- ========================================== -->
+<section class="col-span-6 h-[278px] bg-[#18121e] border border-[#3f3150] rounded relative p-3 flex flex-col justify-between chassis-screws shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+<!-- Module Header -->
+<div class="flex items-center justify-between border-b border-[#3f3150] pb-1.5">
+<div class="flex items-center space-x-2">
+<div class="w-1.5 h-3 bg-[#a764e8] rounded-sm"></div>
+<span class="text-label-md font-label-md text-[#f6effc] font-bold tracking-wider">CLOCK &amp; TIMING</span>
+</div>
+<span class="text-label-sm font-label-sm text-[#d5c7e3] opacity-70">SRC // INT.OSC</span>
+</div>
+<!-- Controls Matrix -->
+<div class="grid grid-cols-12 gap-3 items-center flex-1 py-2">
+<!-- SYNC Enum (Vertical) -->
+<div class="col-span-3 flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1.5">SYNC</span>
+<div class="w-full bg-[#0d0716] border border-[#3f3150] rounded p-1 flex flex-col space-y-1">
+<button class="w-full py-1 text-label-sm font-label-sm rounded bg-[#a764e8] text-[#f6effc] font-bold shadow-[0_0_6px_rgba(167,100,232,0.5)]">
+              INTERNAL
+            </button>
+<button class="w-full py-1 text-label-sm font-label-sm rounded text-[#d5c7e3] opacity-50 hover:opacity-90">
+              CLOCK
+            </button>
+</div>
+</div>
+<!-- RATE Enum (Vertical) -->
+<div class="col-span-3 flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1.5">RATE</span>
+<div class="w-full bg-[#0d0716] border border-[#3f3150] rounded p-1 flex flex-col space-y-1">
+<button class="w-full py-0.5 text-label-sm font-label-sm rounded text-[#d5c7e3] opacity-50 hover:opacity-90">
+              1/32
+            </button>
+<button class="w-full py-0.5 text-label-sm font-label-sm rounded bg-[#c993ff] text-[#0d0716] font-bold shadow-[0_0_6px_rgba(201,147,255,0.7)]">
+              1/16
+            </button>
+<button class="w-full py-0.5 text-label-sm font-label-sm rounded text-[#d5c7e3] opacity-50 hover:opacity-90">
+              1/8
+            </button>
+<button class="w-full py-0.5 text-label-sm font-label-sm rounded text-[#d5c7e3] opacity-50 hover:opacity-90">
+              1/4
+            </button>
+</div>
+</div>
+<!-- TRIPLET Push Toggle (w=64, h=50) -->
+<div class="col-span-2 flex flex-col items-center justify-center">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1.5">MODE</span>
+<button class="w-16 h-[50px] rounded bg-[#1e1329] border border-[#3f3150] flex flex-col items-center justify-center active:translate-y-0.5 transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_3px_0_#09050e,0_4px_6px_rgba(0,0,0,0.6)]">
+<div class="w-2.5 h-1 rounded bg-[#3f3150] mb-1"></div>
+<span class="text-label-sm font-label-sm text-[#d5c7e3] font-bold">TRIPLET</span>
+<span class="text-[8px] font-label-sm text-[#a764e8]">OFF</span>
+</button>
+</div>
+<!-- BPM Rotary Knob (r=38, 124.0) -->
+<div class="col-span-4 flex flex-col items-center justify-center">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1">TEMPO (BPM)</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<!-- Knob track arc -->
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle cx="38" cy="38" fill="none" r="33" stroke="#251a30" stroke-width="4"></circle>
+<circle cx="38" cy="38" fill="none" r="33" stroke="#c993ff" stroke-dasharray="207" stroke-dashoffset="80" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<!-- Physical knob body -->
+<div class="dial-knob w-14 h-14 rounded-full flex items-center justify-center relative cursor-ns-resize border border-[#3f3150]">
+<div class="w-1 h-4 bg-[#c993ff] rounded-full absolute -top-0.5 shadow-[0_0_6px_#c993ff]"></div>
+<span class="material-symbols-outlined text-[18px] text-[#a764e8] opacity-40">speed</span>
+</div>
+</div>
+<!-- Numeric Readout -->
+<div class="mt-1 px-3 py-0.5 rounded recessed-well border border-[#3f3150]">
+<span class="text-readout-numeric font-readout-numeric text-[#c993ff]">124.0</span>
+</div>
+</div>
+</div>
+<!-- Module Footer / Meta -->
+<div class="flex items-center justify-between text-label-sm font-label-sm text-[#d5c7e3] opacity-60 border-t border-[#3f3150] pt-1">
+<span>PPQN: 96</span>
+<span>JITTER: &lt; 0.2ms</span>
+</div>
+</section>
+<!-- ============================================= -->
+<!-- FRAME 2: MIDI OUT (x=642, y=92, w=626, h=304) -->
+<!-- ============================================= -->
+<section class="col-span-6 h-[278px] bg-[#18121e] border border-[#3f3150] rounded relative p-3 flex flex-col justify-between chassis-screws shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+<!-- Module Header -->
+<div class="flex items-center justify-between border-b border-[#3f3150] pb-1.5">
+<div class="flex items-center space-x-2">
+<div class="w-1.5 h-3 bg-[#c993ff] rounded-sm"></div>
+<span class="text-label-md font-label-md text-[#f6effc] font-bold tracking-wider">REAL-TIME MIDI EVENT STREAM</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-label-sm font-label-sm text-[#c993ff] bg-[#221333] px-1.5 py-0.5 rounded border border-[#3f3150]">CH 01</span>
+<span class="text-label-sm font-label-sm text-[#d5c7e3] opacity-70">EVENT RATE: 32 EV/S</span>
+</div>
+</div>
+<!-- MIDI Matrix Monitor -->
+<div class="recessed-well rounded p-2 flex-1 my-2 flex flex-col justify-between border border-[#3f3150]">
+<!-- Pitch & Octave Visualizer -->
+<div class="grid grid-cols-16 gap-1 h-14 border-b border-[#251a30] pb-1">
+<!-- 16 Columns representing Step Notes -->
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#c993ff] h-8 rounded-xs shadow-[0_0_5px_#c993ff]"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">C3</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#a764e8] h-10 rounded-xs"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">E3</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#a764e8] h-12 rounded-xs"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">G3</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#c993ff] h-14 rounded-xs shadow-[0_0_5px_#c993ff]"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">B3</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#a764e8] h-9 rounded-xs"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">D4</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#a764e8] h-11 rounded-xs"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">G4</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#c993ff] h-13 rounded-xs shadow-[0_0_5px_#c993ff]"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">C5</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#a764e8] h-8 rounded-xs"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">B4</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#3f3150] h-2 rounded-xs opacity-40"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">-</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#a764e8] h-10 rounded-xs"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">G4</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#c993ff] h-12 rounded-xs shadow-[0_0_5px_#c993ff]"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">E4</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#a764e8] h-8 rounded-xs"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">C4</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#a764e8] h-10 rounded-xs"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">G3</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#c993ff] h-11 rounded-xs shadow-[0_0_5px_#c993ff]"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">E3</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#3f3150] h-2 rounded-xs opacity-40"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">-</span></div>
+<div class="flex flex-col justify-end items-center h-full"><div class="w-full bg-[#c993ff] h-7 rounded-xs shadow-[0_0_5px_#c993ff]"></div><span class="text-[7px] text-[#d5c7e3] mt-0.5">C3</span></div>
+</div>
+<!-- Velocity Strip Stream -->
+<div class="h-10 flex items-center justify-between px-1">
+<div class="flex flex-col justify-between h-full pr-2 border-r border-[#251a30]">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">VEL 127</span>
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">VEL 0</span>
+</div>
+<div class="flex-1 grid grid-cols-16 gap-1 h-full pl-2 items-end">
+<div class="bg-[#c993ff] h-4/5 w-full rounded-xs"></div>
+<div class="bg-[#a764e8] h-3/5 w-full rounded-xs"></div>
+<div class="bg-[#a764e8] h-3/4 w-full rounded-xs"></div>
+<div class="bg-[#c993ff] h-full w-full rounded-xs shadow-[0_0_4px_#c993ff]"></div>
+<div class="bg-[#a764e8] h-2/3 w-full rounded-xs"></div>
+<div class="bg-[#a764e8] h-3/4 w-full rounded-xs"></div>
+<div class="bg-[#c993ff] h-4/5 w-full rounded-xs"></div>
+<div class="bg-[#a764e8] h-1/2 w-full rounded-xs"></div>
+<div class="bg-[#3f3150] h-1 w-full rounded-xs opacity-30"></div>
+<div class="bg-[#a764e8] h-3/4 w-full rounded-xs"></div>
+<div class="bg-[#c993ff] h-4/5 w-full rounded-xs"></div>
+<div class="bg-[#a764e8] h-2/3 w-full rounded-xs"></div>
+<div class="bg-[#a764e8] h-1/2 w-full rounded-xs"></div>
+<div class="bg-[#c993ff] h-4/5 w-full rounded-xs"></div>
+<div class="bg-[#3f3150] h-1 w-full rounded-xs opacity-30"></div>
+<div class="bg-[#c993ff] h-3/5 w-full rounded-xs"></div>
+</div>
+</div>
+<!-- MIDI Activity Ticker -->
+<div class="flex items-center justify-between text-[9px] font-label-sm text-[#c993ff] bg-[#140b20] px-2 py-0.5 rounded border border-[#2b1e3b]">
+<span>LAST NOTE ON: C5 (72)</span>
+<span>GATE: 140ms</span>
+<span>TRANS: +12 ST</span>
+<span>BUFFER: 0ms OK</span>
+</div>
+</div>
+<!-- Module Footer / Meta -->
+<div class="flex items-center justify-between text-label-sm font-label-sm text-[#d5c7e3] opacity-60 border-t border-[#3f3150] pt-1">
+<span>DEST: DIN-A HARDWARE</span>
+<span>POLYPHONIC STREAM</span>
+</div>
+</section>
+<!-- ============================================ -->
+<!-- FRAME 3: PLAY (x=10, y=404, w=1258, h=220) -->
+<!-- ============================================ -->
+<section class="col-span-12 h-[228px] bg-[#18121e] border border-[#3f3150] rounded relative p-3 flex flex-col justify-between chassis-screws shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+<!-- Module Header -->
+<div class="flex items-center justify-between border-b border-[#3f3150] pb-1.5">
+<div class="flex items-center space-x-2">
+<div class="w-1.5 h-3 bg-[#a764e8] rounded-sm"></div>
+<span class="text-label-md font-label-md text-[#f6effc] font-bold tracking-wider">PLAY &amp; PERFORMANCE MATRIX</span>
+</div>
+<!-- 1-16 Step Pulse Sequencer Indicator -->
+<div class="flex items-center space-x-1">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mr-2">STEPS:</span>
+<!-- 16 Step LEDs -->
+<div class="flex items-center space-x-1.5 bg-[#0d0716] px-2 py-1 rounded border border-[#3f3150]">
+<div class="w-2 h-2 rounded-xs bg-[#c993ff] shadow-[0_0_6px_#c993ff]"></div>
+<div class="w-2 h-2 rounded-xs bg-[#c993ff] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#c993ff] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#c993ff] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#a764e8] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#a764e8] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#a764e8] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#a764e8] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#c993ff] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#c993ff] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#c993ff] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#c993ff] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#a764e8] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#a764e8] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#a764e8] opacity-40"></div>
+<div class="w-2 h-2 rounded-xs bg-[#a764e8] opacity-40"></div>
+</div>
+</div>
+</div>
+<!-- Controls Layout -->
+<div class="grid grid-cols-12 gap-4 items-center flex-1 py-1">
+<!-- Toggle LATCH (w=64, h=50, ON) -->
+<div class="col-span-2 flex flex-col items-center justify-center border-r border-[#3f3150] pr-2">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1.5">LATCH STATE</span>
+<button class="w-16 h-[50px] rounded bg-[#2b173e] border border-[#a764e8] flex flex-col items-center justify-center active:translate-y-0.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_0_10px_rgba(167,100,232,0.4)]">
+<div class="w-3 h-1.5 rounded-full bg-[#c993ff] mb-1 shadow-[0_0_8px_#c993ff]"></div>
+<span class="text-label-sm font-label-sm text-[#f6effc] font-bold">LATCH</span>
+<span class="text-[8px] font-label-sm text-[#c993ff] font-bold">ON</span>
+</button>
+</div>
+<!-- Selector OCTAVES (w=134, h=48, 2 OCT) -->
+<div class="col-span-2 flex flex-col items-center justify-center border-r border-[#3f3150] pr-2">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1.5">OCTAVE RANGE</span>
+<div class="w-[134px] h-[48px] rounded bg-[#0d0716] border border-[#3f3150] flex items-center justify-between px-3 relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]">
+<button class="text-[#a764e8] hover:text-[#c993ff] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="text-label-lg font-label-lg text-[#c993ff] font-bold">2 OCT</span>
+<span class="text-[8px] font-label-sm text-[#d5c7e3] opacity-60">RANGE: -1/+1</span>
+</div>
+<button class="text-[#a764e8] hover:text-[#c993ff] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- 4 Rotary Collet Knobs (GATE, VELOCITY, SWING, VOICES) -->
+<div class="col-span-8 grid grid-cols-4 gap-2 items-center pl-2">
+<!-- KNOB 1: GATE (80%) -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1">GATE</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle cx="38" cy="38" fill="none" r="32" stroke="#251a30" stroke-width="4"></circle>
+<circle cx="38" cy="38" fill="none" r="32" stroke="#a764e8" stroke-dasharray="201" stroke-dashoffset="40" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="dial-knob w-14 h-14 rounded-full flex items-center justify-center relative border border-[#3f3150]">
+<div class="w-1 h-4 bg-[#c993ff] rounded-full absolute -top-0.5 shadow-[0_0_5px_#c993ff] rotate-[45deg]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-[#18121e] border border-[#3f3150]"></div>
+</div>
+</div>
+<div class="mt-1 px-2.5 py-0.5 rounded recessed-well border border-[#3f3150]">
+<span class="text-label-md font-label-md text-[#c993ff]">80%</span>
+</div>
+</div>
+<!-- KNOB 2: VELOCITY (104) -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1">VELOCITY</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle cx="38" cy="38" fill="none" r="32" stroke="#251a30" stroke-width="4"></circle>
+<circle cx="38" cy="38" fill="none" r="32" stroke="#a764e8" stroke-dasharray="201" stroke-dashoffset="36" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="dial-knob w-14 h-14 rounded-full flex items-center justify-center relative border border-[#3f3150]">
+<div class="w-1 h-4 bg-[#c993ff] rounded-full absolute -top-0.5 shadow-[0_0_5px_#c993ff] rotate-[60deg]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-[#18121e] border border-[#3f3150]"></div>
+</div>
+</div>
+<div class="mt-1 px-2.5 py-0.5 rounded recessed-well border border-[#3f3150]">
+<span class="text-label-md font-label-md text-[#c993ff]">104</span>
+</div>
+</div>
+<!-- KNOB 3: SWING (58%) -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1">SWING</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle cx="38" cy="38" fill="none" r="32" stroke="#251a30" stroke-width="4"></circle>
+<circle cx="38" cy="38" fill="none" r="32" stroke="#a764e8" stroke-dasharray="201" stroke-dashoffset="84" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="dial-knob w-14 h-14 rounded-full flex items-center justify-center relative border border-[#3f3150]">
+<div class="w-1 h-4 bg-[#c993ff] rounded-full absolute -top-0.5 shadow-[0_0_5px_#c993ff] rotate-[10deg]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-[#18121e] border border-[#3f3150]"></div>
+</div>
+</div>
+<div class="mt-1 px-2.5 py-0.5 rounded recessed-well border border-[#3f3150]">
+<span class="text-label-md font-label-md text-[#c993ff]">58%</span>
+</div>
+</div>
+<!-- KNOB 4: VOICES (8 VOX) -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-[#d5c7e3] mb-1">VOICES</span>
+<div class="relative w-[76px] h-[76px] flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle cx="38" cy="38" fill="none" r="32" stroke="#251a30" stroke-width="4"></circle>
+<circle cx="38" cy="38" fill="none" r="32" stroke="#a764e8" stroke-dasharray="201" stroke-dashoffset="100" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+<div class="dial-knob w-14 h-14 rounded-full flex items-center justify-center relative border border-[#3f3150]">
+<div class="w-1 h-4 bg-[#c993ff] rounded-full absolute -top-0.5 shadow-[0_0_5px_#c993ff] rotate-[-20deg]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-[#18121e] border border-[#3f3150]"></div>
+</div>
+</div>
+<div class="mt-1 px-2.5 py-0.5 rounded recessed-well border border-[#3f3150]">
+<span class="text-label-md font-label-md text-[#c993ff]">8 VOX</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Play Panel Footnote -->
+<div class="flex items-center justify-between text-label-sm font-label-sm text-[#d5c7e3] opacity-60 border-t border-[#3f3150] pt-1">
+<span>NOTE PRIORITY: LAST NOTE</span>
+<span>MOD WHEEL: PASS-THRU</span>
+<span>SCHWUNG ENGINE ENGAGED</span>
+</div>
+</section>
+</main>
+<!-- ======================================================== -->
+<!-- BOTTOM Q-LINK HARDWARE ENCODER DOCK (Fixed 56px, 10 Encoders) -->
+<!-- ======================================================== -->
+<footer class="w-full h-14 bg-surface-container-lowest border-t border-outline-variant flex items-center justify-between px-space-md z-40 relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.85)]">
+<!-- Bank Indicator -->
+<div class="flex flex-col items-center justify-center pr-3 border-r border-[#3f3150] h-full">
+<span class="text-[8px] font-label-sm text-[#a764e8] font-bold">Q-LINK</span>
+<span class="text-label-md font-label-md text-[#f6effc] font-bold">BANK 1</span>
+</div>
+<!-- 10 Q-Link Hardware Knobs mapped exactly to specifications -->
+<div class="flex-1 grid grid-cols-10 gap-1.5 px-2">
+<!-- Q1: SYNC -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-space-md py-1 rounded">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q1</span>
+<span class="text-label-sm font-label-sm font-bold truncate">SYNC</span>
+</div>
+<!-- Q2: RATE -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q2</span>
+<span class="text-label-sm font-label-sm font-bold truncate">RATE</span>
+</div>
+<!-- Q3: TRIPLET -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q3</span>
+<span class="text-label-sm font-label-sm font-bold truncate">TRIPLET</span>
+</div>
+<!-- Q4: BPM -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q4</span>
+<span class="text-label-sm font-label-sm font-bold truncate">BPM</span>
+</div>
+<!-- Q5: LATCH -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q5</span>
+<span class="text-label-sm font-label-sm font-bold truncate">LATCH</span>
+</div>
+<!-- Q6: OCTAVES -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q6</span>
+<span class="text-label-sm font-label-sm font-bold truncate">OCTAVES</span>
+</div>
+<!-- Q7: GATE -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q7</span>
+<span class="text-label-sm font-label-sm font-bold truncate">GATE</span>
+</div>
+<!-- Q8: VELOCITY -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q8</span>
+<span class="text-label-sm font-label-sm font-bold truncate">VELOCITY</span>
+</div>
+<!-- Q9: SWING -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q9</span>
+<span class="text-label-sm font-label-sm font-bold truncate">SWING</span>
+</div>
+<!-- Q10: VOICES -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<span class="text-[8px] font-label-sm text-[#d5c7e3]">Q10</span>
+<span class="text-label-sm font-label-sm font-bold truncate">VOICES</span>
+</div>
+</div>
+<!-- Quick Lock Action -->
+<div class="flex items-center pl-2 border-l border-[#3f3150] h-full">
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary active:scale-95">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+</div>
+</footer>
+</body></html>
