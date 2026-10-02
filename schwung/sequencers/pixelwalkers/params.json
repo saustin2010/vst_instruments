@@ -1,0 +1,80 @@
+{
+ "name": "Pixel Walkers",
+ "params": [
+  {
+   "key": "birth_note",
+   "name": "BIRTH NOTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "birth_level",
+   "name": "BIRTH LEVEL",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "hit_level",
+   "name": "HIT LEVEL",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "hit_decay",
+   "name": "HIT DECAY",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 0.01
+  },
+  {
+   "key": "randomize",
+   "name": "RANDOMIZE",
+   "options": [
+    "-",
+    "GO"
+   ],
+   "default": 0,
+   "momentary": true
+  },
+  {
+   "key": "bounce",
+   "name": "BOUNCE",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "hardness",
+   "name": "HARDNESS",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "kill_all",
+   "name": "KILL ALL",
+   "options": [
+    "-",
+    "GO"
+   ],
+   "default": 0,
+   "momentary": true
+  },
+  {
+   "key": "tombola",
+   "name": "TOMBOLA",
+   "min": 0.0,
+   "max": 1.0
+  }
+ ]
+}

@@ -1,0 +1,1088 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport">
+<title>WURL // ELECTRIC PIANO - Akai MPC Live II</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#e3e2e6",
+            "outline-variant": "#504535",
+            "primary-fixed": "#ffdead",
+            "on-secondary-fixed": "#400100",
+            "surface-container-high": "#292a2d",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "surface-container": "#1f1f23",
+            "on-surface": "#e3e2e6",
+            "inverse-primary": "#7e5700",
+            "on-error-container": "#ffdad6",
+            "on-error": "#690005",
+            "on-primary-fixed-variant": "#604100",
+            "secondary-fixed": "#ffdad4",
+            "on-tertiary": "#373016",
+            "tertiary": "#dacfa9",
+            "primary-fixed-dim": "#fabc4d",
+            "tertiary-container": "#beb38f",
+            "tertiary-fixed": "#eee2bc",
+            "outline": "#9d8f7c",
+            "secondary": "#ffb4a7",
+            "on-tertiary-fixed": "#211b04",
+            "surface": "#121316",
+            "surface-container-lowest": "#0d0e11",
+            "on-secondary": "#680300",
+            "error-container": "#93000a",
+            "on-secondary-fixed-variant": "#920801",
+            "inverse-on-surface": "#2f3034",
+            "primary": "#ffc665",
+            "surface-bright": "#38393c",
+            "background": "#121316",
+            "primary-container": "#e5a93c",
+            "inverse-surface": "#e3e2e6",
+            "secondary-container": "#920801",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-primary": "#432c00",
+            "on-primary-container": "#5e4000",
+            "on-secondary-container": "#ff9a89",
+            "surface-variant": "#343538",
+            "error": "#ffb4ab",
+            "surface-container-low": "#1b1b1f",
+            "on-tertiary-container": "#4c4529",
+            "surface-tint": "#fabc4d",
+            "surface-dim": "#121316",
+            "on-surface-variant": "#d4c4b0",
+            "surface-container-highest": "#343538",
+            "on-primary-fixed": "#281900"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "gutter": "0.75rem",
+            "space-md": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem",
+            "margin": "0.75rem",
+            "space-xl": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-md": ["Space Grotesk"],
+            "label-md": ["JetBrains Mono"],
+            "headline-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "headline-sm": ["15px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-lg": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "body-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "readout-numeric": ["20px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+            "body-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "label-md": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["9px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Physical Hardware Skeuomorphic & Micro-textures */
+    :root {
+      --wurl-bg: #2b1d14;
+      --wurl-panel: #efe6d2;
+      --wurl-line: #b9a98a;
+      --wurl-ink: #2a2018;
+      --wurl-ink-dim: #4a3d30;
+      --wurl-ink-faint: #8a7a62;
+      --wurl-accent: #b5532b;
+      --wurl-accent-hi: #d4622e;
+      --wurl-knob-face: #efe9dc;
+      --wurl-knob-ring: #6b5a45;
+      --wurl-knob-dot: #b5532b;
+    }
+
+    body {
+      background-color: #0b0705;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      overflow: hidden;
+    }
+
+    .mpc-viewport {
+      width: 1280px;
+      height: 628px;
+      background: var(--wurl-bg);
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(212, 98, 46, 0.12) 0%, transparent 70%),
+        repeating-linear-gradient(0deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18) 1px, transparent 1px, transparent 2px);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.95), 0 0 0 2px #18110b;
+    }
+
+    /* Milled Enclosure Panel (Wurlitzer Cream Tolex / Enamel) */
+    .cream-panel {
+      background-color: var(--wurl-panel);
+      background-image: 
+        linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 2px, rgba(0,0,0,0.04) 100%),
+        radial-gradient(#d8ccb0 1px, transparent 1px);
+      background-size: 100% 100%, 6px 6px;
+      box-shadow: 
+        inset 0 1px 1px rgba(255,255,255,0.7),
+        inset 0 -2px 3px rgba(0,0,0,0.22),
+        0 4px 10px rgba(0,0,0,0.65),
+        0 1px 2px rgba(0,0,0,0.8);
+      border: 1px solid var(--wurl-line);
+    }
+
+    /* Recessed Wells for Displays & Scopes */
+    .recessed-well {
+      background: #110e0c;
+      box-shadow: 
+        inset 0 3px 6px rgba(0,0,0,0.9),
+        inset 0 0 2px rgba(0,0,0,0.95),
+        0 1px 0 rgba(255,255,255,0.1);
+      border: 1px solid #3c3026;
+    }
+
+    /* Faux Hex Screw Head */
+    .hex-screw {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #9a9080, #362e24);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.4), 0 1px 1px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    .hex-screw::after {
+      content: '';
+      position: absolute;
+      top: 3.5px;
+      left: 1.5px;
+      width: 5px;
+      height: 1px;
+      background: #1a1610;
+      transform: rotate(32deg);
+    }
+
+    /* Vintage Fluted Moog Knob Styling */
+    .knob-assembly {
+      touch-action: none;
+      position: relative;
+    }
+
+    .knob-body {
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.55),
+        0 2px 4px rgba(0,0,0,0.7),
+        inset 0 2px 2px rgba(255,255,255,0.6),
+        inset 0 -2px 4px rgba(0,0,0,0.4);
+      background: radial-gradient(circle at 45% 40%, var(--wurl-knob-face) 0%, #dbd0be 70%, var(--wurl-knob-ring) 100%);
+      border: 2px solid #5a4936;
+    }
+
+    .knob-pointer {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      width: 3px;
+      height: 12px;
+      transform: translateX(-50%);
+      background-color: var(--wurl-knob-dot);
+      border-radius: 1.5px;
+      box-shadow: 0 0 3px rgba(181, 83, 43, 0.8), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    /* Fluted grooves along the Moog knob rim */
+    .knob-grooves {
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: repeating-conic-gradient(
+        from 0deg,
+        rgba(0,0,0,0.2) 0deg 4deg,
+        transparent 4deg 12deg
+      );
+    }
+
+    /* Gold Emblem Foil */
+    .gold-foil {
+      background: linear-gradient(135deg, #e3c076 0%, #b89146 30%, #ffd98a 50%, #8c6a28 85%, #f1d387 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+    }
+
+    /* CRT / Reed Screen Scanlines */
+    .reed-scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+      background-size: 100% 4px;
+    }
+
+    /* Optical Vibrato Pulse */
+    @keyframes opto-pulse-l {
+      0%, 100% { opacity: 0.2; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 14px #d4622e; }
+    }
+    @keyframes opto-pulse-r {
+      0%, 100% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 14px #d4622e; }
+      50% { opacity: 0.2; transform: scale(0.9); }
+    }
+    .opto-lamp-l {
+      animation: opto-pulse-l 1.3s infinite ease-in-out;
+    }
+    .opto-lamp-r {
+      animation: opto-pulse-r 1.3s infinite ease-in-out;
+    }
+
+    /* Custom scroll hide */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 m-0 bg-black">
+<!-- STANDALONE MPC LIVE II SCREEN CONTAINER (Strict 1280x628 Viewport) -->
+<div class="mpc-viewport relative flex flex-col justify-between select-none overflow-hidden text-on-surface">
+<!-- ========================================================================= -->
+<!-- TOP APP BAR (Shared Component: TopNavBar with MPC WURL Header Spec) -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-11 bg-surface-container-lowest border-b border-outline-variant text-on-surface">
+<!-- Brand & Vintage Badging -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="text-headline-sm font-headline-sm text-primary tracking-wider uppercase font-bold">WURL // ELECTRIC PIANO</span>
+<span class="px-1.5 py-0.5 text-[9px] font-label-sm font-bold tracking-widest bg-secondary-container text-secondary rounded border border-outline-variant uppercase">
+            MODEL 200A // PHYSICAL REED MODELING
+          </span>
+</div>
+</div>
+<!-- Navigation tabs / Engines from Shared Spec -->
+<nav class="flex items-center gap-space-md">
+<button class="text-primary border-b-2 border-primary font-bold py-1 text-label-md font-label-md transition-transform duration-75 active:translate-y-0.5 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+          WURL
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 text-label-md font-label-md transition-transform duration-75 active:translate-y-0.5">
+          FILTER
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 text-label-md font-label-md transition-transform duration-75 active:translate-y-0.5">
+          ENV
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 text-label-md font-label-md transition-transform duration-75 active:translate-y-0.5">
+          LFO
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 text-label-md font-label-md transition-transform duration-75 active:translate-y-0.5">
+          FX
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 text-label-md font-label-md transition-transform duration-75 active:translate-y-0.5">
+          MOD
+        </button>
+</nav>
+<!-- Trailing Hardware Indicators & Quick Actions -->
+<div class="flex items-center gap-space-md">
+<!-- DSP Readout Well -->
+<div class="flex items-center gap-2 px-2 py-0.5 bg-[#120e0b] border border-outline-variant rounded text-label-sm font-label-sm text-[#d4c4b0]">
+<span class="text-primary font-bold">48kHz / 24-bit</span>
+<span class="text-outline">|</span>
+<span>DSP: <strong class="text-primary font-bold">6%</strong></span>
+</div>
+<!-- Trailing Actions from JSON -->
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container-high hover:bg-surface-container text-primary border border-outline-variant rounded active:translate-y-0.5">
+            PRESET
+          </button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm bg-primary-container text-on-primary-container font-bold rounded active:translate-y-0.5">
+            SAVE
+          </button>
+</div>
+<!-- Action Icons -->
+<div class="flex items-center gap-1 border-l border-outline-variant pl-2">
+<button class="p-1 text-on-surface-variant hover:text-primary active:scale-95" title="Tune Settings">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-primary active:scale-95" title="Graphic EQ">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-primary active:scale-95" title="Global Setup">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN TOUCH WORKSPACE (wurl.txt Physical Layout Specification) -->
+<!-- Coordinate Space: 1280 wide, y=44 to y=572 (h=528) -->
+<!-- ========================================================================= -->
+<main class="relative w-full h-[528px] mt-11 px-space-md py-2 overflow-hidden flex flex-col justify-between">
+<!-- TOP ROW OF RACK PANELS (Height ~244px) -->
+<div class="grid grid-cols-12 gap-space-md h-[252px]">
+<!-- 1. PRESET FRAME (x=10, y=92, w=310, h=304 scaled to rack grid) -->
+<div class="col-span-3 cream-panel rounded-lg p-2.5 flex flex-col justify-between relative">
+<!-- Hex screws -->
+<span class="hex-screw absolute top-1.5 left-1.5"></span>
+<span class="hex-screw absolute top-1.5 right-1.5"></span>
+<span class="hex-screw absolute bottom-1.5 left-1.5"></span>
+<span class="hex-screw absolute bottom-1.5 right-1.5"></span>
+<!-- Panel Header -->
+<div class="flex items-center justify-between border-b border-[#b9a98a] pb-1">
+<span class="text-label-md font-label-md text-[#2a2018] tracking-widest font-bold uppercase">PRESET</span>
+<span class="text-[9px] font-label-sm text-[#8a7a62] font-semibold">BANK 1 // MEMORY</span>
+</div>
+<!-- Vintage Preset Selector Screen Well -->
+<div class="recessed-well rounded p-2 flex flex-col justify-between h-[84px] cursor-pointer hover:border-[#b5532b] transition-colors" id="presetSelectorTrigger">
+<div class="flex items-center justify-between text-[#8a7a62] text-[10px] font-label-sm">
+<span>ACTIVE PROGRAM</span>
+<span class="text-primary font-bold animate-pulse">● LOADED</span>
+</div>
+<div class="text-[#f5ebd7] font-label-lg text-[13px] tracking-wide font-bold flex items-center justify-between">
+<span class="truncate" id="activePresetTitle">01: 1974 SUITCASE CLASSIC</span>
+<span class="material-symbols-outlined text-primary text-[18px]">arrow_drop_down</span>
+</div>
+<div class="flex items-center justify-between text-[9px] font-label-sm text-[#9d8f7c]">
+<span>REED: STEEL-TINNED</span>
+<span>PICKUP: ELECTROSTATIC</span>
+</div>
+</div>
+<!-- Physical Reed & Pickup Geometry Visual Diagram -->
+<div class="recessed-well rounded p-1.5 relative overflow-hidden h-[98px] flex flex-col justify-between">
+<div class="text-[8px] font-label-sm text-[#8a7a62] flex justify-between">
+<span>PHYSICAL REED &amp; PICKUP GAP</span>
+<span class="text-[#d4622e] font-mono">0.38 mm DETENT</span>
+</div>
+<!-- Physical Diagram SVG -->
+<svg class="w-full h-14" fill="none" viewBox="0 0 280 65">
+<!-- Reed base anchor -->
+<rect fill="#3c3026" height="24" rx="2" stroke="#6b5a45" stroke-width="1.5" width="30" x="10" y="24"></rect>
+<circle cx="25" cy="36" fill="#1a140f" r="3" stroke="#8a7a62"></circle>
+<!-- Weighted Reed Blade -->
+<path d="M 40 36 C 90 36, 170 34, 210 33 L 210 39 C 170 38, 90 36, 40 36 Z" fill="url(#reedGrad)" id="reedVibePath"></path>
+<!-- Solder Pyramid Weight on Tip -->
+<polygon fill="#b89146" points="200,31 216,36 200,41" stroke="#ffd98a" stroke-width="0.75"></polygon>
+<!-- Electrostatic Pickup Combs (Fixed polarized bar) -->
+<rect fill="#231c17" height="12" rx="1.5" stroke="#b5532b" stroke-width="1.5" width="55" x="180" y="8"></rect>
+<text fill="#ffdead" font-family="JetBrains Mono" font-size="7" font-weight="700" x="184" y="17">+180V DC POLAR</text>
+<line stroke="#d4622e" stroke-dasharray="2 1" stroke-width="1" x1="190" x2="190" y1="20" y2="28"></line>
+<line stroke="#d4622e" stroke-dasharray="2 1" stroke-width="1" x1="205" x2="205" y1="20" y2="28"></line>
+<line stroke="#d4622e" stroke-dasharray="2 1" stroke-width="1" x1="220" x2="220" y1="20" y2="28"></line>
+<!-- Hammer impact trajectory -->
+<path d="M 120 60 L 135 41" stroke="#b5532b" stroke-linecap="round" stroke-width="2"></path>
+<circle cx="135" cy="41" fill="#efe6d2" r="3" stroke="#2a2018"></circle>
+<defs>
+<linearGradient gradientUnits="userSpaceOnUse" id="reedGrad" x1="40" x2="210" y1="36" y2="36">
+<stop stop-color="#8a7a62"></stop>
+<stop offset="0.6" stop-color="#efe9dc"></stop>
+<stop offset="1" stop-color="#c4b59d"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="flex justify-between items-center text-[8px] font-label-sm text-[#7e6d58]">
+<span>HAMMER TIP: WOOL/NEOPRENE</span>
+<span class="text-[#ffdead]">SUITCASE VELOCITY CURVE</span>
+</div>
+</div>
+<div class="text-[9px] font-label-sm text-[#4a3d30] text-center font-bold tracking-wider">
+            Akai MPC Standalone DSP Core // Active
+          </div>
+</div>
+<!-- 2. TONE FRAME (x=326, y=92, w=626, h=304 scaled) -->
+<div class="col-span-6 cream-panel rounded-lg p-2.5 flex flex-col justify-between relative">
+<!-- Hex screws -->
+<span class="hex-screw absolute top-1.5 left-1.5"></span>
+<span class="hex-screw absolute top-1.5 right-1.5"></span>
+<span class="hex-screw absolute bottom-1.5 left-1.5"></span>
+<span class="hex-screw absolute bottom-1.5 right-1.5"></span>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-[#b9a98a] pb-1">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-[#2a2018] tracking-widest font-bold uppercase">TONE MATRIX</span>
+<span class="text-[9px] font-label-sm px-1.5 py-0.2 bg-[#d8ccb0] text-[#2a2018] rounded border border-[#b9a98a]">MODEL 200A EQ &amp; BARK</span>
+</div>
+<span class="text-[9px] font-label-sm text-[#8a7a62] font-semibold">REED DYNAMICS / HARMONIC EXCITERS</span>
+</div>
+<!-- Content Body: Left Knobs, Center Scope -->
+<div class="grid grid-cols-12 gap-2 h-[195px] items-center">
+<!-- 4 Vintage Knobs: BRIGHTNESS, DARKEN, BARK, TUNE -->
+<div class="col-span-7 grid grid-cols-4 gap-1 items-center justify-items-center">
+<!-- Knob 1: Brightness -->
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-label-md text-[#2a2018] font-bold tracking-wider">BRIGHT</span>
+<div class="knob-assembly my-1" data-knob="brightness" data-max="100" data-min="0" data-unit="%" data-value="68">
+<div class="w-14 h-14 rounded-full knob-body relative flex items-center justify-center cursor-pointer">
+<div class="knob-grooves"></div>
+<div class="w-7 h-7 rounded-full bg-[#3c3026] border border-[#78644e] flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-[#1a140f]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(42deg); transform-origin: center 23px;"></div>
+</div>
+</div>
+<div class="px-1.5 py-0.5 bg-[#120e0b] rounded border border-[#504535] text-[10px] font-label-sm text-primary font-bold" id="val-brightness">
+                  68%
+                </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">Q1 (10kHz)</span>
+</div>
+<!-- Knob 2: Darken -->
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-label-md text-[#2a2018] font-bold tracking-wider">DARKEN</span>
+<div class="knob-assembly my-1" data-knob="darken" data-max="100" data-min="0" data-unit="%" data-value="24">
+<div class="w-14 h-14 rounded-full knob-body relative flex items-center justify-center cursor-pointer">
+<div class="knob-grooves"></div>
+<div class="w-7 h-7 rounded-full bg-[#3c3026] border border-[#78644e] flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-[#1a140f]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(-72deg); transform-origin: center 23px;"></div>
+</div>
+</div>
+<div class="px-1.5 py-0.5 bg-[#120e0b] rounded border border-[#504535] text-[10px] font-label-sm text-primary font-bold" id="val-darken">
+                  24%
+                </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">Q2 (LO-PASS)</span>
+</div>
+<!-- Knob 3: Bark (Reed Saturation) -->
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-label-md text-[#b5532b] font-bold tracking-wider">BARK</span>
+<div class="knob-assembly my-1" data-knob="bark" data-max="100" data-min="0" data-unit="%" data-value="82">
+<div class="w-14 h-14 rounded-full knob-body relative flex items-center justify-center cursor-pointer ring-1 ring-[#b5532b]">
+<div class="knob-grooves"></div>
+<div class="w-7 h-7 rounded-full bg-[#3c3026] border border-[#b5532b] flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-[#b5532b]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(84deg); transform-origin: center 23px;"></div>
+</div>
+</div>
+<div class="px-1.5 py-0.5 bg-[#120e0b] rounded border border-[#b5532b] text-[10px] font-label-sm text-[#ff9a89] font-bold" id="val-bark">
+                  82%
+                </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">Q3 (NON-LIN)</span>
+</div>
+<!-- Knob 4: Tune -->
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-label-md text-[#2a2018] font-bold tracking-wider">TUNE</span>
+<div class="knob-assembly my-1" data-knob="tune" data-max="50" data-min="-50" data-unit="c" data-value="0">
+<div class="w-14 h-14 rounded-full knob-body relative flex items-center justify-center cursor-pointer">
+<div class="knob-grooves"></div>
+<div class="w-7 h-7 rounded-full bg-[#3c3026] border border-[#78644e] flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-[#1a140f]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(0deg); transform-origin: center 23px;"></div>
+</div>
+</div>
+<div class="px-1.5 py-0.5 bg-[#120e0b] rounded border border-[#504535] text-[10px] font-label-sm text-primary font-bold" id="val-tune">
+                  0c
+                </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">Q4 (MASTER)</span>
+</div>
+</div>
+<!-- Reed Harmonic Vibration Curve Visualizer -->
+<div class="col-span-5 recessed-well rounded p-2 h-[180px] flex flex-col justify-between relative reed-scanlines">
+<div class="flex justify-between items-center text-[9px] font-label-sm text-[#9d8f7c]">
+<span class="text-[#ffdead] font-bold">REED HARMONICS</span>
+<span class="text-[#b5532b]">FFT SPECTRUM // 440 Hz</span>
+</div>
+<!-- Canvas Spectrum Scope -->
+<canvas class="w-full h-[110px] rounded" height="110" id="harmonicCanvas" width="230"></canvas>
+<div class="flex justify-between items-center text-[8px] font-label-sm text-[#706050] border-t border-[#29221b] pt-1">
+<span>H1: FUNDAMENTAL</span>
+<span>H3: ODD REED BARK</span>
+<span>H5: PICKUP FLUX</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-center text-[9px] font-label-sm text-[#4a3d30] font-semibold">
+<span>VELOCITY TO HARMONICS: +3.4 dB/OCT</span>
+<span>PHASE-ALIGNED REED EXCURSION</span>
+</div>
+</div>
+<!-- 3. VINTAGE WURLITZER WORDMARK / EMBLEM PLATE (x=958, y=92, w=310, h=304 scaled) -->
+<div class="col-span-3 rounded-lg p-3 flex flex-col justify-between relative border border-[#504535]" style="background: radial-gradient(circle at 50% 30%, #3a281d, #19100a 90%); box-shadow: inset 0 1px 1px rgba(255,255,255,0.15), 0 4px 10px rgba(0,0,0,0.85);">
+<!-- Hex screws on metal faceplate corners -->
+<span class="hex-screw absolute top-2 left-2"></span>
+<span class="hex-screw absolute top-2 right-2"></span>
+<span class="hex-screw absolute bottom-2 left-2"></span>
+<span class="hex-screw absolute bottom-2 right-2"></span>
+<!-- Gold embossed frame -->
+<div class="border-2 border-[#8c6a28] rounded p-3 h-full flex flex-col justify-between items-center text-center bg-[#150e09]/70 relative overflow-hidden">
+<!-- Vintage Guilloche background watermark -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle, #b89146 1px, transparent 1px); background-size: 8px 8px;"></div>
+<div class="text-[9px] font-label-sm tracking-widest text-[#d1c6a1] uppercase">THE ORIGINAL</div>
+<div class="my-auto flex flex-col items-center">
+<h1 class="text-2xl font-serif font-extrabold tracking-wider gold-foil" style="font-family: 'Space Grotesk', serif;">
+                Wurlitzer
+              </h1>
+<div class="w-32 h-0.5 bg-gradient-to-r from-transparent via-[#ffd98a] to-transparent my-1"></div>
+<p class="text-[11px] font-label-md tracking-widest text-[#ffdead] font-bold uppercase">
+                ELECTRONIC PIANO
+              </p>
+<span class="text-xl font-bold tracking-widest text-[#d4622e] font-headline-sm mt-0.5">
+                200 A
+              </span>
+</div>
+<div class="w-full border-t border-[#4a3d30] pt-1.5 flex flex-col gap-0.5 text-[8px] font-label-sm text-[#9d8f7c]">
+<div class="flex justify-between">
+<span>SER. NO. 84920</span>
+<span>DEKALB, ILL. USA</span>
+</div>
+<div class="text-primary/70 font-semibold tracking-wider">
+                AKAI PROFESSIONAL STANDALONE ENGINE
+              </div>
+</div>
+</div>
+</div>
+</div>
+<!-- BOTTOM ROW OF RACK PANELS (Height ~244px) -->
+<div class="grid grid-cols-12 gap-space-md h-[252px]">
+<!-- 4. AMP FRAME (x=10, y=404, w=468, h=304 scaled) -->
+<div class="col-span-5 cream-panel rounded-lg p-2.5 flex flex-col justify-between relative">
+<!-- Hex screws -->
+<span class="hex-screw absolute top-1.5 left-1.5"></span>
+<span class="hex-screw absolute top-1.5 right-1.5"></span>
+<span class="hex-screw absolute bottom-1.5 left-1.5"></span>
+<span class="hex-screw absolute bottom-1.5 right-1.5"></span>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-[#b9a98a] pb-1">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-[#2a2018] tracking-widest font-bold uppercase">SOLID STATE AMPLIFIER</span>
+<span class="text-[9px] font-label-sm px-1.5 py-0.2 bg-[#d8ccb0] text-[#2a2018] rounded border border-[#b9a98a]">CLASS A/B SILICON</span>
+</div>
+<span class="text-[9px] font-label-sm text-[#8a7a62] font-semibold">STAGE DYNAMICS</span>
+</div>
+<!-- Amp Knobs: ATTACK, DECAY, VOLUME -->
+<div class="grid grid-cols-3 gap-2 h-[178px] items-center justify-items-center py-1">
+<!-- Knob 5: Attack -->
+<div class="flex flex-col items-center">
+<span class="text-[11px] font-label-md text-[#2a2018] font-bold tracking-wider">ATTACK</span>
+<div class="knob-assembly my-2" data-knob="attack" data-max="100" data-min="0" data-unit="ms" data-value="12">
+<div class="w-16 h-16 rounded-full knob-body relative flex items-center justify-center cursor-pointer">
+<div class="knob-grooves"></div>
+<div class="w-8 h-8 rounded-full bg-[#3c3026] border border-[#78644e] flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-[#1a140f]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(-100deg); transform-origin: center 27px;"></div>
+</div>
+</div>
+<div class="px-2 py-0.5 bg-[#120e0b] rounded border border-[#504535] text-[11px] font-label-sm text-primary font-bold" id="val-attack">
+                1.2 ms
+              </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">HAMMER CHICK</span>
+</div>
+<!-- Knob 6: Decay -->
+<div class="flex flex-col items-center">
+<span class="text-[11px] font-label-md text-[#2a2018] font-bold tracking-wider">DECAY</span>
+<div class="knob-assembly my-2" data-knob="decay" data-max="100" data-min="0" data-unit="%" data-value="74">
+<div class="w-16 h-16 rounded-full knob-body relative flex items-center justify-center cursor-pointer">
+<div class="knob-grooves"></div>
+<div class="w-8 h-8 rounded-full bg-[#3c3026] border border-[#78644e] flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-[#1a140f]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(62deg); transform-origin: center 27px;"></div>
+</div>
+</div>
+<div class="px-2 py-0.5 bg-[#120e0b] rounded border border-[#504535] text-[11px] font-label-sm text-primary font-bold" id="val-decay">
+                74%
+              </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">DAMPER RELEASE</span>
+</div>
+<!-- Knob 7: Volume -->
+<div class="flex flex-col items-center">
+<span class="text-[11px] font-label-md text-[#2a2018] font-bold tracking-wider">VOLUME</span>
+<div class="knob-assembly my-2" data-knob="volume" data-max="100" data-min="0" data-unit="%" data-value="85">
+<div class="w-16 h-16 rounded-full knob-body relative flex items-center justify-center cursor-pointer ring-1 ring-[#ffc665]">
+<div class="knob-grooves"></div>
+<div class="w-8 h-8 rounded-full bg-[#3c3026] border border-[#ffc665] flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-[#ffc665]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(95deg); transform-origin: center 27px;"></div>
+</div>
+</div>
+<div class="px-2 py-0.5 bg-[#120e0b] rounded border border-[#504535] text-[11px] font-label-sm text-primary font-bold" id="val-volume">
+                85%
+              </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">MASTER OUTPUT</span>
+</div>
+</div>
+<!-- Silkscreen Footer -->
+<div class="flex justify-between items-center text-[9px] font-label-sm text-[#4a3d30] font-semibold border-t border-[#b9a98a] pt-1">
+<span>DISCRETE GERMANIUM STAGE</span>
+<span>NOISE FLOOR: -86 dB</span>
+</div>
+</div>
+<!-- 5. CABINET FRAME (x=484, y=404, w=784, h=304 scaled) -->
+<div class="col-span-7 cream-panel rounded-lg p-2.5 flex flex-col justify-between relative">
+<!-- Hex screws -->
+<span class="hex-screw absolute top-1.5 left-1.5"></span>
+<span class="hex-screw absolute top-1.5 right-1.5"></span>
+<span class="hex-screw absolute bottom-1.5 left-1.5"></span>
+<span class="hex-screw absolute bottom-1.5 right-1.5"></span>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-[#b9a98a] pb-1">
+<div class="flex items-center gap-2">
+<span class="text-label-md font-label-md text-[#2a2018] tracking-widest font-bold uppercase">CABINET &amp; ACOUSTIC SPACE</span>
+<span class="text-[9px] font-label-sm px-1.5 py-0.2 bg-[#d8ccb0] text-[#2a2018] rounded border border-[#b9a98a]">ALNICO 8" OVAL DRIVERS</span>
+</div>
+<span class="text-[9px] font-label-sm text-[#8a7a62] font-semibold">OPTICAL STEREO VIBRATO / ACCUTRONICS TANK</span>
+</div>
+<!-- Content: 3 Knobs + Optical Tremolo Indicator Bay -->
+<div class="grid grid-cols-12 gap-3 h-[178px] items-center py-1">
+<!-- 3 Knobs: TREMOLO, SPEAKER, REVERB -->
+<div class="col-span-7 grid grid-cols-3 gap-1 items-center justify-items-center">
+<!-- Knob 8: Tremolo -->
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-label-md text-[#b5532b] font-bold tracking-wider">TREMOLO</span>
+<div class="knob-assembly my-2" data-knob="tremolo" data-max="100" data-min="0" data-unit="%" data-value="65">
+<div class="w-16 h-16 rounded-full knob-body relative flex items-center justify-center cursor-pointer ring-1 ring-[#b5532b]">
+<div class="knob-grooves"></div>
+<div class="w-8 h-8 rounded-full bg-[#3c3026] border border-[#b5532b] flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-[#b5532b]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(45deg); transform-origin: center 27px;"></div>
+</div>
+</div>
+<div class="px-2 py-0.5 bg-[#120e0b] rounded border border-[#b5532b] text-[10px] font-label-sm text-[#ff9a89] font-bold" id="val-tremolo">
+                  65%
+                </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">OPTO DEPTH</span>
+</div>
+<!-- Knob 9: Speaker (8" Oval Emulation) -->
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-label-md text-[#2a2018] font-bold tracking-wider">SPEAKER</span>
+<div class="knob-assembly my-2" data-knob="speaker" data-max="100" data-min="0" data-unit="%" data-value="50">
+<div class="w-16 h-16 rounded-full knob-body relative flex items-center justify-center cursor-pointer">
+<div class="knob-grooves"></div>
+<div class="w-8 h-8 rounded-full bg-[#3c3026] border border-[#78644e] flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-[#1a140f]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(0deg); transform-origin: center 27px;"></div>
+</div>
+</div>
+<div class="px-2 py-0.5 bg-[#120e0b] rounded border border-[#504535] text-[10px] font-label-sm text-primary font-bold" id="val-speaker">
+                  8" OVAL
+                </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">CABINET CONE</span>
+</div>
+<!-- Knob 10: Reverb (Spring Reverb Tank) -->
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-label-md text-[#2a2018] font-bold tracking-wider">REVERB</span>
+<div class="knob-assembly my-2" data-knob="reverb" data-max="100" data-min="0" data-unit="%" data-value="40">
+<div class="w-16 h-16 rounded-full knob-body relative flex items-center justify-center cursor-pointer">
+<div class="knob-grooves"></div>
+<div class="w-8 h-8 rounded-full bg-[#3c3026] border border-[#78644e] flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-[#1a140f]"></div>
+</div>
+<div class="knob-pointer" style="transform: translateX(-50%) rotate(-30deg); transform-origin: center 27px;"></div>
+</div>
+</div>
+<div class="px-2 py-0.5 bg-[#120e0b] rounded border border-[#504535] text-[10px] font-label-sm text-primary font-bold" id="val-reverb">
+                  40%
+                </div>
+<span class="text-[8px] font-label-sm text-[#8a7a62] mt-0.5">DUAL SPRING</span>
+</div>
+</div>
+<!-- Optical Tremolo Dual Bulb Readout & Speaker Mesh Well -->
+<div class="col-span-5 recessed-well rounded p-2 h-[166px] flex flex-col justify-between relative">
+<div class="flex justify-between items-center text-[9px] font-label-sm text-[#8a7a62]">
+<span class="text-primary font-bold">OPTICAL PHOTO-CELL</span>
+<span class="text-[#d4622e]">SPEED: 5.8 Hz</span>
+</div>
+<!-- Dual Stereo Lamp Bulb Indicators -->
+<div class="flex items-center justify-around py-1 bg-[#1a1410] rounded border border-[#362a20] px-3">
+<!-- Left Opto Lamp -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-[#401206] border-2 border-[#b5532b] flex items-center justify-center shadow-inner relative">
+<div class="w-5 h-5 rounded-full bg-[#ff7a45] opto-lamp-l"></div>
+<div class="absolute inset-0 rounded-full border border-white/20"></div>
+</div>
+<span class="text-[8px] font-label-sm text-[#d4c4b0] font-bold">CH A (LEFT)</span>
+</div>
+<!-- LDR Divider Graphic -->
+<div class="flex flex-col items-center text-center">
+<span class="text-[7px] font-label-sm text-[#8a7a62]">NEON-LDR</span>
+<div class="w-8 h-0.5 bg-[#504535] my-1"></div>
+<span class="text-[8px] font-label-sm text-[#ffc665] font-bold">STEREO PAN</span>
+</div>
+<!-- Right Opto Lamp -->
+<div class="flex flex-col items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-[#401206] border-2 border-[#b5532b] flex items-center justify-center shadow-inner relative">
+<div class="w-5 h-5 rounded-full bg-[#ff7a45] opto-lamp-r"></div>
+<div class="absolute inset-0 rounded-full border border-white/20"></div>
+</div>
+<span class="text-[8px] font-label-sm text-[#d4c4b0] font-bold">CH B (RIGHT)</span>
+</div>
+</div>
+<!-- Speaker Grille Badge -->
+<div class="flex justify-between items-center text-[8px] font-label-sm text-[#9d8f7c] border-t border-[#2a221b] pt-1">
+<span>ACOUSTIC IMPULSE: 1974 SUITCASE CAB</span>
+<span class="text-[#e3c076] font-bold">ACCUTRONICS 2-SPRING</span>
+</div>
+</div>
+</div>
+<!-- Silkscreen Footer -->
+<div class="flex justify-between items-center text-[9px] font-label-sm text-[#4a3d30] font-semibold border-t border-[#b9a98a] pt-1">
+<span>GENUINE PHOTOCELL CHOPPER BEHAVIOR</span>
+<span>IMPEDANCE MATCHED OUTPUTS</span>
+</div>
+</div>
+</div>
+</main>
+<!-- ========================================================================= -->
+<!-- BOTTOM HARDWARE DOCK (Shared Component: BottomNavBar & Q-Link Strip) -->
+<!-- Docked full-width bottom-0 h-14, 11 Physical Q-Link Encoders with active states -->
+<!-- ========================================================================= -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-14 bg-surface-container-lowest border-t border-outline-variant text-on-surface">
+<!-- Bank Indicator & Hardware Mode Switch -->
+<div class="flex items-center gap-2 pr-2 border-r border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[8px] font-label-sm text-outline tracking-wider uppercase">Q-LINK DOCK</span>
+<span class="text-label-md font-label-md text-primary font-bold">BANK 1 [WURL]</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+<span class="w-2 h-2 rounded-full bg-surface-variant inline-block"></span>
+</div>
+</div>
+<!-- Scrollable 11 Q-Link Encoder Touch Targets from wurl.txt -->
+<!-- [preset, brightness, darken, bark, tune, attack, decay, volume, tremolo, speaker, reverb] -->
+<div class="flex items-center gap-1.5 flex-1 px-2 overflow-x-auto no-scrollbar">
+<!-- Q-Link 1: Preset -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[78px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="preset">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q1: PRESET</span>
+<span class="text-[10px] font-label-md text-primary truncate max-w-[70px]">1974 SUIT</span>
+</button>
+<!-- Q-Link 2: Brightness -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[78px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="brightness">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q2: BRIGHT</span>
+<span class="text-[10px] font-label-md text-primary font-mono">68%</span>
+</button>
+<!-- Q-Link 3: Darken -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[78px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="darken">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q3: DARKEN</span>
+<span class="text-[10px] font-label-md text-on-surface font-mono">24%</span>
+</button>
+<!-- Q-Link 4: Bark (Active Navigation Item Highlighted) -->
+<button class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-2 py-1 rounded min-w-[82px] active:scale-95 transition-transform shadow-sm" data-qlink="bark">
+<span class="text-[8px] font-label-sm text-[#ff9a89] font-bold">Q4: BARK</span>
+<span class="text-[10px] font-label-md text-primary font-bold font-mono">82%</span>
+</button>
+<!-- Q-Link 5: Tune -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[74px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="tune">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q5: TUNE</span>
+<span class="text-[10px] font-label-md text-on-surface font-mono">0c</span>
+</button>
+<!-- Q-Link 6: Attack -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[78px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="attack">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q6: ATTACK</span>
+<span class="text-[10px] font-label-md text-on-surface font-mono">1.2ms</span>
+</button>
+<!-- Q-Link 7: Decay -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[74px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="decay">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q7: DECAY</span>
+<span class="text-[10px] font-label-md text-on-surface font-mono">74%</span>
+</button>
+<!-- Q-Link 8: Volume -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[78px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="volume">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q8: VOLUME</span>
+<span class="text-[10px] font-label-md text-primary font-mono">85%</span>
+</button>
+<!-- Q-Link 9: Tremolo -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[82px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="tremolo">
+<span class="text-[8px] font-label-sm text-[#ff9a89]">Q9: TREMOLO</span>
+<span class="text-[10px] font-label-md text-[#ff9a89] font-mono">65%</span>
+</button>
+<!-- Q-Link 10: Speaker -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[80px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="speaker">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q10: SPKR</span>
+<span class="text-[10px] font-label-md text-on-surface font-mono">8" OVAL</span>
+</button>
+<!-- Q-Link 11: Reverb -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[78px] hover:bg-surface-container active:scale-95 transition-transform" data-qlink="reverb">
+<span class="text-[8px] font-label-sm text-[#8a7a62]">Q11: REVERB</span>
+<span class="text-[10px] font-label-md text-on-surface font-mono">40%</span>
+</button>
+</div>
+<!-- Quick MPC Macro Touch Toggle -->
+<div class="pl-2 border-l border-outline-variant flex items-center gap-1.5">
+<button class="flex flex-col items-center justify-center px-2 py-1 bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded active:scale-95">
+<span class="material-symbols-outlined text-[16px] text-primary">dialpad</span>
+<span class="text-[8px] font-label-sm font-bold text-on-surface">LEARN</span>
+</button>
+</div>
+</footer>
+<!-- ========================================================================= -->
+<!-- MODAL / POPUP: PRESET BROWSER (Triggered by Preset Panel) -->
+<!-- ========================================================================= -->
+<div class="hidden absolute inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center" id="presetModal">
+<div class="cream-panel w-[520px] rounded-lg p-4 border-2 border-[#b5532b] shadow-2xl relative">
+<span class="hex-screw absolute top-2 left-2"></span>
+<span class="hex-screw absolute top-2 right-2"></span>
+<span class="hex-screw absolute bottom-2 left-2"></span>
+<span class="hex-screw absolute bottom-2 right-2"></span>
+<div class="flex items-center justify-between border-b border-[#b9a98a] pb-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#b5532b]">graphic_eq</span>
+<span class="text-label-lg font-label-lg text-[#2a2018] font-bold">WURLITZER 200A // FACTORY PRESETS</span>
+</div>
+<button class="text-[#2a2018] hover:text-[#b5532b] font-bold p-1" id="closePresetModal">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-auto no-scrollbar">
+<button class="preset-choice text-left p-2.5 rounded bg-[#1f1a14] border border-[#b5532b] text-[#f5ebd7] hover:bg-[#34271c] active:scale-95 flex flex-col">
+<span class="text-[12px] font-label-md font-bold text-primary">01: 1974 SUITCASE CLASSIC</span>
+<span class="text-[9px] font-label-sm text-[#8a7a62]">Warm, mellow tone with subtle bark</span>
+</button>
+<button class="preset-choice text-left p-2.5 rounded bg-[#120e0b] border border-[#504535] text-[#d4c4b0] hover:bg-[#34271c] active:scale-95 flex flex-col">
+<span class="text-[12px] font-label-md font-bold">02: RAY'S HARLEM SOUL</span>
+<span class="text-[9px] font-label-sm text-[#8a7a62]">High dynamic bark &amp; drive</span>
+</button>
+<button class="preset-choice text-left p-2.5 rounded bg-[#120e0b] border border-[#504535] text-[#d4c4b0] hover:bg-[#34271c] active:scale-95 flex flex-col">
+<span class="text-[12px] font-label-md font-bold">03: SUPERTRAMP CRISP</span>
+<span class="text-[9px] font-label-sm text-[#8a7a62]">Bright treble boost, fast optical chop</span>
+</button>
+<button class="preset-choice text-left p-2.5 rounded bg-[#120e0b] border border-[#504535] text-[#d4c4b0] hover:bg-[#34271c] active:scale-95 flex flex-col">
+<span class="text-[12px] font-label-md font-bold">04: WOODSTOCK VIBRATO</span>
+<span class="text-[9px] font-label-sm text-[#8a7a62]">Deep stereo tremolo, oval speakers</span>
+</button>
+<button class="preset-choice text-left p-2.5 rounded bg-[#120e0b] border border-[#504535] text-[#d4c4b0] hover:bg-[#34271c] active:scale-95 flex flex-col">
+<span class="text-[12px] font-label-md font-bold">05: DIRTY ROADHOUSE BAR</span>
+<span class="text-[9px] font-label-sm text-[#8a7a62]">Overdriven solid-state preamp</span>
+</button>
+<button class="preset-choice text-left p-2.5 rounded bg-[#120e0b] border border-[#504535] text-[#d4c4b0] hover:bg-[#34271c] active:scale-95 flex flex-col">
+<span class="text-[12px] font-label-md font-bold">06: DARK AMBIENT DUSK</span>
+<span class="text-[9px] font-label-sm text-[#8a7a62]">Heavy spring tank, rolled-off top</span>
+</button>
+</div>
+<div class="mt-3 pt-2 border-t border-[#b9a98a] flex justify-between items-center text-[9px] font-label-sm text-[#4a3d30]">
+<span>SELECTION AUTO-LOADS TO HARDWARE MEMORY</span>
+<span class="font-bold text-[#b5532b]">AKAI Q-LINK SYNC ACTIVE</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Logic for Knobs, Canvas Visualizer, & Preset Popups -->
+<script>
+    // 1. Interactive Knobs with Touch / Drag Handling
+    const knobElements = document.querySelectorAll('.knob-assembly');
+    let activeKnob = null;
+    let startY = 0;
+    let startValue = 0;
+
+    knobElements.forEach(knob => {
+      const initVal = parseFloat(knob.dataset.value);
+      updateKnobVisual(knob, initVal);
+
+      const onStart = (clientY) => {
+        activeKnob = knob;
+        startY = clientY;
+        startValue = parseFloat(knob.dataset.value);
+        document.body.style.cursor = 'ns-resize';
+      };
+
+      knob.addEventListener('mousedown', (e) => onStart(e.clientY));
+      knob.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 0) onStart(e.touches[0].clientY);
+      }, { passive: true });
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!activeKnob) return;
+      handleKnobDrag(e.clientY);
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!activeKnob || e.touches.length === 0) return;
+      handleKnobDrag(e.touches[0].clientY);
+    }, { passive: true });
+
+    window.addEventListener('mouseup', () => {
+      activeKnob = null;
+      document.body.style.cursor = 'default';
+    });
+    window.addEventListener('touchend', () => {
+      activeKnob = null;
+    });
+
+    function handleKnobDrag(currentY) {
+      const deltaY = startY - currentY;
+      const min = parseFloat(activeKnob.dataset.min);
+      const max = parseFloat(activeKnob.dataset.max);
+      const range = max - min;
+      const step = range / 120; // 120px drag travel
+      let newVal = Math.min(max, Math.max(min, Math.round(startValue + (deltaY * step))));
+      
+      activeKnob.dataset.value = newVal;
+      updateKnobVisual(activeKnob, newVal);
+      syncQLinkDisplay(activeKnob.dataset.knob, newVal, activeKnob.dataset.unit);
+    }
+
+    function updateKnobVisual(knob, val) {
+      const min = parseFloat(knob.dataset.min);
+      const max = parseFloat(knob.dataset.max);
+      const fraction = (val - min) / (max - min);
+      // Map 0..1 to -135deg to +135deg
+      const deg = -135 + (fraction * 270);
+
+      const pointer = knob.querySelector('.knob-pointer');
+      if (pointer) {
+        pointer.style.transform = `translateX(-50%) rotate(${deg}deg)`;
+      }
+
+      // Update text readout
+      const readoutId = 'val-' + knob.dataset.knob;
+      const readoutEl = document.getElementById(readoutId);
+      if (readoutEl) {
+        const unit = knob.dataset.unit || '';
+        if (knob.dataset.knob === 'attack') {
+          readoutEl.textContent = (val / 10).toFixed(1) + ' ms';
+        } else if (knob.dataset.knob === 'speaker') {
+          readoutEl.textContent = val < 30 ? 'OFF' : (val < 70 ? '8" OVAL' : 'DIRECT');
+        } else {
+          readoutEl.textContent = val + unit;
+        }
+      }
+    }
+
+    function syncQLinkDisplay(key, val, unit) {
+      const qlinkBtn = document.querySelector(`[data-qlink="${key}"]`);
+      if (!qlinkBtn) return;
+      const valueSpan = qlinkBtn.querySelectorAll('span')[1];
+      if (valueSpan) {
+        if (key === 'attack') valueSpan.textContent = (val/10).toFixed(1) + 'ms';
+        else if (key === 'speaker') valueSpan.textContent = val < 30 ? 'OFF' : (val < 70 ? '8" OVAL' : 'DIR');
+        else valueSpan.textContent = val + unit;
+      }
+    }
+
+    // 2. Real-time Reed Harmonics Vibration Visualizer
+    const canvas = document.getElementById('harmonicCanvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+
+      function drawHarmonics() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw vintage phosphor spectrum grid lines
+        ctx.strokeStyle = '#29221b';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < canvas.width; x += 25) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+          ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += 22) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
+        }
+
+        // Draw dynamic resonant harmonic curve
+        const barkKnob = document.querySelector('[data-knob="bark"]');
+        const barkVal = barkKnob ? parseFloat(barkKnob.dataset.value) : 80;
+        const brightKnob = document.querySelector('[data-knob="brightness"]');
+        const brightVal = brightKnob ? parseFloat(brightKnob.dataset.value) : 60;
+
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+
+        for (let x = 0; x < canvas.width; x++) {
+          // Combination of fundamental + 3rd harmonic (Wurlitzer Bark) + subtle high-end pick flux
+          const freq1 = Math.sin((x * 0.05) + (frame * 0.04)) * 30;
+          const freq3 = Math.sin((x * 0.15) - (frame * 0.08)) * (barkVal * 0.25);
+          const freqHigh = Math.sin((x * 0.35) + (frame * 0.1)) * (brightVal * 0.1);
+          
+          // Window envelope
+          const windowEnv = Math.sin((x / canvas.width) * Math.PI);
+          const y = (canvas.height / 2) - ((freq1 + freq3 + freqHigh) * windowEnv * 0.7);
+
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+
+        // Vibrant glow style
+        ctx.strokeStyle = '#d4622e';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = '#ff7a45';
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Peak markers
+        ctx.fillStyle = '#ffdead';
+        ctx.beginPath();
+        ctx.arc(45, 30 + Math.sin(frame * 0.04) * 6, 2.5, 0, Math.PI * 2);
+        ctx.arc(115, 45 + Math.cos(frame * 0.08) * 8, 2, 0, Math.PI * 2);
+        ctx.arc(180, 50 + Math.sin(frame * 0.1) * 4, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        frame++;
+        requestAnimationFrame(drawHarmonics);
+      }
+      drawHarmonics();
+    }
+
+    // 3. Preset Modal Interaction
+    const presetTrigger = document.getElementById('presetSelectorTrigger');
+    const presetModal = document.getElementById('presetModal');
+    const closePresetBtn = document.getElementById('closePresetModal');
+    const activePresetTitle = document.getElementById('activePresetTitle');
+    const presetChoices = document.querySelectorAll('.preset-choice');
+
+    if (presetTrigger && presetModal) {
+      presetTrigger.addEventListener('click', () => presetModal.classList.remove('hidden'));
+    }
+    if (closePresetBtn && presetModal) {
+      closePresetBtn.addEventListener('click', () => presetModal.classList.add('hidden'));
+    }
+    presetChoices.forEach(choice => {
+      choice.addEventListener('click', () => {
+        const title = choice.querySelector('.font-bold').textContent;
+        if (activePresetTitle) activePresetTitle.textContent = title;
+        presetChoices.forEach(c => {
+          c.classList.remove('bg-[#1f1a14]', 'border-[#b5532b]');
+          c.classList.add('bg-[#120e0b]', 'border-[#504535]');
+        });
+        choice.classList.remove('bg-[#120e0b]', 'border-[#504535]');
+        choice.classList.add('bg-[#1f1a14]', 'border-[#b5532b]');
+        
+        // Update Q-Link text
+        const q1 = document.querySelector('[data-qlink="preset"] span:last-child');
+        if (q1) q1.textContent = title.split(':')[1]?.trim().slice(0, 9) || 'PRESET';
+
+        presetModal.classList.add('hidden');
+      });
+    });
+
+    // 4. Physical Q-Link Encoder Touch Target Highlighting
+    const qlinkButtons = document.querySelectorAll('[data-qlink]');
+    qlinkButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        qlinkButtons.forEach(b => {
+          b.className = "flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-2 py-1 rounded min-w-[74px] hover:bg-surface-container active:scale-95 transition-transform";
+        });
+        btn.className = "flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-2 py-1 rounded min-w-[78px] active:scale-95 transition-transform shadow-sm";
+      });
+    });
+  </script>
+</body></html>

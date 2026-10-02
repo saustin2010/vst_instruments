@@ -1,0 +1,425 @@
+{
+ "name": "Denis",
+ "params": [
+  {
+   "key": "osc1_freq",
+   "name": "OSC1 FREQ",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "osc1_timbre",
+   "name": "OSC1 TIMBRE",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "osc2_pitch",
+   "name": "OSC2 FREQ",
+   "min": -2,
+   "max": 2
+  },
+  {
+   "key": "osc2_harmonics",
+   "name": "HARMONICS",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "osc_mix",
+   "name": "OSC MIX",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "fold_depth",
+   "name": "FOLD DEPTH",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "fold_type",
+   "name": "FOLD TYPE",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "filter_cutoff",
+   "name": "CUTOFF",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "filter_q",
+   "name": "Q",
+   "min": 0,
+   "max": 4
+  },
+  {
+   "key": "filter_type",
+   "name": "FILTER TYPE",
+   "options": [
+    "LOWPASS",
+    "BANDPASS",
+    "HIGHPASS",
+    "NOTCH"
+   ],
+   "default": 0
+  },
+  {
+   "key": "vel_to_filter",
+   "name": "VEL>FILTER",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "attack",
+   "name": "ATTACK",
+   "min": 0.001,
+   "max": 3
+  },
+  {
+   "key": "decay",
+   "name": "DECAY",
+   "min": 0.001,
+   "max": 3
+  },
+  {
+   "key": "sustain",
+   "name": "SUSTAIN",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "release",
+   "name": "RELEASE",
+   "min": 0.001,
+   "max": 3
+  },
+  {
+   "key": "noise_mix",
+   "name": "NOISE MIX",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "noise_type",
+   "name": "NOISE TYPE",
+   "options": [
+    "WHITE",
+    "PINK",
+    "BROWN"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_rate",
+   "name": "LFO RATE",
+   "min": 0.01,
+   "max": 500
+  },
+  {
+   "key": "sh_rate",
+   "name": "S&H RATE",
+   "min": 0.01,
+   "max": 500
+  },
+  {
+   "key": "mod_depth_env",
+   "name": "ENV DEPTH",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "mod_depth_noise",
+   "name": "NOISE DEPTH",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "preset",
+   "name": "PRESET",
+   "options": [
+    "INIT",
+    "TABARNAK",
+    "POUTINE GRASSE",
+    "ELVIS GRATTON",
+    "FRETTE EN CRISS",
+    "SLUSH BRUNE",
+    "TI-COUNE",
+    "GRANDE SEDUCTION",
+    "BON COP BAD COP",
+    "C.R.A.Z.Y.",
+    "DEPANNEUR",
+    "CALINE DE BINE",
+    "MAUDITE TOUNE",
+    "LES BOYS",
+    "NANANE",
+    "TIGUIDOU",
+    "PANTOUTE",
+    "ASTEURE",
+    "ENFIROUAPE",
+    "QUETAINE",
+    "CRUISER L'MAIN",
+    "BROUE",
+    "J'ME SOUVIENS",
+    "CHEZ SCHWARTZ",
+    "RATOUREUX",
+    "OSTIE D'LEAD",
+    "NIAISEUX",
+    "GUERRE DES TUQUES",
+    "MAGANE",
+    "STARBUCK"
+   ],
+   "default": 0
+  },
+  {
+   "key": "portamento",
+   "name": "PORTAMENTO",
+   "min": 0,
+   "max": 2
+  },
+  {
+   "key": "legato",
+   "name": "LEGATO",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "patch_mode",
+   "name": "PAD MODE",
+   "options": [
+    "Play",
+    "Patch"
+   ],
+   "default": 0
+  },
+  {
+   "key": "matrix_reset",
+   "name": "RESET MATRIX",
+   "min": 0,
+   "max": 1,
+   "momentary": true,
+   "default": 0
+  },
+  {
+   "key": "rnd_denis",
+   "name": "RANDOM SOUND",
+   "min": 0,
+   "max": 1,
+   "momentary": true,
+   "default": 0
+  },
+  {
+   "key": "rnd_mod",
+   "name": "RANDOM MOD",
+   "min": 0,
+   "max": 1,
+   "momentary": true,
+   "default": 0
+  },
+  {
+   "key": "rnd_patch",
+   "name": "RANDOM ALL",
+   "min": 0,
+   "max": 1,
+   "momentary": true,
+   "default": 0
+  },
+  {
+   "key": "mat_0_0",
+   "name": "ENV>PITCH1",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_0_1",
+   "name": "ENV>TIMBRE",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_0_2",
+   "name": "ENV>PITCH2",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_0_3",
+   "name": "ENV>HARM",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_0_4",
+   "name": "ENV>FOLD",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_0_5",
+   "name": "ENV>FTYPE",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_0_6",
+   "name": "ENV>CUTOFF",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_0_7",
+   "name": "ENV>LEVEL",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_1_0",
+   "name": "LFO>PITCH1",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_1_1",
+   "name": "LFO>TIMBRE",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_1_2",
+   "name": "LFO>PITCH2",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_1_3",
+   "name": "LFO>HARM",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_1_4",
+   "name": "LFO>FOLD",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_1_5",
+   "name": "LFO>FTYPE",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_1_6",
+   "name": "LFO>CUTOFF",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_1_7",
+   "name": "LFO>LEVEL",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_2_0",
+   "name": "S&H>PITCH1",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_2_1",
+   "name": "S&H>TIMBRE",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_2_2",
+   "name": "S&H>PITCH2",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_2_3",
+   "name": "S&H>HARM",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_2_4",
+   "name": "S&H>FOLD",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_2_5",
+   "name": "S&H>FTYPE",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_2_6",
+   "name": "S&H>CUTOFF",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_2_7",
+   "name": "S&H>LEVEL",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_3_0",
+   "name": "NOISE>PITCH1",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_3_1",
+   "name": "NOISE>TIMBRE",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_3_2",
+   "name": "NOISE>PITCH2",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_3_3",
+   "name": "NOISE>HARM",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_3_4",
+   "name": "NOISE>FOLD",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_3_5",
+   "name": "NOISE>FTYPE",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_3_6",
+   "name": "NOISE>CUTOFF",
+   "min": -1,
+   "max": 1
+  },
+  {
+   "key": "mat_3_7",
+   "name": "NOISE>LEVEL",
+   "min": -1,
+   "max": 1
+  }
+ ]
+}

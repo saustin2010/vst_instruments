@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Plaits — Macro Oscillator (MPC Live II)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        bg: '#0d0f0e',
+        panel: '#171a18',
+        line: '#3a423d',
+        ink: '#f1f5f2',
+        dim: '#c9d2cc',
+        faint: '#77847b',
+        accent: '#5fc44a',
+        accentHi: '#8ae673',
+        knobFace: '#eef2ef',
+        knobRing: '#29302b',
+        lcd: '#080a09'
+      },
+      fontFamily: {
+        sans: ['Space Grotesk', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace']
+      }
+    }
+  }
+}
+</script>
+<style>
+body {
+  background-color: #0d0f0e;
+  color: #f1f5f2;
+  user-select: none;
+  touch-action: manipulation;
+  overflow: hidden;
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0;
+  width: 1280px;
+  height: 628px;
+}
+.hardware-panel {
+  background: #171a18;
+  border: 1px solid #3a423d;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.5);
+  position: relative;
+}
+.screw {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2b332e;
+  border: 1px solid #4a544e;
+  position: absolute;
+}
+.screw-tl { top: 5px; left: 5px; }
+.screw-tr { top: 5px; right: 5px; }
+.screw-bl { bottom: 5px; left: 5px; }
+.screw-br { bottom: 5px; right: 5px; }
+.dot-matrix {
+  background: #071207;
+  border: 1px solid #163416;
+  color: #8ae673;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
+}
+.rotary-knob {
+  position: relative;
+  cursor: ns-resize;
+}
+.rotary-knob circle.track {
+  stroke: #29302b;
+}
+.rotary-knob circle.val {
+  stroke: #8ae673;
+  transition: stroke-dashoffset 0.05s ease-out;
+}
+</style>
+</head>
+<body class="w-[1280px] h-[628px] flex flex-col justify-between p-2.5 box-border bg-[#0d0f0e]">
+
+  <!-- TOP HEADER (MPC Native Bar) -->
+  <header class="h-10 bg-[#121614] border border-[#3a423d] rounded flex items-center justify-between px-4 z-20">
+    <div class="flex items-center space-x-3">
+      <span class="text-sm font-bold tracking-wider text-[#8ae673] uppercase font-mono">PLAITS // MACRO OSCILLATOR</span>
+      <span class="text-[11px] px-2 py-0.5 rounded bg-[#1c241e] text-[#c9d2cc] font-mono border border-[#3a423d]">MUTABLE INSTRUMENTS DSP</span>
+    </div>
+    
+    <div class="flex items-center space-x-4">
+      <!-- Page Navigation -->
+      <div class="flex items-center bg-[#0d0f0e] p-0.5 rounded border border-[#3a423d]">
+        <button id="tabPlaits" class="px-3 py-1 text-xs font-mono font-bold rounded bg-[#5fc44a] text-[#0d0f0e]">1: PLAITS</button>
+        <button id="tabPlay" class="px-3 py-1 text-xs font-mono font-semibold text-[#c9d2cc] hover:text-white">2: PLAY</button>
+      </div>
+
+      <div class="flex items-center space-x-2 text-[11px] font-mono text-[#77847b]">
+        <span>INTERNAL CLK</span>
+        <span class="text-[#8ae673]">• 48kHz</span>
+        <span>DSP: 7%</span>
+      </div>
+
+      <div class="flex items-center space-x-1.5 border-l border-[#3a423d] pl-3">
+        <button class="px-2.5 py-1 text-[11px] font-mono rounded bg-[#1c241e] border border-[#3a423d] text-[#c9d2cc] hover:bg-[#253028]">PRESET</button>
+        <button class="px-2.5 py-1 text-[11px] font-mono rounded bg-[#1c241e] border border-[#3a423d] text-[#c9d2cc] hover:bg-[#253028]">SAVE</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN TOUCH WORKSPACE (Native MPC 1280x628 - Header - QLinks) -->
+  <main class="flex-1 grid grid-cols-12 gap-2.5 my-2">
+
+    <!-- ROW 1 (y: 92, h: 260px) -->
+    <!-- MODEL SELECTION (310px / col-span-3) -->
+    <section class="col-span-3 hardware-panel rounded p-3 flex flex-col justify-between">
+      <div class="screw screw-tl"></div><div class="screw screw-tr"></div><div class="screw screw-bl"></div><div class="screw screw-br"></div>
+      <div class="flex items-center justify-between border-b border-[#3a423d] pb-1.5">
+        <span class="text-xs font-mono font-bold tracking-wider text-[#8ae673]">■ MODEL</span>
+        <span class="text-[10px] font-mono text-[#77847b]">ENGINE SELECT</span>
+      </div>
+
+      <div class="flex-1 flex flex-col justify-center space-y-2 py-1">
+        <div class="dot-matrix p-2.5 rounded">
+          <div class="text-[10px] text-[#77847b] uppercase">Active Synthesis Model</div>
+          <div id="modelName" class="text-sm font-bold text-[#8ae673] truncate">01: VIRTUAL ANALOG</div>
+          <div class="text-[9px] text-[#5fc44a] opacity-80">Pair of variable waveshape virtual analog oscillators</div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button id="btnPrevModel" class="px-2 py-2 text-xs font-mono font-bold rounded bg-[#1f2622] border border-[#3a423d] text-[#c9d2cc] active:bg-[#5fc44a] active:text-[#0d0f0e] flex items-center justify-center">
+            &lt; PREV
+          </button>
+          <button id="btnNextModel" class="px-2 py-2 text-xs font-mono font-bold rounded bg-[#1f2622] border border-[#3a423d] text-[#c9d2cc] active:bg-[#5fc44a] active:text-[#0d0f0e] flex items-center justify-center">
+            NEXT &gt;
+          </button>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center text-[10px] font-mono text-[#77847b] border-t border-[#3a423d] pt-1">
+        <span>16 ALGORITHMS</span>
+        <span class="text-[#8ae673]">PITCH: C2 (65.4Hz)</span>
+      </div>
+    </section>
+
+    <!-- SOUND MACRO SECTION (942px / col-span-9) -->
+    <section class="col-span-9 hardware-panel rounded p-3 flex flex-col justify-between">
+      <div class="screw screw-tl"></div><div class="screw screw-tr"></div><div class="screw screw-bl"></div><div class="screw screw-br"></div>
+      <div class="flex items-center justify-between border-b border-[#3a423d] pb-1.5">
+        <div class="flex items-center space-x-2">
+          <span class="text-xs font-mono font-bold tracking-wider text-[#8ae673]">■ SOUND MACROS</span>
+          <span class="text-[10px] font-mono text-[#77847b]">// HARMONICS • TIMBRE • MORPH</span>
+        </div>
+        <!-- Real-time harmonic wave curve visualizer -->
+        <div class="h-5 px-3 rounded bg-[#071207] border border-[#163416] flex items-center">
+          <svg id="macroScope" class="w-40 h-4" viewBox="0 0 160 16">
+            <path id="scopePath" d="M 0 8 Q 20 1, 40 8 T 80 8 T 120 8 T 160 8" fill="none" stroke="#8ae673" stroke-width="1.5" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- 3 Master Collet Knobs -->
+      <div class="flex-1 grid grid-cols-3 gap-6 items-center px-6">
+        <!-- HARMONICS (r=46) -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-24 h-24 rotary-knob" data-key="harmonics" data-val="0.48">
+            <svg class="w-24 h-24 -rotate-90">
+              <circle cx="48" cy="48" r="40" stroke-width="5" fill="none" class="track"/>
+              <circle cx="48" cy="48" r="40" stroke-width="5" fill="none" class="val" stroke-dasharray="251.2" stroke-dashoffset="120"/>
+            </svg>
+            <div class="absolute inset-2.5 rounded-full bg-[#eef2ef] border-2 border-[#29302b] shadow-inner flex items-center justify-center">
+              <div class="w-1.5 h-1.5 rounded-full bg-[#8ae673] absolute top-2"></div>
+              <span class="text-xs font-mono font-bold text-[#171a18] val-text">48%</span>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-bold mt-2 text-[#f1f5f2]">HARMONICS</span>
+          <span class="text-[10px] font-mono text-[#77847b]">Q02 [Q-LINK]</span>
+        </div>
+
+        <!-- TIMBRE (r=46) -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-24 h-24 rotary-knob" data-key="timbre" data-val="0.65">
+            <svg class="w-24 h-24 -rotate-90">
+              <circle cx="48" cy="48" r="40" stroke-width="5" fill="none" class="track"/>
+              <circle cx="48" cy="48" r="40" stroke-width="5" fill="none" class="val" stroke-dasharray="251.2" stroke-dashoffset="88"/>
+            </svg>
+            <div class="absolute inset-2.5 rounded-full bg-[#eef2ef] border-2 border-[#29302b] shadow-inner flex items-center justify-center">
+              <div class="w-1.5 h-1.5 rounded-full bg-[#8ae673] absolute top-2"></div>
+              <span class="text-xs font-mono font-bold text-[#171a18] val-text">65%</span>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-bold mt-2 text-[#f1f5f2]">TIMBRE</span>
+          <span class="text-[10px] font-mono text-[#77847b]">Q03 [Q-LINK]</span>
+        </div>
+
+        <!-- MORPH (r=46) -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-24 h-24 rotary-knob" data-key="morph" data-val="0.32">
+            <svg class="w-24 h-24 -rotate-90">
+              <circle cx="48" cy="48" r="40" stroke-width="5" fill="none" class="track"/>
+              <circle cx="48" cy="48" r="40" stroke-width="5" fill="none" class="val" stroke-dasharray="251.2" stroke-dashoffset="170"/>
+            </svg>
+            <div class="absolute inset-2.5 rounded-full bg-[#eef2ef] border-2 border-[#29302b] shadow-inner flex items-center justify-center">
+              <div class="w-1.5 h-1.5 rounded-full bg-[#8ae673] absolute top-2"></div>
+              <span class="text-xs font-mono font-bold text-[#171a18] val-text">32%</span>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-bold mt-2 text-[#f1f5f2]">MORPH</span>
+          <span class="text-[10px] font-mono text-[#77847b]">Q04 [Q-LINK]</span>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center text-[10px] font-mono text-[#77847b] border-t border-[#3a423d] pt-1">
+        <span>SPECTRAL HARMONICS 1-32</span>
+        <span class="text-[#8ae673]">CV MOD DEPTH: +10V COMPLIANT</span>
+      </div>
+    </section>
+
+    <!-- ROW 2 (y: 404, h: 220px) -->
+    <!-- LOW PASS GATE (468px / col-span-5) -->
+    <section class="col-span-5 hardware-panel rounded p-3 flex flex-col justify-between">
+      <div class="screw screw-tl"></div><div class="screw screw-tr"></div><div class="screw screw-bl"></div><div class="screw screw-br"></div>
+      <div class="flex items-center justify-between border-b border-[#3a423d] pb-1">
+        <span class="text-xs font-mono font-bold tracking-wider text-[#8ae673]">■ LOW PASS GATE</span>
+        <span class="text-[10px] font-mono text-[#77847b]">DYNAMIC VACTROL LPG</span>
+      </div>
+
+      <div class="flex-1 grid grid-cols-3 gap-3 items-center">
+        <!-- LPG DECAY -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 rotary-knob" data-key="decay" data-val="0.55">
+            <svg class="w-16 h-16 -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="track"/>
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="val" stroke-dasharray="163.3" stroke-dashoffset="73"/>
+            </svg>
+            <div class="absolute inset-2 rounded-full bg-[#eef2ef] border border-[#29302b] flex items-center justify-center">
+              <div class="w-1 h-1 rounded-full bg-[#8ae673] absolute top-1.5"></div>
+              <span class="text-[10px] font-mono font-bold text-[#171a18] val-text">340ms</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold mt-1 text-[#f1f5f2]">LPG DECAY</span>
+          <span class="text-[9px] font-mono text-[#77847b]">Q05</span>
+        </div>
+
+        <!-- LPG COLOUR -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 rotary-knob" data-key="lpg_colour" data-val="0.70">
+            <svg class="w-16 h-16 -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="track"/>
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="val" stroke-dasharray="163.3" stroke-dashoffset="49"/>
+            </svg>
+            <div class="absolute inset-2 rounded-full bg-[#eef2ef] border border-[#29302b] flex items-center justify-center">
+              <div class="w-1 h-1 rounded-full bg-[#8ae673] absolute top-1.5"></div>
+              <span class="text-[10px] font-mono font-bold text-[#171a18] val-text">70%</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold mt-1 text-[#f1f5f2]">LPG COLOUR</span>
+          <span class="text-[9px] font-mono text-[#77847b]">Q06</span>
+        </div>
+
+        <!-- ATTACK -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 rotary-knob" data-key="attack" data-val="0.12">
+            <svg class="w-16 h-16 -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="track"/>
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="val" stroke-dasharray="163.3" stroke-dashoffset="143"/>
+            </svg>
+            <div class="absolute inset-2 rounded-full bg-[#eef2ef] border border-[#29302b] flex items-center justify-center">
+              <div class="w-1 h-1 rounded-full bg-[#8ae673] absolute top-1.5"></div>
+              <span class="text-[10px] font-mono font-bold text-[#171a18] val-text">4.2ms</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold mt-1 text-[#f1f5f2]">ATTACK</span>
+          <span class="text-[9px] font-mono text-[#77847b]">Q07</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULATION SECTION (468px / col-span-4) -->
+    <section class="col-span-4 hardware-panel rounded p-3 flex flex-col justify-between">
+      <div class="screw screw-tl"></div><div class="screw screw-tr"></div><div class="screw screw-bl"></div><div class="screw screw-br"></div>
+      <div class="flex items-center justify-between border-b border-[#3a423d] pb-1">
+        <span class="text-xs font-mono font-bold tracking-wider text-[#8ae673]">■ MODULATION</span>
+        <span class="text-[10px] font-mono text-[#77847b]">ATTENUVERTERS</span>
+      </div>
+
+      <div class="flex-1 grid grid-cols-3 gap-2 items-center">
+        <!-- FM -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 rotary-knob" data-key="fm_amount" data-val="0.30">
+            <svg class="w-16 h-16 -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="track"/>
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="val" stroke-dasharray="163.3" stroke-dashoffset="114"/>
+            </svg>
+            <div class="absolute inset-2 rounded-full bg-[#eef2ef] border border-[#29302b] flex items-center justify-center">
+              <div class="w-1 h-1 rounded-full bg-[#8ae673] absolute top-1.5"></div>
+              <span class="text-[10px] font-mono font-bold text-[#171a18] val-text">+30%</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold mt-1 text-[#f1f5f2]">FM</span>
+          <span class="text-[9px] font-mono text-[#77847b]">Q08</span>
+        </div>
+
+        <!-- TIMBRE MOD -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 rotary-knob" data-key="timbre_mod" data-val="0.50">
+            <svg class="w-16 h-16 -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="track"/>
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="val" stroke-dasharray="163.3" stroke-dashoffset="81"/>
+            </svg>
+            <div class="absolute inset-2 rounded-full bg-[#eef2ef] border border-[#29302b] flex items-center justify-center">
+              <div class="w-1 h-1 rounded-full bg-[#8ae673] absolute top-1.5"></div>
+              <span class="text-[10px] font-mono font-bold text-[#171a18] val-text">0.50</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold mt-1 text-[#f1f5f2]">TIMBRE MOD</span>
+          <span class="text-[9px] font-mono text-[#77847b]">Q09</span>
+        </div>
+
+        <!-- MORPH MOD -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 rotary-knob" data-key="morph_mod" data-val="0.25">
+            <svg class="w-16 h-16 -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="track"/>
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="val" stroke-dasharray="163.3" stroke-dashoffset="122"/>
+            </svg>
+            <div class="absolute inset-2 rounded-full bg-[#eef2ef] border border-[#29302b] flex items-center justify-center">
+              <div class="w-1 h-1 rounded-full bg-[#8ae673] absolute top-1.5"></div>
+              <span class="text-[10px] font-mono font-bold text-[#171a18] val-text">0.25</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold mt-1 text-[#f1f5f2]">MORPH MOD</span>
+          <span class="text-[9px] font-mono text-[#77847b]">Q10</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUTPUT SECTION (310px / col-span-3) -->
+    <section class="col-span-3 hardware-panel rounded p-3 flex flex-col justify-between">
+      <div class="screw screw-tl"></div><div class="screw screw-tr"></div><div class="screw screw-bl"></div><div class="screw screw-br"></div>
+      <div class="flex items-center justify-between border-b border-[#3a423d] pb-1">
+        <span class="text-xs font-mono font-bold tracking-wider text-[#8ae673]">■ OUTPUT</span>
+        <span class="text-[10px] font-mono text-[#77847b]">AUX & MASTER</span>
+      </div>
+
+      <div class="flex-1 grid grid-cols-2 gap-3 items-center">
+        <!-- AUX MIX -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 rotary-knob" data-key="aux_mix" data-val="0.45">
+            <svg class="w-16 h-16 -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="track"/>
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="val" stroke-dasharray="163.3" stroke-dashoffset="90"/>
+            </svg>
+            <div class="absolute inset-2 rounded-full bg-[#eef2ef] border border-[#29302b] flex items-center justify-center">
+              <div class="w-1 h-1 rounded-full bg-[#8ae673] absolute top-1.5"></div>
+              <span class="text-[10px] font-mono font-bold text-[#171a18] val-text">45%</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold mt-1 text-[#f1f5f2]">AUX MIX</span>
+          <span class="text-[9px] font-mono text-[#77847b]">Q11</span>
+        </div>
+
+        <!-- OCTAVE -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 rotary-knob" data-key="octave_transpose" data-val="0.5">
+            <svg class="w-16 h-16 -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="track"/>
+              <circle cx="32" cy="32" r="26" stroke-width="4" fill="none" class="val" stroke-dasharray="163.3" stroke-dashoffset="81"/>
+            </svg>
+            <div class="absolute inset-2 rounded-full bg-[#eef2ef] border border-[#29302b] flex items-center justify-center">
+              <div class="w-1 h-1 rounded-full bg-[#8ae673] absolute top-1.5"></div>
+              <span class="text-[10px] font-mono font-bold text-[#171a18] val-text">0 OCT</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold mt-1 text-[#f1f5f2]">OCTAVE</span>
+          <span class="text-[9px] font-mono text-[#77847b]">Q12</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM MPC HARDWARE Q-LINK STRIP (Bank 1: Plaits) -->
+  <footer class="h-11 bg-[#090b0a] border border-[#3a423d] rounded flex items-center px-2 space-x-1.5 overflow-x-auto text-[10px] font-mono z-20">
+    <div class="px-2 py-1 bg-[#171a18] border border-[#3a423d] rounded text-[#8ae673] font-bold shrink-0">
+      Q-LINK BANK 1
+    </div>
+
+    <!-- 12 Encoders directly bound to plaits.txt Q-Link spec -->
+    <div class="flex-1 grid grid-cols-12 gap-1 text-center">
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q01</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">MODEL</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q02</span>
+        <span class="text-[#8ae673] font-bold truncate block">HARM</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q03</span>
+        <span class="text-[#8ae673] font-bold truncate block">TIMBRE</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q04</span>
+        <span class="text-[#8ae673] font-bold truncate block">MORPH</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q05</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">DECAY</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q06</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">COLOUR</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q07</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">ATTACK</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q08</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">FM</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q09</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">TIMB MOD</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q10</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">MRP MOD</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q11</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">AUX MIX</span>
+      </div>
+      <div class="bg-[#121614] border border-[#3a423d] p-1 rounded">
+        <span class="text-[#77847b] block">Q12</span>
+        <span class="text-[#c9d2cc] font-bold truncate block">OCTAVE</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Synthesis Models
+    const models = [
+      { name: "01: VIRTUAL ANALOG", desc: "Pair of variable waveshape virtual analog oscillators" },
+      { name: "02: WAVESHAPING", desc: "Asymmetric triangle oscillator processed by waveshaper" },
+      { name: "03: 2-OP FM", desc: "Two operator frequency modulation with feedback" },
+      { name: "04: GRAIN FORMANT", desc: "Simulation of formants and filtered waveforms" },
+      { name: "05: HARMONIC OSC", desc: "Additive synthesis with 12 sine harmonics" },
+      { name: "06: WAVETABLE", desc: "Four banks of 8x8 wavetables" },
+      { name: "07: CHORDS", desc: "Four-note chord generator with wavetables" },
+      { name: "08: SPEECH / VOWEL", desc: "Formant synthesis and vowel phoneme sequencing" },
+      { name: "09: INHARMONIC STRINGS", desc: "Physical modeling of plucked strings" },
+      { name: "10: MODAL RESONATOR", desc: "Chimes, bars, plates, and bells modal model" },
+      { name: "11: ANALOG BASS DRUM", desc: "Classic 808/909 transistor bass drum model" },
+      { name: "12: ANALOG SNARE DRUM", desc: "Dual bridged T-network analog snare drum" },
+      { name: "13: ANALOG HI-HAT", desc: "Six square wave oscillators XOR ring modulated" },
+      { name: "14: DUST / PARTICLE", desc: "Dust particle noise source with resonant filter" },
+      { name: "15: CLOCK NOISE", desc: "Stepped random voltage and variable sample rate" },
+      { name: "16: 6-OP DX7 FM", desc: "Full 6-operator frequency modulation synth core" }
+    ];
+
+    let currentModelIndex = 0;
+    const modelNameEl = document.getElementById('modelName');
+    const scopePath = document.getElementById('scopePath');
+
+    function updateModel() {
+      modelNameEl.textContent = models[currentModelIndex].name;
+      modelNameEl.nextElementSibling.textContent = models[currentModelIndex].desc;
+      updateScope();
+    }
+
+    document.getElementById('btnPrevModel').addEventListener('click', () => {
+      currentModelIndex = (currentModelIndex - 1 + models.length) % models.length;
+      updateModel();
+    });
+
+    document.getElementById('btnNextModel').addEventListener('click', () => {
+      currentModelIndex = (currentModelIndex + 1) % models.length;
+      updateModel();
+    });
+
+    // Rotary Knob Interactive Drag Handler
+    let activeKnob = null;
+    let startY = 0;
+    let startVal = 0;
+
+    document.querySelectorAll('.rotary-knob').forEach(knob => {
+      knob.addEventListener('pointerdown', (e) => {
+        activeKnob = knob;
+        startY = e.clientY;
+        startVal = parseFloat(knob.dataset.val) || 0.5;
+        knob.setPointerCapture(e.pointerId);
+      });
+
+      knob.addEventListener('pointermove', (e) => {
+        if (!activeKnob) return;
+        const delta = (startY - e.clientY) * 0.006;
+        let newVal = Math.min(1, Math.max(0, startVal + delta));
+        activeKnob.dataset.val = newVal;
+
+        const valCircle = activeKnob.querySelector('circle.val');
+        const textVal = activeKnob.querySelector('.val-text');
+        const r = parseFloat(valCircle.getAttribute('r'));
+        const circumference = 2 * Math.PI * r;
+
+        valCircle.style.strokeDashoffset = circumference * (1 - newVal);
+        
+        // Update readout label
+        const key = activeKnob.dataset.key;
+        if (key === 'octave_transpose') {
+          const oct = Math.round((newVal - 0.5) * 4);
+          textVal.textContent = (oct >= 0 ? `+${oct}` : `${oct}`) + ' OCT';
+        } else if (key === 'decay') {
+          textVal.textContent = Math.round(newVal * 800 + 10) + 'ms';
+        } else if (key === 'attack') {
+          textVal.textContent = (newVal * 50).toFixed(1) + 'ms';
+        } else if (key === 'fm_amount') {
+          textVal.textContent = `${Math.round(newVal * 100)}%`;
+        } else {
+          textVal.textContent = Math.round(newVal * 100) + '%';
+        }
+
+        updateScope();
+      });
+
+      knob.addEventListener('pointerup', (e) => {
+        if (activeKnob) {
+          activeKnob.releasePointerCapture(e.pointerId);
+          activeKnob = null;
+        }
+      });
+    });
+
+    function updateScope() {
+      const harm = parseFloat(document.querySelector('[data-key="harmonics"]')?.dataset.val || 0.5);
+      const timb = parseFloat(document.querySelector('[data-key="timbre"]')?.dataset.val || 0.5);
+      const morph = parseFloat(document.querySelector('[data-key="morph"]')?.dataset.val || 0.5);
+
+      let d = `M 0 8 `;
+      for (let x = 0; x <= 160; x += 4) {
+        const rad = (x / 160) * Math.PI * 4 * (1 + harm);
+        const y = 8 + Math.sin(rad) * 6 * timb + Math.sin(rad * 3) * 2 * morph;
+        d += `L ${x} ${y.toFixed(1)} `;
+      }
+      scopePath.setAttribute('d', d);
+    }
+
+    // Tab switching
+    const tabPlaits = document.getElementById('tabPlaits');
+    const tabPlay = document.getElementById('tabPlay');
+
+    tabPlay.addEventListener('click', () => {
+      tabPlay.className = "px-3 py-1 text-xs font-mono font-bold rounded bg-[#5fc44a] text-[#0d0f0e]";
+      tabPlaits.className = "px-3 py-1 text-xs font-mono font-semibold text-[#c9d2cc] hover:text-white";
+    });
+
+    tabPlaits.addEventListener('click', () => {
+      tabPlaits.className = "px-3 py-1 text-xs font-mono font-bold rounded bg-[#5fc44a] text-[#0d0f0e]";
+      tabPlay.className = "px-3 py-1 text-xs font-mono font-semibold text-[#c9d2cc] hover:text-white";
+    });
+  </script>
+</body>
+</html>

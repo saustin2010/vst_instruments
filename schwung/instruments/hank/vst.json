@@ -1,0 +1,23 @@
+{
+  "name": "Hank",
+  "vendor": "Charles Vestal",
+  "uid": "Hank",
+  "so": "hank.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/hank_plugin.cpp",
+      "src/dsp/hank_engine.cpp"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-std=gnu++14", "-DMPC_PORT"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

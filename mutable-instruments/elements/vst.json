@@ -1,0 +1,35 @@
+{
+  "name": "Elements",
+  "vendor": "Mutable Instruments",
+  "uid": "MIel",
+  "so": "elements.so",
+  "build": {
+    "sources": [
+      "mpc/elements_engine.cc",
+      "src/elements/dsp/exciter.cc",
+      "src/elements/dsp/multistage_envelope.cc",
+      "src/elements/dsp/ominous_voice.cc",
+      "src/elements/dsp/part.cc",
+      "src/elements/dsp/resonator.cc",
+      "src/elements/dsp/string.cc",
+      "src/elements/dsp/tube.cc",
+      "src/elements/dsp/voice.cc",
+      "src/elements/resources.cc",
+      "src/stmlib/dsp/units.cc",
+      "src/stmlib/utils/random.cc"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Isrc",
+      "-DTEST",
+      "-DMPC_PORT",
+      "-std=gnu++14"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

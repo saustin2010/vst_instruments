@@ -1,0 +1,845 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=1280, height=628, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>AKAI MPC LIVE II // GROOVE BANK MIDI FX</title>
+<!-- Material Symbols & Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-container": "#ff9a89",
+            "primary": "#ffc665",
+            "on-primary-fixed-variant": "#604100",
+            "on-surface-variant": "#d4c4b0",
+            "surface-container-low": "#1b1b1f",
+            "primary-fixed-dim": "#fabc4d",
+            "tertiary-container": "#beb38f",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-error": "#690005",
+            "tertiary-fixed": "#eee2bc",
+            "surface-dim": "#121316",
+            "outline": "#9d8f7c",
+            "on-tertiary": "#373016",
+            "on-secondary": "#680300",
+            "inverse-primary": "#7e5700",
+            "error": "#ffb4ab",
+            "surface-variant": "#343538",
+            "secondary": "#ffb4a7",
+            "on-tertiary-container": "#4c4529",
+            "error-container": "#93000a",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "surface-container-high": "#292a2d",
+            "primary-fixed": "#ffdead",
+            "surface-tint": "#fabc4d",
+            "on-secondary-fixed-variant": "#920801",
+            "on-surface": "#e3e2e6",
+            "on-error-container": "#ffdad6",
+            "background": "#121316",
+            "surface-container-highest": "#343538",
+            "inverse-on-surface": "#2f3034",
+            "on-primary": "#432c00",
+            "inverse-surface": "#e3e2e6",
+            "on-background": "#e3e2e6",
+            "surface-container-lowest": "#0d0e11",
+            "on-secondary-fixed": "#400100",
+            "secondary-fixed": "#ffdad4",
+            "surface-bright": "#38393c",
+            "on-primary-fixed": "#281900",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "surface": "#121316",
+            "surface-container": "#1f1f23",
+            "primary-container": "#e5a93c",
+            "outline-variant": "#504535",
+            "tertiary": "#dacfa9",
+            "on-tertiary-fixed": "#211b04",
+            "secondary-container": "#920801",
+            "on-primary-container": "#5e4000"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "margin": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.75rem",
+            "gutter": "0.75rem"
+          },
+          "fontFamily": {
+            "readout-numeric": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "label-md": ["JetBrains Mono"],
+            "headline-sm": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "body-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "readout-numeric": ["20px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+            "body-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "label-md": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "headline-sm": ["15px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "body-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "label-sm": ["9px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Fixed 1280x628 enclosure styling */
+    body {
+      background-color: #080503;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .chassis-viewport {
+      width: 1280px;
+      height: 628px;
+      background-color: #120d08;
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.95), 0 0 0 3px #241b12;
+      position: relative;
+    }
+
+    .walnut-panel {
+      background: radial-gradient(circle at 50% 0%, #251c14 0%, #17110c 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.85);
+      border: 1px solid #4a3b2b;
+    }
+
+    .display-well {
+      background-color: #140d02;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,0.95), inset 0 0 2px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05);
+      border: 1px solid #362615;
+    }
+
+    /* Collet Cream Knobs */
+    .collet-knob-casing {
+      background: conic-gradient(from 180deg, #1c150e, #3a2b1d, #1c150e, #453424, #1c150e);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.15);
+    }
+    
+    .collet-knob-face {
+      background: radial-gradient(circle at 35% 35%, #fffdf8 0%, #ebe1cf 70%, #d8ccb6 100%);
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    /* Faux Hex Screw Head */
+    .hex-screw {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #2b221a;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.12);
+      position: relative;
+    }
+    .hex-screw::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 1px;
+      width: 5px;
+      height: 1px;
+      background: #0d0a08;
+    }
+
+    /* CRT scanlines effect */
+    .scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-on-surface antialiased p-0 m-0">
+<!-- STANDALONE HARDWARE CHASSIS 1280x628 -->
+<div class="chassis-viewport overflow-hidden flex flex-col justify-between font-label-md select-none border border-outline-variant">
+<!-- ========================================================================= -->
+<!-- 1. TOP HARDWARE APP BAR (TopNavBar Shared Component Compliance)           -->
+<!-- ========================================================================= -->
+<header class="w-full h-11 bg-surface-container-lowest flex items-center justify-between px-space-md border-b border-outline-variant z-40 shrink-0">
+<!-- Brand Logo / Product Identifier -->
+<div class="flex items-center space-x-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 bg-primary rounded-full shadow-[0_0_8px_#ffc665]"></span>
+<span class="font-headline-sm text-headline-sm text-primary tracking-wider uppercase font-bold">AKAI MPC LIVE II</span>
+</div>
+<span class="text-outline text-label-sm font-label-sm">//</span>
+<span class="font-readout-numeric text-label-md text-on-surface-variant tracking-wider">SCHWUNG MIDI FX</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant text-label-sm font-label-sm text-primary font-bold">
+          [ 1: MAIN ]
+        </span>
+</div>
+<!-- Navigation Links from Shared Schema -->
+<nav class="flex items-center space-x-4">
+<button class="text-primary border-b-2 border-primary font-bold py-1 font-label-md text-label-md transition-colors">
+          GROOVE BANK
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 font-label-md text-label-md transition-colors">
+          RETRIGGER
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 font-label-md text-label-md transition-colors">
+          FEEL &amp; SWING
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 font-label-md text-label-md transition-colors">
+          ROUTING
+        </button>
+</nav>
+<!-- Trailing Hardware Indicators & Transport Action -->
+<div class="flex items-center space-x-3">
+<!-- MIDI Status Indicator -->
+<div class="flex items-center space-x-1.5 px-2 py-1 bg-surface-container-high border border-outline-variant rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-primary tracking-wider font-bold">PORT A: CH 10</span>
+</div>
+<!-- Start Groove Engine Button (Spacebar Trigger) -->
+<button class="flex items-center space-x-2 px-3 py-1 bg-primary text-on-primary font-headline-sm text-headline-sm font-bold rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_2px_4px_rgba(0,0,0,0.8)] active:translate-y-0.5 active:scale-95 transition-all" id="transport-btn" onclick="toggleEngine()">
+<span class="material-symbols-outlined text-label-lg" id="transport-icon" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span id="transport-text">START ENGINE [SPACE]</span>
+</button>
+<!-- Hardware System Icons -->
+<div class="flex items-center space-x-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-label-lg p-1 hover:text-primary cursor-pointer transition-colors" title="Tune">tune</span>
+<span class="material-symbols-outlined text-label-lg p-1 hover:text-primary cursor-pointer transition-colors" title="EQ">graphic_eq</span>
+<span class="material-symbols-outlined text-label-lg p-1 hover:text-primary cursor-pointer transition-colors" title="Settings">settings</span>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN TOUCH SURFACE (518px interior height)                                 -->
+<!-- ========================================================================= -->
+<main class="w-full flex-1 px-space-md py-space-xs flex flex-col justify-between overflow-hidden gap-space-xs">
+<!-- TOP ROW: 2 PANELS (GROOVE SELECTOR & LIVE MIDI OUT MONITOR) -->
+<div class="grid grid-cols-12 gap-space-md h-[256px]">
+<!-- PANEL 1: GROOVE PATTERN & STEP TIMING VISUALIZER (w: 626px approx) -->
+<div class="col-span-6 walnut-panel rounded p-space-sm flex flex-col justify-between relative">
+<!-- Hex Screws -->
+<div class="hex-screw absolute top-1 left-1"></div>
+<div class="hex-screw absolute top-1 right-1"></div>
+<div class="hex-screw absolute bottom-1 left-1"></div>
+<div class="hex-screw absolute bottom-1 right-1"></div>
+<!-- Module Header -->
+<div class="flex justify-between items-center px-1 border-b border-outline-variant/60 pb-1">
+<div class="flex items-center space-x-2">
+<span class="w-1.5 h-3 bg-primary rounded-xs"></span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold tracking-wide uppercase">GROOVE ENGINE // PATTERN</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">STEP TICKS: 960 PPQN</span>
+</div>
+<!-- Dot Matrix Display Well -->
+<div class="display-well rounded p-2.5 flex flex-col justify-between h-[108px] relative overflow-hidden">
+<div class="scanlines absolute inset-0 z-10"></div>
+<div class="flex justify-between items-center z-20">
+<span class="text-label-sm font-label-sm text-primary/70 tracking-widest uppercase">SLOT // PRESET BANK</span>
+<div class="flex items-center space-x-2">
+<span class="text-label-sm font-label-sm text-primary/60">FEEL:</span>
+<span class="text-label-sm font-label-sm text-primary font-bold" id="groove-feel-tag">MPC 3000 LATENCY DETROIT</span>
+</div>
+</div>
+<!-- Big Dotmatrix Preset Title with Stepper -->
+<div class="flex items-center justify-between z-20 my-auto">
+<button class="w-8 h-8 rounded bg-surface-container-high/80 hover:bg-surface-bright border border-outline-variant flex items-center justify-center text-primary active:scale-90 transition-transform" onclick="changePattern(-1)">
+<span class="material-symbols-outlined text-label-lg">arrow_back_ios_new</span>
+</button>
+<div class="flex flex-col items-center">
+<div class="font-readout-numeric text-readout-numeric text-primary tracking-widest text-center" id="groove-name">
+                  04: DETROIT SOUL 16TH SHUFFLE
+                </div>
+<div class="text-label-sm font-label-sm text-tertiary-container tracking-wider mt-0.5" id="groove-meta">
+                  OFFSET: -14ms | VARIATION: B-TRIPLET | PUSH/PULL: +3.2%
+                </div>
+</div>
+<button class="w-8 h-8 rounded bg-surface-container-high/80 hover:bg-surface-bright border border-outline-variant flex items-center justify-center text-primary active:scale-90 transition-transform" onclick="changePattern(1)">
+<span class="material-symbols-outlined text-label-lg">arrow_forward_ios</span>
+</button>
+</div>
+<!-- Small Status Footer -->
+<div class="flex justify-between items-center z-20 text-label-sm font-label-sm text-primary/60">
+<span>SOURCE: HARDWARE EPROM</span>
+<span class="tracking-widest">CLOCK: INTERNAL 120.0 BPM</span>
+<span>QUANTIZE: 58%</span>
+</div>
+</div>
+<!-- 16-Step Microtiming & Velocity Swing Visualizer Grid -->
+<div class="mt-1 flex flex-col justify-end">
+<div class="flex justify-between items-center mb-1 text-label-sm font-label-sm text-on-surface-variant">
+<span>16-STEP MICROTIMING DEVIATION (MS)</span>
+<span class="text-primary font-readout-numeric" id="step-clock-readout">STEP: 01 / 16</span>
+</div>
+<div class="grid grid-cols-16 gap-1 h-14 bg-surface-container-lowest p-1.5 rounded border border-outline-variant" style="grid-template-columns: repeat(16, minmax(0, 1fr));">
+<!-- Steps 1 to 16 -->
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-0">
+<div class="w-full bg-primary/40 rounded-xs h-3/4"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-1">
+<div class="w-full bg-primary/30 rounded-xs h-1/2"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-2">
+<div class="w-full bg-primary/80 rounded-xs h-5/6"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-3">
+<div class="w-full bg-primary/20 rounded-xs h-1/4"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-4">
+<div class="w-full bg-primary/90 rounded-xs h-full"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-5">
+<div class="w-full bg-primary/30 rounded-xs h-2/5"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-6">
+<div class="w-full bg-primary/60 rounded-xs h-3/5"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-7">
+<div class="w-full bg-primary/40 rounded-xs h-1/3"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-8">
+<div class="w-full bg-primary/85 rounded-xs h-5/6"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-9">
+<div class="w-full bg-primary/25 rounded-xs h-1/3"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-10">
+<div class="w-full bg-primary/70 rounded-xs h-2/3"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-11">
+<div class="w-full bg-primary/40 rounded-xs h-2/5"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-12">
+<div class="w-full bg-primary/95 rounded-xs h-full"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-13">
+<div class="w-full bg-primary/30 rounded-xs h-1/2"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-14">
+<div class="w-full bg-primary/60 rounded-xs h-3/4"></div>
+</div>
+<div class="step-cell bg-surface-container rounded-xs flex flex-col justify-end p-0.5 border border-outline-variant/40 transition-colors" id="step-15">
+<div class="w-full bg-primary/50 rounded-xs h-2/4"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- PANEL 2: LIVE MIDI MONITOR & LATENCY ROUTER (w: 626px approx) -->
+<div class="col-span-6 walnut-panel rounded p-space-sm flex flex-col justify-between relative">
+<!-- Hex Screws -->
+<div class="hex-screw absolute top-1 left-1"></div>
+<div class="hex-screw absolute top-1 right-1"></div>
+<div class="hex-screw absolute bottom-1 left-1"></div>
+<div class="hex-screw absolute bottom-1 right-1"></div>
+<!-- Module Header -->
+<div class="flex justify-between items-center px-1 border-b border-outline-variant/60 pb-1">
+<div class="flex items-center space-x-2">
+<span class="w-1.5 h-3 bg-secondary-container rounded-xs"></span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold tracking-wide uppercase">MIDI OUT // BUS MONITOR</span>
+</div>
+<div class="flex items-center space-x-3">
+<div class="flex items-center space-x-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant">IN/OUT:</span>
+<span class="font-readout-numeric text-label-sm text-primary">0.2 ms</span>
+</div>
+<div class="flex items-center space-x-1">
+<span class="w-2 h-2 rounded-full bg-primary" id="midi-activity-led"></span>
+<span class="text-label-sm font-label-sm text-primary font-bold">ACTIVE</span>
+</div>
+</div>
+</div>
+<!-- Real-Time Note & Polyphonic Retrigger Matrix -->
+<div class="grid grid-cols-3 gap-2 h-[108px]">
+<!-- Active Chord Stack Stream -->
+<div class="display-well rounded p-2 flex flex-col justify-between relative overflow-hidden">
+<div class="scanlines absolute inset-0 z-10"></div>
+<span class="text-label-sm font-label-sm text-primary/70 tracking-wider">CHORD DETECT</span>
+<div class="font-readout-numeric text-headline-md text-primary font-bold text-center z-20 my-auto" id="active-chord-name">
+                Eb min 9
+              </div>
+<div class="flex justify-between text-label-sm font-label-sm text-primary/60 z-20">
+<span>ROOT: Eb3</span>
+<span>NOTES: 5</span>
+</div>
+</div>
+<!-- Polyphonic Stream Logs -->
+<div class="display-well rounded p-2 flex flex-col justify-between font-readout-numeric text-label-sm text-primary/90 relative overflow-hidden">
+<div class="scanlines absolute inset-0 z-10"></div>
+<div class="flex justify-between border-b border-outline-variant/40 pb-0.5 text-primary/60">
+<span>NOTE</span><span>VEL</span><span>OFST</span>
+</div>
+<div class="space-y-0.5 z-20" id="midi-log-lines">
+<div class="flex justify-between"><span>Eb3 (63)</span><span>118</span><span>-4ms</span></div>
+<div class="flex justify-between"><span>Gb3 (66)</span><span>096</span><span>+2ms</span></div>
+<div class="flex justify-between"><span>Bb3 (70)</span><span>102</span><span>+6ms</span></div>
+<div class="flex justify-between text-primary/50"><span>F4  (77)</span><span>084</span><span>+11ms</span></div>
+</div>
+</div>
+<!-- Velocity Curve Graph -->
+<div class="display-well rounded p-2 flex flex-col justify-between relative overflow-hidden">
+<div class="scanlines absolute inset-0 z-10"></div>
+<div class="flex justify-between text-label-sm font-label-sm text-primary/70 z-20">
+<span>DYNAMICS CURVE</span>
+<span class="text-primary">LOG 2</span>
+</div>
+<!-- Simulated response curve SVG -->
+<div class="h-12 w-full flex items-center justify-center z-20">
+<svg class="w-full h-10 stroke-primary fill-none" viewBox="0 0 100 40">
+<path d="M 5 35 Q 35 30, 55 18 T 95 5" stroke-width="2"></path>
+<circle cx="55" cy="18" fill="#ffc665" r="3"></circle>
+<line opacity="0.4" stroke="#ffc665" stroke-dasharray="2,2" stroke-width="0.7" x1="55" x2="55" y1="0" y2="40"></line>
+</svg>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-primary/60 z-20">
+<span>IN: 92</span>
+<span>OUT: 104</span>
+</div>
+</div>
+</div>
+<!-- Bottom Routing Bus Status -->
+<div class="grid grid-cols-4 gap-2 pt-1">
+<div class="bg-surface-container-lowest p-1.5 rounded border border-outline-variant flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">FLAM REPEAT</span>
+<span class="font-readout-numeric text-label-md text-primary font-bold">1/32 T</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded border border-outline-variant flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">HUMANIZE</span>
+<span class="font-readout-numeric text-label-md text-primary font-bold">± 6 TICKS</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded border border-outline-variant flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">PRESSURE CC</span>
+<span class="font-readout-numeric text-label-md text-primary font-bold">AFTERTOUCH</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded border border-outline-variant flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">PITCH SPREAD</span>
+<span class="font-readout-numeric text-label-md text-primary font-bold">0.0 CENTS</span>
+</div>
+</div>
+</div>
+</div>
+<!-- BOTTOM ROW: 2 PANELS (FEEL / KNOB CONTROLS & BRAND/LIBRARY STATUS) -->
+<div class="grid grid-cols-12 gap-space-md h-[256px]">
+<!-- PANEL 3: FEEL & MACROS (5 Cream Collet Knobs + Latch Switch) (w: 942px approx) -->
+<div class="col-span-9 walnut-panel rounded p-space-sm flex flex-col justify-between relative">
+<!-- Hex Screws -->
+<div class="hex-screw absolute top-1 left-1"></div>
+<div class="hex-screw absolute top-1 right-1"></div>
+<div class="hex-screw absolute bottom-1 left-1"></div>
+<div class="hex-screw absolute bottom-1 right-1"></div>
+<!-- Header -->
+<div class="flex justify-between items-center px-1 border-b border-outline-variant/60 pb-1">
+<div class="flex items-center space-x-2">
+<span class="w-1.5 h-3 bg-primary rounded-xs"></span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold tracking-wide uppercase">FEEL GENERATOR // TACTILE MACROS</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">DRAG VERTICAL TO ADJUST VALUE</span>
+</div>
+<!-- Interactive Control Bay: 5 Collet Knobs + 1 Industrial Toggle Switch -->
+<div class="flex items-center justify-around h-full py-1">
+<!-- KNOB 1: VARIANT -->
+<div class="flex flex-col items-center group cursor-ns-resize" onmousedown="startKnobDrag(event, 'variant')">
+<span class="text-label-sm font-label-sm text-on-surface-variant font-bold tracking-wider mb-1">VARIANT</span>
+<div class="w-20 h-20 rounded-full collet-knob-casing p-1.5 flex items-center justify-center relative shadow-lg">
+<div class="w-full h-full rounded-full collet-knob-face flex items-center justify-center relative transition-transform duration-75" id="knob-variant">
+<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_5px_#ffc665] absolute top-1.5"></div>
+</div>
+</div>
+<div class="mt-2 px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded">
+<span class="font-readout-numeric text-label-md text-primary font-bold" id="val-variant">03 / 08</span>
+</div>
+</div>
+<!-- KNOB 2: SWING (50% - 75%) -->
+<div class="flex flex-col items-center group cursor-ns-resize" onmousedown="startKnobDrag(event, 'swing')">
+<span class="text-label-sm font-label-sm text-on-surface-variant font-bold tracking-wider mb-1">SWING</span>
+<div class="w-20 h-20 rounded-full collet-knob-casing p-1.5 flex items-center justify-center relative shadow-lg">
+<div class="w-full h-full rounded-full collet-knob-face flex items-center justify-center relative transition-transform duration-75" id="knob-swing">
+<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_5px_#ffc665] absolute top-1.5"></div>
+</div>
+</div>
+<div class="mt-2 px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded">
+<span class="font-readout-numeric text-label-md text-primary font-bold" id="val-swing">64.0 %</span>
+</div>
+</div>
+<!-- KNOB 3: GATE (10% - 200%) -->
+<div class="flex flex-col items-center group cursor-ns-resize" onmousedown="startKnobDrag(event, 'gate')">
+<span class="text-label-sm font-label-sm text-on-surface-variant font-bold tracking-wider mb-1">GATE</span>
+<div class="w-20 h-20 rounded-full collet-knob-casing p-1.5 flex items-center justify-center relative shadow-lg">
+<div class="w-full h-full rounded-full collet-knob-face flex items-center justify-center relative transition-transform duration-75" id="knob-gate">
+<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_5px_#ffc665] absolute top-1.5"></div>
+</div>
+</div>
+<div class="mt-2 px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded">
+<span class="font-readout-numeric text-label-md text-primary font-bold" id="val-gate">85.0 %</span>
+</div>
+</div>
+<!-- KNOB 4: STRUM (Spread in ms) -->
+<div class="flex flex-col items-center group cursor-ns-resize" onmousedown="startKnobDrag(event, 'strum')">
+<span class="text-label-sm font-label-sm text-on-surface-variant font-bold tracking-wider mb-1">STRUM</span>
+<div class="w-20 h-20 rounded-full collet-knob-casing p-1.5 flex items-center justify-center relative shadow-lg">
+<div class="w-full h-full rounded-full collet-knob-face flex items-center justify-center relative transition-transform duration-75" id="knob-strum">
+<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_5px_#ffc665] absolute top-1.5"></div>
+</div>
+</div>
+<div class="mt-2 px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded">
+<span class="font-readout-numeric text-label-md text-primary font-bold" id="val-strum">22 ms</span>
+</div>
+</div>
+<!-- KNOB 5: ACCENT (0 - 100%) -->
+<div class="flex flex-col items-center group cursor-ns-resize" onmousedown="startKnobDrag(event, 'accent')">
+<span class="text-label-sm font-label-sm text-on-surface-variant font-bold tracking-wider mb-1">ACCENT</span>
+<div class="w-20 h-20 rounded-full collet-knob-casing p-1.5 flex items-center justify-center relative shadow-lg">
+<div class="w-full h-full rounded-full collet-knob-face flex items-center justify-center relative transition-transform duration-75" id="knob-accent">
+<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_5px_#ffc665] absolute top-1.5"></div>
+</div>
+</div>
+<div class="mt-2 px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded">
+<span class="font-readout-numeric text-label-md text-primary font-bold" id="val-accent">72 %</span>
+</div>
+</div>
+<!-- TOGGLE ROCKER: LATCH (w:64, h:50) -->
+<div class="flex flex-col items-center ml-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant font-bold tracking-wider mb-1">LATCH</span>
+<div class="w-16 h-12 rounded bg-surface-container-lowest border-2 border-outline-variant flex flex-col items-center justify-center cursor-pointer shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_2px_4px_rgba(0,0,0,0.6)] active:scale-95 transition-all" id="latch-rocker" onclick="toggleLatch()">
+<div class="w-8 h-2 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center" id="latch-indicator">
+<div class="w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_#ffc665]" id="latch-led"></div>
+</div>
+<span class="text-label-sm font-label-sm font-bold text-primary mt-1" id="latch-text">LATCHED</span>
+</div>
+<div class="mt-2 text-label-sm font-label-sm text-primary/60 font-readout-numeric">
+                HOLD SW
+              </div>
+</div>
+</div>
+</div>
+<!-- PANEL 4: ART / BRAND / SCHWUNG INSIGNIA (w: 310px approx) -->
+<div class="col-span-3 walnut-panel rounded p-space-sm flex flex-col justify-between relative">
+<!-- Hex Screws -->
+<div class="hex-screw absolute top-1 left-1"></div>
+<div class="hex-screw absolute top-1 right-1"></div>
+<div class="hex-screw absolute bottom-1 left-1"></div>
+<div class="hex-screw absolute bottom-1 right-1"></div>
+<!-- Header -->
+<div class="flex justify-between items-center px-1 border-b border-outline-variant/60 pb-1">
+<span class="font-headline-sm text-headline-sm text-primary font-bold tracking-wide uppercase">SCHWUNG AUDIO</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">SERIAL: #0928</span>
+</div>
+<!-- Brand Emblem & Graphic Plate -->
+<div class="display-well rounded p-2.5 flex flex-col justify-between items-center h-[120px] relative overflow-hidden text-center">
+<div class="scanlines absolute inset-0 z-10"></div>
+<div class="z-20 text-label-sm font-label-sm text-primary/70 tracking-widest uppercase">
+              MPC EMBEDDED DSP
+            </div>
+<!-- Stylized insignia mark -->
+<div class="z-20 flex flex-col items-center">
+<div class="font-headline-lg text-headline-lg text-primary font-extrabold tracking-tighter">
+                GROOVE BANK
+              </div>
+<div class="text-label-sm font-label-sm text-tertiary-container tracking-widest uppercase">
+                ANALOGUE MODELLED SWING
+              </div>
+</div>
+<div class="z-20 w-full flex justify-between text-label-sm font-label-sm text-primary/60 border-t border-outline-variant/40 pt-1">
+<span>FIRMWARE 3.2.1</span>
+<span>1280 × 628 TOUCH</span>
+</div>
+</div>
+<!-- Sync Multiplier / Quick Action Status -->
+<div class="bg-surface-container-lowest p-2 rounded border border-outline-variant flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">SYNC MULTIPLIER</span>
+<span class="font-readout-numeric text-label-md text-primary font-bold">1X [NATIVE CLOCK]</span>
+</div>
+<button class="px-2.5 py-1 bg-surface-container-high hover:bg-surface-bright border border-outline-variant rounded text-label-sm font-label-sm text-primary font-bold active:scale-95 transition-transform" onclick="triggerRetriggerBurst()">
+              BURST TEST
+            </button>
+</div>
+</div>
+</div>
+</main>
+<!-- ========================================================================= -->
+<!-- 4. BOTTOM HARDWARE STRIP (BottomNavBar / Q-Link 7-Encoder Hardware Row)    -->
+<!-- ========================================================================= -->
+<footer class="w-full h-14 bg-surface-container-lowest flex justify-between items-center px-space-md border-t border-outline-variant z-40 shrink-0">
+<!-- Label / Mode indicator -->
+<div class="flex items-center space-x-2 mr-2">
+<span class="material-symbols-outlined text-primary text-label-lg" style="font-variation-settings: 'FILL' 1;">dialpad</span>
+<span class="text-label-sm font-label-sm text-primary font-bold tracking-wider">Q-LINKS [MAIN]:</span>
+</div>
+<!-- 7 Q-Link Encoder Hardware Status Items mapped from requirements -->
+<div class="flex-1 grid grid-cols-7 gap-2">
+<!-- Q1: PATTERN -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-space-md py-1 rounded">
+<span class="text-label-sm font-label-sm tracking-wider font-bold">Q1: PATTERN</span>
+<span class="font-readout-numeric text-label-sm text-on-surface">SOUL 16TH</span>
+</div>
+<!-- Q2: VARIANT -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container transition-colors">
+<span class="text-label-sm font-label-sm tracking-wider font-bold">Q2: VARIANT</span>
+<span class="font-readout-numeric text-label-sm text-primary" id="qlink-variant">INDEX 3</span>
+</div>
+<!-- Q3: SWING -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container transition-colors">
+<span class="text-label-sm font-label-sm tracking-wider font-bold">Q3: SWING</span>
+<span class="font-readout-numeric text-label-sm text-primary" id="qlink-swing">64.0 %</span>
+</div>
+<!-- Q4: GATE -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container transition-colors">
+<span class="text-label-sm font-label-sm tracking-wider font-bold">Q4: GATE</span>
+<span class="font-readout-numeric text-label-sm text-primary" id="qlink-gate">85.0 %</span>
+</div>
+<!-- Q5: STRUM -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container transition-colors">
+<span class="text-label-sm font-label-sm tracking-wider font-bold">Q5: STRUM</span>
+<span class="font-readout-numeric text-label-sm text-primary" id="qlink-strum">22 ms</span>
+</div>
+<!-- Q6: ACCENT -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container transition-colors">
+<span class="text-label-sm font-label-sm tracking-wider font-bold">Q6: ACCENT</span>
+<span class="font-readout-numeric text-label-sm text-primary" id="qlink-accent">72 %</span>
+</div>
+<!-- Q7: LATCH -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container transition-colors">
+<span class="text-label-sm font-label-sm tracking-wider font-bold">Q7: LATCH</span>
+<span class="font-readout-numeric text-label-sm text-primary" id="qlink-latch">ON</span>
+</div>
+</div>
+</footer>
+</div>
+<!-- INTERACTIVE LOGIC (CLOCK SIMULATOR, DRAGGABLE POTENTIOMETERS, MIDI MONITOR) -->
+<script>
+    // State
+    let isRunning = false;
+    let clockInterval = null;
+    let currentStep = 0;
+    let patternIndex = 3;
+    let isLatched = true;
+
+    const patterns = [
+      { name: "01: MPC60 VINTAGE 54% SWING", meta: "OFFSET: -4ms | VARIATION: STRAIGHT | PUSH/PULL: 0.0%", feel: "ROGER LINN CLASSIC 1988" },
+      { name: "02: DILLA BEAT LAID-BACK SLOP", meta: "OFFSET: +28ms | VARIATION: QUINTUPLET | PUSH/PULL: -6.4%", feel: "MPC 3000 UNQUANTIZED" },
+      { name: "03: UK GARAGE 2-STEP SKIPPY", meta: "OFFSET: -8ms | VARIATION: 16TH DOTTED | PUSH/PULL: +4.8%", feel: "90s LONDON DRUM & BASS" },
+      { name: "04: DETROIT SOUL 16TH SHUFFLE", meta: "OFFSET: -14ms | VARIATION: B-TRIPLET | PUSH/PULL: +3.2%", feel: "MPC 3000 LATENCY DETROIT" },
+      { name: "05: AFROBEAT POLYRHYTHMIC 6/8", meta: "OFFSET: +12ms | VARIATION: TRIPLE TIE | PUSH/PULL: +1.5%", feel: "LAGOS HIGH LIFE SYNC" }
+    ];
+
+    const chords = [
+      { name: "Eb min 9", root: "Eb3", notes: [63, 66, 70, 74, 77] },
+      { name: "Ab 13 (b9)", root: "Ab2", notes: [56, 60, 64, 69, 75] },
+      { name: "Db Maj 7#11", root: "Db3", notes: [61, 65, 68, 72, 75] },
+      { name: "F min 11", root: "F2", notes: [53, 56, 60, 65, 70] }
+    ];
+
+    let chordIndex = 0;
+
+    // Knob Parameters
+    const knobValues = {
+      variant: { val: 3, min: 1, max: 8, step: 1, unit: "", rot: -40 },
+      swing: { val: 64.0, min: 50.0, max: 75.0, step: 0.5, unit: " %", rot: 25 },
+      gate: { val: 85.0, min: 10.0, max: 200.0, step: 1.0, unit: " %", rot: -10 },
+      strum: { val: 22, min: 0, max: 100, step: 1, unit: " ms", rot: -50 },
+      accent: { val: 72, min: 0, max: 100, step: 1, unit: " %", rot: 45 }
+    };
+
+    function updateKnobVisuals() {
+      for (const [key, data] of Object.entries(knobValues)) {
+        const knobEl = document.getElementById(`knob-${key}`);
+        const valEl = document.getElementById(`val-${key}`);
+        if (knobEl) knobEl.style.transform = `rotate(${data.rot}deg)`;
+        if (valEl) {
+          if (key === 'variant') {
+            valEl.textContent = `0${data.val} / 08`;
+            document.getElementById('qlink-variant').textContent = `INDEX ${data.val}`;
+          } else {
+            valEl.textContent = `${data.val}${data.unit}`;
+            const qEl = document.getElementById(`qlink-${key}`);
+            if (qEl) qEl.textContent = `${data.val}${data.unit}`;
+          }
+        }
+      }
+    }
+
+    // Engine Transport Toggle
+    function toggleEngine() {
+      isRunning = !isRunning;
+      const btn = document.getElementById('transport-btn');
+      const icon = document.getElementById('transport-icon');
+      const text = document.getElementById('transport-text');
+
+      if (isRunning) {
+        btn.classList.remove('bg-primary', 'text-on-primary');
+        btn.classList.add('bg-secondary-container', 'text-on-secondary');
+        icon.textContent = 'pause';
+        text.textContent = 'STOP ENGINE [SPACE]';
+        startClock();
+      } else {
+        btn.classList.remove('bg-secondary-container', 'text-on-secondary');
+        btn.classList.add('bg-primary', 'text-on-primary');
+        icon.textContent = 'play_arrow';
+        text.textContent = 'START ENGINE [SPACE]';
+        stopClock();
+      }
+    }
+
+    function startClock() {
+      if (clockInterval) clearInterval(clockInterval);
+      clockInterval = setInterval(() => {
+        advanceStep();
+      }, 125); // ~120 BPM 16th notes
+    }
+
+    function stopClock() {
+      if (clockInterval) clearInterval(clockInterval);
+      document.querySelectorAll('.step-cell').forEach(c => c.classList.remove('bg-primary', 'border-primary'));
+    }
+
+    function advanceStep() {
+      // Clear previous step
+      const prevStepEl = document.getElementById(`step-${currentStep}`);
+      if (prevStepEl) {
+        prevStepEl.classList.remove('bg-primary/50', 'border-primary', 'shadow-[0_0_8px_#ffc665]');
+      }
+
+      currentStep = (currentStep + 1) % 16;
+      const activeStepEl = document.getElementById(`step-${currentStep}`);
+      if (activeStepEl) {
+        activeStepEl.classList.add('bg-primary/50', 'border-primary', 'shadow-[0_0_8px_#ffc665]');
+      }
+
+      // Step text readout
+      const stepNum = currentStep + 1;
+      document.getElementById('step-clock-readout').textContent = `STEP: ${stepNum < 10 ? '0' + stepNum : stepNum} / 16`;
+
+      // Flash MIDI LED
+      const led = document.getElementById('midi-activity-led');
+      led.classList.add('shadow-[0_0_8px_#ffc665]', 'bg-primary-fixed');
+      setTimeout(() => {
+        led.classList.remove('shadow-[0_0_8px_#ffc665]', 'bg-primary-fixed');
+      }, 50);
+
+      // Rotate chord randomly every 4 steps
+      if (currentStep % 4 === 0) {
+        chordIndex = (chordIndex + 1) % chords.length;
+        const cur = chords[chordIndex];
+        document.getElementById('active-chord-name').textContent = cur.name;
+        
+        // Update simulated log
+        const logContainer = document.getElementById('midi-log-lines');
+        logContainer.innerHTML = `
+          <div class="flex justify-between"><span>${cur.root} (${cur.notes[0]})</span><span>118</span><span>-4ms</span></div>
+          <div class="flex justify-between"><span>G# (${cur.notes[1]})</span><span>096</span><span>+2ms</span></div>
+          <div class="flex justify-between"><span>B  (${cur.notes[2]})</span><span>102</span><span>+6ms</span></div>
+          <div class="flex justify-between text-primary/50"><span>D# (${cur.notes[3]})</span><span>084</span><span>+11ms</span></div>
+        `;
+      }
+    }
+
+    // Pattern change
+    function changePattern(dir) {
+      patternIndex = (patternIndex + dir + patterns.length) % patterns.length;
+      const p = patterns[patternIndex];
+      document.getElementById('groove-name').textContent = p.name;
+      document.getElementById('groove-meta').textContent = p.meta;
+      document.getElementById('groove-feel-tag').textContent = p.feel;
+      document.getElementById('qlink-pattern').textContent = p.name.split(':')[1].substring(1, 11);
+    }
+
+    // Toggle Latch
+    function toggleLatch() {
+      isLatched = !isLatched;
+      const led = document.getElementById('latch-led');
+      const text = document.getElementById('latch-text');
+      const qlink = document.getElementById('qlink-latch');
+
+      if (isLatched) {
+        led.classList.remove('opacity-20');
+        led.classList.add('bg-primary', 'shadow-[0_0_8px_#ffc665]');
+        text.textContent = 'LATCHED';
+        qlink.textContent = 'ON';
+      } else {
+        led.classList.remove('bg-primary', 'shadow-[0_0_8px_#ffc665]');
+        led.classList.add('opacity-20');
+        text.textContent = 'MOMENTARY';
+        qlink.textContent = 'OFF';
+      }
+    }
+
+    // Retrigger burst trigger
+    function triggerRetriggerBurst() {
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          advanceStep();
+        }, i * 35);
+      }
+    }
+
+    // Keyboard Spacebar Trigger
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        toggleEngine();
+      }
+    });
+
+    // Mouse Drag on Knobs
+    let activeDrag = null;
+    function startKnobDrag(e, knobKey) {
+      e.preventDefault();
+      activeDrag = {
+        key: knobKey,
+        startY: e.clientY,
+        startVal: knobValues[knobKey].val,
+        startRot: knobValues[knobKey].rot
+      };
+      window.addEventListener('mousemove', onKnobDrag);
+      window.addEventListener('mouseup', stopKnobDrag);
+    }
+
+    function onKnobDrag(e) {
+      if (!activeDrag) return;
+      const deltaY = activeDrag.startY - e.clientY;
+      const knob = knobValues[activeDrag.key];
+      const range = knob.max - knob.min;
+      const stepFactor = range / 120; // 120px full range
+
+      let newVal = activeDrag.startVal + deltaY * stepFactor;
+      if (newVal < knob.min) newVal = knob.min;
+      if (newVal > knob.max) newVal = knob.max;
+
+      if (knob.step >= 1) newVal = Math.round(newVal);
+      else newVal = parseFloat(newVal.toFixed(1));
+
+      knob.val = newVal;
+      
+      // Calculate rotation (-135deg to +135deg)
+      const ratio = (newVal - knob.min) / range;
+      knob.rot = -135 + ratio * 270;
+
+      updateKnobVisuals();
+    }
+
+    function stopKnobDrag() {
+      activeDrag = null;
+      window.removeEventListener('mousemove', onKnobDrag);
+      window.removeEventListener('mouseup', stopKnobDrag);
+    }
+
+    // Initialize visual state
+    updateKnobVisuals();
+  </script>
+</body></html>

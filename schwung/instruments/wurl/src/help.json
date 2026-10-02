@@ -1,0 +1,104 @@
+{
+  "title": "Wurl",
+  "children": [
+    {
+      "title": "About",
+      "lines": [
+        "Physically-modeled",
+        "Wurlitzer 200A electric",
+        "piano. Port of",
+        "OpenWurli (hal0zer0,",
+        "GPL-3.0).",
+        "",
+        "Modal reed oscillator",
+        "(7 modes, Euler-",
+        "Bernoulli beam theory)",
+        "with bark + tremolo +",
+        "amp tone."
+      ]
+    },
+    {
+      "title": "Pads",
+      "lines": [
+        "Standard chromatic",
+        "keyboard mapping.",
+        "Notes 36-67 across",
+        "the 32-pad grid.",
+        "",
+        "Pad pressure adds",
+        "subtle bark, the",
+        "harsh metallic attack",
+        "the real 200A makes",
+        "when played hard."
+      ]
+    },
+    {
+      "title": "Knobs",
+      "lines": [
+        "K1 Volume",
+        "K2 Tremolo",
+        "    amplitude wobble",
+        "    classic Wurli LFO",
+        "K3 Attack",
+        "    reed initial",
+        "    motion time",
+        "K4 Decay",
+        "    reed damping",
+        "K5 Brightness",
+        "    treble lift",
+        "K6 Darken",
+        "    HF rolloff for",
+        "    that midnight Wurli",
+        "K7 Bark",
+        "    velocity-driven",
+        "    attack harshness",
+        "K8 Reverb",
+        "    spring-style tail"
+      ]
+    },
+    {
+      "title": "About modal synthesis",
+      "lines": [
+        "The Wurli 200A's reed",
+        "is a thin steel bar",
+        "struck by a hammer.",
+        "Its vibration is the",
+        "sum of 7 vibrational",
+        "modes at inharmonic",
+        "frequency ratios.",
+        "",
+        "Modeled here via 7",
+        "parallel resonators",
+        "tuned to those modes.",
+        "Each note retunes the",
+        "whole bank, preserving",
+        "the natural inhar-",
+        "monicity that makes",
+        "the Wurli sound like",
+        "a Wurli."
+      ]
+    },
+    {
+      "title": "Tips",
+      "lines": [
+        "Tremolo + Reverb is",
+        " the classic Sun Ra",
+        " / Ray Charles tone.",
+        "",
+        "Bark high + Brightness",
+        " high + hard pads =",
+        " Pink Floyd 'Money'",
+        " grit.",
+        "",
+        "Darken pulls the high",
+        " end down for a soft",
+        " late-night ballad",
+        " sound.",
+        "",
+        "Slow Attack adds bow-",
+        " ed-string-style",
+        " swell to each note."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1321 @@
+{
+ "name": "Chordism",
+ "params": [
+  {
+   "key": "chord_type",
+   "name": "CHORD",
+   "options": [
+    "OCTAVES",
+    "FIFTH",
+    "MINOR",
+    "MIN 7",
+    "MIN 9",
+    "MIN 11",
+    "MAJOR",
+    "MAJ 7",
+    "MAJ 9",
+    "SUS 4",
+    "6/9",
+    "MIN 6",
+    "10TH",
+    "DOM 7",
+    "DOM 7 B9",
+    "HALF DIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "detune",
+   "name": "DETUNE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "width",
+   "name": "WIDTH",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "filter_cutoff",
+   "name": "CUTOFF",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "filter_resonance",
+   "name": "RESONANCE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "filter_mode",
+   "name": "FILTER MODE",
+   "options": [
+    "LP",
+    "HP",
+    "BP"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_slope",
+   "name": "SLOPE",
+   "options": [
+    "12 DB",
+    "24 DB"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_lfo_rate",
+   "name": "FLT LFO RATE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "filter_lfo_depth",
+   "name": "FLT LFO DPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "filter_lfo_spread",
+   "name": "FLT LFO SPRD",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "filter_lfo_shape",
+   "name": "FLT LFO WAVE",
+   "options": [
+    "TRIANGLE",
+    "RAMP UP",
+    "RAMP DOWN",
+    "SQUARE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_env_attack",
+   "name": "ENV A",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "filter_env_decay",
+   "name": "ENV D",
+   "min": 0,
+   "max": 1,
+   "default": 0.3
+  },
+  {
+   "key": "filter_env_depth",
+   "name": "ENV AMT",
+   "min": -1,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "drive",
+   "name": "DRIVE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0,
+   "max": 1,
+   "default": 0.8
+  },
+  {
+   "key": "wave_1",
+   "name": "WAVE 1",
+   "options": [
+    "OFF",
+    "SINE",
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE TR",
+    "WAVETABLE"
+   ],
+   "default": 1
+  },
+  {
+   "key": "wave_2",
+   "name": "WAVE 2",
+   "options": [
+    "OFF",
+    "SINE",
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE TR",
+    "WAVETABLE"
+   ],
+   "default": 1
+  },
+  {
+   "key": "wave_3",
+   "name": "WAVE 3",
+   "options": [
+    "OFF",
+    "SINE",
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE TR",
+    "WAVETABLE"
+   ],
+   "default": 1
+  },
+  {
+   "key": "wave_4",
+   "name": "WAVE 4",
+   "options": [
+    "OFF",
+    "SINE",
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE TR",
+    "WAVETABLE"
+   ],
+   "default": 1
+  },
+  {
+   "key": "shape",
+   "name": "SHAPE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "shape_1",
+   "name": "SHAPE 1",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "shape_2",
+   "name": "SHAPE 2",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "shape_3",
+   "name": "SHAPE 3",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "shape_4",
+   "name": "SHAPE 4",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "morph_index",
+   "name": "MORPH INDEX",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "morph_intensity",
+   "name": "MORPH INT",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pan_morph_index",
+   "name": "PAN MORPH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pan_morph_intensity",
+   "name": "PAN MORPH IN",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "chord_spread",
+   "name": "SPREAD",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "chord_rotation",
+   "name": "ROTATION",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "fm_modulator",
+   "name": "FM MOD",
+   "min": 0,
+   "max": 3,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "fm_amount",
+   "name": "FM AMT",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lfo_shape",
+   "name": "SHP LFO WAVE",
+   "options": [
+    "TRIANGLE",
+    "RAMP UP",
+    "RAMP DOWN",
+    "SQUARE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_rate",
+   "name": "SHP LFO RATE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lfo_depth",
+   "name": "SHP LFO DPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "vib_depth",
+   "name": "VIB DEPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "vib_speed",
+   "name": "VIB SPEED",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "vib_delay",
+   "name": "VIB DELAY",
+   "min": 0,
+   "max": 1,
+   "default": 0.2
+  },
+  {
+   "key": "sweep_amount",
+   "name": "SWEEP",
+   "min": -1,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "sweep_rate",
+   "name": "SWEEP RATE",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "attack",
+   "name": "ATTACK",
+   "min": 0,
+   "max": 1,
+   "default": 0.05
+  },
+  {
+   "key": "release",
+   "name": "RELEASE",
+   "min": 0,
+   "max": 1,
+   "default": 0.3
+  },
+  {
+   "key": "reverb_mix",
+   "name": "REVERB MIX",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "reverb_decay",
+   "name": "REV DECAY",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "reverb_damp",
+   "name": "REV DAMPING",
+   "min": 0,
+   "max": 1,
+   "default": 0.3
+  },
+  {
+   "key": "grind",
+   "name": "GRIND",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "bit_shift",
+   "name": "BIT SHIFT",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "decimator",
+   "name": "DECIMATOR",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "delay_mix",
+   "name": "DELAY MIX",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "delay_time",
+   "name": "DLY TIME",
+   "min": 0,
+   "max": 1,
+   "default": 0.3
+  },
+  {
+   "key": "delay_feedback",
+   "name": "DLY FBK",
+   "min": 0,
+   "max": 1,
+   "default": 0.4
+  },
+  {
+   "key": "delay_tone",
+   "name": "DLY TONE",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "glide_rate",
+   "name": "GLIDE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "glide_legato",
+   "name": "GLIDE LEGATO",
+   "options": [
+    "ALWAYS",
+    "LEGATO"
+   ],
+   "default": 0
+  },
+  {
+   "key": "vib_stray",
+   "name": "VIBRAT STRAY",
+   "options": [
+    "LFO",
+    "RANDOM"
+   ],
+   "default": 0
+  },
+  {
+   "key": "delay_mode",
+   "name": "DELAY MODE",
+   "options": [
+    "STEREO",
+    "PING-PONG",
+    "FLIP-FLOP",
+    "LONG",
+    "ZENITH",
+    "INTERVAL"
+   ],
+   "default": 0
+  },
+  {
+   "key": "delay_tone_hi",
+   "name": "DLY TONE HI",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "delay_tone_lo",
+   "name": "DLY TONE LO",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "delay_mod_rate",
+   "name": "DLY MOD RATE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "delay_mod_depth",
+   "name": "DLY MOD DPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "reverb_shimmer",
+   "name": "SHIMMER",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "reverb_lowcut",
+   "name": "REV LOW CUT",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "reverb_size",
+   "name": "ROOM SIZE",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "reverb_mod_rate",
+   "name": "REV MOD RATE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "reverb_mod_depth",
+   "name": "REV MOD DPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lm_lfo_rate",
+   "name": "LVL LFO RATE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lm_lfo_depth",
+   "name": "LVL LFO DPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lm_lfo_shape",
+   "name": "LVL LFO WAVE",
+   "options": [
+    "TRIANGLE",
+    "RAMP UP",
+    "RAMP DOWN",
+    "SQUARE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "pm_lfo_rate",
+   "name": "PAN LFO RATE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pm_lfo_depth",
+   "name": "PAN LFO DPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pm_lfo_shape",
+   "name": "PAN LFO WAVE",
+   "options": [
+    "TRIANGLE",
+    "RAMP UP",
+    "RAMP DOWN",
+    "SQUARE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "amp_lfo_rate",
+   "name": "TREM RATE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "amp_lfo_depth",
+   "name": "TREM DEPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "amp_lfo_shape",
+   "name": "TREMOLO WAVE",
+   "options": [
+    "TRIANGLE",
+    "RAMP UP",
+    "RAMP DOWN",
+    "SQUARE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "vca_mode",
+   "name": "VCA MODE",
+   "options": [
+    "AD",
+    "ASR",
+    "LOOPING"
+   ],
+   "default": 1
+  },
+  {
+   "key": "vca_hard_reset",
+   "name": "VCA RESET",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "vca_drone",
+   "name": "DRONE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "fenv_mode",
+   "name": "FLT ENV MODE",
+   "options": [
+    "AD",
+    "ASR",
+    "LOOPING"
+   ],
+   "default": 0
+  },
+  {
+   "key": "fenv_hard_reset",
+   "name": "FENV RESET",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "quality_position",
+   "name": "LOFI POS",
+   "options": [
+    "POST-FLT",
+    "PRE-FLT"
+   ],
+   "default": 0
+  },
+  {
+   "key": "fm_amount_1",
+   "name": "FM AMT 1",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "fm_amount_2",
+   "name": "FM AMT 2",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "fm_amount_3",
+   "name": "FM AMT 3",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "fm_amount_4",
+   "name": "FM AMT 4",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "mix_1",
+   "name": "MIX 1",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "mix_2",
+   "name": "MIX 2",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "mix_3",
+   "name": "MIX 3",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "mix_4",
+   "name": "MIX 4",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "vib_osc_enable",
+   "name": "VIB OSCS",
+   "min": 0,
+   "max": 15,
+   "default": 15,
+   "display": "int"
+  },
+  {
+   "key": "sweep_osc_enable",
+   "name": "SWEEP OSCS",
+   "min": 0,
+   "max": 15,
+   "default": 15,
+   "display": "int"
+  },
+  {
+   "key": "shape_lfo_mode",
+   "name": "LFO MODE",
+   "options": [
+    "FREE",
+    "NOTE RESET",
+    "ONE SHOT"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_lfo_mode",
+   "name": "FLT LFO MODE",
+   "options": [
+    "FREE",
+    "NOTE RESET",
+    "ONE SHOT"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lm_lfo_mode",
+   "name": "LVL LFO MODE",
+   "options": [
+    "FREE",
+    "NOTE RESET",
+    "ONE SHOT"
+   ],
+   "default": 0
+  },
+  {
+   "key": "pm_lfo_mode",
+   "name": "PAN LFO MODE",
+   "options": [
+    "FREE",
+    "NOTE RESET",
+    "ONE SHOT"
+   ],
+   "default": 0
+  },
+  {
+   "key": "fm_position",
+   "name": "FM POSITION",
+   "options": [
+    "PRE-MORPH",
+    "POST-MORPH"
+   ],
+   "default": 0
+  },
+  {
+   "key": "arp_hold",
+   "name": "ARP HOLD",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "arp_euclid_steps",
+   "name": "EUCLID STEPS",
+   "min": 1,
+   "max": 16,
+   "default": 16,
+   "display": "int"
+  },
+  {
+   "key": "arp_euclid_beats",
+   "name": "EUCLID BEATS",
+   "min": 0,
+   "max": 16,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "arp_variation_interval",
+   "name": "ARP VAR INT",
+   "min": -12,
+   "max": 12,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "arp_variations",
+   "name": "VAR COUNT",
+   "min": 1,
+   "max": 8,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "arp_clock_sync",
+   "name": "CLOCK SYNC",
+   "options": [
+    "INTERNAL",
+    "MIDI CLK"
+   ],
+   "default": 0
+  },
+  {
+   "key": "arp_clock_division",
+   "name": "CLOCK DIVISI",
+   "options": [
+    "1/4",
+    "1/4T",
+    "1/8",
+    "1/8T",
+    "1/16",
+    "1/32"
+   ],
+   "default": 2
+  },
+  {
+   "key": "scale_index",
+   "name": "SCALE",
+   "options": [
+    "CHROMATIC",
+    "MAJOR",
+    "MINOR",
+    "HARM MIN",
+    "PENT MAJ",
+    "PENT MIN",
+    "DIMINISHED",
+    "DORIAN",
+    "PHRYGIAN",
+    "LYDIAN",
+    "MIXOLYD",
+    "LOCRIAN",
+    "BLUES MAJ",
+    "BLUES MIN",
+    "ARABIC",
+    "ARABIC2",
+    "HIJAZ",
+    "IWATO",
+    "PELOG",
+    "SLENDRO",
+    "FOLK",
+    "JAPANESE",
+    "GYPSY",
+    "FLAMENCO",
+    "WHOLE TONE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "scale_root",
+   "name": "ROOT",
+   "options": [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B"
+   ],
+   "default": 0
+  },
+  {
+   "key": "tuning_mode",
+   "name": "TUNING",
+   "options": [
+    "CHORD",
+    "INTERVAL",
+    "CHORD MULTI"
+   ],
+   "default": 0
+  },
+  {
+   "key": "chord_pc_0",
+   "name": "C",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_1",
+   "name": "C#",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_2",
+   "name": "D",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_3",
+   "name": "D#",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_4",
+   "name": "E",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_5",
+   "name": "F",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_6",
+   "name": "F#",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_7",
+   "name": "G",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_8",
+   "name": "G#",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_9",
+   "name": "A",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_10",
+   "name": "A#",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "chord_pc_11",
+   "name": "B",
+   "options": [
+    "OCT",
+    "5TH",
+    "MIN",
+    "MIN7",
+    "MIN9",
+    "MIN11",
+    "MAJ",
+    "MAJ7",
+    "MAJ9",
+    "SUS4",
+    "6/9",
+    "MIN6",
+    "10",
+    "DOM7",
+    "DOM7B9",
+    "HALFDIM"
+   ],
+   "default": 6
+  },
+  {
+   "key": "interval_1",
+   "name": "INTERVAL 1",
+   "min": -24,
+   "max": 24,
+   "default": 4,
+   "display": "int"
+  },
+  {
+   "key": "interval_2",
+   "name": "INTERVAL 2",
+   "min": -24,
+   "max": 24,
+   "default": 7,
+   "display": "int"
+  },
+  {
+   "key": "interval_3",
+   "name": "INTERVAL 3",
+   "min": -24,
+   "max": 24,
+   "default": 12,
+   "display": "int"
+  },
+  {
+   "key": "lfo_phase_1",
+   "name": "LFO PHASE 1",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lfo_phase_2",
+   "name": "LFO PHASE 2",
+   "min": 0,
+   "max": 1,
+   "default": 0.25
+  },
+  {
+   "key": "lfo_phase_3",
+   "name": "LFO PHASE 3",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "lfo_phase_4",
+   "name": "LFO PHASE 4",
+   "min": 0,
+   "max": 1,
+   "default": 0.75
+  },
+  {
+   "key": "ctrl_source",
+   "name": "CTRL SRC",
+   "options": [
+    "AFTERTOUCH",
+    "RANDOM",
+    "COIN TOSS",
+    "MIDI CC",
+    "VELOCITY"
+   ],
+   "default": 0
+  },
+  {
+   "key": "ctrl_cc",
+   "name": "CTRL CC",
+   "min": 0,
+   "max": 127,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "ctrl_to_cutoff",
+   "name": "CTRL>CUTOFF",
+   "min": -1,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "ctrl_to_morph",
+   "name": "CTRL>MORPH",
+   "min": -1,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "ctrl_to_vib",
+   "name": "CTRL>VIBRATO",
+   "min": -1,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "ctrl_to_shape",
+   "name": "CTRL>SHAPE",
+   "min": -1,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "ctrl_to_fm",
+   "name": "CTRL>FM",
+   "min": -1,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "arp_enabled",
+   "name": "ARP STATUS",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "arp_tempo",
+   "name": "ARP TEMPO",
+   "min": 0,
+   "max": 1,
+   "default": 0.4
+  },
+  {
+   "key": "arp_direction",
+   "name": "ARP DIRECTIO",
+   "options": [
+    "UP",
+    "DOWN",
+    "UP/DOWN",
+    "RANDOM"
+   ],
+   "default": 0
+  }
+ ]
+}

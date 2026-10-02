@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Stands in for ssh when testing install.sh / uninstall.sh: skips ssh's options, runs the remote command in the
+# fake-mpc container. Use with MPC_SSH_BIN=dev-tools/fake-mpc/fake-ssh (see README.md).
+while [ $# -gt 0 ]; do case "$1" in -o|-i) shift 2 ;; -O) exit 0 ;; -*) shift ;; *) break ;; esac; done
+shift   # user@host
+exec docker exec -i fake-mpc sh -c "${*:-true}"

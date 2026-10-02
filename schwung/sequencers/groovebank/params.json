@@ -1,0 +1,95 @@
+{
+ "name": "Groove Bank",
+ "params": [
+  {
+   "key": "pattern",
+   "name": "GROOVE",
+   "min": 0,
+   "max": 599,
+   "default": 0,
+   "step": 1,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "variant",
+   "name": "VARIANT",
+   "min": 0,
+   "max": 5,
+   "default": 0,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "swing",
+   "name": "SWING",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "step": 1,
+   "unit": "%",
+   "display": "int"
+  },
+  {
+   "key": "gate",
+   "name": "GATE",
+   "min": 5,
+   "max": 200,
+   "default": 80,
+   "step": 5,
+   "unit": "%",
+   "display": "int"
+  },
+  {
+   "key": "strum",
+   "name": "STRUM",
+   "min": -100,
+   "max": 100,
+   "default": 0,
+   "step": 5,
+   "display": "int"
+  },
+  {
+   "key": "accent",
+   "name": "ACCENT",
+   "min": 0,
+   "max": 100,
+   "default": 50,
+   "step": 5,
+   "unit": "%",
+   "display": "int"
+  },
+  {
+   "key": "latch",
+   "name": "LATCH",
+   "default": 0,
+   "step": 1,
+   "options": [
+    "OFF",
+    "ON"
+   ]
+  },
+  {
+   "key": "pattern_prev",
+   "name": "PREV GROOVE",
+   "momentary": true,
+   "step_of": "pattern",
+   "step_delta": -1
+  },
+  {
+   "key": "pattern_next",
+   "name": "NEXT GROOVE",
+   "momentary": true,
+   "step_of": "pattern",
+   "step_delta": 1
+  },
+  {
+   "key": "pattern_label",
+   "name": "GROOVE NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

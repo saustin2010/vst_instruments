@@ -1,0 +1,362 @@
+{
+  "id": "noisemaker",
+  "name": "Noisemaker",
+  "abbrev": "NM",
+  "version": "0.2.2",
+  "description": "Virtual-analog synth ported from TAL Noisemaker (Patrick Kunz). 6-voice, dual osc + sub, 12 multimode filters, 2 LFOs, spline mod-envelope, chorus + reverb + delay. 256 factory presets, plus import your own banks of .noisemakerpreset files.",
+  "author": "legsmechanical (engine: Patrick Kunz / TAL)",
+  "license": "GPL-2.0",
+  "ui": "ui.js",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "aftertouch": false,
+    "chainable": true,
+    "host_canvas_ui": true,
+    "component_type": "sound_generator"
+  },
+  "ui_hierarchy": {
+    "modes": null,
+    "levels": {
+      "root": {
+        "label": "Noisemaker",
+        "list_param": "preset",
+        "count_param": "preset_count",
+        "name_param": "preset_name",
+        "knobs": [
+          "wave",
+          "tune2",
+          "cutoff",
+          "resonance",
+          "filter_env",
+          "fenv_time",
+          "aenv_time",
+          "volume"
+        ],
+        "params": [
+          {
+            "key": "editor",
+            "label": "Editor"
+          },
+          {
+            "level": "banks",
+            "label": "Preset Bank"
+          },
+          {
+            "level": "macros",
+            "label": "Macros"
+          },
+          {
+            "level": "osc",
+            "label": "Oscillators"
+          },
+          {
+            "level": "filter",
+            "label": "Filter"
+          },
+          {
+            "level": "fenv",
+            "label": "Filter Env"
+          },
+          {
+            "level": "aenv",
+            "label": "Amp Env"
+          },
+          {
+            "level": "lfo1",
+            "label": "LFO 1"
+          },
+          {
+            "level": "lfo2",
+            "label": "LFO 2"
+          },
+          {
+            "level": "env3",
+            "label": "Env 3 (Free)"
+          },
+          {
+            "level": "envd",
+            "label": "Env Draw"
+          },
+          {
+            "level": "voice",
+            "label": "Voicing / Vel"
+          },
+          {
+            "level": "fx",
+            "label": "Chorus / Reverb"
+          },
+          {
+            "level": "delay",
+            "label": "Delay"
+          }
+        ]
+      },
+      "banks": {
+        "label": "Preset Bank",
+        "items_param": "bank_list",
+        "select_param": "bank_index"
+      },
+      "macros": {
+        "knobs": [
+          "wave",
+          "tune2",
+          "cutoff",
+          "resonance",
+          "filter_env",
+          "fenv_time",
+          "aenv_time",
+          "volume"
+        ],
+        "params": [
+          "wave",
+          "tune2",
+          "fenv_time",
+          "aenv_time",
+          "cutoff",
+          "resonance",
+          "filter_env",
+          "volume"
+        ]
+      },
+      "osc": {
+        "knobs": [
+          "osc1_wave",
+          "osc2_wave",
+          "osc1_vol",
+          "osc2_vol",
+          "osc3_vol",
+          "detune",
+          "osc1_pw",
+          "ringmod"
+        ],
+        "params": [
+          "osc1_wave",
+          "osc1_vol",
+          "osc1_tune",
+          "osc1_fine",
+          "osc1_pw",
+          "osc1_phase",
+          "osc2_wave",
+          "osc2_vol",
+          "osc2_tune",
+          "osc2_fine",
+          "osc2_phase",
+          "osc2_fm",
+          "osc3_vol",
+          "osc_sync",
+          "ringmod",
+          "detune",
+          "osc_tune",
+          "bitcrush",
+          "vintage"
+        ]
+      },
+      "filter": {
+        "knobs": [
+          "filter_type",
+          "cutoff",
+          "resonance",
+          "keyfollow",
+          "filter_env",
+          "filter_drive",
+          "highpass",
+          "vel_cut"
+        ],
+        "params": [
+          "filter_type",
+          "cutoff",
+          "resonance",
+          "keyfollow",
+          "filter_env",
+          "filter_drive",
+          "highpass"
+        ]
+      },
+      "fenv": {
+        "knobs": [
+          "fenv_a",
+          "fenv_d",
+          "fenv_s",
+          "fenv_r",
+          "fenv_time",
+          "filter_env",
+          "cutoff",
+          "resonance"
+        ],
+        "params": [
+          "fenv_a",
+          "fenv_d",
+          "fenv_s",
+          "fenv_r",
+          "fenv_time"
+        ]
+      },
+      "aenv": {
+        "knobs": [
+          "aenv_a",
+          "aenv_d",
+          "aenv_s",
+          "aenv_r",
+          "aenv_time",
+          "vel_vol",
+          "volume",
+          "cutoff"
+        ],
+        "params": [
+          "aenv_a",
+          "aenv_d",
+          "aenv_s",
+          "aenv_r",
+          "aenv_time"
+        ]
+      },
+      "lfo1": {
+        "knobs": [
+          "lfo1_wave",
+          "lfo1_rate",
+          "lfo1_amount",
+          "lfo1_dest",
+          "lfo1_sync",
+          "lfo1_keytrig",
+          "lfo1_phase",
+          "volume"
+        ],
+        "params": [
+          "lfo1_wave",
+          "lfo1_rate",
+          "lfo1_amount",
+          "lfo1_dest",
+          "lfo1_sync",
+          "lfo1_keytrig",
+          "lfo1_phase"
+        ]
+      },
+      "lfo2": {
+        "knobs": [
+          "lfo2_wave",
+          "lfo2_rate",
+          "lfo2_amount",
+          "lfo2_dest",
+          "lfo2_sync",
+          "lfo2_keytrig",
+          "lfo2_phase",
+          "volume"
+        ],
+        "params": [
+          "lfo2_wave",
+          "lfo2_rate",
+          "lfo2_amount",
+          "lfo2_dest",
+          "lfo2_sync",
+          "lfo2_keytrig",
+          "lfo2_phase"
+        ]
+      },
+      "env3": {
+        "knobs": [
+          "free_a",
+          "free_d",
+          "free_amt",
+          "free_dest",
+          "cutoff",
+          "resonance",
+          "filter_env",
+          "volume"
+        ],
+        "params": [
+          "free_a",
+          "free_d",
+          "free_amt",
+          "free_dest"
+        ]
+      },
+      "envd": {
+        "knobs": [
+          "env_dest",
+          "env_amt",
+          "env_speed",
+          "cutoff",
+          "resonance",
+          "filter_env",
+          "aenv_a",
+          "volume"
+        ],
+        "params": [
+          "env_dest",
+          "env_amt",
+          "env_speed"
+        ]
+      },
+      "voice": {
+        "knobs": [
+          "voices",
+          "portamento",
+          "porta_mode",
+          "vel_vol",
+          "vel_env",
+          "vel_cut",
+          "pw_pitch",
+          "pw_cutoff"
+        ],
+        "params": [
+          "voices",
+          "portamento",
+          "porta_mode",
+          "vel_vol",
+          "vel_env",
+          "vel_cut",
+          "pw_pitch",
+          "pw_cutoff"
+        ]
+      },
+      "fx": {
+        "knobs": [
+          "chorus1",
+          "chorus2",
+          "reverb_wet",
+          "reverb_decay",
+          "reverb_pre",
+          "reverb_hi",
+          "reverb_lo",
+          "volume"
+        ],
+        "params": [
+          "chorus1",
+          "chorus2",
+          "reverb_wet",
+          "reverb_decay",
+          "reverb_pre",
+          "reverb_hi",
+          "reverb_lo"
+        ]
+      },
+      "delay": {
+        "knobs": [
+          "delay_wet",
+          "delay_time",
+          "delay_fb",
+          "delay_sync",
+          "delay_fac_l",
+          "delay_fac_r",
+          "delay_hi",
+          "delay_lo"
+        ],
+        "params": [
+          "delay_wet",
+          "delay_time",
+          "delay_fb",
+          "delay_sync",
+          "delay_fac_l",
+          "delay_fac_r",
+          "delay_hi",
+          "delay_lo"
+        ]
+      }
+    }
+  }
+}

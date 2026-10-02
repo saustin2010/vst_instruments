@@ -1,0 +1,20 @@
+{
+    "name": "Plaits + Reverb",
+    "version": 1,
+    "chain": {
+        "input": "pads",
+        "synth": {
+            "module": "plaits",
+            "config": {}
+        },
+        "audio_fx": [
+            {
+                "type": "freeverb",
+                "params": {
+                    "room_size": 0.7,
+                    "wet": 0.3
+                }
+            }
+        ]
+    }
+}

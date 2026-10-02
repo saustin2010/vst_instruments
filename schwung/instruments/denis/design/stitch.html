@@ -1,0 +1,956 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Denis — West Coast Serge Synthesizer (MPC Live II)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  :root {
+    --bg: #0c0c0c;
+    --panel: #151515;
+    --line: #3a3a3a;
+    --ink: #f0f0ea;
+    --ink-dim: #c8c8c0;
+    --ink-faint: #7a7a72;
+    --accent: #2f9fd8;
+    --accent-hi: #f0c020;
+    --knob-face: #f0f0ea;
+    --knob-ring: #2a2a2a;
+    --knob-dot: #f0c020;
+    --lcd: #080808;
+    --seg-active: #f0c020;
+    --seg-inactive: #222222;
+    --seg-active-tx: #0c0c0c;
+    --banana-blue: #2f9fd8;
+    --banana-yellow: #f0c020;
+    --banana-red: #e04838;
+  }
+  body {
+    background: #050505;
+    color: var(--ink);
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px;
+    overflow-x: hidden;
+  }
+  .mpc-chassis {
+    width: 1280px;
+    height: 720px;
+    background: var(--bg);
+    border: 2px solid #2e2e2e;
+    border-radius: 8px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Top Nav / Status Bar */
+  .top-bar {
+    height: 52px;
+    background: #111111;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+  .brand-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .led-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-hi);
+    box-shadow: 0 0 10px var(--accent-hi);
+  }
+  .device-title {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .plugin-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--accent-hi);
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .tab-btn {
+    background: #1c1c1c;
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn.active {
+    background: var(--accent-hi);
+    color: #0c0c0c;
+    border-color: #ffd84d;
+    box-shadow: 0 0 12px rgba(240, 192, 32, 0.4);
+  }
+  .audition-btn {
+    background: #242010;
+    border: 1px solid var(--accent-hi);
+    color: var(--accent-hi);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    padding: 7px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.1s ease;
+  }
+  .audition-btn:active, .audition-btn.playing {
+    background: var(--accent-hi);
+    color: #0c0c0c;
+    box-shadow: 0 0 18px var(--accent-hi);
+  }
+
+  /* Main Workspace */
+  .workspace {
+    width: 1280px;
+    height: 618px;
+    position: relative;
+    padding: 10px;
+  }
+  .tab-page {
+    display: none;
+    width: 100%;
+    height: 100%;
+  }
+  .tab-page.active {
+    display: block;
+  }
+
+  /* Hardware Frames */
+  .frame {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    position: absolute;
+    padding: 24px 12px 10px 12px;
+  }
+  .frame-title {
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    color: var(--banana-blue);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .frame-title.yellow { color: var(--accent-hi); }
+  .frame-title.red { color: var(--banana-red); }
+
+  /* Serge-style Collet Metal Knob */
+  .knob-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: ns-resize;
+    position: relative;
+  }
+  .knob-body {
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffffff, #e2e2dc 60%, #9e9e96 95%);
+    border: 3px solid var(--knob-ring);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.7), inset 0 2px 3px rgba(255,255,255,0.9), inset 0 -2px 3px rgba(0,0,0,0.5);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .knob-pointer {
+    position: absolute;
+    top: 6px;
+    width: 3px;
+    height: 22px;
+    background: var(--accent-hi);
+    border-radius: 2px;
+    box-shadow: 0 0 6px var(--accent-hi);
+  }
+  .knob-label {
+    margin-top: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ink-dim);
+    text-align: center;
+  }
+  .knob-val {
+    margin-top: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent-hi);
+    background: #080808;
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #292929;
+  }
+
+  /* Push Buttons & Triggers */
+  .hw-btn {
+    background: #202020;
+    border: 1px solid #444;
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 10px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  }
+  .hw-btn:active {
+    background: var(--accent-hi);
+    color: #0c0c0c;
+  }
+
+  /* Preset Stepper / Popup */
+  .preset-stepper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #080808;
+    border: 1px solid #333;
+    padding: 8px 12px;
+    border-radius: 4px;
+    width: 250px;
+  }
+  .preset-display {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-hi);
+    text-align: center;
+  }
+
+  /* Vertical Enum Options */
+  .enum-v {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .enum-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .enum-opt {
+    background: #1f1f1f;
+    color: var(--ink-faint);
+    border: 1px solid #333;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .enum-opt.active {
+    background: var(--banana-blue);
+    color: #fff;
+    border-color: #62c3f7;
+    box-shadow: 0 0 8px rgba(47, 159, 216, 0.4);
+  }
+
+  /* 4x8 Serge Modulation Matrix Table */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(8, 1fr);
+    gap: 6px;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .matrix-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--accent-hi);
+    text-align: center;
+    padding: 6px 2px;
+    background: #0c0c0c;
+    border: 1px solid #282828;
+    border-radius: 3px;
+  }
+  .matrix-row-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--banana-blue);
+    display: flex;
+    align-items: center;
+    padding-left: 6px;
+    background: #111;
+    border: 1px solid #282828;
+    border-radius: 3px;
+  }
+  .matrix-cell {
+    background: #090909;
+    border: 1px solid #2a2a2a;
+    border-radius: 3px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.1s;
+    position: relative;
+  }
+  .matrix-cell.connected {
+    background: #1c272e;
+    border-color: var(--banana-blue);
+  }
+  .matrix-cell.yellow-conn {
+    background: #2b250f;
+    border-color: var(--accent-hi);
+  }
+  .pin-jack {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #444;
+    background: #000;
+  }
+  .matrix-cell.connected .pin-jack {
+    background: var(--banana-blue);
+    border-color: #72cbfa;
+    box-shadow: 0 0 8px var(--banana-blue);
+  }
+  .matrix-cell.yellow-conn .pin-jack {
+    background: var(--accent-hi);
+    border-color: #ffe680;
+    box-shadow: 0 0 8px var(--accent-hi);
+  }
+  .matrix-amt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    margin-top: 3px;
+    color: var(--ink-faint);
+  }
+  .matrix-cell.connected .matrix-amt { color: var(--banana-blue); }
+  .matrix-cell.yellow-conn .matrix-amt { color: var(--accent-hi); }
+
+  /* Waveviewer Oscilloscope */
+  .scope-box {
+    width: 100%;
+    height: 100%;
+    background: #070707;
+    border: 1px solid #222;
+    border-radius: 3px;
+    position: relative;
+  }
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Bottom Q-Links Bar */
+  .qlink-bar {
+    height: 44px;
+    background: #101010;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+  .qlink-bank-tag {
+    color: var(--accent-hi);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .qlink-badges {
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  .q-badge {
+    background: #1c1c1c;
+    border: 1px solid #2e2e2e;
+    padding: 3px 8px;
+    border-radius: 3px;
+    color: var(--ink-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    white-space: nowrap;
+  }
+  .q-badge b { color: var(--accent-hi); }
+</style>
+</head>
+<body>
+
+<div class="mpc-chassis">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="brand-badge">
+      <div class="led-dot"></div>
+      <div class="device-title">AKAI MPC LIVE II // WEST COAST SERGE</div>
+      <div class="plugin-title">DENIS // ANALOG MATRIX SYNTHESIZER</div>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" id="tab1" onclick="switchDenisTab(1)">1: DENIS</button>
+      <button class="tab-btn" id="tab2" onclick="switchDenisTab(2)">2: ENV / MOD</button>
+      <button class="tab-btn" id="tab3" onclick="switchDenisTab(3)">3: ENV LFO</button>
+      <button class="tab-btn" id="tab4" onclick="switchDenisTab(4)">4: S&amp;H NOISE</button>
+    </div>
+
+    <button class="audition-btn" id="auditionBtn" onclick="triggerDenisTone()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      AUDITION BOLD PLUCK [SPACE]
+    </button>
+  </div>
+
+  <!-- Workspace -->
+  <div class="workspace">
+
+    <!-- PAGE 1: DENIS -->
+    <div class="tab-page active" id="pageDenis">
+      <!-- PATCH (468) -->
+      <div class="frame" style="left: 10px; top: 10px; width: 468px; height: 260px;">
+        <div class="frame-title yellow">PATCH PROGRAM &amp; RANDOMIZER</div>
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 18px; height: 100%; padding-top: 10px;">
+          <div class="preset-stepper">
+            <span style="font-size: 9px; color: var(--ink-faint);">PATCH</span>
+            <div class="preset-display">04: WEST COAST BUBBLES</div>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button class="hw-btn" onclick="randomizeAll()">RANDOM ALL</button>
+            <button class="hw-btn" onclick="randomizeMod()">RND MOD</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- OSCILLATORS (784) -->
+      <div class="frame" style="left: 488px; top: 10px; width: 762px; height: 260px;">
+        <div class="frame-title">OSCILLATORS // DUAL COMPLEX CORE</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="osc1_freq" data-val="110" data-min="20" data-max="2000" data-unit="Hz">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">OSC1 FREQ</div>
+            <div class="knob-val">110 Hz</div>
+          </div>
+          <div class="knob-control" data-key="osc1_timbre" data-val="45" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">OSC1 TIMBRE</div>
+            <div class="knob-val">45 %</div>
+          </div>
+          <div class="knob-control" data-key="osc2_pitch" data-val="220" data-min="20" data-max="2000" data-unit="Hz">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">OSC2 FREQ</div>
+            <div class="knob-val">220 Hz</div>
+          </div>
+          <div class="knob-control" data-key="osc2_harmonics" data-val="60" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">HARMONICS</div>
+            <div class="knob-val">60 %</div>
+          </div>
+          <div class="knob-control" data-key="osc_mix" data-val="50" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">OSC MIX</div>
+            <div class="knob-val">50 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAVEFOLDER (310) -->
+      <div class="frame" style="left: 10px; top: 278px; width: 310px; height: 280px;">
+        <div class="frame-title red">WAVEFOLDER // BUCHLA 259 STYLE</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="fold_depth" data-val="70" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">FOLD DEPTH</div>
+            <div class="knob-val">70 %</div>
+          </div>
+          <div class="knob-control" data-key="fold_type" data-val="2" data-min="1" data-max="4" data-unit="MOD">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">FOLD TYPE</div>
+            <div class="knob-val">TYPE 2</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTER (626) -->
+      <div class="frame" style="left: 326px; top: 278px; width: 626px; height: 280px;">
+        <div class="frame-title">VARIABLE RESONANT FILTER</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="filter_cutoff" data-val="2400" data-min="50" data-max="12000" data-unit="Hz">
+            <div class="knob-body" style="width: 82px; height: 82px;"><div class="knob-pointer" style="height: 25px;"></div></div>
+            <div class="knob-label">CUTOFF</div>
+            <div class="knob-val">2.40 kHz</div>
+          </div>
+          <div class="knob-control" data-key="filter_q" data-val="65" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">Q (RESO)</div>
+            <div class="knob-val">65 %</div>
+          </div>
+          <div class="enum-v">
+            <div class="enum-label">FILTER TYPE</div>
+            <div class="enum-opt active">LOWPASS</div>
+            <div class="enum-opt">BANDPASS</div>
+            <div class="enum-opt">HIGHPASS</div>
+            <div class="enum-opt">NOTCH</div>
+          </div>
+          <div class="knob-control" data-key="vel_to_filter" data-val="55" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">VEL&gt;FILTER</div>
+            <div class="knob-val">55 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOICE (310) -->
+      <div class="frame" style="left: 958px; top: 278px; width: 292px; height: 280px;">
+        <div class="frame-title yellow">VOICE CONTROL</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="portamento" data-val="25" data-min="0" data-max="100" data-unit="ms">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">PORTAMENTO</div>
+            <div class="knob-val">25 ms</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <button class="hw-btn" style="padding: 14px 18px;">LEGATO [ON]</button>
+            <div class="knob-label" style="margin-top: 8px;">LEGATO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: ENV / MOD -->
+    <div class="tab-page" id="pageEnvMod">
+      <!-- ENVELOPE (626) -->
+      <div class="frame" style="left: 10px; top: 10px; width: 626px; height: 260px;">
+        <div class="frame-title">SLOPE GENERATOR ENVELOPE</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="attack" data-val="12" data-min="1" data-max="2000" data-unit="ms">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">ATTACK</div>
+            <div class="knob-val">12 ms</div>
+          </div>
+          <div class="knob-control" data-key="decay" data-val="350" data-min="5" data-max="4000" data-unit="ms">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">DECAY</div>
+            <div class="knob-val">350 ms</div>
+          </div>
+          <div class="knob-control" data-key="sustain" data-val="40" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">SUSTAIN</div>
+            <div class="knob-val">40 %</div>
+          </div>
+          <div class="knob-control" data-key="release" data-val="280" data-min="5" data-max="4000" data-unit="ms">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">RELEASE</div>
+            <div class="knob-val">280 ms</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOISE (310) -->
+      <div class="frame" style="left: 642px; top: 10px; width: 310px; height: 260px;">
+        <div class="frame-title">ANALOG NOISE</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="noise_mix" data-val="25" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">NOISE MIX</div>
+            <div class="knob-val">25 %</div>
+          </div>
+          <div class="enum-v">
+            <div class="enum-label">NOISE TYPE</div>
+            <div class="enum-opt active">WHITE</div>
+            <div class="enum-opt">PINK</div>
+            <div class="enum-opt">BROWN</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RANDOM (310) -->
+      <div class="frame" style="left: 958px; top: 10px; width: 292px; height: 260px;">
+        <div class="frame-title yellow">RANDOM GENERATORS</div>
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; height: 100%; padding-top: 10px;">
+          <button class="hw-btn" style="width: 160px;" onclick="randomizeAll()">RANDOM SOUND</button>
+          <button class="hw-btn" style="width: 160px;" onclick="randomizeMod()">RANDOM MOD</button>
+        </div>
+      </div>
+
+      <!-- MODULATORS (626) -->
+      <div class="frame" style="left: 10px; top: 278px; width: 626px; height: 280px;">
+        <div class="frame-title red">MODULATORS (LFO / S&amp;H)</div>
+        <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding-top: 10px;">
+          <div class="knob-control" data-key="lfo_rate" data-val="4.2" data-min="0.1" data-max="50" data-unit="Hz">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">LFO RATE</div>
+            <div class="knob-val">4.2 Hz</div>
+          </div>
+          <div class="knob-control" data-key="sh_rate" data-val="6.5" data-min="0.1" data-max="50" data-unit="Hz">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">S&amp;H RATE</div>
+            <div class="knob-val">6.5 Hz</div>
+          </div>
+          <div class="knob-control" data-key="mod_depth_env" data-val="65" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">ENV DEPTH</div>
+            <div class="knob-val">65 %</div>
+          </div>
+          <div class="knob-control" data-key="mod_depth_noise" data-val="30" data-min="0" data-max="100" data-unit="%">
+            <div class="knob-body"><div class="knob-pointer"></div></div>
+            <div class="knob-label">NOISE DEPTH</div>
+            <div class="knob-val">30 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MATRIX RESET & LOGO (610) -->
+      <div class="frame" style="left: 642px; top: 278px; width: 608px; height: 280px;">
+        <div class="frame-title yellow">INTERACTIVE MODULATION WAVE MONITOR</div>
+        <div class="scope-box">
+          <canvas id="denisScope"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: ENV LFO (Serge 4x8 Matrix Part 1) -->
+    <div class="tab-page" id="pageEnvLfo">
+      <div class="frame" style="left: 10px; top: 10px; width: 1240px; height: 548px;">
+        <div class="frame-title">SERGE 4x8 MODULATION MATRIX (ROUTING: ENVELOPE &amp; LFO)</div>
+        <div style="padding-top: 14px;">
+          <div class="matrix-grid">
+            <div></div>
+            <div class="matrix-header">PITCH 1</div>
+            <div class="matrix-header">TIMBRE</div>
+            <div class="matrix-header">PITCH 2</div>
+            <div class="matrix-header">HARMONICS</div>
+            <div class="matrix-header">WAVEFOLD</div>
+            <div class="matrix-header">FILT TYPE</div>
+            <div class="matrix-header">CUTOFF</div>
+            <div class="matrix-header">VCA LEVEL</div>
+
+            <!-- ROW 1: ENVELOPE -->
+            <div class="matrix-row-title">ENV TO</div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell connected" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">+45%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell connected" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">+80%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell connected" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">+60%</div></div>
+            <div class="matrix-cell connected" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">+100%</div></div>
+
+            <!-- ROW 2: LFO -->
+            <div class="matrix-row-title">LFO TO</div>
+            <div class="matrix-cell connected" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">+15%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell connected" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">+35%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell connected" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">+40%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: S&H NOISE (Serge 4x8 Matrix Part 2) -->
+    <div class="tab-page" id="pageShNoise">
+      <div class="frame" style="left: 10px; top: 10px; width: 1240px; height: 548px;">
+        <div class="frame-title yellow">SERGE 4x8 MODULATION MATRIX (ROUTING: S&amp;H &amp; NOISE)</div>
+        <div style="padding-top: 14px;">
+          <div class="matrix-grid">
+            <div></div>
+            <div class="matrix-header">PITCH 1</div>
+            <div class="matrix-header">TIMBRE</div>
+            <div class="matrix-header">PITCH 2</div>
+            <div class="matrix-header">HARMONICS</div>
+            <div class="matrix-header">WAVEFOLD</div>
+            <div class="matrix-header">FILT TYPE</div>
+            <div class="matrix-header">CUTOFF</div>
+            <div class="matrix-header">VCA LEVEL</div>
+
+            <!-- ROW 3: S&H -->
+            <div class="matrix-row-title yellow">S&amp;H TO</div>
+            <div class="matrix-cell yellow-conn" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">+25%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell yellow-conn" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">+50%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell yellow-conn" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">+30%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+
+            <!-- ROW 4: NOISE -->
+            <div class="matrix-row-title yellow">NOISE TO</div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell yellow-conn" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">+20%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+            <div class="matrix-cell yellow-conn" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">+35%</div></div>
+            <div class="matrix-cell" onclick="toggleMatrix(this, true)"><div class="pin-jack"></div><div class="matrix-amt">0%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Q-Links Strip -->
+  <div class="qlink-bar">
+    <div class="qlink-bank-tag">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+      <span id="qlinkBankTitle">Q-LINKS [DENIS]</span>:
+    </div>
+    <div class="qlink-badges" id="denisQBadges"></div>
+  </div>
+</div>
+
+<script>
+  const denisQLinks = {
+    1: ['preset', 'rnd_patch', 'osc1_freq', 'osc1_timbre', 'osc2_pitch', 'osc2_harmonics', 'osc_mix', 'fold_depth', 'fold_type', 'filter_cutoff', 'filter_q', 'filter_type', 'vel_to_filter', 'portamento', 'legato'],
+    2: ['attack', 'decay', 'sustain', 'release', 'noise_mix', 'noise_type', 'rnd_denis', 'rnd_mod', 'lfo_rate', 'sh_rate', 'mod_depth_env', 'mod_depth_noise', 'matrix_reset'],
+    3: ['mat_0_0 (ENV>P1)', 'mat_0_1 (ENV>TMB)', 'mat_0_4 (ENV>FLD)', 'mat_0_6 (ENV>CUT)', 'mat_1_0 (LFO>P1)', 'mat_1_3 (LFO>HRM)', 'mat_1_6 (LFO>CUT)'],
+    4: ['mat_2_0 (SH>P1)', 'mat_2_2 (SH>P2)', 'mat_2_4 (SH>FLD)', 'mat_3_1 (NOI>TMB)', 'mat_3_6 (NOI>CUT)']
+  };
+
+  let activeTab = 1;
+  let audioCtx = null;
+
+  function switchDenisTab(tab) {
+    activeTab = tab;
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById(`tab${i}`).classList.toggle('active', i === tab);
+    }
+    document.getElementById('pageDenis').classList.toggle('active', tab === 1);
+    document.getElementById('pageEnvMod').classList.toggle('active', tab === 2);
+    document.getElementById('pageEnvLfo').classList.toggle('active', tab === 3);
+    document.getElementById('pageShNoise').classList.toggle('active', tab === 4);
+
+    const names = ['', 'DENIS', 'ENV / MOD', 'ENV LFO', 'S&H NOISE'];
+    document.getElementById('qlinkBankTitle').textContent = `Q-LINKS [${names[tab]}]`;
+    renderDenisQLinks();
+  }
+
+  function renderDenisQLinks() {
+    const list = denisQLinks[activeTab] || [];
+    const container = document.getElementById('denisQBadges');
+    container.innerHTML = list.map((item, idx) => `
+      <div class="q-badge"><b>Q${idx + 1}</b> ${item.toUpperCase().replace('_', ' ')}</div>
+    `).join('');
+  }
+  renderDenisQLinks();
+
+  function toggleMatrix(cell, isYellow = false) {
+    const cls = isYellow ? 'yellow-conn' : 'connected';
+    cell.classList.toggle(cls);
+    const amt = cell.querySelector('.matrix-amt');
+    if (cell.classList.contains(cls)) {
+      amt.textContent = '+50%';
+    } else {
+      amt.textContent = '0%';
+    }
+  }
+
+  // Rotary Knob Dragging
+  document.querySelectorAll('.knob-control').forEach(ctrl => {
+    let startY, startVal;
+    const body = ctrl.querySelector('.knob-body');
+    const valDisplay = ctrl.querySelector('.knob-val');
+    const min = parseFloat(ctrl.dataset.min);
+    const max = parseFloat(ctrl.dataset.max);
+    const unit = ctrl.dataset.unit || '';
+
+    function updateKnob(val) {
+      val = Math.max(min, Math.min(max, val));
+      ctrl.dataset.val = val;
+      valDisplay.textContent = `${Math.round(val)} ${unit}`;
+      const pct = (val - min) / (max - min);
+      const deg = -135 + pct * 270;
+      body.style.transform = `rotate(${deg}deg)`;
+    }
+
+    updateKnob(parseFloat(ctrl.dataset.val));
+
+    ctrl.addEventListener('pointerdown', (e) => {
+      startY = e.clientY;
+      startVal = parseFloat(ctrl.dataset.val);
+      ctrl.setPointerCapture(e.pointerId);
+
+      function onMove(me) {
+        const delta = startY - me.clientY;
+        const range = max - min;
+        const step = (range / 140) * delta;
+        updateKnob(startVal + step);
+      }
+      function onUp() {
+        ctrl.removeEventListener('pointermove', onMove);
+        ctrl.removeEventListener('pointerup', onUp);
+      }
+      ctrl.addEventListener('pointermove', onMove);
+      ctrl.addEventListener('pointerup', onUp);
+    });
+  });
+
+  // Oscilloscope for West Coast wavefolder monitor
+  const canvas = document.getElementById('denisScope');
+  const ctx = canvas.getContext('2d');
+  let phase = 0;
+
+  function resizeScope() {
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+  }
+  window.addEventListener('resize', resizeScope);
+  setTimeout(resizeScope, 50);
+
+  function drawScope() {
+    if (!canvas.width) return requestAnimationFrame(drawScope);
+    ctx.fillStyle = '#070707';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = '#181818';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < canvas.width; x += 30) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+    }
+    for (let y = 0; y < canvas.height; y += 25) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+
+    // Folded Waveform (Buchla folding harmonics)
+    ctx.beginPath();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#f0c020';
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = '#f0c020';
+
+    const midY = canvas.height * 0.5;
+    const len = canvas.width;
+    for (let x = 0; x < len; x++) {
+      const raw = Math.sin((x * 0.035) + phase) * 1.8;
+      // Triangle wave folding algorithm
+      let folded = raw;
+      if (folded > 1.0) folded = 2.0 - folded;
+      if (folded < -1.0) folded = -2.0 - folded;
+      const y = midY + folded * 45;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    phase += 0.06;
+    requestAnimationFrame(drawScope);
+  }
+  requestAnimationFrame(drawScope);
+
+  // Web Audio West Coast Pluck Audition
+  function triggerDenisTone() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const btn = document.getElementById('auditionBtn');
+    btn.classList.add('playing');
+    setTimeout(() => btn.classList.remove('playing'), 200);
+
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const waveShaper = audioCtx.createWaveShaper();
+
+    // Generate folding curve
+    const n_samples = 256;
+    const curve = new Float32Array(n_samples);
+    for (let i = 0; i < n_samples; ++i) {
+      const x = (i * 2) / n_samples - 1;
+      curve[i] = Math.sin(x * Math.PI * 2.5); // Buchla wavefolding harmonic curve
+    }
+    waveShaper.curve = curve;
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(110, now);
+    osc.frequency.exponentialRampToValueAtTime(55, now + 0.35);
+
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+
+    osc.connect(waveShaper);
+    waveShaper.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.55);
+  }
+
+  function randomizeAll() {
+    document.querySelectorAll('.knob-control').forEach(ctrl => {
+      const min = parseFloat(ctrl.dataset.min);
+      const max = parseFloat(ctrl.dataset.max);
+      const unit = ctrl.dataset.unit || '';
+      const rVal = min + Math.random() * (max - min);
+      ctrl.dataset.val = rVal;
+      ctrl.querySelector('.knob-val').textContent = `${Math.round(rVal)} ${unit}`;
+      const pct = (rVal - min) / (max - min);
+      const deg = -135 + pct * 270;
+      ctrl.querySelector('.knob-body').style.transform = `rotate(${deg}deg)`;
+    });
+  }
+
+  function randomizeMod() {
+    document.querySelectorAll('.matrix-cell').forEach(cell => {
+      const active = Math.random() > 0.65;
+      cell.classList.toggle('connected', active);
+      cell.querySelector('.matrix-amt').textContent = active ? `+${Math.round(Math.random() * 80 + 20)}%` : '0%';
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target === document.body) {
+      e.preventDefault();
+      triggerDenisTone();
+    }
+  });
+</script>
+
+</body></html>

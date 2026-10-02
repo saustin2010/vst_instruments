@@ -1,0 +1,78 @@
+{
+  "title": "Denis",
+  "children": [
+    {
+      "title": "Oscillators",
+      "lines": [
+        "Osc1 Freq: Detune +/-1 oct",
+        "Timbre: Sine>Tri>Saw>Pulse",
+        "Osc2 Freq: +/-2 oct offset",
+        "Harmonics: Odd>Both>Even",
+        "Osc Mix: Blend Osc1 & Osc2",
+        "Noise Mix: Osc/noise blend",
+        "Noise Type: White/Pink/Brown",
+        "Cutoff: Filter frequency"
+      ]
+    },
+    {
+      "title": "Control",
+      "lines": [
+        "Fold Depth: Wavefold amount",
+        "Fold Type: Odd>Both>Even",
+        "Cutoff: Filter frequency",
+        "Q: Resonance (0-400%)",
+        " Self-oscillates at max",
+        "Attack: Env attack time",
+        "Decay: Env decay time",
+        "Sustain: Env sustain level",
+        "Release: Env release time",
+        "Filter Type: LP/BP/HP/Notch",
+        "Vel>Filter: Velocity mod"
+      ]
+    },
+    {
+      "title": "Mod & Patch",
+      "lines": [
+        "LFO Rate: 0.01-500Hz tri",
+        "S&H Rate: 0.01-500Hz random",
+        "Env Depth: Envelope amount",
+        "Nz Depth: Noise mod amount",
+        "Rnd Denis: Randomize synth",
+        "Rnd Mod: Randomize matrix",
+        "Reset Matrix: Clear all mod",
+        "Rnd Patch: Randomize all",
+        "Preset: 30 Joual presets",
+        "Pad Mode: Play or Patch",
+        "Portamento: Glide time",
+        "Legato: Retrigger on/off"
+      ]
+    },
+    {
+      "title": "Matrix Pages",
+      "lines": [
+        "Mat: Env/LFO/S&H/Nz",
+        "Each row = mod source",
+        "8 knobs = 8 targets:",
+        " Pitch1, Timbre, Pitch2",
+        " Harm, Fold, FType",
+        " Cutoff, Level",
+        "Bipolar: -100% to +100%"
+      ]
+    },
+    {
+      "title": "Tips",
+      "lines": [
+        "Pad Mode=Patch: 1st pad",
+        " plays note, others route",
+        " mod matrix (vel=depth)",
+        "LFO up to 500Hz for",
+        " audio-rate FM effects",
+        "Per-sample mod on Pitch",
+        " and Cutoff for metallic",
+        " timbres",
+        "Analog drift adds subtle",
+        " detuning automatically"
+      ]
+    }
+  ]
+}

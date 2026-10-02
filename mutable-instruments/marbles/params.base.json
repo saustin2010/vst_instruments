@@ -1,0 +1,224 @@
+{
+ "name": "Marbles",
+ "params": [
+  {
+   "key": "t_model",
+   "name": "T MODEL",
+   "options": [
+    "COMPLEMENTARY",
+    "CLUSTERS",
+    "DRUMS",
+    "INDEPENDENT",
+    "DIVIDER",
+    "THREE STATES",
+    "MARKOV"
+   ],
+   "default": 0
+  },
+  {
+   "key": "t_range",
+   "name": "T RANGE",
+   "options": [
+    "0.25X",
+    "1X",
+    "4X"
+   ],
+   "default": 1
+  },
+  {
+   "key": "clock_div",
+   "name": "CLOCK DIV",
+   "options": [
+    "1/4",
+    "1/3",
+    "1/2",
+    "2/3",
+    "1:1",
+    "3/2",
+    "2X",
+    "3X",
+    "4X"
+   ],
+   "default": 4
+  },
+  {
+   "key": "rate_base",
+   "name": "RATE BASE",
+   "options": [
+    "QUARTERS",
+    "EIGHTHS",
+    "SIXTEENTHS"
+   ],
+   "default": 2
+  },
+  {
+   "key": "t_bias",
+   "name": "T BIAS",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "jitter",
+   "name": "JITTER",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "gate_len",
+   "name": "GATE LEN",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "gate_rand",
+   "name": "GATE RAND",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "t_deja_vu",
+   "name": "T DEJA VU",
+   "options": [
+    "OFF",
+    "ON",
+    "LOCKED"
+   ],
+   "default": 0
+  },
+  {
+   "key": "spread",
+   "name": "SPREAD",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "x_bias",
+   "name": "X BIAS",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "steps",
+   "name": "STEPS",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  },
+  {
+   "key": "x_range",
+   "name": "X RANGE",
+   "options": [
+    "2 OCTAVES",
+    "5 OCTAVES",
+    "10 OCTAVES"
+   ],
+   "default": 0
+  },
+  {
+   "key": "scale",
+   "name": "SCALE",
+   "options": [
+    "MAJOR",
+    "MINOR",
+    "PENTATONIC",
+    "PELOG",
+    "BHAIRAV",
+    "SHRI"
+   ],
+   "default": 0
+  },
+  {
+   "key": "x_mode",
+   "name": "X MODE",
+   "options": [
+    "IDENTICAL",
+    "BUMP",
+    "TILT"
+   ],
+   "default": 0
+  },
+  {
+   "key": "x_deja_vu",
+   "name": "X DEJA VU",
+   "options": [
+    "OFF",
+    "ON",
+    "LOCKED"
+   ],
+   "default": 0
+  },
+  {
+   "key": "deja_vu",
+   "name": "DEJA VU",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "length",
+   "name": "LENGTH",
+   "min": 1,
+   "max": 16,
+   "default": 8,
+   "display": "int"
+  },
+  {
+   "key": "base_note",
+   "name": "BASE NOTE",
+   "min": 0,
+   "max": 96,
+   "default": 48,
+   "display": "int"
+  },
+  {
+   "key": "velocity",
+   "name": "VELOCITY",
+   "min": 1,
+   "max": 127,
+   "default": 100,
+   "display": "int"
+  },
+  {
+   "key": "channels",
+   "name": "CHANNELS",
+   "options": [
+    "SPLIT 1-2-3",
+    "ALL ON 1"
+   ],
+   "default": 0
+  },
+  {
+   "key": "t1_out",
+   "name": "T1 OUT",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "t2_out",
+   "name": "T2 OUT",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "t3_out",
+   "name": "T3 OUT",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  }
+ ]
+}

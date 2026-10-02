@@ -1,0 +1,96 @@
+{
+  "title": "Aphex",
+  "children": [
+    {
+      "title": "About",
+      "lines": [
+        "Korg MS-10/MS-20 hybrid mono synth.",
+        "Two VCOs into a KORG-35 (REV.1) or OTA",
+        "(REV.2) HPF+LPF cascade, with a",
+        "source-side patchbay and an External",
+        "Signal Processor (ESP).",
+        "Monophonic, last-note priority."
+      ]
+    },
+    {
+      "title": "Aphex (root)",
+      "lines": [
+        "LPF Cut/Peak, HPF Cut/Peak, MG",
+        "Freq/Depth, Drive, Volume.",
+        "Quick-access summary of the most-used",
+        "controls. Menu: Preset, Octave,",
+        "Portamento, Trigger, Rnd/Reset Patch."
+      ]
+    },
+    {
+      "title": "VCO 1+2",
+      "lines": [
+        "Scale 1/Scale 2 are octave switches",
+        "(32'/16'/8'/4' and 16'/8'/4'/2') — each",
+        "step is one octave; 8' is the reference.",
+        "Pitch fine-tunes VCO 2 (±24 st).",
+        "Wave, PW per oscillator; menu adds Sync,",
+        "FM, Detune."
+      ]
+    },
+    {
+      "title": "Mixer",
+      "lines": [
+        "VCO 1/VCO 2 levels and the MG/T.EXT and",
+        "EG1/EXT pitch-mod attenuators.",
+        "Menu: Sub, Ring, Noise, Color, ESP Aud,",
+        "Feedback."
+      ]
+    },
+    {
+      "title": "Filter",
+      "lines": [
+        "HPF and LPF Cut/Peak plus per-filter",
+        "MG and EG attenuators.",
+        "Mode (menu, Modern): HP+LP (default),",
+        "LP only, HP only, Notch. REV switches",
+        "the KORG-35 / OTA circuit character."
+      ]
+    },
+    {
+      "title": "Envelopes",
+      "lines": [
+        "EG1 (Delay/Atk/Rel) is the filter",
+        "envelope by default — opens the cutoff.",
+        "EG2 (Hold/Atk/Dcy/Sus/Rel) shapes the",
+        "amplitude. Both reroutable in the",
+        "patchbay."
+      ]
+    },
+    {
+      "title": "MG / ESP",
+      "lines": [
+        "MG is the LFO: Freq and Shape, with",
+        "global Depth on the root page.",
+        "ESP turns line-in into pitch CV, an",
+        "envelope follower and a gate. Sig Lvl,",
+        "Lo Cut, Hi Cut, Threshold, CV Adj."
+      ]
+    },
+    {
+      "title": "Patchbay",
+      "lines": [
+        "Each row is one MS-20 input jack; pick",
+        "what source feeds it. Index 0 is the",
+        "hard-wired default routing.",
+        "Route ESP Audio into Ext Sig to feed",
+        "external audio through the filter."
+      ]
+    },
+    {
+      "title": "Modern",
+      "lines": [
+        "Non-period extras: Drift, Drive,",
+        "KeyTrack, Filter Rev, MS-10 Mode,",
+        "per-VCO Drift, MW→MG, MW→Filt.",
+        "Menu: Filter Mode, X-Mod Amt, V2 PW,",
+        "V2 Detune."
+      ]
+    }
+  ]
+}

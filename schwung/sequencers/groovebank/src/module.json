@@ -1,0 +1,41 @@
+{
+    "id": "groovebank",
+    "name": "Groove Bank",
+    "abbrev": "GRUV",
+    "version": "0.1.16",
+    "description": "Retrigger the chord you hold on a library of standard rhythm templates — genre-first grooves, played by your hands.",
+    "author": "Mission Minnow",
+    "api_version": 2,
+    "dsp": "dsp.so",
+    "capabilities": {
+        "midi_in": true,
+        "midi_out": true,
+        "chainable": true,
+        "component_type": "midi_fx",
+        "ui_hierarchy": {
+            "levels": {
+                "root": {
+                    "name": "Groove Bank",
+                    "params": [
+                        { "key": "view", "name": "Pattern", "type": "canvas", "canvas_script": "canvas.js", "show_value": false, "show_footer": false },
+                        { "level": "globals", "label": "Globals" }
+                    ]
+                },
+                "globals": {
+                    "name": "Globals",
+                    "params": ["variant", "strum", "gate", "accent", "latch", "swing"],
+                    "knobs": ["variant", "strum", "gate", "accent", "latch", "swing"]
+                }
+            }
+        }
+    },
+    "chain_params": [
+        { "key": "pattern", "name": "Pattern", "type": "int", "min": 0, "max": 599, "default": 0, "step": 1 },
+        { "key": "variant", "name": "Variant", "type": "int", "min": 0, "max": 5, "default": 0, "step": 1 },
+        { "key": "swing", "name": "Swing", "type": "int", "min": 0, "max": 100, "default": 0, "step": 1, "unit": "%" },
+        { "key": "gate", "name": "Gate", "type": "int", "min": 5, "max": 200, "default": 80, "step": 5, "unit": "%" },
+        { "key": "strum", "name": "Strum", "type": "int", "min": -100, "max": 100, "default": 0, "step": 5 },
+        { "key": "accent", "name": "Accent", "type": "int", "min": 0, "max": 100, "default": 50, "step": 5, "unit": "%" },
+        { "key": "latch", "name": "Latch", "type": "int", "min": 0, "max": 1, "default": 0, "step": 1 }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Verglas",
+  "vendor": "Mutable Instruments",
+  "uid": "Vrgl",
+  "so": "verglas.so",
+  "effect": true,
+  "build": {
+    "sources": [
+      "src/clouds_move.cpp",
+      "mpc/schwung_audio_fx.c",
+      "src/clouds/dsp/granular_processor.cc",
+      "src/clouds/dsp/correlator.cc",
+      "src/clouds/dsp/mu_law.cc",
+      "src/clouds/dsp/pvoc/phase_vocoder.cc",
+      "src/clouds/dsp/pvoc/stft.cc",
+      "src/clouds/dsp/pvoc/frame_transformation.cc",
+      "src/clouds/resources.cc",
+      "src/stmlib/dsp/units.cc",
+      "src/stmlib/dsp/atan.cc"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Isrc",
+      "-std=gnu++17",
+      "-DNDEBUG",
+      "-DTEST", "-DMPC_PORT"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

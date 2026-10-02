@@ -1,0 +1,202 @@
+{
+  "title": "Mono",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "Six-track digital",
+        "machine synth with",
+        "a 64-step lock",
+        "sequencer.",
+        "",
+        "Open from Schwung's",
+        "overtake menu.",
+        "Back returns to",
+        "native Move."
+      ]
+    },
+    {
+      "title": "Tracks",
+      "lines": [
+        "Top-row pads 1-6",
+        "select tracks.",
+        "Pad 7 changes the",
+        "track machine.",
+        "Pad 8 starts or",
+        "stops sequencing.",
+        "",
+        "Lower 3 pad rows",
+        "play notes.",
+        "Up / Down changes",
+        "the track octave."
+      ]
+    },
+    {
+      "title": "Steps",
+      "lines": [
+        "Step buttons edit",
+        "the current page",
+        "of 16 steps.",
+        "Red = trig.",
+        "Purple = locked.",
+        "White = playing.",
+        "",
+        "Arrows change the",
+        "16-step page.",
+        "",
+        "Hold step + pad 7:",
+        "copy. Add Shift:",
+        "paste. Hold step +",
+        "Record clears it.",
+        "",
+        "Shift + Left / Right",
+        "copies / pastes track.",
+        "Shift + Record does",
+        "undo and redo."
+      ]
+    },
+    {
+      "title": "Play Window",
+      "lines": [
+        "Shift + top pad 8",
+        "opens Setup.",
+        "Turn the jog for",
+        "Sequence, Step, Arp,",
+        "Routing, and Song.",
+        "",
+        "Knob 1: start.",
+        "Knob 2: length.",
+        "Knob 3: order.",
+        "Knob 4: swing.",
+        "Knobs 5-8: track",
+        "start, length,",
+        "rotation, division.",
+        "Shift + turn 5-8",
+        "returns to global.",
+        "",
+        "Orders are Forward,",
+        "Reverse, Pendulum",
+        "and Random."
+      ]
+    },
+    {
+      "title": "Arp and Routing",
+      "lines": [
+        "In Setup, choose",
+        "Arpeggiator.",
+        "Knobs set on, latch,",
+        "mode, rate, octaves,",
+        "gate and length.",
+        "Tap a step then turn",
+        "knob 8 for its offset.",
+        "Shift + knob 8 sets",
+        "fixed velocity.",
+        "",
+        "Set routing on the",
+        "receiving track:",
+        "T2 gets T1, T3 gets",
+        "T2, and so on.",
+        "Track 1 has no source.",
+        "Trigger the source; it",
+        "may be muted while it",
+        "still modulates FM."
+      ]
+    },
+    {
+      "title": "Step and Song",
+      "lines": [
+        "Step Detail adds",
+        "microtiming, accent,",
+        "probability, retrigs",
+        "and tie. A tie holds",
+        "the previous note",
+        "through its step;",
+        "chain ties for",
+        "longer notes.",
+        "",
+        "Song Mode chains 16",
+        "step windows. Each",
+        "row has start, length,",
+        "repeats and transpose.",
+        "Tap a step key to",
+        "select a song row."
+      ]
+    },
+    {
+      "title": "Mute and Solo",
+      "lines": [
+        "Mute + top pad",
+        "1-6 toggles mute.",
+        "",
+        "Shift + Mute +",
+        "top pad 1-6",
+        "toggles solo.",
+        "",
+        "Green = solo.",
+        "Dim = muted."
+      ]
+    },
+    {
+      "title": "Locks",
+      "lines": [
+        "Hold a step and",
+        "turn a knob to",
+        "lock that value",
+        "on the step.",
+        "",
+        "Hold Shift too",
+        "and turn the knob",
+        "to remove its lock.",
+        "",
+        "Press Record while",
+        "playing, then turn",
+        "knobs to live-lock",
+        "the current step.",
+        "Continuous locks",
+        "glide; choices step."
+      ]
+    },
+    {
+      "title": "Pages",
+      "lines": [
+        "Turn the jog for",
+        "SYNTH, AMP, FILTER,",
+        "EFFECT and LFO",
+        "pages. Each page",
+        "maps to knobs 1-8.",
+        "",
+        "On any page, hold",
+        "Shift and turn a",
+        "knob for its second",
+        "eight controls.",
+        "",
+        "LFO DEST names all",
+        "112 sound params plus",
+        "Pitch. LFOs can",
+        "modulate each other.",
+        "TRIG and WAVE use",
+        "five named choices."
+      ]
+    },
+    {
+      "title": "Presets",
+      "lines": [
+        "Hold Shift and",
+        "click the jog to",
+        "open presets.",
+        "",
+        "Save current keeps",
+        "all 6 sounds, 64",
+        "steps, per-machine",
+        "sounds, timing,",
+        "step behavior,",
+        "mutes and locks.",
+        "",
+        "Confirm saves and",
+        "returns to Mono.",
+        "Back closes preset",
+        "and setup screens."
+      ]
+    }
+  ]
+}

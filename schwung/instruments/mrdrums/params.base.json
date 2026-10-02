@@ -1,0 +1,83 @@
+{
+ "name": "Mrdrums",
+ "params": [
+  {
+   "key": "pad_sample_path",
+   "name": "pad_sample_path",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_vol",
+   "name": "pad_vol",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_pan",
+   "name": "pad_pan",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_tune",
+   "name": "pad_tune",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_start",
+   "name": "pad_start",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "pad_attack_ms",
+   "name": "pad_attack_ms",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_decay_ms",
+   "name": "pad_decay_ms",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_choke_group",
+   "name": "pad_choke_group",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_mode",
+   "name": "pad_mode",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_rand_pan_amt",
+   "name": "pad_rand_pan_amt",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_rand_vol_amt",
+   "name": "pad_rand_vol_amt",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_rand_decay_amt",
+   "name": "pad_rand_decay_amt",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "pad_chance_pct",
+   "name": "pad_chance_pct",
+   "min": 0.0,
+   "max": 1.0
+  }
+ ]
+}

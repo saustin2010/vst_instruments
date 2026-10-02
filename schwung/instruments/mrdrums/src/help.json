@@ -1,0 +1,116 @@
+{
+  "title": "MrDrums",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "16-pad drum sampler",
+        "for Schwung.",
+        "",
+        "Pads map to notes",
+        "36..51.",
+        "",
+        "No sound until a",
+        "pad Sample is set."
+      ]
+    },
+    {
+      "title": "Setup",
+      "children": [
+        {
+          "title": "Sample",
+          "lines": [
+            "Open Pad Settings,",
+            "select Sample.",
+            "",
+            "Choose wav/aif",
+            "from /data, incl.",
+            "UserLibrary and",
+            "CoreLibrary."
+          ]
+        },
+        {
+          "title": "Browse Behavior",
+          "lines": [
+            "Live preview while",
+            "browsing files.",
+            "",
+            "Back restores",
+            "previous sample.",
+            "Select commits."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Global",
+      "lines": [
+        "Master Vol:",
+        "overall level",
+        "Polyphony:",
+        "active voice cap",
+        "Vel Curve:",
+        "linear/soft/hard",
+        "Humanize:",
+        "timing random ms",
+        "Random Seed:",
+        "static random seed",
+        "Rand Loop Steps:",
+        "random loop length"
+      ]
+    },
+    {
+      "title": "Pad Settings",
+      "lines": [
+        "Auto Select:",
+        "switch pad from",
+        "incoming notes",
+        "",
+        "Current Pad:",
+        "edit target 1..16",
+        "",
+        "Pad controls are",
+        "stored per pad."
+      ]
+    },
+    {
+      "title": "Pad Controls",
+      "lines": [
+        "Sample, Vol, Pan,",
+        "Tune, Start,",
+        "Attack, Decay,",
+        "Choke, Mode",
+        "",
+        "Start uses native",
+        "wav_position in",
+        "range 0.00..1.00",
+        "",
+        "Rand Pan/Vol/Dec,",
+        "Chance"
+      ]
+    },
+    {
+      "title": "Tips",
+      "lines": [
+        "For live tweaks,",
+        "set Auto Select",
+        "to off.",
+        "",
+        "Use Random Seed",
+        "for repeatable",
+        "random behavior."
+      ]
+    },
+    {
+      "title": "Disclaimer",
+      "lines": [
+        "Developed with",
+        "AI assistance.",
+        "",
+        "Design + release",
+        "decisions are",
+        "human-reviewed."
+      ]
+    }
+  ]
+}

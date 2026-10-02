@@ -1,0 +1,150 @@
+{
+  "title": "Hera (Juno-60)",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "Juno-60 emulation.",
+        "6-voice polyphonic.",
+        "",
+        "DCO with saw, pulse,",
+        "sub, and noise.",
+        "Resonant lowpass",
+        "filter with envelope",
+        "and LFO modulation.",
+        "BBD chorus (I/II).",
+        "",
+        "56 factory presets."
+      ]
+    },
+    {
+      "title": "Controls",
+      "children": [
+        {
+          "title": "Knob Mapping",
+          "lines": [
+            "Knob 1: Volume",
+            "Knob 2: VCF Cutoff",
+            "Knob 3: VCF Resonance",
+            "Knob 4: VCF Env",
+            "Knob 5: Attack",
+            "Knob 6: Decay",
+            "Knob 7: Sustain",
+            "Knob 8: Octave",
+            "",
+            "Presets are browsed",
+            "from the list on the",
+            "same page, not from",
+            "a knob. Release is",
+            "on the Envelope",
+            "page."
+          ]
+        },
+        {
+          "title": "DCO",
+          "lines": [
+            "Saw Level: sawtooth",
+            "Pulse Level: pulse",
+            "Sub Level: sub-osc",
+            " (one octave below)",
+            "Noise Level: white",
+            "",
+            "PWM Depth: pulse",
+            " width mod amount",
+            "PWM Mod source:",
+            " 0=Manual, 1=LFO,",
+            " 2=Envelope",
+            "",
+            "Pitch Range:",
+            " 0=16', 1=8', 2=4'",
+            "Pitch Mod: LFO to",
+            " pitch amount"
+          ]
+        },
+        {
+          "title": "VCF (Filter)",
+          "lines": [
+            "Cutoff: filter freq",
+            " (20Hz to 20kHz)",
+            "",
+            "Resonance: feedback",
+            " Self-oscillates",
+            " near maximum",
+            "",
+            "Env: envelope depth",
+            " Negative values",
+            " invert the sweep",
+            "",
+            "LFO: LFO modulation",
+            " to cutoff",
+            "",
+            "Key: keyboard",
+            " tracking amount",
+            "",
+            "Bend: pitch bend",
+            " modulation depth"
+          ]
+        },
+        {
+          "title": "VCA & Envelope",
+          "lines": [
+            "VCA Depth: envelope",
+            " to amplitude",
+            "",
+            "VCA Type:",
+            " 0=Envelope (ADSR)",
+            " 1=Gate (on/off)",
+            "",
+            "Attack: note onset",
+            "Decay: peak to",
+            " sustain time",
+            "Sustain: held level",
+            "Release: fade after",
+            " note off"
+          ]
+        },
+        {
+          "title": "LFO & Effects",
+          "lines": [
+            "LFO Rate: speed",
+            " (~0.1 to 20 Hz)",
+            "",
+            "LFO Delay: onset",
+            " delay after note",
+            "",
+            "LFO Trigger:",
+            " 0=Free-running",
+            " 1=Retrigger per",
+            "   note",
+            "",
+            "HPF: high-pass",
+            " filter cutoff",
+            "",
+            "Chorus I: mode 1",
+            "Chorus II: mode 2",
+            " Both can be on for",
+            " extra stereo width"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "MIDI",
+      "lines": [
+        "6-voice polyphony.",
+        "",
+        "Pitch Bend:",
+        " +/- 7 semitones",
+        "",
+        "Velocity controls",
+        "note amplitude.",
+        "",
+        "CC 120: All Sound Off",
+        "CC 123: All Notes Off",
+        "",
+        "Octave: -3 to +3",
+        " via menu"
+      ]
+    }
+  ]
+}

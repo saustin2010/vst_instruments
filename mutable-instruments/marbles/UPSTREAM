@@ -1,0 +1,6 @@
+https://github.com/pichenettes/eurorack (marbles/)
+commit 08460a69a7e1f7a81c5a2abcc7189c9a6b7208d4 2023-08-16
+stmlib: https://github.com/pichenettes/stmlib commit e3bd7c9cc00e4364166f9905c0509b6ffd0535ec
+vendored 2026-10-01: marbles/random, marbles/ramp, marbles/resources.* + stmlib dsp/ utils/ stmlib.h; src/marbles_fx.cc is new
+(the panel and settings logic of marbles.cc/settings.cc, as a MIDI FX module). LICENSE = the MIT header text.
+mpc/ = steve/tools/midifx adapter (MIDI out via an ALSA port, host transport as MIDI clock) + Schwung host headers + wrapper/engine.h

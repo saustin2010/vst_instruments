@@ -1,0 +1,96 @@
+{
+ "name": "pixelwalkers",
+ "params": [
+  {
+   "key": "birth_note",
+   "name": "Birth",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 1
+  },
+  {
+   "key": "birth_level",
+   "name": "Birth Lv",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "hit_level",
+   "name": "Hit Lv",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "hit_decay",
+   "name": "Decay",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 0.01
+  },
+  {
+   "key": "randomize",
+   "name": "Random",
+   "options": [
+    "-",
+    "Rnd!"
+   ],
+   "default": 0,
+   "momentary": true
+  },
+  {
+   "key": "bounce",
+   "name": "bounce",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "hardness",
+   "name": "Hard",
+   "unit": "%",
+   "min": 0,
+   "max": 1,
+   "default": 1
+  },
+  {
+   "key": "kill_all",
+   "name": "Kill",
+   "options": [
+    "-",
+    "Kill!"
+   ],
+   "default": 0,
+   "momentary": true
+  },
+  {
+   "key": "tombola",
+   "name": "tombola",
+   "min": 0.0,
+   "max": 1.0
+  }
+ ],
+ "sections": [
+  {
+   "label": "root",
+   "keys": [
+    "birth_note",
+    "birth_level",
+    "hit_level",
+    "hit_decay",
+    "randomize",
+    "bounce",
+    "hardness",
+    "kill_all",
+    "tombola"
+   ]
+  }
+ ]
+}

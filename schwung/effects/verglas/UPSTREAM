@@ -1,0 +1,4 @@
+https://github.com/filliformes/verglas-move
+commit 581d671da6a754a015e60773067210ec19cd20d2 2026-09-15
+vendored 2026-10-01: upstream src/ + LICENSE (MIT; Clouds DSP and stmlib by Emilie Gillet, MIT; port by fillioning)
+mpc/ = steve/tools/audiofx adapter (Schwung audio_fx_api_v2 -> the MPC engine interface) + Schwung host header + wrapper/engine.h

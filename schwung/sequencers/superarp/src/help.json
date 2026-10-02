@@ -1,0 +1,125 @@
+{
+  "title": "Super Arp",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "Advanced MIDI arp",
+        "for Move Anything.",
+        "",
+        "Turns held notes",
+        "into evolving",
+        "patterns.",
+        "",
+        "Supports internal",
+        "or MIDI clock sync."
+      ]
+    },
+    {
+      "title": "Quick Start",
+      "lines": [
+        "1) Insert Super Arp",
+        " in MIDI FX slot",
+        "2) Play notes/chords",
+        "3) Route output to",
+        " a synth module",
+        "4) Shape params in",
+        " Shadow UI."
+      ]
+    },
+    {
+      "title": "Menus",
+      "children": [
+        {
+          "title": "Global",
+          "lines": [
+            "Latch: hold notes",
+            "after key release.",
+            "Max Voices: 1-64,",
+            "oldest note steals.",
+            "Rate: 1/32 to 1/4",
+            "Triplet: on/off",
+            "Swing: 0-100",
+            "Gate: 0-1600",
+            "Velocity: 0 keeps",
+            "played velocity.",
+            "Octave: 0,+1,-1,",
+            "+2,-2",
+            "Sync: internal or",
+            "clock",
+            "BPM: 40-240 for",
+            "internal sync."
+          ]
+        },
+        {
+          "title": "Progression",
+          "lines": [
+            "Mode: up, down,",
+            "as_played, leap,",
+            "chord, pattern,",
+            "or random_pattern.",
+            "Pattern: 40 presets",
+            "for pattern mode.",
+            "Trigger: retrigger",
+            "or continuous.",
+            "Note Policy: fold,",
+            "wrap, clamp, skip.",
+            "Rand Seed: 0-65535",
+            "Rand Length: 1-32",
+            "Rand Chords: 0-100",
+            "Rand Ch Seed:",
+            "extra chord seed."
+          ]
+        },
+        {
+          "title": "Rhythm",
+          "lines": [
+            "Pattern: 40 presets",
+            "0 = trigger step",
+            "x = rest step",
+            "Trigger: retrigger",
+            "or continuous."
+          ]
+        },
+        {
+          "title": "Modifiers",
+          "lines": [
+            "Mod Loop: 0-128",
+            "0 means no loop.",
+            "Mod Trig: retrigger",
+            "or continuous.",
+            "Drop: 0-100",
+            "Vel Rand: 0-127",
+            "Gate Rand: 0-1600",
+            "Oct Rand: 0-100",
+            "Oct Range: +1,-1,",
+            "+-1,+2,-2,+-2",
+            "Note Rand: 0-100",
+            "Each has its own",
+            "seed (0-65535)."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Troubleshooting",
+      "lines": [
+        "No arp output?",
+        "Check MIDI routing.",
+        "Check rhythm step is",
+        "not rest (x).",
+        "In clock sync mode,",
+        "send MIDI clock",
+        "start/tick.",
+        "",
+        "Too many overlaps?",
+        "Lower Gate and",
+        "Max Voices.",
+        "",
+        "Timing feels wrong?",
+        "Check Sync, Triplet,",
+        "and Swing."
+      ]
+    }
+  ]
+}

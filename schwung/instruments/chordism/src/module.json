@@ -1,0 +1,20 @@
+{
+  "id": "chordism",
+  "name": "Chordism",
+  "abbrev": "CH",
+  "version": "0.3.15",
+  "description": "Chord-based polyphonic synthesizer with morphing mixer",
+  "author": "charlesvestal",
+  "license": "MIT",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "aftertouch": true,
+    "chainable": true,
+    "component_type": "sound_generator"
+  }
+}

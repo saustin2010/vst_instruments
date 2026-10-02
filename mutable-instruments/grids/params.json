@@ -1,0 +1,154 @@
+{
+ "name": "Grids",
+ "params": [
+  {
+   "key": "mode",
+   "name": "MODE",
+   "options": [
+    "DRUMS",
+    "EUCLIDEAN"
+   ],
+   "default": 0
+  },
+  {
+   "key": "map_x",
+   "name": "MAP X",
+   "min": 0,
+   "max": 255,
+   "default": 128,
+   "display": "int"
+  },
+  {
+   "key": "map_y",
+   "name": "MAP Y",
+   "min": 0,
+   "max": 255,
+   "default": 128,
+   "display": "int"
+  },
+  {
+   "key": "chaos",
+   "name": "CHAOS",
+   "min": 0,
+   "max": 255,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "bd_fill",
+   "name": "BD FILL",
+   "min": 0,
+   "max": 255,
+   "default": 128,
+   "display": "int"
+  },
+  {
+   "key": "sd_fill",
+   "name": "SD FILL",
+   "min": 0,
+   "max": 255,
+   "default": 128,
+   "display": "int"
+  },
+  {
+   "key": "hh_fill",
+   "name": "HH FILL",
+   "min": 0,
+   "max": 255,
+   "default": 128,
+   "display": "int"
+  },
+  {
+   "key": "len_bd",
+   "name": "BD LEN",
+   "min": 1,
+   "max": 32,
+   "default": 16,
+   "display": "int"
+  },
+  {
+   "key": "len_sd",
+   "name": "SD LEN",
+   "min": 1,
+   "max": 32,
+   "default": 16,
+   "display": "int"
+  },
+  {
+   "key": "len_hh",
+   "name": "HH LEN",
+   "min": 1,
+   "max": 32,
+   "default": 16,
+   "display": "int"
+  },
+  {
+   "key": "resolution",
+   "name": "RESOLUTION",
+   "options": [
+    "1/16",
+    "1/32"
+   ],
+   "default": 0
+  },
+  {
+   "key": "swing",
+   "name": "SWING",
+   "options": [
+    "OFF",
+    "LIGHT",
+    "MEDIUM",
+    "HEAVY"
+   ],
+   "default": 0
+  },
+  {
+   "key": "bd_note",
+   "name": "BD NOTE",
+   "min": 0,
+   "max": 127,
+   "default": 36,
+   "display": "int"
+  },
+  {
+   "key": "sd_note",
+   "name": "SD NOTE",
+   "min": 0,
+   "max": 127,
+   "default": 38,
+   "display": "int"
+  },
+  {
+   "key": "hh_note",
+   "name": "HH NOTE",
+   "min": 0,
+   "max": 127,
+   "default": 42,
+   "display": "int"
+  },
+  {
+   "key": "accent_vel",
+   "name": "ACCENT VEL",
+   "min": 1,
+   "max": 127,
+   "default": 127,
+   "display": "int"
+  },
+  {
+   "key": "normal_vel",
+   "name": "NORMAL VEL",
+   "min": 1,
+   "max": 127,
+   "default": 90,
+   "display": "int"
+  },
+  {
+   "key": "channel",
+   "name": "CHANNEL",
+   "min": 1,
+   "max": 16,
+   "default": 1,
+   "display": "int"
+  }
+ ]
+}

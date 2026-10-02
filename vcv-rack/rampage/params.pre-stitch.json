@@ -1,0 +1,231 @@
+{
+ "name": "Rampage",
+ "params": [
+  {
+   "key": "range_a",
+   "name": "A RANGE",
+   "options": [
+    "MEDIUM",
+    "FAST",
+    "SLOW"
+   ],
+   "default": 0
+  },
+  {
+   "key": "shape_a",
+   "name": "A SHAPE",
+   "min": -1.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "rise_a",
+   "name": "A RISE",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "fall_a",
+   "name": "A FALL",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "cycle_a",
+   "name": "A CYCLE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "trig_a",
+   "name": "A TRIGGER",
+   "options": [
+    "-",
+    "GO"
+   ],
+   "default": 0,
+   "momentary": true
+  },
+  {
+   "key": "range_b",
+   "name": "B RANGE",
+   "options": [
+    "MEDIUM",
+    "FAST",
+    "SLOW"
+   ],
+   "default": 2
+  },
+  {
+   "key": "shape_b",
+   "name": "B SHAPE",
+   "min": -1.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "rise_b",
+   "name": "B RISE",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "fall_b",
+   "name": "B FALL",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "cycle_b",
+   "name": "B CYCLE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 1
+  },
+  {
+   "key": "trig_b",
+   "name": "B TRIGGER",
+   "options": [
+    "-",
+    "GO"
+   ],
+   "default": 0,
+   "momentary": true
+  },
+  {
+   "key": "balance",
+   "name": "BALANCE",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "mode_a",
+   "name": "A NOTES",
+   "options": [
+    "OFF",
+    "TRIGGER",
+    "GATE"
+   ],
+   "default": 1
+  },
+  {
+   "key": "mode_b",
+   "name": "B NOTES",
+   "options": [
+    "OFF",
+    "TRIGGER",
+    "GATE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "keytrack_a",
+   "name": "A KEY TRACK",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "keytrack_b",
+   "name": "B KEY TRACK",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "cc_channel",
+   "name": "CC CHANNEL",
+   "min": 1,
+   "max": 16,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "cc_a",
+   "name": "CC OUT A",
+   "min": 0,
+   "max": 119,
+   "default": 20,
+   "display": "int"
+  },
+  {
+   "key": "cc_b",
+   "name": "CC OUT B",
+   "min": 0,
+   "max": 119,
+   "default": 21,
+   "display": "int"
+  },
+  {
+   "key": "cc_min",
+   "name": "CC MIN",
+   "min": 0,
+   "max": 119,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "cc_max",
+   "name": "CC MAX",
+   "min": 0,
+   "max": 119,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "eoc_notes",
+   "name": "EOC NOTES",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "eoc_note_a",
+   "name": "EOC NOTE A",
+   "min": 0,
+   "max": 127,
+   "default": 36,
+   "display": "int"
+  },
+  {
+   "key": "eoc_note_b",
+   "name": "EOC NOTE B",
+   "min": 0,
+   "max": 127,
+   "default": 38,
+   "display": "int"
+  },
+  {
+   "key": "audio",
+   "name": "AUDIO",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  }
+ ]
+}

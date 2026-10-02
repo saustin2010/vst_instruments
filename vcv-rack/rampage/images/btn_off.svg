@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56" height="44" viewBox="0 0 56 44">
+ <defs><linearGradient id="rampage-cap-off" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2f2f0"/><stop offset="0.45" stop-color="#d6d7d8"/><stop offset="1" stop-color="#b9bbbe"/></linearGradient></defs>
+ <circle cx="28" cy="8" r="4.5" fill="#5a1814" stroke="#000" stroke-width="1"/>
+ <rect x="3" y="18" width="50" height="25" rx="4" fill="#4a4c50"/>
+ <rect x="5" y="18.5" width="46" height="21" rx="3" fill="url(#rampage-cap-off)" stroke="#8d9095" stroke-width="0.8"/>
+</svg>

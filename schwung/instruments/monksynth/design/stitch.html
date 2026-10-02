@@ -1,0 +1,1004 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<title>MONKSYNTH // MPC LIVE II</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#920801",
+            "surface": "#121316",
+            "on-primary-fixed": "#281900",
+            "error-container": "#93000a",
+            "tertiary-fixed": "#eee2bc",
+            "primary-fixed": "#ffdead",
+            "primary-container": "#e5a93c",
+            "on-tertiary": "#373016",
+            "secondary": "#ffb4a7",
+            "outline-variant": "#504535",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary-fixed": "#211b04",
+            "on-surface-variant": "#d4c4b0",
+            "on-secondary-fixed": "#400100",
+            "on-secondary-container": "#ff9a89",
+            "inverse-on-surface": "#2f3034",
+            "surface-variant": "#343538",
+            "inverse-primary": "#7e5700",
+            "surface-container-low": "#1b1b1f",
+            "surface-dim": "#121316",
+            "surface-bright": "#38393c",
+            "surface-container-lowest": "#0d0e11",
+            "surface-tint": "#fabc4d",
+            "on-error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#604100",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "secondary-fixed-dim": "#ffb4a7",
+            "tertiary-container": "#beb38f",
+            "error": "#ffb4ab",
+            "on-secondary": "#680300",
+            "on-primary": "#432c00",
+            "surface-container-highest": "#343538",
+            "on-primary-container": "#5e4000",
+            "on-error": "#690005",
+            "on-secondary-fixed-variant": "#920801",
+            "primary": "#ffc665",
+            "on-tertiary-container": "#4c4529",
+            "on-surface": "#e3e2e6",
+            "tertiary": "#dacfa9",
+            "surface-container": "#1f1f23",
+            "secondary-fixed": "#ffdad4",
+            "outline": "#9d8f7c",
+            "surface-container-high": "#292a2d",
+            "on-background": "#e3e2e6",
+            "inverse-surface": "#e3e2e6",
+            "primary-fixed-dim": "#fabc4d",
+            "background": "#121316"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem"
+          },
+          "fontFamily": {
+            "body-md": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-sm": ["15px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-sm": ["9px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "500" }],
+            "readout-numeric": ["20px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+            "body-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "label-lg": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }],
+            "label-md": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    :root {
+      --theme-bg: #120a14;
+      --theme-panel: #1d1220;
+      --theme-line: #4a3352;
+      --theme-ink: #f8eefa;
+      --theme-ink-dim: #dcc8e0;
+      --theme-ink-faint: #8c7392;
+      --theme-accent: #d9a63a;
+      --theme-accent-hi: #f5c451;
+      --theme-display-bg: #160e02;
+      --theme-display-ink: #f5c451;
+    }
+
+    body {
+      background-color: #080509;
+      color: var(--theme-ink);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Fixed hardware viewport simulation */
+    #mpc-chassis {
+      width: 1280px;
+      height: 628px;
+      background-color: var(--theme-bg);
+      position: relative;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 0 1px #2d1e33, inset 0 1px 0 rgba(255,255,255,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: 44px 1fr 56px;
+    }
+
+    /* Recessed industrial module well */
+    .module-card {
+      background-color: var(--theme-panel);
+      border: 1px solid var(--theme-line);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 5px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--theme-accent);
+      opacity: 0.85;
+    }
+
+    /* Hex screws on corners */
+    .screw {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2a1c2f;
+      border: 1px solid #4a3352;
+      box-shadow: inset 0 1px 1px #000;
+      position: absolute;
+    }
+    .screw-tl { top: 4px; left: 4px; }
+    .screw-tr { top: 4px; right: 4px; }
+    .screw-bl { bottom: 4px; left: 4px; }
+    .screw-br { bottom: 4px; right: 4px; }
+
+    /* Amber / Dot-matrix recessed display */
+    .display-well {
+      background-color: var(--theme-display-bg);
+      border: 1px solid rgba(217, 166, 58, 0.35);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05);
+      color: var(--theme-display-ink);
+      position: relative;
+    }
+    .display-well::after {
+      content: " ";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Tactile Rotary Potentiometer Knob UI */
+    .knob-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: ns-resize;
+      width: 76px;
+    }
+    .knob-outer {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #2e2034 0%, #150c18 80%);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.15), 0 0 0 2px #0a050d;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .knob-indicator-dot {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background-color: var(--theme-accent-hi);
+      border-radius: 50%;
+      top: 5px;
+      box-shadow: 0 0 5px var(--theme-accent-hi);
+    }
+    .knob-tick-track {
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1px dashed rgba(217, 166, 58, 0.2);
+      pointer-events: none;
+    }
+
+    /* Tactile Beveled Button */
+    .tactile-btn {
+      background: linear-gradient(180deg, #2b1c30 0%, #1a1020 100%);
+      border: 1px solid var(--theme-line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 3px rgba(0,0,0,0.7);
+      transition: all 0.05s ease;
+    }
+    .tactile-btn:active, .tactile-btn.active {
+      transform: translateY(1px);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.9), 0 0 0 1px var(--theme-accent);
+      border-color: var(--theme-accent);
+      color: var(--theme-accent-hi);
+    }
+
+    /* Custom scroll/scrollbar hidden for fixed hardware */
+    ::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-surface-container-lowest">
+<!-- STANDALONE MPC LIVE II FRAME (1280x628 Hardware Viewport) -->
+<main id="mpc-chassis">
+<!-- TOP HARDWARE BAR (44px) - SHARED COMPONENT: TopNavBar -->
+<header class="h-11 px-3 flex items-center justify-between border-b border-[#4a3352] bg-[#120a14] z-50 select-none">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#1d1220] border border-[#4a3352]">
+<span class="w-2 h-2 rounded-full bg-[#f5c451] shadow-[0_0_6px_#f5c451] animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-[#f8eefa] tracking-wider font-bold">AKAI MPC LIVE II</span>
+</div>
+<span class="text-[#8c7392] font-label-sm">/</span>
+<h1 class="font-headline-sm text-headline-sm text-[#f5c451] tracking-wider uppercase font-bold">MONKSYNTH // SINGING VOICE</h1>
+</div>
+<!-- TABS -->
+<nav class="flex items-center gap-2">
+<button class="px-4 py-1 text-label-md font-label-md font-bold text-[#f5c451] border-b-2 border-[#f5c451] bg-[#29172e] flex items-center gap-1.5 transition-all" id="tab-singer">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">person</span>
+<span>1: SINGER</span>
+</button>
+<button class="px-4 py-1 text-label-md font-label-md text-[#8c7392] hover:text-[#dcc8e0] border-b-2 border-transparent transition-all flex items-center gap-1.5" id="tab-choir">
+<span class="material-symbols-outlined text-sm">groups</span>
+<span>2: CHOIR</span>
+</button>
+</nav>
+<!-- AUDITION ACTION & TELEMETRY -->
+<div class="flex items-center gap-3">
+<button class="tactile-btn px-3 py-1 rounded flex items-center gap-2 text-label-sm font-label-sm font-bold text-[#f5c451] border border-[#d9a63a] hover:bg-[#341b3b]" id="audition-btn">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+<span>AUDITION CHANT [SPACE]</span>
+</button>
+<div class="flex items-center gap-2 text-label-sm font-label-sm bg-[#160e02] px-2 py-1 border border-[#4a3352] rounded text-[#d9a63a]">
+<span class="text-[#8c7392]">DSP:</span><span id="dsp-load">8%</span>
+<span class="text-[#8c7392]">|</span>
+<span>48kHz</span>
+<span class="text-[#8c7392]">|</span>
+<span class="text-[#f8eefa]">1280x628</span>
+</div>
+</div>
+</header>
+<!-- MAIN TOUCH SURFACE (528px) - 4-MODULE RACK (2x2 GRID) -->
+<section class="p-3 grid grid-cols-2 grid-rows-2 gap-3 h-full overflow-hidden bg-[#120a14]">
+<!-- 1. MODULE: CHARACTER (x=10 y=92 w=626 h=258) -->
+<div class="module-card rounded p-2.5 flex flex-col justify-between">
+<div class="screw screw-tl"></div>
+<div class="screw screw-tr"></div>
+<div class="screw screw-bl"></div>
+<div class="screw screw-br"></div>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-[#4a3352]/60 pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm uppercase font-bold text-[#d9a63a] tracking-widest">MODULE 01</span>
+<span class="text-[#8c7392] text-label-sm">//</span>
+<span class="text-body-md font-headline-sm font-bold text-[#f8eefa]">CHARACTER &amp; SPECTRUM</span>
+</div>
+<span class="text-label-sm font-label-sm text-[#8c7392]">TRACT_SIM: 60FPS</span>
+</div>
+<!-- Amber Dot-Matrix Preset Bar -->
+<div class="display-well rounded p-1.5 flex items-center justify-between mt-1">
+<button class="px-3 py-1 bg-[#251503] hover:bg-[#3d2407] border border-[#d9a63a]/40 rounded text-label-sm font-label-sm font-bold text-[#f5c451] active:scale-95 flex items-center gap-1" id="preset-prev">
+<span class="material-symbols-outlined text-xs">chevron_left</span> PREV
+          </button>
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-[#d9a63a]/70 uppercase tracking-widest text-[8px] leading-tight">ACTIVE FORMANT PROFILE</span>
+<span class="font-readout-numeric text-label-lg font-bold tracking-wider text-[#f5c451]" id="preset-name">01: TIBETAN MONK CHANT</span>
+</div>
+<button class="px-3 py-1 bg-[#251503] hover:bg-[#3d2407] border border-[#d9a63a]/40 rounded text-label-sm font-label-sm font-bold text-[#f5c451] active:scale-95 flex items-center gap-1" id="preset-next">
+            NEXT <span class="material-symbols-outlined text-xs">chevron_right</span>
+</button>
+</div>
+<!-- Real-Time Vocal Tract Formant Spectrum Visualizer -->
+<div class="relative w-full h-[142px] bg-[#0c070d] rounded border border-[#4a3352] overflow-hidden mt-1.5">
+<canvas class="w-full h-full block" height="142" id="spectrum-canvas" width="604"></canvas>
+<div class="absolute top-1.5 left-2 flex gap-3 text-[9px] font-label-sm font-bold text-[#8c7392] pointer-events-none">
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-[#f5c451] rounded-full inline-block"></span> F1: <span class="text-[#f5c451]" id="f1-val">420 Hz</span></span>
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-[#d9a63a] rounded-full inline-block"></span> F2: <span class="text-[#f5c451]" id="f2-val">1180 Hz</span></span>
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-[#8c7392] rounded-full inline-block"></span> F3: <span class="text-[#f5c451]" id="f3-val">2450 Hz</span></span>
+</div>
+<div class="absolute bottom-1 right-2 text-[9px] font-label-sm text-[#8c7392]/60 pointer-events-none">
+            RESONANT TRACT [GYUTO OVERTONE]
+          </div>
+</div>
+</div>
+<!-- 2. MODULE: VOICE (x=642 y=92 w=626 h=258) -->
+<div class="module-card rounded p-2.5 flex flex-col justify-between">
+<div class="screw screw-tl"></div>
+<div class="screw screw-tr"></div>
+<div class="screw screw-bl"></div>
+<div class="screw screw-br"></div>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-[#4a3352]/60 pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm uppercase font-bold text-[#d9a63a] tracking-widest">MODULE 02</span>
+<span class="text-[#8c7392] text-label-sm">//</span>
+<span class="text-body-md font-headline-sm font-bold text-[#f8eefa]">VOICE &amp; FORMANT PHONEMES</span>
+</div>
+<span class="text-label-sm font-label-sm text-[#8c7392]">SUB-HARMONIC: ACTIVE</span>
+</div>
+<!-- Vowel Phoneme Quick Selectors -->
+<div class="flex items-center justify-between gap-1.5 mt-1 bg-[#150c18] p-1.5 rounded border border-[#4a3352]">
+<span class="text-label-sm font-label-sm font-bold text-[#8c7392] px-1">VOWEL:</span>
+<div class="flex flex-1 justify-around" id="phoneme-buttons">
+<button class="vowel-btn tactile-btn px-4 py-1 rounded text-label-md font-label-md font-bold text-[#8c7392] hover:text-[#f8eefa]" data-vowel="A">A [ɑ]</button>
+<button class="vowel-btn tactile-btn px-4 py-1 rounded text-label-md font-label-md font-bold text-[#8c7392] hover:text-[#f8eefa]" data-vowel="E">E [ɛ]</button>
+<button class="vowel-btn tactile-btn px-4 py-1 rounded text-label-md font-label-md font-bold text-[#8c7392] hover:text-[#f8eefa]" data-vowel="I">I [i]</button>
+<button class="vowel-btn tactile-btn active px-4 py-1 rounded text-label-md font-label-md font-bold text-[#f5c451] border-[#d9a63a] bg-[#2d1b09]" data-vowel="O">O [ɔ]</button>
+<button class="vowel-btn tactile-btn px-4 py-1 rounded text-label-md font-label-md font-bold text-[#8c7392] hover:text-[#f8eefa]" data-vowel="U">U [u]</button>
+</div>
+</div>
+<!-- 4 Channel Knobs -->
+<div class="grid grid-cols-4 gap-2 mt-2 items-center justify-items-center">
+<!-- VOWEL -->
+<div class="knob-container" data-max="127" data-min="0" data-param="vowel" data-val="64">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-1">VOWEL</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(20deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1.5 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">64</span>
+</div>
+</div>
+<!-- HEAD SIZE -->
+<div class="knob-container" data-max="127" data-min="0" data-param="head_size" data-val="88">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-1">HEAD SIZE</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(70deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1.5 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">88</span>
+</div>
+</div>
+<!-- BREATH / ASPIRATION -->
+<div class="knob-container" data-max="127" data-min="0" data-param="aspiration" data-val="42">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-1">BREATH</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(-35deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1.5 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">42</span>
+</div>
+</div>
+<!-- LEVEL -->
+<div class="knob-container" data-max="127" data-min="0" data-param="level" data-val="105">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-1">LEVEL</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(110deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1.5 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">105</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. MODULE: ENVELOPE (x=10 y=404 w=626 h=258) -->
+<div class="module-card rounded p-2.5 flex flex-col justify-between">
+<div class="screw screw-tl"></div>
+<div class="screw screw-tr"></div>
+<div class="screw screw-bl"></div>
+<div class="screw screw-br"></div>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-[#4a3352]/60 pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm uppercase font-bold text-[#d9a63a] tracking-widest">MODULE 03</span>
+<span class="text-[#8c7392] text-label-sm">//</span>
+<span class="text-body-md font-headline-sm font-bold text-[#f8eefa]">AMPLITUDE ENVELOPE (ADSR)</span>
+</div>
+<span class="text-label-sm font-label-sm text-[#8c7392]">CURVE: EXPONENTIAL</span>
+</div>
+<!-- Interactive ADSR Graph Preview -->
+<div class="h-[52px] bg-[#0c070d] rounded border border-[#4a3352] px-2 py-1 relative flex items-center">
+<canvas class="w-full h-full block" height="44" id="adsr-canvas" width="590"></canvas>
+</div>
+<!-- 4 Knobs: ATTACK, DECAY, SUSTAIN, RELEASE -->
+<div class="grid grid-cols-4 gap-2 mt-1 items-center justify-items-center">
+<div class="knob-container" data-max="127" data-min="0" data-param="attack" data-val="35">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-0.5">ATTACK</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(-50deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">35 ms</span>
+</div>
+</div>
+<div class="knob-container" data-max="127" data-min="0" data-param="decay" data-val="60">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-0.5">DECAY</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(0deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">480 ms</span>
+</div>
+</div>
+<div class="knob-container" data-max="127" data-min="0" data-param="sustain" data-val="92">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-0.5">SUSTAIN</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(80deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">72%</span>
+</div>
+</div>
+<div class="knob-container" data-max="127" data-min="0" data-param="release" data-val="78">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-0.5">RELEASE</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(50deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">820 ms</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. MODULE: EXPRESSION (x=642 y=404 w=626 h=258) -->
+<div class="module-card rounded p-2.5 flex flex-col justify-between">
+<div class="screw screw-tl"></div>
+<div class="screw screw-tr"></div>
+<div class="screw screw-bl"></div>
+<div class="screw screw-br"></div>
+<!-- Header -->
+<div class="flex items-center justify-between border-b border-[#4a3352]/60 pb-1 px-1">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm uppercase font-bold text-[#d9a63a] tracking-widest">MODULE 04</span>
+<span class="text-[#8c7392] text-label-sm">//</span>
+<span class="text-body-md font-headline-sm font-bold text-[#f8eefa]">EXPRESSION &amp; MODULATION</span>
+</div>
+<span class="text-label-sm font-label-sm text-[#8c7392]">PITCH LFO: SYNC</span>
+</div>
+<!-- Expression Status Row -->
+<div class="flex items-center justify-between bg-[#150c18] px-3 py-1.5 rounded border border-[#4a3352]">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#f5c451] shadow-[0_0_4px_#f5c451]"></span>
+<span class="text-label-sm font-label-sm font-bold text-[#f8eefa]">PORTAMENTO: LEGATO</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-label-sm font-label-sm text-[#8c7392]">LFO SHAPE:</span>
+<span class="px-2 py-0.5 bg-[#251503] border border-[#d9a63a]/40 text-[#f5c451] text-[10px] font-label-sm font-bold rounded">TRIANGLE</span>
+</div>
+</div>
+<!-- 4 Knobs: GLIDE, VIBRATO, VIB RATE, BEND RANGE -->
+<div class="grid grid-cols-4 gap-2 mt-1 items-center justify-items-center">
+<div class="knob-container" data-max="127" data-min="0" data-param="glide" data-val="24">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-0.5">GLIDE</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(-70deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">24 ms</span>
+</div>
+</div>
+<div class="knob-container" data-max="127" data-min="0" data-param="vibrato" data-val="52">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-0.5">VIBRATO</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(-15deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">52%</span>
+</div>
+</div>
+<div class="knob-container" data-max="127" data-min="0" data-param="vibrato_rate" data-val="65">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-0.5">VIB RATE</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(10deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">5.2 Hz</span>
+</div>
+</div>
+<div class="knob-container" data-max="12" data-min="1" data-param="bend_range" data-val="2">
+<span class="text-label-sm font-label-sm font-bold text-[#dcc8e0] mb-0.5">BEND RNG</span>
+<div class="knob-outer">
+<div class="knob-tick-track"></div>
+<div class="knob-indicator-dot" style="transform: rotate(-90deg) translateY(0px);"></div>
+</div>
+<div class="display-well rounded px-2 py-0.5 mt-1 text-center w-14">
+<span class="font-readout-numeric text-[11px] font-bold text-[#f5c451] knob-num">±2 ST</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- LOWER HARDWARE Q-LINK ENCODER DOCK (56px) - SHARED COMPONENT: BottomNavBar -->
+<footer class="h-14 px-3 bg-[#120a14] border-t border-[#4a3352] flex items-center justify-between z-50">
+<div class="flex items-center gap-2">
+<div class="px-2 py-1 bg-[#1d1220] rounded border border-[#4a3352] flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-[#f5c451]" style="font-variation-settings: 'FILL' 1;">dialpad</span>
+<span class="font-label-sm text-label-sm font-bold text-[#f8eefa]">Q-LINK BANK 1</span>
+</div>
+<span class="text-[10px] font-label-sm text-[#8c7392] hidden md:inline">OLED MACROS</span>
+</div>
+<!-- 4 PHYSICAL Q-LINK ENCODER TILES -->
+<div class="grid grid-cols-4 gap-3 flex-1 max-w-[880px] mx-4">
+<!-- Q1 -->
+<div class="flex items-center justify-between px-2.5 py-1 bg-[#1d1220] border border-[#d9a63a] rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+<div class="flex items-center gap-1.5">
+<span class="text-label-sm font-label-sm font-bold text-[#f5c451]">Q1</span>
+<span class="text-label-sm font-label-sm text-[#dcc8e0]">VOWEL</span>
+</div>
+<span class="font-readout-numeric text-label-sm font-bold text-[#f5c451]" id="qlink-val-1">64</span>
+</div>
+<!-- Q2 -->
+<div class="flex items-center justify-between px-2.5 py-1 bg-[#1d1220] border border-[#4a3352] rounded">
+<div class="flex items-center gap-1.5">
+<span class="text-label-sm font-label-sm font-bold text-[#8c7392]">Q2</span>
+<span class="text-label-sm font-label-sm text-[#dcc8e0]">HEAD SZ</span>
+</div>
+<span class="font-readout-numeric text-label-sm font-bold text-[#dcc8e0]" id="qlink-val-2">88</span>
+</div>
+<!-- Q3 -->
+<div class="flex items-center justify-between px-2.5 py-1 bg-[#1d1220] border border-[#4a3352] rounded">
+<div class="flex items-center gap-1.5">
+<span class="text-label-sm font-label-sm font-bold text-[#8c7392]">Q3</span>
+<span class="text-label-sm font-label-sm text-[#dcc8e0]">ATTACK</span>
+</div>
+<span class="font-readout-numeric text-label-sm font-bold text-[#dcc8e0]" id="qlink-val-3">35ms</span>
+</div>
+<!-- Q4 -->
+<div class="flex items-center justify-between px-2.5 py-1 bg-[#1d1220] border border-[#4a3352] rounded">
+<div class="flex items-center gap-1.5">
+<span class="text-label-sm font-label-sm font-bold text-[#8c7392]">Q4</span>
+<span class="text-label-sm font-label-sm text-[#dcc8e0]">VIBRATO</span>
+</div>
+<span class="font-readout-numeric text-label-sm font-bold text-[#dcc8e0]" id="qlink-val-4">52%</span>
+</div>
+</div>
+<!-- Panic / Master Output Level meter -->
+<div class="flex items-center gap-2">
+<div class="flex flex-col items-end">
+<span class="text-[8px] font-label-sm text-[#8c7392]">OUT L/R</span>
+<div class="flex gap-0.5 h-3 items-end">
+<div class="w-1.5 h-2 bg-[#d9a63a] rounded-xs"></div>
+<div class="w-1.5 h-3 bg-[#d9a63a] rounded-xs"></div>
+<div class="w-1.5 h-2.5 bg-[#f5c451] rounded-xs"></div>
+<div class="w-1.5 h-1.5 bg-[#8c7392] rounded-xs"></div>
+</div>
+</div>
+<button class="tactile-btn px-2 py-1 text-label-sm font-label-sm font-bold text-[#ffb4a7] border border-[#920801] hover:bg-[#400100] rounded" id="panic-btn">
+          MUTE
+        </button>
+</div>
+</footer>
+</main>
+<!-- WEB AUDIO MONK SYNTH ENGINE & INTERACTIVITY -->
+<script>
+    // State Store
+    const state = {
+      presetIndex: 0,
+      presets: [
+        "01: TIBETAN MONK CHANT",
+        "02: GYUTO DEEP THROAT",
+        "03: TUVAN KHARGYRAA",
+        "04: SACRED CHOIR DRONE",
+        "05: OVERTONE TEMPLE"
+      ],
+      currentVowel: "O",
+      vowelFormants: {
+        "A": { f1: 700, f2: 1200, f3: 2600 },
+        "E": { f1: 500, f2: 1800, f3: 2500 },
+        "I": { f1: 300, f2: 2300, f3: 3000 },
+        "O": { f1: 420, f2: 1180, f3: 2450 },
+        "U": { f1: 320, f2: 850,  f3: 2250 }
+      },
+      params: {
+        vowel: 64,
+        head_size: 88,
+        aspiration: 42,
+        level: 105,
+        attack: 35,
+        decay: 60,
+        sustain: 92,
+        release: 78,
+        glide: 24,
+        vibrato: 52,
+        vibrato_rate: 65,
+        bend_range: 2
+      },
+      isPlaying: false
+    };
+
+    // Web Audio Setup
+    let audioCtx = null;
+    let osc1 = null;
+    let oscSub = null;
+    let noiseNode = null;
+    let biquad1 = null;
+    let biquad2 = null;
+    let biquad3 = null;
+    let masterGain = null;
+    let lfo = null;
+    let lfoGain = null;
+
+    function initAudio() {
+      if (audioCtx) return;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+
+      // Master Output
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      masterGain.connect(audioCtx.destination);
+
+      // Formant Biquad Resonators
+      biquad1 = audioCtx.createBiquadFilter();
+      biquad1.type = "bandpass";
+      biquad1.Q.value = 8.0;
+
+      biquad2 = audioCtx.createBiquadFilter();
+      biquad2.type = "bandpass";
+      biquad2.Q.value = 10.0;
+
+      biquad3 = audioCtx.createBiquadFilter();
+      biquad3.type = "bandpass";
+      biquad3.Q.value = 12.0;
+
+      updateFormantFrequencies();
+
+      biquad1.connect(masterGain);
+      biquad2.connect(masterGain);
+      biquad3.connect(masterGain);
+    }
+
+    function updateFormantFrequencies() {
+      if (!audioCtx) return;
+      const fmt = state.vowelFormants[state.currentVowel] || state.vowelFormants["O"];
+      const scale = (state.params.head_size / 64); // head size scales resonance tract
+      const now = audioCtx.currentTime;
+      biquad1.frequency.setTargetAtTime(fmt.f1 * scale, now, 0.05);
+      biquad2.frequency.setTargetAtTime(fmt.f2 * scale, now, 0.05);
+      biquad3.frequency.setTargetAtTime(fmt.f3 * scale, now, 0.05);
+
+      document.getElementById('f1-val').textContent = Math.round(fmt.f1 * scale) + " Hz";
+      document.getElementById('f2-val').textContent = Math.round(fmt.f2 * scale) + " Hz";
+      document.getElementById('f3-val').textContent = Math.round(fmt.f3 * scale) + " Hz";
+    }
+
+    function startDrone() {
+      initAudio();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      // Deep Monk Fundamental (C2 ~ 65.4 Hz or low D2 ~ 73.4 Hz)
+      const baseFreq = 65.41;
+
+      // Primary Rich Saw/Square vocal fold model
+      osc1 = audioCtx.createOscillator();
+      osc1.type = "sawtooth";
+      osc1.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+
+      // Deep Sub Throat Undertone (half frequency - Gyuto subharmonic technique)
+      oscSub = audioCtx.createOscillator();
+      oscSub.type = "sine";
+      oscSub.frequency.setValueAtTime(baseFreq * 0.5, audioCtx.currentTime);
+
+      // Vibrato LFO
+      lfo = audioCtx.createOscillator();
+      lfoGain = audioCtx.createGain();
+      const vibRate = 3.0 + (state.params.vibrato_rate / 127) * 4.5;
+      const vibDepth = (state.params.vibrato / 127) * 4.0;
+      lfo.frequency.setValueAtTime(vibRate, audioCtx.currentTime);
+      lfoGain.gain.setValueAtTime(vibDepth, audioCtx.currentTime);
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc1.frequency);
+      lfo.start();
+
+      // Connect oscillators to formant filters
+      const oscMix = audioCtx.createGain();
+      oscMix.gain.value = 0.8;
+      osc1.connect(oscMix);
+      oscSub.connect(oscMix);
+
+      oscMix.connect(biquad1);
+      oscMix.connect(biquad2);
+      oscMix.connect(biquad3);
+
+      osc1.start();
+      oscSub.start();
+
+      // Envelope Attack
+      const attackSec = 0.02 + (state.params.attack / 127) * 1.5;
+      const targetGain = (state.params.level / 127) * 0.45;
+      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      masterGain.gain.setTargetAtTime(targetGain, audioCtx.currentTime, attackSec * 0.4);
+
+      state.isPlaying = true;
+      document.getElementById('audition-btn').classList.add('active');
+    }
+
+    function stopDrone() {
+      if (!audioCtx || !state.isPlaying) return;
+      const releaseSec = 0.05 + (state.params.release / 127) * 1.8;
+      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, releaseSec * 0.3);
+
+      setTimeout(() => {
+        if (!state.isPlaying && osc1) {
+          try {
+            osc1.stop();
+            oscSub.stop();
+            lfo.stop();
+            osc1.disconnect();
+            oscSub.disconnect();
+          } catch(e) {}
+        }
+      }, releaseSec * 1000 + 100);
+
+      state.isPlaying = false;
+      document.getElementById('audition-btn').classList.remove('active');
+    }
+
+    // Toggle Audition
+    const auditionBtn = document.getElementById('audition-btn');
+    auditionBtn.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      if (!state.isPlaying) {
+        startDrone();
+      } else {
+        stopDrone();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && !e.repeat) {
+        e.preventDefault();
+        startDrone();
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        stopDrone();
+      }
+    });
+
+    // Preset Stepper
+    const presetNameEl = document.getElementById('preset-name');
+    document.getElementById('preset-prev').addEventListener('click', () => {
+      state.presetIndex = (state.presetIndex - 1 + state.presets.length) % state.presets.length;
+      presetNameEl.textContent = state.presets[state.presetIndex];
+    });
+    document.getElementById('preset-next').addEventListener('click', () => {
+      state.presetIndex = (state.presetIndex + 1) % state.presets.length;
+      presetNameEl.textContent = state.presets[state.presetIndex];
+    });
+
+    // Phoneme Selection
+    const phonemeButtons = document.querySelectorAll('.vowel-btn');
+    phonemeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        phonemeButtons.forEach(b => {
+          b.classList.remove('active', 'text-[#f5c451]', 'border-[#d9a63a]', 'bg-[#2d1b09]');
+          b.classList.add('text-[#8c7392]');
+        });
+        btn.classList.add('active', 'text-[#f5c451]', 'border-[#d9a63a]', 'bg-[#2d1b09]');
+        btn.classList.remove('text-[#8c7392]');
+        state.currentVowel = btn.getAttribute('data-vowel');
+        updateFormantFrequencies();
+      });
+    });
+
+    // Interactive Knobs Logic (Touch & Drag)
+    document.querySelectorAll('.knob-container').forEach(knob => {
+      let isDragging = false;
+      let startY = 0;
+      let initialVal = 0;
+      const paramName = knob.getAttribute('data-param');
+      const min = parseInt(knob.getAttribute('data-min') || '0');
+      const max = parseInt(knob.getAttribute('data-max') || '127');
+      const dot = knob.querySelector('.knob-indicator-dot');
+      const numDisplay = knob.querySelector('.knob-num');
+
+      function updateKnobUI(val) {
+        // Map min-max to -135deg to +135deg
+        const pct = (val - min) / (max - min);
+        const deg = -135 + pct * 270;
+        dot.style.transform = `rotate(${deg}deg) translateY(0px)`;
+        
+        // Contextual formatting
+        if (paramName === 'attack') numDisplay.textContent = `${Math.round(val * 3.2)} ms`;
+        else if (paramName === 'decay') numDisplay.textContent = `${Math.round(val * 8)} ms`;
+        else if (paramName === 'sustain') numDisplay.textContent = `${Math.round((val/127)*100)}%`;
+        else if (paramName === 'release') numDisplay.textContent = `${Math.round(val * 11)} ms`;
+        else if (paramName === 'glide') numDisplay.textContent = `${val} ms`;
+        else if (paramName === 'vibrato') numDisplay.textContent = `${Math.round((val/127)*100)}%`;
+        else if (paramName === 'vibrato_rate') numDisplay.textContent = `${(3 + (val/127)*4.5).toFixed(1)} Hz`;
+        else if (paramName === 'bend_range') numDisplay.textContent = `±${val} ST`;
+        else numDisplay.textContent = val;
+
+        // Sync with Q-Link bar
+        if (paramName === 'vowel') document.getElementById('qlink-val-1').textContent = val;
+        if (paramName === 'head_size') document.getElementById('qlink-val-2').textContent = val;
+        if (paramName === 'attack') document.getElementById('qlink-val-3').textContent = `${Math.round(val * 3.2)}ms`;
+        if (paramName === 'vibrato') document.getElementById('qlink-val-4').textContent = `${Math.round((val/127)*100)}%`;
+
+        drawADSR();
+        updateFormantFrequencies();
+      }
+
+      knob.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        startY = e.clientY;
+        initialVal = state.params[paramName];
+        knob.setPointerCapture(e.pointerId);
+      });
+
+      knob.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const delta = (startY - e.clientY);
+        let newVal = Math.min(max, Math.max(min, initialVal + Math.round(delta * 0.8)));
+        state.params[paramName] = newVal;
+        updateKnobUI(newVal);
+      });
+
+      knob.addEventListener('pointerup', (e) => {
+        isDragging = false;
+        knob.releasePointerCapture(e.pointerId);
+      });
+    });
+
+    // MUTE Button
+    document.getElementById('panic-btn').addEventListener('click', () => {
+      stopDrone();
+      if (masterGain && audioCtx) {
+        masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      }
+    });
+
+    // 60FPS Formant Spectrum Visualizer
+    const canvas = document.getElementById('spectrum-canvas');
+    const ctx = canvas.getContext('2d');
+    let phase = 0;
+
+    function renderSpectrum() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Grid Lines
+      ctx.strokeStyle = "rgba(74, 51, 82, 0.4)";
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 28) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      // Dynamic Formant Peaks
+      const fmt = state.vowelFormants[state.currentVowel] || state.vowelFormants["O"];
+      const scale = (state.params.head_size / 64);
+      const f1 = (fmt.f1 * scale) / 3200 * canvas.width;
+      const f2 = (fmt.f2 * scale) / 3200 * canvas.width;
+      const f3 = (fmt.f3 * scale) / 3200 * canvas.width;
+
+      // Glow Gradient Curve
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height - 10);
+
+      const amplitude = state.isPlaying ? 1.0 : 0.25;
+
+      for (let x = 0; x < canvas.width; x += 3) {
+        // Synthesized Formant envelopes + animated vocal tract turbulence
+        const g1 = Math.exp(-Math.pow((x - f1) / 35, 2)) * 80 * amplitude;
+        const g2 = Math.exp(-Math.pow((x - f2) / 50, 2)) * 60 * amplitude;
+        const g3 = Math.exp(-Math.pow((x - f3) / 75, 2)) * 40 * amplitude;
+        const jitter = state.isPlaying ? Math.sin(x * 0.15 + phase) * (state.params.aspiration / 12) : 0;
+        const y = canvas.height - 15 - (g1 + g2 + g3 + jitter);
+        ctx.lineTo(x, Math.max(10, y));
+      }
+
+      ctx.lineTo(canvas.width, canvas.height - 10);
+      
+      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      grad.addColorStop(0, "rgba(245, 196, 81, 0.35)");
+      grad.addColorStop(1, "rgba(217, 166, 58, 0.0)");
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Peak highlight line
+      ctx.strokeStyle = "#f5c451";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      phase += state.isPlaying ? 0.35 : 0.08;
+      requestAnimationFrame(renderSpectrum);
+    }
+    renderSpectrum();
+
+    // ADSR Curve Canvas Drawer
+    function drawADSR() {
+      const adsrCanvas = document.getElementById('adsr-canvas');
+      const c = adsrCanvas.getContext('2d');
+      c.clearRect(0, 0, adsrCanvas.width, adsrCanvas.height);
+
+      const w = adsrCanvas.width;
+      const h = adsrCanvas.height;
+
+      const aW = (state.params.attack / 127) * (w * 0.25) + 10;
+      const dW = (state.params.decay / 127) * (w * 0.25) + 10;
+      const sY = h - ((state.params.sustain / 127) * (h - 12) + 6);
+      const rW = (state.params.release / 127) * (w * 0.3) + 15;
+      const sW = Math.max(10, w - aW - dW - rW - 30);
+
+      c.strokeStyle = "#4a3352";
+      c.lineWidth = 1;
+      c.beginPath();
+      c.moveTo(0, h - 2);
+      c.lineTo(w, h - 2);
+      c.stroke();
+
+      // ADSR Stroke
+      c.strokeStyle = "#f5c451";
+      c.lineWidth = 2.5;
+      c.beginPath();
+      c.moveTo(6, h - 4);
+      c.lineTo(6 + aW, 6); // Attack
+      c.lineTo(6 + aW + dW, sY); // Decay
+      c.lineTo(6 + aW + dW + sW, sY); // Sustain
+      c.lineTo(6 + aW + dW + sW + rW, h - 4); // Release
+      c.stroke();
+
+      // Glow fill
+      c.lineTo(6, h - 4);
+      c.fillStyle = "rgba(217, 166, 58, 0.15)";
+      c.fill();
+    }
+    drawADSR();
+
+    // Random DSP load fluctuation micro-interaction
+    setInterval(() => {
+      const base = state.isPlaying ? 14 : 8;
+      const jitter = Math.floor(Math.random() * 3);
+      document.getElementById('dsp-load').textContent = `${base + jitter}%`;
+    }, 1800);
+  </script>
+</body></html>

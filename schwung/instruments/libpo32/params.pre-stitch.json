@@ -1,0 +1,1511 @@
+{
+ "name": "Libpo32",
+ "params": [
+  {
+   "key": "kit",
+   "name": "KIT",
+   "type": "stepper",
+   "min": 0,
+   "max": 2,
+   "step": 1,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "level",
+   "name": "LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "decay",
+   "name": "DECAY SCALE",
+   "min": 0.1,
+   "max": 3,
+   "step": 0.05
+  },
+  {
+   "key": "v01_freq",
+   "name": "PAD1 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_atk",
+   "name": "PAD1 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_dcy",
+   "name": "PAD1 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_mrate",
+   "name": "PAD1 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_mamt",
+   "name": "PAD1 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_nffrq",
+   "name": "PAD1 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_nfq",
+   "name": "PAD1 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_neatk",
+   "name": "PAD1 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_nedcy",
+   "name": "PAD1 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_mix",
+   "name": "PAD1 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_dist",
+   "name": "PAD1 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v01_lvl",
+   "name": "PAD1 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_freq",
+   "name": "PAD2 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_atk",
+   "name": "PAD2 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_dcy",
+   "name": "PAD2 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_mrate",
+   "name": "PAD2 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_mamt",
+   "name": "PAD2 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_nffrq",
+   "name": "PAD2 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_nfq",
+   "name": "PAD2 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_neatk",
+   "name": "PAD2 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_nedcy",
+   "name": "PAD2 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_mix",
+   "name": "PAD2 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_dist",
+   "name": "PAD2 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v02_lvl",
+   "name": "PAD2 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_freq",
+   "name": "PAD3 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_atk",
+   "name": "PAD3 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_dcy",
+   "name": "PAD3 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_mrate",
+   "name": "PAD3 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_mamt",
+   "name": "PAD3 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_nffrq",
+   "name": "PAD3 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_nfq",
+   "name": "PAD3 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_neatk",
+   "name": "PAD3 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_nedcy",
+   "name": "PAD3 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_mix",
+   "name": "PAD3 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_dist",
+   "name": "PAD3 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v03_lvl",
+   "name": "PAD3 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_freq",
+   "name": "PAD4 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_atk",
+   "name": "PAD4 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_dcy",
+   "name": "PAD4 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_mrate",
+   "name": "PAD4 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_mamt",
+   "name": "PAD4 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_nffrq",
+   "name": "PAD4 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_nfq",
+   "name": "PAD4 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_neatk",
+   "name": "PAD4 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_nedcy",
+   "name": "PAD4 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_mix",
+   "name": "PAD4 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_dist",
+   "name": "PAD4 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v04_lvl",
+   "name": "PAD4 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_freq",
+   "name": "PAD5 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_atk",
+   "name": "PAD5 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_dcy",
+   "name": "PAD5 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_mrate",
+   "name": "PAD5 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_mamt",
+   "name": "PAD5 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_nffrq",
+   "name": "PAD5 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_nfq",
+   "name": "PAD5 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_neatk",
+   "name": "PAD5 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_nedcy",
+   "name": "PAD5 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_mix",
+   "name": "PAD5 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_dist",
+   "name": "PAD5 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v05_lvl",
+   "name": "PAD5 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_freq",
+   "name": "PAD6 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_atk",
+   "name": "PAD6 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_dcy",
+   "name": "PAD6 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_mrate",
+   "name": "PAD6 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_mamt",
+   "name": "PAD6 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_nffrq",
+   "name": "PAD6 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_nfq",
+   "name": "PAD6 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_neatk",
+   "name": "PAD6 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_nedcy",
+   "name": "PAD6 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_mix",
+   "name": "PAD6 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_dist",
+   "name": "PAD6 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v06_lvl",
+   "name": "PAD6 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_freq",
+   "name": "PAD7 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_atk",
+   "name": "PAD7 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_dcy",
+   "name": "PAD7 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_mrate",
+   "name": "PAD7 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_mamt",
+   "name": "PAD7 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_nffrq",
+   "name": "PAD7 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_nfq",
+   "name": "PAD7 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_neatk",
+   "name": "PAD7 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_nedcy",
+   "name": "PAD7 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_mix",
+   "name": "PAD7 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_dist",
+   "name": "PAD7 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v07_lvl",
+   "name": "PAD7 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_freq",
+   "name": "PAD8 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_atk",
+   "name": "PAD8 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_dcy",
+   "name": "PAD8 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_mrate",
+   "name": "PAD8 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_mamt",
+   "name": "PAD8 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_nffrq",
+   "name": "PAD8 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_nfq",
+   "name": "PAD8 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_neatk",
+   "name": "PAD8 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_nedcy",
+   "name": "PAD8 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_mix",
+   "name": "PAD8 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_dist",
+   "name": "PAD8 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v08_lvl",
+   "name": "PAD8 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_freq",
+   "name": "PAD9 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_atk",
+   "name": "PAD9 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_dcy",
+   "name": "PAD9 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_mrate",
+   "name": "PAD9 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_mamt",
+   "name": "PAD9 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_nffrq",
+   "name": "PAD9 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_nfq",
+   "name": "PAD9 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_neatk",
+   "name": "PAD9 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_nedcy",
+   "name": "PAD9 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_mix",
+   "name": "PAD9 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_dist",
+   "name": "PAD9 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v09_lvl",
+   "name": "PAD9 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_freq",
+   "name": "PAD10 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_atk",
+   "name": "PAD10 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_dcy",
+   "name": "PAD10 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_mrate",
+   "name": "PAD10 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_mamt",
+   "name": "PAD10 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_nffrq",
+   "name": "PAD10 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_nfq",
+   "name": "PAD10 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_neatk",
+   "name": "PAD10 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_nedcy",
+   "name": "PAD10 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_mix",
+   "name": "PAD10 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_dist",
+   "name": "PAD10 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v10_lvl",
+   "name": "PAD10 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_freq",
+   "name": "PAD11 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_atk",
+   "name": "PAD11 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_dcy",
+   "name": "PAD11 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_mrate",
+   "name": "PAD11 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_mamt",
+   "name": "PAD11 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_nffrq",
+   "name": "PAD11 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_nfq",
+   "name": "PAD11 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_neatk",
+   "name": "PAD11 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_nedcy",
+   "name": "PAD11 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_mix",
+   "name": "PAD11 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_dist",
+   "name": "PAD11 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v11_lvl",
+   "name": "PAD11 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_freq",
+   "name": "PAD12 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_atk",
+   "name": "PAD12 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_dcy",
+   "name": "PAD12 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_mrate",
+   "name": "PAD12 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_mamt",
+   "name": "PAD12 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_nffrq",
+   "name": "PAD12 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_nfq",
+   "name": "PAD12 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_neatk",
+   "name": "PAD12 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_nedcy",
+   "name": "PAD12 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_mix",
+   "name": "PAD12 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_dist",
+   "name": "PAD12 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v12_lvl",
+   "name": "PAD12 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_freq",
+   "name": "PAD13 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_atk",
+   "name": "PAD13 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_dcy",
+   "name": "PAD13 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_mrate",
+   "name": "PAD13 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_mamt",
+   "name": "PAD13 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_nffrq",
+   "name": "PAD13 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_nfq",
+   "name": "PAD13 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_neatk",
+   "name": "PAD13 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_nedcy",
+   "name": "PAD13 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_mix",
+   "name": "PAD13 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_dist",
+   "name": "PAD13 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v13_lvl",
+   "name": "PAD13 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_freq",
+   "name": "PAD14 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_atk",
+   "name": "PAD14 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_dcy",
+   "name": "PAD14 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_mrate",
+   "name": "PAD14 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_mamt",
+   "name": "PAD14 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_nffrq",
+   "name": "PAD14 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_nfq",
+   "name": "PAD14 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_neatk",
+   "name": "PAD14 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_nedcy",
+   "name": "PAD14 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_mix",
+   "name": "PAD14 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_dist",
+   "name": "PAD14 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v14_lvl",
+   "name": "PAD14 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_freq",
+   "name": "PAD15 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_atk",
+   "name": "PAD15 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_dcy",
+   "name": "PAD15 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_mrate",
+   "name": "PAD15 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_mamt",
+   "name": "PAD15 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_nffrq",
+   "name": "PAD15 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_nfq",
+   "name": "PAD15 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_neatk",
+   "name": "PAD15 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_nedcy",
+   "name": "PAD15 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_mix",
+   "name": "PAD15 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_dist",
+   "name": "PAD15 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v15_lvl",
+   "name": "PAD15 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_freq",
+   "name": "PAD16 PITCH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_atk",
+   "name": "PAD16 ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_dcy",
+   "name": "PAD16 DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_mrate",
+   "name": "PAD16 MRATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_mamt",
+   "name": "PAD16 BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_nffrq",
+   "name": "PAD16 NFREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_nfq",
+   "name": "PAD16 NQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_neatk",
+   "name": "PAD16 NATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_nedcy",
+   "name": "PAD16 NDCY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_mix",
+   "name": "PAD16 NOISE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_dist",
+   "name": "PAD16 DIST",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "v16_lvl",
+   "name": "PAD16 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "kit_prev",
+   "name": "PREV KIT",
+   "momentary": true,
+   "step_of": "kit",
+   "step_delta": -1
+  },
+  {
+   "key": "kit_next",
+   "name": "NEXT KIT",
+   "momentary": true,
+   "step_of": "kit",
+   "step_delta": 1
+  },
+  {
+   "key": "kit_name",
+   "name": "KIT NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "randomize",
+   "name": "RANDOM KIT",
+   "momentary": true
+  },
+  {
+   "key": "inst",
+   "name": "EDIT PAD",
+   "options": [
+    "PAD 1",
+    "PAD 2",
+    "PAD 3",
+    "PAD 4",
+    "PAD 5",
+    "PAD 6",
+    "PAD 7",
+    "PAD 8",
+    "PAD 9",
+    "PAD 10",
+    "PAD 11",
+    "PAD 12",
+    "PAD 13",
+    "PAD 14",
+    "PAD 15",
+    "PAD 16"
+   ],
+   "default": 0
+  },
+  {
+   "key": "inst_wave",
+   "name": "WAVE",
+   "default": 0,
+   "options": [
+    "SINE",
+    "TRI",
+    "SAW"
+   ]
+  },
+  {
+   "key": "inst_freq",
+   "name": "PITCH",
+   "default": 0,
+   "min": 0,
+   "max": 100,
+   "display": "int"
+  },
+  {
+   "key": "inst_dcy",
+   "name": "DECAY",
+   "default": 0,
+   "min": 0,
+   "max": 100,
+   "display": "int"
+  },
+  {
+   "key": "inst_mod_mode",
+   "name": "MOD MODE",
+   "default": 0,
+   "options": [
+    "DECAY",
+    "SINE",
+    "NOISE"
+   ]
+  },
+  {
+   "key": "inst_mod_amt",
+   "name": "MOD AMOUNT",
+   "default": 0,
+   "min": 0,
+   "max": 100,
+   "display": "int"
+  },
+  {
+   "key": "inst_noise",
+   "name": "NOISE MIX",
+   "default": 0,
+   "min": 0,
+   "max": 100,
+   "display": "int"
+  },
+  {
+   "key": "inst_noise_filt",
+   "name": "NOISE FILTER",
+   "default": 0,
+   "options": [
+    "LP",
+    "BP",
+    "HP"
+   ]
+  },
+  {
+   "key": "inst_noise_env",
+   "name": "NOISE ENV",
+   "default": 0,
+   "options": [
+    "EXP",
+    "LIN",
+    "MOD"
+   ]
+  },
+  {
+   "key": "inst_dist",
+   "name": "DISTORTION",
+   "default": 0,
+   "min": 0,
+   "max": 100,
+   "display": "int"
+  },
+  {
+   "key": "inst_level",
+   "name": "PAD LEVEL",
+   "default": 0,
+   "min": 0,
+   "max": 100,
+   "display": "int"
+  }
+ ]
+}

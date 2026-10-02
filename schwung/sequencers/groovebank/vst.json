@@ -1,0 +1,30 @@
+{
+  "name": "Groove Bank",
+  "vendor": "Mission Minnow",
+  "uid": "GrvB",
+  "so": "groovebank.so",
+  "build": {
+    "sources": [
+      "src/dsp/grooves.c",
+      "src/host/groovebank_plugin.c",
+      "mpc/schwung_midi_fx.c"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Impc/host",
+      "-Isrc",
+      "-Isrc/dsp",
+      "-Isrc/host"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "MODULE_DIR": "\"/sdcard/vst/groovebank\""
+  }
+}

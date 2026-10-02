@@ -1,0 +1,256 @@
+{
+ "name": "Hera",
+ "params": [
+  {
+   "key": "preset",
+   "name": "PATCH",
+   "min": 0,
+   "max": 55,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.8
+  },
+  {
+   "key": "vcf_cutoff",
+   "name": "VCF FREQ",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "vcf_resonance",
+   "name": "RESONANCE",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "vcf_env",
+   "name": "VCF ENV",
+   "unit": "%",
+   "min": -1.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "attack",
+   "name": "ATTACK",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "decay",
+   "name": "DECAY",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "sustain",
+   "name": "SUSTAIN",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "release",
+   "name": "RELEASE",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "lfo_rate",
+   "name": "LFO RATE",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "saw_level",
+   "name": "SAW",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pulse_level",
+   "name": "PULSE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "sub_level",
+   "name": "SUB",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "noise_level",
+   "name": "NOISE",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pwm_depth",
+   "name": "PWM DEPTH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "pwm_mod",
+   "name": "PWM MODE",
+   "options": [
+    "MAN",
+    "LFO",
+    "ENV"
+   ],
+   "default": 0
+  },
+  {
+   "key": "pitch_range",
+   "name": "RANGE",
+   "options": [
+    "16'",
+    "8'",
+    "4'"
+   ],
+   "default": 1
+  },
+  {
+   "key": "pitch_mod",
+   "name": "DCO LFO",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "vcf_lfo",
+   "name": "VCF LFO",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "vcf_key",
+   "name": "VCF KYBD",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "vcf_bend",
+   "name": "VCF BEND",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "vca_depth",
+   "name": "VCA LEVEL",
+   "default": 0.5,
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "vca_type",
+   "name": "VCA MODE",
+   "options": [
+    "ENV",
+    "GATE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_delay",
+   "name": "LFO DELAY",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lfo_trigger",
+   "name": "LFO TRIG",
+   "options": [
+    "MANUAL",
+    "AUTO"
+   ],
+   "default": 1
+  },
+  {
+   "key": "hpf",
+   "name": "HPF",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "chorus_i",
+   "name": "CHORUS I",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "chorus_ii",
+   "name": "CHORUS II",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "octave_transpose",
+   "name": "OCTAVE",
+   "min": -3,
+   "max": 3,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "PATCH NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

@@ -1,0 +1,252 @@
+{
+  "id": "moog",
+  "name": "RaffoSynth",
+  "abbrev": "RF",
+  "version": "0.2.5",
+  "description": "Monophonic synthesizer based on RaffoSynth (4 oscillators, Moog ladder filter)",
+  "author": "Nicolas Roulet, Julian Palladino (port: charlesvestal)",
+  "license": "MIT",
+  "ui": "ui.js",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "aftertouch": true,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "ui_hierarchy": {
+      "modes": null,
+      "levels": {
+        "root": {
+          "list_param": "preset",
+          "count_param": "preset_count",
+          "name_param": "preset_name",
+          "children": "main",
+          "knobs": [
+            "cutoff",
+            "resonance",
+            "contour",
+            "attack",
+            "decay",
+            "sustain",
+            "release",
+            "octave_transpose"
+          ],
+          "params": []
+        },
+        "main": {
+          "children": null,
+          "knobs": [
+            "cutoff",
+            "resonance",
+            "contour",
+            "attack",
+            "decay",
+            "sustain",
+            "release",
+            "octave_transpose"
+          ],
+          "params": [
+            {
+              "level": "osc1",
+              "label": "Oscillator 1"
+            },
+            {
+              "level": "osc2",
+              "label": "Oscillator 2"
+            },
+            {
+              "level": "osc3",
+              "label": "Oscillator 3"
+            },
+            {
+              "level": "osc4",
+              "label": "Oscillator 4"
+            },
+            {
+              "level": "mixer",
+              "label": "Mixer"
+            },
+            {
+              "level": "filter",
+              "label": "Filter"
+            },
+            {
+              "level": "filt_env",
+              "label": "Filter Env"
+            },
+            {
+              "level": "amp_env",
+              "label": "Amp Env"
+            },
+            {
+              "level": "lfo",
+              "label": "LFO"
+            },
+            {
+              "level": "performance",
+              "label": "Performance"
+            }
+          ]
+        },
+        "osc1": {
+          "children": null,
+          "knobs": [
+            "osc1_wave",
+            "osc1_volume",
+            "osc1_range"
+          ],
+          "params": [
+            "osc1_wave",
+            "osc1_volume",
+            "osc1_range"
+          ]
+        },
+        "osc2": {
+          "children": null,
+          "knobs": [
+            "osc2_wave",
+            "osc2_volume",
+            "osc2_range",
+            "osc2_detune"
+          ],
+          "params": [
+            "osc2_wave",
+            "osc2_volume",
+            "osc2_range",
+            "osc2_detune"
+          ]
+        },
+        "osc3": {
+          "children": null,
+          "knobs": [
+            "osc3_wave",
+            "osc3_volume",
+            "osc3_range",
+            "osc3_detune"
+          ],
+          "params": [
+            "osc3_wave",
+            "osc3_volume",
+            "osc3_range",
+            "osc3_detune"
+          ]
+        },
+        "osc4": {
+          "children": null,
+          "knobs": [
+            "osc4_wave",
+            "osc4_volume",
+            "osc4_range",
+            "osc4_detune"
+          ],
+          "params": [
+            "osc4_wave",
+            "osc4_volume",
+            "osc4_range",
+            "osc4_detune"
+          ]
+        },
+        "mixer": {
+          "children": null,
+          "knobs": [
+            "osc1_volume",
+            "osc2_volume",
+            "osc3_volume",
+            "osc4_volume",
+            "noise",
+            "volume"
+          ],
+          "params": [
+            "osc1_volume",
+            "osc2_volume",
+            "osc3_volume",
+            "osc4_volume",
+            "noise",
+            "volume"
+          ]
+        },
+        "filter": {
+          "children": null,
+          "knobs": [
+            "cutoff",
+            "resonance",
+            "contour",
+            "key_follow"
+          ],
+          "params": [
+            "cutoff",
+            "resonance",
+            "contour",
+            "key_follow"
+          ]
+        },
+        "filt_env": {
+          "children": null,
+          "knobs": [
+            "f_attack",
+            "f_decay",
+            "f_sustain",
+            "f_release"
+          ],
+          "params": [
+            "f_attack",
+            "f_decay",
+            "f_sustain",
+            "f_release"
+          ]
+        },
+        "amp_env": {
+          "children": null,
+          "knobs": [
+            "attack",
+            "decay",
+            "sustain",
+            "release"
+          ],
+          "params": [
+            "attack",
+            "decay",
+            "sustain",
+            "release"
+          ]
+        },
+        "lfo": {
+          "children": null,
+          "knobs": [
+            "lfo_rate",
+            "lfo_pitch",
+            "lfo_filter"
+          ],
+          "params": [
+            "lfo_rate",
+            "lfo_pitch",
+            "lfo_filter"
+          ]
+        },
+        "performance": {
+          "children": null,
+          "knobs": [
+            "glide",
+            "mod_filter",
+            "mod_pitch",
+            "bend_range",
+            "vel_sens",
+            "octave_transpose"
+          ],
+          "params": [
+            "glide",
+            "mod_filter",
+            "mod_pitch",
+            "bend_range",
+            "vel_sens",
+            "octave_transpose"
+          ]
+        }
+      }
+    }
+  }
+}

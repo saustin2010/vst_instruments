@@ -1,0 +1,574 @@
+{
+ "name": "Tablor",
+ "params": [
+  {
+   "key": "wt1_pos",
+   "name": "WT1 POSITION",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt2_pos",
+   "name": "WT2 POSITION",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_level",
+   "name": "WT1 LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "display": "int"
+  },
+  {
+   "key": "wt2_level",
+   "name": "WT2 LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_tune",
+   "name": "WT1 TUNE",
+   "min": -24,
+   "max": 24,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt2_tune",
+   "name": "WT2 TUNE",
+   "min": -24,
+   "max": 24,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_uni",
+   "name": "WT1 UNISON",
+   "min": 1,
+   "max": 4,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "wt1_detune",
+   "name": "WT1 DETUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_spread",
+   "name": "WT1 SPREAD",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt1_pan",
+   "name": "WT1 PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt2_uni",
+   "name": "WT2 UNISON",
+   "min": 1,
+   "max": 4,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "wt2_detune",
+   "name": "WT2 DETUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt2_spread",
+   "name": "WT2 SPREAD",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "wt2_pan",
+   "name": "WT2 PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt1_bend",
+   "name": "WT1 BEND",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt1_formant",
+   "name": "WT1 FORMANT",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt2_bend",
+   "name": "WT2 BEND",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "wt2_formant",
+   "name": "WT2 FORMANT",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "sub_tune",
+   "name": "SUB TUNE",
+   "min": -24,
+   "max": 24,
+   "default": -12,
+   "display": "int"
+  },
+  {
+   "key": "flt_freq",
+   "name": "CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "display": "int"
+  },
+  {
+   "key": "flt_res",
+   "name": "RESONANCE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "flt_type",
+   "name": "FILTER TYPE",
+   "options": [
+    "LP 12",
+    "LP 24",
+    "HP 12",
+    "HP 24",
+    "BP 12",
+    "BP 24",
+    "NOTCH 12",
+    "NOTCH 24"
+   ],
+   "default": 1
+  },
+  {
+   "key": "sub_level",
+   "name": "SUB LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "sub_wave",
+   "name": "SUB WAVE",
+   "options": [
+    "SINE",
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE",
+    "PULSE TR"
+   ],
+   "default": 0
+  },
+  {
+   "key": "noise_level",
+   "name": "NOISE LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "noise_type",
+   "name": "NOISE TYPE",
+   "options": [
+    "WHITE",
+    "PINK"
+   ],
+   "default": 0
+  },
+  {
+   "key": "vca_a",
+   "name": "VCA ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 51,
+   "display": "int"
+  },
+  {
+   "key": "vca_d",
+   "name": "VCA DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "vca_s",
+   "name": "VCA SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 102,
+   "display": "int"
+  },
+  {
+   "key": "vca_r",
+   "name": "VCA RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "flt_a",
+   "name": "FLT ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 51,
+   "display": "int"
+  },
+  {
+   "key": "flt_d",
+   "name": "FLT DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "flt_s",
+   "name": "FLT SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 102,
+   "display": "int"
+  },
+  {
+   "key": "flt_r",
+   "name": "FLT RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me1_a",
+   "name": "EG1 A",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "me1_d",
+   "name": "EG1 D",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me1_s",
+   "name": "EG1 S",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "me1_r",
+   "name": "EG1 R",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me2_a",
+   "name": "EG2 A",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "me2_d",
+   "name": "EG2 D",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me2_s",
+   "name": "EG2 S",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "me2_r",
+   "name": "EG2 R",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "vca_vel",
+   "name": "VELOCITY",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "display": "int"
+  },
+  {
+   "key": "flt_key",
+   "name": "KEY TRACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "flt_vel",
+   "name": "VEL TRACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "flt_env",
+   "name": "FILTER ENV",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me1_dst",
+   "name": "EG1 DST",
+   "options": [
+    "NONE",
+    "WT1 POS",
+    "WT2 POS",
+    "WT1 LEVEL",
+    "WT2 LEVEL",
+    "WT1 TUNE",
+    "WT2 TUNE",
+    "WT1 BEND",
+    "WT2 BEND",
+    "WT1 FORMANT",
+    "WT2 FORMANT",
+    "WT1 PAN",
+    "WT2 PAN",
+    "FILTER FREQ",
+    "FILTER RES",
+    "SUB LEVEL",
+    "NOISE LEVEL",
+    "AMP"
+   ],
+   "default": 0
+  },
+  {
+   "key": "me1_amt",
+   "name": "EG1 AMT",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "me2_dst",
+   "name": "EG2 DST",
+   "options": [
+    "NONE",
+    "WT1 POS",
+    "WT2 POS",
+    "WT1 LEVEL",
+    "WT2 LEVEL",
+    "WT1 TUNE",
+    "WT2 TUNE",
+    "WT1 BEND",
+    "WT2 BEND",
+    "WT1 FORMANT",
+    "WT2 FORMANT",
+    "WT1 PAN",
+    "WT2 PAN",
+    "FILTER FREQ",
+    "FILTER RES",
+    "SUB LEVEL",
+    "NOISE LEVEL",
+    "AMP"
+   ],
+   "default": 0
+  },
+  {
+   "key": "me2_amt",
+   "name": "EG2 AMT",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "display": "int"
+  },
+  {
+   "key": "voice_mode",
+   "name": "VOICE MODE",
+   "options": [
+    "POLY",
+    "MONO"
+   ],
+   "default": 0
+  },
+  {
+   "key": "voices",
+   "name": "VOICES",
+   "min": 1,
+   "max": 8,
+   "default": 8,
+   "display": "int"
+  },
+  {
+   "key": "glide",
+   "name": "GLIDE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "glide_mode",
+   "name": "GLIDE MODE",
+   "options": [
+    "OFF",
+    "GLISSANDO",
+    "PORTAMENTO"
+   ],
+   "default": 0
+  },
+  {
+   "key": "legato",
+   "name": "LEGATO",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "pb_range",
+   "name": "BEND RANGE",
+   "min": 0,
+   "max": 24,
+   "default": 2,
+   "display": "int"
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "display": "int"
+  },
+  {
+   "key": "wt1_select",
+   "name": "WT1 TABLE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "wt1_select_prev",
+   "name": "WT1 PREV",
+   "momentary": true,
+   "step_of": "wt1_select",
+   "step_delta": -1
+  },
+  {
+   "key": "wt1_select_next",
+   "name": "WT1 NEXT",
+   "momentary": true,
+   "step_of": "wt1_select",
+   "step_delta": 1
+  },
+  {
+   "key": "wt1_name",
+   "name": "WT1 NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "wt2_select",
+   "name": "WT2 TABLE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "wt2_select_prev",
+   "name": "WT2 PREV",
+   "momentary": true,
+   "step_of": "wt2_select",
+   "step_delta": -1
+  },
+  {
+   "key": "wt2_select_next",
+   "name": "WT2 NEXT",
+   "momentary": true,
+   "step_of": "wt2_select",
+   "step_delta": 1
+  },
+  {
+   "key": "wt2_name",
+   "name": "WT2 NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

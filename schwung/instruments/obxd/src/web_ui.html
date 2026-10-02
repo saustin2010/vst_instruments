@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>OB-Xd</title>
+<style>
+  :root {
+    --panel-top: #2b4a6b;
+    --panel-bot: #1b2f47;
+    --panel-edge: #0d1828;
+    --line: rgba(120,160,200,0.18);
+    --knob-1: #2a2a2e;
+    --knob-2: #050507;
+    --red: #d8352a;
+    --red-glow: #ff5b4d;
+    --text: #cdd9e6;
+    --text-dim: #8aa0b6;
+    --switch-bg: #14202f;
+    --switch-cap: #2c2c30;
+    --bg: #050608;
+    --label-bg: #0e1929;
+  }
+  * { box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; background: var(--bg); }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  /* ---- top bar: preset browser + master controls ---- */
+  .topbar {
+    display: flex; align-items: center; gap: 12px;
+    background: linear-gradient(180deg, #233a55, #16243a);
+    border: 1px solid var(--panel-edge);
+    border-radius: 8px; padding: 8px 12px; margin-bottom: 10px;
+    min-width: 980px;
+  }
+  .brand { font-size: 22px; font-weight: 700; letter-spacing: .5px; color: #eef4fb; }
+  .brand small { font-size: 11px; color: var(--text-dim); font-weight: 400; }
+  .preset {
+    display: flex; align-items: center; gap: 8px; margin-left: auto;
+  }
+  .preset .name {
+    min-width: 200px; text-align: center;
+    background: #0a1422; border: 1px solid var(--line); border-radius: 5px;
+    padding: 6px 10px; font-size: 13px; color: #d7e6f5;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .btn {
+    background: linear-gradient(180deg,#33455c,#1c2a3c); color: var(--text);
+    border: 1px solid var(--panel-edge); border-radius: 5px;
+    padding: 6px 11px; font-size: 14px; cursor: pointer;
+  }
+  .btn:active { background: #16222f; }
+
+  /* ---- rack of panels (stacked rows) ---- */
+  /* width hugs the widest row so the narrower row grows to match it (not the viewport) */
+  #rack { display: flex; flex-direction: column; gap: 8px; width: fit-content; min-width: 980px; }
+  .rack { display: flex; gap: 8px; min-width: 980px; align-items: stretch; }
+  .panel {
+    background: linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+    border: 1px solid var(--panel-edge);
+    border-radius: 8px; padding: 8px 10px 6px;
+    position: relative;
+    flex: 1 1 auto;   /* grow so a row fills the rack width (rows end up equal) */
+    background-image:
+      repeating-linear-gradient(180deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 7px),
+      linear-gradient(180deg, var(--panel-top), var(--panel-bot));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 4px rgba(0,0,0,0.4);
+  }
+  .panel > .ptitle {
+    position: absolute; bottom: 5px; left: 0; right: 0; text-align: center;
+    font-size: 13px; letter-spacing: 2px; color: #e8f0f8; font-weight: 600;
+  }
+  .panel .body { display: flex; gap: 4px; padding-bottom: 22px; height: 100%; }
+  .col { display: flex; flex-direction: column; gap: 6px; }
+  .col.sep { border-left: 1px solid var(--line); padding-left: 6px; margin-left: 2px; }
+  .row { display: flex; gap: 6px; }
+  .grow { flex: 1; }
+
+  /* ---- caption label (engraved strip) ---- */
+  .cap {
+    font-size: 8.5px; letter-spacing: .5px; text-align: center; color: var(--text);
+    background: var(--label-bg); border: 1px solid rgba(0,0,0,0.5);
+    border-radius: 3px; padding: 2px 3px; line-height: 1.1; min-width: 46px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.4);
+    white-space: nowrap;
+  }
+  .hdr {
+    font-size: 9px; letter-spacing: 1px; text-align: center; color: #dce8f4;
+    font-weight: 600; margin-bottom: 1px;
+  }
+
+  /* ---- knob ---- */
+  .knob-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .knob {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 30%, #3a3a3f, var(--knob-1) 55%, var(--knob-2) 100%);
+    border: 1px solid #000; position: relative; cursor: ns-resize; touch-action: none;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.55), inset 0 1px 1px rgba(255,255,255,0.12);
+  }
+  .knob.small { width: 38px; height: 38px; }
+  .kval {
+    font-size: 8px; color: var(--text-dim); font-family: ui-monospace, monospace;
+    height: 9px; line-height: 9px;
+  }
+
+  /* ---- switch (LED rocker) ---- */
+  .sw-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .sw {
+    width: 40px; height: 30px; border-radius: 4px; cursor: pointer;
+    background: linear-gradient(180deg,#3a3a3e,#202024);
+    border: 1px solid #000; position: relative;
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.05);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sw .led {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #3a0e0a; box-shadow: inset 0 0 2px #000;
+    transition: background .08s, box-shadow .08s;
+  }
+  .sw.on .led {
+    background: var(--red-glow);
+    box-shadow: 0 0 7px var(--red-glow), 0 0 2px #fff inset;
+  }
+
+  /* ---- stepper ---- */
+  .step-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .step {
+    width: 52px; height: 30px; border-radius: 4px; cursor: pointer;
+    background: #0a1c12; border: 1px solid #000;
+    color: #6fe39a; font-family: ui-monospace, monospace; font-size: 13px;
+    display: flex; align-items: center; justify-content: center; letter-spacing: .5px;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.7); text-shadow: 0 0 4px rgba(111,227,154,0.5);
+  }
+
+  .vv-voices { display: flex; gap: 5px; justify-content: center; }
+  .vv-num { font-size: 8px; color: var(--text-dim); text-align: center; }
+  .disabled { opacity: .35; pointer-events: none; }
+  .hint { color: var(--text-dim); font-size: 11px; margin: 8px 4px 2px; min-width: 980px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">OB&#8209;Xd <small>for Schwung</small></div>
+  <div class="preset">
+    <button class="btn" id="oct-down" title="Octave down">OCT &#9660;</button>
+    <div class="step" id="oct-val" style="width:46px">0</div>
+    <button class="btn" id="oct-up" title="Octave up">OCT &#9650;</button>
+    <button class="btn" id="prev">&#9664; Prev</button>
+    <div class="name" id="preset-name">&mdash;</div>
+    <button class="btn" id="next">Next &#9654;</button>
+  </div>
+  <button class="btn" id="sync" title="Force a full re-sync from the device">&#8635; Sync</button>
+</div>
+
+<div id="rack"></div>
+<div class="hint" id="status">Connecting to device&hellip;</div>
+
+<script src="/static/schwung-remote-api.js"></script>
+<script>
+"use strict";
+
+/* ---------- fallback so the page still renders for local preview ---------- */
+if (!window.schwungRemote) {
+  var _store = {};
+  window.schwungRemote = {
+    getParam: function (k) { return Promise.resolve(_store[k]); },
+    setParam: function (k, v) { _store[k] = String(v); },
+    onParamChange: function () {},
+    getHierarchy: function () { return Promise.resolve(null); },
+    getChainParams: function () { return Promise.resolve(null); }
+  };
+}
+
+var P = "synth:";  /* component prefix for all synth params */
+
+/* ---------- control model (mirrors the OB-Xd hardware faceplate) ----------
+   type: knob | switch | stepper
+   def : default value (0..1 for knobs/switches; raw for steppers) */
+var PANELS = [
+  { title: "GLOBAL", row: 2, cols: [
+    { items: [
+      { type: "knob", key: "volume", cap: "VOLUME", def: 1.0, big: true },
+      { type: "knob", key: "tune", cap: "MASTER TUNE", def: 0.5, bipolar: true },
+    ]},
+    { sep: true, items: [
+      { type: "stepper", key: "voice_count", cap: "VOICES", def: 6,
+        steps: [1,2,3,4,5,6,7,8], labels: ["1","2","3","4","5","6","7","8"] },
+      { type: "stepper", key: "legato", cap: "LEGATO", def: 0,
+        steps: [0,1,2,3], labels: ["RETRIG","LEG-1","LEG-2","KEEP"] },
+      { type: "switch", key: "as_played", cap: "AS PLAYED", def: 0 },
+    ]},
+    { sep: true, items: [
+      { type: "switch", key: "unison", cap: "UNISON", def: 0 },
+      { type: "knob", key: "unison_det", cap: "SPREAD", def: 0 },
+    ]},
+  ]},
+
+  { title: "CONTROL", row: 2, cols: [
+    { items: [
+      { type: "knob", key: "portamento", cap: "PORTAMENTO", def: 0 },
+      { type: "switch", key: "bend_range", cap: "BND 12", def: 0 },
+      { type: "switch", key: "bend_osc2", cap: "BND O2", def: 0 },
+    ]},
+  ]},
+
+  { title: "MODULATION", row: 2, cols: [
+    { hdr: "LFO", items: [
+      { type: "knob", key: "lfo_rate", cap: "RATE", def: 0.3 },
+      { type: "switch", key: "lfo_sin", cap: "SINE", def: 0 },
+      { type: "switch", key: "lfo_square", cap: "SQUARE", def: 0 },
+      { type: "switch", key: "lfo_sh", cap: "S&H", def: 0 },
+      { type: "switch", key: "lfo_sync", cap: "SYNC", def: 0 },
+    ]},
+    { sep: true, hdr: "FREQUENCY", items: [
+      { type: "knob", key: "lfo_amt1", cap: "DEPTH", def: 0 },
+      { type: "switch", key: "lfo_osc1", cap: "OSC1", def: 0 },
+      { type: "switch", key: "lfo_osc2", cap: "OSC2", def: 0 },
+      { type: "switch", key: "lfo_filter", cap: "FILTER", def: 0 },
+    ]},
+    { sep: true, hdr: "PULSE WIDTH", items: [
+      { type: "knob", key: "lfo_amt2", cap: "DEPTH", def: 0 },
+      { type: "switch", key: "lfo_pw1", cap: "OSC1", def: 0 },
+      { type: "switch", key: "lfo_pw2", cap: "OSC2", def: 0 },
+    ]},
+  ]},
+
+  { title: "OSCILLATORS", cols: [
+    { hdr: "OSC 1", items: [
+      { type: "knob", key: "osc1_pitch", cap: "FREQ", def: 0 },
+      { type: "switch", key: "osc1_saw", cap: "SAW", def: 1 },
+      { type: "switch", key: "osc1_pulse", cap: "PULSE", def: 0 },
+    ]},
+    { sep: true, hdr: "OSC 2", items: [
+      { type: "cols2", of: [
+        { type: "knob", key: "osc2_pitch", cap: "FREQ", def: 0 },
+        { type: "switch", key: "osc2_saw", cap: "SAW", def: 1 },
+        { type: "switch", key: "osc2_pulse", cap: "PULSE", def: 0 },
+        { type: "knob", key: "osc2_detune", cap: "DETUNE", def: 0.1, small: true },
+        { type: "switch", key: "osc2_sync", cap: "SYNC", def: 0 },
+        { type: "knob", key: "pw_ofs", cap: "PW OFS", def: 0, small: true },
+      ]},
+    ]},
+    { sep: true, hdr: "COMMON", items: [
+      { type: "cols2", lanes: [
+        [ /* pulse-width params */
+          { type: "knob", key: "pw", cap: "PULSE WIDTH", def: 0 },
+          { type: "knob", key: "pw_env", cap: "PW ENV", def: 0, small: true },
+          { type: "switch", key: "pw_env_both", cap: "PWE BOTH", def: 0 },
+        ],
+        [ /* other common */
+          { type: "knob", key: "xmod", cap: "X-MOD", def: 0, small: true },
+          { type: "knob", key: "brightness", cap: "BRIGHT", def: 0.5, small: true },
+        ],
+        [ /* step + pitch envelope */
+          { type: "switch", key: "osc_quantize", cap: "STEP", def: 0 },
+          { type: "knob", key: "env_pitch", cap: "PITCH ENV", def: 0, small: true },
+          { type: "switch", key: "env_pitch_both", cap: "PE BOTH", def: 0 },
+        ],
+      ]},
+    ]},
+  ]},
+
+  { title: "MIXER", cols: [
+    { items: [
+      { type: "knob", key: "osc1_mix", cap: "OSC 1", def: 0.5 },
+      { type: "knob", key: "osc2_mix", cap: "OSC 2", def: 0.5 },
+      { type: "knob", key: "noise", cap: "NOISE", def: 0 },
+    ]},
+  ]},
+
+  { title: "FILTER", cols: [
+    { items: [
+      { type: "knob", key: "cutoff", cap: "CUTOFF", def: 0.7 },
+      { type: "knob", key: "resonance", cap: "RESONANCE", def: 0.2 },
+      { type: "knob", key: "filter_env", cap: "ENVELOPE", def: 0.3 },
+    ]},
+    { sep: true, items: [
+      { type: "knob", key: "key_follow", cap: "KEY", def: 0, small: true },
+      { type: "knob", key: "multimode", cap: "MULTI", def: 0, small: true },
+    ]},
+    { sep: true, items: [
+      { type: "switch", key: "bandpass", cap: "BP", def: 0 },
+      { type: "switch", key: "fourpole", cap: "24dB", def: 1 },
+      { type: "switch", key: "self_osc", cap: "SELF OSC", def: 0 },
+      { type: "switch", key: "fenv_inv", cap: "F.ENV INV", def: 0 },
+    ]},
+  ]},
+
+  { title: "ENVELOPES", cols: [
+    { hdr: "AMP ENVELOPE", items: [
+      { type: "row", of: [
+        { type: "knob", key: "attack", cap: "ATTACK", def: 0.01 },
+        { type: "knob", key: "decay", cap: "DECAY", def: 0.3 },
+        { type: "knob", key: "sustain", cap: "SUSTAIN", def: 0.7 },
+        { type: "knob", key: "release", cap: "RELEASE", def: 0.2 },
+        { type: "knob", key: "vel_amp", cap: "VEL", def: 0 },
+      ]},
+      { hdr: "FILTER ENVELOPE" },
+      { type: "row", of: [
+        { type: "knob", key: "f_attack", cap: "ATTACK", def: 0.01 },
+        { type: "knob", key: "f_decay", cap: "DECAY", def: 0.3 },
+        { type: "knob", key: "f_sustain", cap: "SUSTAIN", def: 0.3 },
+        { type: "knob", key: "f_release", cap: "RELEASE", def: 0.2 },
+        { type: "knob", key: "vel_filter", cap: "VEL", def: 0 },
+      ]},
+    ]},
+  ]},
+
+  { title: "VOICE VARIATION", row: 2, cols: [
+    { items: [
+      { type: "row", center: true, of: [
+        { type: "knob", key: "vibrato", cap: "VIBRATO", def: 0, small: true },
+        { type: "knob", key: "filter_var", cap: "FILTER", def: 0, small: true },
+        { type: "knob", key: "porta_var", cap: "GLIDE", def: 0, small: true },
+        { type: "knob", key: "env_var", cap: "ENV", def: 0, small: true },
+        { type: "knob", key: "level_var", cap: "LEVEL", def: 0, small: true },
+      ]},
+      { type: "voices" },  /* pan_1..pan_8 */
+    ]},
+  ]},
+];
+
+/* ====================================================================== */
+var registry = {};   /* key -> {set(v), el, ...}  */
+
+function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+function fmtPct(v) { return Math.round(v * 100); }
+
+/* ---------------- knob ---------------- */
+function makeKnob(item) {
+  var wrap = document.createElement("div");
+  wrap.className = "knob-wrap";
+  var k = document.createElement("div");
+  k.className = "knob" + (item.small ? " small" : "");
+  var val = document.createElement("div");
+  val.className = "kval";
+  var cap = document.createElement("div");
+  cap.className = "cap";
+  cap.textContent = item.cap;
+  wrap.appendChild(k); wrap.appendChild(val); wrap.appendChild(cap);
+
+  /* dedicated indicator element (rotated to show value) */
+  var indicator = document.createElement("div");
+  indicator.style.cssText =
+    "position:absolute;left:50%;top:" + (item.small ? "4px" : "5px") +
+    ";width:3px;height:" + (item.small ? "13px" : "16px") +
+    ";margin-left:-1.5px;border-radius:2px;" +
+    "background:linear-gradient(180deg,var(--red-glow),var(--red));" +
+    "box-shadow:0 0 4px rgba(216,53,42,0.8);" +
+    "transform-origin:50% " + (item.small ? "15px" : "18px") + ";";
+  k.appendChild(indicator);
+
+  var cur = item.def;
+  function render(v) {
+    cur = clamp01(v);
+    indicator.style.transform = "rotate(" + (-135 + cur * 270) + "deg)";
+    if (item.bipolar) {
+      val.textContent = (cur >= 0.5 ? "+" : "") + Math.round((cur - 0.5) * 200);
+    } else {
+      val.textContent = fmtPct(cur);
+    }
+  }
+
+  /* knobs are 0..1 internally; the DSP contract is a native int 0..100 (percent) */
+  function commit(v) { render(v); schwungRemote.setParam(P + item.key, String(Math.round(cur * 100))); }
+
+  /* drag (vertical) */
+  var dragging = false, startY = 0, startV = 0;
+  function down(e) {
+    dragging = true;
+    startY = (e.touches ? e.touches[0].clientY : e.clientY);
+    startV = cur;
+    e.preventDefault();
+    window.addEventListener("mousemove", move);
+    window.addEventListener("touchmove", move, { passive: false });
+    window.addEventListener("mouseup", up);
+    window.addEventListener("touchend", up);
+  }
+  function move(e) {
+    if (!dragging) return;
+    var y = (e.touches ? e.touches[0].clientY : e.clientY);
+    var speed = e.shiftKey ? 600 : 180;   /* shift = fine */
+    commit(startV + (startY - y) / speed);
+    e.preventDefault();
+  }
+  function up() {
+    dragging = false;
+    window.removeEventListener("mousemove", move);
+    window.removeEventListener("touchmove", move);
+    window.removeEventListener("mouseup", up);
+    window.removeEventListener("touchend", up);
+  }
+  k.addEventListener("mousedown", down);
+  k.addEventListener("touchstart", down, { passive: false });
+  k.addEventListener("wheel", function (e) {
+    commit(cur - Math.sign(e.deltaY) * 0.02); e.preventDefault();
+  }, { passive: false });
+  k.addEventListener("dblclick", function () { commit(item.def); });
+
+  render(item.def);
+  registry[item.key] = { el: k, set: function (v) { render(parseFloat(v) / 100); } };
+  return wrap;
+}
+
+/* ---------------- switch ---------------- */
+function makeSwitch(item) {
+  var wrap = document.createElement("div");
+  wrap.className = "sw-wrap";
+  var sw = document.createElement("div");
+  sw.className = "sw";
+  var led = document.createElement("div");
+  led.className = "led";
+  sw.appendChild(led);
+  var cap = document.createElement("div");
+  cap.className = "cap";
+  cap.textContent = item.cap;
+  wrap.appendChild(sw); wrap.appendChild(cap);
+
+  var on = !!item.def;
+  function render(v) { on = (parseFloat(v) >= 0.5); sw.classList.toggle("on", on); }
+  sw.addEventListener("click", function () {
+    on = !on; render(on ? 1 : 0);
+    schwungRemote.setParam(P + item.key, on ? "1" : "0");
+  });
+  render(item.def);
+  registry[item.key] = { el: sw, set: render };
+  return wrap;
+}
+
+/* ---------------- stepper ---------------- */
+function makeStepper(item) {
+  var wrap = document.createElement("div");
+  wrap.className = "step-wrap";
+  var box = document.createElement("div");
+  box.className = "step";
+  var cap = document.createElement("div");
+  cap.className = "cap";
+  cap.textContent = item.cap;
+  wrap.appendChild(box); wrap.appendChild(cap);
+
+  var idx = 0;
+  function nearest(v) {
+    var best = 0, bd = 1e9;
+    for (var i = 0; i < item.steps.length; i++) {
+      var d = Math.abs(item.steps[i] - v);
+      if (d < bd) { bd = d; best = i; }
+    }
+    return best;
+  }
+  function render(v) { idx = nearest(parseFloat(v)); box.textContent = item.labels[idx]; }
+  function advance(dir) {
+    idx = (idx + dir + item.steps.length) % item.steps.length;
+    box.textContent = item.labels[idx];
+    schwungRemote.setParam(P + item.key, String(item.steps[idx]));  /* native int */
+  }
+  box.addEventListener("click", function () { advance(1); });
+  box.addEventListener("contextmenu", function (e) { e.preventDefault(); advance(-1); });
+  box.addEventListener("wheel", function (e) { advance(-Math.sign(e.deltaY)); e.preventDefault(); }, { passive: false });
+  render(item.def);
+  registry[item.key] = { el: box, set: render };
+  return wrap;
+}
+
+/* ---------------- per-voice pan row ---------------- */
+function makeVoices() {
+  var box = document.createElement("div");
+  box.style.cssText = "display:flex;flex-direction:column;gap:4px;align-items:center;margin-top:4px;";
+  var hdr = document.createElement("div");
+  hdr.className = "hdr"; hdr.textContent = "VOICE PAN  1 - 8";
+  var row = document.createElement("div"); row.className = "vv-voices";
+  for (var i = 1; i <= 8; i++) {
+    var item = { type: "knob", key: "pan_" + i, cap: String(i), def: 0.5, small: true, bipolar: true };
+    var w = makeKnob(item);
+    /* compact captions to just the number */
+    w.querySelector(".cap").style.minWidth = "20px";
+    row.appendChild(w);
+  }
+  box.appendChild(hdr); box.appendChild(row);
+  return box;
+}
+
+/* ---------------- build a control element ---------------- */
+function build(item) {
+  if (item.type === "knob") return makeKnob(item);
+  if (item.type === "switch") return makeSwitch(item);
+  if (item.type === "stepper") return makeStepper(item);
+  if (item.type === "voices") return makeVoices();
+  if (item.type === "row") {
+    var r = document.createElement("div");
+    r.className = "row";
+    if (item.center) r.style.justifyContent = "center";
+    item.of.forEach(function (sub) { r.appendChild(build(sub)); });
+    return r;
+  }
+  if (item.type === "cols2") {
+    var rr = document.createElement("div");
+    rr.className = "row";
+    /* explicit lanes: an array of vertical columns */
+    if (item.lanes) {
+      item.lanes.forEach(function (laneItems) {
+        var lane = document.createElement("div"); lane.className = "col";
+        laneItems.forEach(function (sub) { lane.appendChild(build(sub)); });
+        rr.appendChild(lane);
+      });
+      return rr;
+    }
+    /* otherwise split `of` into two vertical lanes (first half left, rest right) */
+    var laneA = document.createElement("div"); laneA.className = "col";
+    var laneB = document.createElement("div"); laneB.className = "col";
+    var half = (item.split != null) ? item.split : Math.ceil(item.of.length / 2);
+    item.of.forEach(function (sub, i) { (i < half ? laneA : laneB).appendChild(build(sub)); });
+    rr.appendChild(laneA); rr.appendChild(laneB);
+    return rr;
+  }
+  if (item.hdr) { var h = document.createElement("div"); h.className = "hdr"; h.textContent = item.hdr; return h; }
+  return document.createComment("");
+}
+
+/* ---------------- render panels ---------------- */
+function renderRack() {
+  var rack = document.getElementById("rack");
+  var row1 = document.createElement("div"); row1.className = "rack";
+  var row2 = document.createElement("div"); row2.className = "rack";
+  rack.appendChild(row1); rack.appendChild(row2);
+  PANELS.forEach(function (panel) {
+    var targetRow = (panel.row === 2) ? row2 : row1;
+    var pe = document.createElement("div");
+    pe.className = "panel";
+    var bodyWrap = document.createElement("div");
+    bodyWrap.className = "body";
+    panel.cols.forEach(function (col) {
+      var ce = document.createElement("div");
+      ce.className = "col" + (col.sep ? " sep" : "");
+      if (col.hdr) { var h = document.createElement("div"); h.className = "hdr"; h.textContent = col.hdr; ce.appendChild(h); }
+      col.items.forEach(function (item) { ce.appendChild(build(item)); });
+      bodyWrap.appendChild(ce);
+    });
+    var t = document.createElement("div");
+    t.className = "ptitle"; t.textContent = panel.title;
+    pe.appendChild(bodyWrap); pe.appendChild(t);
+    targetRow.appendChild(pe);
+  });
+}
+
+/* ---------------- preset + octave bar ---------------- */
+var presetCount = 0, presetIdx = 0;
+function refreshPreset() {
+  schwungRemote.getParam(P + "preset_name").then(function (n) {
+    if (n !== undefined && n !== null && n !== "") document.getElementById("preset-name").textContent = n;
+  });
+}
+function changePreset(dir) {
+  Promise.all([
+    schwungRemote.getParam(P + "preset"),
+    schwungRemote.getParam(P + "preset_count")
+  ]).then(function (r) {
+    presetIdx = parseInt(r[0] || "0", 10) || 0;
+    presetCount = parseInt(r[1] || "0", 10) || 0;
+    if (presetCount <= 0) return;
+    presetIdx = (presetIdx + dir + presetCount) % presetCount;
+    schwungRemote.setParam(P + "preset", String(presetIdx));
+    setTimeout(refreshPreset, 120);
+  });
+}
+function changeOctave(dir) {
+  schwungRemote.getParam(P + "octave_transpose").then(function (v) {
+    var o = parseInt(v || "0", 10) || 0;
+    o = Math.max(-3, Math.min(3, o + dir));
+    schwungRemote.setParam(P + "octave_transpose", String(o));
+    document.getElementById("oct-val").textContent = (o > 0 ? "+" : "") + o;
+  });
+}
+
+/* ---------------- live sync ---------------- */
+function applyParams(params) {
+  for (var fullKey in params) {
+    if (!params.hasOwnProperty(fullKey)) continue;
+    var key = fullKey.indexOf(P) === 0 ? fullKey.slice(P.length) : fullKey;
+    if (registry[key]) registry[key].set(params[fullKey]);
+    else if (key === "preset_name") document.getElementById("preset-name").textContent = params[fullKey];
+    else if (key === "octave_transpose") {
+      var o = parseInt(params[fullKey] || "0", 10) || 0;
+      document.getElementById("oct-val").textContent = (o > 0 ? "+" : "") + o;
+    }
+  }
+}
+
+/* seed initial values from the device cache */
+function seed() {
+  var keys = Object.keys(registry);
+  keys.forEach(function (key) {
+    schwungRemote.getParam(P + key).then(function (v) {
+      if (v !== undefined && v !== null && v !== "") registry[key].set(v);
+    });
+  });
+  schwungRemote.getParam(P + "octave_transpose").then(function (v) {
+    if (v != null && v !== "") {
+      var o = parseInt(v, 10) || 0;
+      document.getElementById("oct-val").textContent = (o > 0 ? "+" : "") + o;
+    }
+  });
+  refreshPreset();
+}
+
+/* ---------------- force re-sync ---------------- */
+/* Re-fire the subscribe: the manager re-pushes slot info + hierarchy +
+ * chain_params + the full current state on every subscribe, so this pulls
+ * every control back into sync if updates ever fall behind. */
+function forceSync() {
+  var s = document.getElementById("status");
+  if (s) s.textContent = "Re-syncing…";
+  try { window.parent.postMessage({ type: "subscribe" }, "*"); } catch (e) {}
+  setTimeout(seed, 250);        /* re-read the refreshed cache as a backstop */
+  refreshPreset();
+}
+
+/* ---------------- boot ---------------- */
+renderRack();
+document.getElementById("prev").addEventListener("click", function () { changePreset(-1); });
+document.getElementById("next").addEventListener("click", function () { changePreset(1); });
+document.getElementById("oct-down").addEventListener("click", function () { changeOctave(-1); });
+document.getElementById("oct-up").addEventListener("click", function () { changeOctave(1); });
+document.getElementById("sync").addEventListener("click", forceSync);
+
+schwungRemote.onParamChange(function (params) {
+  applyParams(params);
+  document.getElementById("status").textContent = "Connected — live sync active";
+});
+document.getElementById("status").textContent = "Loading parameters…";
+setTimeout(seed, 200);
+</script>
+</body>
+</html>

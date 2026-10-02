@@ -1,0 +1,179 @@
+{
+  "title": "RaffoSynth",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "Monophonic synth",
+        "with Moog ladder",
+        "filter.",
+        "",
+        "4 oscillators with",
+        "4 waveforms each.",
+        "Dual ADSR envelopes",
+        "(amp + filter).",
+        "LFO and glide.",
+        "",
+        "Last-note priority",
+        "with legato glide.",
+        "",
+        "14 factory presets."
+      ]
+    },
+    {
+      "title": "Controls",
+      "children": [
+        {
+          "title": "Knob Mapping",
+          "lines": [
+            "Main page knobs:",
+            " 1 Cutoff",
+            " 2 Resonance",
+            " 3 Contour",
+            "  (filter env depth)",
+            " 4 Attack",
+            " 5 Decay",
+            " 6 Sustain",
+            " 7 Release",
+            " 8 Octave (-3..+3)",
+            "",
+            "Glide is not on this",
+            "row - it is the",
+            "first knob on the",
+            "Performance page.",
+            "",
+            "Submenus: Osc 1-4,",
+            "Mixer, Filter,",
+            "Filter Env, Amp Env,",
+            "LFO, Performance."
+          ]
+        },
+        {
+          "title": "Oscillators",
+          "lines": [
+            "4 oscillators, each",
+            "with:",
+            "",
+            "Wave: Triangle,",
+            " Sawtooth, Square,",
+            " Pulse",
+            "",
+            "Volume: mix level",
+            " (0 = disabled)",
+            "",
+            "Range: -2 to +2",
+            " octaves",
+            "",
+            "Detune (Osc 2-4):",
+            " +/- 50 cents fine",
+            " pitch adjust",
+            "",
+            "The Mixer page has",
+            "all four volumes",
+            "plus Noise and",
+            "master Volume."
+          ]
+        },
+        {
+          "title": "Filter",
+          "lines": [
+            "4-pole Moog ladder",
+            "lowpass filter.",
+            "",
+            "Cutoff: 20Hz-20kHz",
+            "",
+            "Resonance: feedback",
+            "",
+            "Contour: how much",
+            " the filter envelope",
+            " moves the cutoff",
+            "",
+            "Key Follow: filter",
+            " tracks keyboard",
+            " pitch"
+          ]
+        },
+        {
+          "title": "Envelopes",
+          "lines": [
+            "Amp Envelope:",
+            " Attack, Decay,",
+            " Sustain, Release",
+            " Controls volume.",
+            "",
+            "Filter Envelope:",
+            " F.Attack, F.Decay,",
+            " F.Sustain, F.Release",
+            " Controls cutoff.",
+            " Depth set by",
+            " Contour knob."
+          ]
+        },
+        {
+          "title": "LFO & Performance",
+          "lines": [
+            "LFO page:",
+            " Rate: 0.1 to 20 Hz",
+            "  (sine)",
+            " Pitch: vibrato",
+            " Filter: wah/sweep",
+            "",
+            "Performance page:",
+            " Glide: portamento",
+            "  time between notes",
+            " Mod>Filter and",
+            "  Mod>Pitch: how far",
+            "  the mod wheel",
+            "  pushes each LFO",
+            "  depth",
+            " Bend Range: 0-12",
+            "  semitones",
+            " Vel Sens: how much",
+            "  velocity affects",
+            "  amplitude",
+            " Octave: -3 to +3"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "MIDI",
+      "lines": [
+        "Monophonic with",
+        "last-note priority.",
+        "Legato: envelopes",
+        "don't retrigger.",
+        "",
+        "Pitch Bend:",
+        " Configurable range",
+        "",
+        "Mod Wheel (CC 1):",
+        " LFO to pitch and",
+        " filter",
+        "",
+        "CC 123: All Notes Off"
+      ]
+    },
+    {
+      "title": "Presets",
+      "lines": [
+        "14 factory presets:",
+        "",
+        " Init",
+        " Soloist",
+        " Duet",
+        " Trio",
+        " Quartet",
+        " SonataFlair",
+        " SonataFlairSub",
+        " AngrySweep",
+        " SquarePulse",
+        " Whisper",
+        " CookedPasta",
+        " CookedPasta2",
+        " Classic Bass",
+        " Sub Bass"
+      ]
+    }
+  ]
+}

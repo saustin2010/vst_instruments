@@ -1,0 +1,220 @@
+{
+ "name": "Maze Lite",
+ "params": [
+  {
+   "key": "s1_corrupt",
+   "name": "S1 CORRUPT",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "s1_cv_range",
+   "name": "S1 RANGE",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "s1_length",
+   "name": "S1 LENGTH",
+   "min": 1,
+   "max": 8,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "s1_bit_flip",
+   "name": "S1 BIT FLIP",
+   "options": [
+    "OFF",
+    "GO"
+   ],
+   "momentary": true
+  },
+  {
+   "key": "s1_advance",
+   "name": "S1 ADVANCE",
+   "options": [
+    "OFF",
+    "GO"
+   ],
+   "momentary": true
+  },
+  {
+   "key": "s1_reset",
+   "name": "S1 RESET",
+   "options": [
+    "1 BAR",
+    "2 BARS",
+    "4 BARS",
+    "8 BARS",
+    "OFF"
+   ],
+   "default": 4
+  },
+  {
+   "key": "s2_corrupt",
+   "name": "S2 CORRUPT",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "s2_cv_range",
+   "name": "S2 RANGE",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "s2_length",
+   "name": "S2 LENGTH",
+   "min": 1,
+   "max": 8,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "s2_bit_flip",
+   "name": "S2 BIT FLIP",
+   "options": [
+    "OFF",
+    "GO"
+   ],
+   "momentary": true
+  },
+  {
+   "key": "s2_advance",
+   "name": "S2 ADVANCE",
+   "options": [
+    "OFF",
+    "GO"
+   ],
+   "momentary": true
+  },
+  {
+   "key": "s2_reset",
+   "name": "S2 RESET",
+   "options": [
+    "1 BAR",
+    "2 BARS",
+    "4 BARS",
+    "8 BARS",
+    "OFF"
+   ],
+   "default": 4
+  },
+  {
+   "key": "trig_mix",
+   "name": "S1 TRIG MIX",
+   "min": -63,
+   "max": 64,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "trig_mix_b",
+   "name": "S2 TRIG MIX",
+   "min": -63,
+   "max": 64,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "g_reset",
+   "name": "RESET BOTH",
+   "options": [
+    "1 BAR",
+    "2 BARS",
+    "4 BARS",
+    "8 BARS",
+    "OFF"
+   ],
+   "default": 4
+  },
+  {
+   "key": "scale",
+   "name": "SCALE",
+   "options": [
+    "CHROMATIC",
+    "MAJOR",
+    "MINOR",
+    "PENTATONIC MAJ",
+    "PENTATONIC MIN",
+    "MELODIC MINOR",
+    "HARMONIC MINOR",
+    "WHOLE TONE",
+    "HIRAJOSHI",
+    "MAJOR 7",
+    "MINOR 7",
+    "UNQUANTIZED"
+   ]
+  },
+  {
+   "key": "note_rate",
+   "name": "NOTE RATE",
+   "options": [
+    "1/32",
+    "1/16",
+    "1/8",
+    "1/4",
+    "1/2",
+    "1 BAR"
+   ]
+  },
+  {
+   "key": "note_length",
+   "name": "NOTE LENGTH",
+   "options": [
+    "1/4",
+    "2/4",
+    "3/4",
+    "4/4",
+    "5/4",
+    "6/4",
+    "7/4",
+    "8/4"
+   ]
+  },
+  {
+   "key": "running",
+   "name": "RUNNING",
+   "min": 0,
+   "max": 1,
+   "display": "int"
+  },
+  {
+   "key": "s1_bits",
+   "name": "S1 BITS",
+   "display": "string",
+   "min": 0,
+   "max": 0
+  },
+  {
+   "key": "s2_bits",
+   "name": "S2 BITS",
+   "display": "string",
+   "min": 0,
+   "max": 0
+  },
+  {
+   "key": "s1_play",
+   "name": "S1 PLAY",
+   "min": -1,
+   "max": 7,
+   "display": "int"
+  },
+  {
+   "key": "s2_play",
+   "name": "S2 PLAY",
+   "min": -1,
+   "max": 7,
+   "display": "int"
+  }
+ ]
+}

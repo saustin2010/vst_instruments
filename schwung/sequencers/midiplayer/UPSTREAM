@@ -1,0 +1,4 @@
+https://github.com/charlesvestal/schwung-midi-player
+commit a655383f224c58d506d7a2b14b10977523afe71e 2026-09-12
+vendored 2026-10-01: upstream src/ as src/ + LICENSE;
+mpc/ = steve/tools/midifx adapter (MIDI out via an ALSA port, host transport as MIDI clock) + Schwung host headers + wrapper/engine.h

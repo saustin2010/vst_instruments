@@ -1,0 +1,657 @@
+{
+ "name": "Noisemaker",
+ "params": [
+  {
+   "key": "unused_macro_1",
+   "name": "UNUSED A",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "unused_macro_2",
+   "name": "UNUSED B",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "fenv_time",
+   "name": "FLT TIME",
+   "min": 0,
+   "max": 100,
+   "default": 50
+  },
+  {
+   "key": "aenv_time",
+   "name": "AMP TIME",
+   "min": 0,
+   "max": 100,
+   "default": 50
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "highpass",
+   "name": "HIGH PASS",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "osc1_wave",
+   "name": "OSC1 WAVE",
+   "options": [
+    "SAW",
+    "PULSE",
+    "NOISE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "osc2_wave",
+   "name": "OSC2 WAVE",
+   "options": [
+    "SAW",
+    "PULSE",
+    "TRI",
+    "SINE",
+    "NOISE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "osc1_vol",
+   "name": "OSC1 LEVEL",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "osc2_vol",
+   "name": "OSC2 LEVEL",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "osc3_vol",
+   "name": "SUB LEVEL",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "osc_tune",
+   "name": "MASTER TUNE",
+   "min": 0,
+   "max": 100,
+   "default": 50
+  },
+  {
+   "key": "osc1_tune",
+   "name": "OSC1 TUNE",
+   "min": 0,
+   "max": 100,
+   "default": 50
+  },
+  {
+   "key": "osc2_tune",
+   "name": "OSC2 TUNE",
+   "min": 0,
+   "max": 100,
+   "default": 50
+  },
+  {
+   "key": "osc1_fine",
+   "name": "OSC1 FINE",
+   "min": 0,
+   "max": 100,
+   "default": 50
+  },
+  {
+   "key": "osc2_fine",
+   "name": "OSC2 FINE",
+   "min": 0,
+   "max": 100,
+   "default": 50
+  },
+  {
+   "key": "osc1_pw",
+   "name": "OSC1 PW",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "osc1_phase",
+   "name": "OSC1 PHASE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "osc2_phase",
+   "name": "OSC2 PHASE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "osc2_fm",
+   "name": "OSC2 FM",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "osc_sync",
+   "name": "OSC SYNC",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "ringmod",
+   "name": "RING MOD",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "detune",
+   "name": "DETUNE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "bitcrush",
+   "name": "BITCRUSH",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "vintage",
+   "name": "VINTAGE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "filter_type",
+   "name": "FILTER TYPE",
+   "options": [
+    "LP24",
+    "LP18",
+    "LP12",
+    "LP6",
+    "HP24",
+    "BP24",
+    "Notch",
+    "SV-LP",
+    "SV-HP",
+    "SV-BP",
+    "Moog",
+    "Moog2"
+   ],
+   "default": 0
+  },
+  {
+   "key": "cutoff",
+   "name": "CUTOFF",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "resonance",
+   "name": "RESONANCE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "keyfollow",
+   "name": "KEY TRACK",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "filter_env",
+   "name": "FILTER ENV",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "filter_drive",
+   "name": "DRIVE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "fenv_a",
+   "name": "FLT ATTACK",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "fenv_d",
+   "name": "FLT DECAY",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "fenv_s",
+   "name": "FLT SUSTAIN",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "fenv_r",
+   "name": "FLT RELEASE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "aenv_a",
+   "name": "AMP ATTACK",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "aenv_d",
+   "name": "AMP DECAY",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "aenv_s",
+   "name": "AMP SUSTAIN",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "aenv_r",
+   "name": "AMP RELEASE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "lfo1_wave",
+   "name": "LFO1 WAVE",
+   "options": [
+    "SIN",
+    "TRI",
+    "SAW",
+    "SQR",
+    "S+H",
+    "RND"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo1_rate",
+   "name": "LFO1 RATE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "lfo1_amount",
+   "name": "LFO1 AMOUNT",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "lfo1_dest",
+   "name": "LFO1 DEST",
+   "options": [
+    "NONE",
+    "FILTER",
+    "OSC1",
+    "OSC2",
+    "PW",
+    "FM",
+    "LFO2",
+    "OSC1+2"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo1_sync",
+   "name": "LFO1 SYNC",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo1_keytrig",
+   "name": "LFO1 KEYTRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo1_phase",
+   "name": "LFO1 PHASE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "lfo2_wave",
+   "name": "LFO2 WAVE",
+   "options": [
+    "SIN",
+    "TRI",
+    "SAW",
+    "SQR",
+    "S+H",
+    "RND"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo2_rate",
+   "name": "LFO2 RATE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "lfo2_amount",
+   "name": "LFO2 AMOUNT",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "lfo2_dest",
+   "name": "LFO2 DEST",
+   "options": [
+    "NONE",
+    "FILTER",
+    "OSC1",
+    "OSC2",
+    "PAN",
+    "VOLUME",
+    "LFO1",
+    "OSC1+2"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo2_sync",
+   "name": "LFO2 SYNC",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo2_keytrig",
+   "name": "LFO2 KEYTRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo2_phase",
+   "name": "LFO2 PHASE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "free_a",
+   "name": "ENV3 ATTACK",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "free_d",
+   "name": "ENV3 DECAY",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "free_amt",
+   "name": "ENV3 AMOUNT",
+   "min": 0,
+   "max": 100,
+   "default": 50
+  },
+  {
+   "key": "free_dest",
+   "name": "ENV3 DEST",
+   "options": [
+    "OFF",
+    "FILTER",
+    "OSC1",
+    "OSC2",
+    "PW",
+    "FM"
+   ],
+   "default": 0
+  },
+  {
+   "key": "vel_vol",
+   "name": "VEL VOLUME",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "vel_env",
+   "name": "VEL ENV",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "vel_cut",
+   "name": "VEL CUTOFF",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "pw_cutoff",
+   "name": "WHEEL CUTOFF",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "pw_pitch",
+   "name": "BEND RANGE",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "portamento",
+   "name": "PORTAMENTO",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "porta_mode",
+   "name": "PORTA MODE",
+   "options": [
+    "OFF",
+    "AUTO",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "voices",
+   "name": "VOICES",
+   "min": 1,
+   "max": 6,
+   "display": "int"
+  },
+  {
+   "key": "chorus1",
+   "name": "CHORUS I",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "chorus2",
+   "name": "CHORUS II",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "reverb_wet",
+   "name": "REVERB WET",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "reverb_decay",
+   "name": "REV DECAY",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "reverb_pre",
+   "name": "REV PREDELAY",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "reverb_hi",
+   "name": "REV HI CUT",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "reverb_lo",
+   "name": "REV LO CUT",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "delay_wet",
+   "name": "DELAY WET",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "delay_time",
+   "name": "DELAY TIME",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "delay_sync",
+   "name": "DELAY SYNC",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "delay_fac_l",
+   "name": "DELAY 2X L",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "delay_fac_r",
+   "name": "DELAY 2X R",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "delay_fb",
+   "name": "DLY FEEDBACK",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "delay_hi",
+   "name": "DLY HI CUT",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "delay_lo",
+   "name": "DLY LO CUT",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "env_amt",
+   "name": "DRAW AMOUNT",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "key": "env_speed",
+   "name": "DRAW SPEED",
+   "options": [
+    "X1",
+    "X2",
+    "X4",
+    "X8",
+    "X16",
+    "X32"
+   ],
+   "default": 0
+  },
+  {
+   "key": "env_dest",
+   "name": "DRAW DEST",
+   "options": [
+    "OFF",
+    "FILTER",
+    "OSC1",
+    "OSC2",
+    "OSC1+2",
+    "FM",
+    "RINGMOD",
+    "VOLUME"
+   ],
+   "default": 0
+  },
+  {
+   "key": "preset",
+   "name": "PATCH",
+   "min": 0,
+   "max": 255,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "PATCH NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

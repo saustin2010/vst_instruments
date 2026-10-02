@@ -1,0 +1,883 @@
+{
+ "name": "Aphex",
+ "params": [
+  {
+   "key": "lpf_cut",
+   "name": "LPF CUTOFF",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.6,
+   "description": "LPF cutoff frequency (50Hz\u201315kHz per MS-20 spec)"
+  },
+  {
+   "key": "lpf_reso",
+   "name": "LPF PEAK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.2,
+   "description": "LPF resonance (flat \u2192 self-osc)"
+  },
+  {
+   "key": "hpf_cut",
+   "name": "HPF CUTOFF",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "HPF cutoff frequency"
+  },
+  {
+   "key": "hpf_reso",
+   "name": "HPF PEAK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "HPF resonance"
+  },
+  {
+   "key": "mg_freq",
+   "name": "MG FREQ",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.3,
+   "description": "MG (LFO) frequency, 0.05 Hz to 40 Hz (extends past MS-20 spec into audio-rate territory; per-sample mod handles aliasing)"
+  },
+  {
+   "key": "mg_depth",
+   "name": "MG DEPTH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.4,
+   "description": "Global MG depth"
+  },
+  {
+   "key": "master_tune",
+   "name": "TUNE",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "Master tune \u00b1100 cents (DSP scales by 100 internally \u2014 full encoder sweep = \u00b1100\u00a2)"
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.7,
+   "description": "Output level"
+  },
+  {
+   "key": "preset",
+   "name": "PRESET",
+   "default": "Init",
+   "options": [
+    "INIT",
+    "STICKY BASS",
+    "ACID SQUELCH",
+    "SUB WOBBLER",
+    "FM BASS",
+    "RESO BASS",
+    "PLUCK BASS",
+    "DETUNED DOOM",
+    "PICKED BASS",
+    "LEAD SCREAM",
+    "SYNC HOWL",
+    "WHISTLE LEAD",
+    "FILTER CRY",
+    "FM LEAD",
+    "HARD SYNC 5TH",
+    "RESONANT SPIKE",
+    "SAW STACK",
+    "ANALOG PAD",
+    "SWEEP PAD",
+    "GHOST CHOIR",
+    "SLOW WASH",
+    "VINTAGE EP",
+    "GLASS BELL",
+    "PLUCKED CLAV",
+    "ACID SEQ",
+    "TECHNO PULSE",
+    "WOBBLY BLEEP",
+    "LASER ZAP",
+    "COMPUTER BLEEP",
+    "HELICOPTER",
+    "STUTTER GLITCH",
+    "RANDOM PATCH",
+    "ENDLESS HOLD",
+    "SLOW EVOLUTION",
+    "TAPE HISS DRONE",
+    "MODULAR HUM",
+    "VOCAL HARMONIZER",
+    "TALK BOX",
+    "AUDIO TRACKER",
+    "FEEDBACK HOWL",
+    "ESP MANGLER"
+   ],
+   "description": "40 character presets across 8 categories (Bass / Lead / Pad / Keys / Sequence / SFX / Drone / ESP) inspired by Korg Collection MS-20 V2 and Arturia MS-20 V"
+  },
+  {
+   "key": "octave",
+   "name": "OCTAVE",
+   "min": -2,
+   "max": 2,
+   "step": 1,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "portamento",
+   "name": "PORTAMENTO",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "unit": "s",
+   "display_format": "%.3f",
+   "description": "Glide time in seconds (max ~1s; MS-20 spec is 10s but we cap for usability)"
+  },
+  {
+   "key": "trigger",
+   "name": "TRIGGER",
+   "min": 0,
+   "max": 1,
+   "step": 1,
+   "description": "Manual gate (MS-20 mini TRIG SW button equivalent \u2014 momentary)",
+   "momentary": true
+  },
+  {
+   "key": "rnd_patch",
+   "name": "RANDOM",
+   "min": 0,
+   "max": 1,
+   "step": 1,
+   "description": "One-shot full randomization \u2014 fresh patch with musical bounds",
+   "momentary": true
+  },
+  {
+   "key": "mutate",
+   "name": "MUTATE",
+   "min": 0,
+   "max": 1,
+   "step": 1,
+   "description": "Small \u00b120% variation of 6 random parameters around the current patch \u2014 keeps character, finds variations",
+   "momentary": true
+  },
+  {
+   "key": "rnd_mod",
+   "name": "RANDOM MOD",
+   "min": 0,
+   "max": 1,
+   "step": 1,
+   "description": "Randomize ONLY the patchbay jack assignments \u2014 keeps current sound, scrambles routing",
+   "momentary": true
+  },
+  {
+   "key": "reset_patch",
+   "name": "RESET",
+   "min": 0,
+   "max": 1,
+   "step": 1,
+   "description": "Reset to Init defaults",
+   "momentary": true
+  },
+  {
+   "key": "v1_pitch",
+   "name": "VCO1 SCALE",
+   "default": "8'",
+   "options": [
+    "32'",
+    "16'",
+    "8'",
+    "4'"
+   ],
+   "description": "VCO 1 octave (MS-20 SCALE switch) \u2014 each step = 1 octave"
+  },
+  {
+   "key": "v1_wave",
+   "name": "VCO1 WAVE",
+   "default": "Saw",
+   "options": [
+    "TRI",
+    "SAW",
+    "PW-SQUARE",
+    "NOISE"
+   ],
+   "description": "VCO 1 waveform (MS-20 set)"
+  },
+  {
+   "key": "v1_pw",
+   "name": "VCO1 PW",
+   "min": 0.05,
+   "max": 0.95,
+   "step": 0.01,
+   "default": 0.5,
+   "description": "VCO 1 pulse width (1:1 \u2192 1:\u221e)"
+  },
+  {
+   "key": "v2_pitch",
+   "name": "VCO2 SCALE",
+   "default": "8'",
+   "options": [
+    "16'",
+    "8'",
+    "4'",
+    "2'"
+   ],
+   "description": "VCO 2 octave (MS-20 SCALE switch) \u2014 each step = 1 octave"
+  },
+  {
+   "key": "v2_fine",
+   "name": "VCO2 PITCH",
+   "min": -24,
+   "max": 24,
+   "step": 0.01,
+   "default": 0,
+   "unit": "st",
+   "description": "VCO 2 PITCH knob in semitones (\u00b12 octaves per MS-20 Kit spec)"
+  },
+  {
+   "key": "v2_wave",
+   "name": "VCO2 WAVE",
+   "default": "Saw",
+   "options": [
+    "SAW",
+    "SQUARE",
+    "PULSE",
+    "RING"
+   ],
+   "description": "VCO 2 waveform (MS-20 set; Ring is one of 4 wave slots, not a separate mix)"
+  },
+  {
+   "key": "v2_pw",
+   "name": "VCO2 PW",
+   "min": 0.05,
+   "max": 0.95,
+   "step": 0.01,
+   "default": 0.5
+  },
+  {
+   "key": "v2_sync",
+   "name": "VCO2 SYNC",
+   "default": "Off",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "description": "VCO1\u2192VCO2 hard sync (MS-20 mini Kit slide switch)"
+  },
+  {
+   "key": "v2_xmod",
+   "name": "VCO2 FM",
+   "default": "Off",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "description": "VCO1\u2192VCO2 hard FM (MS-20 mini Kit slide switch \u2014 binary)"
+  },
+  {
+   "key": "v2_detune",
+   "name": "VCO2 DETUNE",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.07,
+   "description": "Fine detune (Modern continuous control)"
+  },
+  {
+   "key": "vco_mg",
+   "name": "MG/T.EXT",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "VCO MIXER FREQ MOD attenuator: MG (or T.EXT jack) \u2192 both VCOs' pitch"
+  },
+  {
+   "key": "vco_eg",
+   "name": "EG1/EXT",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "VCO MIXER FREQ MOD attenuator: EG1 (or EXT jack) \u2192 both VCOs' pitch"
+  },
+  {
+   "key": "mix_v1",
+   "name": "VCO1 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.7
+  },
+  {
+   "key": "mix_v2",
+   "name": "VCO2 LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5
+  },
+  {
+   "key": "mix_sub",
+   "name": "SUB LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "Sub osc level (Modern extra; not on MS-20)"
+  },
+  {
+   "key": "mix_noise",
+   "name": "NOISE LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0
+  },
+  {
+   "key": "noise_color",
+   "name": "NOISE COLOR",
+   "default": "White",
+   "options": [
+    "WHITE",
+    "PINK"
+   ]
+  },
+  {
+   "key": "mix_esp",
+   "name": "ESP LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "ESP audio into mixer (matches MS-20 patching workflow)"
+  },
+  {
+   "key": "mix_fb",
+   "name": "FEEDBACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "Output\u2192input feedback (Modern extra)"
+  },
+  {
+   "key": "hpf_mg",
+   "name": "HPF MG",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "HPF cutoff modulation by MG (or T.EXT jack if patched)"
+  },
+  {
+   "key": "hpf_eg",
+   "name": "HPF EG",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "HPF cutoff modulation by EG2 (or EXT jack if patched)"
+  },
+  {
+   "key": "lpf_mg",
+   "name": "LPF MG",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "LPF cutoff modulation by MG"
+  },
+  {
+   "key": "lpf_eg",
+   "name": "LPF EG",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.6,
+   "description": "LPF cutoff modulation by EG2"
+  },
+  {
+   "key": "filter_mode",
+   "name": "FILTER MODE",
+   "default": "HP+LP",
+   "options": [
+    "HP+LP",
+    "LP ONLY",
+    "HP ONLY",
+    "NOTCH"
+   ],
+   "description": "MS-20 is fixed HP+LP cascade (default); other modes are Modern extras"
+  },
+  {
+   "key": "e1_delay",
+   "name": "E1 DELAY",
+   "min": 0,
+   "max": 4,
+   "step": 0.001,
+   "default": 0,
+   "unit": "s",
+   "display_format": "%.3f",
+   "description": "EG1 Delay (MS-20 trapezoid: D-A-Sustain@max-R, 3 knobs only)"
+  },
+  {
+   "key": "e1_atk",
+   "name": "E1 ATK",
+   "min": 0.001,
+   "max": 4,
+   "step": 0.001,
+   "default": 0.005,
+   "unit": "s",
+   "display_format": "%.3f"
+  },
+  {
+   "key": "e1_rel",
+   "name": "E1 REL",
+   "min": 0.001,
+   "max": 6,
+   "step": 0.001,
+   "default": 0.4,
+   "unit": "s",
+   "display_format": "%.3f"
+  },
+  {
+   "key": "e2_hold",
+   "name": "E2 HOLD",
+   "min": 0,
+   "max": 20,
+   "step": 0.01,
+   "default": 0,
+   "unit": "s",
+   "display_format": "%.2f",
+   "description": "EG2 Hold (MS-20 spec: max 20s)"
+  },
+  {
+   "key": "e2_atk",
+   "name": "E2 ATK",
+   "min": 0.001,
+   "max": 4,
+   "step": 0.001,
+   "default": 0.005,
+   "unit": "s",
+   "display_format": "%.3f"
+  },
+  {
+   "key": "e2_dcy",
+   "name": "E2 DCY",
+   "min": 0.001,
+   "max": 4,
+   "step": 0.001,
+   "default": 0.3,
+   "unit": "s",
+   "display_format": "%.3f"
+  },
+  {
+   "key": "e2_sus",
+   "name": "E2 SUS",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.7
+  },
+  {
+   "key": "e2_rel",
+   "name": "E2 REL",
+   "min": 0.001,
+   "max": 6,
+   "step": 0.001,
+   "default": 0.3,
+   "unit": "s",
+   "display_format": "%.3f"
+  },
+  {
+   "key": "mg_shape",
+   "name": "MG SHAPE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5,
+   "description": "MG slope output: 0=positive saw, 0.5=triangle, 1=negative saw \u2014 continuously variable (MS-20 spec)"
+  },
+  {
+   "key": "mg_pw",
+   "name": "MG PW",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5,
+   "description": "MG pulse output duty cycle: 0=wide, 0.5=square, 1=narrow (independent from shape, both outputs always available)"
+  },
+  {
+   "key": "esp_in_gain",
+   "name": "SIG LVL",
+   "min": 0,
+   "max": 2,
+   "step": 0.01,
+   "default": 1.0,
+   "description": "ESP signal input level (MS-20 spec)"
+  },
+  {
+   "key": "esp_lo_cut",
+   "name": "LO CUT",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "ESP low-cut (50Hz\u20132.5kHz)"
+  },
+  {
+   "key": "esp_hi_cut",
+   "name": "HI CUT",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 1.0,
+   "description": "ESP high-cut (100Hz\u20135kHz)"
+  },
+  {
+   "key": "esp_cv_adj",
+   "name": "CV ADJ",
+   "min": -1,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5,
+   "description": "ESP pitch CV V/oct trim"
+  },
+  {
+   "key": "esp_threshold",
+   "name": "THRESHOLD",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.1,
+   "description": "ESP gate threshold"
+  },
+  {
+   "key": "esp_pitch_slew",
+   "name": "PITCH SLEW",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.1
+  },
+  {
+   "key": "esp_env_atk",
+   "name": "ENV ATK",
+   "min": 0.001,
+   "max": 1,
+   "step": 0.001,
+   "default": 0.005,
+   "unit": "s",
+   "display_format": "%.3f"
+  },
+  {
+   "key": "esp_env_rel",
+   "name": "ENV REL",
+   "min": 0.001,
+   "max": 2,
+   "step": 0.001,
+   "default": 0.1,
+   "unit": "s",
+   "display_format": "%.3f"
+  },
+  {
+   "key": "esp_aud_mix",
+   "name": "AUD MIX",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 1.0
+  },
+  {
+   "key": "esp_pitch_mode",
+   "name": "PITCH MODE",
+   "default": "Track",
+   "options": [
+    "OFF",
+    "TRACK",
+    "QUANTIZED"
+   ]
+  },
+  {
+   "key": "esp_gate_pol",
+   "name": "GATE POL",
+   "default": "+",
+   "options": [
+    "+",
+    "-"
+   ]
+  },
+  {
+   "key": "pb_kbd_cv",
+   "name": "KBD CV IN",
+   "default": "Normal",
+   "options": [
+    "NORMAL",
+    "ESP CV",
+    "WHEEL",
+    "S&H",
+    "TRIG CV",
+    "NONE"
+   ],
+   "description": "What feeds VCO1+VCO2 Hz/V CV (defaults to keyboard)"
+  },
+  {
+   "key": "pb_total",
+   "name": "T.EXT",
+   "default": "MG",
+   "options": [
+    "MG",
+    "WHEEL",
+    "ESP CV",
+    "ESP ENV",
+    "S&H",
+    "NOISE",
+    "EG1 REV",
+    "EG2 REV",
+    "NONE"
+   ],
+   "description": "Replaces MG in panel MG/T.EXT attenuators (VCO Master, HPF, LPF)"
+  },
+  {
+   "key": "pb_freq",
+   "name": "VCO FREQ",
+   "default": "EG1",
+   "options": [
+    "EG1",
+    "EG2",
+    "ESP ENV",
+    "WHEEL",
+    "S&H",
+    "NOISE",
+    "NONE"
+   ],
+   "description": "Replaces EG1 in VCO Master EG1/EXT attenuator"
+  },
+  {
+   "key": "pb_hpf_cv",
+   "name": "HPF EG/EXT",
+   "default": "EG1",
+   "options": [
+    "EG1",
+    "EG2",
+    "ESP ENV",
+    "WHEEL",
+    "S&H",
+    "NOISE",
+    "NONE"
+   ],
+   "description": "HPF cutoff envelope source (default EG1, unipolar \u2014 opens only)"
+  },
+  {
+   "key": "pb_lpf_cv",
+   "name": "LPF EG/EXT",
+   "default": "EG1",
+   "options": [
+    "EG1",
+    "EG2",
+    "ESP ENV",
+    "WHEEL",
+    "S&H",
+    "NOISE",
+    "NONE"
+   ],
+   "description": "LPF cutoff envelope source (default EG1, the filter env; unipolar \u2014 opens only)"
+  },
+  {
+   "key": "pb_vca_in",
+   "name": "INITIAL GAIN",
+   "default": "None",
+   "options": [
+    "NONE",
+    "WHEEL",
+    "ESP ENV",
+    "EG1",
+    "S&H",
+    "NOISE"
+   ],
+   "description": "INITIAL GAIN \u2014 adds to EG2's VCA control (MS-20 spec, no attenuator)"
+  },
+  {
+   "key": "pb_pwm_in",
+   "name": "PWM IN",
+   "default": "None",
+   "options": [
+    "NONE",
+    "MG TRI",
+    "MG SQ",
+    "EG1",
+    "EG2",
+    "S&H",
+    "NOISE",
+    "ESP ENV",
+    "WHEEL"
+   ],
+   "description": "PWM IN \u2014 modulates VCO1 PW-Square (MS-20 mini Kit feature, demoted to menu in panel-strict mode)"
+  },
+  {
+   "key": "pb_ext_sig",
+   "name": "EXT SIG",
+   "default": "None",
+   "options": [
+    "NONE",
+    "ESP AUDIO",
+    "NOISE",
+    "MIXER OUT",
+    "TRACK 1",
+    "TRACK 2",
+    "TRACK 3",
+    "TRACK 4"
+   ],
+   "description": "VCF external signal input (3Vp-p max per MS-20 spec). Track 1-4 read from /move-track-audio SHM \u2014 feed any other track through Aphex's K35 filter (Schwung v0.7.8+). Caveat: routing the track Aphex is on creates a feedback loop."
+  },
+  {
+   "key": "pb_vco2_cv",
+   "name": "VCO 2 CV",
+   "default": "None",
+   "options": [
+    "NONE",
+    "ESP CV",
+    "WHEEL",
+    "S&H",
+    "NOISE",
+    "KBD CV"
+   ],
+   "description": "VCO 2 CV IN jack \u2014 separate Hz/V into VCO 2 only (independent from VCO 1)"
+  },
+  {
+   "key": "pb_eg1_trig",
+   "name": "EG1 TRIG",
+   "default": "None",
+   "options": [
+    "NONE",
+    "S&H",
+    "ESP GATE",
+    "WHEEL",
+    "NOISE"
+   ],
+   "description": "EG 1 TRIG IN \u2014 rising edge retriggers EG 1 (in addition to keyboard)"
+  },
+  {
+   "key": "pb_eg12_trig",
+   "name": "EG1+2 TRIG",
+   "default": "None",
+   "options": [
+    "NONE",
+    "S&H",
+    "ESP GATE",
+    "WHEEL",
+    "NOISE"
+   ],
+   "description": "EG 1+2 TRIG IN \u2014 rising edge retriggers both envelopes"
+  },
+  {
+   "key": "drift",
+   "name": "DRIFT",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.35,
+   "description": "Global analog drift intensity (drift.h: multi-source per-instance jitter)"
+  },
+  {
+   "key": "drive",
+   "name": "DRIVE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.2,
+   "description": "Pre-filter saturation (Modern; not on original MS-20). 20ms smoothed for pop-free knob turns."
+  },
+  {
+   "key": "key_track",
+   "name": "KEY TRACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.5,
+   "description": "Filter cutoff follows pitch (Modern)"
+  },
+  {
+   "key": "filter_rev",
+   "name": "FILTER REV",
+   "default": "REV.1 KORG-35",
+   "options": [
+    "REV.1 KORG-35",
+    "REV.2 OTA"
+   ],
+   "description": "Early MS-20/MS-10 KORG-35 (creamy fuzz break-up) vs late MS-20 LM13600 OTA (cleaner howl)"
+  },
+  {
+   "key": "ms10_mode",
+   "name": "MS-10 MODE",
+   "default": "Off",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "description": "Collapse to MS-10 layout: VCO1 + LPF + EG2 only"
+  },
+  {
+   "key": "v1_drift",
+   "name": "V1 DRIFT",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.15,
+   "description": "Per-VCO1 drift trim (Diva Trimmers-style)"
+  },
+  {
+   "key": "v2_drift",
+   "name": "V2 DRIFT",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.18,
+   "description": "Per-VCO2 drift trim"
+  },
+  {
+   "key": "x_mod_amt",
+   "name": "X-MOD AMT",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "Continuous X-Mod depth (Modern; original is on/off only)"
+  },
+  {
+   "key": "mw_mg",
+   "name": "MW>MG",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "Mod wheel \u2192 MG depth (Modern)"
+  },
+  {
+   "key": "mw_filt",
+   "name": "MW>FILT",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0,
+   "description": "Mod wheel \u2192 LPF cutoff (Modern)"
+  },
+  {
+   "key": "vel_amt",
+   "name": "VEL>AMP",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "default": 0.8,
+   "description": "Velocity \u2192 amplitude depth: 0 = every note full level (velocity ignored), 1 = full dynamic range. Floor + gentle curve keep soft hits audible."
+  }
+ ]
+}

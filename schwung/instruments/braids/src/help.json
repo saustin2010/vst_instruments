@@ -1,0 +1,332 @@
+{
+  "title": "Braids",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "Macro oscillator",
+        "with 47 synthesis",
+        "algorithms.",
+        "",
+        "Based on Mutable",
+        "Instruments Braids.",
+        "",
+        "4-voice polyphony",
+        "with voice stealing.",
+        "",
+        "Each algorithm has",
+        "unique Timbre and",
+        "Color behavior.",
+        "",
+        "Includes ADSR amp",
+        "envelope, filter",
+        "with its own ADSR,",
+        "and FM modulation."
+      ]
+    },
+    {
+      "title": "Controls",
+      "children": [
+        {
+          "title": "Knob Mapping",
+          "lines": [
+            "Knob 1: Algorithm",
+            " Select from 47",
+            " synthesis models",
+            "",
+            "Knob 2: Timbre",
+            " Algorithm-specific",
+            " (see Algorithms)",
+            "",
+            "Knob 3: Color",
+            " Algorithm-specific",
+            " (see Algorithms)",
+            "",
+            "Knob 4: Cutoff",
+            " Post-oscillator",
+            " filter frequency",
+            "",
+            "Knob 5: Attack",
+            "Knob 6: Decay",
+            "Knob 7: Sustain",
+            "Knob 8: Release",
+            " Amp envelope ADSR",
+            " drawn as a curve"
+          ]
+        },
+        {
+          "title": "Menu Parameters",
+          "lines": [
+            "Resonance:",
+            " Filter resonance",
+            " amount (0-100%)",
+            "",
+            "Filt Env:",
+            " How much the filter",
+            " envelope modulates",
+            " cutoff frequency",
+            "",
+            "FM:",
+            " Frequency modulation",
+            " depth (0-100%)",
+            "",
+            "Volume:",
+            " Output level",
+            "",
+            "Octave:",
+            " Transpose -3 to +3",
+            "",
+            "Filter Envelope:",
+            " F.Attack, F.Decay,",
+            " F.Sustain, F.Release",
+            " Separate ADSR for",
+            " filter cutoff"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Algorithms",
+      "children": [
+        {
+          "title": "Analog Waveforms",
+          "lines": [
+            "CSAW: Saw + square",
+            " T: pulse width",
+            " C: square amount",
+            "",
+            "MORPH: Morphing wave",
+            " T: saw>tri>pulse",
+            " C: sub-osc mix",
+            "",
+            "/\\-_: Variable slope",
+            " T: slope shape",
+            " C: asymmetry",
+            "",
+            "SINE^: Sine + fold",
+            " T: wavefolder depth",
+            " C: asymmetry",
+            "",
+            "BUZZ: Harsh buzz",
+            " T: harmonics count",
+            " C: decay shape"
+          ]
+        },
+        {
+          "title": "Sub & Sync",
+          "lines": [
+            "SQR<: Square + sub",
+            " T: pulse width",
+            " C: sub-osc level",
+            "",
+            "SAW<: Saw + sub",
+            " T: detune",
+            " C: sub-osc level",
+            "",
+            "SQsync: Square sync",
+            " T: sync frequency",
+            " C: pulse width",
+            "",
+            "SWsync: Saw sync",
+            " T: sync frequency",
+            " C: waveform blend"
+          ]
+        },
+        {
+          "title": "Triple Oscillators",
+          "lines": [
+            "3 detuned voices:",
+            "",
+            "3xSAW: Triple saw",
+            "3xSQR: Triple square",
+            "3xTRI: Triple tri",
+            "3xSIN: Triple sine",
+            "",
+            "For all:",
+            " T: detune spread",
+            " C: voice balance",
+            "",
+            "3xRNG: Ring mod",
+            " 3 sine ring mod",
+            " T: frequency ratio",
+            " C: balance",
+            " Metallic tones"
+          ]
+        },
+        {
+          "title": "Complex Analog",
+          "lines": [
+            "SWARM: Swarm of",
+            " oscillators",
+            " T: spread amount",
+            " C: detune",
+            "",
+            "COMB: Comb filter",
+            " on impulse train",
+            " T: comb frequency",
+            " C: feedback",
+            "",
+            "TOY: Lo-fi aliased",
+            " digital oscillator",
+            " T: waveform select",
+            " C: bitcrush amount"
+          ]
+        },
+        {
+          "title": "Digital Filters",
+          "lines": [
+            "Resonant filter on",
+            "noise excitation:",
+            "",
+            "ZLPF: Low pass",
+            "ZPKF: Peaking",
+            "ZBPF: Band pass",
+            "ZHPF: High pass",
+            "",
+            "For all:",
+            " T: cutoff frequency",
+            " C: resonance",
+            "",
+            "Great for kicks,",
+            "zaps, and drones."
+          ]
+        },
+        {
+          "title": "Vocal Synthesis",
+          "lines": [
+            "VOSIM: Voice sim",
+            " T: formant 1 freq",
+            " C: formant 2 freq",
+            "",
+            "VOWL: Vowel sounds",
+            " T: vowel morph",
+            " C: formant shift",
+            "",
+            "V.FOF: Formant wave",
+            " T: formant freq",
+            " C: formant width",
+            "",
+            "All produce speech-",
+            "like tones and",
+            "choir textures."
+          ]
+        },
+        {
+          "title": "FM Synthesis",
+          "lines": [
+            "HARM: Additive",
+            " 12 harmonics",
+            " T: harmonic tilt",
+            " C: peak position",
+            "",
+            "FM: 2-op FM",
+            " T: mod index",
+            " C: mod frequency",
+            "",
+            "FBFM: FM + feedback",
+            " T: mod index",
+            " C: feedback amount",
+            "",
+            "WTFM: Wavetable FM",
+            " T: mod index",
+            " C: wavetable morph"
+          ]
+        },
+        {
+          "title": "Physical Models",
+          "lines": [
+            "PLUK: Plucked string",
+            " T: decay/damping",
+            " C: pluck position",
+            "",
+            "BOWD: Bowed string",
+            " T: bow pressure",
+            " C: bow position",
+            "",
+            "BLOW: Blown reed",
+            " T: breath pressure",
+            " C: embouchure",
+            "",
+            "FLUT: Flute",
+            " T: breath amount",
+            " C: blow position"
+          ]
+        },
+        {
+          "title": "Percussion",
+          "lines": [
+            "BELL: Metallic bell",
+            " T: brightness",
+            " C: damping",
+            "",
+            "DRUM: 808-style",
+            " T: tone/noise mix",
+            " C: decay time",
+            "",
+            "KICK: Bass kick",
+            " T: pitch sweep",
+            " C: attack/body",
+            "",
+            "CYMB: Cymbal/hat",
+            " T: brightness",
+            " C: decay",
+            "",
+            "SNAR: Snare drum",
+            " T: tone/noise mix",
+            " C: decay"
+          ]
+        },
+        {
+          "title": "Wavetables",
+          "lines": [
+            "WTBL: Wavetable",
+            " T: table position",
+            " C: interpolation",
+            "",
+            "WMAP: 2D wavetable",
+            " T: X position",
+            " C: Y position",
+            "",
+            "WLIN: Linear interp",
+            " wavetable scan",
+            " T: table position",
+            " C: waveform blend",
+            "",
+            "WTx4: 4-voice para-",
+            " phonic wavetable",
+            " T: table position",
+            " C: chord voicing"
+          ]
+        },
+        {
+          "title": "Noise & Digital",
+          "lines": [
+            "NOIS: Filtered noise",
+            " T: filter cutoff",
+            " C: filter type",
+            "",
+            "TWNQ: Twin peaks",
+            " T: peak 1 freq",
+            " C: peak 2 freq",
+            "",
+            "CLKN: Clocked noise",
+            " T: clock rate",
+            " C: noise color",
+            "",
+            "GRN: Granular",
+            " T: grain size",
+            " C: grain density",
+            "",
+            "PART: Particle",
+            " T: density",
+            " C: randomness",
+            "",
+            "QPSK: Digital modem",
+            " T: data rate",
+            " C: noise amount"
+          ]
+        }
+      ]
+    }
+  ]
+}

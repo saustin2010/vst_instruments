@@ -1,0 +1,218 @@
+{
+ "name": "Braids",
+ "params": [
+  {
+   "key": "engine",
+   "name": "ALGORITHM",
+   "options": [
+    "CSAW",
+    "MORPH",
+    "/\\-_",
+    "SINE^",
+    "BUZZ",
+    "SQR<",
+    "SAW<",
+    "SQsync",
+    "SWsync",
+    "3xSAW",
+    "3xSQR",
+    "3xTRI",
+    "3xSIN",
+    "3xRNG",
+    "SWARM",
+    "COMB",
+    "TOY",
+    "ZLPF",
+    "ZPKF",
+    "ZBPF",
+    "ZHPF",
+    "VOSIM",
+    "VOWL",
+    "V.FOF",
+    "HARM",
+    "FM",
+    "FBFM",
+    "WTFM",
+    "PLUK",
+    "BOWD",
+    "BLOW",
+    "FLUT",
+    "BELL",
+    "DRUM",
+    "KICK",
+    "CYMB",
+    "SNAR",
+    "WTBL",
+    "WMAP",
+    "WLIN",
+    "WTx4",
+    "NOIS",
+    "TWNQ",
+    "CLKN",
+    "GRN",
+    "PART",
+    "QPSK"
+   ],
+   "default": 0
+  },
+  {
+   "key": "timbre",
+   "name": "TIMBRE",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "color",
+   "name": "COLOR",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "attack",
+   "name": "AMP ATTACK",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "decay",
+   "name": "AMP DECAY",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "sustain",
+   "name": "AMP SUSTAIN",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 1.0
+  },
+  {
+   "key": "release",
+   "name": "AMP RELEASE",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "cutoff",
+   "name": "CUTOFF",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 1.0
+  },
+  {
+   "key": "resonance",
+   "name": "RESONANCE",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "filt_env",
+   "name": "FILTER ENV",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "fm",
+   "name": "FM",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  },
+  {
+   "key": "octave_transpose",
+   "name": "OCTAVE",
+   "min": -3,
+   "max": 3,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "f_attack",
+   "name": "FLT ATTACK",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "f_decay",
+   "name": "FLT DECAY",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "f_sustain",
+   "name": "FLT SUSTAIN",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "f_release",
+   "name": "FLT RELEASE",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "preset",
+   "name": "PATCH",
+   "min": 0,
+   "max": 9,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "PATCH NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

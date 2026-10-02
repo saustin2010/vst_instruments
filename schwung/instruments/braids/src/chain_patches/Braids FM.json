@@ -1,0 +1,24 @@
+{
+    "name": "Braids FM",
+    "version": 1,
+    "chain": {
+        "synth": {
+            "module": "braids",
+            "config": {
+                "state": {
+                    "engine": 24,
+                    "timbre": 0.4,
+                    "color": 0.3,
+                    "attack": 0.0,
+                    "decay": 0.6,
+                    "fm": 0.0,
+                    "cutoff": 0.8,
+                    "resonance": 0.1,
+                    "volume": 0.7
+                }
+            }
+        },
+        "audio_fx": [],
+        "input": "both"
+    }
+}

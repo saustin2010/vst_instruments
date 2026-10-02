@@ -1,0 +1,26 @@
+{
+  "name": "Maze Lite",
+  "vendor": "sd88me",
+  "uid": "MzLt",
+  "so": "mazelite.so",
+  "build": {
+    "sources": [
+      "src/dsp/maze_seq_lite.c",
+      "mpc/schwung_midi_fx.c"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Impc/host",
+      "-Isrc",
+      "-Isrc/dsp",
+      "-Isrc/host"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

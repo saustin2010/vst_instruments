@@ -1,0 +1,107 @@
+{
+ "name": "Rings",
+ "params": [
+  {
+   "key": "model",
+   "name": "MODEL",
+   "options": [
+    "MODAL",
+    "SYMPATHETIC",
+    "STRING",
+    "FM VOICE",
+    "SYMP CHORDS",
+    "STRING+VERB",
+    "STRING SYNTH"
+   ],
+   "default": 0
+  },
+  {
+   "key": "polyphony",
+   "name": "POLYPHONY",
+   "options": [
+    "1 VOICE",
+    "2 VOICES",
+    "4 VOICES"
+   ],
+   "default": 2
+  },
+  {
+   "key": "structure",
+   "name": "STRUCTURE",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.4
+  },
+  {
+   "key": "brightness",
+   "name": "BRIGHTNESS",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "damping",
+   "name": "DAMPING",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.6
+  },
+  {
+   "key": "position",
+   "name": "POSITION",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "synth_fx",
+   "name": "SYNTH FX",
+   "options": [
+    "FORMANT",
+    "CHORUS",
+    "REVERB",
+    "FORMANT 2",
+    "ENSEMBLE",
+    "REVERB 2"
+   ],
+   "default": 0
+  },
+  {
+   "key": "octave",
+   "name": "OCTAVE",
+   "min": -2,
+   "max": 2,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "bend_range",
+   "name": "BEND RANGE",
+   "min": 0,
+   "max": 12,
+   "default": 2,
+   "display": "int"
+  },
+  {
+   "key": "velocity",
+   "name": "VELOCITY",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  },
+  {
+   "key": "width",
+   "name": "WIDTH",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 1.0
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7
+  }
+ ]
+}

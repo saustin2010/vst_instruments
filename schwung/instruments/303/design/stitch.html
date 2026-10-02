@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>303 — TB-303 & Devilfish Mod Bassline Synth (MPC Live II)</title>
+<style>
+  :root {
+    --theme-bg: #aeb1b4;
+    --theme-panel: #d3d5d6;
+    --theme-line: #8e9196;
+    --theme-ink: #17181b;
+    --theme-ink-dim: #34373c;
+    --theme-ink-faint: #5f6369;
+    --theme-accent: #d9531e;
+    --theme-accent-hi: #f0621f;
+    --theme-knob-face: #e9e7e0;
+    --theme-knob-ring: #7d8085;
+    --theme-knob-dot: #d9531e;
+    --theme-lcd: #1b1c1f;
+    --theme-seg-active: #1c1d20;
+    --theme-seg-inactive: #e3e4e5;
+    --theme-seg-active-tx: #f3f3f1;
+    --theme-box: #d3d5d6;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  body {
+    background: #090a0c;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
+    color: var(--theme-ink);
+  }
+
+  /* 1280x628 Exact MPC Live II Plugin Viewport */
+  .mpc-chassis {
+    width: 1280px;
+    height: 628px;
+    background: linear-gradient(180deg, #b9bcc0 0%, var(--theme-bg) 10%, #9fa2a6 100%);
+    border-radius: 6px;
+    border: 2px solid #5a5d62;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Brushed Aluminum Texture overlay */
+  .mpc-chassis::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(0,0,0,0.03) 2px, rgba(255,255,255,0.02) 4px);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Top Global MPC Header Bar */
+  .mpc-header {
+    height: 48px;
+    background: #181a1d;
+    border-bottom: 2px solid #2d3036;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 10;
+    color: #e2e4e8;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .device-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #9297a0;
+  }
+
+  .device-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--theme-accent);
+    box-shadow: 0 0 8px var(--theme-accent-hi);
+  }
+
+  .brand-chip {
+    background: #25282e;
+    border: 1px solid #3c4048;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #d1d5db;
+    letter-spacing: 1px;
+  }
+
+  .plugin-title {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #fff;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .plugin-title span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--theme-accent-hi);
+    letter-spacing: 1px;
+  }
+
+  /* Tab Navigation */
+  .tab-nav {
+    display: flex;
+    gap: 6px;
+    background: #111215;
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px solid #2a2d33;
+  }
+
+  .tab-btn {
+    padding: 5px 18px;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    background: transparent;
+    color: #7b818c;
+    transition: all 0.15s ease;
+  }
+
+  .tab-btn:hover {
+    color: #cfd4dc;
+  }
+
+  .tab-btn.active {
+    background: var(--theme-accent);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(217, 83, 30, 0.4);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+    color: #8b919a;
+    font-family: ui-monospace, SFMono-Regular, "Courier New", monospace;
+  }
+
+  .audition-btn {
+    background: linear-gradient(180deg, #d9531e 0%, #aa3b0e 100%);
+    border: 1px solid #f0621f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  .audition-btn:active, .audition-btn.auditioning {
+    background: #f0621f;
+    box-shadow: 0 0 14px #f0621f;
+  }
+
+  /* Main Workspace (1280 x 536 middle canvas) */
+  .workspace-container {
+    flex: 1;
+    position: relative;
+    z-index: 5;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tab-page {
+    display: none;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tab-page.active {
+    display: flex;
+  }
+
+  /* Grid Layout corresponding to Skin Studio Frames */
+  .rack-row {
+    display: flex;
+    gap: 8px;
+    height: 260px;
+  }
+
+  .rack-row.upper {
+    height: 260px;
+  }
+
+  .rack-row.lower {
+    height: 260px;
+  }
+
+  /* Hardware Frames */
+  .hw-frame {
+    background: linear-gradient(180deg, #e1e3e5 0%, var(--theme-panel) 60%, #c4c6c9 100%);
+    border: 1.5px solid var(--theme-line);
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 5px rgba(0,0,0,0.15);
+    position: relative;
+    padding: 26px 12px 10px 12px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hw-frame::before {
+    content: attr(data-title);
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: var(--theme-ink);
+    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border-bottom: 2px solid var(--theme-accent);
+    padding-bottom: 2px;
+  }
+
+  .hw-frame .frame-subtitle {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--theme-ink-faint);
+    text-transform: uppercase;
+  }
+
+  .frame-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+  }
+
+  /* Controls (Knobs, Switches, Enums) */
+  .control-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .control-label {
+    margin-top: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: var(--theme-ink);
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .control-value {
+    font-family: ui-monospace, SFMono-Regular, "Courier New", monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #17181b;
+    background: rgba(0,0,0,0.06);
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-top: 2px;
+    border: 1px solid rgba(0,0,0,0.12);
+  }
+
+  /* Vintage 303 Collet Knobs */
+  .knob-wrapper {
+    position: relative;
+    cursor: ns-resize;
+    touch-action: none;
+  }
+
+  .knob-base {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffffff 0%, var(--theme-knob-face) 45%, #b5b3aa 95%);
+    border: 2px solid var(--theme-knob-ring);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.35), inset 0 2px 2px rgba(255,255,255,0.8), inset 0 -2px 3px rgba(0,0,0,0.4);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .knob-base::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.15);
+    background: repeating-conic-gradient(from 0deg, rgba(0,0,0,0.03) 0deg 15deg, transparent 15deg 30deg);
+  }
+
+  /* Indicator Dot / Notch */
+  .knob-notch {
+    position: absolute;
+    width: 3.5px;
+    height: 44%;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--theme-knob-dot);
+    border-radius: 2px;
+    box-shadow: 0 0 3px var(--theme-accent-hi);
+    transform-origin: bottom center;
+  }
+
+  /* Knob Sizes */
+  .knob-r46 .knob-base {
+    width: 92px;
+    height: 92px;
+  }
+  .knob-r46 .knob-notch {
+    width: 4px;
+    height: 42px;
+    top: 5px;
+  }
+
+  .knob-r38 .knob-base {
+    width: 76px;
+    height: 76px;
+  }
+  .knob-r38 .knob-notch {
+    width: 3px;
+    height: 34px;
+    top: 4px;
+  }
+
+  /* Bezel Dial Tick Ring */
+  .dial-tick-ring {
+    position: absolute;
+    inset: -9px;
+    border-radius: 50%;
+    border: 1px dashed rgba(0,0,0,0.25);
+    pointer-events: none;
+  }
+
+  /* Segmented Vertical / Horizontal Switch (Enum Selector) */
+  .enum-v-selector {
+    display: flex;
+    flex-direction: column;
+    background: #202226;
+    border: 1.5px solid #4a4e55;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    width: 82px;
+  }
+
+  .enum-opt {
+    padding: 9px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: center;
+    color: #8c939f;
+    cursor: pointer;
+    border-bottom: 1px solid #32363d;
+    transition: all 0.15s ease;
+    letter-spacing: 1px;
+  }
+
+  .enum-opt:last-child {
+    border-bottom: none;
+  }
+
+  .enum-opt.selected {
+    background: var(--theme-accent);
+    color: #ffffff;
+    font-weight: 900;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 0 8px rgba(217, 83, 30, 0.4);
+  }
+
+  /* Hardware Push Toggle Button */
+  .hw-toggle-btn {
+    width: 76px;
+    height: 48px;
+    background: linear-gradient(180deg, #f0f1f3 0%, #cbced2 100%);
+    border: 1.5px solid #6b7078;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    color: #1a1b1e;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.25), inset 0 1px 0 #fff;
+    transition: all 0.1s ease;
+  }
+
+  .hw-toggle-btn .toggle-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #393b40;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
+  }
+
+  .hw-toggle-btn.active {
+    background: linear-gradient(180deg, #c0c3c7 0%, #e6e8eb 100%);
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.35);
+    border-color: var(--theme-accent);
+    transform: translateY(1px);
+  }
+
+  .hw-toggle-btn.active .toggle-led {
+    background: #f0621f;
+    box-shadow: 0 0 10px #f0621f, inset 0 1px 1px #fff;
+  }
+
+  /* Live Acid Waveform Visualizer & Badge in Right Box */
+  .acid-badge-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    background: #17191d;
+    border: 1.5px solid #3c4048;
+    border-radius: 4px;
+    padding: 12px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .acid-canvas {
+    width: 100%;
+    height: 110px;
+    background: #0d0f12;
+    border-radius: 3px;
+    border: 1px solid #282b32;
+  }
+
+  .acid-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #9da3ad;
+    font-size: 11px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    border-top: 1px solid #282b32;
+    padding-top: 8px;
+  }
+
+  .acid-logo-text {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #f0f3f6;
+  }
+
+  .acid-logo-text em {
+    font-style: normal;
+    color: var(--theme-accent-hi);
+  }
+
+  /* Devilfish Specific Mod Styling */
+  .devilfish-badge {
+    background: #941b0c;
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 1px;
+  }
+
+  /* Bottom Hardware Q-Links Bar */
+  .qlinks-bar {
+    height: 38px;
+    background: #141619;
+    border-top: 2px solid #292c32;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    justify-content: space-between;
+    z-index: 10;
+    font-size: 11px;
+    color: #8c929c;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+  }
+
+  .qlink-bank-tag {
+    font-weight: 800;
+    color: var(--theme-accent-hi);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .qlink-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .qlink-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #1e2126;
+    border: 1px solid #2e323a;
+    border-radius: 3px;
+    padding: 2px 7px;
+    font-size: 10px;
+  }
+
+  .qlink-item .q-idx {
+    font-weight: 900;
+    color: var(--theme-accent);
+  }
+
+  .qlink-item .q-name {
+    color: #cdd2da;
+  }
+
+  .footer-sys-info {
+    font-size: 10px;
+    color: #636872;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="mpc-chassis">
+  <!-- Top Header Navigation -->
+  <header class="mpc-header">
+    <div class="header-left">
+      <div class="device-badge">
+        <div class="device-led"></div>
+        AKAI MPC LIVE II
+      </div>
+      <div class="brand-chip">OPEN303 + DEVILFISH</div>
+      <div class="plugin-title">303 <span>// BASS LINE</span></div>
+    </div>
+
+    <div class="tab-nav">
+      <button class="tab-btn active" id="tabBtn303" onclick="switchTab('303')">1: 303 MAIN</button>
+      <button class="tab-btn" id="tabBtnDevil" onclick="switchTab('DEVILFISH')">2: DEVILFISH MOD</button>
+    </div>
+
+    <div class="header-right">
+      <span>DSP: <strong>7%</strong></span>
+      <span>48.0 kHz</span>
+      <span>VOICE: <strong>1/1 MONO</strong></span>
+      <button class="audition-btn" id="auditionBtn" onmousedown="triggerAcid(true)" onmouseup="triggerAcid(false)" onmouseleave="triggerAcid(false)">
+        ▶ AUDITION ACID [C2]
+      </button>
+    </div>
+  </header>
+
+  <!-- Workspace Container: Exactly matches Skin Studio Layout Spec -->
+  <main class="workspace-container">
+
+    <!-- ==================== TAB 1: 303 ==================== -->
+    <div class="tab-page active" id="page-303">
+      <!-- Upper Rack: VCO (310w) | VCF (626w) | ACCENT (152w) | OUT (152w) -->
+      <div class="rack-row upper">
+        <!-- FRAME 1: VCO -->
+        <div class="hw-frame" data-title="VCO" style="flex: 310;">
+          <div class="frame-subtitle">OSCILLATOR</div>
+          <div class="frame-content">
+            <!-- enum_v WAVEFORM -->
+            <div class="control-unit">
+              <div class="enum-v-selector" id="enumWaveform">
+                <div class="enum-opt selected" onclick="selectWave('SAW')">SAW</div>
+                <div class="enum-opt" onclick="selectWave('SQUARE')">SQUARE</div>
+              </div>
+              <div class="control-label">WAVEFORM</div>
+            </div>
+
+            <!-- knob TUNING -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="tuning" data-min="-12" data-max="12" data-val="0" data-unit="ST">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(0deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">TUNING</div>
+              <div class="control-value">0 ST</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRAME 2: VCF -->
+        <div class="hw-frame" data-title="VCF" style="flex: 626;">
+          <div class="frame-subtitle">18dB / 24dB DIODE LADDER</div>
+          <div class="frame-content">
+            <!-- knob CUTOFF (r=46) -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r46" data-key="cutoff" data-min="100" data-max="12000" data-val="3200" data-unit="Hz">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(-15deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">CUTOFF</div>
+              <div class="control-value">3.20 kHz</div>
+            </div>
+
+            <!-- knob RESONANCE (r=38) -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="resonance" data-min="0" data-max="100" data-val="78" data-unit="%">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(75deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">RESONANCE</div>
+              <div class="control-value">78 %</div>
+            </div>
+
+            <!-- knob ENV MOD (r=38) -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="env_mod" data-min="0" data-max="100" data-val="82" data-unit="%">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(85deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">ENV MOD</div>
+              <div class="control-value">82 %</div>
+            </div>
+
+            <!-- knob DECAY (r=38) -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="decay" data-min="200" data-max="2500" data-val="680" data-unit="ms">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(10deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">DECAY</div>
+              <div class="control-value">680 ms</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRAME 3: ACCENT -->
+        <div class="hw-frame" data-title="ACCENT" style="flex: 152;">
+          <div class="frame-content">
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="accent" data-min="0" data-max="100" data-val="65" data-unit="%">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(42deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">ACCENT</div>
+              <div class="control-value">65 %</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRAME 4: OUT -->
+        <div class="hw-frame" data-title="OUT" style="flex: 152;">
+          <div class="frame-content">
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="volume" data-min="0" data-max="100" data-val="85" data-unit="%">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(95deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">VOLUME</div>
+              <div class="control-value">85 %</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lower Rack: DRIVE (784w) | ART / LOGO (468w) -->
+      <div class="rack-row lower">
+        <!-- FRAME 5: DRIVE -->
+        <div class="hw-frame" data-title="DRIVE" style="flex: 784;">
+          <div class="frame-subtitle">ANALOG SATURATION & CLIPPING</div>
+          <div class="frame-content">
+            <!-- enum_v DRIVE MODEL -->
+            <div class="control-unit">
+              <div class="enum-v-selector" id="enumDriveModel">
+                <div class="enum-opt selected" onclick="selectDriveModel('SOFT')">SOFT</div>
+                <div class="enum-opt" onclick="selectDriveModel('RAT')">RAT</div>
+              </div>
+              <div class="control-label">DRIVE MODEL</div>
+            </div>
+
+            <!-- knob DRIVE -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="drive" data-min="0" data-max="100" data-val="45" data-unit="%">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(-10deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">DRIVE</div>
+              <div class="control-value">45 %</div>
+            </div>
+
+            <!-- knob DRIVE MIX -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="drive_mix" data-min="0" data-max="100" data-val="70" data-unit="%">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(50deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">DRIVE MIX</div>
+              <div class="control-value">70 %</div>
+            </div>
+
+            <!-- knob SHAPER DRIVE -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="tanh_shaper_drive" data-min="0" data-max="100" data-val="30" data-unit="%">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(-45deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">SHAPER DRIVE</div>
+              <div class="control-value">30 %</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRAME 6: ART / LOGO (images/logo_468.svg) -->
+        <div class="hw-frame" data-title="MONITOR // ACID SCOPE" style="flex: 468;">
+          <div class="acid-badge-box">
+            <canvas class="acid-canvas" id="acidScopeCanvas"></canvas>
+            <div class="acid-meta-row">
+              <div class="acid-logo-text">ROLAND <em>TB-303</em></div>
+              <div>SILVER RETRO SKIN · ARM64</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== TAB 2: DEVILFISH ==================== -->
+    <div class="tab-page" id="page-DEVILFISH">
+      <!-- Upper Rack: DEVILFISH ENVELOPES (1258w) -->
+      <div class="rack-row upper">
+        <div class="hw-frame" data-title="DEVILFISH ENVELOPES" style="flex: 1258;">
+          <div class="frame-subtitle"><span class="devilfish-badge">DEVILFISH MOD v4.2</span> ROBIN WHITTLE EXTENSION</div>
+          <div class="frame-content">
+            <!-- toggle DEVILFISH -->
+            <div class="control-unit">
+              <button class="hw-toggle-btn active" id="btnDevilMod" onclick="toggleDevilMod()">
+                <div class="toggle-led"></div>
+                MOD ON
+              </button>
+              <div class="control-label">DEVILFISH</div>
+            </div>
+
+            <!-- knob NORMAL DECAY -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="normal_decay" data-min="30" data-max="3500" data-val="750" data-unit="ms">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(25deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">NORMAL DECAY</div>
+              <div class="control-value">750 ms</div>
+            </div>
+
+            <!-- knob ACCENT DECAY -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="accent_decay" data-min="20" data-max="1200" data-val="320" data-unit="ms">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(-20deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">ACCENT DECAY</div>
+              <div class="control-value">320 ms</div>
+            </div>
+
+            <!-- knob SOFT ATTACK -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="soft_attack" data-min="0" data-max="100" data-val="15" data-unit="%">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(-85deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">SOFT ATTACK</div>
+              <div class="control-value">15 %</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lower Rack: FILTER / SLIDE (1258w) -->
+      <div class="rack-row lower">
+        <div class="hw-frame" data-title="FILTER / SLIDE" style="flex: 1258;">
+          <div class="frame-subtitle">MODIFIED RESONANCE FEEDBACK & EXTENDED PORTAMENTO</div>
+          <div class="frame-content">
+            <!-- knob FEEDBACK HPF -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="feedback_hpf" data-min="20" data-max="1000" data-val="140" data-unit="Hz">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(-40deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">FEEDBACK HPF</div>
+              <div class="control-value">140 Hz</div>
+            </div>
+
+            <!-- knob SLIDE TIME -->
+            <div class="control-unit">
+              <div class="knob-wrapper knob-r38" data-key="slide_time" data-min="0" data-max="250" data-val="65" data-unit="ms">
+                <div class="dial-tick-ring"></div>
+                <div class="knob-base">
+                  <div class="knob-notch" style="transform: translateX(-50%) rotate(0deg);"></div>
+                </div>
+              </div>
+              <div class="control-label">SLIDE TIME</div>
+              <div class="control-value">65 ms</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Hardware Q-Links Bar -->
+  <footer class="qlinks-bar">
+    <div class="qlink-bank-tag">
+      <span>Q-LINKS</span>
+      <span id="activeBankTitle">[BANK 1: 303 MAIN]</span>
+    </div>
+
+    <div class="qlink-chips" id="qlinkChipsContainer">
+      <!-- Populated dynamically based on active tab -->
+    </div>
+
+    <div class="footer-sys-info">
+      1280×628 BUFFER · OPEN303 CORE · SKIN STUDIO
+    </div>
+  </footer>
+</div>
+
+<script>
+  // State
+  let activeTab = '303';
+  let activeWave = 'SAW';
+  let activeDriveModel = 'SOFT';
+  let isDevilModOn = true;
+
+  const qlinksMap = {
+    '303': ['WAVE', 'TUNING', 'CUTOFF', 'RESO', 'ENV MOD', 'DECAY', 'ACCENT', 'VOLUME', 'DRV MODEL', 'DRIVE', 'MIX', 'SHAPER'],
+    'DEVILFISH': ['DEVIL MOD', 'NORM DCY', 'ACC DCY', 'SOFT ATK', 'FB HPF', 'SLIDE TIME']
+  };
+
+  function updateQLinkChips() {
+    const list = qlinksMap[activeTab] || [];
+    const container = document.getElementById('qlinkChipsContainer');
+    document.getElementById('activeBankTitle').innerText = activeTab === '303' ? '[BANK 1: 303 MAIN]' : '[BANK 2: DEVILFISH]';
+    
+    container.innerHTML = list.map((param, i) => `
+      <div class="qlink-item">
+        <span class="q-idx">Q${i+1}</span>
+        <span class="q-name">${param}</span>
+      </div>
+    `).join('');
+  }
+
+  function switchTab(tabId) {
+    activeTab = tabId;
+    document.getElementById('page-303').classList.toggle('active', tabId === '303');
+    document.getElementById('page-DEVILFISH').classList.toggle('active', tabId === 'DEVILFISH');
+    document.getElementById('tabBtn303').classList.toggle('active', tabId === '303');
+    document.getElementById('tabBtnDevil').classList.toggle('active', tabId === 'DEVILFISH');
+    updateQLinkChips();
+  }
+
+  function selectWave(wave) {
+    activeWave = wave;
+    document.querySelectorAll('#enumWaveform .enum-opt').forEach(el => {
+      el.classList.toggle('selected', el.innerText.trim() === wave);
+    });
+  }
+
+  function selectDriveModel(model) {
+    activeDriveModel = model;
+    document.querySelectorAll('#enumDriveModel .enum-opt').forEach(el => {
+      el.classList.toggle('selected', el.innerText.trim() === model);
+    });
+  }
+
+  function toggleDevilMod() {
+    isDevilModOn = !isDevilModOn;
+    const btn = document.getElementById('btnDevilMod');
+    btn.classList.toggle('active', isDevilModOn);
+    btn.innerHTML = `<div class="toggle-led"></div> ${isDevilModOn ? 'MOD ON' : 'BYPASS'}`;
+  }
+
+  // Interactive Knob Dragging
+  document.querySelectorAll('.knob-wrapper').forEach(knob => {
+    let startY = 0;
+    let startVal = 0;
+
+    knob.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      startY = e.clientY;
+      const min = parseFloat(knob.dataset.min);
+      const max = parseFloat(knob.dataset.max);
+      startVal = parseFloat(knob.dataset.val);
+
+      function onPointerMove(ev) {
+        const delta = (startY - ev.clientY);
+        const range = max - min;
+        let newVal = startVal + (delta / 120) * range;
+        newVal = Math.max(min, Math.min(max, newVal));
+        knob.dataset.val = newVal;
+
+        // Angle: -135deg to +135deg
+        const pct = (newVal - min) / range;
+        const angle = -135 + (pct * 270);
+        const notch = knob.querySelector('.knob-notch');
+        if (notch) {
+          notch.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+        }
+
+        // Value text
+        const unit = knob.dataset.unit || '';
+        let displayVal = newVal >= 1000 ? (newVal / 1000).toFixed(2) + ' k' + unit : Math.round(newVal) + ' ' + unit;
+        const valElem = knob.closest('.control-unit').querySelector('.control-value');
+        if (valElem) valElem.innerText = displayVal;
+      }
+
+      function onPointerUp() {
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', onPointerUp);
+      }
+
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+    });
+  });
+
+  // Real-time Acid Oscilloscope Canvas Animation
+  const canvas = document.getElementById('acidScopeCanvas');
+  const ctx = canvas.getContext('2d');
+  let phase = 0;
+  let isAuditionActive = false;
+
+  function resizeCanvas() {
+    canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }
+  window.addEventListener('resize', resizeCanvas);
+  setTimeout(resizeCanvas, 50);
+
+  function drawAcidScope() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    if (!w || !h) return requestAnimationFrame(drawAcidScope);
+
+    ctx.fillStyle = '#0a0c0f';
+    ctx.fillRect(0, 0, w, h);
+
+    // Subtle grid lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 30) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+    }
+    for (let y = 0; y < h; y += 20) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+
+    // Oscilloscope Trace
+    ctx.beginPath();
+    ctx.strokeStyle = isAuditionActive ? '#f0621f' : '#d9531e';
+    ctx.lineWidth = isAuditionActive ? 3.0 : 2.0;
+    ctx.shadowColor = '#f0621f';
+    ctx.shadowBlur = isAuditionActive ? 12 : 5;
+
+    const midY = h / 2;
+    const freq = 0.04;
+    const amp = isAuditionActive ? (h * 0.38) : (h * 0.22);
+
+    for (let x = 0; x < w; x++) {
+      let y = midY;
+      if (activeWave === 'SAW') {
+        const cycle = ((x * freq + phase) % 2) - 1;
+        y += cycle * amp * (0.85 + Math.sin(x * 0.02 + phase) * 0.15);
+      } else {
+        // Square
+        const cycle = Math.sin(x * freq + phase) >= 0 ? 1 : -1;
+        y += cycle * amp * 0.85;
+      }
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    phase += isAuditionActive ? 0.16 : 0.04;
+    requestAnimationFrame(drawAcidScope);
+  }
+  requestAnimationFrame(drawAcidScope);
+
+  // Web Audio Synth Engine for Auditioning Acid Bassline
+  let audioCtx = null;
+  let osc = null;
+  let filter = null;
+  let gainNode = null;
+
+  function triggerAcid(start) {
+    isAuditionActive = start;
+    const btn = document.getElementById('auditionBtn');
+    btn.classList.toggle('auditioning', start);
+
+    if (start) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const now = audioCtx.currentTime;
+      osc = audioCtx.createOscillator();
+      filter = audioCtx.createBiquadFilter();
+      gainNode = audioCtx.createGain();
+
+      osc.type = activeWave === 'SAW' ? 'sawtooth' : 'square';
+      osc.frequency.setValueAtTime(65.41, now); // C2 Note
+
+      // 303 Filter Envelope Sweep
+      filter.type = 'lowpass';
+      filter.Q.value = 16.0; // Acid resonance
+      filter.frequency.setValueAtTime(450, now);
+      filter.frequency.exponentialRampToValueAtTime(4800, now + 0.04);
+      filter.frequency.exponentialRampToValueAtTime(320, now + 0.55);
+
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(0.35, now + 0.015);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+
+      osc.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.72);
+    } else {
+      if (gainNode && audioCtx) {
+        gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
+      }
+    }
+  }
+
+  // Spacebar hotkey
+  window.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !e.repeat) {
+      e.preventDefault();
+      triggerAcid(true);
+    }
+  });
+  window.addEventListener('keyup', e => {
+    if (e.code === 'Space') {
+      triggerAcid(false);
+    }
+  });
+
+  // Init
+  updateQLinkChips();
+</script>
+</body>
+</html>

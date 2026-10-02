@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56" height="44" viewBox="0 0 56 44">
+ <defs><linearGradient id="obx-cap-on" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#6a6d74"/><stop offset="0.45" stop-color="#46484e"/><stop offset="1" stop-color="#2c2e32"/>
+ </linearGradient>
+ <filter id="obx-glow" x="-2" y="-2" width="5" height="5"><feGaussianBlur stdDeviation="2.4"/></filter></defs>
+ <circle cx="28" cy="8" r="6.5" fill="#ff3d2e" opacity="0.85" filter="url(#obx-glow)"/>
+ <circle cx="28" cy="8" r="4.5" fill="#ff5645" stroke="#000" stroke-width="1"/>
+ <circle cx="26.6" cy="6.6" r="1.4" fill="#fff" opacity="0.75"/>
+ <rect x="3" y="18" width="50" height="25" rx="4" fill="#070708"/>
+ <rect x="5" y="20" width="46" height="21" rx="3" fill="url(#obx-cap-on)" stroke="#8a8d93" stroke-width="0.8"/>
+</svg>

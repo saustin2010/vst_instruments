@@ -1,0 +1,73 @@
+{
+ "name": "wurl",
+ "params": [
+  {
+   "key": "volume",
+   "name": "Volume",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "tremolo",
+   "name": "Tremolo",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "attack",
+   "name": "Attack",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "decay",
+   "name": "Decay",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "brightness",
+   "name": "Bright",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "darken",
+   "name": "Darken",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "bark",
+   "name": "Bark",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "reverb",
+   "name": "Reverb",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "speaker",
+   "name": "Speaker",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "tune",
+   "name": "Tune",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "preset",
+   "name": "Preset",
+   "min": 0,
+   "max": 9,
+   "display": "int"
+  }
+ ],
+ "note": "from the engine's own chain_params (get_param), 2026-10-01"
+}

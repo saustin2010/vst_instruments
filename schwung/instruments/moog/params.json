@@ -1,0 +1,326 @@
+{
+ "name": "Moog",
+ "params": [
+  {
+   "key": "osc1_wave",
+   "name": "OSC1 WAVE",
+   "options": [
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE"
+   ]
+  },
+  {
+   "key": "osc1_volume",
+   "name": "OSC1 LEVEL",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc1_range",
+   "name": "OSC1 RANGE",
+   "options": [
+    "32'",
+    "16'",
+    "8'",
+    "4'",
+    "2'"
+   ],
+   "values": [
+    -2,
+    -1,
+    0,
+    1,
+    2
+   ],
+   "default": 2
+  },
+  {
+   "key": "osc2_wave",
+   "name": "OSC2 WAVE",
+   "options": [
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE"
+   ]
+  },
+  {
+   "key": "osc2_volume",
+   "name": "OSC2 LEVEL",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc2_range",
+   "name": "OSC2 RANGE",
+   "options": [
+    "32'",
+    "16'",
+    "8'",
+    "4'",
+    "2'"
+   ],
+   "values": [
+    -2,
+    -1,
+    0,
+    1,
+    2
+   ],
+   "default": 2
+  },
+  {
+   "key": "osc2_detune",
+   "name": "OSC2 DETUNE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc3_wave",
+   "name": "OSC3 WAVE",
+   "options": [
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE"
+   ]
+  },
+  {
+   "key": "osc3_volume",
+   "name": "OSC3 LEVEL",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc3_range",
+   "name": "OSC3 RANGE",
+   "options": [
+    "32'",
+    "16'",
+    "8'",
+    "4'",
+    "2'"
+   ],
+   "values": [
+    -2,
+    -1,
+    0,
+    1,
+    2
+   ],
+   "default": 2
+  },
+  {
+   "key": "osc3_detune",
+   "name": "OSC3 DETUNE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc4_wave",
+   "name": "OSC4 WAVE",
+   "options": [
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "PULSE"
+   ]
+  },
+  {
+   "key": "osc4_volume",
+   "name": "OSC4 LEVEL",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "osc4_range",
+   "name": "OSC4 RANGE",
+   "options": [
+    "32'",
+    "16'",
+    "8'",
+    "4'",
+    "2'"
+   ],
+   "values": [
+    -2,
+    -1,
+    0,
+    1,
+    2
+   ],
+   "default": 2
+  },
+  {
+   "key": "osc4_detune",
+   "name": "OSC4 DETUNE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "noise",
+   "name": "NOISE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff",
+   "name": "CUTOFF",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "resonance",
+   "name": "EMPHASIS",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "contour",
+   "name": "CONTOUR",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "key_follow",
+   "name": "KEY TRACK",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "attack",
+   "name": "AMP ATTACK",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "decay",
+   "name": "AMP DECAY",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "sustain",
+   "name": "AMP SUSTAIN",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "release",
+   "name": "AMP RELEASE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "f_attack",
+   "name": "FLT ATTACK",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "f_decay",
+   "name": "FLT DECAY",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "f_sustain",
+   "name": "FLT SUSTAIN",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "f_release",
+   "name": "FLT RELEASE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "glide",
+   "name": "GLIDE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lfo_rate",
+   "name": "LFO RATE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lfo_pitch",
+   "name": "LFO PITCH",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lfo_filter",
+   "name": "LFO FILTER",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_filter",
+   "name": "WHEEL FILTER",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "mod_pitch",
+   "name": "WHEEL PITCH",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "bend_range",
+   "name": "BEND RANGE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "vel_sens",
+   "name": "VELOCITY",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "preset",
+   "name": "PATCH",
+   "min": 0,
+   "max": 13,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "PATCH NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

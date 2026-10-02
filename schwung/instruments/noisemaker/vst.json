@@ -1,0 +1,27 @@
+{
+  "name": "Noisemaker",
+  "vendor": "TAL",
+  "uid": "Nois",
+  "so": "noisemaker.so",
+  "module": "src/module.json",
+  "params": "params.json",
+  "build": {
+    "sources": [
+      "src/dsp/noisemaker_plugin.cpp",
+      "src/dsp/Engine/Lfo.cpp"
+    ],
+    "cflags": [
+      "-Isrc",
+      "-Isrc/dsp",
+      "-Isrc/dsp/Engine",
+      "-std=gnu++14",
+      "-fpermissive", "-DMPC_PORT", "-fwrapv",
+      "-Wno-write-strings"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "layout": "layout.conf",
+  "art": "html"
+}

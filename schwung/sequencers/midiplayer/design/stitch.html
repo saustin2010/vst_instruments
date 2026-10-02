@@ -1,0 +1,915 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>MIDI PLAYER // MPC LIVE II</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#920801",
+            "surface": "#121316",
+            "on-primary-fixed": "#281900",
+            "error-container": "#93000a",
+            "tertiary-fixed": "#eee2bc",
+            "primary-fixed": "#ffdead",
+            "primary-container": "#e5a93c",
+            "on-tertiary": "#373016",
+            "secondary": "#ffb4a7",
+            "outline-variant": "#504535",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary-fixed": "#211b04",
+            "on-surface-variant": "#d4c4b0",
+            "on-secondary-fixed": "#400100",
+            "on-secondary-container": "#ff9a89",
+            "inverse-on-surface": "#2f3034",
+            "surface-variant": "#343538",
+            "inverse-primary": "#7e5700",
+            "surface-container-low": "#1b1b1f",
+            "surface-dim": "#121316",
+            "surface-bright": "#38393c",
+            "surface-container-lowest": "#0d0e11",
+            "surface-tint": "#fabc4d",
+            "on-error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#604100",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "secondary-fixed-dim": "#ffb4a7",
+            "tertiary-container": "#beb38f",
+            "error": "#ffb4ab",
+            "on-secondary": "#680300",
+            "on-primary": "#432c00",
+            "surface-container-highest": "#343538",
+            "on-primary-container": "#5e4000",
+            "on-error": "#690005",
+            "on-secondary-fixed-variant": "#920801",
+            "primary": "#ffc665",
+            "on-tertiary-container": "#4c4529",
+            "on-surface": "#e3e2e6",
+            "tertiary": "#dacfa9",
+            "surface-container": "#1f1f23",
+            "secondary-fixed": "#ffdad4",
+            "outline": "#9d8f7c",
+            "surface-container-high": "#292a2d",
+            "on-background": "#e3e2e6",
+            "inverse-surface": "#e3e2e6",
+            "primary-fixed-dim": "#fabc4d",
+            "background": "#121316",
+            // MPC Hardware Specification Overlays
+            "mpc-bg": "#0a0d12",
+            "mpc-panel": "#121820",
+            "mpc-line": "#2f3c4d",
+            "mpc-ink": "#eef4fb",
+            "mpc-ink-dim": "#c3cfdd",
+            "mpc-ink-faint": "#6d7e92",
+            "mpc-accent": "#3a9be8",
+            "mpc-accent-hi": "#66b8ff",
+            "mpc-disp-bg": "#02101c",
+            "mpc-disp-cell": "#061c2e",
+            "mpc-disp-ink": "#66b8ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem"
+          },
+          "fontFamily": {
+            "body-md": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Industrial Faceplate & Custom Styles */
+    .recessed-display {
+      background-color: #02101c;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.9), inset 0 0 1px rgba(0,0,0,0.95);
+      border: 1px solid #2f3c4d;
+    }
+    .milled-panel {
+      background-color: #121820;
+      border: 1px solid #2f3c4d;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(0,0,0,0.6);
+    }
+    .hex-screw {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #3d4f66 30%, #151d27 80%);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), 0 1px 1px #000;
+      position: absolute;
+    }
+    .knurled-dial {
+      background: radial-gradient(circle at 40% 40%, #2a3749 0%, #131922 70%);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.2);
+    }
+    .piano-roll-canvas {
+      background: linear-gradient(180deg, #02101c 0%, #031424 100%);
+    }
+    /* Grid lines for sequencer */
+    .grid-bg {
+      background-image: 
+        linear-gradient(to right, rgba(47, 60, 77, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(47, 60, 77, 0.25) 1px, transparent 1px);
+      background-size: 32px 14px;
+    }
+    /* CRT Scanlines */
+    .crt-overlay {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+      background-size: 100% 3px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-[#050709] text-on-surface select-none flex items-center justify-center min-h-screen p-0 m-0 overflow-hidden font-body-md">
+<!-- STANDALONE 1280x628 HARDWARE VIEWPORT CONTAINER -->
+<div class="relative w-[1280px] h-[628px] bg-[#0a0d12] border-2 border-[#1e2733] shadow-2xl flex flex-col justify-between overflow-hidden">
+<!-- SHARED COMPONENT: TopNavBar (Exact Style JSON Integration) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-11 bg-surface-container-lowest border-b border-outline-variant select-none">
+<div class="flex items-center space-x-3">
+<span class="text-headline-sm font-headline-sm text-primary tracking-wider uppercase flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="album">album</span>
+          AKAI MPC LIVE II // SCHWUNG MIDI FX
+        </span>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-[#16212e] text-[#66b8ff] border border-[#2f3c4d]">
+          MIDI PLAYER // STANDARD MIDI FILE TRANSPORT
+        </span>
+</div>
+<!-- Navigation Tabs from JSON -->
+<nav class="flex items-center space-x-4">
+<button class="text-primary border-b-2 border-primary font-bold py-1 text-label-md font-label-md flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#66b8ff] animate-ping"></span>
+          1: MAIN
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 text-label-md font-label-md">
+          2: EVENT LIST
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 text-label-md font-label-md">
+          3: ROUTING
+        </button>
+<button class="text-on-surface-variant hover:text-on-surface py-1 text-label-md font-label-md">
+          4: SETUP
+        </button>
+</nav>
+<!-- Sync Info & Header Action -->
+<div class="flex items-center space-x-3 text-label-sm font-label-sm">
+<div class="flex items-center space-x-2 text-[#6d7e92] border-r border-[#2f3c4d] pr-3">
+<span>PORT A</span>
+<span class="text-[#3a9be8] font-semibold">SYNC 120.0 BPM</span>
+<span class="text-[#c3cfdd]">PPQN: 960</span>
+</div>
+<button class="flex items-center gap-1.5 px-3 py-1 rounded bg-[#1a2c42] border border-[#3a9be8] text-[#66b8ff] hover:bg-[#253f5e] active:scale-95 transition-transform duration-75 shadow-sm" id="transport-btn" onclick="togglePlayState()">
+<span class="material-symbols-outlined text-sm" data-icon="play_arrow" id="transport-icon">play_arrow</span>
+<span class="font-bold" id="transport-text">PLAY / PAUSE [SPACE]</span>
+</button>
+<div class="flex items-center space-x-1 pl-1">
+<button class="w-7 h-7 flex items-center justify-center text-[#c3cfdd] hover:text-[#66b8ff] rounded border border-transparent hover:border-[#2f3c4d]">
+<span class="material-symbols-outlined text-base" data-icon="tune">tune</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center text-[#c3cfdd] hover:text-[#66b8ff] rounded border border-transparent hover:border-[#2f3c4d]">
+<span class="material-symbols-outlined text-base" data-icon="graphic_eq">graphic_eq</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center text-[#c3cfdd] hover:text-[#66b8ff] rounded border border-transparent hover:border-[#2f3c4d]">
+<span class="material-symbols-outlined text-base" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN CHASSIS WORKSPACE (Fixed height between headers: 528px) -->
+<main class="relative mt-11 mb-14 w-full h-[517px] p-3 grid grid-cols-12 gap-3 overflow-hidden bg-[#0a0d12]">
+<!-- TOP ROW: FILE & REAL-TIME PIANO ROLL (w=626 equivalent -> Col 6) -->
+<section class="col-span-6 milled-panel rounded relative flex flex-col p-2.5">
+<!-- Faux Hex Screws -->
+<span class="hex-screw top-1.5 left-1.5"></span>
+<span class="hex-screw top-1.5 right-1.5"></span>
+<span class="hex-screw bottom-1.5 left-1.5"></span>
+<span class="hex-screw bottom-1.5 right-1.5"></span>
+<!-- Section Bar -->
+<div class="flex items-center justify-between border-b border-[#2f3c4d] pb-1 mb-2 px-3">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-[#3a9be8] shadow-[0_0_6px_#3a9be8]"></span>
+<h2 class="text-headline-sm font-headline-sm tracking-wider text-[#eef4fb]">FILE: SEQUENCE TRANSPORT</h2>
+</div>
+<span class="text-label-sm font-label-sm text-[#6d7e92] font-mono">BUF: 24.8KB / FORMAT 1</span>
+</div>
+<!-- Dot Matrix File Selector -->
+<div class="recessed-display rounded p-2 flex items-center justify-between mb-2">
+<button class="px-2.5 py-1 bg-[#061c2e] hover:bg-[#0c2f4d] active:scale-95 border border-[#2f3c4d] rounded text-[#66b8ff] text-label-md font-label-md flex items-center" onclick="prevFile()">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="arrow_back_ios">arrow_back_ios</span> PREV
+          </button>
+<div class="flex flex-col items-center">
+<span class="text-label-sm font-label-sm text-[#3a9be8] uppercase tracking-widest font-semibold">ACTIVE SMF SOURCE</span>
+<div class="text-[#66b8ff] font-label-lg text-sm tracking-wider font-mono drop-shadow-[0_0_8px_rgba(102,184,255,0.7)]" id="file-name-display">
+              03: FUNK_BASS_90BPM.MID
+            </div>
+</div>
+<button class="px-2.5 py-1 bg-[#061c2e] hover:bg-[#0c2f4d] active:scale-95 border border-[#2f3c4d] rounded text-[#66b8ff] text-label-md font-label-md flex items-center" onclick="nextFile()">
+            NEXT <span class="material-symbols-outlined text-sm ml-1" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+</button>
+</div>
+<!-- 60FPS Piano Roll Canvas -->
+<div class="relative flex-1 recessed-display rounded overflow-hidden flex flex-col">
+<div class="h-4 bg-[#081522] border-b border-[#1b2b3d] flex items-center px-2 justify-between text-label-sm font-label-sm text-[#6d7e92]">
+<div class="flex space-x-8">
+<span>BAR 1.1</span>
+<span>BAR 2.1</span>
+<span>BAR 3.1</span>
+<span>BAR 4.1</span>
+<span>BAR 5.1</span>
+</div>
+<span class="text-[#3a9be8]">LIVE BUFFER VIEW</span>
+</div>
+<div class="relative flex-1 grid-bg overflow-hidden" id="piano-roll-container">
+<!-- Playhead scrubber line -->
+<div class="absolute top-0 bottom-0 w-[2px] bg-[#66b8ff] shadow-[0_0_8px_#66b8ff] z-20 left-0 transition-[left] ease-linear" id="scrubber-line"></div>
+<!-- Notes Container (populated dynamically) -->
+<div class="absolute inset-0 z-10 pointer-events-none" id="piano-roll-notes"></div>
+<!-- CRT scanline overlay effect -->
+<div class="absolute inset-0 crt-overlay"></div>
+</div>
+<div class="h-4 bg-[#040e17] border-t border-[#1b2b3d] flex items-center px-2 justify-between text-[9px] text-[#6d7e92] font-mono">
+<span>VELOCITY MAP // POLYPHONIC SMR</span>
+<span id="canvas-status">STATUS: STANDBY</span>
+</div>
+</div>
+</section>
+<!-- TOP RIGHT: MIDI OUT & CHANNELS MATRIX (Col 6) -->
+<section class="col-span-6 milled-panel rounded relative flex flex-col p-2.5">
+<span class="hex-screw top-1.5 left-1.5"></span>
+<span class="hex-screw top-1.5 right-1.5"></span>
+<span class="hex-screw bottom-1.5 left-1.5"></span>
+<span class="hex-screw bottom-1.5 right-1.5"></span>
+<!-- Section Header -->
+<div class="flex items-center justify-between border-b border-[#2f3c4d] pb-1 mb-2 px-3">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-[#66b8ff] shadow-[0_0_6px_#66b8ff]"></span>
+<h2 class="text-headline-sm font-headline-sm tracking-wider text-[#eef4fb]">MIDI OUT &amp; ROUTING BUS</h2>
+</div>
+<span class="text-label-sm font-label-sm text-[#3a9be8] font-mono">PORT: MPC VIRTUAL 1</span>
+</div>
+<!-- 16 Channel Real-Time Activity Grid -->
+<div class="recessed-display rounded p-2.5 mb-2">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-label-sm font-label-sm text-[#6d7e92] uppercase">16-Channel Hardware Bus Monitor</span>
+<span class="text-label-sm font-label-sm text-[#66b8ff]" id="total-voice-count">4 VOICES ACTIVE</span>
+</div>
+<div class="grid grid-cols-8 gap-1.5">
+<!-- 16 MIDI LED Nodes -->
+<template id="ch-template"></template>
+<!-- Generated channels 1 through 16 -->
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-1">
+<span class="text-[9px] font-mono text-[#c3cfdd]">01</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#66b8ff] shadow-[0_0_8px_#66b8ff] transition-all" id="led-1"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-2">
+<span class="text-[9px] font-mono text-[#c3cfdd]">02</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-2"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-3">
+<span class="text-[9px] font-mono text-[#c3cfdd]">03</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-3"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-4">
+<span class="text-[9px] font-mono text-[#c3cfdd]">04</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-4"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-5">
+<span class="text-[9px] font-mono text-[#c3cfdd]">05</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-5"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-6">
+<span class="text-[9px] font-mono text-[#c3cfdd]">06</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-6"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-7">
+<span class="text-[9px] font-mono text-[#c3cfdd]">07</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-7"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-8">
+<span class="text-[9px] font-mono text-[#c3cfdd]">08</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-8"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-9">
+<span class="text-[9px] font-mono text-[#c3cfdd]">09</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-9"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-10">
+<span class="text-[9px] font-mono text-[#66b8ff] font-bold">10</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#3a9be8] shadow-[0_0_6px_#3a9be8] transition-all" id="led-10"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-11">
+<span class="text-[9px] font-mono text-[#c3cfdd]">11</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-11"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-12">
+<span class="text-[9px] font-mono text-[#c3cfdd]">12</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-12"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-13">
+<span class="text-[9px] font-mono text-[#c3cfdd]">13</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-13"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-14">
+<span class="text-[9px] font-mono text-[#c3cfdd]">14</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-14"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-15">
+<span class="text-[9px] font-mono text-[#c3cfdd]">15</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-15"></div>
+</div>
+<div class="flex flex-col items-center bg-[#071725] border border-[#1d2d3e] p-1 rounded" id="ch-box-16">
+<span class="text-[9px] font-mono text-[#c3cfdd]">16</span>
+<div class="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#10293d] transition-all" id="led-16"></div>
+</div>
+</div>
+</div>
+<!-- Telemetry & Event Filters Bento -->
+<div class="grid grid-cols-2 gap-2 flex-1">
+<div class="recessed-display rounded p-2 flex flex-col justify-between">
+<span class="text-[10px] uppercase font-mono text-[#6d7e92]">Filter Protocols</span>
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-[#c3cfdd]">SysEx Messages:</span>
+<span class="px-1.5 py-0.5 rounded bg-[#10283c] text-[#66b8ff] font-bold border border-[#2f3c4d]">FILTER ON</span>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-[#c3cfdd]">Continuous Ctrl:</span>
+<span class="text-[#3a9be8] font-bold">CC 01/07/10/64</span>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-[#c3cfdd]">Running Status:</span>
+<span class="text-[#66b8ff] font-mono">OPTIMIZED</span>
+</div>
+</div>
+<div class="recessed-display rounded p-2 flex flex-col justify-between">
+<span class="text-[10px] uppercase font-mono text-[#6d7e92]">Hardware Out Stats</span>
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-[#c3cfdd]">Baud Rate:</span>
+<span class="text-[#eef4fb] font-mono">31.25 kbit/s</span>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-[#c3cfdd]">Total Events:</span>
+<span class="text-[#66b8ff] font-mono" id="stat-events">1,482 MSG</span>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-[#c3cfdd]">Jitter Spec:</span>
+<span class="text-[#3a9be8] font-mono">&lt; 0.22 ms</span>
+</div>
+</div>
+</div>
+</section>
+<!-- BOTTOM LEFT: PLAYBACK CONFIG (w=310 equivalent -> Col 4) -->
+<section class="col-span-4 milled-panel rounded relative flex flex-col p-2.5 justify-between">
+<span class="hex-screw top-1.5 left-1.5"></span>
+<span class="hex-screw top-1.5 right-1.5"></span>
+<span class="hex-screw bottom-1.5 left-1.5"></span>
+<span class="hex-screw bottom-1.5 right-1.5"></span>
+<!-- Section Title -->
+<div class="flex items-center justify-between border-b border-[#2f3c4d] pb-1">
+<div class="flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#3a9be8]"></span>
+<h3 class="text-label-lg font-label-lg text-[#eef4fb]">PLAYBACK ENGINE</h3>
+</div>
+<span class="text-[10px] font-mono text-[#6d7e92]">SRC T-96</span>
+</div>
+<!-- Track Dropdown / Filter -->
+<div class="flex flex-col space-y-1">
+<label class="text-label-sm font-label-sm text-[#6d7e92]">TRACK ROUTE SELECT</label>
+<div class="relative">
+<select class="w-full bg-[#061c2e] border border-[#2f3c4d] text-[#66b8ff] text-label-md font-label-md rounded p-1.5 focus:border-[#3a9be8] focus:ring-0 outline-none" id="track-select" onchange="switchTrack(this.value)">
+<option value="ALL">ALL TRACKS (POLYPHONIC)</option>
+<option selected="" value="TRACK1">TRACK 1 [BASS SECTION]</option>
+<option value="TRACK2">TRACK 2 [RHODES CHORDS]</option>
+<option value="TRACK3">TRACK 3 [PERCUSSION / CH10]</option>
+</select>
+</div>
+</div>
+<!-- Loop Toggle & Multiplier Buttons -->
+<div class="grid grid-cols-2 gap-2">
+<!-- Tactile Loop Switch Button -->
+<button class="h-14 rounded border flex flex-col items-center justify-center transition-all bg-[#0d2238] border-[#3a9be8] shadow-[0_0_10px_rgba(58,155,232,0.4)]" id="loop-btn" onclick="toggleLoop()">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-base text-[#66b8ff]" data-icon="all_inclusive">all_inclusive</span>
+<span class="text-label-md font-label-md font-bold text-[#66b8ff]" id="loop-text">LOOP: ON</span>
+</div>
+<span class="text-[9px] font-mono text-[#3a9be8]">1 - 8 BARS</span>
+</button>
+<!-- Tempo Multipliers (0.5x, 1x, 2x) -->
+<div class="flex flex-col justify-between space-y-1">
+<span class="text-[9px] font-mono text-[#6d7e92]">SPEED MULTIPLY</span>
+<div class="grid grid-cols-3 gap-1">
+<button class="speed-btn py-1.5 rounded bg-[#061c2e] border border-[#2f3c4d] text-label-sm font-label-sm text-[#c3cfdd] hover:text-[#66b8ff]" onclick="setSpeed(0.5, this)">0.5x</button>
+<button class="speed-btn py-1.5 rounded bg-[#102d4a] border border-[#3a9be8] text-label-sm font-label-sm font-bold text-[#66b8ff]" onclick="setSpeed(1.0, this)">1x</button>
+<button class="speed-btn py-1.5 rounded bg-[#061c2e] border border-[#2f3c4d] text-label-sm font-label-sm text-[#c3cfdd] hover:text-[#66b8ff]" onclick="setSpeed(2.0, this)">2x</button>
+</div>
+</div>
+</div>
+</section>
+<!-- BOTTOM RIGHT: STATUS BADGE & TRANSPORT TIMELINE SCRUBBER (w=942 -> Col 8) -->
+<section class="col-span-8 milled-panel rounded relative flex flex-col p-2.5 justify-between">
+<span class="hex-screw top-1.5 left-1.5"></span>
+<span class="hex-screw top-1.5 right-1.5"></span>
+<span class="hex-screw bottom-1.5 left-1.5"></span>
+<span class="hex-screw bottom-1.5 right-1.5"></span>
+<!-- Bar/Beat/Tick Digital Display & Transport Status -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded bg-[#031526] border border-[#2f3c4d] text-[#3a9be8] text-label-sm font-label-sm font-bold tracking-widest">
+              SCHWUNG AUDIO CORE v2.4
+            </span>
+<span class="text-label-sm font-label-sm text-[#6d7e92]">SMF PARSER ACTIVE</span>
+</div>
+<!-- 7-Segment Bar/Beat Readout -->
+<div class="recessed-display px-3 py-1 rounded flex items-center space-x-2">
+<span class="text-[9px] uppercase font-mono text-[#3a9be8]">POSITION:</span>
+<span class="font-readout-numeric text-readout-numeric text-[#66b8ff] drop-shadow-[0_0_8px_rgba(102,184,255,0.8)]" id="bbt-readout">
+              002.03.180
+            </span>
+<span class="text-[12px] font-mono text-[#2f3c4d]">/</span>
+<span class="font-mono text-xs text-[#6d7e92]">008.00.000</span>
+</div>
+</div>
+<!-- Touch Scrubber Progress Bar -->
+<div class="flex flex-col space-y-1">
+<div class="flex justify-between text-[10px] font-mono text-[#6d7e92]">
+<span>SCRUBBER: 1.1.0</span>
+<span id="time-elapsed">00:04.250</span>
+<span>END: 8.4.0</span>
+</div>
+<div class="recessed-display h-5 rounded relative cursor-pointer" id="scrubber-bar" onclick="seekPlayback(event)">
+<div class="h-full bg-gradient-to-r from-[#194b75] to-[#3a9be8] rounded-l transition-all duration-75 relative w-[28%]" id="scrubber-fill">
+<div class="absolute right-0 top-0 bottom-0 w-2 bg-[#66b8ff] shadow-[0_0_8px_#66b8ff]"></div>
+</div>
+<!-- Marker ticks -->
+<div class="absolute inset-0 flex justify-between px-2 items-center pointer-events-none opacity-30 text-[8px] font-mono">
+<span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>|</span>
+</div>
+</div>
+</div>
+<!-- Sliders & Macro Controls (Transpose & Velocity Scale) -->
+<div class="grid grid-cols-4 gap-3 items-center pt-1 border-t border-[#1e2938]">
+<!-- Transpose Control -->
+<div class="flex flex-col">
+<div class="flex justify-between items-center text-[10px] font-mono text-[#c3cfdd] mb-0.5">
+<span>TRANSPOSE</span>
+<span class="text-[#66b8ff] font-bold" id="trans-val">0 ST</span>
+</div>
+<div class="flex items-center space-x-1">
+<button class="w-6 h-6 rounded bg-[#061c2e] border border-[#2f3c4d] text-xs font-bold text-[#c3cfdd] hover:text-[#66b8ff]" onclick="adjustTranspose(-1)">-</button>
+<input class="w-full accent-[#3a9be8] bg-[#02101c] h-2 rounded cursor-pointer" id="transpose-slider" max="12" min="-12" oninput="updateTranspose(this.value)" type="range" value="0">
+<button class="w-6 h-6 rounded bg-[#061c2e] border border-[#2f3c4d] text-xs font-bold text-[#c3cfdd] hover:text-[#66b8ff]" onclick="adjustTranspose(1)">+</button>
+</div>
+</div>
+<!-- Velocity Scale Fader -->
+<div class="flex flex-col">
+<div class="flex justify-between items-center text-[10px] font-mono text-[#c3cfdd] mb-0.5">
+<span>VELOCITY SCALE</span>
+<span class="text-[#66b8ff] font-bold" id="vel-val">100%</span>
+</div>
+<input class="w-full accent-[#3a9be8] bg-[#02101c] h-2 rounded cursor-pointer" id="vel-slider" max="150" min="10" oninput="updateVelScale(this.value)" type="range" value="100">
+</div>
+<!-- Direct Transport Controls -->
+<div class="col-span-2 flex items-center justify-end space-x-2">
+<button class="h-8 px-3 rounded bg-[#081724] border border-[#2f3c4d] text-xs font-bold text-[#c3cfdd] hover:text-[#eef4fb] flex items-center gap-1 active:scale-95" onclick="stopPlayback()">
+<span class="material-symbols-outlined text-base" data-icon="stop">stop</span>
+              STOP
+            </button>
+<button class="h-8 px-3 rounded bg-[#081724] border border-[#2f3c4d] text-xs font-bold text-[#c3cfdd] hover:text-[#eef4fb] flex items-center gap-1 active:scale-95" onclick="rewindPlayback()">
+<span class="material-symbols-outlined text-base" data-icon="fast_rewind">fast_rewind</span>
+              REWIND
+            </button>
+<button class="h-8 px-4 rounded bg-[#133c5e] border border-[#3a9be8] text-xs font-bold text-[#66b8ff] hover:bg-[#1a4e7a] flex items-center gap-1.5 shadow-[0_0_12px_rgba(58,155,232,0.4)] active:scale-95" id="hero-play-btn" onclick="togglePlayState()">
+<span class="material-symbols-outlined text-base" data-icon="play_arrow" id="hero-play-icon">play_arrow</span>
+<span id="hero-play-text">START PLAY</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- SHARED COMPONENT: BottomNavBar (Q-Link Encoders - Exact Structural Mapping) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-space-md h-14 bg-surface-container-lowest border-t border-outline-variant select-none">
+<!-- Bank indicator / label -->
+<div class="flex items-center space-x-2 border-r border-[#2f3c4d] pr-4">
+<div class="flex flex-col">
+<span class="text-[9px] font-mono text-[#6d7e92] uppercase">ENCODER BANK</span>
+<span class="text-label-md font-label-md text-primary font-bold">MPC Q-LINK [1-4]</span>
+</div>
+<div class="w-2 h-2 rounded-full bg-[#66b8ff]"></div>
+</div>
+<!-- Q1: CUTOFF / FILE INDEX -->
+<div class="flex items-center space-x-3 px-space-md py-1 rounded bg-surface-container-high border border-primary">
+<div class="w-8 h-8 rounded-full knurled-dial flex items-center justify-center relative">
+<div class="w-1 h-3 bg-primary rounded-full absolute -top-0.5"></div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="dialpad">dialpad</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-[#6d7e92]">Q1: CUTOFF</span>
+<span class="text-label-md font-label-md text-primary font-bold">FILE_INDEX: #3</span>
+</div>
+</div>
+<!-- Q2: RESO / TRACK ROUTE -->
+<div class="flex items-center space-x-3 text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<div class="w-8 h-8 rounded-full knurled-dial flex items-center justify-center relative">
+<div class="w-1 h-3 bg-[#6d7e92] rounded-full absolute -top-0.5"></div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="adjust">adjust</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-[#6d7e92]">Q2: RESO</span>
+<span class="text-label-md font-label-md text-[#eef4fb] font-semibold">TRACK: T-1 [BASS]</span>
+</div>
+</div>
+<!-- Q3: DRIVE / TRANSPOSE -->
+<div class="flex items-center space-x-3 text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<div class="w-8 h-8 rounded-full knurled-dial flex items-center justify-center relative">
+<div class="w-1 h-3 bg-[#6d7e92] rounded-full absolute -top-0.5"></div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="tune">tune</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-[#6d7e92]">Q3: DRIVE</span>
+<span class="text-label-md font-label-md text-[#eef4fb] font-semibold" id="q3-val">TRANSPOSE: 0 ST</span>
+</div>
+</div>
+<!-- Q4: TEMPO / VELOCITY SCALE -->
+<div class="flex items-center space-x-3 text-on-surface-variant border border-outline-variant px-space-md py-1 rounded hover:bg-surface-container">
+<div class="w-8 h-8 rounded-full knurled-dial flex items-center justify-center relative">
+<div class="w-1 h-3 bg-[#6d7e92] rounded-full absolute -top-0.5"></div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="speed">speed</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-[#6d7e92]">Q4: TEMPO</span>
+<span class="text-label-md font-label-md text-[#eef4fb] font-semibold" id="q4-val">VEL_SCALE: 100%</span>
+</div>
+</div>
+</footer>
+</div>
+<!-- SCRIPT LOGIC: Real-Time MIDI Sequence Emulation, Web Audio Synth & Physical Transport -->
+<script>
+    // State management
+    const state = {
+      isPlaying: false,
+      bpm: 120.0,
+      currentBar: 2,
+      currentBeat: 3,
+      currentTick: 180,
+      totalTicks: 8 * 4 * 960, // 8 bars
+      speed: 1.0,
+      isLooping: true,
+      fileIndex: 2,
+      transpose: 0,
+      velocityScale: 1.0,
+      activeVoices: 4,
+      files: [
+        "01: TECHNO_DRUM_128BPM.MID",
+        "02: ACID_303_PATTERN_132BPM.MID",
+        "03: FUNK_BASS_90BPM.MID",
+        "04: SOUL_KEYS_BALLAD_78BPM.MID",
+        "05: CYBER_ARP_CHORD_124BPM.MID"
+      ]
+    };
+
+    // Web Audio Synthesizer Context
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Play synthesized bass/key blip
+    function triggerMidiTone(freq, duration = 0.15) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sawtooth";
+        
+        // Pitch with transpose
+        const semitoneShift = Math.pow(2, state.transpose / 12);
+        osc.frequency.setValueAtTime(freq * semitoneShift, ctx.currentTime);
+
+        const volume = 0.08 * state.velocityScale;
+        gain.gain.setValueAtTime(volume, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {
+        // audio context handling fallback
+      }
+    }
+
+    // Mock Sequence Note Matrix for Piano Roll
+    const notesData = [
+      { bar: 1.1, pitch: 36, dur: 0.8, color: '#3a9be8' },
+      { bar: 1.3, pitch: 48, dur: 0.4, color: '#66b8ff' },
+      { bar: 2.1, pitch: 38, dur: 0.6, color: '#3a9be8' },
+      { bar: 2.3, pitch: 41, dur: 0.9, color: '#66b8ff' },
+      { bar: 3.1, pitch: 36, dur: 1.2, color: '#3a9be8' },
+      { bar: 3.4, pitch: 50, dur: 0.3, color: '#ffdead' },
+      { bar: 4.2, pitch: 43, dur: 0.7, color: '#3a9be8' },
+      { bar: 5.1, pitch: 36, dur: 0.8, color: '#66b8ff' },
+      { bar: 6.2, pitch: 45, dur: 0.5, color: '#3a9be8' },
+      { bar: 7.1, pitch: 48, dur: 1.0, color: '#66b8ff' },
+      { bar: 7.4, pitch: 53, dur: 0.4, color: '#ffdead' }
+    ];
+
+    // Populate Visual Piano Roll
+    function initPianoRoll() {
+      const container = document.getElementById('piano-roll-notes');
+      container.innerHTML = '';
+      const totalWidth = 600; // approximation
+      
+      notesData.forEach(n => {
+        const noteEl = document.createElement('div');
+        const leftPercent = ((n.bar - 1) / 8) * 100;
+        const widthPercent = (n.dur / 8) * 100;
+        const topPercent = 100 - (((n.pitch - 30) / 30) * 100);
+
+        noteEl.className = 'absolute h-3 rounded-xs border border-white/20 shadow-sm';
+        noteEl.style.left = `${leftPercent}%`;
+        noteEl.style.width = `${Math.max(widthPercent, 2)}%`;
+        noteEl.style.top = `${Math.min(Math.max(topPercent, 5), 85)}%`;
+        noteEl.style.backgroundColor = n.color;
+        container.appendChild(noteEl);
+      });
+    }
+
+    // Toggle Play/Pause
+    function togglePlayState() {
+      state.isPlaying = !state.isPlaying;
+      getAudioContext();
+      
+      const transportIcon = document.getElementById('transport-icon');
+      const transportText = document.getElementById('transport-text');
+      const heroPlayIcon = document.getElementById('hero-play-icon');
+      const heroPlayText = document.getElementById('hero-play-text');
+      const canvasStatus = document.getElementById('canvas-status');
+
+      if (state.isPlaying) {
+        transportIcon.innerText = 'pause';
+        transportText.innerText = 'PAUSE [SPACE]';
+        heroPlayIcon.innerText = 'pause';
+        heroPlayText.innerText = 'PAUSE';
+        canvasStatus.innerText = 'STATUS: STREAMING [RUNNING]';
+        document.getElementById('transport-btn').classList.add('bg-[#204368]');
+        tickEngine();
+      } else {
+        transportIcon.innerText = 'play_arrow';
+        transportText.innerText = 'PLAY / PAUSE [SPACE]';
+        heroPlayIcon.innerText = 'play_arrow';
+        heroPlayText.innerText = 'START PLAY';
+        canvasStatus.innerText = 'STATUS: STANDBY';
+        document.getElementById('transport-btn').classList.remove('bg-[#204368]');
+      }
+    }
+
+    // Stop and return to start
+    function stopPlayback() {
+      state.isPlaying = false;
+      state.currentBar = 1;
+      state.currentBeat = 1;
+      state.currentTick = 0;
+      updateDisplays();
+      togglePlayState(); // updates icons to false
+      state.isPlaying = false; // ensure false
+      document.getElementById('transport-icon').innerText = 'play_arrow';
+      document.getElementById('transport-text').innerText = 'PLAY / PAUSE [SPACE]';
+      document.getElementById('hero-play-icon').innerText = 'play_arrow';
+      document.getElementById('hero-play-text').innerText = 'START PLAY';
+      document.getElementById('canvas-status').innerText = 'STATUS: STOPPED';
+    }
+
+    function rewindPlayback() {
+      state.currentBar = 1;
+      state.currentBeat = 1;
+      state.currentTick = 0;
+      updateDisplays();
+      triggerMidiTone(220, 0.08);
+    }
+
+    // Touch Scrubber click
+    function seekPlayback(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const progress = Math.max(0, Math.min(1, clickX / rect.width));
+      
+      const totalBarTicks = 8 * 4 * 960;
+      const targetTick = Math.floor(progress * totalBarTicks);
+      
+      state.currentBar = Math.floor(targetTick / (4 * 960)) + 1;
+      const rem = targetTick % (4 * 960);
+      state.currentBeat = Math.floor(rem / 960) + 1;
+      state.currentTick = rem % 960;
+      
+      updateDisplays();
+      triggerMidiTone(330, 0.08);
+    }
+
+    // Engine loop for 60FPS precision
+    let lastTime = performance.now();
+    function tickEngine() {
+      if (!state.isPlaying) return;
+
+      const now = performance.now();
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+
+      // Increment clock ticks based on BPM and Multiplier
+      const ticksPerSec = (state.bpm * state.speed / 60) * 960;
+      state.currentTick += Math.floor(ticksPerSec * delta);
+
+      if (state.currentTick >= 960) {
+        state.currentTick -= 960;
+        state.currentBeat++;
+        pulseLeds();
+
+        // Synth note trigger on each beat
+        const baseFreqs = [110, 146.83, 164.81, 220, 130.81];
+        const f = baseFreqs[(state.currentBeat + state.currentBar) % baseFreqs.length];
+        triggerMidiTone(f, 0.12);
+
+        if (state.currentBeat > 4) {
+          state.currentBeat = 1;
+          state.currentBar++;
+          if (state.currentBar > 8) {
+            if (state.isLooping) {
+              state.currentBar = 1;
+            } else {
+              stopPlayback();
+              return;
+            }
+          }
+        }
+      }
+
+      updateDisplays();
+      requestAnimationFrame(tickEngine);
+    }
+
+    function updateDisplays() {
+      // Format 7-Segment Bar/Beat/Tick
+      const bStr = String(state.currentBar).padStart(3, '0');
+      const beatStr = String(state.currentBeat).padStart(2, '0');
+      const tickStr = String(state.currentTick).padStart(3, '0');
+      document.getElementById('bbt-readout').innerText = `${bStr}.${beatStr}.${tickStr}`;
+
+      // Progress Scrubber calculation
+      const currentTotalTicks = ((state.currentBar - 1) * 4 * 960) + ((state.currentBeat - 1) * 960) + state.currentTick;
+      const totalRatio = currentTotalTicks / state.totalTicks;
+      const pct = (totalRatio * 100).toFixed(2);
+      
+      document.getElementById('scrubber-fill').style.width = `${pct}%`;
+      document.getElementById('scrubber-line').style.left = `${pct}%`;
+
+      // Seconds calculation
+      const seconds = (currentTotalTicks / ((state.bpm / 60) * 960)).toFixed(2);
+      document.getElementById('time-elapsed').innerText = `00:${String(Math.floor(seconds)).padStart(2, '0')}.${String(Math.floor((seconds % 1) * 1000)).padStart(3, '0')}`;
+    }
+
+    // Toggle Loop
+    function toggleLoop() {
+      state.isLooping = !state.isLooping;
+      const btn = document.getElementById('loop-btn');
+      const txt = document.getElementById('loop-text');
+      if (state.isLooping) {
+        btn.classList.add('bg-[#0d2238]', 'border-[#3a9be8]', 'shadow-[0_0_10px_rgba(58,155,232,0.4)]');
+        btn.classList.remove('bg-[#061c2e]', 'border-[#2f3c4d]');
+        txt.innerText = 'LOOP: ON';
+        txt.classList.add('text-[#66b8ff]');
+      } else {
+        btn.classList.remove('bg-[#0d2238]', 'border-[#3a9be8]', 'shadow-[0_0_10px_rgba(58,155,232,0.4)]');
+        btn.classList.add('bg-[#061c2e]', 'border-[#2f3c4d]');
+        txt.innerText = 'LOOP: OFF';
+        txt.classList.remove('text-[#66b8ff]');
+      }
+    }
+
+    // Tempo speed modifier
+    function setSpeed(val, el) {
+      state.speed = val;
+      document.querySelectorAll('.speed-btn').forEach(b => {
+        b.className = 'speed-btn py-1.5 rounded bg-[#061c2e] border border-[#2f3c4d] text-label-sm font-label-sm text-[#c3cfdd] hover:text-[#66b8ff]';
+      });
+      el.className = 'speed-btn py-1.5 rounded bg-[#102d4a] border border-[#3a9be8] text-label-sm font-label-sm font-bold text-[#66b8ff]';
+      triggerMidiTone(392, 0.05);
+    }
+
+    // Channel LED flash activity
+    function pulseLeds() {
+      const activeChannels = [1, 10, Math.floor(Math.random() * 8) + 2];
+      for (let i = 1; i <= 16; i++) {
+        const led = document.getElementById(`led-${i}`);
+        if (activeChannels.includes(i)) {
+          led.style.backgroundColor = '#66b8ff';
+          led.style.boxShadow = '0 0 8px #66b8ff';
+          setTimeout(() => {
+            if (i !== 1 && i !== 10) {
+              led.style.backgroundColor = '#10293d';
+              led.style.boxShadow = 'none';
+            }
+          }, 140);
+        }
+      }
+    }
+
+    // Transpose handlers
+    function updateTranspose(val) {
+      state.transpose = parseInt(val);
+      const str = (state.transpose > 0 ? `+${state.transpose}` : `${state.transpose}`) + " ST";
+      document.getElementById('trans-val').innerText = str;
+      document.getElementById('q3-val').innerText = `TRANSPOSE: ${str}`;
+    }
+
+    function adjustTranspose(delta) {
+      const slider = document.getElementById('transpose-slider');
+      let newVal = parseInt(slider.value) + delta;
+      if (newVal >= -12 && newVal <= 12) {
+        slider.value = newVal;
+        updateTranspose(newVal);
+        triggerMidiTone(261.63 * Math.pow(2, newVal / 12), 0.1);
+      }
+    }
+
+    // Velocity Scale handler
+    function updateVelScale(val) {
+      state.velocityScale = parseInt(val) / 100;
+      document.getElementById('vel-val').innerText = `${val}%`;
+      document.getElementById('q4-val').innerText = `VEL_SCALE: ${val}%`;
+    }
+
+    // File switcher
+    function nextFile() {
+      state.fileIndex = (state.fileIndex + 1) % state.files.length;
+      document.getElementById('file-name-display').innerText = state.files[state.fileIndex];
+      triggerMidiTone(440, 0.08);
+    }
+
+    function prevFile() {
+      state.fileIndex = (state.fileIndex - 1 + state.files.length) % state.files.length;
+      document.getElementById('file-name-display').innerText = state.files[state.fileIndex];
+      triggerMidiTone(370, 0.08);
+    }
+
+    function switchTrack(trackName) {
+      triggerMidiTone(523.25, 0.07);
+    }
+
+    // Keyboard Spacebar Transport shortcut
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        togglePlayState();
+      }
+    });
+
+    // Initialize visual modules on boot
+    window.addEventListener('DOMContentLoaded', () => {
+      initPianoRoll();
+      updateDisplays();
+    });
+  </script>
+</body></html>

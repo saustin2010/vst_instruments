@@ -1,0 +1,678 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eucalypso — 4-Lane Euclidean Sequencer (MPC Live II)</title>
+<style>
+  :root {
+    --bg: #0b0f0d;
+    --panel: #141a17;
+    --line: #34433b;
+    --ink: #eef7f1;
+    --ink-dim: #c3d3c9;
+    --ink-faint: #71857a;
+    --accent: #3fcf6e;
+    --accent-hi: #7cf29a;
+    --knob-face: #eef7f1;
+    --knob-ring: #26302b;
+    --knob-dot: #7cf29a;
+    --lcd: #070a08;
+    --seg-active: #7cf29a;
+    --seg-inactive: #1f2823;
+    --seg-active-tx: #0b0f0d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  body {
+    background: #040705;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .mpc-bezel {
+    width: 1320px;
+    background: #0f1412;
+    border: 3px solid #233029;
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+    padding: 16px;
+    position: relative;
+  }
+  .header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    padding: 0 14px;
+    background: #111714;
+    border: 1px solid #28372f;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .hw-tag {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .led-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent-hi);
+    box-shadow: 0 0 10px var(--accent-hi);
+  }
+  .title-brand {
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--accent-hi);
+    font-size: 15px;
+  }
+  .tabs-nav {
+    display: flex;
+    gap: 5px;
+  }
+  .tab-btn {
+    background: #1a221e;
+    color: var(--ink-dim);
+    border: 1px solid #34433b;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #0b0f0d;
+    border-color: var(--accent-hi);
+    box-shadow: 0 0 12px rgba(124, 242, 154, 0.4);
+  }
+  .play-btn {
+    background: linear-gradient(180deg, #3fcf6e 0%, #1e7a3d 100%);
+    color: #05140b;
+    border: 1px solid var(--accent-hi);
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .play-btn.playing {
+    background: #7cf29a;
+    box-shadow: 0 0 15px #7cf29a;
+  }
+
+  /* 1280 x 628 Screen */
+  .touch-screen {
+    width: 1280px;
+    height: 628px;
+    background: var(--bg);
+    position: relative;
+    border: 2px solid #233029;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .tab-content {
+    display: none;
+    width: 1280px;
+    height: 628px;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .tab-content.active { display: block; }
+
+  /* Frame Box */
+  .frame-box {
+    position: absolute;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 8px;
+  }
+  .frame-title {
+    position: absolute;
+    top: -9px;
+    left: 14px;
+    background: var(--panel);
+    padding: 0 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-hi);
+    text-transform: uppercase;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+  }
+
+  /* Controls */
+  .control-item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .control-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .knob-wrap {
+    position: relative;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .knob-body {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d5e5db 60%, #879f91 100%);
+    border: 2px solid var(--knob-ring);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.7);
+    position: relative;
+  }
+  .knob-dot {
+    position: absolute;
+    width: 5px;
+    height: 12px;
+    background: var(--accent-hi);
+    border-radius: 2px;
+    top: 4px;
+    left: calc(50% - 2.5px);
+    transform-origin: center 26px;
+    box-shadow: 0 0 6px var(--accent-hi);
+  }
+  .val-badge {
+    font-size: 9px;
+    color: var(--accent-hi);
+    background: var(--lcd);
+    border: 1px solid #233029;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+    min-width: 36px;
+    text-align: center;
+  }
+
+  /* Enum Vertical */
+  .enum-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background: var(--lcd);
+    padding: 3px;
+    border: 1px solid #233029;
+    border-radius: 4px;
+  }
+  .enum-opt {
+    font-size: 9px;
+    padding: 3px 8px;
+    font-weight: 700;
+    text-align: center;
+    background: var(--seg-inactive);
+    color: var(--ink-dim);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .enum-opt.active {
+    background: var(--seg-active);
+    color: var(--seg-active-tx);
+    box-shadow: 0 0 6px var(--accent-hi);
+  }
+
+  /* Toggle Switch */
+  .hw-toggle {
+    width: 64px;
+    height: 48px;
+    background: #18221c;
+    border: 1px solid #34433b;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--ink-dim);
+    gap: 4px;
+  }
+  .hw-toggle.on {
+    background: #1f3829;
+    border-color: var(--accent-hi);
+    color: #fff;
+  }
+  .hw-toggle .toggle-led {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #25332b;
+  }
+  .hw-toggle.on .toggle-led {
+    background: var(--accent-hi);
+    box-shadow: 0 0 8px var(--accent-hi);
+  }
+
+  /* Popup Dropdown Box */
+  .popup-box {
+    background: var(--lcd);
+    border: 1px solid #34433b;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-hi);
+  }
+  .popup-box::after { content: "▼"; font-size: 8px; color: var(--accent); }
+
+  /* Euclidean Wheel Ring Canvas */
+  .euclid-viz {
+    width: 580px;
+    height: 250px;
+    position: absolute;
+    left: 20px;
+    top: 24px;
+    background: var(--lcd);
+    border: 1px solid #233029;
+    border-radius: 6px;
+  }
+
+  /* Qlink Bar */
+  .qlink-bar {
+    margin-top: 10px;
+    background: #0f1412;
+    border: 1px solid #233029;
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+  }
+  .qlink-title {
+    color: var(--accent-hi);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .qlink-chips { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+  .qlink-chip {
+    background: #18221c;
+    border: 1px solid #28372f;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--ink-dim);
+    font-family: monospace;
+    font-size: 9px;
+  }
+  .qlink-chip span { color: var(--accent-hi); font-weight: bold; margin-right: 3px; }
+</style>
+</head>
+<body>
+
+<div class="mpc-bezel">
+  <div class="header-bar">
+    <div class="hw-tag">
+      <div class="led-dot"></div>
+      <span>Akai MPC Live II // Schwung MIDI FX</span>
+      <span style="color:#34433b;">|</span>
+      <span class="title-brand">EUCALYPSO // 4-LANE EUCLIDEAN SEQUENCER</span>
+    </div>
+
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="selectTab(0)">1: MAIN</button>
+      <button class="tab-btn" onclick="selectTab(1)">2: LANE 1</button>
+      <button class="tab-btn" onclick="selectTab(2)">3: LANE 2</button>
+      <button class="tab-btn" onclick="selectTab(3)">4: LANE 3</button>
+      <button class="tab-btn" onclick="selectTab(4)">5: LANE 4</button>
+      <button class="tab-btn" onclick="selectTab(5)">6: NOTES</button>
+    </div>
+
+    <button class="play-btn" id="playBtn">START MIDI ENGINE [SPACE]</button>
+  </div>
+
+  <div class="touch-screen" id="touchScreen">
+    
+    <!-- PAGE 0: MAIN -->
+    <div class="tab-content active" id="tab0">
+      <!-- CLOCK -->
+      <div class="frame-box" style="left:10px; top:12px; width:626px; height:290px;">
+        <span class="frame-title">CLOCK &amp; TRANSPORT</span>
+        <div class="control-item" style="left:88px; top:140px;">
+          <div class="control-label">SYNC</div>
+          <div class="enum-group">
+            <div class="enum-opt active" onclick="setEnum(this)">INTERNAL</div>
+            <div class="enum-opt" onclick="setEnum(this)">CLOCK</div>
+          </div>
+        </div>
+        <div class="control-item" style="left:244px; top:140px;">
+          <div class="control-label">RATE</div>
+          <div class="popup-box" style="width:130px; height:46px;">1/16 NOTE</div>
+        </div>
+        <div class="control-item" style="left:401px; top:135px;">
+          <div class="control-label">BPM</div>
+          <div class="knob-wrap" data-key="bpm" data-val="124">
+            <div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform: rotate(20deg);"></div></div>
+          </div>
+          <div class="val-badge">124.0</div>
+        </div>
+        <div class="control-item" style="left:557px; top:135px;">
+          <div class="control-label">SWING</div>
+          <div class="knob-wrap" data-key="swing" data-val="54">
+            <div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform: rotate(10deg);"></div></div>
+          </div>
+          <div class="val-badge">54 %</div>
+        </div>
+      </div>
+
+      <!-- MIDI OUT & 4-LANE CIRCULAR DISPLAY -->
+      <div class="frame-box" style="left:644px; top:12px; width:626px; height:290px;">
+        <span class="frame-title">4-LANE EUCLIDEAN WHEEL MATRIX</span>
+        <canvas class="euclid-viz" id="euclidWheelCanvas" width="580" height="240"></canvas>
+      </div>
+
+      <!-- PLAY -->
+      <div class="frame-box" style="left:10px; top:312px; width:626px; height:290px;">
+        <span class="frame-title">PLAY MODE</span>
+        <div class="control-item" style="left:88px; top:145px;">
+          <div class="control-label">PLAY MODE</div>
+          <div class="enum-group">
+            <div class="enum-opt active" onclick="setEnum(this)">HOLD</div>
+            <div class="enum-opt" onclick="setEnum(this)">LATCH</div>
+          </div>
+        </div>
+        <div class="control-item" style="left:244px; top:145px;">
+          <div class="control-label">RETRIGGER</div>
+          <div class="enum-group">
+            <div class="enum-opt active" onclick="setEnum(this)">RESTART</div>
+            <div class="enum-opt" onclick="setEnum(this)">CONT</div>
+          </div>
+        </div>
+        <div class="control-item" style="left:401px; top:140px;">
+          <div class="control-label">VOICES</div>
+          <div class="knob-wrap" data-key="max_voices" data-val="8">
+            <div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform: rotate(40deg);"></div></div>
+          </div>
+          <div class="val-badge">8</div>
+        </div>
+        <div class="control-item" style="left:557px; top:140px;">
+          <div class="control-label">RAND CYCLE</div>
+          <div class="knob-wrap" data-key="rand_cycle" data-val="0">
+            <div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform: rotate(-120deg);"></div></div>
+          </div>
+          <div class="val-badge">OFF</div>
+        </div>
+      </div>
+
+      <!-- FEEL -->
+      <div class="frame-box" style="left:644px; top:312px; width:626px; height:290px;">
+        <span class="frame-title">GLOBAL VELOCITY &amp; GATE FEEL</span>
+        <div class="control-item" style="left:76px; top:140px;">
+          <div class="control-label">VELOCITY</div>
+          <div class="knob-wrap" data-key="global_velocity" data-val="100">
+            <div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform: rotate(60deg);"></div></div>
+          </div>
+          <div class="val-badge">100</div>
+        </div>
+        <div class="control-item" style="left:232px; top:140px;">
+          <div class="control-label">VEL RANDOM</div>
+          <div class="knob-wrap" data-key="global_v_rnd" data-val="15">
+            <div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform: rotate(-80deg);"></div></div>
+          </div>
+          <div class="val-badge">±15</div>
+        </div>
+        <div class="control-item" style="left:390px; top:140px;">
+          <div class="control-label">GATE</div>
+          <div class="knob-wrap" data-key="global_gate" data-val="75">
+            <div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform: rotate(20deg);"></div></div>
+          </div>
+          <div class="val-badge">75 %</div>
+        </div>
+        <div class="control-item" style="left:530px; top:140px;">
+          <div class="control-label">GATE RANDOM</div>
+          <div class="knob-wrap" data-key="global_g_rnd" data-val="10">
+            <div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform: rotate(-90deg);"></div></div>
+          </div>
+          <div class="val-badge">±10%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 1: LANE 1 -->
+    <div class="tab-content" id="tab1">
+      <div class="frame-box" style="left:10px; top:12px; width:1258px; height:290px;">
+        <span class="frame-title">LANE 1 RHYTHM (KICK / LOW BASS)</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="hw-toggle on" onclick="this.classList.toggle('on')"><div class="toggle-led"></div><span>L1 ON</span></div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">STEPS</div>
+            <div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(40deg)"></div></div></div>
+            <div class="val-badge">16</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">PULSES</div>
+            <div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-40deg)"></div></div></div>
+            <div class="val-badge">4</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">ROTATE</div>
+            <div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(0deg)"></div></div></div>
+            <div class="val-badge">0</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DROP</div>
+            <div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-120deg)"></div></div></div>
+            <div class="val-badge">0 %</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">DROP SEED</div>
+            <div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(30deg)"></div></div></div>
+            <div class="val-badge">#42</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">VELOCITY</div>
+            <div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(80deg)"></div></div></div>
+            <div class="val-badge">115</div>
+          </div>
+          <div class="control-item" style="position:static; transform:none;">
+            <div class="control-label">GATE</div>
+            <div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(20deg)"></div></div></div>
+            <div class="val-badge">80 %</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame-box" style="left:10px; top:312px; width:1258px; height:290px;">
+        <span class="frame-title">LANE 1 NOTES &amp; TRANSPOSITION</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">NOTE</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(0deg)"></div></div></div><div class="val-badge">C1 (36)</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">NOTE RND</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-120deg)"></div></div></div><div class="val-badge">0 %</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">NOTE SEED</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(10deg)"></div></div></div><div class="val-badge">#1</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">OCTAVE</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-40deg)"></div></div></div><div class="val-badge">-1</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">OCT RND</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-120deg)"></div></div></div><div class="val-badge">0 %</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">OCT SEED</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(0deg)"></div></div></div><div class="val-badge">#0</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">OCT RANGE</div><div class="popup-box" style="width:120px; height:46px;">±1 OCT</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 5: NOTES -->
+    <div class="tab-content" id="tab5">
+      <div class="frame-box" style="left:10px; top:12px; width:1258px; height:290px;">
+        <span class="frame-title">NOTE REGISTER &amp; SCALE QUANTIZATION</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">REGISTER</div><div class="enum-group"><div class="enum-opt active">HELD</div><div class="enum-opt">SCALE</div><div class="enum-opt">DRUMPAD</div></div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">NOTE ORDER</div><div class="enum-group"><div class="enum-opt active">UP</div><div class="enum-opt">DOWN</div><div class="enum-opt">PLAYED</div><div class="enum-opt">RAND</div></div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">MISSING NOTE</div><div class="enum-group"><div class="enum-opt active">SKIP</div><div class="enum-opt">FOLD</div><div class="enum-opt">WRAP</div><div class="enum-opt">RANDOM</div></div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">SCALE</div><div class="popup-box" style="width:200px; height:46px;">DORIAN (NATURAL)</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">ROOT</div><div class="popup-box" style="width:100px; height:46px;">D</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">SCALE RANGE</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(30deg)"></div></div></div><div class="val-badge">2 OCT</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">OCTAVE</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(0deg)"></div></div></div><div class="val-badge">0 OCT</div></div>
+        </div>
+      </div>
+
+      <div class="frame-box" style="left:10px; top:312px; width:626px; height:290px;">
+        <span class="frame-title">DETERMINISTIC SEEDS</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; height:100%; padding-top:20px;">
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">ORDER SEED</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(40deg)"></div></div></div><div class="val-badge">#108</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">MISSING SEED</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(-30deg)"></div></div></div><div class="val-badge">#44</div></div>
+          <div class="control-item" style="position:static; transform:none;"><div class="control-label">RANDOM SEED</div><div class="knob-wrap"><div class="knob-body" style="width:76px; height:76px;"><div class="knob-dot" style="transform:rotate(70deg)"></div></div></div><div class="val-badge">#891</div></div>
+        </div>
+      </div>
+
+      <!-- Vector Artwork Brand Emblem -->
+      <div class="frame-box" style="left:644px; top:312px; width:626px; height:290px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;">
+        <div style="font-size:26px; font-weight:900; letter-spacing:0.18em; color:var(--accent-hi);">SCHWUNG MIDI</div>
+        <div style="font-size:12px; color:var(--ink-faint); letter-spacing:0.15em;">EUCLIDEAN ALGORITHM MATRIX // 4-PORT ROUTER</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QLINK BAR -->
+  <div class="qlink-bar">
+    <div class="qlink-title">Q-LINKS [<span id="qlinkTitle">MAIN</span>]:</div>
+    <div class="qlink-chips" id="qlinkChips">
+      <div class="qlink-chip"><span>Q1</span>SYNC</div>
+      <div class="qlink-chip"><span>Q2</span>RATE</div>
+      <div class="qlink-chip"><span>Q3</span>BPM</div>
+      <div class="qlink-chip"><span>Q4</span>SWING</div>
+      <div class="qlink-chip"><span>Q5</span>PLAY MODE</div>
+      <div class="qlink-chip"><span>Q6</span>RETRIGGER</div>
+      <div class="qlink-chip"><span>Q7</span>VOICES</div>
+      <div class="qlink-chip"><span>Q8</span>RAND CYCLE</div>
+      <div class="qlink-chip"><span>Q9</span>VELOCITY</div>
+      <div class="qlink-chip"><span>Q10</span>VEL RANDOM</div>
+      <div class="qlink-chip"><span>Q11</span>GATE</div>
+      <div class="qlink-chip"><span>Q12</span>GATE RANDOM</div>
+    </div>
+    <div style="color:var(--ink-faint); font-family:monospace; font-size:9px;">MIDI ENGINE // 0% CPU</div>
+  </div>
+</div>
+
+<script>
+  let activeTabIdx = 0;
+  function selectTab(idx) {
+    activeTabIdx = idx;
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => btn.classList.toggle('active', i === idx));
+    document.querySelectorAll('.tab-content').forEach((p, i) => {
+      if (p.id === `tab${idx}`) p.classList.add('active');
+      else p.classList.remove('active');
+    });
+  }
+  function setEnum(el) {
+    el.parentElement.querySelectorAll('.enum-opt').forEach(opt => opt.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // 4-Lane Circular Euclidean Visualizer
+  const canvas = document.getElementById('euclidWheelCanvas');
+  const ctx = canvas.getContext('2d');
+  let isPlaying = false;
+  let currentStep = 0;
+
+  const lanes = [
+    { steps: 16, pulses: 4, rot: 0, r: 100, color: '#7cf29a' },
+    { steps: 16, pulses: 7, rot: 2, r: 76, color: '#3fcf6e' },
+    { steps: 12, pulses: 5, rot: 1, r: 52, color: '#27a352' },
+    { steps: 8, pulses: 3, rot: 0, r: 28, color: '#85ffc7' }
+  ];
+
+  function getEuclideanPattern(steps, pulses, rot) {
+    let pattern = new Array(steps).fill(false);
+    let bucket = 0;
+    for (let i = 0; i < steps; i++) {
+      bucket += pulses;
+      if (bucket >= steps) {
+        bucket -= steps;
+        pattern[(i + rot) % steps] = true;
+      }
+    }
+    return pattern;
+  }
+
+  function renderWheel() {
+    ctx.fillStyle = '#070a08';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+
+    lanes.forEach((lane, lIdx) => {
+      const pattern = getEuclideanPattern(lane.steps, lane.pulses, lane.rot);
+      // Draw track circle
+      ctx.strokeStyle = '#18241d';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, lane.r, 0, Math.PI * 2);
+      ctx.stroke();
+
+      for (let s = 0; s < lane.steps; s++) {
+        const angle = (s / lane.steps) * Math.PI * 2 - Math.PI / 2;
+        const x = cx + Math.cos(angle) * lane.r;
+        const y = cy + Math.sin(angle) * lane.r;
+
+        const isHit = pattern[s];
+        const isActiveStep = isPlaying && (currentStep % lane.steps === s);
+
+        ctx.beginPath();
+        if (isActiveStep) {
+          ctx.arc(x, y, 6, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = lane.color;
+          ctx.shadowBlur = 10;
+        } else if (isHit) {
+          ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+          ctx.fillStyle = lane.color;
+          ctx.shadowBlur = 0;
+        } else {
+          ctx.arc(x, y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = '#2b3a31';
+          ctx.shadowBlur = 0;
+        }
+        ctx.fill();
+      }
+    });
+
+    if (isPlaying) {
+      currentStep++;
+      setTimeout(() => requestAnimationFrame(renderWheel), 120);
+    } else {
+      requestAnimationFrame(renderWheel);
+    }
+  }
+  requestAnimationFrame(renderWheel);
+
+  document.getElementById('playBtn').addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    document.getElementById('playBtn').classList.toggle('playing', isPlaying);
+    document.getElementById('playBtn').innerText = isPlaying ? "STOP MIDI ENGINE [SPACE]" : "START MIDI ENGINE [SPACE]";
+    if (isPlaying) renderWheel();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      document.getElementById('playBtn').click();
+    }
+  });
+</script>
+
+
+
+</body></html>

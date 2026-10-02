@@ -1,0 +1,17 @@
+# build output (tools/build.sh, dev-tools)
+*/*/build/
+*/*/*/build/
+*/*/logs/
+*/*/*/logs/
+*/*/preview/
+*/*/*/preview/
+# the framework checkout (framework/setup.sh)
+framework/mpc-vst-plugins/
+.DS_Store
+__pycache__/
+*.pyc
+dev-tools/fake-mpc/state/
+# the plugins' libraries: fetched by tools/fetch-presets.py, never committed (presets/README.md)
+presets/*
+!presets/README.md
+.fetch-*/

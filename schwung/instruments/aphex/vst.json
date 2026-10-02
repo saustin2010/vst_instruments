@@ -1,0 +1,22 @@
+{
+  "name": "Aphex",
+  "vendor": "Filliformes",
+  "uid": "Aphx",
+  "so": "aphex.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/aphex.c"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-ffast-math"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

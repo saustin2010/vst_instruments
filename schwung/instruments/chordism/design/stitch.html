@@ -1,0 +1,966 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chordism — 4-Voice Morphing Synthesizer (MPC Live II)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            mpc: {
+              bg: '#100a14',
+              panel: '#1b1222',
+              card: '#160e1c',
+              line: '#4a3358',
+              lineLight: '#6d4882',
+              ink: '#fbeefa',
+              inkDim: '#e2cbe4',
+              inkFaint: '#8e7296',
+              accent: '#e2588f',
+              accentHi: '#ff7aac',
+              accentGlow: 'rgba(255, 122, 172, 0.35)',
+              knobFace: '#fbeefa',
+              knobRing: '#36243f',
+              lcd: '#0a060c',
+              segActive: '#ff7aac',
+              segInactive: '#2b1d33',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #100a14;
+      --panel: #1b1222;
+      --line: #4a3358;
+      --accent: #e2588f;
+      --accent-hi: #ff7aac;
+      --knob-face: #fbeefa;
+    }
+    body {
+      background-color: #08050a;
+      color: #fbeefa;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    /* Rotary Knob Styles */
+    .knob-container {
+      position: relative;
+      touch-action: none;
+      cursor: ns-resize;
+    }
+    .knob-body {
+      background: radial-gradient(circle at 35% 30%, #ffffff 0%, #fbeefa 35%, #d1bed6 80%, #9983a0 100%);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 2px 3px rgba(255, 255, 255, 0.9), inset 0 -3px 5px rgba(54, 36, 63, 0.7);
+      border: 1.5px solid #2d1936;
+      transition: transform 0.05s ease-out;
+    }
+    .knob-pointer {
+      position: absolute;
+      top: 5px;
+      left: calc(50% - 1.5px);
+      width: 3px;
+      height: 38%;
+      background: #ff7aac;
+      border-radius: 2px;
+      box-shadow: 0 0 6px #ff7aac;
+      pointer-events: none;
+    }
+    .knob-container:hover .knob-body {
+      filter: brightness(1.06);
+    }
+    .knob-container.active .knob-body {
+      box-shadow: 0 0 12px rgba(255, 122, 172, 0.5), inset 0 2px 3px #fff;
+    }
+    /* Scrollbars for Page Selector */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Oscilloscope Grid */
+    .scope-grid {
+      background-size: 20px 20px;
+      background-image: 
+        linear-gradient(to right, rgba(74, 51, 88, 0.3) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(74, 51, 88, 0.3) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-6 bg-[#07040a] font-sans">
+
+  <!-- MPC LIVE II STANDALONE CHASSIS (1280x628 Touchscreen Buffer Frame) -->
+  <div class="relative w-full max-w-[1360px] bg-[#120a17] border-2 border-[#3b2347] rounded-2xl shadow-[0_25px_70px_rgba(0,0,0,0.85)] p-4 sm:p-6 flex flex-col">
+    
+    <!-- HARDWARE BEZEL HEADER -->
+    <header class="h-14 border-b border-mpc-line flex items-center justify-between px-3 mb-3 bg-[#170e1e] rounded-t-xl">
+      <!-- Title & Engine Specs -->
+      <div class="flex items-center space-x-3">
+        <div class="w-3 h-3 rounded-full bg-mpc-accentHi shadow-[0_0_8px_#ff7aac] animate-pulse"></div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="text-xs uppercase tracking-widest text-mpc-inkFaint font-mono">AKAI MPC LIVE II // SYNTH ENGINE</span>
+            <span class="px-2 py-0.5 text-[11px] font-mono font-bold bg-[#2e1939] text-mpc-accentHi rounded border border-mpc-line">4-VOICE POLY</span>
+          </div>
+          <h1 class="text-lg font-bold tracking-tight text-mpc-ink flex items-center gap-2">
+            CHORDISM <span class="text-mpc-accentHi font-mono text-sm font-normal">// MORPHING CYBER CHORD SYNTH</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Live MPC Header Status Indicators -->
+      <div class="flex items-center space-x-4">
+        <div class="hidden md:flex items-center space-x-3 text-xs font-mono text-mpc-inkDim border-r border-mpc-line pr-4">
+          <div>DSP: <span class="text-mpc-accentHi font-bold" id="dspUsage">9%</span></div>
+          <div>RATE: <span class="text-mpc-ink">48.0 kHz</span></div>
+          <div>BUFFER: <span class="text-mpc-ink">1280×628</span></div>
+        </div>
+
+        <!-- Master Spacebar Audition Button -->
+        <button id="auditionBtn" class="flex items-center space-x-2 bg-gradient-to-r from-[#ba3e71] to-[#e2588f] hover:from-[#d14b82] hover:to-[#ff7aac] active:scale-95 text-white font-mono font-bold text-xs uppercase px-4 py-2.5 rounded-lg border border-[#ff9bc4]/40 shadow-[0_0_15px_rgba(226,88,143,0.4)] transition-all">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <span>Audition Chord [Space]</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 10-PAGE HARDWARE TAB SELECTOR (as specified in chordism.txt) -->
+    <div class="flex items-center space-x-1 mb-3 overflow-x-auto no-scrollbar py-1 border-b border-mpc-line/60">
+      <button onclick="setTab(0)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all bg-mpc-accentHi text-mpc-bg shadow-[0_0_12px_rgba(255,122,172,0.6)]">1: MAIN</button>
+      <button onclick="setTab(1)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">2: OSCILLATORS</button>
+      <button onclick="setTab(2)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">3: SHAPE</button>
+      <button onclick="setTab(3)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">4: FILTER ENV</button>
+      <button onclick="setTab(4)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">5: VIBRATO</button>
+      <button onclick="setTab(5)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">6: TREMOLO</button>
+      <button onclick="setTab(6)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">7: DELAY</button>
+      <button onclick="setTab(7)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">8: REVERB</button>
+      <button onclick="setTab(8)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">9: CHORD MAP</button>
+      <button onclick="setTab(9)" class="tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line">10: ARPEGGIATOR</button>
+    </div>
+
+    <!-- MAIN TOUCH VIEWPORT (1280x628 Layout Ratio) -->
+    <main class="relative w-full h-[628px] bg-mpc-bg rounded-xl border border-mpc-line overflow-hidden p-3.5 flex flex-col justify-between">
+      
+      <!-- TAB 1: MAIN (Default Screen matching chordism.txt & page_0.png) -->
+      <section id="tab-page-0" class="tab-page w-full h-full grid grid-cols-2 grid-rows-2 gap-3.5">
+        
+        <!-- CARD 1: CHORD ENGINE (Top-Left: 626x304) -->
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between relative shadow-inner">
+          <div class="flex items-center justify-between border-b border-mpc-line pb-1.5">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-mpc-accentHi">CHORD ENGINE &amp; HARMONY</span>
+            <span class="text-[10px] font-mono text-mpc-inkFaint">TAB 1 // QUAD HARMONIZER</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-2 pt-2 items-center">
+            <!-- CHORD SELECTOR -->
+            <div class="flex flex-col space-y-1">
+              <label class="text-[11px] font-mono text-mpc-inkDim uppercase">CHORD</label>
+              <select id="chord_type" onchange="updateChordParams()" class="bg-[#120817] border border-mpc-line rounded text-xs font-mono text-mpc-accentHi p-2 focus:outline-none focus:border-mpc-accentHi">
+                <option value="min7" selected="">MINOR 7TH</option>
+                <option value="maj7">MAJOR 7TH</option>
+                <option value="dom7">DOMINANT 7TH</option>
+                <option value="sus4">SUSPENDED 4</option>
+                <option value="dim7">DIMINISHED 7</option>
+                <option value="min9">MINOR 9TH</option>
+                <option value="maj9">MAJOR 9TH</option>
+                <option value="eleventh">11TH NEON</option>
+              </select>
+            </div>
+
+            <!-- TUNING MODE (enum_v) -->
+            <div class="flex flex-col space-y-1">
+              <label class="text-[11px] font-mono text-mpc-inkDim uppercase">TUNING</label>
+              <div class="flex flex-col gap-1 bg-mpc-lcd p-1 rounded border border-mpc-line">
+                <button class="tune-btn py-0.5 text-[10px] font-mono font-bold rounded bg-mpc-accentHi text-mpc-bg">CHORD</button>
+                <button class="tune-btn py-0.5 text-[10px] font-mono font-bold rounded text-mpc-inkFaint hover:text-mpc-ink">INTERVAL</button>
+                <button class="tune-btn py-0.5 text-[10px] font-mono font-bold rounded text-mpc-inkFaint hover:text-mpc-ink">MULTI</button>
+              </div>
+            </div>
+
+            <!-- SCALE INDEX -->
+            <div class="flex flex-col space-y-1">
+              <label class="text-[11px] font-mono text-mpc-inkDim uppercase">SCALE</label>
+              <select id="scale_index" class="bg-[#120817] border border-mpc-line rounded text-xs font-mono text-mpc-accentHi p-2 focus:outline-none focus:border-mpc-accentHi">
+                <option value="dorian" selected="">DORIAN</option>
+                <option value="aeolian">NAT MINOR</option>
+                <option value="major">IONIAN / MAJ</option>
+                <option value="phrygian">PHRYGIAN</option>
+                <option value="pentatonic">PENTATONIC</option>
+              </select>
+            </div>
+
+            <!-- ROOT NOTE -->
+            <div class="flex flex-col space-y-1">
+              <label class="text-[11px] font-mono text-mpc-inkDim uppercase">ROOT</label>
+              <select id="scale_root" class="bg-[#120817] border border-mpc-line rounded text-xs font-mono text-mpc-accentHi p-2 focus:outline-none focus:border-mpc-accentHi">
+                <option value="C">C</option>
+                <option value="D" selected="">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Real-Time Interactive Chord Voicing & Strum Trace -->
+          <div class="relative h-20 w-full bg-mpc-lcd rounded border border-mpc-line/70 overflow-hidden flex items-center justify-center p-2 scope-grid">
+            <canvas id="chordCanvas" class="w-full h-full"></canvas>
+            <div class="absolute bottom-1 left-2 text-[10px] font-mono text-mpc-inkFaint flex gap-3">
+              <span>V1: <span id="v1Note" class="text-mpc-accentHi">D3 (146Hz)</span></span>
+              <span>V2: <span id="v2Note" class="text-mpc-accentHi">F3 (174Hz)</span></span>
+              <span>V3: <span id="v3Note" class="text-mpc-accentHi">A3 (220Hz)</span></span>
+              <span>V4: <span id="v4Note" class="text-mpc-accentHi">C4 (261Hz)</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: VOICES (Top-Right: 626x304) -->
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between shadow-inner">
+          <div class="flex items-center justify-between border-b border-mpc-line pb-1.5">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-mpc-accentHi">VOICES &amp; STEREO SPREAD</span>
+            <span class="text-[10px] font-mono text-mpc-inkFaint">Q-LINKS 5–8</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-3 py-2 place-items-center">
+            <!-- DETUNE -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-16 h-16 flex items-center justify-center" data-param="detune" data-val="18" data-min="0" data-max="50" data-unit=" ct">
+                <div class="knob-body w-14 h-14 rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-mpc-inkDim mt-1 uppercase">DETUNE</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val">18 ct</span>
+            </div>
+
+            <!-- WIDTH -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-16 h-16 flex items-center justify-center" data-param="width" data-val="75" data-min="0" data-max="100" data-unit="%">
+                <div class="knob-body w-14 h-14 rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-mpc-inkDim mt-1 uppercase">WIDTH</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val">75%</span>
+            </div>
+
+            <!-- SPREAD -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-16 h-16 flex items-center justify-center" data-param="chord_spread" data-val="60" data-min="0" data-max="100" data-unit="%">
+                <div class="knob-body w-14 h-14 rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-mpc-inkDim mt-1 uppercase">SPREAD</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val">60%</span>
+            </div>
+
+            <!-- ROTATION -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-16 h-16 flex items-center justify-center" data-param="chord_rotation" data-val="2" data-min="0" data-max="3" data-unit=" INV">
+                <div class="knob-body w-14 h-14 rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-mpc-inkDim mt-1 uppercase">ROTATION</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val">2 INV</span>
+            </div>
+          </div>
+
+          <!-- Dynamic Voice Spread Panner Readout -->
+          <div class="h-8 bg-mpc-lcd rounded border border-mpc-line flex items-center px-4 justify-between">
+            <span class="text-[10px] font-mono text-mpc-inkFaint">STEREO PAN:</span>
+            <div class="flex space-x-6 text-[11px] font-mono">
+              <span class="text-mpc-inkDim">V1: <span class="text-mpc-accentHi">L55</span></span>
+              <span class="text-mpc-inkDim">V2: <span class="text-mpc-accentHi">L20</span></span>
+              <span class="text-mpc-inkDim">V3: <span class="text-mpc-accentHi">R20</span></span>
+              <span class="text-mpc-inkDim">V4: <span class="text-mpc-accentHi">R55</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3: FILTER (Bottom-Left: 626x304) -->
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between shadow-inner">
+          <div class="flex items-center justify-between border-b border-mpc-line pb-1.5">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-mpc-accentHi">VARIABLE 24DB FILTER</span>
+            <span class="text-[10px] font-mono text-mpc-inkFaint">Q-LINKS 9–12</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-3 py-2 items-center">
+            <!-- CUTOFF (r=46 large knob) -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-20 h-20 flex items-center justify-center" data-param="cutoff" data-val="2600" data-min="20" data-max="20000" data-unit=" Hz">
+                <div class="knob-body w-[68px] h-[68px] rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-bold text-mpc-ink mt-1 uppercase">CUTOFF</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val font-bold">2600 Hz</span>
+            </div>
+
+            <!-- RESONANCE -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-16 h-16 flex items-center justify-center" data-param="resonance" data-val="45" data-min="0" data-max="100" data-unit="%">
+                <div class="knob-body w-14 h-14 rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-mpc-inkDim mt-1 uppercase">RESONANCE</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val">45%</span>
+            </div>
+
+            <!-- FILTER MODE (LP / HP / BP) -->
+            <div class="flex flex-col space-y-1">
+              <label class="text-[10px] font-mono text-mpc-inkDim uppercase text-center">FILTER MODE</label>
+              <div class="flex flex-col gap-1 bg-mpc-lcd p-1 rounded border border-mpc-line">
+                <button onclick="setFilterMode('LP')" class="filter-mode-btn py-1 text-[10px] font-mono font-bold rounded bg-mpc-accentHi text-mpc-bg">LP</button>
+                <button onclick="setFilterMode('HP')" class="filter-mode-btn py-1 text-[10px] font-mono font-bold rounded text-mpc-inkFaint hover:text-mpc-ink">HP</button>
+                <button onclick="setFilterMode('BP')" class="filter-mode-btn py-1 text-[10px] font-mono font-bold rounded text-mpc-inkFaint hover:text-mpc-ink">BP</button>
+              </div>
+            </div>
+
+            <!-- FILTER SLOPE (12 DB / 24 DB) -->
+            <div class="flex flex-col space-y-1">
+              <label class="text-[10px] font-mono text-mpc-inkDim uppercase text-center">SLOPE</label>
+              <div class="flex flex-col gap-1 bg-mpc-lcd p-1 rounded border border-mpc-line">
+                <button class="slope-btn py-1.5 text-[10px] font-mono font-bold rounded text-mpc-inkFaint hover:text-mpc-ink">12 DB</button>
+                <button class="slope-btn py-1.5 text-[10px] font-mono font-bold rounded bg-mpc-accentHi text-mpc-bg">24 DB</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cutoff Response Visual Bar -->
+          <div class="w-full bg-[#120817] h-5 rounded border border-mpc-line/60 relative overflow-hidden flex items-center px-2">
+            <div id="filterSpectrumBar" class="h-2 rounded bg-gradient-to-r from-mpc-accent to-mpc-accentHi transition-all" style="width: 58%;"></div>
+            <span class="absolute right-2 text-[9px] font-mono text-mpc-inkFaint">LADDER CASCADE</span>
+          </div>
+        </div>
+
+        <!-- CARD 4: AMP (Bottom-Right: 626x304) -->
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between shadow-inner">
+          <div class="flex items-center justify-between border-b border-mpc-line pb-1.5">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-mpc-accentHi">VCA AMPLIFIER &amp; ENVELOPE</span>
+            <span class="text-[10px] font-mono text-mpc-inkFaint">Q-LINKS 13–16</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-3 py-2 items-center">
+            <!-- ATTACK -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-16 h-16 flex items-center justify-center" data-param="attack" data-val="12" data-min="1" data-max="3000" data-unit=" ms">
+                <div class="knob-body w-14 h-14 rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-mpc-inkDim mt-1 uppercase">ATTACK</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val">12 ms</span>
+            </div>
+
+            <!-- RELEASE -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-16 h-16 flex items-center justify-center" data-param="release" data-val="650" data-min="10" data-max="5000" data-unit=" ms">
+                <div class="knob-body w-14 h-14 rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-mpc-inkDim mt-1 uppercase">RELEASE</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val">650 ms</span>
+            </div>
+
+            <!-- VCA MODE (AD, ASR, LOOPING) -->
+            <div class="flex flex-col space-y-1">
+              <label class="text-[10px] font-mono text-mpc-inkDim uppercase text-center">VCA MODE</label>
+              <div class="flex flex-col gap-1 bg-mpc-lcd p-1 rounded border border-mpc-line">
+                <button class="vca-btn py-1 text-[10px] font-mono font-bold rounded text-mpc-inkFaint hover:text-mpc-ink">AD</button>
+                <button class="vca-btn py-1 text-[10px] font-mono font-bold rounded bg-mpc-accentHi text-mpc-bg">ASR</button>
+                <button class="vca-btn py-1 text-[10px] font-mono font-bold rounded text-mpc-inkFaint hover:text-mpc-ink">LOOPING</button>
+              </div>
+            </div>
+
+            <!-- MASTER VOLUME -->
+            <div class="flex flex-col items-center">
+              <div class="knob-container w-16 h-16 flex items-center justify-center" data-param="volume" data-val="85" data-min="0" data-max="100" data-unit="%">
+                <div class="knob-body w-14 h-14 rounded-full relative">
+                  <div class="knob-pointer"></div>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono font-semibold text-mpc-inkDim mt-1 uppercase">VOLUME</span>
+              <span class="text-[11px] font-mono text-mpc-accentHi knob-val">85%</span>
+            </div>
+          </div>
+
+          <!-- Real-Time ADSR Envelope Curve Visualizer -->
+          <div class="relative h-10 w-full bg-mpc-lcd rounded border border-mpc-line/70 overflow-hidden flex items-center justify-center">
+            <svg id="envSvg" class="w-full h-full p-1" viewBox="0 0 300 40">
+              <path d="M 10 35 L 40 8 L 160 16 L 290 35" fill="none" stroke="#ff7aac" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <circle cx="40" cy="8" r="3" fill="#ffffff"></circle>
+              <circle cx="160" cy="16" r="3" fill="#ffffff"></circle>
+            </svg>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 2: OSCILLATORS (chordism.txt) -->
+      <section id="tab-page-1" class="tab-page hidden w-full h-full grid grid-cols-1 grid-rows-2 gap-3.5">
+        <!-- FRAME OSCILLATORS (1258x304) -->
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between">
+          <div class="flex items-center justify-between border-b border-mpc-line pb-1.5">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-mpc-accentHi">QUAD OSCILLATOR ENGINE (WAVE 1–4 &amp; MIX 1–4)</span>
+            <span class="text-[10px] font-mono text-mpc-inkFaint">TAB 2 // MORPHING CORE</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-4 py-2">
+            <!-- OSC 1 -->
+            <div class="bg-[#130919] p-3 rounded border border-mpc-line flex flex-col items-center space-y-2">
+              <span class="text-xs font-mono font-bold text-mpc-ink">VOICE 1</span>
+              <select class="w-full bg-mpc-lcd border border-mpc-line rounded text-xs font-mono text-mpc-accentHi p-1.5">
+                <option>SAW</option>
+                <option>SQUARE</option>
+                <option>PULSE</option>
+                <option>WT MORPH</option>
+              </select>
+              <div class="knob-container w-14 h-14 flex items-center justify-center" data-param="mix_1" data-val="100" data-min="0" data-max="100" data-unit="%">
+                <div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div>
+              </div>
+              <span class="text-[10px] font-mono text-mpc-accentHi knob-val">100%</span>
+            </div>
+            <!-- OSC 2 -->
+            <div class="bg-[#130919] p-3 rounded border border-mpc-line flex flex-col items-center space-y-2">
+              <span class="text-xs font-mono font-bold text-mpc-ink">VOICE 2</span>
+              <select class="w-full bg-mpc-lcd border border-mpc-line rounded text-xs font-mono text-mpc-accentHi p-1.5">
+                <option>SAW</option>
+                <option selected="">SQUARE</option>
+                <option>PULSE</option>
+                <option>WT MORPH</option>
+              </select>
+              <div class="knob-container w-14 h-14 flex items-center justify-center" data-param="mix_2" data-val="85" data-min="0" data-max="100" data-unit="%">
+                <div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div>
+              </div>
+              <span class="text-[10px] font-mono text-mpc-accentHi knob-val">85%</span>
+            </div>
+            <!-- OSC 3 -->
+            <div class="bg-[#130919] p-3 rounded border border-mpc-line flex flex-col items-center space-y-2">
+              <span class="text-xs font-mono font-bold text-mpc-ink">VOICE 3</span>
+              <select class="w-full bg-mpc-lcd border border-mpc-line rounded text-xs font-mono text-mpc-accentHi p-1.5">
+                <option selected="">SAW</option>
+                <option>SQUARE</option>
+                <option>PULSE</option>
+                <option>WT MORPH</option>
+              </select>
+              <div class="knob-container w-14 h-14 flex items-center justify-center" data-param="mix_3" data-val="80" data-min="0" data-max="100" data-unit="%">
+                <div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div>
+              </div>
+              <span class="text-[10px] font-mono text-mpc-accentHi knob-val">80%</span>
+            </div>
+            <!-- OSC 4 -->
+            <div class="bg-[#130919] p-3 rounded border border-mpc-line flex flex-col items-center space-y-2">
+              <span class="text-xs font-mono font-bold text-mpc-ink">VOICE 4</span>
+              <select class="w-full bg-mpc-lcd border border-mpc-line rounded text-xs font-mono text-mpc-accentHi p-1.5">
+                <option>SAW</option>
+                <option>SQUARE</option>
+                <option selected="">WT MORPH</option>
+              </select>
+              <div class="knob-container w-14 h-14 flex items-center justify-center" data-param="mix_4" data-val="75" data-min="0" data-max="100" data-unit="%">
+                <div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div>
+              </div>
+              <span class="text-[10px] font-mono text-mpc-accentHi knob-val">75%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRAME SHAPE (1258x304) -->
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between">
+          <div class="flex items-center justify-between border-b border-mpc-line pb-1.5">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-mpc-accentHi">POLYPHONIC SHAPE MODULATION</span>
+            <span class="text-[10px] font-mono text-mpc-inkFaint">SHAPE 1–4 &amp; LFO PHASES</span>
+          </div>
+          <div class="grid grid-cols-7 gap-3 items-center py-2">
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="shape" data-val="40" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">SHAPE</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">40%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="shape_1" data-val="25" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">SHAPE 1</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">25%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="shape_2" data-val="50" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">SHAPE 2</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">50%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="shape_3" data-val="75" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">SHAPE 3</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">75%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="shape_4" data-val="90" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">SHAPE 4</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">90%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="lfo_ph_1" data-val="0" data-min="0" data-max="360" data-unit="°"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">LFO PH 1</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">0°</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="lfo_ph_2" data-val="90" data-min="0" data-max="360" data-unit="°"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">LFO PH 2</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">90°</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: SHAPE & FM MATRIX (chordism.txt) -->
+      <section id="tab-page-2" class="tab-page hidden w-full h-full grid grid-cols-3 gap-3.5">
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between">
+          <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1">PHASE OFFSETS</span>
+          <div class="flex justify-around items-center py-4">
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="lfo_ph_3" data-val="180" data-min="0" data-max="360" data-unit="°"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">PHASE 3</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">180°</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="lfo_ph_4" data-val="270" data-min="0" data-max="360" data-unit="°"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">PHASE 4</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">270°</span></div>
+          </div>
+          <div class="text-[10px] font-mono text-mpc-inkFaint p-2 bg-mpc-lcd rounded">Independent quadrasonic phase offsets drive complex stereo chord shimmering.</div>
+        </div>
+        
+        <div class="col-span-2 bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between">
+          <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1">FM OPERATOR MATRIX &amp; MORPH</span>
+          <div class="grid grid-cols-4 gap-3 py-2 items-center">
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="fm_mod" data-val="45" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">FM MOD</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">45%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="fm_amt" data-val="30" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">FM AMT</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">30%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="morph_idx" data-val="65" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">MORPH INDEX</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">65%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="morph_int" data-val="80" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">MORPH INT</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">80%</span></div>
+          </div>
+          <div class="h-10 bg-mpc-lcd rounded border border-mpc-line flex items-center px-3 justify-between">
+            <span class="text-[10px] font-mono text-mpc-inkFaint">ROUTING: PRE-MORPH / POST-VCF CASCADE</span>
+            <span class="text-[10px] font-mono text-mpc-accentHi">ARM NEON // ZERO-DELAY FEEDBACK</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: FILTER ENV & MOD (chordism.txt) -->
+      <section id="tab-page-3" class="tab-page hidden w-full h-full grid grid-cols-2 gap-3.5">
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between">
+          <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1">FILTER ENVELOPE MODULATION</span>
+          <div class="grid grid-cols-4 gap-3 py-3 items-center">
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="env_a" data-val="8" data-min="1" data-max="2000" data-unit=" ms"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">ENV A</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">8 ms</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="env_d" data-val="420" data-min="10" data-max="5000" data-unit=" ms"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">ENV D</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">420 ms</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="env_amt" data-val="75" data-min="-100" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">ENV AMT</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">+75%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="drive" data-val="35" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">DRIVE</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">35%</span></div>
+          </div>
+          <div class="p-2 bg-mpc-lcd rounded text-[10px] font-mono text-mpc-inkFaint">Bipolar modulation routing to quad 24dB resonance pole points.</div>
+        </div>
+
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between">
+          <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1">FILTER LFO &amp; SPREAD</span>
+          <div class="grid grid-cols-3 gap-3 py-3 items-center">
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="flt_lfo_rate" data-val="3.2" data-min="0.1" data-max="20" data-unit=" Hz"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">LFO RATE</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">3.2 Hz</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="flt_lfo_depth" data-val="55" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">LFO DEPTH</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">55%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="flt_lfo_sprd" data-val="80" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">LFO SPREAD</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">80%</span></div>
+          </div>
+          <div class="p-2 bg-mpc-lcd rounded text-[10px] font-mono text-mpc-inkFaint">Multi-phase LFO offsets cutoffs independently across voices 1 to 4.</div>
+        </div>
+      </section>
+
+      <!-- TAB 5: VIBRATO & SWEEP -->
+      <section id="tab-page-4" class="tab-page hidden w-full h-full bg-mpc-panel rounded-lg border border-mpc-line p-4 flex flex-col justify-between">
+        <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1.5">VIBRATO &amp; PITCH SWEEP CONTROLS</span>
+        <div class="grid grid-cols-6 gap-4 py-4 items-center">
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="vib_depth" data-val="25" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">VIB DEPTH</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">25%</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="vib_speed" data-val="5.5" data-min="0.5" data-max="15" data-unit=" Hz"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">VIB SPEED</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">5.5 Hz</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="vib_delay" data-val="120" data-min="0" data-max="1000" data-unit=" ms"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">VIB DELAY</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">120 ms</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="sweep_amt" data-val="0" data-min="-24" data-max="24" data-unit=" ST"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">SWEEP</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">0 ST</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="sweep_rate" data-val="80" data-min="10" data-max="1000" data-unit=" ms"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">SWEEP RATE</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">80 ms</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="stray" data-val="40" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">VIB STRAY</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">40%</span></div>
+        </div>
+        <div class="h-12 bg-mpc-lcd rounded border border-mpc-line p-2 text-xs font-mono text-mpc-inkDim flex items-center justify-between">
+          <span>ANALOG VIBRATO MODEL: RANDOMIZED TAPE FLUTTER ENGINE</span>
+          <span class="text-mpc-accentHi">[ACTIVE]</span>
+        </div>
+      </section>
+
+      <!-- TAB 6: TREMOLO & LO-FI (GRIND / SHIFT / DECIM) -->
+      <section id="tab-page-5" class="tab-page hidden w-full h-full grid grid-cols-2 gap-3.5">
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between">
+          <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1">TREMOLO &amp; VCA GLIDE</span>
+          <div class="grid grid-cols-3 gap-3 py-3 items-center">
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="trem_rate" data-val="4.0" data-min="0.1" data-max="20" data-unit=" Hz"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">TREM RATE</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">4.0 Hz</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="trem_depth" data-val="30" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">TREM DEPTH</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">30%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="glide" data-val="45" data-min="0" data-max="500" data-unit=" ms"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">GLIDE</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">45 ms</span></div>
+          </div>
+          <div class="p-2 bg-mpc-lcd rounded text-[10px] font-mono text-mpc-inkFaint">Polyphonic portamento with legato retriggering.</div>
+        </div>
+
+        <div class="bg-mpc-panel rounded-lg border border-mpc-line p-3.5 flex flex-col justify-between">
+          <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1">LO-FI DESTRUCTION &amp; CRUSH</span>
+          <div class="grid grid-cols-3 gap-3 py-3 items-center">
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="grind" data-val="20" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">GRIND</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">20%</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="bit_shift" data-val="12" data-min="4" data-max="16" data-unit=" bit"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">BIT SHIFT</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">12 bit</span></div>
+            <div class="flex flex-col items-center"><div class="knob-container w-14 h-14 flex items-center justify-center" data-param="decimator" data-val="15" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-12 h-12 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[10px] font-mono text-mpc-inkDim mt-1">DECIMATOR</span><span class="text-[10px] font-mono text-mpc-accentHi knob-val">15%</span></div>
+          </div>
+          <div class="p-2 bg-mpc-lcd rounded text-[10px] font-mono text-mpc-accentHi">Vintage 8-bit &amp; 12-bit sampler emulation stage.</div>
+        </div>
+      </section>
+
+      <!-- TAB 7: DELAY (DELAY MIX, TIME, FBK, TONE, MOD) -->
+      <section id="tab-page-6" class="tab-page hidden w-full h-full bg-mpc-panel rounded-lg border border-mpc-line p-4 flex flex-col justify-between">
+        <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1.5">STEREO TAPE &amp; DIGITAL DELAY</span>
+        <div class="grid grid-cols-5 gap-4 py-4 items-center">
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="dly_mix" data-val="35" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">DELAY MIX</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">35%</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="dly_time" data-val="375" data-min="10" data-max="2000" data-unit=" ms"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">DLY TIME</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">375 ms</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="dly_fbk" data-val="55" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">DLY FBK</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">55%</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="dly_tone" data-val="60" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">DLY TONE</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">60%</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="dly_mod" data-val="25" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">MOD DEPTH</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">25%</span></div>
+        </div>
+        <div class="h-10 bg-mpc-lcd rounded border border-mpc-line px-3 flex items-center justify-between text-xs font-mono text-mpc-inkDim">
+          <span>MODE: PING-PONG STEREO CROSSFEED</span>
+          <span class="text-mpc-accentHi">SYNC: 3/16 DOTTED</span>
+        </div>
+      </section>
+
+      <!-- TAB 8: REVERB (DIFFUSION & SHIMMER) -->
+      <section id="tab-page-7" class="tab-page hidden w-full h-full bg-mpc-panel rounded-lg border border-mpc-line p-4 flex flex-col justify-between">
+        <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1.5">LUSH DIFFUSION REVERB &amp; SHIMMER</span>
+        <div class="grid grid-cols-5 gap-4 py-4 items-center">
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="rev_mix" data-val="40" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">REVERB MIX</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">40%</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="rev_decay" data-val="3.8" data-min="0.2" data-max="15" data-unit=" s"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">DECAY</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">3.8 s</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="rev_damp" data-val="50" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">DAMPING</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">50%</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="rev_shimmer" data-val="35" data-min="0" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">SHIMMER</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">35%</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="rev_size" data-val="85" data-min="10" data-max="100" data-unit="%"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">ROOM SIZE</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">85%</span></div>
+        </div>
+        <div class="h-10 bg-mpc-lcd rounded border border-mpc-line px-3 flex items-center justify-between text-xs font-mono text-mpc-inkDim">
+          <span>ALGORITHM: CLOUD DIFFUSION WITH PITCHED FEEDBACK OCTAVE</span>
+          <span class="text-mpc-accentHi">DSP ENGINE 1 // ACTIVE</span>
+        </div>
+      </section>
+
+      <!-- TAB 9: CHORD MAP MATRIX (12 Semitone Pitches) -->
+      <section id="tab-page-8" class="tab-page hidden w-full h-full bg-mpc-panel rounded-lg border border-mpc-line p-4 flex flex-col justify-between">
+        <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1.5">CHORD MAP PITCH CLASSES (C TO B ASSIGNMENT)</span>
+        <div class="grid grid-cols-6 gap-2.5 py-3">
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">C</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option>MAJ7</option><option selected="">MIN7</option><option>SUS4</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">C#</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">DIM7</option><option>MIN9</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">D</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">MIN9</option><option>MIN7</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">D#</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">MAJ7</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">E</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">MIN7</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">F</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">MAJ9</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">F#</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">HALF-DIM</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">G</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">DOM7</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">G#</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">MAJ7</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">A</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">MIN7</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">A#</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">DOM7</option></select></div>
+          <div class="bg-mpc-lcd p-2 rounded border border-mpc-line flex flex-col items-center"><span class="text-xs font-mono text-mpc-accentHi font-bold">B</span><select class="w-full bg-[#170e1e] text-[10px] font-mono text-mpc-ink mt-1 p-1 rounded"><option selected="">MIN7b5</option></select></div>
+        </div>
+        <div class="p-2 bg-mpc-lcd rounded text-[10px] font-mono text-mpc-inkDim">Single key trigger assigns full customized jazz &amp; neo-soul chords across pads.</div>
+      </section>
+
+      <!-- TAB 10: EUCLIDEAN ARPEGGIATOR -->
+      <section id="tab-page-9" class="tab-page hidden w-full h-full bg-mpc-panel rounded-lg border border-mpc-line p-4 flex flex-col justify-between">
+        <span class="text-xs font-mono font-bold text-mpc-accentHi border-b border-mpc-line pb-1.5">EUCLIDEAN ARPEGGIATOR &amp; VARIATIONS</span>
+        <div class="grid grid-cols-5 gap-4 py-4 items-center">
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="arp_steps" data-val="16" data-min="1" data-max="32" data-unit=" steps"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">EUCLID STEPS</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">16 steps</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="arp_beats" data-val="7" data-min="1" data-max="16" data-unit=" pulses"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">EUCLID BEATS</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">7 pulses</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="arp_tempo" data-val="124" data-min="60" data-max="200" data-unit=" BPM"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">ARP TEMPO</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">124 BPM</span></div>
+          <div class="flex flex-col items-center"><div class="knob-container w-16 h-16 flex items-center justify-center" data-param="arp_var" data-val="3" data-min="0" data-max="8" data-unit=" vars"><div class="knob-body w-14 h-14 rounded-full relative"><div class="knob-pointer"></div></div></div><span class="text-[11px] font-mono text-mpc-inkDim mt-1">VAR COUNT</span><span class="text-[11px] font-mono text-mpc-accentHi knob-val">3 vars</span></div>
+          <div class="flex flex-col items-center space-y-2">
+            <span class="text-[11px] font-mono text-mpc-inkDim uppercase">ARP STATUS</span>
+            <button id="arpToggleBtn" onclick="toggleArp()" class="w-24 py-2 font-mono font-bold text-xs rounded bg-mpc-accentHi text-mpc-bg shadow-[0_0_10px_#ff7aac]">ON</button>
+          </div>
+        </div>
+        <div class="h-12 bg-mpc-lcd rounded border border-mpc-line p-2 text-xs font-mono text-mpc-accentHi flex items-center justify-between">
+          <span>PATTERN: E(7, 16) ROTATED ALGORITHM // DIRECTION: UP/DOWN ALTERNATING</span>
+          <span>SYNC: MPC MIDI MASTER CLOCK</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- LIVE HARDWARE Q-LINK ENCODER STRIP (Matching active tab parameters) -->
+    <footer class="mt-3 h-10 border border-mpc-line bg-[#160d1d] rounded-lg px-3 flex items-center justify-between text-[11px] font-mono text-mpc-inkDim overflow-x-auto no-scrollbar">
+      <div class="flex items-center space-x-2 shrink-0">
+        <span class="w-2 h-2 rounded-full bg-mpc-accentHi"></span>
+        <span class="font-bold text-mpc-accentHi uppercase" id="qlinkBankLabel">Q-LINKS [MAIN]:</span>
+      </div>
+      <div class="flex items-center space-x-3 shrink-0 ml-4" id="qlinkParams">
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q1</b> CHORD</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q2</b> TUNING</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q3</b> SCALE</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q4</b> ROOT</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q5</b> DETUNE</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q6</b> WIDTH</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q7</b> SPREAD</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q8</b> ROTATION</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q9</b> CUTOFF</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q10</b> RESO</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q11</b> FLT MODE</span>
+        <span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q12</b> SLOPE</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- INTERACTIVE AUDIO & UI LOGIC -->
+  <script>
+    // Tab Mapping & Q-Link Data
+    const qlinkData = {
+      0: { name: "MAIN", params: ["CHORD", "TUNING", "SCALE", "ROOT", "DETUNE", "WIDTH", "SPREAD", "ROTATION", "CUTOFF", "RESONANCE", "FILTER MODE", "SLOPE", "ATTACK", "RELEASE", "VCA MODE", "VOLUME"] },
+      1: { name: "OSCILLATORS", params: ["WAVE 1", "WAVE 2", "WAVE 3", "WAVE 4", "MIX 1", "MIX 2", "MIX 3", "MIX 4", "SHAPE", "SHAPE 1", "SHAPE 2", "SHAPE 3", "SHAPE 4", "LFO MODE", "LFO PH 1", "LFO PH 2"] },
+      2: { name: "SHAPE", params: ["LFO PH 3", "LFO PH 4", "MORPH", "MORPH INT", "PAN MORPH", "PAN INT", "FM MOD", "FM AMT", "FM AMT 1", "FM AMT 2", "FM AMT 3", "FM AMT 4", "FM POSITION"] },
+      3: { name: "FILTER ENV", params: ["ENV A", "ENV D", "ENV AMT", "DRIVE", "FLT MODE", "HARD RESET", "LOFI POS", "FLT LFO RATE", "FLT LFO DEPTH", "FLT LFO SPREAD", "LFO SHAPE", "LFO RATE", "LFO DEPTH"] },
+      4: { name: "VIBRATO", params: ["VIB DEPTH", "VIB SPEED", "VIB DELAY", "VIB STRAY", "OSC ENABLE", "SWEEP", "SWEEP RATE", "SWE OSC ENAB", "LVL MRP 1", "LVL MRP 2", "PAN MRP 1", "PAN MRP 2"] },
+      5: { name: "TREMOLO", params: ["TREM RATE", "TREM DEPTH", "TREM WAVE", "GLIDE", "GLIDE LEGATO", "VCA RESET", "DRONE", "GRIND", "BIT SHIFT", "DECIMATOR"] },
+      6: { name: "DELAY", params: ["DELAY MIX", "DELAY TIME", "DELAY FBK", "DELAY TONE", "DELAY MODE", "TONE HI", "TONE LO", "MOD RATE", "MOD DEPTH"] },
+      7: { name: "REVERB", params: ["REVERB MIX", "REVERB DECAY", "REVERB DAMP", "REVERB SHIMR", "LOW CUT", "REVERB SIZE", "REV MOD RATE", "REV MOD DEPTH"] },
+      8: { name: "CHORD MAP", params: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"] },
+      9: { name: "ARPEGGIATOR", params: ["ARP HOLD", "EUCLID STEPS", "EUCLID BEATS", "VAR INTERVAL", "VAR COUNT", "CLOCK SYNC", "CLOCK DIV", "ARP ENABLE", "ARP TEMPO", "ARP DIRECTION"] }
+    };
+
+    function setTab(idx) {
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        if (i === idx) {
+          btn.className = "tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all bg-mpc-accentHi text-mpc-bg shadow-[0_0_12px_rgba(255,122,172,0.6)]";
+        } else {
+          btn.className = "tab-btn px-3 py-1.5 rounded text-xs font-mono font-bold transition-all text-mpc-inkDim hover:text-mpc-ink bg-mpc-panel border border-mpc-line";
+        }
+      });
+
+      document.querySelectorAll('.tab-page').forEach((page, i) => {
+        page.classList.toggle('hidden', i !== idx);
+      });
+
+      // Update Q-Link Strip
+      const q = qlinkData[idx] || qlinkData[0];
+      document.getElementById('qlinkBankLabel').textContent = `Q-LINKS [${q.name}]:`;
+      const container = document.getElementById('qlinkParams');
+      container.innerHTML = q.params.slice(0, 12).map((p, i) => 
+        `<span class="px-1.5 py-0.5 rounded bg-mpc-lcd border border-mpc-line/80"><b class="text-mpc-accentHi">Q${i+1}</b> ${p}</span>`
+      ).join('');
+    }
+
+    // Touch & Mouse Rotary Knob Drag Interaction
+    let activeKnob = null;
+    let startY = 0;
+    let startVal = 0;
+
+    document.querySelectorAll('.knob-container').forEach(knob => {
+      const updateRotation = (val, min, max) => {
+        const pct = (val - min) / (max - min);
+        const deg = -140 + pct * 280;
+        const body = knob.querySelector('.knob-body');
+        if (body) body.style.transform = `rotate(${deg}deg)`;
+      };
+
+      const val = parseFloat(knob.dataset.val);
+      const min = parseFloat(knob.dataset.min);
+      const max = parseFloat(knob.dataset.max);
+      updateRotation(val, min, max);
+
+      knob.addEventListener('pointerdown', (e) => {
+        activeKnob = knob;
+        startY = e.clientY;
+        startVal = parseFloat(knob.dataset.val);
+        knob.classList.add('active');
+        knob.setPointerCapture(e.pointerId);
+      });
+
+      knob.addEventListener('pointermove', (e) => {
+        if (!activeKnob || activeKnob !== knob) return;
+        const dy = startY - e.clientY;
+        const min = parseFloat(knob.dataset.min);
+        const max = parseFloat(knob.dataset.max);
+        const range = max - min;
+        let newVal = startVal + (dy / 140) * range;
+        newVal = Math.max(min, Math.min(max, newVal));
+        
+        const isInt = (max - min) > 10 && !knob.dataset.val.includes('.');
+        const displayVal = isInt ? Math.round(newVal) : newVal.toFixed(1);
+        knob.dataset.val = displayVal;
+        
+        const valElem = knob.parentElement.querySelector('.knob-val');
+        if (valElem) valElem.textContent = displayVal + (knob.dataset.unit || '');
+        
+        updateRotation(newVal, min, max);
+
+        // Dynamic visual linkage
+        if (knob.dataset.param === 'cutoff') {
+          const bar = document.getElementById('filterSpectrumBar');
+          if (bar) bar.style.width = `${Math.min(100, Math.max(5, (newVal / 20000) * 100))}%`;
+        }
+      });
+
+      knob.addEventListener('pointerup', (e) => {
+        if (activeKnob === knob) {
+          knob.classList.remove('active');
+          knob.releasePointerCapture(e.pointerId);
+          activeKnob = null;
+        }
+      });
+    });
+
+    // Chord Definitions (Offsets in Semitones)
+    const chordVoicings = {
+      min7: { name: "Minor 7th", offsets: [0, 3, 7, 10], notes: ["D3", "F3", "A3", "C4"], freqs: [146.8, 174.6, 220.0, 261.6] },
+      maj7: { name: "Major 7th", offsets: [0, 4, 7, 11], notes: ["D3", "F#3", "A3", "C#4"], freqs: [146.8, 185.0, 220.0, 277.2] },
+      dom7: { name: "Dominant 7th", offsets: [0, 4, 7, 10], notes: ["D3", "F#3", "A3", "C4"], freqs: [146.8, 185.0, 220.0, 261.6] },
+      sus4: { name: "Suspended 4", offsets: [0, 5, 7, 10], notes: ["D3", "G3", "A3", "C4"], freqs: [146.8, 196.0, 220.0, 261.6] },
+      dim7: { name: "Diminished 7", offsets: [0, 3, 6, 9], notes: ["D3", "F3", "Ab3", "B3"], freqs: [146.8, 174.6, 207.6, 246.9] },
+      min9: { name: "Minor 9th", offsets: [0, 3, 7, 14], notes: ["D3", "F3", "A3", "E4"], freqs: [146.8, 174.6, 220.0, 329.6] },
+      maj9: { name: "Major 9th", offsets: [0, 4, 11, 14], notes: ["D3", "F#3", "C#4", "E4"], freqs: [146.8, 185.0, 277.2, 329.6] },
+      eleventh: { name: "11th Neon", offsets: [0, 7, 10, 17], notes: ["D3", "A3", "C4", "G4"], freqs: [146.8, 220.0, 261.6, 392.0] }
+    };
+
+    function updateChordParams() {
+      const type = document.getElementById('chord_type').value;
+      const v = chordVoicings[type] || chordVoicings.min7;
+      document.getElementById('v1Note').textContent = `${v.notes[0]} (${Math.round(v.freqs[0])}Hz)`;
+      document.getElementById('v2Note').textContent = `${v.notes[1]} (${Math.round(v.freqs[1])}Hz)`;
+      document.getElementById('v3Note').textContent = `${v.notes[2]} (${Math.round(v.freqs[2])}Hz)`;
+      document.getElementById('v4Note').textContent = `${v.notes[3]} (${Math.round(v.freqs[3])}Hz)`;
+    }
+
+    function setFilterMode(mode) {
+      document.querySelectorAll('.filter-mode-btn').forEach(btn => {
+        if (btn.textContent.trim() === mode) {
+          btn.className = "filter-mode-btn py-1 text-[10px] font-mono font-bold rounded bg-mpc-accentHi text-mpc-bg";
+        } else {
+          btn.className = "filter-mode-btn py-1 text-[10px] font-mono font-bold rounded text-mpc-inkFaint hover:text-mpc-ink";
+        }
+      });
+    }
+
+    function toggleArp() {
+      const btn = document.getElementById('arpToggleBtn');
+      const isOn = btn.textContent === "ON";
+      btn.textContent = isOn ? "OFF" : "ON";
+      btn.className = isOn 
+        ? "w-24 py-2 font-mono font-bold text-xs rounded bg-mpc-panel border border-mpc-line text-mpc-inkFaint"
+        : "w-24 py-2 font-mono font-bold text-xs rounded bg-mpc-accentHi text-mpc-bg shadow-[0_0_10px_#ff7aac]";
+    }
+
+    // 60FPS Cyberpunk Real-Time Harmonic Oscilloscope
+    const canvas = document.getElementById('chordCanvas');
+    const ctx = canvas.getContext('2d');
+    let phase = 0;
+
+    function resizeCanvas() {
+      if (!canvas) return;
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function renderScope() {
+      if (!canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width;
+      const h = canvas.height;
+      const cy = h / 2;
+
+      // Draw Center Baseline
+      ctx.strokeStyle = 'rgba(74, 51, 88, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, cy);
+      ctx.lineTo(w, cy);
+      ctx.stroke();
+
+      // Get Current Chord frequencies
+      const type = document.getElementById('chord_type')?.value || 'min7';
+      const chord = chordVoicings[type] || chordVoicings.min7;
+      const f1 = chord.freqs[0] / 80;
+      const f2 = chord.freqs[1] / 80;
+      const f3 = chord.freqs[2] / 80;
+      const f4 = chord.freqs[3] / 80;
+
+      // Wave Trace
+      ctx.beginPath();
+      ctx.lineWidth = 2.2;
+      ctx.strokeStyle = '#ff7aac';
+      ctx.shadowColor = '#ff7aac';
+      ctx.shadowBlur = 8;
+
+      for (let x = 0; x < w; x++) {
+        const t = (x / w) * Math.PI * 4;
+        const y1 = Math.sin(t * f1 + phase);
+        const y2 = Math.sin(t * f2 + phase * 1.1) * 0.75;
+        const y3 = Math.sin(t * f3 + phase * 0.9) * 0.55;
+        const y4 = Math.sin(t * f4 + phase * 1.3) * 0.4;
+        const composite = (y1 + y2 + y3 + y4) * 0.35;
+        const py = cy + composite * (h * 0.4);
+
+        if (x === 0) ctx.moveTo(x, py);
+        else ctx.lineTo(x, py);
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      phase += 0.045;
+      requestAnimationFrame(renderScope);
+    }
+    renderScope();
+
+    // Web Audio Real-Time 4-Voice Chord Audition Engine
+    let audioCtx = null;
+    function playChord() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const type = document.getElementById('chord_type')?.value || 'min7';
+        const chord = chordVoicings[type] || chordVoicings.min7;
+        const now = audioCtx.currentTime;
+
+        // Cutoff & Reso from knobs
+        const cutoffKnob = document.querySelector('[data-param="cutoff"]');
+        const cutoffFreq = cutoffKnob ? parseFloat(cutoffKnob.dataset.val) : 2600;
+
+        // Shared Filter
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(cutoffFreq * 1.2, now);
+        filter.frequency.exponentialRampToValueAtTime(cutoffFreq * 0.4, now + 1.2);
+        filter.Q.value = 4.5;
+
+        // Master Gain
+        const masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(0.001, now);
+        masterGain.gain.linearRampToValueAtTime(0.22, now + 0.04);
+        masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+
+        filter.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
+
+        // Quad Oscillators with Stereo Panning
+        chord.freqs.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const panner = audioCtx.createStereoPanner ? audioCtx.createStereoPanner() : null;
+
+          osc.type = (idx === 1) ? 'sawtooth' : (idx === 3 ? 'triangle' : 'sawtooth');
+          // Detune slight drift
+          const detuneCents = (idx - 1.5) * 8;
+          osc.frequency.setValueAtTime(freq, now);
+          osc.detune.setValueAtTime(detuneCents, now);
+
+          if (panner) {
+            const panVal = [-0.6, -0.2, 0.2, 0.6][idx];
+            panner.pan.setValueAtTime(panVal, now);
+            osc.connect(panner);
+            panner.connect(filter);
+          } else {
+            osc.connect(filter);
+          }
+
+          osc.start(now);
+          osc.stop(now + 1.6);
+        });
+
+        // Flash Audition Button
+        const btn = document.getElementById('auditionBtn');
+        btn.classList.add('scale-95', 'brightness-125');
+        setTimeout(() => btn.classList.remove('scale-95', 'brightness-125'), 180);
+
+      } catch (err) {
+        console.warn("Web Audio not allowed or error:", err);
+      }
+    }
+
+    document.getElementById('auditionBtn').addEventListener('click', playChord);
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') {
+        e.preventDefault();
+        playChord();
+      }
+    });
+  </script>
+
+
+</body></html>

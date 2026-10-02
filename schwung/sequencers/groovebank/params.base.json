@@ -1,0 +1,84 @@
+{
+ "name": "groovebank",
+ "params": [
+  {
+   "key": "pattern",
+   "name": "Pattern",
+   "type": "int",
+   "min": 0,
+   "max": 599,
+   "default": 0,
+   "step": 1
+  },
+  {
+   "key": "variant",
+   "name": "Variant",
+   "type": "int",
+   "min": 0,
+   "max": 5,
+   "default": 0,
+   "step": 1
+  },
+  {
+   "key": "swing",
+   "name": "Swing",
+   "type": "int",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "step": 1,
+   "unit": "%"
+  },
+  {
+   "key": "gate",
+   "name": "Gate",
+   "type": "int",
+   "min": 5,
+   "max": 200,
+   "default": 80,
+   "step": 5,
+   "unit": "%"
+  },
+  {
+   "key": "strum",
+   "name": "Strum",
+   "type": "int",
+   "min": -100,
+   "max": 100,
+   "default": 0,
+   "step": 5
+  },
+  {
+   "key": "accent",
+   "name": "Accent",
+   "type": "int",
+   "min": 0,
+   "max": 100,
+   "default": 50,
+   "step": 5,
+   "unit": "%"
+  },
+  {
+   "key": "latch",
+   "name": "Latch",
+   "type": "int",
+   "min": 0,
+   "max": 1,
+   "default": 0,
+   "step": 1
+  }
+ ],
+ "sections": [
+  {
+   "label": "globals",
+   "keys": [
+    "variant",
+    "strum",
+    "gate",
+    "accent",
+    "latch",
+    "swing"
+   ]
+  }
+ ]
+}

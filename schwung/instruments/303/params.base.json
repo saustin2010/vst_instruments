@@ -1,0 +1,151 @@
+{
+ "name": "303",
+ "params": [
+  {
+   "key": "cutoff",
+   "name": "Cutoff",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "resonance",
+   "name": "Resonance",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "env_mod",
+   "name": "Env Mod",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "decay",
+   "name": "Decay",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "accent",
+   "name": "Accent",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "volume",
+   "name": "Volume",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.8
+  },
+  {
+   "key": "waveform",
+   "name": "Waveform",
+   "options": [
+    "Saw",
+    "Square"
+   ],
+   "default": 0
+  },
+  {
+   "key": "tuning",
+   "name": "Tuning",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "devil_mod_switch",
+   "name": "Enable",
+   "options": [
+    "Off",
+    "On"
+   ],
+   "default": 0
+  },
+  {
+   "key": "normal_decay",
+   "name": "Normal Decay",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "accent_decay",
+   "name": "Accent Decay",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "feedback_hpf",
+   "name": "Feedback HPF",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.5
+  },
+  {
+   "key": "soft_attack",
+   "name": "Soft Attack",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "slide_time",
+   "name": "Slide Time",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.3
+  },
+  {
+   "key": "tanh_shaper_drive",
+   "name": "Shaper Drive",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "drive_model",
+   "name": "Model",
+   "options": [
+    "Soft",
+    "RAT"
+   ],
+   "default": 0
+  },
+  {
+   "key": "drive",
+   "name": "Drive",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.0
+  },
+  {
+   "key": "drive_mix",
+   "name": "Mix",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 1.0
+  }
+ ]
+}

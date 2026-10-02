@@ -1,0 +1,23 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored. Each is described in README.md under "Changes for the MPC".
+--- a/src/dsp/helm/mopo/src/memory.cpp
++++ b/src/dsp/helm/mopo/src/memory.cpp
+@@ -38,6 +38,6 @@
+   }
+ 
+   Memory::~Memory() {
+-    delete memory_;
++    delete[] memory_;   // MPC port: allocated with new[] (ASan alloc-dealloc-mismatch)
+   }
+ } // namespace mopo
+--- a/src/dsp/helm/mopo/src/trigger_operators.cpp
++++ b/src/dsp/helm/mopo/src/trigger_operators.cpp
+@@ -33,7 +33,7 @@
+     }
+   }
+ 
+-  TriggerWait::TriggerWait() : Processor(kNumInputs, 1) { }
++  TriggerWait::TriggerWait() : Processor(kNumInputs, 1), waiting_(false), trigger_value_(0.0) { }   // MPC port: were uninitialised
+ 
+   void TriggerWait::waitTrigger(mopo_float trigger_value) {
+     waiting_ = true;

@@ -1,0 +1,1121 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<title>Marbles for MPC // Standalone Touch Engine</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#920801",
+            "surface": "#121316",
+            "on-primary-fixed": "#281900",
+            "error-container": "#93000a",
+            "tertiary-fixed": "#eee2bc",
+            "primary-fixed": "#ffdead",
+            "primary-container": "#e5a93c",
+            "on-tertiary": "#373016",
+            "secondary": "#ffb4a7",
+            "outline-variant": "#504535",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary-fixed": "#211b04",
+            "on-surface-variant": "#d4c4b0",
+            "on-secondary-fixed": "#400100",
+            "on-secondary-container": "#ff9a89",
+            "inverse-on-surface": "#2f3034",
+            "surface-variant": "#343538",
+            "inverse-primary": "#7e5700",
+            "surface-container-low": "#1b1b1f",
+            "surface-dim": "#121316",
+            "surface-bright": "#38393c",
+            "surface-container-lowest": "#0d0e11",
+            "surface-tint": "#fabc4d",
+            "on-error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#604100",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "secondary-fixed-dim": "#ffb4a7",
+            "tertiary-container": "#beb38f",
+            "error": "#ffb4ab",
+            "on-secondary": "#680300",
+            "on-primary": "#432c00",
+            "surface-container-highest": "#343538",
+            "on-primary-container": "#5e4000",
+            "on-error": "#690005",
+            "on-secondary-fixed-variant": "#920801",
+            "primary": "#ffc665",
+            "on-tertiary-container": "#4c4529",
+            "on-surface": "#e3e2e6",
+            "tertiary": "#dacfa9",
+            "surface-container": "#1f1f23",
+            "secondary-fixed": "#ffdad4",
+            "outline": "#9d8f7c",
+            "surface-container-high": "#292a2d",
+            "on-background": "#e3e2e6",
+            "inverse-surface": "#e3e2e6",
+            "primary-fixed-dim": "#fabc4d",
+            "background": "#121316",
+            /* Mutable Marbles & MPC hardware palette anchors */
+            "mpc-bg": "#0e0c12",
+            "mpc-panel": "#18151f",
+            "mpc-line": "#3d3550",
+            "mpc-ink": "#f4f0fb",
+            "mpc-ink-dim": "#d2c9e3",
+            "mpc-ink-faint": "#7d7092",
+            "mpc-accent": "#8f6ae0",
+            "mpc-accent-hi": "#b394ff",
+            "mpc-gold": "#ffc665"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "gutter": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem"
+          },
+          "fontFamily": {
+            "body-md": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Physical chassis styling & custom hardware effects */
+    body {
+      background-color: #07060a;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      overflow: hidden;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    /* Recessed optical panel */
+    .recessed-display {
+      background: radial-gradient(circle at 50% 30%, #15111f 0%, #0c0913 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.9), inset 0 0 1px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.06);
+      border: 1px solid #282138;
+    }
+
+    /* Milled rack panel */
+    .module-card {
+      background: linear-gradient(180deg, #1b1725 0%, #15121e 100%);
+      border: 1px solid #362c4b;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+      position: relative;
+    }
+
+    /* Corner hex screws */
+    .module-card::before, .module-card::after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: radial-gradient(circle, #554a6e 35%, #181324 100%);
+      border-radius: 50%;
+      border: 0.5px solid #2b233a;
+      box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.25);
+    }
+    .module-card::before { top: 4px; left: 4px; }
+    .module-card::after { top: 4px; right: 4px; }
+
+    /* Machined Aluminum Collet Knob */
+    .knob-container {
+      position: relative;
+      touch-action: none;
+      cursor: ns-resize;
+    }
+    .knob-body {
+      background: radial-gradient(circle at 35% 30%, #d8d0e6 0%, #837599 45%, #3d354d 85%, #241f2e 100%);
+      border-radius: 50%;
+      box-shadow: 0 5px 9px rgba(0,0,0,0.85), inset 0 1px 1px rgba(255,255,255,0.7), 0 0 0 1.5px #15111e;
+      position: relative;
+    }
+    .knob-body::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 45% 45%, #2a2436 0%, #15121c 90%);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
+    }
+    .knob-indicator {
+      position: absolute;
+      width: 3.5px;
+      height: 44%;
+      top: 6%;
+      left: calc(50% - 1.75px);
+      transform-origin: bottom center;
+      background: #b394ff;
+      border-radius: 2px;
+      box-shadow: 0 0 6px #b394ff, 0 0 10px rgba(179,148,255,0.7);
+      z-index: 5;
+    }
+
+    /* Push tactile switch */
+    .tactile-btn {
+      background: linear-gradient(180deg, #2b2338 0%, #1b1624 100%);
+      border: 1px solid #4a3e63;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .tactile-btn:active, .tactile-btn.active-state {
+      background: linear-gradient(180deg, #171320 0%, #261f33 100%);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.9), 0 0 8px rgba(179,148,255,0.4);
+      border-color: #b394ff;
+      transform: translateY(1px);
+    }
+
+    /* Canvas glow styling */
+    canvas {
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-2 bg-[#08070d]">
+<!-- STANDALONE 1280x628 HARDWARE VIEWPORT -->
+<main class="w-[1280px] h-[628px] bg-mpc-bg text-on-surface relative overflow-hidden flex flex-col border border-[#2b2438] rounded shadow-[0_12px_45px_rgba(0,0,0,0.95)]">
+<!-- TOP APP BAR / MPC LIVE II SYSTEM DOCK -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-space-md h-11 bg-surface-container-lowest dark:bg-surface-container-lowest border-b border-outline-variant dark:border-outline-variant shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]">
+<!-- Left: Logo & Hardware Engine Tag -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-mpc-accent-hi shadow-[0_0_8px_#b394ff] animate-pulse"></span>
+<h1 class="text-headline-sm font-headline-sm text-primary dark:text-primary tracking-wider uppercase font-bold">
+            SYNTH ENGINE // MPC
+          </h1>
+</div>
+<div class="h-4 w-[1px] bg-mpc-line mx-1"></div>
+<div class="font-label-sm text-label-sm text-mpc-ink-dim tracking-wider uppercase flex items-center gap-2">
+<span class="text-mpc-accent-hi font-bold">MARBLES</span>
+<span class="text-mpc-ink-faint">|</span>
+<span class="text-mpc-ink-dim">RANDOM SAMPLER &amp; T/X GENERATOR</span>
+</div>
+</div>
+<!-- Center: Navigation Tabs -->
+<nav class="flex items-center gap-4">
+<button class="text-primary dark:text-primary border-b-2 border-primary dark:border-primary font-bold py-1 text-label-md font-label-md flex items-center gap-1.5 transition-colors" id="tab-marbles">
+<span class="text-xs">[1]</span> MARBLES
+        </button>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface dark:hover:text-on-surface py-1 text-label-md font-label-md flex items-center gap-1.5 transition-colors" id="tab-setup">
+<span class="text-xs">[2]</span> SETUP
+        </button>
+</nav>
+<!-- Right: Global Actions & Transport -->
+<div class="flex items-center gap-2">
+<div class="flex items-center bg-[#15121d] border border-mpc-line rounded px-2 py-0.5 gap-2 mr-1">
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">MODE:</span>
+<span class="text-label-sm font-label-sm text-mpc-accent-hi font-bold" id="global-loop-state">DEJA VU FREE</span>
+</div>
+<button class="h-7 px-3 tactile-btn rounded text-label-md font-label-md text-mpc-ink font-bold flex items-center gap-1.5 transition-all active:translate-y-0.5" id="btn-clock-trigger">
+<span class="w-1.5 h-1.5 rounded-full bg-mpc-accent-hi"></span>
+<span>TRIGGER CLOCK</span>
+<span class="text-[9px] text-mpc-ink-faint font-normal">[SPACE]</span>
+</button>
+<button class="h-7 px-2.5 tactile-btn rounded text-label-md font-label-md text-mpc-ink hover:text-primary dark:hover:text-primary transition-colors flex items-center">
+          SAVE
+        </button>
+<button class="h-7 px-2.5 tactile-btn rounded text-label-md font-label-md text-mpc-ink hover:text-primary dark:hover:text-primary transition-colors flex items-center">
+          PRESET
+        </button>
+<div class="flex items-center gap-1 pl-1 border-l border-mpc-line">
+<button class="w-7 h-7 tactile-btn rounded flex items-center justify-center text-mpc-ink-dim hover:text-primary" title="Tune">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+</button>
+<button class="w-7 h-7 tactile-btn rounded flex items-center justify-center text-mpc-ink-dim hover:text-primary" title="EQ">
+<span class="material-symbols-outlined" data-icon="graphic_eq">graphic_eq</span>
+</button>
+<button class="w-7 h-7 tactile-btn rounded flex items-center justify-center text-mpc-ink-dim hover:text-primary" title="Settings">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN TOUCH SURFACE GRID (1280 x 517 viewport inside frame) -->
+<div class="pt-11 pb-14 px-3 flex-1 grid grid-cols-12 gap-3 h-[528px]">
+<!-- SECTION 1: T RHYTHM (Col 1-7, Upper Row) -->
+<section class="col-span-7 module-card rounded p-2.5 flex flex-col justify-between border-t-2 border-t-mpc-accent-hi">
+<!-- Module Header -->
+<div class="flex items-center justify-between pb-1.5 border-b border-mpc-line/60">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-mpc-accent-hi font-label-lg tracking-wider">T RHYTHM</span>
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">// BERNOULLI GENERATOR</span>
+</div>
+<!-- Parameter Popups / Selectors -->
+<div class="flex items-center gap-2">
+<!-- T MODEL popup -->
+<div class="flex items-center gap-1 bg-surface-container-lowest border border-mpc-line px-2 py-0.5 rounded cursor-pointer hover:border-mpc-accent" id="popup-t-model">
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">MODEL:</span>
+<span class="text-label-sm font-label-sm text-mpc-accent-hi font-bold" id="val-t-model">BERNOULLI</span>
+<span class="material-symbols-outlined text-[13px] text-mpc-ink-dim" data-icon="expand_more">expand_more</span>
+</div>
+<!-- CLOCK DIV popup -->
+<div class="flex items-center gap-1 bg-surface-container-lowest border border-mpc-line px-2 py-0.5 rounded cursor-pointer hover:border-mpc-accent" id="popup-clock-div">
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">DIV:</span>
+<span class="text-label-sm font-label-sm text-mpc-accent-hi font-bold" id="val-clock-div">1/16</span>
+<span class="material-symbols-outlined text-[13px] text-mpc-ink-dim" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Upper Layout: Knobs + Dynamic Scope Display -->
+<div class="flex items-center gap-3 pt-2">
+<!-- Master Large Knob: T BIAS (r=46 -> 92px) -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-[92px] h-[92px]" data-max="1" data-min="0" data-param="t_bias" data-step="0.01" data-val="0.52" id="knob-t-bias">
+<div class="knob-body w-full h-full">
+<div class="knob-indicator" style="transform: rotate(5deg);"></div>
+</div>
+</div>
+<div class="mt-1 text-center">
+<div class="text-label-sm font-label-sm text-mpc-ink-dim uppercase font-bold tracking-wider">T BIAS</div>
+<div class="recessed-display px-2 py-0.5 mt-0.5 rounded font-label-md text-label-md text-mpc-accent-hi font-bold" id="readout-t-bias">0.52</div>
+</div>
+</div>
+<!-- Medium Knobs: JITTER & GATE LEN -->
+<div class="flex flex-col gap-2">
+<!-- JITTER -->
+<div class="flex items-center gap-2">
+<div class="knob-container w-12 h-12" data-max="1" data-min="0" data-param="jitter" data-step="0.01" data-val="0.18" id="knob-jitter">
+<div class="knob-body w-full h-full">
+<div class="knob-indicator" style="transform: rotate(-70deg);"></div>
+</div>
+</div>
+<div>
+<div class="text-label-sm font-label-sm text-mpc-ink-dim">JITTER</div>
+<div class="recessed-display px-1.5 py-0.2 rounded font-label-sm text-label-sm text-mpc-accent-hi" id="readout-jitter">18%</div>
+</div>
+</div>
+<!-- GATE LEN -->
+<div class="flex items-center gap-2">
+<div class="knob-container w-12 h-12" data-max="1" data-min="0" data-param="gate_len" data-step="0.01" data-val="0.65" id="knob-gate-len">
+<div class="knob-body w-full h-full">
+<div class="knob-indicator" style="transform: rotate(45deg);"></div>
+</div>
+</div>
+<div>
+<div class="text-label-sm font-label-sm text-mpc-ink-dim">GATE LEN</div>
+<div class="recessed-display px-1.5 py-0.2 rounded font-label-sm text-label-sm text-mpc-accent-hi" id="readout-gate-len">65%</div>
+</div>
+</div>
+</div>
+<!-- Real-time 60 FPS 3-Lane Rhythmic Trigger Impulse Visualizer -->
+<div class="flex-1 flex flex-col h-[138px] recessed-display rounded p-1.5 relative overflow-hidden">
+<div class="flex justify-between items-center text-[8px] font-label-sm text-mpc-ink-faint px-1 pb-0.5 border-b border-mpc-line/40">
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-mpc-accent-hi inline-block"></span> T1: MASTER</span>
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span> T2: COMPL</span>
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#f87171] inline-block"></span> T3: COIN</span>
+</div>
+<canvas class="w-full flex-1" height="110" id="rhythm-canvas" width="410"></canvas>
+<div class="absolute bottom-1 right-2 text-[8px] font-label-sm text-mpc-ink-faint opacity-50">60FPS T-STREAM</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: DEJA VU (Col 8-12, Upper Row) -->
+<section class="col-span-5 module-card rounded p-2.5 flex flex-col justify-between border-t-2 border-t-primary">
+<!-- Module Header -->
+<div class="flex items-center justify-between pb-1.5 border-b border-mpc-line/60">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-primary font-label-lg tracking-wider">DEJA VU</span>
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">// LOOP PROBABILITY</span>
+</div>
+<span class="text-[9px] font-label-sm px-1.5 py-0.5 rounded bg-surface-container-lowest text-primary border border-mpc-line font-bold" id="badge-deja-loop">
+            LOCKED LOOP
+          </span>
+</div>
+<div class="flex items-center justify-around pt-2">
+<!-- Master Large Knob: DEJA VU (r=46 -> 92px) -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-[92px] h-[92px]" data-max="1" data-min="0" data-param="deja_vu" data-step="0.01" data-val="0.75" id="knob-deja-vu">
+<div class="knob-body w-full h-full">
+<div class="knob-indicator" style="transform: rotate(70deg);"></div>
+</div>
+</div>
+<div class="mt-1 text-center">
+<div class="text-label-sm font-label-sm text-mpc-ink-dim uppercase font-bold tracking-wider">DEJA VU</div>
+<div class="recessed-display px-2 py-0.5 mt-0.5 rounded font-label-md text-label-md text-primary font-bold" id="readout-deja-vu">0.75</div>
+</div>
+</div>
+<!-- Knob: LENGTH (1 to 16 steps) -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-14 h-14" data-max="16" data-min="1" data-param="length" data-step="1" data-val="8" id="knob-length">
+<div class="knob-body w-full h-full">
+<div class="knob-indicator" style="transform: rotate(-10deg);"></div>
+</div>
+</div>
+<div class="mt-1 text-center">
+<div class="text-label-sm font-label-sm text-mpc-ink-dim uppercase font-bold">LENGTH</div>
+<div class="recessed-display px-2 py-0.5 mt-0.5 rounded font-label-sm text-label-sm text-primary font-bold" id="readout-length">8 STEPS</div>
+</div>
+</div>
+<!-- Segmented Selector: T DEJA VU -->
+<div class="flex flex-col items-center gap-1.5">
+<span class="text-label-sm font-label-sm text-mpc-ink-dim">T DEJA VU</span>
+<div class="flex flex-col gap-1 w-24">
+<button class="deja-t-btn h-6 text-[10px] font-label-sm rounded tactile-btn font-bold text-mpc-ink-dim" data-state="OFF">OFF</button>
+<button class="deja-t-btn h-6 text-[10px] font-label-sm rounded tactile-btn font-bold text-mpc-ink-dim" data-state="ON">ON</button>
+<button class="deja-t-btn h-6 text-[10px] font-label-sm rounded tactile-btn font-bold active-state text-primary" data-state="LOCKED">LOCKED</button>
+</div>
+</div>
+</div>
+<!-- 16-step active indicator dots -->
+<div class="recessed-display p-1.5 rounded flex items-center justify-between mt-1">
+<div class="grid grid-cols-16 gap-1 w-full flex-row flex justify-between" id="step-indicators">
+<!-- 16 steps rendered via js -->
+</div>
+</div>
+</section>
+<!-- SECTION 3: X PITCH (Col 1-7, Lower Row) -->
+<section class="col-span-7 module-card rounded p-2.5 flex flex-col justify-between border-t-2 border-t-mpc-accent">
+<!-- Header -->
+<div class="flex items-center justify-between pb-1.5 border-b border-mpc-line/60">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-mpc-accent-hi font-label-lg tracking-wider">X PITCH</span>
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">// QUANTIZED GAUSSIAN CV</span>
+</div>
+<div class="flex items-center gap-2">
+<!-- SCALE Popup -->
+<div class="flex items-center gap-1 bg-surface-container-lowest border border-mpc-line px-2 py-0.5 rounded cursor-pointer hover:border-mpc-accent" id="popup-scale">
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">SCALE:</span>
+<span class="text-label-sm font-label-sm text-mpc-accent-hi font-bold" id="val-scale">MINOR PENTATONIC</span>
+<span class="material-symbols-outlined text-[13px] text-mpc-ink-dim" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Segmented: X DEJA VU -->
+<div class="flex bg-surface-container-lowest border border-mpc-line rounded p-0.5 gap-0.5">
+<button class="deja-x-btn px-2 py-0.5 text-[9px] font-label-sm rounded text-mpc-ink-dim" data-state="OFF">OFF</button>
+<button class="deja-x-btn px-2 py-0.5 text-[9px] font-label-sm rounded text-mpc-ink-dim active-state bg-mpc-accent text-surface-container-lowest font-bold" data-state="ON">ON</button>
+<button class="deja-x-btn px-2 py-0.5 text-[9px] font-label-sm rounded text-mpc-ink-dim" data-state="LOCKED">LOCKED</button>
+</div>
+</div>
+</div>
+<!-- Controls + Gaussian Bell Display -->
+<div class="flex items-center gap-3 pt-2">
+<!-- Master Large Knob: SPREAD (r=46 -> 92px) -->
+<div class="flex flex-col items-center">
+<div class="knob-container w-[92px] h-[92px]" data-max="1" data-min="0" data-param="spread" data-step="0.01" data-val="0.68" id="knob-spread">
+<div class="knob-body w-full h-full">
+<div class="knob-indicator" style="transform: rotate(50deg);"></div>
+</div>
+</div>
+<div class="mt-1 text-center">
+<div class="text-label-sm font-label-sm text-mpc-ink-dim uppercase font-bold tracking-wider">SPREAD</div>
+<div class="recessed-display px-2 py-0.5 mt-0.5 rounded font-label-md text-label-md text-mpc-accent-hi font-bold" id="readout-spread">0.68</div>
+</div>
+</div>
+<!-- Knobs: X BIAS & STEPS -->
+<div class="flex flex-col gap-2">
+<!-- X BIAS -->
+<div class="flex items-center gap-2">
+<div class="knob-container w-12 h-12" data-max="1" data-min="0" data-param="x_bias" data-step="0.01" data-val="0.45" id="knob-x-bias">
+<div class="knob-body w-full h-full">
+<div class="knob-indicator" style="transform: rotate(-15deg);"></div>
+</div>
+</div>
+<div>
+<div class="text-label-sm font-label-sm text-mpc-ink-dim">X BIAS</div>
+<div class="recessed-display px-1.5 py-0.2 rounded font-label-sm text-label-sm text-mpc-accent-hi" id="readout-x-bias">0.45</div>
+</div>
+</div>
+<!-- STEPS -->
+<div class="flex items-center gap-2">
+<div class="knob-container w-12 h-12" data-max="1" data-min="0" data-param="steps" data-step="0.01" data-val="0.80" id="knob-steps">
+<div class="knob-body w-full h-full">
+<div class="knob-indicator" style="transform: rotate(80deg);"></div>
+</div>
+</div>
+<div>
+<div class="text-label-sm font-label-sm text-mpc-ink-dim">STEPS</div>
+<div class="recessed-display px-1.5 py-0.2 rounded font-label-sm text-label-sm text-mpc-accent-hi" id="readout-steps">QUANT 80%</div>
+</div>
+</div>
+</div>
+<!-- Live Gaussian Bell Curve Distribution Analyzer -->
+<div class="flex-1 flex flex-col h-[138px] recessed-display rounded p-1.5 relative overflow-hidden">
+<div class="flex justify-between items-center text-[8px] font-label-sm text-mpc-ink-faint px-1 pb-0.5 border-b border-mpc-line/40">
+<span>PROBABILITY DENSITY CURVE</span>
+<span class="text-mpc-accent-hi font-mono" id="scale-indicator-text">12-TET QUANT</span>
+</div>
+<canvas class="w-full flex-1" height="110" id="gaussian-canvas" width="410"></canvas>
+<div class="absolute bottom-1 right-2 text-[8px] font-label-sm text-mpc-ink-faint opacity-50">GAUSS // LIVE HIST</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: MIDI OUT / CV VOICES (Col 8-12, Lower Row) -->
+<section class="col-span-5 module-card rounded p-2.5 flex flex-col justify-between border-t-2 border-t-mpc-ink-dim">
+<!-- Header -->
+<div class="flex items-center justify-between pb-1.5 border-b border-mpc-line/60">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-mpc-ink font-label-lg tracking-wider">MIDI OUT</span>
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">// 3-VOICE GENERATIVE BUS</span>
+</div>
+<span class="text-label-sm font-label-sm text-mpc-ink-dim font-mono">CH 1 - 3 ACTIVE</span>
+</div>
+<!-- 3-Voice CV/MIDI Status Display Wells -->
+<div class="grid grid-cols-3 gap-2 pt-1 flex-1">
+<!-- VOICE 1 (X1) -->
+<div class="recessed-display p-2 rounded flex flex-col justify-between relative border-l-2 border-l-mpc-accent-hi">
+<div class="flex justify-between items-center">
+<span class="text-[10px] font-bold text-mpc-accent-hi">VOICE 1</span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#3d3550] transition-colors" id="led-v1"></span>
+</div>
+<div class="text-center my-1">
+<div class="text-headline-md font-readout-numeric text-mpc-ink" id="note-v1">C3</div>
+<div class="text-[9px] font-label-sm text-mpc-ink-faint" id="hz-v1">130.8 Hz</div>
+</div>
+<div class="flex justify-between items-center text-[9px] font-label-sm text-mpc-ink-dim pt-1 border-t border-mpc-line/50">
+<span>MIDI CH 1</span>
+<span class="font-bold text-mpc-accent-hi" id="vel-v1">104</span>
+</div>
+</div>
+<!-- VOICE 2 (X2) -->
+<div class="recessed-display p-2 rounded flex flex-col justify-between relative border-l-2 border-l-primary">
+<div class="flex justify-between items-center">
+<span class="text-[10px] font-bold text-primary">VOICE 2</span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#3d3550] transition-colors" id="led-v2"></span>
+</div>
+<div class="text-center my-1">
+<div class="text-headline-md font-readout-numeric text-primary" id="note-v2">Eb3</div>
+<div class="text-[9px] font-label-sm text-mpc-ink-faint" id="hz-v2">155.6 Hz</div>
+</div>
+<div class="flex justify-between items-center text-[9px] font-label-sm text-mpc-ink-dim pt-1 border-t border-mpc-line/50">
+<span>MIDI CH 2</span>
+<span class="font-bold text-primary" id="vel-v2">92</span>
+</div>
+</div>
+<!-- VOICE 3 (X3) -->
+<div class="recessed-display p-2 rounded flex flex-col justify-between relative border-l-2 border-l-[#f87171]">
+<div class="flex justify-between items-center">
+<span class="text-[10px] font-bold text-[#f87171]">VOICE 3</span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#3d3550] transition-colors" id="led-v3"></span>
+</div>
+<div class="text-center my-1">
+<div class="text-headline-md font-readout-numeric text-[#f87171]" id="note-v3">G3</div>
+<div class="text-[9px] font-label-sm text-mpc-ink-faint" id="hz-v3">196.0 Hz</div>
+</div>
+<div class="flex justify-between items-center text-[9px] font-label-sm text-mpc-ink-dim pt-1 border-t border-mpc-line/50">
+<span>MIDI CH 3</span>
+<span class="font-bold text-[#f87171]" id="vel-v3">118</span>
+</div>
+</div>
+</div>
+<!-- Master Status Ticker -->
+<div class="recessed-display px-2 py-1 rounded flex items-center justify-between mt-2">
+<div class="flex items-center gap-2">
+<span class="text-[9px] font-label-sm text-mpc-ink-faint">CLOCK SOURCE:</span>
+<span class="text-[9px] font-label-sm text-primary font-bold">INTERNAL 120.0 BPM</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[9px] font-label-sm text-mpc-ink-faint">QUANTIZER:</span>
+<span class="text-[9px] font-label-sm text-mpc-accent-hi font-bold">BRAIDS ENGINE ON</span>
+</div>
+</div>
+</section>
+</div>
+<!-- BOTTOM Q-LINK BAR (Shared Component Anchor) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-space-md h-14 bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant shadow-[inset_0_2px_4px_rgba(0,0,0,0.85)]">
+<!-- Bank / Q-Link Label -->
+<div class="flex items-center gap-2 pr-3 border-r border-mpc-line">
+<div class="text-label-md font-label-md text-primary dark:text-primary font-bold">Q-LINK</div>
+<div class="text-[9px] font-label-sm text-mpc-ink-faint leading-tight">BANK 1<br>MARBLES</div>
+</div>
+<!-- Quick Potentiometer Encoders (Mapping Q1..Q4) -->
+<div class="flex-1 flex justify-around items-center px-2">
+<!-- Q1: CUTOFF / T BIAS -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high dark:bg-surface-container-high text-primary dark:text-primary border border-primary dark:border-primary px-space-md py-1 rounded cursor-pointer active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="dialpad">dialpad</span>
+<span class="text-label-sm font-label-sm font-bold tracking-wider">Q1: CUTOFF</span>
+</div>
+<span class="text-[9px] font-label-sm text-mpc-ink-dim" id="qlink-1-val">T BIAS: 0.52</span>
+</div>
+<!-- Q2: RESO / SPREAD -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant border border-outline-variant dark:border-outline-variant px-space-md py-1 rounded cursor-pointer hover:bg-surface-container dark:hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="adjust">adjust</span>
+<span class="text-label-sm font-label-sm font-bold tracking-wider">Q2: RESO</span>
+</div>
+<span class="text-[9px] font-label-sm text-mpc-ink-dim" id="qlink-2-val">SPREAD: 0.68</span>
+</div>
+<!-- Q3: DRIVE / DEJA VU -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant border border-outline-variant dark:border-outline-variant px-space-md py-1 rounded cursor-pointer hover:bg-surface-container dark:hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="tune">tune</span>
+<span class="text-label-sm font-label-sm font-bold tracking-wider">Q3: DRIVE</span>
+</div>
+<span class="text-[9px] font-label-sm text-mpc-ink-dim" id="qlink-3-val">DEJA VU: 0.75</span>
+</div>
+<!-- Q4: TEMPO / LENGTH -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant border border-outline-variant dark:border-outline-variant px-space-md py-1 rounded cursor-pointer hover:bg-surface-container dark:hover:bg-surface-container active:scale-95 transition-transform duration-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="speed">speed</span>
+<span class="text-label-sm font-label-sm font-bold tracking-wider">Q4: TEMPO</span>
+</div>
+<span class="text-[9px] font-label-sm text-mpc-ink-dim" id="qlink-4-val">120.0 BPM (8 ST)</span>
+</div>
+</div>
+<!-- Trailing Status Indicator -->
+<div class="pl-3 border-l border-mpc-line flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-mpc-ink-faint">DSP LOAD 11%</span>
+</div>
+</footer>
+</main>
+<!-- JAVASCRIPT: WEB AUDIO SYNTH ENGINE, ROTARY INTERACTIONS & PARTICLE VISUALIZERS -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // State Object
+      const state = {
+        clockRunning: false,
+        bpm: 120,
+        t_model: "BERNOULLI",
+        clock_div: "1/16",
+        t_bias: 0.52,
+        jitter: 0.18,
+        gate_len: 0.65,
+        deja_vu: 0.75,
+        length: 8,
+        t_deja_vu: "LOCKED",
+        spread: 0.68,
+        x_bias: 0.45,
+        steps: 0.80,
+        scale: "MINOR PENTATONIC",
+        x_deja_vu: "ON",
+        currentStep: 0,
+        loopHistory: []
+      };
+
+      // Scales mapping
+      const SCALES = {
+        "MINOR PENTATONIC": [0, 3, 5, 7, 10],
+        "MAJOR PENTATONIC": [0, 2, 4, 7, 9],
+        "DORIAN": [0, 2, 3, 5, 7, 9, 10],
+        "MICROTONAL (24-TET)": [0, 1.5, 3, 4.5, 6, 7.5, 9, 10.5]
+      };
+
+      const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+      // Setup 16 Steps UI
+      const stepContainer = document.getElementById("step-indicators");
+      for (let i = 0; i < 16; i++) {
+        const dot = document.createElement("div");
+        dot.className = `w-4 h-2.5 rounded-sm bg-[#221c2e] border border-mpc-line transition-all step-cell-${i}`;
+        stepContainer.appendChild(dot);
+      }
+
+      // Web Audio API Synth Engine
+      let audioCtx = null;
+      function initAudio() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      }
+
+      function playVoice(freq, length, gainLevel = 0.25, voiceIndex = 1) {
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+
+        osc.type = voiceIndex === 1 ? 'sawtooth' : (voiceIndex === 2 ? 'triangle' : 'square');
+        osc.frequency.setValueAtTime(freq, now);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(600 + (state.spread * 3000), now);
+        filter.Q.setValueAtTime(4 + (state.t_bias * 12), now);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(gainLevel, now + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + (length * 0.45));
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + length);
+      }
+
+      // Convert Pitch to Note / Hz
+      function midiToFreq(midi) {
+        return 440 * Math.pow(2, (midi - 69) / 12);
+      }
+
+      function midiToName(midi) {
+        const rounded = Math.round(midi);
+        const note = NOTE_NAMES[rounded % 12];
+        const oct = Math.floor(rounded / 12) - 1;
+        return `${note}${oct}`;
+      }
+
+      // Rotary Knob Interaction Handler
+      function setupKnob(elemId, callback) {
+        const knob = document.getElementById(elemId);
+        if (!knob) return;
+
+        let startY = 0;
+        let startVal = parseFloat(knob.dataset.val);
+        const min = parseFloat(knob.dataset.min);
+        const max = parseFloat(knob.dataset.max);
+        const step = parseFloat(knob.dataset.step);
+
+        function updateRotation(val) {
+          const norm = (val - min) / (max - min);
+          const deg = -135 + (norm * 270);
+          const indicator = knob.querySelector(".knob-indicator");
+          if (indicator) indicator.style.transform = `rotate(${deg}deg)`;
+        }
+
+        updateRotation(startVal);
+
+        function onPointerDown(e) {
+          initAudio();
+          startY = e.clientY || (e.touches && e.touches[0].clientY);
+          startVal = parseFloat(knob.dataset.val);
+
+          function onPointerMove(moveEvent) {
+            const currentY = moveEvent.clientY || (moveEvent.touches && moveEvent.touches[0].clientY);
+            const deltaY = startY - currentY;
+            const range = max - min;
+            let newVal = startVal + (deltaY / 150) * range;
+            newVal = Math.max(min, Math.min(max, newVal));
+
+            if (step >= 1) newVal = Math.round(newVal);
+            else newVal = Math.round(newVal * 100) / 100;
+
+            knob.dataset.val = newVal;
+            updateRotation(newVal);
+            callback(newVal);
+          }
+
+          function onPointerUp() {
+            window.removeEventListener("mousemove", onPointerMove);
+            window.removeEventListener("mouseup", onPointerUp);
+            window.removeEventListener("touchmove", onPointerMove);
+            window.removeEventListener("touchend", onPointerUp);
+          }
+
+          window.addEventListener("mousemove", onPointerMove);
+          window.addEventListener("mouseup", onPointerUp);
+          window.addEventListener("touchmove", onPointerMove);
+          window.addEventListener("touchend", onPointerUp);
+        }
+
+        knob.addEventListener("mousedown", onPointerDown);
+        knob.addEventListener("touchstart", onPointerDown, { passive: true });
+      }
+
+      // Attach Knob Bindings
+      setupKnob("knob-t-bias", (val) => {
+        state.t_bias = val;
+        document.getElementById("readout-t-bias").textContent = val.toFixed(2);
+        document.getElementById("qlink-1-val").textContent = `T BIAS: ${val.toFixed(2)}`;
+      });
+
+      setupKnob("knob-jitter", (val) => {
+        state.jitter = val;
+        document.getElementById("readout-jitter").textContent = `${Math.round(val * 100)}%`;
+      });
+
+      setupKnob("knob-gate-len", (val) => {
+        state.gate_len = val;
+        document.getElementById("readout-gate-len").textContent = `${Math.round(val * 100)}%`;
+      });
+
+      setupKnob("knob-deja-vu", (val) => {
+        state.deja_vu = val;
+        document.getElementById("readout-deja-vu").textContent = val.toFixed(2);
+        document.getElementById("qlink-3-val").textContent = `DEJA VU: ${val.toFixed(2)}`;
+        const loopBadge = document.getElementById("badge-deja-loop");
+        if (val > 0.8) {
+          loopBadge.textContent = "LOCKED LOOP";
+          loopBadge.className = "text-[9px] font-label-sm px-1.5 py-0.5 rounded bg-surface-container-lowest text-primary border border-mpc-line font-bold";
+        } else if (val < 0.2) {
+          loopBadge.textContent = "PURE RANDOM";
+          loopBadge.className = "text-[9px] font-label-sm px-1.5 py-0.5 rounded bg-surface-container-lowest text-mpc-ink-dim border border-mpc-line";
+        } else {
+          loopBadge.textContent = "MUTATING LOOP";
+          loopBadge.className = "text-[9px] font-label-sm px-1.5 py-0.5 rounded bg-surface-container-lowest text-mpc-accent-hi border border-mpc-line";
+        }
+      });
+
+      setupKnob("knob-length", (val) => {
+        state.length = val;
+        document.getElementById("readout-length").textContent = `${val} STEPS`;
+        document.getElementById("qlink-4-val").textContent = `120.0 BPM (${val} ST)`;
+      });
+
+      setupKnob("knob-spread", (val) => {
+        state.spread = val;
+        document.getElementById("readout-spread").textContent = val.toFixed(2);
+        document.getElementById("qlink-2-val").textContent = `SPREAD: ${val.toFixed(2)}`;
+      });
+
+      setupKnob("knob-x-bias", (val) => {
+        state.x_bias = val;
+        document.getElementById("readout-x-bias").textContent = val.toFixed(2);
+      });
+
+      setupKnob("knob-steps", (val) => {
+        state.steps = val;
+        document.getElementById("readout-steps").textContent = `QUANT ${Math.round(val * 100)}%`;
+      });
+
+      // T DEJA VU Segmented Switch
+      document.querySelectorAll(".deja-t-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".deja-t-btn").forEach(b => {
+            b.classList.remove("active-state", "text-primary");
+            b.classList.add("text-mpc-ink-dim");
+          });
+          btn.classList.add("active-state", "text-primary");
+          btn.classList.remove("text-mpc-ink-dim");
+          state.t_deja_vu = btn.dataset.state;
+        });
+      });
+
+      // X DEJA VU Segmented Switch
+      document.querySelectorAll(".deja-x-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".deja-x-btn").forEach(b => {
+            b.className = "deja-x-btn px-2 py-0.5 text-[9px] font-label-sm rounded text-mpc-ink-dim";
+          });
+          btn.className = "deja-x-btn px-2 py-0.5 text-[9px] font-label-sm rounded bg-mpc-accent text-surface-container-lowest font-bold";
+          state.x_deja_vu = btn.dataset.state;
+        });
+      });
+
+      // Popups Selectors (T MODEL, CLOCK DIV, SCALE)
+      const models = ["BERNOULLI", "COIN TOSS", "RATIO CLOCK"];
+      let modelIdx = 0;
+      document.getElementById("popup-t-model").addEventListener("click", () => {
+        modelIdx = (modelIdx + 1) % models.length;
+        state.t_model = models[modelIdx];
+        document.getElementById("val-t-model").textContent = state.t_model;
+      });
+
+      const divs = ["1/8", "1/16", "1/16T", "1/32"];
+      let divIdx = 1;
+      document.getElementById("popup-clock-div").addEventListener("click", () => {
+        divIdx = (divIdx + 1) % divs.length;
+        state.clock_div = divs[divIdx];
+        document.getElementById("val-clock-div").textContent = state.clock_div;
+      });
+
+      const scalesList = ["MINOR PENTATONIC", "MAJOR PENTATONIC", "DORIAN", "MICROTONAL (24-TET)"];
+      let scaleIdx = 0;
+      document.getElementById("popup-scale").addEventListener("click", () => {
+        scaleIdx = (scaleIdx + 1) % scalesList.length;
+        state.scale = scalesList[scaleIdx];
+        document.getElementById("val-scale").textContent = state.scale;
+        document.getElementById("scale-indicator-text").textContent = state.scale.slice(0, 10);
+      });
+
+      // Particle Visualizer for RHYTHM
+      const rhythmCanvas = document.getElementById("rhythm-canvas");
+      const rCtx = rhythmCanvas.getContext("2d");
+      const particles = [];
+
+      class MarbleParticle {
+        constructor(lane, color) {
+          this.lane = lane; // 0, 1, 2
+          this.x = 0;
+          this.y = 20 + lane * 34;
+          this.vx = 2.5 + Math.random() * 1.5;
+          this.radius = 4;
+          this.color = color;
+          this.alpha = 1.0;
+        }
+        update() {
+          this.x += this.vx;
+          if (this.x > rhythmCanvas.width - 25) {
+            this.alpha -= 0.08;
+          }
+        }
+        draw(ctx) {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, this.alpha);
+          ctx.fillStyle = this.color;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function spawnMarble(lane) {
+        const colors = ["#b394ff", "#ffc665", "#f87171"];
+        particles.push(new MarbleParticle(lane, colors[lane]));
+      }
+
+      // Gaussian Distribution Live Canvas
+      const gCanvas = document.getElementById("gaussian-canvas");
+      const gCtx = gCanvas.getContext("2d");
+
+      function drawGaussian() {
+        gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
+        
+        // Draw grid lines
+        gCtx.strokeStyle = "rgba(61, 53, 80, 0.4)";
+        gCtx.lineWidth = 1;
+        for (let x = 0; x < gCanvas.width; x += 40) {
+          gCtx.beginPath();
+          gCtx.moveTo(x, 0);
+          gCtx.lineTo(x, gCanvas.height);
+          gCtx.stroke();
+        }
+
+        // Bell curve params
+        const mean = gCanvas.width * state.x_bias;
+        const stdDev = 20 + (state.spread * 120);
+
+        gCtx.beginPath();
+        gCtx.moveTo(0, gCanvas.height);
+
+        for (let x = 0; x <= gCanvas.width; x += 4) {
+          const exponent = -Math.pow(x - mean, 2) / (2 * Math.pow(stdDev, 2));
+          const yVal = Math.exp(exponent);
+          const y = gCanvas.height - (yVal * (gCanvas.height - 15));
+          gCtx.lineTo(x, y);
+        }
+
+        gCtx.lineTo(gCanvas.width, gCanvas.height);
+        gCtx.closePath();
+
+        const grad = gCtx.createLinearGradient(0, 0, 0, gCanvas.height);
+        grad.addColorStop(0, "rgba(179, 148, 255, 0.55)");
+        grad.addColorStop(1, "rgba(143, 106, 224, 0.02)");
+
+        gCtx.fillStyle = grad;
+        gCtx.fill();
+
+        gCtx.strokeStyle = "#b394ff";
+        gCtx.lineWidth = 2;
+        gCtx.stroke();
+
+        // Sample pointers
+        if (state.lastSampleX) {
+          gCtx.fillStyle = "#ffc665";
+          gCtx.beginPath();
+          gCtx.arc(state.lastSampleX, gCanvas.height - 30, 4.5, 0, Math.PI * 2);
+          gCtx.fill();
+        }
+      }
+
+      // Flash LED Indicator Helper
+      function flashLed(id, color) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.backgroundColor = color;
+        el.style.boxShadow = `0 0 10px ${color}`;
+        setTimeout(() => {
+          el.style.backgroundColor = "#3d3550";
+          el.style.boxShadow = "none";
+        }, 120);
+      }
+
+      // Step & Clock Engine (Mutable Marbles Generative Algorithm)
+      function triggerStep() {
+        initAudio();
+        state.currentStep = (state.currentStep + 1) % state.length;
+
+        // Step dot highlights
+        for (let i = 0; i < 16; i++) {
+          const dot = document.querySelector(`.step-cell-${i}`);
+          if (!dot) continue;
+          if (i === state.currentStep) {
+            dot.style.backgroundColor = "#ffc665";
+            dot.style.boxShadow = "0 0 6px #ffc665";
+          } else if (i < state.length) {
+            dot.style.backgroundColor = "#352b47";
+            dot.style.boxShadow = "none";
+          } else {
+            dot.style.backgroundColor = "#16131e";
+            dot.style.boxShadow = "none";
+          }
+        }
+
+        // T-Rhythm evaluation
+        const coin1 = Math.random() < state.t_bias;
+        const coin2 = Math.random() < (1 - state.t_bias);
+        const coin3 = Math.random() < 0.5;
+
+        // Spawn rhythm marbles in visualizer
+        if (coin1) spawnMarble(0);
+        if (coin2) spawnMarble(1);
+        if (coin3) spawnMarble(2);
+
+        // Deja-Vu Memory Check
+        let noteValues = [];
+        const isLocked = state.deja_vu > Math.random();
+
+        if (isLocked && state.loopHistory[state.currentStep]) {
+          noteValues = state.loopHistory[state.currentStep];
+        } else {
+          // Generate new Gaussian Pitch Values
+          const scaleNotes = SCALES[state.scale] || SCALES["MINOR PENTATONIC"];
+          const baseOctave = 48; // C3
+
+          for (let v = 0; v < 3; v++) {
+            // Box-Muller Gaussian
+            const u = 1 - Math.random();
+            const vRand = Math.random();
+            const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * vRand);
+            
+            const rawPitch = (state.x_bias * 24) + (z * state.spread * 12);
+            
+            // Quantize according to steps
+            const scaleDegree = scaleNotes[Math.floor(Math.abs(rawPitch) % scaleNotes.length)];
+            const octaveOffset = Math.floor(rawPitch / 12) * 12;
+            const quantizedMidi = baseOctave + octaveOffset + scaleDegree;
+
+            // Blend quantized with raw pitch based on steps parameter
+            const finalMidi = (quantizedMidi * state.steps) + ((baseOctave + rawPitch) * (1 - state.steps));
+            noteValues.push(finalMidi);
+          }
+          state.loopHistory[state.currentStep] = noteValues;
+        }
+
+        // Update Voice Readouts and Audio
+        const v1Midi = noteValues[0];
+        const v2Midi = noteValues[1] + 7;
+        const v3Midi = noteValues[2] - 12;
+
+        state.lastSampleX = Math.min(gCanvas.width, Math.max(0, (v1Midi - 36) * (gCanvas.width / 48)));
+
+        // Voice 1 Trigger
+        if (coin1) {
+          const freq1 = midiToFreq(v1Midi);
+          playVoice(freq1, state.gate_len * 0.4, 0.35, 1);
+          document.getElementById("note-v1").textContent = midiToName(v1Midi);
+          document.getElementById("hz-v1").textContent = `${freq1.toFixed(1)} Hz`;
+          document.getElementById("vel-v1").textContent = Math.floor(80 + Math.random() * 45);
+          flashLed("led-v1", "#b394ff");
+        }
+
+        // Voice 2 Trigger
+        if (coin2) {
+          const freq2 = midiToFreq(v2Midi);
+          playVoice(freq2, state.gate_len * 0.5, 0.25, 2);
+          document.getElementById("note-v2").textContent = midiToName(v2Midi);
+          document.getElementById("hz-v2").textContent = `${freq2.toFixed(1)} Hz`;
+          document.getElementById("vel-v2").textContent = Math.floor(75 + Math.random() * 45);
+          flashLed("led-v2", "#ffc665");
+        }
+
+        // Voice 3 Trigger
+        if (coin3) {
+          const freq3 = midiToFreq(v3Midi);
+          playVoice(freq3, state.gate_len * 0.3, 0.28, 3);
+          document.getElementById("note-v3").textContent = midiToName(v3Midi);
+          document.getElementById("hz-v3").textContent = `${freq3.toFixed(1)} Hz`;
+          document.getElementById("vel-v3").textContent = Math.floor(90 + Math.random() * 37);
+          flashLed("led-v3", "#f87171");
+        }
+      }
+
+      // Clock Loop
+      let clockInterval = null;
+      function toggleClock() {
+        initAudio();
+        const triggerBtn = document.getElementById("btn-clock-trigger");
+        if (state.clockRunning) {
+          clearInterval(clockInterval);
+          state.clockRunning = false;
+          triggerBtn.classList.remove("active-state");
+        } else {
+          state.clockRunning = true;
+          triggerBtn.classList.add("active-state");
+          const ms = (60000 / state.bpm) / 4; // 16th notes
+          clockInterval = setInterval(triggerStep, ms);
+        }
+      }
+
+      // Button / Space key listeners
+      document.getElementById("btn-clock-trigger").addEventListener("click", toggleClock);
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          toggleClock();
+        }
+      });
+
+      // Visualizer Loop (60 FPS)
+      function renderLoop() {
+        // Clear Rhythm Canvas
+        rCtx.clearRect(0, 0, rhythmCanvas.width, rhythmCanvas.height);
+
+        // Draw Lanes
+        rCtx.strokeStyle = "rgba(61, 53, 80, 0.35)";
+        rCtx.lineWidth = 1;
+        [20, 54, 88].forEach(y => {
+          rCtx.beginPath();
+          rCtx.moveTo(0, y);
+          rCtx.lineTo(rhythmCanvas.width, y);
+          rCtx.stroke();
+        });
+
+        // Update and draw particles
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.update();
+          p.draw(rCtx);
+          if (p.alpha <= 0) particles.splice(i, 1);
+        }
+
+        // Draw Gaussian Curve
+        drawGaussian();
+
+        requestAnimationFrame(renderLoop);
+      }
+
+      renderLoop();
+    });
+  </script>
+</body></html>

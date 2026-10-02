@@ -1,0 +1,449 @@
+{
+ "name": "Hush One",
+ "params": [
+  {
+   "key": "preset",
+   "name": "PATCH",
+   "min": 0,
+   "max": 10,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "volume",
+   "name": "MASTER VOL",
+   "min": 0,
+   "max": 1,
+   "default": 0.85
+  },
+  {
+   "key": "bend_range",
+   "name": "BEND RANGE",
+   "min": 0,
+   "max": 12,
+   "default": 2.0
+  },
+  {
+   "key": "saw",
+   "name": "SAW WAVE",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "pulse",
+   "name": "PULSE / SQR",
+   "min": 0,
+   "max": 1,
+   "default": 0.55
+  },
+  {
+   "key": "sub",
+   "name": "SUB OSC",
+   "min": 0,
+   "max": 1,
+   "default": 0.35
+  },
+  {
+   "key": "noise",
+   "name": "NOISE",
+   "min": 0,
+   "max": 1,
+   "default": 0.0
+  },
+  {
+   "key": "sub_mode",
+   "name": "SUB MODE",
+   "options": [
+    "-2 OCT 50% PW",
+    "-2 OCT",
+    "-1 OCT"
+   ],
+   "default": 1
+  },
+  {
+   "key": "white_noise",
+   "name": "WHITE NOISE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "pulse_width",
+   "name": "PULSE WIDTH",
+   "min": 0.05,
+   "max": 0.95,
+   "default": 0.5
+  },
+  {
+   "key": "pwm_mode",
+   "name": "PWM SOURCE",
+   "options": [
+    "ENV",
+    "MANUAL",
+    "LFO"
+   ],
+   "default": 1
+  },
+  {
+   "key": "pwm_depth",
+   "name": "PWM LFO",
+   "min": 0,
+   "max": 1,
+   "default": 0.0
+  },
+  {
+   "key": "pwm_env_depth",
+   "name": "PWM ENV",
+   "min": 0,
+   "max": 1,
+   "default": 0.0
+  },
+  {
+   "key": "cutoff",
+   "name": "CUTOFF",
+   "min": 0,
+   "max": 1,
+   "default": 0.55
+  },
+  {
+   "key": "resonance",
+   "name": "RESONANCE",
+   "min": 0,
+   "max": 1.2,
+   "default": 0.2
+  },
+  {
+   "key": "env_amt",
+   "name": "ENV AMT",
+   "min": 0,
+   "max": 1,
+   "default": 0.4
+  },
+  {
+   "key": "key_follow",
+   "name": "KEY TRACK",
+   "min": 0,
+   "max": 1,
+   "default": 0.5
+  },
+  {
+   "key": "filter_velocity_sens",
+   "name": "VEL FILTER",
+   "min": 0,
+   "max": 1,
+   "default": 0.25
+  },
+  {
+   "key": "attack",
+   "name": "ATTACK",
+   "min": 0.001,
+   "max": 4.0,
+   "default": 0.005
+  },
+  {
+   "key": "decay",
+   "name": "DECAY",
+   "min": 0.001,
+   "max": 6.0,
+   "default": 0.12
+  },
+  {
+   "key": "sustain",
+   "name": "SUSTAIN",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "release",
+   "name": "RELEASE",
+   "min": 0.001,
+   "max": 8.0,
+   "default": 0.2
+  },
+  {
+   "key": "velocity_sens",
+   "name": "VELO SENS",
+   "min": 0,
+   "max": 1,
+   "default": 0.7
+  },
+  {
+   "key": "f_attack",
+   "name": "FLT ATTACK",
+   "min": 0.001,
+   "max": 4.0,
+   "default": 0.008
+  },
+  {
+   "key": "f_decay",
+   "name": "FLT DECAY",
+   "min": 0.001,
+   "max": 6.0,
+   "default": 0.18
+  },
+  {
+   "key": "f_sustain",
+   "name": "FLT SUSTAIN",
+   "min": 0,
+   "max": 1,
+   "default": 0.4
+  },
+  {
+   "key": "f_release",
+   "name": "FLT RELEASE",
+   "min": 0.001,
+   "max": 8.0,
+   "default": 0.25
+  },
+  {
+   "key": "lfo_rate",
+   "name": "LFO RATE",
+   "min": 0.02,
+   "max": 40.0,
+   "default": 5.0
+  },
+  {
+   "key": "lfo_waveform",
+   "name": "LFO WAVE",
+   "options": [
+    "TRI",
+    "RECT",
+    "RANDOM",
+    "NOISE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_trigger",
+   "name": "LFO RETRIG",
+   "options": [
+    "FREE",
+    "RETRIG"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_sync",
+   "name": "LFO SYNC",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_invert",
+   "name": "LFO INVERT",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_pitch_snap",
+   "name": "PITCH SNAP",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "lfo_pitch",
+   "name": "LFO PITCH",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lfo_filter",
+   "name": "LFO FILTER",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "lfo_pwm",
+   "name": "LFO PWM",
+   "min": 0,
+   "max": 1,
+   "default": 0
+  },
+  {
+   "key": "glide",
+   "name": "GLIDE",
+   "min": 0,
+   "max": 500,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "portamento_mode",
+   "name": "PORTA MODE",
+   "options": [
+    "OFF",
+    "ON",
+    "AUTO"
+   ],
+   "default": 2
+  },
+  {
+   "key": "portamento_linear",
+   "name": "PORTA CURVE",
+   "options": [
+    "EXPO",
+    "LINEAR"
+   ],
+   "default": 0
+  },
+  {
+   "key": "retrigger",
+   "name": "RETRIGGER",
+   "options": [
+    "LEGATO",
+    "TRIG"
+   ],
+   "default": 0
+  },
+  {
+   "key": "hold",
+   "name": "HOLD",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "transpose",
+   "name": "TRANSPOSE",
+   "min": -24,
+   "max": 24,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "octave_transpose",
+   "name": "OCTAVE",
+   "min": -2,
+   "max": 2,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "fine_tune",
+   "name": "FINE TUNE",
+   "min": -100,
+   "max": 100,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "gate_trig_mode",
+   "name": "GATE MODE",
+   "options": [
+    "GATE",
+    "GATE+TRIG",
+    "LFO"
+   ],
+   "default": 0
+  },
+  {
+   "key": "vca_mode",
+   "name": "VCA MODE",
+   "options": [
+    "GATE",
+    "ENVELOPE"
+   ],
+   "default": 1
+  },
+  {
+   "key": "adsr_declick",
+   "name": "DECLICK",
+   "min": 0,
+   "max": 1,
+   "default": 0.65
+  },
+  {
+   "key": "priority",
+   "name": "PRIORITY",
+   "options": [
+    "LAST",
+    "LOW"
+   ],
+   "default": 0
+  },
+  {
+   "key": "velocity_mode",
+   "name": "VEL MODE",
+   "options": [
+    "OFF",
+    "TRIGGER",
+    "ACTIVE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "same_note_quirk",
+   "name": "SAME NOTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_env_full_range",
+   "name": "ENV FULL",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_env_polarity",
+   "name": "ENV POLARITY",
+   "options": [
+    "POSITIVE",
+    "NEGATIVE"
+   ],
+   "default": 0
+  },
+  {
+   "key": "filter_volume_correction",
+   "name": "VOL CORRECT",
+   "min": 0,
+   "max": 1,
+   "default": 0.0
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT PATCH",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "PATCH NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

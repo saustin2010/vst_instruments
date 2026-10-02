@@ -1,0 +1,82 @@
+{
+ "name": "Wurl",
+ "params": [
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "tremolo",
+   "name": "TREMOLO",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "attack",
+   "name": "ATTACK",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "decay",
+   "name": "DECAY",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "brightness",
+   "name": "BRIGHTNESS",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "darken",
+   "name": "DARKEN",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "bark",
+   "name": "BARK",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "reverb",
+   "name": "REVERB",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "speaker",
+   "name": "SPEAKER",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "tune",
+   "name": "TUNE",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "key": "preset",
+   "name": "PRESET",
+   "options": [
+    "CLASSIC 200A",
+    "DREAMY KEYS",
+    "BARKY SOUL",
+    "SURF SPRING",
+    "DARK BALLAD",
+    "PERC CLAV",
+    "WARM PAD",
+    "LO-FI TAPE",
+    "BRIGHT BELL",
+    "GOSPEL GROWL"
+   ],
+   "default": 0
+  }
+ ]
+}

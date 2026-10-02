@@ -1,0 +1,16 @@
+{
+    "name": "Plaits Pluck",
+    "version": 1,
+    "chain": {
+        "input": "pads",
+        "synth": {
+            "module": "plaits",
+            "config": {
+                "engine": "19",
+                "decay": "0.2",
+                "lpg_colour": "0.7",
+                "harmonics": "0.5"
+            }
+        }
+    }
+}

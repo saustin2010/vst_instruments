@@ -1,0 +1,821 @@
+{
+ "name": "Eucalypso",
+ "params": [
+  {
+   "key": "play_mode",
+   "name": "PLAY MODE",
+   "options": [
+    "HOLD",
+    "LATCH"
+   ],
+   "send": [
+    "hold",
+    "latch"
+   ]
+  },
+  {
+   "key": "rate",
+   "name": "RATE",
+   "options": [
+    "1/32",
+    "1/16T",
+    "1/16",
+    "1/8T",
+    "1/8",
+    "1/4T",
+    "1/4",
+    "1/2",
+    "1"
+   ],
+   "send": [
+    "1/32",
+    "1/16T",
+    "1/16",
+    "1/8T",
+    "1/8",
+    "1/4T",
+    "1/4",
+    "1/2",
+    "1"
+   ]
+  },
+  {
+   "key": "retrigger_mode",
+   "name": "RETRIGGER",
+   "options": [
+    "RESTART",
+    "CONT"
+   ],
+   "send": [
+    "restart",
+    "cont"
+   ]
+  },
+  {
+   "key": "sync",
+   "name": "SYNC",
+   "options": [
+    "INTERNAL",
+    "CLOCK"
+   ],
+   "send": [
+    "internal",
+    "clock"
+   ],
+   "default": 1
+  },
+  {
+   "key": "bpm",
+   "name": "BPM",
+   "min": 40,
+   "max": 240,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "swing",
+   "name": "SWING",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "max_voices",
+   "name": "VOICES",
+   "min": 1,
+   "max": 64,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "global_velocity",
+   "name": "VELOCITY",
+   "min": 1,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "global_v_rnd",
+   "name": "VEL RANDOM",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "global_gate",
+   "name": "GATE",
+   "min": 1,
+   "max": 1600,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "global_g_rnd",
+   "name": "GATE RANDOM",
+   "min": 0,
+   "max": 1600,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "global_rnd_seed",
+   "name": "RANDOM SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "rand_cycle",
+   "name": "RAND CYCLE",
+   "min": 1,
+   "max": 128,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "register_mode",
+   "name": "REGISTER",
+   "options": [
+    "HELD",
+    "SCALE",
+    "DRUMPAD"
+   ],
+   "send": [
+    "held",
+    "scale",
+    "drumpad"
+   ]
+  },
+  {
+   "key": "held_order",
+   "name": "NOTE ORDER",
+   "options": [
+    "UP",
+    "DOWN",
+    "PLAYED",
+    "RAND"
+   ],
+   "send": [
+    "up",
+    "down",
+    "played",
+    "rand"
+   ]
+  },
+  {
+   "key": "held_order_seed",
+   "name": "ORDER SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "missing_note_policy",
+   "name": "MISSING NOTE",
+   "options": [
+    "SKIP",
+    "FOLD",
+    "WRAP",
+    "RANDOM"
+   ],
+   "send": [
+    "skip",
+    "fold",
+    "wrap",
+    "random"
+   ]
+  },
+  {
+   "key": "missing_note_seed",
+   "name": "MISSING SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "scale_mode",
+   "name": "SCALE",
+   "options": [
+    "MAJOR",
+    "NATURAL MINOR",
+    "HARMONIC MINOR",
+    "MELODIC MINOR",
+    "DORIAN",
+    "PHRYGIAN",
+    "LYDIAN",
+    "MIXOLYDIAN",
+    "LOCRIAN",
+    "PENTATONIC MAJOR",
+    "PENTATONIC MINOR",
+    "BLUES",
+    "WHOLE TONE",
+    "CHROMATIC"
+   ],
+   "send": [
+    "major",
+    "natural_minor",
+    "harmonic_minor",
+    "melodic_minor",
+    "dorian",
+    "phrygian",
+    "lydian",
+    "mixolydian",
+    "locrian",
+    "pentatonic_major",
+    "pentatonic_minor",
+    "blues",
+    "whole_tone",
+    "chromatic"
+   ]
+  },
+  {
+   "key": "scale_rng",
+   "name": "SCALE RANGE",
+   "min": 1,
+   "max": 24,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "root_note",
+   "name": "ROOT",
+   "step": 1,
+   "options": [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B"
+   ]
+  },
+  {
+   "key": "octave",
+   "name": "OCTAVE",
+   "min": -3,
+   "max": 3,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_enabled",
+   "name": "L1 ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "send": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "lane1_steps",
+   "name": "L1 STEPS",
+   "min": 1,
+   "max": 128,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_pulses",
+   "name": "L1 PULSES",
+   "min": 0,
+   "max": 128,
+   "max_param": "lane1_steps",
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_rotation",
+   "name": "L1 ROTATE",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_drop",
+   "name": "L1 DROP",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_drop_seed",
+   "name": "L1 DROP SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_note",
+   "name": "L1 NOTE",
+   "min": 1,
+   "max": 24,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_n_rnd",
+   "name": "L1 NOTE RND",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_n_seed",
+   "name": "L1 NOTE SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_octave",
+   "name": "L1 OCTAVE",
+   "min": -3,
+   "max": 3,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_oct_rnd",
+   "name": "L1 OCT RND",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_oct_seed",
+   "name": "L1 OCT SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_oct_rng",
+   "name": "L1 OCT RANGE",
+   "options": [
+    "+1",
+    "-1",
+    "+-1",
+    "+2",
+    "-2",
+    "+-2"
+   ],
+   "send": [
+    "+1",
+    "-1",
+    "+-1",
+    "+2",
+    "-2",
+    "+-2"
+   ]
+  },
+  {
+   "key": "lane1_velocity",
+   "name": "L1 VELOCITY",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane1_gate",
+   "name": "L1 GATE",
+   "min": 0,
+   "max": 1600,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_enabled",
+   "name": "L2 ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "send": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "lane2_steps",
+   "name": "L2 STEPS",
+   "min": 1,
+   "max": 128,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_pulses",
+   "name": "L2 PULSES",
+   "min": 0,
+   "max": 128,
+   "max_param": "lane2_steps",
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_rotation",
+   "name": "L2 ROTATE",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_drop",
+   "name": "L2 DROP",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_drop_seed",
+   "name": "L2 DROP SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_note",
+   "name": "L2 NOTE",
+   "min": 1,
+   "max": 24,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_n_rnd",
+   "name": "L2 NOTE RND",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_n_seed",
+   "name": "L2 NOTE SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_octave",
+   "name": "L2 OCTAVE",
+   "min": -3,
+   "max": 3,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_oct_rnd",
+   "name": "L2 OCT RND",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_oct_seed",
+   "name": "L2 OCT SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_oct_rng",
+   "name": "L2 OCT RANGE",
+   "options": [
+    "+1",
+    "-1",
+    "+-1",
+    "+2",
+    "-2",
+    "+-2"
+   ],
+   "send": [
+    "+1",
+    "-1",
+    "+-1",
+    "+2",
+    "-2",
+    "+-2"
+   ]
+  },
+  {
+   "key": "lane2_velocity",
+   "name": "L2 VELOCITY",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane2_gate",
+   "name": "L2 GATE",
+   "min": 0,
+   "max": 1600,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_enabled",
+   "name": "L3 ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "send": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "lane3_steps",
+   "name": "L3 STEPS",
+   "min": 1,
+   "max": 128,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_pulses",
+   "name": "L3 PULSES",
+   "min": 0,
+   "max": 128,
+   "max_param": "lane3_steps",
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_rotation",
+   "name": "L3 ROTATE",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_drop",
+   "name": "L3 DROP",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_drop_seed",
+   "name": "L3 DROP SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_note",
+   "name": "L3 NOTE",
+   "min": 1,
+   "max": 24,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_n_rnd",
+   "name": "L3 NOTE RND",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_n_seed",
+   "name": "L3 NOTE SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_octave",
+   "name": "L3 OCTAVE",
+   "min": -3,
+   "max": 3,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_oct_rnd",
+   "name": "L3 OCT RND",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_oct_seed",
+   "name": "L3 OCT SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_oct_rng",
+   "name": "L3 OCT RANGE",
+   "options": [
+    "+1",
+    "-1",
+    "+-1",
+    "+2",
+    "-2",
+    "+-2"
+   ],
+   "send": [
+    "+1",
+    "-1",
+    "+-1",
+    "+2",
+    "-2",
+    "+-2"
+   ]
+  },
+  {
+   "key": "lane3_velocity",
+   "name": "L3 VELOCITY",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane3_gate",
+   "name": "L3 GATE",
+   "min": 0,
+   "max": 1600,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_enabled",
+   "name": "L4 ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "send": [
+    "off",
+    "on"
+   ]
+  },
+  {
+   "key": "lane4_steps",
+   "name": "L4 STEPS",
+   "min": 1,
+   "max": 128,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_pulses",
+   "name": "L4 PULSES",
+   "min": 0,
+   "max": 128,
+   "max_param": "lane4_steps",
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_rotation",
+   "name": "L4 ROTATE",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_drop",
+   "name": "L4 DROP",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_drop_seed",
+   "name": "L4 DROP SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_note",
+   "name": "L4 NOTE",
+   "min": 1,
+   "max": 24,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_n_rnd",
+   "name": "L4 NOTE RND",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_n_seed",
+   "name": "L4 NOTE SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_octave",
+   "name": "L4 OCTAVE",
+   "min": -3,
+   "max": 3,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_oct_rnd",
+   "name": "L4 OCT RND",
+   "min": 0,
+   "max": 100,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_oct_seed",
+   "name": "L4 OCT SEED",
+   "min": 0,
+   "max": 65535,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_oct_rng",
+   "name": "L4 OCT RANGE",
+   "options": [
+    "+1",
+    "-1",
+    "+-1",
+    "+2",
+    "-2",
+    "+-2"
+   ],
+   "send": [
+    "+1",
+    "-1",
+    "+-1",
+    "+2",
+    "-2",
+    "+-2"
+   ]
+  },
+  {
+   "key": "lane4_velocity",
+   "name": "L4 VELOCITY",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "lane4_gate",
+   "name": "L4 GATE",
+   "min": 0,
+   "max": 1600,
+   "step": 1,
+   "display": "int"
+  }
+ ]
+}

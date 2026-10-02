@@ -1,0 +1,36 @@
+{
+  "name": "Marbles",
+  "vendor": "Mutable Instruments",
+  "uid": "MImb",
+  "so": "marbles.so",
+  "build": {
+    "sources": [
+      "src/marbles_fx.cc",
+      "mpc/schwung_midi_fx.c",
+      "src/marbles/random/t_generator.cc",
+      "src/marbles/random/x_y_generator.cc",
+      "src/marbles/random/output_channel.cc",
+      "src/marbles/random/quantizer.cc",
+      "src/marbles/random/lag_processor.cc",
+      "src/marbles/random/discrete_distribution_quantizer.cc",
+      "src/marbles/ramp/ramp_extractor.cc",
+      "src/marbles/resources.cc",
+      "src/stmlib/dsp/units.cc",
+      "src/stmlib/utils/random.cc"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Impc/host",
+      "-Isrc",
+      "-DTEST", "-DMPC_PORT",
+      "-std=gnu++14"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

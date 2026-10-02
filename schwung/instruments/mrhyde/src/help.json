@@ -1,0 +1,119 @@
+{
+  "title": "MrHyde",
+  "children": [
+    {
+      "title": "Overview",
+      "lines": [
+        "MicroFreak-inspired",
+        "Plaits-based synth",
+        "for Schwung.",
+        "",
+        "Root menu:",
+        "Main / Filter /",
+        "Mod / Mod Sources",
+        "/ Voice & Mix"
+      ]
+    },
+    {
+      "title": "Main",
+      "lines": [
+        "Model: engine",
+        "selection",
+        "Pitch: semitone",
+        "offset (+/-48)",
+        "Harmonics, Timbre,",
+        "Morph, FM Amount",
+        "Aux Mix (0 main,",
+        "0.5 blend, 1 aux)",
+        "LPG Decay, Color",
+        "all on Main page"
+      ]
+    },
+    {
+      "title": "Filter",
+      "lines": [
+        "Global post filter",
+        "Mode: LP/BP/HP",
+        "Cutoff +",
+        "Resonance",
+        "",
+        "Cutoff is also",
+        "mapped to root",
+        "knob 8"
+      ]
+    },
+    {
+      "title": "Mod",
+      "lines": [
+        "Pages in order:",
+        "Pitch, Harmonics,",
+        "Timbre, Cutoff,",
+        "Assign 1, Assign 2",
+        "",
+        "Assign pages set",
+        "target + source",
+        "amounts. Targets",
+        "include volume,",
+        "pan, detune,",
+        "spread. Active=*"
+      ]
+    },
+    {
+      "title": "Mod Sources",
+      "lines": [
+        "LFO, Envelope,",
+        "Cycling Envelope,",
+        "Random, Velocity,",
+        "Poly Aftertouch",
+        "",
+        "LFO/Random sync",
+        "rates: 16 bars",
+        "to 1/64"
+      ]
+    },
+    {
+      "title": "Voice & Mix",
+      "lines": [
+        "Volume + Pan are",
+        "static mix controls",
+        "at top of page",
+        "",
+        "Modes: mono,",
+        "poly, mono legato",
+        "Mono modes allow",
+        "unison stacks,",
+        "but no chords",
+        "Poly allows",
+        "chords + unison",
+        "max voices: 8"
+      ]
+    },
+    {
+      "title": "Tips",
+      "lines": [
+        "Pitch mod range:",
+        "+/-48 semitones",
+        "(0.1 step)",
+        "Other mod depths",
+        "are -1..1",
+        "Glide is int ms",
+        "in 5ms steps",
+        "Release timing",
+        "follows LPG decay"
+      ]
+    },
+    {
+      "title": "Disclaimer",
+      "lines": [
+        "Uses Mutable",
+        "Instruments Plaits",
+        "source under MIT",
+        "license.",
+        "",
+        "Developed with",
+        "AI assistance and",
+        "human review."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+https://github.com/handcraftedcc/move-everything-superarp
+commit 6eefd02af91823e330f7ce86883dc097b634ecc1 2026-03-23
+vendored 2026-10-01: upstream src/ as src/ + LICENSE;
+mpc/ = steve/tools/midifx adapter (MIDI out via an ALSA port, host transport as MIDI clock) + Schwung host headers + wrapper/engine.h

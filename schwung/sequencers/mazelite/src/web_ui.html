@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Maze Lite</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --cheek: #0c0b0a; --cheek-hi: #201d19; --cheek-edge: #000;
+    --plate: #131211; --plate-hi: #1c1a17; --plate-shadow: #060605;
+    --plate-line: rgba(255, 255, 255, 0.09); --plate-line-strong: rgba(255, 255, 255, 0.18);
+    --ink: #efe9d8; --ink-dim: #8f8878; --ink-faint: #5c584c;
+    --metal-hi: #f2f1ee; --metal-lo: #8f8e89;
+    --accent: #c1552f; --led-off: #2c2620; --led-on: #e2793f;
+    --bg: #0a0a08;
+  }
+
+  * { box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); }
+  body { font-family: "Archivo", ui-sans-serif, system-ui, sans-serif; padding: 10px; overflow-x: auto; color: var(--ink); }
+
+  /* ---- top bar ---- */
+  .topbar { display: flex; align-items: center; gap: 14px; padding: 6px 10px 10px; }
+  .topbar .name { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.04em; color: var(--ink); }
+  .topbar .status { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; color: var(--ink-faint); display: flex; align-items: center; gap: 6px; }
+  .topbar .status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--led-off); }
+  .topbar .status.live .dot { background: var(--led-on); box-shadow: 0 0 5px var(--led-on); }
+  .sync-btn { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-dim); background: #1c1a17; border: 1px solid var(--plate-line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+  .sync-btn:active { background: #26231e; }
+
+  /* ------------------------------------------------------------------ */
+  /* Rack                                                                 */
+  /* ------------------------------------------------------------------ */
+  .rack { display: grid; grid-template-columns: 20px 1fr 20px; width: fit-content; border-radius: 8px; overflow: hidden; box-shadow: 0 20px 44px -22px rgba(0,0,0,0.6), 0 2px 0 rgba(0,0,0,0.3); }
+  .cheek { background: linear-gradient(180deg, var(--cheek-hi), var(--cheek) 45%, var(--cheek-edge)); position: relative; }
+  .cheek::before, .cheek::after { content: ""; position: absolute; left: 50%; width: 6px; height: 6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #5a5650, #100e0b 70%); transform: translateX(-50%); }
+  .cheek::before { top: 14px; } .cheek::after { bottom: 14px; }
+
+  .plate { background: repeating-linear-gradient(115deg, rgba(255,255,255,0.014) 0 1px, transparent 1px 3px), linear-gradient(150deg, var(--plate-hi), var(--plate) 45%, var(--plate-shadow)); padding: 20px 22px 14px; position: relative; color: var(--ink); }
+  .screw { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #8b8578, #423e35 60%, #1c1a16 100%); box-shadow: 0 1px 2px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(0,0,0,0.4); }
+  .screw::before, .screw::after { content: ""; position: absolute; top: 50%; left: 50%; background: #17150f; transform: translate(-50%, -50%) rotate(45deg); }
+  .screw::before { width: 6.5px; height: 1.3px; } .screw::after { width: 1.3px; height: 6.5px; }
+  .screw.tl { top: 9px; left: 9px; } .screw.tr { top: 9px; right: 9px; }
+  .screw.bl { bottom: 9px; left: 9px; } .screw.br { bottom: 9px; right: 9px; }
+
+  /* Sections stack vertically — Global sits under Sequencer */
+  .panel-rows { display: flex; flex-direction: column; gap: 0; padding-block: 4px 6px; }
+  .section { display: flex; flex-direction: column; gap: 8px; padding-inline: 2px; }
+  .section + .section { border-top: 1px solid var(--plate-line); padding-top: 12px; margin-top: 2px; }
+  .section-title { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); border-bottom: 1px solid var(--plate-line-strong); padding-bottom: 5px; }
+
+  .stack { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .stack-row { display: flex; gap: 12px; align-items: flex-start; flex: 1; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .col.spacer-col { visibility: hidden; }
+  .stage { height: 56px; display: flex; align-items: center; justify-content: center; }
+  .topline { height: 10px; width: 34px; display: flex; align-items: center; justify-content: center; }
+  .topline.polarity { justify-content: space-between; font-size: 8px; color: var(--ink-faint); }
+
+  /* ---- captions ---- */
+  .cap-label { font-family: "Barlow Condensed", sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; text-align: center; color: var(--ink); line-height: 1.15; white-space: nowrap; }
+  .kval { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 8.5px; color: var(--ink-faint); height: 10px; line-height: 10px; font-variant-numeric: tabular-nums; }
+
+  /* ---- knob: same generated SVG as Maze Voice ---- */
+  .knob-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .knob-wrap.small .knob-svg { width: 33px; height: 33px; }
+  .knob-wrap.big .knob-svg { width: 52px; height: 52px; }
+  .knob-svg { cursor: ns-resize; touch-action: none; overflow: visible; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)); }
+
+  /* ---- stepper: cycling enum readout (Reset, Scale, Note Rate/Len) ---- */
+  .stepper-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .stepper-wrap .stage { height: 56px; }
+  .step-box { width: 62px; height: 26px; border-radius: 4px; cursor: pointer; background: #050403;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.7), 0 0 0 1px var(--plate-line);
+    display: flex; align-items: center; justify-content: center; padding: 0 4px; }
+  .step-box .txt { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10px; color: var(--led-on);
+    text-shadow: 0 0 5px rgba(226,121,63,0.45); text-align: center; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ---- momentary button: Bit Flip, Advance ---- */
+  .btn-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .btn-wrap .stage { height: 56px; }
+  .go-btn { width: 40px; height: 26px; border-radius: 4px; cursor: pointer; border: none;
+    font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--ink-dim); background: linear-gradient(180deg, #2c2925, #17150f); box-shadow: 0 2px 0 #000, inset 0 1px 0 rgba(255,255,255,0.06); }
+  .go-btn:active, .go-btn.flash { color: #fdf3ea; background: linear-gradient(180deg, var(--accent), #7f2f1e); transform: translateY(1px); box-shadow: 0 1px 0 #000; }
+
+  .plate-foot { display: flex; align-items: baseline; justify-content: center; gap: 10px; padding: 10px 0 2px; }
+  .wordmark { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.04em; color: var(--ink); }
+  .tagline { font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="name">MAZE LITE</span>
+  <span class="status" id="status"><span class="dot"></span><span id="statusText">Connecting&hellip;</span></span>
+  <button class="sync-btn" id="sync" title="Force a full re-sync from the device">&#8635; Sync</button>
+</div>
+
+<div class="rack" aria-label="Maze Lite control panel">
+  <div class="cheek" aria-hidden="true"></div>
+  <div class="plate">
+    <span class="screw tl" aria-hidden="true"></span><span class="screw tr" aria-hidden="true"></span>
+    <span class="screw bl" aria-hidden="true"></span><span class="screw br" aria-hidden="true"></span>
+    <div class="panel-rows" id="panelRows"></div>
+    <div class="plate-foot"><span class="wordmark">MAZE LITE</span><span class="tagline">Dual Generative Sequencer &middot; for Move</span></div>
+  </div>
+  <div class="cheek" aria-hidden="true"></div>
+</div>
+
+<script src="/static/schwung-remote-api.js"></script>
+<script>
+"use strict";
+
+/* fallback so the page still renders for local preview outside the manager */
+if (!window.schwungRemote) {
+  const _store = {};
+  window.schwungRemote = {
+    getParam: (k) => Promise.resolve(_store[k]),
+    setParam: (k, v) => { _store[k] = String(v); },
+    onParamChange: () => {},
+    getHierarchy: () => Promise.resolve(null),
+    getChainParams: () => Promise.resolve(null),
+  };
+}
+
+/* maze_seq_lite is a midi_fx slot module — the manager's fixed component
+ * key for that slot type is "midi_fx1" (there's only ever one per chain,
+ * unlike fx1/fx2), NOT "synth". See schwung-manager/remote_ui.go's
+ * componentPrefixes. */
+const P = "midi_fx1:";
+const SVG_NS = "http://www.w3.org/2000/svg";
+let uid = 0;
+
+function pct(min, max, def) { return (def - min) / (max - min); }
+function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+
+const registry = {}; /* key -> { set(rawStr) } — used for seed + live sync */
+
+/* ---------------------------------------------------------------------
+ * SVG knob — identical construction to Maze Voice's.
+ * ------------------------------------------------------------------- */
+function scallopPoints(cx, cy, rBase, rAmp, n, samples) {
+  const pts = [];
+  for (let i = 0; i <= samples; i++) {
+    const t = (i / samples) * Math.PI * 2;
+    const r = rBase + rAmp * Math.cos(n * t);
+    pts.push((cx + r * Math.cos(t)).toFixed(2) + "," + (cy + r * Math.sin(t)).toFixed(2));
+  }
+  return pts.join(" ");
+}
+function svgEl(tag, attrs) { const el = document.createElementNS(SVG_NS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); return el; }
+function buildKnobSvg() {
+  const id = "kg" + (uid++);
+  const svg = svgEl("svg", { viewBox: "0 0 100 100", class: "knob-svg" });
+  const defs = svgEl("defs", {});
+  defs.innerHTML =
+    '<radialGradient id="' + id + '-skirt" cx="36%" cy="28%" r="80%">' +
+      '<stop offset="0%" stop-color="#4c4842"/><stop offset="55%" stop-color="#201e1a"/><stop offset="100%" stop-color="#030302"/>' +
+    '</radialGradient>' +
+    '<linearGradient id="' + id + '-cap" x1="12%" y1="8%" x2="88%" y2="92%">' +
+      '<stop offset="0%" stop-color="#f4f3f0"/><stop offset="42%" stop-color="#aeada8"/><stop offset="52%" stop-color="#96958f"/><stop offset="100%" stop-color="#e2e0da"/>' +
+    '</linearGradient>';
+  svg.appendChild(defs);
+  const rotor = svgEl("g", { class: "rotor" });
+  rotor.appendChild(svgEl("polygon", { points: scallopPoints(50, 50, 40, 7, 8, 96), fill: "url(#" + id + "-skirt)", stroke: "#000", "stroke-width": "0.6" }));
+  rotor.appendChild(svgEl("circle", { cx: "50", cy: "50", r: "29", fill: "url(#" + id + "-cap)", stroke: "#75746e", "stroke-width": "0.6" }));
+  rotor.appendChild(svgEl("rect", { x: "47.2", y: "23", width: "5.6", height: "14", rx: "1.6", fill: "#201f1c" }));
+  svg.appendChild(rotor);
+  return { svg, rotor };
+}
+
+function makeKnob(item) {
+  const wrap = document.createElement("div");
+  wrap.className = "knob-wrap " + (item.size || "small");
+  const { svg, rotor } = buildKnobSvg();
+  const stage = document.createElement("div"); stage.className = "stage"; stage.appendChild(svg);
+  const val = document.createElement("div"); val.className = "kval";
+  const cap = document.createElement("div"); cap.className = "cap-label"; cap.textContent = item.cap;
+  const topline = document.createElement("div"); topline.className = "topline";
+  if (item.bipolar) { topline.classList.add("polarity"); topline.innerHTML = "<span>&minus;</span><span>+</span>"; }
+
+  wrap.appendChild(stage); wrap.appendChild(topline); wrap.appendChild(val); wrap.appendChild(cap);
+
+  let cur = pct(item.min, item.max, item.def);
+  function render(frac) {
+    cur = clamp01(frac);
+    rotor.setAttribute("transform", "rotate(" + (-132 + cur * 264) + " 50 50)");
+    const raw = item.min + cur * (item.max - item.min);
+    val.textContent = (item.bipolar && raw >= 0 ? "+" : "") + Math.round(raw);
+  }
+  function commit(frac) {
+    render(frac);
+    const raw = Math.round(item.min + cur * (item.max - item.min));
+    schwungRemote.setParam(P + item.key, String(raw));
+    if (item.onCommit) item.onCommit(raw); /* optional hook, unused currently */
+  }
+
+  let dragging = false, startY = 0, startV = 0;
+  function down(e) { dragging = true; startY = (e.touches ? e.touches[0].clientY : e.clientY); startV = cur; e.preventDefault();
+    window.addEventListener("mousemove", move); window.addEventListener("touchmove", move, { passive: false });
+    window.addEventListener("mouseup", up); window.addEventListener("touchend", up); }
+  function move(e) { if (!dragging) return; const y = (e.touches ? e.touches[0].clientY : e.clientY); const speed = e.shiftKey ? 640 : 180;
+    commit(startV + (startY - y) / speed); e.preventDefault(); }
+  function up() { dragging = false; window.removeEventListener("mousemove", move); window.removeEventListener("touchmove", move);
+    window.removeEventListener("mouseup", up); window.removeEventListener("touchend", up); }
+  svg.addEventListener("mousedown", down);
+  svg.addEventListener("touchstart", down, { passive: false });
+  svg.addEventListener("wheel", (e) => { commit(cur - Math.sign(e.deltaY) * 0.02); e.preventDefault(); }, { passive: false });
+  svg.addEventListener("dblclick", () => commit(pct(item.min, item.max, item.def)));
+
+  render(cur);
+  /* Ignore live pushes while the user is actively dragging this knob — see
+   * maze_seq/web_ui.html for why (server pushes can land mid-gesture with
+   * the pre-drag value and visibly snap the knob back otherwise). */
+  if (!item.noRegister) registry[item.key] = { set: (v) => { if (dragging) return; const raw = parseFloat(v); if (!isNaN(raw)) render(clamp01(pct(item.min, item.max, raw))); } };
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+ * Stepper — cycling enum readout (Reset, Scale, Note Rate, Note Length).
+ * Wire value is the numeric option index, matching maze_seq_lite.c's
+ * `int v = atoi(val)` used directly (or via reset_bars_from_idx) for
+ * every enum key here.
+ * ------------------------------------------------------------------- */
+function makeStepper(item) {
+  const wrap = document.createElement("div"); wrap.className = "stepper-wrap";
+  const stage = document.createElement("div"); stage.className = "stage";
+  const box = document.createElement("div"); box.className = "step-box";
+  const txt = document.createElement("div"); txt.className = "txt";
+  box.appendChild(txt); stage.appendChild(box);
+  const cap = document.createElement("div"); cap.className = "cap-label"; cap.textContent = item.cap;
+
+  let idx = item.def || 0;
+  function render(i) { idx = i; txt.textContent = item.options[idx]; }
+  function commit(i) { render(i); schwungRemote.setParam(P + item.key, String(idx)); }
+  function advance(dir) { commit((idx + dir + item.options.length) % item.options.length); }
+  box.addEventListener("click", (e) => advance(e.shiftKey ? -1 : 1));
+  box.addEventListener("contextmenu", (e) => { e.preventDefault(); advance(-1); });
+  box.addEventListener("wheel", (e) => { advance(-Math.sign(e.deltaY)); e.preventDefault(); }, { passive: false });
+  render(idx);
+
+  wrap.appendChild(stage); wrap.appendChild(cap);
+  registry[item.key] = { set: (v) => { const i = Math.round(parseFloat(v)); if (i >= 0 && i < item.options.length) render(i); } };
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+ * Momentary button — Bit Flip, Advance. Fires the real device action
+ * (matches trig_fired()'s accepted "go"). No visual feedback in this
+ * panel — a live Bits/playhead display was tried and pulled: for an
+ * ordinary chain slot (not the Tool tab), the only refresh mechanism
+ * available is the same heavy full resync the Sync button triggers, and
+ * polling that on any interval short enough to feel "live" overwhelmed
+ * the channel. True smooth live state is a Tool-tab/overtake-only
+ * feature in this framework (docs/MODULES.md's rui_poll). The DSP still
+ * exposes s1_bits/s2_bits/s1_play/s2_play/running read-only if a future
+ * approach wants them.
+ * ------------------------------------------------------------------- */
+function makeGoButton(item) {
+  const wrap = document.createElement("div"); wrap.className = "btn-wrap";
+  const stage = document.createElement("div"); stage.className = "stage";
+  const btn = document.createElement("button"); btn.className = "go-btn"; btn.textContent = item.label;
+  stage.appendChild(btn);
+  const cap = document.createElement("div"); cap.className = "cap-label"; cap.textContent = item.cap;
+  btn.addEventListener("click", () => {
+    schwungRemote.setParam(P + item.key, "go");
+    if (item.onFire) item.onFire();
+    btn.classList.add("flash");
+    setTimeout(() => btn.classList.remove("flash"), 120);
+  });
+  wrap.appendChild(stage); wrap.appendChild(cap);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+ * Layout helpers
+ * ------------------------------------------------------------------- */
+function col(children, extraClass) { const c = document.createElement("div"); c.className = "col" + (extraClass ? " " + extraClass : ""); children.forEach((el) => c.appendChild(el)); return c; }
+/* An invisible copy of the knob it's standing in for, so the column takes
+ * the same width (driven by the caption text) and the row above/below
+ * still lines up — a truly empty div collapses to zero width instead. */
+function spacerCol(likeItem) { return col([ makeKnob(Object.assign({ noRegister: true }, likeItem)) ], "spacer-col"); }
+function row() { const r = document.createElement("div"); r.className = "stack-row"; return r; }
+function buildSection(title, rowBuilder) {
+  const s = document.createElement("div"); s.className = "section";
+  const t = document.createElement("div"); t.className = "section-title"; t.textContent = title; s.appendChild(t);
+  const stack = document.createElement("div"); stack.className = "stack";
+  rowBuilder(stack);
+  s.appendChild(stack);
+  return s;
+}
+
+const RESET_OPTS = ["1 bar", "2 bars", "4 bars", "8 bars", "Off"];
+const panelRows = document.getElementById("panelRows");
+
+/* ---- Sequencer: SEQ 1 row over SEQ 2 row, same order as the real panel ---- */
+panelRows.appendChild(buildSection("Sequencer", (stack) => {
+  const top = row(), bot = row();
+
+  top.appendChild(col([ makeKnob({ size:"big", key:"s1_corrupt", cap:"Corrupt", min:0, max:100, def:0 }) ]));
+  bot.appendChild(col([ makeKnob({ size:"big", key:"s2_corrupt", cap:"Corrupt", min:0, max:100, def:0 }) ]));
+
+  top.appendChild(col([ makeKnob({ size:"small", key:"s1_cv_range", cap:"CV Range", min:0, max:100, def:50 }) ]));
+  bot.appendChild(col([ makeKnob({ size:"small", key:"s2_cv_range", cap:"CV Range", min:0, max:100, def:50 }) ]));
+
+  top.appendChild(col([ makeKnob({ size:"small", key:"s1_length", cap:"Length", min:1, max:8, def:8 }) ]));
+  bot.appendChild(col([ makeKnob({ size:"small", key:"s2_length", cap:"Length", min:1, max:8, def:8 }) ]));
+
+  /* trig_mix / trig_mix_b are DSP-level ALIASES of one shared value
+   * (maze_seq_lite.c writes/reads L->trig_mix for both keys) — one
+   * control is enough, on SEQ1's row. The bottom row gets an invisible
+   * same-size stand-in instead of nothing, so Reset/Bit Flip/Advance
+   * below still line up between the two rows. */
+  const trigMixItem = { size:"small", key:"trig_mix", cap:"Trig Mix", bipolar:true, min:-63, max:64, def:0 };
+  top.appendChild(col([ makeKnob(trigMixItem) ]));
+  bot.appendChild(spacerCol(trigMixItem));
+
+  top.appendChild(col([ makeStepper({ key:"s1_reset", cap:"Reset", options:RESET_OPTS, def:4 }) ]));
+  bot.appendChild(col([ makeStepper({ key:"s2_reset", cap:"Reset", options:RESET_OPTS, def:4 }) ]));
+
+  /* No onFire simulation anymore — Bit Flip/Advance write the real DSP
+   * action, and the next poll (within 130ms) picks up the real result. */
+  top.appendChild(col([ makeGoButton({ key:"s1_bit_flip", cap:"Bit Flip", label:"FLIP" }) ]));
+  bot.appendChild(col([ makeGoButton({ key:"s2_bit_flip", cap:"Bit Flip", label:"FLIP" }) ]));
+
+  top.appendChild(col([ makeGoButton({ key:"s1_advance", cap:"Advance", label:"ADV" }) ]));
+  bot.appendChild(col([ makeGoButton({ key:"s2_advance", cap:"Advance", label:"ADV" }) ]));
+
+  stack.appendChild(top);
+  stack.appendChild(bot);
+}));
+
+/* ---- Global: shared across both sequencers, stacked under Sequencer ---- */
+panelRows.appendChild(buildSection("Global", (stack) => {
+  const r = row();
+  r.appendChild(col([ makeStepper({ key:"scale", cap:"Scale", options:["Chromatic","Major","Minor","Pentatonic Maj","Pentatonic Min","Melodic Minor","Harmonic Minor","Whole Tone","Hirajoshi","Major 7","Minor 7","Unquantized"], def:1 }) ]));
+  r.appendChild(col([ makeStepper({ key:"note_rate", cap:"Note Rate", options:["1/32","1/16","1/8","1/4","1/2","1 bar"], def:1 }) ]));
+  r.appendChild(col([ makeStepper({ key:"note_length", cap:"Note Len", options:["1/4","2/4","3/4","4/4","5/4","6/4","7/4","8/4"], def:3 }) ]));
+  r.appendChild(col([ makeStepper({ key:"g_reset", cap:"Reset Both", options:RESET_OPTS, def:4 }) ]));
+  stack.appendChild(r);
+}));
+
+/* ---------------------------------------------------------------------
+ * Live sync
+ * ------------------------------------------------------------------- */
+function applyParams(params) {
+  let touched = false;
+  for (const fullKey in params) {
+    if (!Object.prototype.hasOwnProperty.call(params, fullKey)) continue;
+    const key = fullKey.indexOf(P) === 0 ? fullKey.slice(P.length) : fullKey;
+    if (registry[key]) { registry[key].set(params[fullKey]); touched = true; }
+  }
+  if (touched) setStatus(true);
+}
+function setStatus(live) {
+  const el = document.getElementById("status");
+  el.classList.toggle("live", live);
+  document.getElementById("statusText").textContent = live ? "Connected — live sync active" : "Connecting…";
+}
+function seed() {
+  Object.keys(registry).forEach((key) => {
+    schwungRemote.getParam(P + key).then((v) => { if (v !== undefined && v !== null && v !== "") registry[key].set(v); });
+  });
+}
+function forceSync() {
+  document.getElementById("statusText").textContent = "Re-syncing…";
+  try { window.parent.postMessage({ type: "subscribe" }, "*"); } catch (e) {}
+  setTimeout(seed, 250);
+}
+document.getElementById("sync").addEventListener("click", forceSync);
+
+schwungRemote.onParamChange(applyParams);
+setTimeout(seed, 200);
+</script>
+</body>
+</html>

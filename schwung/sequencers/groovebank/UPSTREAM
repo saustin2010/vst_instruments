@@ -1,0 +1,4 @@
+https://github.com/mission-minnow/groovebank
+commit 4edfa2f0a65f953f685e60b5753e725b0e5df7ce 2026-07-24
+vendored 2026-10-01: upstream src/ as src/ + LICENSE;
+mpc/ = steve/tools/midifx adapter (MIDI out via an ALSA port, host transport as MIDI clock) + Schwung host headers + wrapper/engine.h

@@ -1,0 +1,624 @@
+{
+ "name": "Fizzik",
+ "params": [
+  {
+   "key": "preset",
+   "name": "PRESET",
+   "options": [
+    "ALIENCHURCH",
+    "BOWEDGLASS",
+    "CAVESTRINGS",
+    "COUNCILSPIANO",
+    "DISTORTEDBASS",
+    "FEEDBACKHARP",
+    "JUDGEMENTAWAITS",
+    "OLDRESONANCES",
+    "PREPAREDPIANO",
+    "RYTHMICBOW",
+    "SENSITIVESKIN",
+    "SHARP",
+    "SHOCKINGPLUCK",
+    "SLAPPY",
+    "SURROUNDEDBYBELLS",
+    "XYLOSTYLE",
+    "GLASSKALIMBA",
+    "IRONLULLABY",
+    "TIDALGONG",
+    "HOLLOWREED",
+    "STARLIGHTPAD",
+    "BROKENMUSICBOX",
+    "DEEPDIVEBASS",
+    "COPPERTONGUE",
+    "GHOSTSITAR",
+    "MARBLEDRUM",
+    "WHISPERHARP",
+    "TITANIUMBELL",
+    "FROZENLAKE",
+    "PULSEENGINE",
+    "INIT"
+   ]
+  },
+  {
+   "key": "rnd_patch",
+   "name": "RANDOM ALL",
+   "options": [
+    "idle",
+    "trigger"
+   ],
+   "momentary": true
+  },
+  {
+   "key": "rnd_exc",
+   "name": "RND EXCITER",
+   "options": [
+    "idle",
+    "trigger"
+   ],
+   "momentary": true
+  },
+  {
+   "key": "rnd_reson",
+   "name": "RND RESON",
+   "options": [
+    "idle",
+    "trigger"
+   ],
+   "momentary": true
+  },
+  {
+   "key": "exc_mix",
+   "name": "EXC MIX",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "exc_crackle",
+   "name": "CRACKLE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "exc_color",
+   "name": "COLOR",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "exc_attack",
+   "name": "ATTACK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "exc_decay",
+   "name": "DECAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "exc_reso",
+   "name": "EXC RESO",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "vel_level",
+   "name": "VEL LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "vel_color",
+   "name": "VEL COLOR",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "a_model",
+   "name": "MODEL A",
+   "options": [
+    "STRING",
+    "BEAM",
+    "PLATE",
+    "MEMBRANE"
+   ]
+  },
+  {
+   "key": "a_struct",
+   "name": "STRUCTURE A",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "a_decay",
+   "name": "DECAY A",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "a_damp",
+   "name": "DAMP A",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "a_pos",
+   "name": "POSITION A",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "a_tone",
+   "name": "TONE A",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "a_tune",
+   "name": "TUNE A",
+   "min": -24,
+   "max": 24,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "a_tension",
+   "name": "TENSION A",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "b_model",
+   "name": "MODEL B",
+   "options": [
+    "STRING",
+    "BEAM",
+    "PLATE",
+    "MEMBRANE"
+   ]
+  },
+  {
+   "key": "b_struct",
+   "name": "STRUCTURE B",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "b_decay",
+   "name": "DECAY B",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "b_damp",
+   "name": "DAMP B",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "b_pos",
+   "name": "POSITION B",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "b_tone",
+   "name": "TONE B",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "b_tune",
+   "name": "TUNE B",
+   "min": -24,
+   "max": 24,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "b_tension",
+   "name": "TENSION B",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "couple",
+   "name": "COUPLE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "balance",
+   "name": "BALANCE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "glide",
+   "name": "GLIDE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "amp_attack",
+   "name": "AMP ATK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "amp_release",
+   "name": "AMP REL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "spread",
+   "name": "SPREAD",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "drive",
+   "name": "DRIVE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "level",
+   "name": "LEVEL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "rev_mix",
+   "name": "REVERB",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "rev_size",
+   "name": "REV SIZE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "rev_damp",
+   "name": "REV DAMP",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "dly_mix",
+   "name": "DELAY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "dly_time",
+   "name": "DLY TIME",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "dly_fb",
+   "name": "DLY FBK",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "dly_tone",
+   "name": "DLY TONE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "width",
+   "name": "WIDTH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "cutoff",
+   "name": "CUTOFF",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "resonance",
+   "name": "RESONANCE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "ftype",
+   "name": "FILTER TYPE",
+   "options": [
+    "LP",
+    "HP",
+    "BP",
+    "NOTCH"
+   ]
+  },
+  {
+   "key": "voicing",
+   "name": "VOICING",
+   "options": [
+    "CLEAN SVF",
+    "SEM",
+    "MS-20",
+    "STEINER",
+    "LADDER 4P",
+    "LADDER 2P",
+    "LADDER 1P",
+    "PROPHET",
+    "OBERHEIM",
+    "DIODE",
+    "SALLEN-KEY",
+    "VINTAGE"
+   ]
+  },
+  {
+   "key": "eq_tone",
+   "name": "TONE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "eq_body",
+   "name": "BODY",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "cho_mix",
+   "name": "CHORUS",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "cho_rate",
+   "name": "CHO RATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "cho_depth",
+   "name": "CHO DEPTH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "comp_amt",
+   "name": "GLUE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "lim_drive",
+   "name": "LIM DRIVE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "lim_ceil",
+   "name": "LIM CEIL",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "lfo1_rate",
+   "name": "LFO1 RATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "viz": {
+    "group": "lfo1",
+    "role": "rate",
+    "kind": "lfo"
+   }
+  },
+  {
+   "key": "lfo1_depth",
+   "name": "LFO1 DEPTH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "viz": {
+    "group": "lfo1",
+    "role": "depth"
+   }
+  },
+  {
+   "key": "lfo1_shape",
+   "name": "LFO1 SHAPE",
+   "options": [
+    "SINE",
+    "TRI",
+    "SAW",
+    "SQUARE",
+    "S&H"
+   ],
+   "viz": {
+    "group": "lfo1",
+    "role": "shape"
+   }
+  },
+  {
+   "key": "lfo1_target",
+   "name": "LFO1 TARGET",
+   "options": [
+    "OFF",
+    "CUTOFF",
+    "PITCH",
+    "COUPLE",
+    "BALANCE",
+    "TENSION",
+    "TONE",
+    "RESO"
+   ]
+  },
+  {
+   "key": "lfo2_rate",
+   "name": "LFO2 RATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "viz": {
+    "group": "lfo2",
+    "role": "rate",
+    "kind": "lfo"
+   }
+  },
+  {
+   "key": "lfo2_depth",
+   "name": "LFO2 DEPTH",
+   "min": 0,
+   "max": 1,
+   "step": 0.01,
+   "viz": {
+    "group": "lfo2",
+    "role": "depth"
+   }
+  },
+  {
+   "key": "lfo2_shape",
+   "name": "LFO2 SHAPE",
+   "options": [
+    "SINE",
+    "TRI",
+    "SAW",
+    "SQUARE",
+    "S&H"
+   ],
+   "viz": {
+    "group": "lfo2",
+    "role": "shape"
+   }
+  },
+  {
+   "key": "lfo2_target",
+   "name": "LFO2 TARGET",
+   "options": [
+    "OFF",
+    "CUTOFF",
+    "PITCH",
+    "COUPLE",
+    "BALANCE",
+    "TENSION",
+    "TONE",
+    "RESO"
+   ]
+  },
+  {
+   "key": "at_preset",
+   "name": "AT PRESET",
+   "options": [
+    "OFF",
+    "GENTLE",
+    "BRIGHTEN",
+    "BOW",
+    "SWELL",
+    "VIBRATO",
+    "EXPRESSIVE",
+    "CELLO",
+    "WILD",
+    "SFORZATO"
+   ]
+  },
+  {
+   "key": "at_bright",
+   "name": "AT BRIGHT",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "at_bow",
+   "name": "AT BOW",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "at_cutoff",
+   "name": "AT CUTOFF",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "at_vib",
+   "name": "AT VIB",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "at_bend",
+   "name": "AT BEND",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "at_vrate",
+   "name": "AT VIB RATE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  },
+  {
+   "key": "at_curve",
+   "name": "AT CURVE",
+   "min": 0,
+   "max": 1,
+   "step": 0.01
+  }
+ ]
+}

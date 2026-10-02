@@ -1,0 +1,32 @@
+{
+  "name": "Hera",
+  "vendor": "jpcima",
+  "uid": "Hera",
+  "so": "hera.so",
+  "module": "src/module.json",
+  "build": {
+    "sources": [
+      "src/dsp/hera_plugin.cpp",
+      "src/dsp/Engine/HeraEnvelope.cpp",
+      "src/dsp/Engine/HeraLFO.cpp",
+      "src/dsp/Engine/HeraLFOWithEnvelope.cpp",
+      "src/dsp/Engine/HeraTables.cpp",
+      "src/dsp/Engine/bbd_filter.cpp",
+      "src/dsp/Engine/bbd_line.cpp"
+    ],
+    "cflags": [
+      "-Isrc/dsp",
+      "-Isrc/dsp/Engine",
+      "-std=gnu++14", "-fwrapv"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "MODULE_DIR": "\"/sdcard/vst/hera\""
+  }
+}

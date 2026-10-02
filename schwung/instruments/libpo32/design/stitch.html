@@ -1,0 +1,1357 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<title>AKAI MPC LIVE II // POCKET DRUM SYNTH - LIBPO32</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-primary-container": "#5e4000",
+            "secondary-fixed": "#ffdad4",
+            "inverse-primary": "#7e5700",
+            "on-tertiary-fixed": "#211b04",
+            "surface-container": "#1f1f23",
+            "on-error": "#690005",
+            "outline-variant": "#504535",
+            "on-primary": "#432c00",
+            "background": "#121316",
+            "secondary-fixed-dim": "#ffb4a7",
+            "on-surface": "#e3e2e6",
+            "tertiary": "#dacfa9",
+            "surface-tint": "#fabc4d",
+            "surface-container-low": "#1b1b1f",
+            "on-surface-variant": "#d4c4b0",
+            "surface": "#121316",
+            "surface-container-high": "#292a2d",
+            "tertiary-fixed": "#eee2bc",
+            "tertiary-container": "#beb38f",
+            "inverse-surface": "#e3e2e6",
+            "on-error-container": "#ffdad6",
+            "on-secondary": "#680300",
+            "primary-fixed-dim": "#fabc4d",
+            "surface-variant": "#343538",
+            "on-primary-fixed": "#281900",
+            "tertiary-fixed-dim": "#d1c6a1",
+            "inverse-on-surface": "#2f3034",
+            "on-primary-fixed-variant": "#604100",
+            "error": "#ffb4ab",
+            "primary": "#ffc665",
+            "error-container": "#93000a",
+            "on-tertiary": "#373016",
+            "secondary": "#ffb4a7",
+            "surface-bright": "#38393c",
+            "on-secondary-container": "#ff9a89",
+            "secondary-container": "#920801",
+            "on-background": "#e3e2e6",
+            "on-tertiary-fixed-variant": "#4e472a",
+            "on-tertiary-container": "#4c4529",
+            "surface-container-highest": "#343538",
+            "surface-dim": "#121316",
+            "surface-container-lowest": "#0d0e11",
+            "on-secondary-fixed-variant": "#920801",
+            "on-secondary-fixed": "#400100",
+            "primary-fixed": "#ffdead",
+            "primary-container": "#e5a93c",
+            "outline": "#9d8f7c"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "space-md": "0.75rem",
+            "gutter": "0.75rem",
+            "space-xs": "0.25rem",
+            "margin": "0.75rem"
+          },
+          fontFamily: {
+            "headline-md": ["Space Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "readout-numeric": ["JetBrains Mono"],
+            "body-lg": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "label-lg": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "body-md": ["Space Grotesk"]
+          },
+          fontSize: {
+            "headline-md": ["18px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-sm": ["9px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "500" }],
+            "readout-numeric": ["20px", { lineHeight: "20px", letterSpacing: "0.1em", fontWeight: "700" }],
+            "body-lg": ["14px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "500" }],
+            "headline-sm": ["15px", { lineHeight: "18px", letterSpacing: "0em", fontWeight: "600" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "label-lg": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
+            "label-md": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "body-md": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    :root {
+      --theme-bg: #071f19;
+      --theme-panel: #0d3128;
+      --theme-panel-light: #134438;
+      --theme-line: #2a6a55;
+      --theme-ink: #f1faf5;
+      --theme-ink-dim: #c3e2d4;
+      --theme-ink-faint: #6fa08c;
+      --theme-accent: #d9b43c;
+      --theme-accent-hi: #f2cf55;
+      --theme-knob-face: #0b261f;
+      --theme-knob-ring: #1c4a3d;
+      --theme-lcd: #a9b39a;
+      --theme-lcd-ink: #1a1f14;
+      --theme-lcd-bezel: #0a0d08;
+    }
+    
+    body {
+      background-color: #040c0a;
+      color: var(--theme-ink);
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Fixed hardware bounds 1280x628 viewport */
+    #mpc-screen {
+      width: 1280px;
+      height: 628px;
+      background: var(--theme-bg);
+      background-image: 
+        radial-gradient(#1c4a3d 0.75px, transparent 0.75px),
+        linear-gradient(to right, rgba(42, 106, 85, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(42, 106, 85, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px, 12px 12px, 12px 12px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.9), inset 0 0 2px rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #06150f;
+    }
+
+    /* Hardware screw heads */
+    .screw {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #2a6a55 30%, #071f19 80%);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.1);
+      position: relative;
+    }
+    .screw::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 1px;
+      width: 6px;
+      height: 1.5px;
+      background: #040c0a;
+      transform: rotate(35deg);
+    }
+
+    /* Retro LCD display well */
+    .po-lcd {
+      background-color: var(--theme-lcd);
+      color: var(--theme-lcd-ink);
+      box-shadow: inset 0 3px 6px rgba(0,0,0,0.8), inset 0 0 12px rgba(0,0,0,0.3);
+      border: 3px solid var(--theme-lcd-bezel);
+      image-rendering: pixelated;
+    }
+
+    .lcd-pixel-grid {
+      background-image: linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+      background-size: 3px 3px;
+    }
+
+    /* Rotary Knobs */
+    .knob-pot {
+      touch-action: none;
+      cursor: ns-resize;
+    }
+
+    /* Fader track styling */
+    .fader-track {
+      width: 8px;
+      height: 140px;
+      background: #051410;
+      border-radius: 4px;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.08);
+      position: relative;
+    }
+    .fader-track-fill {
+      position: absolute;
+      bottom: 0;
+      left: 2px;
+      width: 4px;
+      background: var(--theme-accent);
+      box-shadow: 0 0 6px var(--theme-accent);
+      border-radius: 2px;
+    }
+
+    .fader-handle {
+      width: 42px;
+      height: 24px;
+      background: linear-gradient(180deg, #504535 0%, #29241b 45%, #f2cf55 50%, #29241b 55%, #181510 100%);
+      border: 1px solid #756230;
+      border-radius: 3px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.4);
+      position: absolute;
+      left: -17px;
+      transform: translateY(50%);
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .fader-handle::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 11px;
+      height: 2px;
+      background: #ffffff;
+      box-shadow: 0 0 3px #ffffff;
+    }
+
+    /* Material Symbols */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+<!-- NATIVE MPC LIVE II TOUCH CANVAS (1280 x 628) -->
+<div class="flex flex-col justify-between p-space-md select-none" id="mpc-screen">
+<!-- TOP HEADER BAR (44px) -->
+<header class="h-11 flex items-center justify-between px-space-md bg-surface-container-lowest border-b border-outline-variant rounded z-20 shadow">
+<!-- Title & Model -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_#ffc665]"></span>
+<span class="text-headline-sm font-headline-sm text-primary tracking-wider uppercase">SYNTH ENGINE // MPC</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant">LIBPO32 // TONIC DRUM</span>
+</div>
+<!-- Tab selectors [1: KIT] [2: EDIT] [3: TUNE] -->
+<div class="flex items-center gap-1 bg-surface-container-lowest p-0.5 rounded border border-outline-variant">
+<button class="px-space-md py-1 text-label-md font-label-md rounded transition-all bg-primary-container text-on-primary font-bold shadow" id="tab-kit-btn" onclick="switchTab('kit')">
+          [1: KIT]
+        </button>
+<button class="px-space-md py-1 text-label-md font-label-md rounded transition-all text-on-surface-variant hover:text-on-surface" id="tab-edit-btn" onclick="switchTab('edit')">
+          [2: EDIT]
+        </button>
+<button class="px-space-md py-1 text-label-md font-label-md rounded transition-all text-on-surface-variant hover:text-on-surface" id="tab-tune-btn" onclick="switchTab('tune')">
+          [3: TUNE]
+        </button>
+</div>
+<!-- Action Cluster -->
+<div class="flex items-center gap-space-md">
+<!-- Drum Pattern Play/Stop Toggle -->
+<button class="h-8 px-space-md rounded bg-primary text-on-primary font-headline-sm text-label-md flex items-center gap-1.5 shadow active:scale-95 transition-transform" id="pattern-btn" onclick="togglePattern()">
+<span class="material-symbols-outlined text-[16px]" id="play-icon">play_arrow</span>
+<span id="play-text">PLAY PATTERN [SPACE]</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="h-8 px-2.5 rounded border border-outline-variant text-label-sm font-label-sm text-on-surface-variant hover:bg-surface-container active:scale-95 transition" onclick="savePresetPrompt()">
+            SAVE
+          </button>
+<button class="h-8 px-2.5 rounded border border-outline-variant text-label-sm font-label-sm text-on-surface-variant hover:bg-surface-container active:scale-95 transition" onclick="switchPreset(1)">
+            PRESET
+          </button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN TOUCH VIEWPORT (504px vertical) -->
+<main class="relative w-full h-[504px] overflow-hidden">
+<!-- ================= TAB 1: KIT ================= -->
+<section class="w-full h-full flex flex-col gap-space-md" id="view-kit">
+<!-- Top Half (Kit Display & Master Control) 626x240 each approx -->
+<div class="grid grid-cols-2 gap-space-md h-[240px]">
+<!-- 1. KIT LCD PANEL (PO-32 Retro Visualizer) -->
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-space-md flex flex-col justify-between relative shadow-lg">
+<div class="absolute top-2 left-2 screw"></div>
+<div class="absolute top-2 right-2 screw"></div>
+<div class="absolute bottom-2 left-2 screw"></div>
+<div class="absolute bottom-2 right-2 screw"></div>
+<div class="flex items-center justify-between px-2 pt-0.5">
+<span class="text-label-sm font-label-sm text-[#f2cf55] tracking-widest font-bold">// TONIC POCKET LCD ENGINE</span>
+<span class="text-label-sm font-label-sm text-[#6fa08c]">PO-32 HARDWARE V1.4</span>
+</div>
+<!-- Greenish LCD Bed (Theme tokens: theme_display_bg: #a9b39a, theme_display_ink: #1a1f14) -->
+<div class="po-lcd lcd-pixel-grid rounded-sm h-[174px] p-3 flex flex-col justify-between relative overflow-hidden">
+<!-- Animated Micro LCD Drummer & Metronome -->
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="text-[9px] uppercase tracking-wider font-extrabold bg-[#1a1f14] text-[#a9b39a] px-1">BANK 01</span>
+<span class="text-[9px] font-bold tracking-wider opacity-80">SOUND ENGINE A/B</span>
+</div>
+<div class="text-headline-lg font-readout-numeric text-[#1a1f14] tracking-tight mt-0.5" id="kit-name-display">
+                    KIT 03: ELECTRO GLITCH
+                  </div>
+<div class="text-[10px] tracking-widest font-bold mt-1 text-[#1a1f14] opacity-80">
+                    BPM: <span class="font-black" id="bpm-val">134.0</span> | SWING: 58% | SYNTH: FM+MOD
+                  </div>
+</div>
+<!-- Retro PO Micro Character / Drummer Box -->
+<div class="w-20 h-16 border-2 border-[#1a1f14] flex flex-col items-center justify-center relative p-1 bg-[#a9b39a]/60">
+<div class="w-10 h-8 flex items-center justify-center font-bold text-lg select-none" id="lcd-drummer">
+                    🥁
+                  </div>
+<div class="flex gap-1 mt-1">
+<span class="w-1.5 h-1.5 bg-[#1a1f14]" id="lcd-step-1"></span>
+<span class="w-1.5 h-1.5 bg-transparent border border-[#1a1f14]" id="lcd-step-2"></span>
+<span class="w-1.5 h-1.5 bg-transparent border border-[#1a1f14]" id="lcd-step-3"></span>
+<span class="w-1.5 h-1.5 bg-transparent border border-[#1a1f14]" id="lcd-step-4"></span>
+</div>
+<span class="text-[7px] font-bold tracking-tighter uppercase mt-0.5">PO-DRUMMER</span>
+</div>
+</div>
+<!-- Graphic Wave & Drum Pad Visualizer within LCD -->
+<div class="flex items-end justify-between border-t border-[#1a1f14]/30 pt-1.5">
+<div class="flex items-center gap-1">
+<!-- 8 Trigger Indicators on retro LCD -->
+<div class="w-5 h-7 border border-[#1a1f14] flex items-center justify-center text-[9px] font-bold" id="lcd-pad-0">1</div>
+<div class="w-5 h-7 border border-[#1a1f14] flex items-center justify-center text-[9px] font-bold" id="lcd-pad-1">2</div>
+<div class="w-5 h-7 border border-[#1a1f14] flex items-center justify-center text-[9px] font-bold" id="lcd-pad-2">3</div>
+<div class="w-5 h-7 border border-[#1a1f14] flex items-center justify-center text-[9px] font-bold" id="lcd-pad-3">4</div>
+<div class="w-5 h-7 border border-[#1a1f14] flex items-center justify-center text-[9px] font-bold" id="lcd-pad-4">5</div>
+<div class="w-5 h-7 border border-[#1a1f14] flex items-center justify-center text-[9px] font-bold" id="lcd-pad-5">6</div>
+<div class="w-5 h-7 border border-[#1a1f14] flex items-center justify-center text-[9px] font-bold" id="lcd-pad-6">7</div>
+<div class="w-5 h-7 border border-[#1a1f14] flex items-center justify-center text-[9px] font-bold" id="lcd-pad-7">8</div>
+</div>
+<!-- Kit Steppers -->
+<div class="flex items-center gap-1">
+<button class="px-2 py-1 bg-[#1a1f14] text-[#a9b39a] text-[10px] font-bold active:bg-black rounded-none" onclick="prevKit()">◄ PREV</button>
+<button class="px-2 py-1 bg-[#1a1f14] text-[#a9b39a] text-[10px] font-bold active:bg-black rounded-none" onclick="nextKit()">NEXT ►</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. MASTER CONTROLS -->
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-space-md flex flex-col justify-between relative shadow-lg">
+<div class="absolute top-2 left-2 screw"></div>
+<div class="absolute top-2 right-2 screw"></div>
+<div class="absolute bottom-2 left-2 screw"></div>
+<div class="absolute bottom-2 right-2 screw"></div>
+<div class="flex items-center justify-between px-2 pt-0.5">
+<span class="text-label-sm font-label-sm text-[#f2cf55] tracking-widest font-bold">// MASTER OUTPUT STAGE</span>
+<span class="text-label-sm font-label-sm text-[#c3e2d4]">ANALOG SATURATION ON</span>
+</div>
+<div class="flex items-center justify-around h-full pt-2">
+<!-- Knob 1: Master Level -->
+<div class="flex flex-col items-center gap-1">
+<span class="text-label-sm font-label-sm text-[#c3e2d4]">LEVEL</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center shadow-inner cursor-ns-resize" data-max="100" data-min="0" data-val="84" id="knob-master-lvl">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full shadow-[0_0_5px_#f2cf55]" style="transform-origin: 50% 20px; transform: rotate(45deg);"></div>
+</div>
+</div>
+<div class="text-label-md font-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]" id="val-master-lvl">84 dB</div>
+</div>
+<!-- Knob 2: Decay Scale -->
+<div class="flex flex-col items-center gap-1">
+<span class="text-label-sm font-label-sm text-[#c3e2d4]">DECAY SCALE</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center shadow-inner cursor-ns-resize" data-max="100" data-min="10" data-val="65" id="knob-decay-scale">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full shadow-[0_0_5px_#f2cf55]" style="transform-origin: 50% 20px; transform: rotate(15deg);"></div>
+</div>
+</div>
+<div class="text-label-md font-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]" id="val-decay-scale">65%</div>
+</div>
+<!-- Tactile Gold Random Button -->
+<div class="flex flex-col items-center justify-center gap-2">
+<button class="w-24 h-24 rounded-lg bg-gradient-to-b from-[#f2cf55] via-[#d9b43c] to-[#756230] p-1 shadow-[0_5px_10px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.8)] active:translate-y-1 active:shadow-none transition-all flex flex-col items-center justify-center group" onclick="randomizeAllKit()">
+<div class="w-full h-full rounded bg-[#0b261f] flex flex-col items-center justify-center border border-[#d9b43c]/60 group-hover:bg-[#10382e] transition">
+<span class="material-symbols-outlined text-[#f2cf55] text-2xl group-hover:rotate-180 transition-transform duration-300">casino</span>
+<span class="text-[10px] font-label-lg font-bold text-[#f1faf5] mt-1 text-center leading-tight">RANDOM<br>KIT</span>
+</div>
+</button>
+<span class="text-[9px] text-[#6fa08c] uppercase tracking-wider font-bold">MUTATE ALL VOICES</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. PAD LEVEL (1258x244): 8 Vertical Fader Sliders for 8 PO-32 Drum Voices -->
+<div class="w-full h-[248px] bg-[#09221b] border border-[#2a6a55] rounded p-space-md flex flex-col justify-between shadow-xl relative">
+<div class="flex items-center justify-between border-b border-[#1c4a3d] pb-1">
+<div class="flex items-center gap-space-md">
+<span class="text-label-sm font-label-sm text-[#f2cf55] font-bold">// PAD LEVEL MIXER [VOICES 1-8]</span>
+<span class="text-label-sm font-label-sm text-[#6fa08c]">TOUCH &amp; DRAG SLIDERS OR HIT PADS 1-8</span>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-[#c3e2d4]">
+<span>VELOCITY CURVE: LINEAR</span>
+</div>
+</div>
+<!-- 8 Channel Strips -->
+<div class="grid grid-cols-8 gap-2 h-[196px] items-center pt-2">
+<!-- Pad Voice 1: Kick -->
+<div class="flex flex-col items-center justify-between h-full bg-[#061914] border border-[#1c4a3d] py-1.5 rounded relative hover:border-[#d9b43c] transition group">
+<span class="text-[9px] font-bold text-[#f2cf55]">01: KICK</span>
+<!-- Fader Container -->
+<div class="fader-track cursor-ns-resize" data-val="90" id="fader-1" onpointerdown="startFaderDrag(event, 1)">
+<div class="fader-track-fill" style="height: 90%;"></div>
+<div class="fader-handle" style="bottom: 90%;"></div>
+</div>
+<button class="w-12 h-6 mt-1 rounded bg-[#10352b] border border-[#2a6a55] text-[10px] font-bold text-[#f1faf5] active:bg-[#f2cf55] active:text-[#06150f] transition shadow" onclick="triggerDrumHit(0)">
+                PAD 1
+              </button>
+</div>
+<!-- Pad Voice 2: Snare -->
+<div class="flex flex-col items-center justify-between h-full bg-[#061914] border border-[#1c4a3d] py-1.5 rounded relative hover:border-[#d9b43c] transition group">
+<span class="text-[9px] font-bold text-[#f2cf55]">02: SNARE</span>
+<div class="fader-track cursor-ns-resize" data-val="80" id="fader-2" onpointerdown="startFaderDrag(event, 2)">
+<div class="fader-track-fill" style="height: 80%;"></div>
+<div class="fader-handle" style="bottom: 80%;"></div>
+</div>
+<button class="w-12 h-6 mt-1 rounded bg-[#10352b] border border-[#2a6a55] text-[10px] font-bold text-[#f1faf5] active:bg-[#f2cf55] active:text-[#06150f] transition shadow" onclick="triggerDrumHit(1)">
+                PAD 2
+              </button>
+</div>
+<!-- Pad Voice 3: Clave -->
+<div class="flex flex-col items-center justify-between h-full bg-[#061914] border border-[#1c4a3d] py-1.5 rounded relative hover:border-[#d9b43c] transition group">
+<span class="text-[9px] font-bold text-[#f2cf55]">03: CLAVE</span>
+<div class="fader-track cursor-ns-resize" data-val="72" id="fader-3" onpointerdown="startFaderDrag(event, 3)">
+<div class="fader-track-fill" style="height: 72%;"></div>
+<div class="fader-handle" style="bottom: 72%;"></div>
+</div>
+<button class="w-12 h-6 mt-1 rounded bg-[#10352b] border border-[#2a6a55] text-[10px] font-bold text-[#f1faf5] active:bg-[#f2cf55] active:text-[#06150f] transition shadow" onclick="triggerDrumHit(2)">
+                PAD 3
+              </button>
+</div>
+<!-- Pad Voice 4: Tom -->
+<div class="flex flex-col items-center justify-between h-full bg-[#061914] border border-[#1c4a3d] py-1.5 rounded relative hover:border-[#d9b43c] transition group">
+<span class="text-[9px] font-bold text-[#f2cf55]">04: TOM</span>
+<div class="fader-track cursor-ns-resize" data-val="84" id="fader-4" onpointerdown="startFaderDrag(event, 4)">
+<div class="fader-track-fill" style="height: 84%;"></div>
+<div class="fader-handle" style="bottom: 84%;"></div>
+</div>
+<button class="w-12 h-6 mt-1 rounded bg-[#10352b] border border-[#2a6a55] text-[10px] font-bold text-[#f1faf5] active:bg-[#f2cf55] active:text-[#06150f] transition shadow" onclick="triggerDrumHit(3)">
+                PAD 4
+              </button>
+</div>
+<!-- Pad Voice 5: Hat Closed -->
+<div class="flex flex-col items-center justify-between h-full bg-[#061914] border border-[#1c4a3d] py-1.5 rounded relative hover:border-[#d9b43c] transition group">
+<span class="text-[9px] font-bold text-[#f2cf55]">05: HAT CL</span>
+<div class="fader-track cursor-ns-resize" data-val="75" id="fader-5" onpointerdown="startFaderDrag(event, 5)">
+<div class="fader-track-fill" style="height: 75%;"></div>
+<div class="fader-handle" style="bottom: 75%;"></div>
+</div>
+<button class="w-12 h-6 mt-1 rounded bg-[#10352b] border border-[#2a6a55] text-[10px] font-bold text-[#f1faf5] active:bg-[#f2cf55] active:text-[#06150f] transition shadow" onclick="triggerDrumHit(4)">
+                PAD 5
+              </button>
+</div>
+<!-- Pad Voice 6: Hat Open -->
+<div class="flex flex-col items-center justify-between h-full bg-[#061914] border border-[#1c4a3d] py-1.5 rounded relative hover:border-[#d9b43c] transition group">
+<span class="text-[9px] font-bold text-[#f2cf55]">06: HAT OP</span>
+<div class="fader-track cursor-ns-resize" data-val="68" id="fader-6" onpointerdown="startFaderDrag(event, 6)">
+<div class="fader-track-fill" style="height: 68%;"></div>
+<div class="fader-handle" style="bottom: 68%;"></div>
+</div>
+<button class="w-12 h-6 mt-1 rounded bg-[#10352b] border border-[#2a6a55] text-[10px] font-bold text-[#f1faf5] active:bg-[#f2cf55] active:text-[#06150f] transition shadow" onclick="triggerDrumHit(5)">
+                PAD 6
+              </button>
+</div>
+<!-- Pad Voice 7: Cymbal -->
+<div class="flex flex-col items-center justify-between h-full bg-[#061914] border border-[#1c4a3d] py-1.5 rounded relative hover:border-[#d9b43c] transition group">
+<span class="text-[9px] font-bold text-[#f2cf55]">07: CYMB</span>
+<div class="fader-track cursor-ns-resize" data-val="62" id="fader-7" onpointerdown="startFaderDrag(event, 7)">
+<div class="fader-track-fill" style="height: 62%;"></div>
+<div class="fader-handle" style="bottom: 62%;"></div>
+</div>
+<button class="w-12 h-6 mt-1 rounded bg-[#10352b] border border-[#2a6a55] text-[10px] font-bold text-[#f1faf5] active:bg-[#f2cf55] active:text-[#06150f] transition shadow" onclick="triggerDrumHit(6)">
+                PAD 7
+              </button>
+</div>
+<!-- Pad Voice 8: Noise Percussion -->
+<div class="flex flex-col items-center justify-between h-full bg-[#061914] border border-[#1c4a3d] py-1.5 rounded relative hover:border-[#d9b43c] transition group">
+<span class="text-[9px] font-bold text-[#f2cf55]">08: NOISE</span>
+<div class="fader-track cursor-ns-resize" data-val="88" id="fader-8" onpointerdown="startFaderDrag(event, 8)">
+<div class="fader-track-fill" style="height: 88%;"></div>
+<div class="fader-handle" style="bottom: 88%;"></div>
+</div>
+<button class="w-12 h-6 mt-1 rounded bg-[#10352b] border border-[#2a6a55] text-[10px] font-bold text-[#f1faf5] active:bg-[#f2cf55] active:text-[#06150f] transition shadow" onclick="triggerDrumHit(7)">
+                PAD 8
+              </button>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= TAB 2: EDIT (VOICE SYNTH ARCHITECTURE) ================= -->
+<section class="hidden w-full h-full flex flex-col gap-space-md" id="view-edit">
+<!-- Voice Selector Strip -->
+<div class="h-10 bg-[#09221b] border border-[#2a6a55] rounded px-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<span class="text-label-sm font-label-sm text-[#f2cf55] font-bold">SELECT ACTIVE PAD VOICE:</span>
+<div class="flex gap-1">
+<button class="edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#f2cf55] text-[#06150f] font-bold" data-idx="0" onclick="selectEditVoice(0)">1: KICK</button>
+<button class="edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#0d3128] text-[#c3e2d4]" data-idx="1" onclick="selectEditVoice(1)">2: SNARE</button>
+<button class="edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#0d3128] text-[#c3e2d4]" data-idx="2" onclick="selectEditVoice(2)">3: CLAVE</button>
+<button class="edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#0d3128] text-[#c3e2d4]" data-idx="3" onclick="selectEditVoice(3)">4: TOM</button>
+<button class="edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#0d3128] text-[#c3e2d4]" data-idx="4" onclick="selectEditVoice(4)">5: HAT CL</button>
+<button class="edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#0d3128] text-[#c3e2d4]" data-idx="5" onclick="selectEditVoice(5)">6: HAT OP</button>
+<button class="edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#0d3128] text-[#c3e2d4]" data-idx="6" onclick="selectEditVoice(6)">7: CYMB</button>
+<button class="edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#0d3128] text-[#c3e2d4]" data-idx="7" onclick="selectEditVoice(7)">8: NOISE</button>
+</div>
+</div>
+<button class="px-space-md py-1 rounded bg-[#d9b43c] text-[#06150f] text-label-sm font-bold flex items-center gap-1" onclick="triggerDrumHit(currentEditVoice)">
+<span class="material-symbols-outlined text-[14px]">volume_up</span> AUDITION VOICE
+          </button>
+</div>
+<!-- Synth Modules Bento Grid -->
+<div class="grid grid-cols-4 gap-space-md h-[448px]">
+<!-- MODULE 1: OSCILLATOR -->
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-space-md flex flex-col justify-between shadow">
+<div class="border-b border-[#2a6a55] pb-1 flex justify-between items-center">
+<span class="text-label-sm font-bold text-[#f2cf55]">// 1. OSCILLATOR</span>
+<span class="w-2 h-2 rounded-full bg-[#f2cf55]"></span>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-label-sm text-[#c3e2d4]">WAVEFORM:</span>
+<div class="grid grid-cols-3 gap-1">
+<button class="py-1 text-[10px] font-bold rounded bg-[#f2cf55] text-[#071f19]">SINE</button>
+<button class="py-1 text-[10px] font-bold rounded bg-[#071f19] text-[#c3e2d4] border border-[#1c4a3d]">TRI</button>
+<button class="py-1 text-[10px] font-bold rounded bg-[#071f19] text-[#c3e2d4] border border-[#1c4a3d]">SAW</button>
+</div>
+<!-- Pitch Knob -->
+<div class="flex flex-col items-center mt-2">
+<span class="text-label-sm text-[#c3e2d4]">BASE PITCH</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center my-1" data-max="99" data-min="20" data-val="48">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 20px; transform: rotate(-30deg);"></div>
+</div>
+</div>
+<span class="text-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]">48.2 Hz</span>
+</div>
+<!-- Decay Knob -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm text-[#c3e2d4]">OSC DECAY</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center my-1" data-max="99" data-min="1" data-val="64">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 20px; transform: rotate(20deg);"></div>
+</div>
+</div>
+<span class="text-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]">240 ms</span>
+</div>
+</div>
+<div class="text-[9px] text-[#6fa08c] text-center">ANALOG EMULATION CORE</div>
+</div>
+<!-- MODULE 2: MODULATION (FM / PITCH ENV) -->
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-space-md flex flex-col justify-between shadow">
+<div class="border-b border-[#2a6a55] pb-1 flex justify-between items-center">
+<span class="text-label-sm font-bold text-[#f2cf55]">// 2. MODULATION</span>
+<span class="w-2 h-2 rounded-full bg-[#f2cf55]"></span>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-label-sm text-[#c3e2d4]">MOD MODE:</span>
+<div class="grid grid-cols-2 gap-1">
+<button class="py-1 text-[10px] font-bold rounded bg-[#f2cf55] text-[#071f19]">PITCH SWEEP</button>
+<button class="py-1 text-[10px] font-bold rounded bg-[#071f19] text-[#c3e2d4] border border-[#1c4a3d]">FM RATIO</button>
+</div>
+<!-- Mod Rate Knob -->
+<div class="flex flex-col items-center mt-2">
+<span class="text-label-sm text-[#c3e2d4]">MOD AMOUNT</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center my-1" data-max="99" data-min="0" data-val="78">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 20px; transform: rotate(55deg);"></div>
+</div>
+</div>
+<span class="text-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]">78% ENV</span>
+</div>
+<!-- Mod Rate Knob -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm text-[#c3e2d4]">PITCH DROP RATE</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center my-1" data-max="99" data-min="1" data-val="52">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 20px; transform: rotate(-5deg);"></div>
+</div>
+</div>
+<span class="text-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]">FAST EXP</span>
+</div>
+</div>
+<div class="text-[9px] text-[#6fa08c] text-center">TONIC MOD OPERATOR</div>
+</div>
+<!-- MODULE 3: NOISE & FILTER -->
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-space-md flex flex-col justify-between shadow">
+<div class="border-b border-[#2a6a55] pb-1 flex justify-between items-center">
+<span class="text-label-sm font-bold text-[#f2cf55]">// 3. NOISE / VCF</span>
+<span class="w-2 h-2 rounded-full bg-[#f2cf55]"></span>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-label-sm text-[#c3e2d4]">FILTER TYPE:</span>
+<div class="grid grid-cols-3 gap-1">
+<button class="py-1 text-[10px] font-bold rounded bg-[#f2cf55] text-[#071f19]">LPF</button>
+<button class="py-1 text-[10px] font-bold rounded bg-[#071f19] text-[#c3e2d4] border border-[#1c4a3d]">BPF</button>
+<button class="py-1 text-[10px] font-bold rounded bg-[#071f19] text-[#c3e2d4] border border-[#1c4a3d]">HPF</button>
+</div>
+<!-- Noise Blend Knob -->
+<div class="flex flex-col items-center mt-2">
+<span class="text-label-sm text-[#c3e2d4]">NOISE MIX</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center my-1" data-max="99" data-min="0" data-val="35">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 20px; transform: rotate(-40deg);"></div>
+</div>
+</div>
+<span class="text-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]">35% WHITE</span>
+</div>
+<!-- Filter Cutoff Knob -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm text-[#c3e2d4]">CUTOFF FREQ</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center my-1" data-max="99" data-min="10" data-val="82">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 20px; transform: rotate(60deg);"></div>
+</div>
+</div>
+<span class="text-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]">4.2 kHz</span>
+</div>
+</div>
+<div class="text-[9px] text-[#6fa08c] text-center">PO-32 NOISE GENERATOR</div>
+</div>
+<!-- MODULE 4: OUTPUT & DRIVE -->
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-space-md flex flex-col justify-between shadow">
+<div class="border-b border-[#2a6a55] pb-1 flex justify-between items-center">
+<span class="text-label-sm font-bold text-[#f2cf55]">// 4. AMP &amp; DRIVE</span>
+<span class="w-2 h-2 rounded-full bg-[#f2cf55]"></span>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-label-sm text-[#c3e2d4]">SATURATION CURVE:</span>
+<div class="grid grid-cols-2 gap-1">
+<button class="py-1 text-[10px] font-bold rounded bg-[#f2cf55] text-[#071f19]">HARD CLIP</button>
+<button class="py-1 text-[10px] font-bold rounded bg-[#071f19] text-[#c3e2d4] border border-[#1c4a3d]">TAPE WARM</button>
+</div>
+<!-- Distortion Amount -->
+<div class="flex flex-col items-center mt-2">
+<span class="text-label-sm text-[#c3e2d4]">DRIVE / GAIN</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center my-1" data-max="99" data-min="0" data-val="60">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 20px; transform: rotate(10deg);"></div>
+</div>
+</div>
+<span class="text-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]">+6.4 dB</span>
+</div>
+<!-- Pad Pan -->
+<div class="flex flex-col items-center">
+<span class="text-label-sm text-[#c3e2d4]">PAN POSITION</span>
+<div class="knob-pot relative w-16 h-16 rounded-full bg-[#071f19] border-2 border-[#1c4a3d] flex items-center justify-center my-1" data-max="100" data-min="0" data-val="50">
+<div class="w-12 h-12 rounded-full bg-[#0d3128] border border-[#2a6a55] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-1 w-1.5 h-3 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 20px; transform: rotate(0deg);"></div>
+</div>
+</div>
+<span class="text-label-md text-[#f1faf5] bg-[#071f19] px-2 py-0.5 rounded border border-[#1c4a3d]">CENTER</span>
+</div>
+</div>
+<div class="text-[9px] text-[#6fa08c] text-center">AMP OUTPUT STAGE</div>
+</div>
+</div>
+</section>
+<!-- ================= TAB 3: TUNE (MACRO PITCH & DECAY MATRIX) ================= -->
+<section class="hidden w-full h-full flex flex-col gap-space-md" id="view-tune">
+<div class="h-10 bg-[#09221b] border border-[#2a6a55] rounded px-space-md flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-[#f2cf55] font-bold">// 8-VOICE PITCH &amp; DECAY GLOBAL TUNE RACK</span>
+<span class="text-label-sm font-label-sm text-[#6fa08c]">DOUBLE CLICK OR DRAG KNOBS TO FINE TUNE</span>
+</div>
+<div class="grid grid-cols-8 gap-space-md h-[448px]">
+<!-- 8 Vertical Columns for Voice 1 through 8 Tuning -->
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-2 flex flex-col justify-between items-center shadow">
+<span class="text-[10px] font-bold text-[#f2cf55]">01: KICK</span>
+<!-- Pitch -->
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">PITCH</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="42">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(-20deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">42 Hz</span>
+</div>
+<!-- Decay -->
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">DECAY</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="75">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(45deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">320ms</span>
+</div>
+<button class="w-full py-1 rounded bg-[#10352b] text-[9px] font-bold text-[#f1faf5] border border-[#2a6a55]" onclick="triggerDrumHit(0)">HIT</button>
+</div>
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-2 flex flex-col justify-between items-center shadow">
+<span class="text-[10px] font-bold text-[#f2cf55]">02: SNARE</span>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">PITCH</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="60">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(10deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">185 Hz</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">DECAY</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="55">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(0deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">180ms</span>
+</div>
+<button class="w-full py-1 rounded bg-[#10352b] text-[9px] font-bold text-[#f1faf5] border border-[#2a6a55]" onclick="triggerDrumHit(1)">HIT</button>
+</div>
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-2 flex flex-col justify-between items-center shadow">
+<span class="text-[10px] font-bold text-[#f2cf55]">03: CLAVE</span>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">PITCH</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="80">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(50deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">850 Hz</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">DECAY</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="30">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(-50deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">45ms</span>
+</div>
+<button class="w-full py-1 rounded bg-[#10352b] text-[9px] font-bold text-[#f1faf5] border border-[#2a6a55]" onclick="triggerDrumHit(2)">HIT</button>
+</div>
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-2 flex flex-col justify-between items-center shadow">
+<span class="text-[10px] font-bold text-[#f2cf55]">04: TOM</span>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">PITCH</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="50">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(-10deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">120 Hz</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">DECAY</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="65">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(25deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">220ms</span>
+</div>
+<button class="w-full py-1 rounded bg-[#10352b] text-[9px] font-bold text-[#f1faf5] border border-[#2a6a55]" onclick="triggerDrumHit(3)">HIT</button>
+</div>
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-2 flex flex-col justify-between items-center shadow">
+<span class="text-[10px] font-bold text-[#f2cf55]">05: HAT CL</span>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">PITCH</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="75">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(40deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">4.5 kHz</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">DECAY</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="25">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(-60deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">35ms</span>
+</div>
+<button class="w-full py-1 rounded bg-[#10352b] text-[9px] font-bold text-[#f1faf5] border border-[#2a6a55]" onclick="triggerDrumHit(4)">HIT</button>
+</div>
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-2 flex flex-col justify-between items-center shadow">
+<span class="text-[10px] font-bold text-[#f2cf55]">06: HAT OP</span>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">PITCH</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="75">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(40deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">4.2 kHz</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">DECAY</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="70">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(35deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">280ms</span>
+</div>
+<button class="w-full py-1 rounded bg-[#10352b] text-[9px] font-bold text-[#f1faf5] border border-[#2a6a55]" onclick="triggerDrumHit(5)">HIT</button>
+</div>
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-2 flex flex-col justify-between items-center shadow">
+<span class="text-[10px] font-bold text-[#f2cf55]">07: CYMB</span>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">PITCH</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="82">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(60deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">6.8 kHz</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">DECAY</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="85">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(65deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">650ms</span>
+</div>
+<button class="w-full py-1 rounded bg-[#10352b] text-[9px] font-bold text-[#f1faf5] border border-[#2a6a55]" onclick="triggerDrumHit(6)">HIT</button>
+</div>
+<div class="bg-[#0a231c] border border-[#2a6a55] rounded p-2 flex flex-col justify-between items-center shadow">
+<span class="text-[10px] font-bold text-[#f2cf55]">08: NOISE</span>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">PITCH</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="70">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(35deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">NOISE F</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[9px] text-[#c3e2d4]">DECAY</span>
+<div class="knob-pot relative w-12 h-12 rounded-full bg-[#071f19] border border-[#1c4a3d] flex items-center justify-center my-1" data-val="40">
+<div class="w-9 h-9 rounded-full bg-[#0d3128] flex items-center justify-center relative pointer-events-none">
+<div class="knob-indicator absolute top-0.5 w-1 h-2 bg-[#f2cf55] rounded-full" style="transform-origin: 50% 16px; transform: rotate(-30deg);"></div>
+</div>
+</div>
+<span class="text-[9px] text-[#f1faf5]">95ms</span>
+</div>
+<button class="w-full py-1 rounded bg-[#10352b] text-[9px] font-bold text-[#f1faf5] border border-[#2a6a55]" onclick="triggerDrumHit(7)">HIT</button>
+</div>
+</div>
+</section>
+</main>
+<!-- BOTTOM BAR: Q-LINK HARDWARE STRIP (56px) - Map to 12 MPC Q-Links -->
+<footer class="h-14 bg-surface-container-lowest border-t border-outline-variant rounded flex items-center justify-between px-space-md shadow-inner z-20">
+<!-- Primary Q-Link Macro Cluster -->
+<div class="flex items-center gap-1.5 w-full justify-between">
+<!-- Q1 -->
+<div class="flex flex-col items-center justify-center bg-surface-container-high text-primary border border-primary px-space-md py-1 rounded cursor-pointer min-w-[90px]">
+<span class="text-[9px] font-extrabold text-primary">Q1: CUTOFF</span>
+<span class="text-label-sm font-label-sm">82% [4.2k]</span>
+</div>
+<!-- Q2 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded cursor-pointer min-w-[90px]">
+<span class="text-[9px] font-bold">Q2: RESO</span>
+<span class="text-label-sm font-label-sm">45%</span>
+</div>
+<!-- Q3 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded cursor-pointer min-w-[90px]">
+<span class="text-[9px] font-bold">Q3: DRIVE</span>
+<span class="text-label-sm font-label-sm">+6.4 dB</span>
+</div>
+<!-- Q4 -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant border border-outline-variant px-space-md py-1 rounded cursor-pointer min-w-[90px]">
+<span class="text-[9px] font-bold">Q4: TEMPO</span>
+<span class="text-label-sm font-label-sm">134.0 BPM</span>
+</div>
+<div class="h-6 w-px bg-outline-variant"></div>
+<!-- Q5 - Q12 Pad Level Quick Macro Strip -->
+<div class="flex items-center gap-1">
+<div class="text-[9px] font-bold text-[#6fa08c] mr-1">Q-PADS:</div>
+<div class="px-2 py-0.5 bg-[#061914] border border-[#1c4a3d] text-[9px] text-[#f2cf55] rounded">V1:90</div>
+<div class="px-2 py-0.5 bg-[#061914] border border-[#1c4a3d] text-[9px] text-[#f2cf55] rounded">V2:80</div>
+<div class="px-2 py-0.5 bg-[#061914] border border-[#1c4a3d] text-[9px] text-[#f2cf55] rounded">V3:72</div>
+<div class="px-2 py-0.5 bg-[#061914] border border-[#1c4a3d] text-[9px] text-[#f2cf55] rounded">V4:84</div>
+<div class="px-2 py-0.5 bg-[#061914] border border-[#1c4a3d] text-[9px] text-[#f2cf55] rounded">V5:75</div>
+<div class="px-2 py-0.5 bg-[#061914] border border-[#1c4a3d] text-[9px] text-[#f2cf55] rounded">V6:68</div>
+<div class="px-2 py-0.5 bg-[#061914] border border-[#1c4a3d] text-[9px] text-[#f2cf55] rounded">V7:62</div>
+<div class="px-2 py-0.5 bg-[#061914] border border-[#1c4a3d] text-[9px] text-[#f2cf55] rounded">V8:88</div>
+</div>
+<div class="flex items-center gap-2 pl-2 border-l border-outline-variant">
+<span class="material-symbols-outlined text-[18px] text-[#f2cf55]">dialpad</span>
+<span class="text-[9px] font-bold text-[#c3e2d4]">BANK 1: ACTIVE</span>
+</div>
+</div>
+</footer>
+</div>
+<!-- SYNTH ENGINE LOGIC & AUDIO DSP (VANILLA JS) -->
+<script>
+    // Audio Context Setup for PO-32 Synth Simulation
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Sound Generation Recipes for 8 PO-32 Drum Sounds
+    function triggerDrumHit(voiceIndex) {
+      initAudio();
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+
+      // Visual flash on LCD
+      const lcdPad = document.getElementById('lcd-pad-' + voiceIndex);
+      if (lcdPad) {
+        lcdPad.style.backgroundColor = '#1a1f14';
+        lcdPad.style.color = '#a9b39a';
+        setTimeout(() => {
+          lcdPad.style.backgroundColor = 'transparent';
+          lcdPad.style.color = '#1a1f14';
+        }, 80);
+      }
+
+      // Read volume from fader
+      const faderEl = document.getElementById('fader-' + (voiceIndex + 1));
+      const vol = faderEl ? parseFloat(faderEl.dataset.val) / 100 : 0.8;
+
+      switch(voiceIndex) {
+        case 0: // KICK (Punchy pitch drop sine)
+          {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.exponentialRampToValueAtTime(38, now + 0.14);
+
+            gain.gain.setValueAtTime(vol * 1.2, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.35);
+          }
+          break;
+
+        case 1: // SNARE (Pitched body + White noise burst)
+          {
+            const osc = audioCtx.createOscillator();
+            const oscGain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(220, now);
+            osc.frequency.exponentialRampToValueAtTime(120, now + 0.08);
+            oscGain.gain.setValueAtTime(vol * 0.7, now);
+            oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            osc.connect(oscGain);
+            oscGain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.16);
+
+            // Noise
+            const bufferSize = audioCtx.sampleRate * 0.2;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.setValueAtTime(1200, now);
+            const noiseGain = audioCtx.createGain();
+            noiseGain.gain.setValueAtTime(vol * 0.9, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+            noise.connect(filter);
+            filter.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+            noise.start(now);
+            noise.stop(now + 0.2);
+          }
+          break;
+
+        case 2: // CLAVE (High metallic resonance click)
+          {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1450, now);
+            gain.gain.setValueAtTime(vol * 0.8, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.07);
+          }
+          break;
+
+        case 3: // TOM (Decaying sine tone with sweep)
+          {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(180, now);
+            osc.frequency.exponentialRampToValueAtTime(75, now + 0.22);
+            gain.gain.setValueAtTime(vol * 0.9, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.26);
+          }
+          break;
+
+        case 4: // HAT CLOSED (Short highpass noise)
+          {
+            const bufferSize = audioCtx.sampleRate * 0.05;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(7500, now);
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(vol * 0.7, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            noise.start(now);
+            noise.stop(now + 0.05);
+          }
+          break;
+
+        case 5: // HAT OPEN (Sustained shimmering noise)
+          {
+            const bufferSize = audioCtx.sampleRate * 0.3;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.setValueAtTime(5000, now);
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(vol * 0.7, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            noise.start(now);
+            noise.stop(now + 0.3);
+          }
+          break;
+
+        case 6: // CYMBAL (Multi-osc metallic cluster)
+          {
+            [320, 480, 610, 890].forEach(freq => {
+              const osc = audioCtx.createOscillator();
+              const gain = audioCtx.createGain();
+              osc.type = 'square';
+              osc.frequency.setValueAtTime(freq, now);
+              gain.gain.setValueAtTime(vol * 0.15, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+              osc.connect(gain);
+              gain.connect(audioCtx.destination);
+              osc.start(now);
+              osc.stop(now + 0.52);
+            });
+          }
+          break;
+
+        case 7: // NOISE PERCUSSION (Chirp glitch)
+          {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(900, now);
+            osc.frequency.exponentialRampToValueAtTime(80, now + 0.1);
+            gain.gain.setValueAtTime(vol * 0.85, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.13);
+          }
+          break;
+      }
+    }
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.getElementById('view-kit').classList.add('hidden');
+      document.getElementById('view-edit').classList.add('hidden');
+      document.getElementById('view-tune').classList.add('hidden');
+
+      const btnKit = document.getElementById('tab-kit-btn');
+      const btnEdit = document.getElementById('tab-edit-btn');
+      const btnTune = document.getElementById('tab-tune-btn');
+
+      [btnKit, btnEdit, btnTune].forEach(b => {
+        b.className = "px-space-md py-1 text-label-md font-label-md rounded transition-all text-on-surface-variant hover:text-on-surface";
+      });
+
+      const activeBtn = document.getElementById('tab-' + tabId + '-btn');
+      activeBtn.className = "px-space-md py-1 text-label-md font-label-md rounded transition-all bg-primary-container text-on-primary font-bold shadow";
+
+      document.getElementById('view-' + tabId).classList.remove('hidden');
+    }
+
+    // Active Edit Voice Selection
+    let currentEditVoice = 0;
+    function selectEditVoice(idx) {
+      currentEditVoice = idx;
+      document.querySelectorAll('.edit-voice-btn').forEach((b, i) => {
+        if (i === idx) {
+          b.className = 'edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#f2cf55] text-[#06150f] font-bold';
+        } else {
+          b.className = 'edit-voice-btn px-3 py-0.5 text-label-sm font-label-sm rounded bg-[#0d3128] text-[#c3e2d4]';
+        }
+      });
+    }
+
+    // Drum Pattern Sequencer (PO-32 16-step style)
+    let isPlaying = false;
+    let seqInterval = null;
+    let currentStep = 0;
+    const pattern = [
+      [0, 4],       // step 0: kick, hat
+      [4],          // step 1: hat
+      [1, 4],       // step 2: snare, hat
+      [4, 2],       // step 3: hat, clave
+      [0, 4],       // step 4: kick, hat
+      [4, 7],       // step 5: hat, noise
+      [1, 5],       // step 6: snare, open hat
+      [3, 4],       // step 7: tom, hat
+    ];
+
+    function togglePattern() {
+      initAudio();
+      isPlaying = !isPlaying;
+      const playIcon = document.getElementById('play-icon');
+      const playText = document.getElementById('play-text');
+      const patternBtn = document.getElementById('pattern-btn');
+
+      if (isPlaying) {
+        playIcon.textContent = 'pause';
+        playText.textContent = 'STOP PATTERN [SPACE]';
+        patternBtn.classList.replace('bg-primary', 'bg-[#ffb4a7]');
+        patternBtn.classList.replace('text-on-primary', 'text-[#400100]');
+
+        // 134 BPM -> ~112ms per 16th step
+        const stepTime = (60 / 134 / 4) * 1000 * 2; // 8th shuffle
+        seqInterval = setInterval(() => {
+          const hits = pattern[currentStep % pattern.length];
+          hits.forEach(voice => triggerDrumHit(voice));
+
+          // Animate LCD drummer
+          const drummer = document.getElementById('lcd-drummer');
+          if (drummer) drummer.textContent = (currentStep % 2 === 0) ? '🥁' : '⚡';
+
+          // Step lights
+          for (let s = 1; s <= 4; s++) {
+            const stepEl = document.getElementById('lcd-step-' + s);
+            if (stepEl) {
+              if ((currentStep % 4) + 1 === s) {
+                stepEl.style.backgroundColor = '#1a1f14';
+              } else {
+                stepEl.style.backgroundColor = 'transparent';
+              }
+            }
+          }
+
+          currentStep++;
+        }, stepTime);
+      } else {
+        clearInterval(seqInterval);
+        playIcon.textContent = 'play_arrow';
+        playText.textContent = 'PLAY PATTERN [SPACE]';
+        patternBtn.classList.replace('bg-[#ffb4a7]', 'bg-primary');
+        patternBtn.classList.replace('text-[#400100]', 'text-on-primary');
+        const drummer = document.getElementById('lcd-drummer');
+        if (drummer) drummer.textContent = '🥁';
+      }
+    }
+
+    // Keyboard Shortcuts (1-8 for pads, Space for Play)
+    window.addEventListener('keydown', (e) => {
+      if (e.repeat) return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        togglePattern();
+        return;
+      }
+      const padNum = parseInt(e.key);
+      if (padNum >= 1 && padNum <= 8) {
+        triggerDrumHit(padNum - 1);
+      }
+    });
+
+    // Fader Drag Logic
+    let activeFader = null;
+    function startFaderDrag(e, padIndex) {
+      activeFader = {
+        el: document.getElementById('fader-' + padIndex),
+        padIndex: padIndex
+      };
+      updateFaderPos(e);
+      window.addEventListener('pointermove', updateFaderPos);
+      window.addEventListener('pointerup', endFaderDrag);
+    }
+
+    function updateFaderPos(e) {
+      if (!activeFader) return;
+      const rect = activeFader.el.getBoundingClientRect();
+      const relativeY = rect.bottom - e.clientY;
+      let percent = Math.round((relativeY / rect.height) * 100);
+      percent = Math.max(0, Math.min(100, percent));
+
+      activeFader.el.dataset.val = percent;
+      activeFader.el.querySelector('.fader-track-fill').style.height = percent + '%';
+      activeFader.el.querySelector('.fader-handle').style.bottom = percent + '%';
+    }
+
+    function endFaderDrag() {
+      window.removeEventListener('pointermove', updateFaderPos);
+      window.removeEventListener('pointerup', endFaderDrag);
+      activeFader = null;
+    }
+
+    // Touch & Pointer Rotary Knob Controller
+    let activeKnob = null;
+    let startY = 0;
+    let startVal = 0;
+
+    document.querySelectorAll('.knob-pot').forEach(knob => {
+      knob.addEventListener('pointerdown', (e) => {
+        activeKnob = knob;
+        startY = e.clientY;
+        startVal = parseFloat(knob.dataset.val) || 50;
+        window.addEventListener('pointermove', onKnobDrag);
+        window.addEventListener('pointerup', onKnobUp);
+      });
+    });
+
+    function onKnobDrag(e) {
+      if (!activeKnob) return;
+      const dy = startY - e.clientY;
+      const min = parseFloat(activeKnob.dataset.min) || 0;
+      const max = parseFloat(activeKnob.dataset.max) || 100;
+      let newVal = Math.round(startVal + dy * 0.6);
+      newVal = Math.max(min, Math.min(max, newVal));
+
+      activeKnob.dataset.val = newVal;
+      // -135 to +135 deg rotation
+      const deg = -135 + ((newVal - min) / (max - min)) * 270;
+      const indicator = activeKnob.querySelector('.knob-indicator');
+      if (indicator) {
+        indicator.style.transform = `rotate(${deg}deg)`;
+      }
+
+      // Update value label if available
+      const labelId = 'val-' + activeKnob.id.replace('knob-', '');
+      const labelEl = document.getElementById(labelId);
+      if (labelEl) {
+        labelEl.textContent = newVal + (labelId.includes('lvl') ? ' dB' : '%');
+      }
+    }
+
+    function onKnobUp() {
+      window.removeEventListener('pointermove', onKnobDrag);
+      window.removeEventListener('pointerup', onKnobUp);
+      activeKnob = null;
+    }
+
+    // Kit Switching
+    const kits = [
+      "KIT 01: RAW 808 BOOM",
+      "KIT 02: POCKET OPERATOR 32",
+      "KIT 03: ELECTRO GLITCH",
+      "KIT 04: INDUSTRIAL CRUSH",
+      "KIT 05: FM DRUM MATRIX"
+    ];
+    let currentKitIndex = 2;
+
+    function nextKit() {
+      currentKitIndex = (currentKitIndex + 1) % kits.length;
+      document.getElementById('kit-name-display').textContent = kits[currentKitIndex];
+      triggerDrumHit(0);
+    }
+
+    function prevKit() {
+      currentKitIndex = (currentKitIndex - 1 + kits.length) % kits.length;
+      document.getElementById('kit-name-display').textContent = kits[currentKitIndex];
+      triggerDrumHit(0);
+    }
+
+    function switchPreset(dir) {
+      nextKit();
+    }
+
+    function savePresetPrompt() {
+      const name = prompt("Save Current PO-32 Kit To MPC Standalone Storage:", kits[currentKitIndex]);
+      if (name) {
+        alert("Kit Preset '" + name + "' stored in /Internal/Libpo32/Kits/");
+      }
+    }
+
+    function randomizeAllKit() {
+      initAudio();
+      // Randomize Faders
+      for (let i = 1; i <= 8; i++) {
+        const val = Math.floor(Math.random() * 50) + 45;
+        const fader = document.getElementById('fader-' + i);
+        if (fader) {
+          fader.dataset.val = val;
+          fader.querySelector('.fader-track-fill').style.height = val + '%';
+          fader.querySelector('.fader-handle').style.bottom = val + '%';
+        }
+      }
+
+      // Flash Drummer
+      const drummer = document.getElementById('lcd-drummer');
+      if (drummer) drummer.textContent = '🎲';
+      setTimeout(() => {
+        if (drummer) drummer.textContent = '🥁';
+      }, 300);
+
+      // Play flourish
+      triggerDrumHit(0);
+      setTimeout(() => triggerDrumHit(2), 100);
+      setTimeout(() => triggerDrumHit(1), 200);
+    }
+  </script>
+</body></html>

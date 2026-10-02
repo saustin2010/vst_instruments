@@ -1,0 +1,32 @@
+{
+  "name": "Rings",
+  "vendor": "Mutable Instruments",
+  "uid": "MIrg",
+  "so": "rings.so",
+  "build": {
+    "sources": [
+      "mpc/rings_engine.cc",
+      "src/rings/dsp/fm_voice.cc",
+      "src/rings/dsp/part.cc",
+      "src/rings/dsp/resonator.cc",
+      "src/rings/dsp/string.cc",
+      "src/rings/dsp/string_synth_part.cc",
+      "src/rings/resources.cc",
+      "src/stmlib/dsp/units.cc",
+      "src/stmlib/utils/random.cc"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Isrc",
+      "-DTEST",
+      "-DMPC_PORT",
+      "-std=gnu++14"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html"
+}

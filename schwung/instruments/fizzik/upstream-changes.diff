@@ -1,0 +1,16 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored. Each is described in README.md under "Changes for the MPC".
+--- a/src/dsp/fizzik.c
++++ b/src/dsp/fizzik.c
+@@ -206,6 +206,11 @@
+     if (age > DELAY_MAX - 2) age = DELAY_MAX - 2;
+     float rp = (float)w->wpos - age;
+     while (rp < 0.0f) rp += DELAY_MAX;
++#ifdef MPC_PORT
++    /* MPC port (2026-10-02): a tiny negative rp plus DELAY_MAX rounds to exactly DELAY_MAX in float, one past dl[]
++     * (found with steve/tools/fuzz) */
++    if (rp >= (float)DELAY_MAX) rp -= DELAY_MAX;
++#endif
+     int i0 = (int)rp;
+     float frac = rp - (float)i0;
+     int i1 = i0 + 1; if (i1 >= DELAY_MAX) i1 -= DELAY_MAX;

@@ -1,0 +1,5 @@
+https://github.com/pichenettes/eurorack (warps/)
+commit 08460a69a7e1f7a81c5a2abcc7189c9a6b7208d4 2023-08-16
+stmlib: https://github.com/pichenettes/stmlib commit e3bd7c9cc00e4364166f9905c0509b6ffd0535ec
+vendored 2026-10-01: warps/dsp, warps/resources.*, warps/drivers/debug_pin.h + stmlib dsp/ utils/ stmlib.h + LICENSE (MIT header)
+mpc/ = the effect engine (new, MIT) + steve/tools/mi/mi_engine.h + wrapper/engine.h

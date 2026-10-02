@@ -1,0 +1,94 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored. Each is described in README.md under "Changes for the MPC".
+--- a/src/rings/dsp/part.cc
++++ b/src/rings/dsp/part.cc
+@@ -51,6 +51,9 @@
+     excitation_filter_[i].Init();
+     plucker_[i].Init();
+     dc_blocker_[i].Init(1.0f - 10.0f / kSampleRate);
++#ifdef MPC_PORT
++    pluck_level_[i] = 1.0f;
++#endif
+   }
+   
+   reverb_.Init(reverb_buffer);
+@@ -308,7 +311,11 @@
+       voice == active_voice_ &&
+       performance_state.strum) {
+     resonator_input_[0] += 0.25f * SemitonesToRatio(
+-        filter_cutoff * filter_cutoff * 24.0f) / filter_cutoff;
++        filter_cutoff * filter_cutoff * 24.0f) / filter_cutoff
++#ifdef MPC_PORT
++        * performance_state.velocity
++#endif
++        ;
+   }
+   
+   // Process through filter.
+@@ -392,11 +399,20 @@
+   if (performance_state.internal_exciter) {
+     if (voice == active_voice_ && performance_state.strum) {
+       plucker_[voice].Trigger(frequency, filter_cutoff * 8.0f, patch.position);
++#ifdef MPC_PORT
++      pluck_level_[voice] = performance_state.velocity;
++#endif
+     }
+     plucker_[voice].Process(noise_burst_buffer_, size);
++#ifdef MPC_PORT
+     for (size_t i = 0; i < size; ++i) {
++      resonator_input_[i] += noise_burst_buffer_[i] * pluck_level_[voice];
++    }
++#else
++    for (size_t i = 0; i < size; ++i) {
+       resonator_input_[i] += noise_burst_buffer_[i];
+     }
++#endif
+   }
+   dc_blocker_[voice].Process(resonator_input_, size);
+   
+--- a/src/rings/dsp/part.h
++++ b/src/rings/dsp/part.h
+@@ -159,6 +159,9 @@
+   int32_t active_voice_;
+   uint32_t step_counter_;
+   int32_t polyphony_;
++#ifdef MPC_PORT
++  float pluck_level_[kMaxPolyphony];   // velocity of each voice's last strum (its noise burst rings on)
++#endif
+   
+   Resonator resonator_[kMaxPolyphony];
+   String string_[kNumStrings];
+--- a/src/rings/dsp/performance_state.h
++++ b/src/rings/dsp/performance_state.h
+@@ -43,6 +43,9 @@
+   float note;
+   float fm;
+   int32_t chord;
++#ifdef MPC_PORT
++  float velocity;   // MPC port: strike/pluck level of a strum, 0..1 (the hardware has none)
++#endif
+ };
+ 
+ }  // namespace rings
+--- a/src/stmlib/dsp/dsp.h
++++ b/src/stmlib/dsp/dsp.h
+@@ -42,7 +42,19 @@
+ 
+ inline float Interpolate(const float* table, float index, float size) {
+   index *= size;
++#ifdef MPC_PORT
++  // MPC port (2026-10-02): the hardware's ADCs stop just short of full scale, but a host parameter at exactly 1.0, or a
++  // modulation sum past it, read one past the end of the table (size + 1 entries; found with steve/tools/fuzz).
++  if (!(index > 0.0f)) index = 0.0f;  // also NaN
++  if (index > size) index = size;
+   MAKE_INTEGRAL_FRACTIONAL(index)
++  if (index_integral >= static_cast<int32_t>(size)) {
++    index_integral = static_cast<int32_t>(size) - 1;
++    index_fractional = index - static_cast<float>(index_integral);
++  }
++#else
++  MAKE_INTEGRAL_FRACTIONAL(index)
++#endif
+   float a = table[index_integral];
+   float b = table[index_integral + 1];
+   return a + (b - a) * index_fractional;

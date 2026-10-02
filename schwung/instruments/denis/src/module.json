@@ -1,0 +1,71 @@
+{
+  "id": "denis",
+  "name": "Denis",
+  "version": "0.1.2",
+  "api_version": 2,
+  "description": "Monophonic West Coast synthesizer inspired by Serge Modular",
+  "author": "Vincent Fillion",
+  "abbrev": "DENIS",
+  "dsp": "dsp.so",
+  "component_type": "sound_generator",
+  "raw_midi": true,
+  "capabilities": {
+    "audio_out": true,
+    "midi_in": true,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "ui_hierarchy": {
+      "modes": null,
+      "levels": {
+        "root": {
+          "name": "Denis",
+          "knobs": ["osc1_freq", "osc1_timbre", "osc2_pitch", "osc2_harmonics", "osc_mix", "noise_mix", "noise_type", "filter_cutoff"],
+          "params": [
+            {"level": "Oscillators", "label": "Oscillators"},
+            {"level": "Control", "label": "Control"},
+            {"level": "Mod & Patch", "label": "Mod & Patch"},
+            {"level": "Mat: Env", "label": "Mat: Env"},
+            {"level": "Mat: LFO", "label": "Mat: LFO"},
+            {"level": "Mat: S&H", "label": "Mat: S&H"},
+            {"level": "Mat: Nz", "label": "Mat: Nz"}
+          ]
+        },
+        "Oscillators": {
+          "label": "Oscillators",
+          "knobs": ["osc1_freq", "osc1_timbre", "osc2_pitch", "osc2_harmonics", "osc_mix", "noise_mix", "noise_type", "filter_cutoff"],
+          "params": ["osc1_freq", "osc1_timbre", "osc2_pitch", "osc2_harmonics", "osc_mix", "noise_mix", "noise_type"]
+        },
+        "Control": {
+          "label": "Control",
+          "knobs": ["fold_depth", "fold_type", "filter_cutoff", "filter_q", "attack", "decay", "sustain", "release"],
+          "params": ["fold_depth", "fold_type", "filter_cutoff", "filter_q", "attack", "decay", "sustain", "release", "filter_type", "vel_to_filter"]
+        },
+        "Mod & Patch": {
+          "label": "Mod & Patch",
+          "knobs": ["lfo_rate", "sh_rate", "mod_depth_env", "mod_depth_noise", "rnd_denis", "rnd_mod", "matrix_reset", "rnd_patch"],
+          "params": ["lfo_rate", "sh_rate", "mod_depth_env", "mod_depth_noise", "rnd_denis", "rnd_mod", "matrix_reset", "rnd_patch", "preset", "patch_mode", "portamento", "legato"]
+        },
+        "Mat: Env": {
+          "label": "Mat: Env",
+          "knobs": ["mat_0_0", "mat_0_1", "mat_0_2", "mat_0_3", "mat_0_4", "mat_0_5", "mat_0_6", "mat_0_7"],
+          "params": ["mat_0_0", "mat_0_1", "mat_0_2", "mat_0_3", "mat_0_4", "mat_0_5", "mat_0_6", "mat_0_7"]
+        },
+        "Mat: LFO": {
+          "label": "Mat: LFO",
+          "knobs": ["mat_1_0", "mat_1_1", "mat_1_2", "mat_1_3", "mat_1_4", "mat_1_5", "mat_1_6", "mat_1_7"],
+          "params": ["mat_1_0", "mat_1_1", "mat_1_2", "mat_1_3", "mat_1_4", "mat_1_5", "mat_1_6", "mat_1_7"]
+        },
+        "Mat: S&H": {
+          "label": "Mat: S&H",
+          "knobs": ["mat_2_0", "mat_2_1", "mat_2_2", "mat_2_3", "mat_2_4", "mat_2_5", "mat_2_6", "mat_2_7"],
+          "params": ["mat_2_0", "mat_2_1", "mat_2_2", "mat_2_3", "mat_2_4", "mat_2_5", "mat_2_6", "mat_2_7"]
+        },
+        "Mat: Nz": {
+          "label": "Mat: Nz",
+          "knobs": ["mat_3_0", "mat_3_1", "mat_3_2", "mat_3_3", "mat_3_4", "mat_3_5", "mat_3_6", "mat_3_7"],
+          "params": ["mat_3_0", "mat_3_1", "mat_3_2", "mat_3_3", "mat_3_4", "mat_3_5", "mat_3_6", "mat_3_7"]
+        }
+      }
+    }
+  }
+}

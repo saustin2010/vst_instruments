@@ -1,0 +1,606 @@
+{
+ "name": "Mr Hyde",
+ "params": [
+  {
+   "key": "model",
+   "name": "MODEL",
+   "type": "enum",
+   "options": [
+    "VA VCF",
+    "PHASE DISTORTION",
+    "WAVE TERRAIN",
+    "STRING MACHINE",
+    "VIRTUAL ANALOG",
+    "WAVESHAPING",
+    "FM 2-OP",
+    "GRANULAR FORMANT",
+    "HARMONIC",
+    "WAVETABLE",
+    "CHORDS",
+    "VOCAL SPEECH",
+    "SWARM",
+    "NOISE",
+    "PARTICLE NOISE",
+    "INHARMONIC STRING",
+    "MODAL RESONATOR"
+   ]
+  },
+  {
+   "key": "pitch",
+   "name": "PITCH",
+   "min": -48.0,
+   "max": 48.0
+  },
+  {
+   "key": "harmonics",
+   "name": "HARMONICS",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre",
+   "name": "TIMBRE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "morph",
+   "name": "MORPH",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "fm_amount",
+   "name": "FM AMOUNT",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "aux_mix",
+   "name": "AUX MIX",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lpg_decay",
+   "name": "LPG DECAY",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "lpg_color",
+   "name": "LPG COLOR",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "filter_mode",
+   "name": "FILTER MODE",
+   "type": "enum",
+   "options": [
+    "LP",
+    "BP",
+    "HP"
+   ]
+  },
+  {
+   "key": "filter_cutoff",
+   "name": "CUTOFF FREQ",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "filter_resonance",
+   "name": "RESONANCE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_target",
+   "name": "A1 TARGET",
+   "type": "enum",
+   "options": [
+    "OFF",
+    "MORPH",
+    "FM_AMOUNT",
+    "LPG_DECAY",
+    "LPG_COLOR",
+    "FILTER_RESONANCE",
+    "PITCH",
+    "HARMONICS",
+    "TIMBRE",
+    "FILTER_CUTOFF",
+    "VOLUME",
+    "PAN",
+    "DETUNE",
+    "SPREAD"
+   ]
+  },
+  {
+   "key": "assign1_mod_lfo_amt",
+   "name": "A1 LFO",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_env_amt",
+   "name": "A1 ENV",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_cycle_env_amt",
+   "name": "A1 CYCLE",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_random_amt",
+   "name": "A1 RANDOM",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_velocity_amt",
+   "name": "A1 VEL",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign1_mod_poly_aftertouch_amt",
+   "name": "A1 AT",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_target",
+   "name": "A2 TARGET",
+   "type": "enum",
+   "options": [
+    "OFF",
+    "MORPH",
+    "FM_AMOUNT",
+    "LPG_DECAY",
+    "LPG_COLOR",
+    "FILTER_RESONANCE",
+    "PITCH",
+    "HARMONICS",
+    "TIMBRE",
+    "FILTER_CUTOFF",
+    "VOLUME",
+    "PAN",
+    "DETUNE",
+    "SPREAD"
+   ]
+  },
+  {
+   "key": "assign2_mod_lfo_amt",
+   "name": "A2 LFO",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_env_amt",
+   "name": "A2 ENV",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_cycle_env_amt",
+   "name": "A2 CYCLE",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_random_amt",
+   "name": "A2 RANDOM",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_velocity_amt",
+   "name": "A2 VEL",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "assign2_mod_poly_aftertouch_amt",
+   "name": "A2 AT",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "pitch_mod_lfo_amt",
+   "name": "PITCH LFO",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_env_amt",
+   "name": "PITCH ENV",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_cycle_env_amt",
+   "name": "PITCH CYCLE",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_random_amt",
+   "name": "PITCH RANDOM",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_velocity_amt",
+   "name": "PITCH VEL",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "pitch_mod_poly_aftertouch_amt",
+   "name": "PITCH AT",
+   "min": -48.0,
+   "max": 48.0,
+   "step": 0.1
+  },
+  {
+   "key": "harmonics_mod_lfo_amt",
+   "name": "HARM LFO",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_env_amt",
+   "name": "HARM ENV",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_cycle_env_amt",
+   "name": "HARM CYCLE",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_random_amt",
+   "name": "HARM RANDOM",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_velocity_amt",
+   "name": "HARM VEL",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "harmonics_mod_poly_aftertouch_amt",
+   "name": "HARM AT",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_lfo_amt",
+   "name": "TIMB LFO",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_env_amt",
+   "name": "TIMB ENV",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_cycle_env_amt",
+   "name": "TIMB CYCLE",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_random_amt",
+   "name": "TIMB RANDOM",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_velocity_amt",
+   "name": "TIMB VEL",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "timbre_mod_poly_aftertouch_amt",
+   "name": "TIMB AT",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_lfo_amt",
+   "name": "CUT LFO",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_env_amt",
+   "name": "CUT ENV",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_cycle_env_amt",
+   "name": "CUT CYCLE",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_random_amt",
+   "name": "CUT RANDOM",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_velocity_amt",
+   "name": "CUT VEL",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "cutoff_mod_poly_aftertouch_amt",
+   "name": "CUT AT",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "lfo_shape",
+   "name": "LFO SHAPE",
+   "type": "enum",
+   "options": [
+    "SINE",
+    "TRIANGLE",
+    "SAW",
+    "SQUARE",
+    "RANDOM",
+    "SMOOTH_RANDOM"
+   ]
+  },
+  {
+   "key": "lfo_rate",
+   "name": "LFO RATE",
+   "min": 0.01,
+   "max": 40.0
+  },
+  {
+   "key": "lfo_rate_mode",
+   "name": "LFO SYNC",
+   "type": "enum",
+   "options": [
+    "FREE",
+    "SYNC"
+   ]
+  },
+  {
+   "key": "lfo_retrig",
+   "name": "LFO RETRIG",
+   "type": "enum",
+   "options": [
+    "OFF",
+    "ON"
+   ]
+  },
+  {
+   "key": "lfo_phase",
+   "name": "LFO PHASE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "env_attack_ms",
+   "name": "ENV ATTACK",
+   "min": 0,
+   "max": 5000,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "env_decay_ms",
+   "name": "ENV DECAY",
+   "min": 0,
+   "max": 5000,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "env_sustain",
+   "name": "ENV SUSTAIN",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "env_release_ms",
+   "name": "ENV RELEASE",
+   "min": 0,
+   "max": 5000,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "env_retrig",
+   "name": "ENV RETRIG",
+   "type": "enum",
+   "options": [
+    "OFF",
+    "ON"
+   ]
+  },
+  {
+   "key": "cycle_attack_ms",
+   "name": "CYC ATTACK",
+   "min": 1,
+   "max": 5000,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "cycle_decay_ms",
+   "name": "CYC DECAY",
+   "min": 1,
+   "max": 5000,
+   "step": 1,
+   "display": "int"
+  },
+  {
+   "key": "cycle_shape",
+   "name": "CYC SHAPE",
+   "type": "enum",
+   "options": [
+    "LINEAR",
+    "EXPONENTIAL",
+    "LOGARITHMIC"
+   ]
+  },
+  {
+   "key": "cycle_sync",
+   "name": "CYC SYNC",
+   "type": "enum",
+   "options": [
+    "OFF",
+    "ON"
+   ]
+  },
+  {
+   "key": "cycle_retrig",
+   "name": "CYC RETRIG",
+   "type": "enum",
+   "options": [
+    "OFF",
+    "ON"
+   ]
+  },
+  {
+   "key": "cycle_bipolar",
+   "name": "CYC BIPOLAR",
+   "type": "enum",
+   "options": [
+    "OFF",
+    "ON"
+   ]
+  },
+  {
+   "key": "random_mode",
+   "name": "RND MODE",
+   "type": "enum",
+   "options": [
+    "SAMPLE_HOLD",
+    "SMOOTH",
+    "DRIFT"
+   ]
+  },
+  {
+   "key": "random_rate",
+   "name": "RND RATE",
+   "min": 0.01,
+   "max": 40.0
+  },
+  {
+   "key": "random_rate_mode",
+   "name": "RND SYNC",
+   "type": "enum",
+   "options": [
+    "FREE",
+    "SYNC"
+   ]
+  },
+  {
+   "key": "random_slew",
+   "name": "RND SLEW",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "random_retrig",
+   "name": "RND RETRIG",
+   "type": "enum",
+   "options": [
+    "OFF",
+    "ON"
+   ]
+  },
+  {
+   "key": "velocity_curve",
+   "name": "VEL CURVE",
+   "min": 0.1,
+   "max": 4.0
+  },
+  {
+   "key": "poly_aftertouch_curve",
+   "name": "AT CURVE",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0.0,
+   "max": 2.0
+  },
+  {
+   "key": "pan",
+   "name": "PAN",
+   "min": -1.0,
+   "max": 1.0
+  },
+  {
+   "key": "voice_mode",
+   "name": "VOICE MODE",
+   "type": "enum",
+   "options": [
+    "MONO",
+    "POLY",
+    "MONO_LEGATO"
+   ]
+  },
+  {
+   "key": "polyphony",
+   "name": "POLYPHONY",
+   "min": 1,
+   "max": 8,
+   "display": "int"
+  },
+  {
+   "key": "unison",
+   "name": "UNISON",
+   "min": 1,
+   "max": 8,
+   "display": "int"
+  },
+  {
+   "key": "detune",
+   "name": "DETUNE",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "spread",
+   "name": "SPREAD",
+   "min": 0.0,
+   "max": 1.0
+  },
+  {
+   "key": "glide_ms",
+   "name": "GLIDE",
+   "min": 0,
+   "max": 2000,
+   "step": 5,
+   "display": "int"
+  }
+ ]
+}
