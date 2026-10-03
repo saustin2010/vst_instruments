@@ -29,5 +29,11 @@ copied.
 | `mrdrums/kits/01_Starter/` | 8 synthesised drum hits | made here: `dev-tools/skin-redesign/make_starter_kit.py` |
 | `midiplayer/MIDI/` | a demo file | made here: `dev-tools/midifx/make_demo_mid.py` |
 
-Adding your own (Mr Drums kits, MIDI files, wavetables) and what's still missing: see
+Your own libraries go here too, in the same layout (git ignores them like the rest; `./install.sh` copies them):
+`obxd/presets/<Bank>.fxb` (an OB-Xd 1.x LV2 bank converts with `tools/obxd-lv2-to-fxb.py`),
+`noisemaker/presets/<Bank>/...*.noisemakerpreset`, `hush1/presets/...*.bassline`. Keep the archive you unpacked in
+`<plugin>/not-installed/` so it isn't copied to the MPC. `fetch-presets.py --force <plugin>` replaces the whole
+folder, your files included.
+
+Adding your own (Mr Drums kits, MIDI files, wavetables, preset banks) and what's still missing: see
 [../docs/presets-and-libraries.md](../docs/presets-and-libraries.md).

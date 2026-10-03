@@ -1,15 +1,15 @@
 # Hush One
 
-**Synth** · Roland SH-101: a monophonic bass and lead synth with 11 presets. · maker in MPC: Move Everything · licence: not stated upstream
+**Synth** · Roland SH-101: a monophonic bass and lead synth with 11 presets, plus TAL-BassLine-101 presets you add. · maker in MPC: Move Everything · licence: not stated upstream
 
 <img src="screenshots/page_0.png" width="760" alt="Hush One on the MPC touchscreen">
 
-An SH-101 emulation: one oscillator with saw, pulse (with PWM), sub-oscillator and noise mixed together, the resonant 4-pole filter with envelope and keyboard tracking, an ADSR, an LFO with its own routing, portamento and the 101's trigger modes. Built for basses, leads and acid lines. 11 built-in presets.
+An SH-101 emulation: one oscillator with saw, pulse (with PWM), sub-oscillator and noise mixed together, the resonant 4-pole filter with envelope and keyboard tracking, an ADSR, an LFO with its own routing, portamento and the 101's trigger modes. Built for basses, leads and acid lines. 11 built-in presets; TAL-BassLine-101 presets (`.bassline`, `.vstpreset`) you add follow them in PATCH.
 
 ## On the MPC
 
 - In the plugin browser: **Hush One** by **Move Everything** (Synth)
-- Files: `/sdcard/vst/hushone.so`, screen in `/sdcard/Synths/Move Everything - VST - Hush One/`
+- Files: `/sdcard/vst/hushone.so`, presets you add in `/sdcard/vst/hush1/presets/` (from this repo's `presets/hush1/`), screen in `/sdcard/Synths/Move Everything - VST - Hush One/`
 - 56 parameters (all automatable) on 4 pages
 
 ## Playing it
@@ -61,6 +61,7 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 ## Changes for the MPC
 
 - Presets work: the preset control only reached presets 0 and 1; now a PATCH browser over all 11.
+- TAL-BassLine-101 presets (2026-10-03): `.bassline` / `.vstpreset` files in `/sdcard/vst/hush1/presets/` (subfolders included, up to 512) follow the 11 built-in presets in PATCH, which now runs to 522. They're read when the plugin is inserted, so re-insert it after adding files. vst.json sets `MODULE_DIR` (without it the engine looked nowhere), and one engine change, under `MPC_PORT` (`upstream-changes.diff`): a preset is named by its file, not by the name stored inside, which packs often leave stale ("02 - Softy" in `SY Softy.bassline`) and which scrambled their category order.
 - Four SH-101-style pages (MAIN, SOURCE, MODULATOR, PERFORM): faders for the source mixer and envelopes.
 - The engine reports option values as text, so option labels only changed case (matched case-insensitively).
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
@@ -81,5 +82,6 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | `images/` | artwork: backgrounds, knobs, displays |
 | `design/` | the Google Stitch design this screen was converted from (`stitch.html`, as Stitch wrote it) |
 | `src/` | the engine's source, vendored from upstream |
+| `upstream-changes.diff` | every local change to the upstream source |
 
 To rebuild from source see [BUILDING.md](../../../BUILDING.md); to change the screen, [RESKINNING.md](../../../RESKINNING.md).

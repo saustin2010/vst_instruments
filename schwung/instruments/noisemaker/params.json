@@ -652,6 +652,37 @@
    "max": 0,
    "display": "string",
    "type": "readout"
+  },
+  {
+   "key": "bank_index",
+   "name": "BANK",
+   "min": 0,
+   "max": 63,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "bank_index_prev",
+   "name": "PREV BANK",
+   "momentary": true,
+   "step_of": "bank_index",
+   "step_delta": -1
+  },
+  {
+   "key": "bank_index_next",
+   "name": "NEXT BANK",
+   "momentary": true,
+   "step_of": "bank_index",
+   "step_delta": 1
+  },
+  {
+   "key": "bank_name",
+   "name": "BANK NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
   }
  ]
 }

@@ -4,13 +4,13 @@
 
 <img src="screenshots/page_0.png" width="760" alt="OB-Xd on the MPC touchscreen">
 
-The OB-Xd emulation of Oberheim's OB-X: two oscillators per voice with sync, cross-modulation and pulse width, a mixer with noise, a 12/24 dB multimode filter, filter and amp envelopes, an LFO routed to pitch, filter and pulse width, and "voice variation" controls that detune each voice's oscillator, filter and envelopes slightly, as analog voices do. 128 factory presets ship with it.
+The OB-Xd emulation of Oberheim's OB-X: two oscillators per voice with sync, cross-modulation and pulse width, a mixer with noise, a 12/24 dB multimode filter, filter and amp envelopes, an LFO routed to pitch, filter and pulse width, and "voice variation" controls that detune each voice's oscillator, filter and envelopes slightly, as analog voices do. 128 factory presets ship with it, and any `.fxb` banks you add show up in its BANK selector.
 
 ## On the MPC
 
 - In the plugin browser: **OB-Xd** by **reales** (Synth)
 - Files: `/sdcard/vst/obxd.so`, presets/data in `/sdcard/vst/obxd/` (from this repo's `presets/obxd/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/reales - VST - OB-Xd/`
-- 70 parameters (all automatable) on 5 pages
+- 74 parameters (all automatable) on 5 pages
 
 ## Playing it
 
@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="OB-Xd, page MAIN">
 
-Q-Link columns: **1** PATCH, VOLUME, TUNE, VOICES  ·  **2** SPREAD, UNISON, AS PLAYED, LEGATO  ·  **3** PORTAMENTO, BEND 12, BEND OSC2
+Q-Link columns: **1** PATCH, VOLUME, TUNE, VOICES  ·  **2** SPREAD, UNISON, AS PLAYED, LEGATO  ·  **3** PORTAMENTO, BEND 12, BEND OSC2, BANK
 
 ### 2. OSCILLATORS
 
@@ -68,6 +68,7 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 
 - Sound fixed (2026-09-30): the knobs were declared 0-1 while the engine speaks 0-100, so any restore or knob move zeroed the patch; the fallback Init patch was also silent (engine patch, VENDORED.md).
 - Presets work: factory bank shipped + MODULE_DIR, PATCH browser with a red dot-matrix display.
+- BANK selector (2026-10-03), under PATCH on MAIN: every `.fxb` bank in `/sdcard/vst/obxd/presets/` (up to 32; Factory first, then by file name, which is the name shown), and PATCH browses the chosen one (up to 128 programs). The bank is saved with the project by name. An OB-Xd 1.x LV2 bank (`presets.ttl`) converts with `python3 tools/obxd-lv2-to-fxb.py <presets.ttl or its archive> "presets/obxd/presets/<Bank name>.fxb"`. The new parameters are appended (indices 70-73), so saved projects and Q-Link assignments keep working.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 
 ## Files

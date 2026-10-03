@@ -357,7 +357,7 @@ def dev_tools(dst):
                     ignore=shutil.ignore_patterns("state", ".DS_Store"))
     for f in glob.glob(os.path.join(dst, "**", "*.sh"), recursive=True):   # no personal key name as a default
         t = open(f).read()
-        t2 = t.replace('-i "${MPC_KEY:-$HOME/.ssh/mpc_live}"', '${MPC_KEY:+-i "$MPC_KEY"}')
+        t2 = re.sub(r'-i "\$\{MPC_KEY:-[^}]*\}"', '${MPC_KEY:+-i "$MPC_KEY"}', t)
         if t2 != t:
             open(f, "w").write(t2)
 

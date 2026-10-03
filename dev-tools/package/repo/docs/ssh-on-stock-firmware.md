@@ -95,7 +95,7 @@ header lists all Gen1 ids incl. `0x09e84047`.
    (or hold Shift + Update). Let it reboot itself.
 7. Connect the MPC to Wi-Fi, find its IP. From the Mac: `ssh -i <your_key> root@<device-ip>`.
    On first connect, the host-key fingerprint must equal the one you generated in step 3 — accept
-   only if it matches. Prompt is `root@mpc-live-ii:~#`.
+   only if it matches. The prompt shows the MPC's hostname: `root@<hostname>:~#`.
 
 **Security notes for whoever runs this:** use a passphrased key or a Keychain-loaded one; a
 no-passphrase key file is a plaintext root credential to anyone on the LAN. The point of the

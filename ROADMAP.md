@@ -11,19 +11,21 @@ parameter index, so existing projects keep working.
   with its wavetable paths rewritten from `/data/UserData/UserLibrary/Wavetables/` to `/sdcard/vst/tablor/wavetables/`; add a PRESET
   stepper (with a name readout) that applies a preset's `TBLR2;...` state blob after resetting to defaults. Needs a
   small engine patch under `MPC_PORT` (upstream selects presets through Move's preset browser, not a parameter).
-- [ ] **OB-Xd banks.** Add a BANK selector bound to the engine's `bank_index` (the list is `fxb_bank_list`, rescanned
-  on each query), so `.fxb` banks in `/sdcard/vst/obxd/presets/` can be chosen; PATCH then browses that bank.
-- [ ] **Noisemaker imports.** Set `"MODULE_DIR": "\"/sdcard/vst/noisemaker\""` in vst.json (the engine then imports
-  `.noisemakerpreset` folders from `<module_dir>/presets`), create that folder on install, add a bank selector.
-- [ ] **Hush One imports.** Set `MODULE_DIR` (`/sdcard/vst/hush1`) so `.bassline` / `.vstpreset` files in
-  `presets/` are imported, and widen PATCH beyond the 11 built-in presets (the engine reports `preset_count`).
+- [x] **OB-Xd banks** (2026-10-03). BANK selector under PATCH (`bank_index`/`bank_name`, appended); `.fxb` banks in
+  `/sdcard/vst/obxd/presets/` are chosen there. `tools/obxd-lv2-to-fxb.py` converts OB-Xd 1.x LV2 banks.
+- [x] **Noisemaker imports** (2026-10-03). `MODULE_DIR` set; each folder in `/sdcard/vst/noisemaker/presets/` is a
+  bank, chosen with BANK under PATCH. PATCH reaches a bank's first 256 presets.
+- [x] **Hush One imports** (2026-10-03). `MODULE_DIR` set; PATCH widened to 0-522 (11 built-in + 512); imported
+  presets named by file (`MPC_PORT` patch). Check on the device: a project saved with the old PATCH range (0-10)
+  may reopen showing a different PATCH number (MPC sets parameters back from normalized values).
 - [ ] **Libpo32 SAVE KIT** button (`save_kit`), and create its `presets/` folder on install for it to write to.
-- [ ] INSTALL.md / plugin READMEs: document each of the above once it works.
+- [ ] INSTALL.md / plugin READMEs: document each of the above once it works (OB-Xd, Noisemaker, Hush One: done
+  2026-10-03).
 
 ## On a device (nothing below has been tried on hardware yet)
 
 - [ ] Install everything on an MPC and re-insert each plugin; check every page of the new Stitch screens (names,
-  values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays).
+  values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays). Track it in README.md's Design QA column.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
 - [ ] Audio effects (Verglas, Warps, Rings FX): does MPC offer third-party VST effects in its insert list at all?
 - [ ] Plugin browser groups: Grids reports `category="Sequencer"`. If MPC groups it and it still loads on a plugin

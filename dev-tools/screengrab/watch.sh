@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Record the MPC's screen while someone uses it (steve/tools/screengrab, 2026-10-02):
-#   steve/tools/screengrab/watch.sh [seconds=600] [interval=1.5] [max=80] [host]
+#   steve/tools/screengrab/watch.sh [seconds=600] [interval=1.5] [max=80] [mpc-address]
 # Grabs the framebuffer every interval, keeps only frames that differ from the last kept one (md5), stops after
 # `seconds` or `max` kept frames, then converts them to PNGs in steve/screens/watch-<time>/ (NNN_<hhmmss>.png).
 set -uo pipefail
-SECS=${1:-600}; IV=${2:-1.5}; MAX=${3:-80}; HOST=${4:-mpc-live-ii.local}
+SECS=${1:-600}; IV=${2:-1.5}; MAX=${3:-80}; HOST=${4:-${MPC_HOST:?pass the MPC address or set MPC_HOST}}
 HERE=$(cd "$(dirname "$0")" && pwd); STEVE=$(dirname "$(dirname "$HERE")"); MV=$(dirname "$STEVE")
 OUT="$STEVE/screens/watch-$(date +%Y%m%d-%H%M%S)"; mkdir -p "$OUT/raw"
 SSH=(ssh -o ConnectTimeout=10 -o ServerAliveInterval=5 ${MPC_KEY:+-i "$MPC_KEY"} "root@$HOST")

@@ -4,13 +4,13 @@
 
 <img src="screenshots/page_0.png" width="760" alt="Noisemaker on the MPC touchscreen">
 
-TAL-NoiseMaker by Patrick Kunz: two oscillators plus sub, 12 multimode filters with their own envelope and velocity response, two LFOs, a third envelope you can draw, chorus, reverb and delay. Six voices. All 256 factory presets are built in, from pads and leads to basses and effects.
+TAL-NoiseMaker by Patrick Kunz: two oscillators plus sub, 12 multimode filters with their own envelope and velocity response, two LFOs, a third envelope you can draw, chorus, reverb and delay. Six voices. All 256 factory presets are built in, from pads and leads to basses and effects, and folders of your own TAL-NoiseMaker presets (`.noisemakerpreset`) show up as banks.
 
 ## On the MPC
 
 - In the plugin browser: **Noisemaker** by **TAL** (Synth)
-- Files: `/sdcard/vst/noisemaker.so`, screen in `/sdcard/Synths/TAL - VST - Noisemaker/`
-- 87 parameters (all automatable) on 6 pages
+- Files: `/sdcard/vst/noisemaker.so`, preset banks in `/sdcard/vst/noisemaker/presets/` (from this repo's `presets/noisemaker/`), screen in `/sdcard/Synths/TAL - VST - Noisemaker/`
+- 91 parameters (all automatable) on 6 pages
 
 ## Playing it
 
@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Noisemaker, page MAIN">
 
-Q-Link columns: **1** CUTOFF, RESONANCE, FILTER ENV, VOLUME  ·  **2** VOICES, PORTAMENTO, PORTA MODE, AMP ATTACK  ·  **3** AMP DECAY, AMP SUSTAIN, AMP RELEASE, PATCH  ·  **4** FILTER TYPE
+Q-Link columns: **1** CUTOFF, RESONANCE, FILTER ENV, VOLUME  ·  **2** VOICES, PORTAMENTO, PORTA MODE, AMP ATTACK  ·  **3** AMP DECAY, AMP SUSTAIN, AMP RELEASE, PATCH  ·  **4** FILTER TYPE, BANK
 
 ### 2. OSC
 
@@ -73,6 +73,7 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 ## Changes for the MPC
 
 - Presets work: 256 factory presets were never exposed; now a PATCH browser.
+- Preset banks (2026-10-03): each folder in `/sdcard/vst/noisemaker/presets/` is a bank of `.noisemakerpreset` files (its subfolders included; up to 64 banks of 512), picked with the new BANK selector under PATCH; PATCH then browses that bank (its first 256), named and sorted by file name. vst.json now sets `MODULE_DIR`, which the engine needs to look there at all. The bank is saved with the project by name; the new parameters are appended (indices 87-90), so saved projects and Q-Link assignments keep working. The scope under them is shorter (`layout.conf` edited by hand, see its header).
 - Ten real on/off switches (osc sync, LFO sync/keytrig, Chorus I/II, delay sync/2x) were 0-100 knobs; LFO waves and destinations are now choices.
 - Osc 2 tuning no longer drifts when a project is restored: two Move-UI macro parameters wrote through to other settings; their slots are kept (same indices) but the engine no longer sees them.
 - **Crash on changing VOICES fixed (2026-10-02).** Changing VOICES (e.g. from 1) while notes were sounding, then playing more notes than voices, took MPC down: upstream's `VoiceManager::setNumberOfVoices` emptied its list of playing notes while the voices kept sounding (and mono mode never lists its note), so the next note's "steal the oldest voice" read past the end of an empty list (`playingNotes.at(-1)`, an uncaught `std::out_of_range`). Local patch in `src/dsp/Engine/VoiceManager.h`, under `#ifdef MPC_PORT` (vst.json defines it): a real change of the voice count releases every voice and starts both note lists afresh, and a steal with an empty list takes voice 1. The original file is in `upstream-changes.diff`. Also `-fwrapv` (the noise generators rely on integer wrap-around). Found and checked with `dev-tools/fuzz/` (`fuzz_port.sh noisemaker 1 2000 0 voices` crashed before, survives after, on one thread and on two).
