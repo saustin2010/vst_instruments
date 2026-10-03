@@ -4,7 +4,7 @@
 
 <img src="screenshots/page_0.png" width="760" alt="Verglas on the MPC touchscreen">
 
-Clouds (here Verglas) records the track's audio into a buffer and plays it back as grains: POSITION, SIZE, PITCH, DENSITY and TEXTURE shape the cloud, FREEZE holds the buffer, and MODE switches between granular, stretch, looper and spectral processing. DRY/WET, SPREAD, FEEDBACK and REVERB blend it, high- and low-pass filters and a lo-fi QUALITY switch colour it, and the TONE page adds a low boost and a limiter. Ambient washes, frozen pads and glitchy textures from any sound.
+Clouds (here Verglas) records the track's audio into a buffer and plays it back as grains: POSITION, SIZE, PITCH, DENSITY and TEXTURE shape the cloud, FREEZE holds the buffer, and MODE switches between granular, stretch, looper and spectral processing. DRY/WET, SPREAD, FEEDBACK and REVERB blend it, a lo-fi QUALITY switch colours it, and the TONE page adds high- and low-pass filters, a low boost and a limiter. Ambient washes, frozen pads and glitchy textures from any sound.
 
 ## On the MPC
 
