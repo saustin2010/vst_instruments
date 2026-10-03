@@ -26,13 +26,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Mrdrums, page KIT">
 
-Q-Link columns: **1** KIT, MASTER VOL, POLYPHONY, VEL CURVE  ·  **2** HUMANIZE, AUTO SELECT, EDIT PAD, RAND LOOP
+Q-Link columns: **1** MASTER VOL, POLYPHONY, VEL CURVE, HUMANIZE  ·  **2** EDIT PAD, AUTO SELECT  ·  **3** RAND LOOP  ·  **4** KIT
 
 ### 2. PAD
 
 <img src="screenshots/page_1.png" width="760" alt="Mrdrums, page PAD">
 
-Q-Link columns: **1** EDIT PAD, PAD VOLUME, PAD PAN, PAD TUNE  ·  **2** PAD START, PAD MODE, CHOKE GROUP, PAD ATTACK  ·  **3** PAD DECAY, RAND VOLUME, RAND PAN, RAND DECAY  ·  **4** CHANCE
+Q-Link columns: **1** EDIT PAD  ·  **2** PAD VOLUME, PAD PAN, PAD TUNE, PAD START  ·  **3** PAD MODE, CHOKE GROUP, PAD ATTACK, PAD DECAY  ·  **4** RAND VOLUME, RAND PAN, RAND DECAY, CHANCE
 
 ## Install
 

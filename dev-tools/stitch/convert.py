@@ -537,11 +537,23 @@ MAPS = {
             {"sel": "div.grid.grid-cols-4:has(> .mpc-pad-btn)", "where": "replace", "html":
              '<div class="aug-stepper mpc-well rounded h-24 flex items-center justify-center" data-param="ui_current_pad">'
              '<span class="font-label-lg text-label-lg text-secondary">EDIT PAD</span></div>'},
+            # design QA 2026-10-03: AUTO SELECT from the header's corner to above EDIT PAD (its outline left the panel)
+            {"sel": "div:has(> #toggle-autoselect)", "move": "div.aug-stepper[data-param=ui_current_pad]", "where": "beforebegin",
+             "attr": {"style": "align-self: center"}},
             {"sel": "div.justify-around:has(#knob-drive)", "where": "replace", "html":
              '<div class="flex items-center justify-around bg-surface-container-high border border-outline-variant rounded p-2 '
              'h-24">@knob(g_rand_loop_steps)</div>'},
         ],
         "map": {"vol": "g_master_vol", "poly": "g_polyphony", "jitter": "g_humanize_ms", "autoselect": "ui_auto_select_pad"},
+        # design QA 2026-10-03: a Q-Link column per panel (KIT: MASTER | 16-PAD MATRIX | RAND LOOP | KIT, the kit last as
+        # a preset; PAD: PAD | SOUND | PLAYBACK | RANDOM, PAD MODE / CHOKE moved in with the envelope, layout.grid.conf)
+        "qlinks": {
+            0: ["g_master_vol", "g_polyphony", "g_vel_curve", "g_humanize_ms", "ui_current_pad", "ui_auto_select_pad", "-", "-",
+                "g_rand_loop_steps", "-", "-", "-", "kit", "-", "-", "-"],
+            1: ["ui_current_pad", "-", "-", "-", "pad_vol", "pad_pan", "pad_tune", "pad_start",
+                "pad_mode", "pad_choke_group", "pad_attack_ms", "pad_decay_ms",
+                "pad_rand_vol_amt", "pad_rand_pan_amt", "pad_rand_decay_amt", "pad_chance_pct"],
+        },
         "grid": {"tabs": ["PAD"], "tpl": None, "skip": ["g_rand_loop_steps"]},
         "tab_order": ["KIT", "PAD"],
     },
