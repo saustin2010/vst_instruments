@@ -1036,6 +1036,14 @@ MAPS = {
             {"sel": ".tab-page", "all": True, "attr": {"style": "position: relative; top: 30px;"}},
         ],
         "map": {"legatoBtn": "legato"},
+        # design QA 2026-10-03: bank 1 = BOW | BLOW | STRIKE | RESONATOR knobs, bank 2 = CONTOUR | MODEL | SPACE (six panels
+        # of 1 to 5 controls don't fit one bank of four columns); PLAY: PITCH | PERFORMANCE | MASTER
+        "qlinks": {
+            0: ["bow", "bow_timbre", "-", "-", "blow", "flow", "blow_timbre", "-", "strike", "mallet", "strike_timbre", "-",
+                "geometry", "brightness", "damping", "position", "contour", "-", "-", "-", "model", "-", "-", "-",
+                "space", "-", "-", "-"],
+            1: ["octave", "fine", "bend_range", "-", "legato", "velocity", "signature", "-", "volume", "-", "-", "-"],
+        },
     },
     "denis": {
         # 4 pages; the 2x8 matrix cells (no control in the design) become small knobs in its own knob style
