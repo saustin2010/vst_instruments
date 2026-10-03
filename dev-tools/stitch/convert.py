@@ -233,6 +233,7 @@ MAPS = {
                         'border-outline-variant">{opt}</button>',
         },
         "augment": [
+            {"sel": "div:has(> div > div > #knob-cutoff)", "attr": {"style": "flex-direction: row-reverse"}},   # design QA
             {"sel": "body > main", "attr": {"style": "top: 55px;"}},   # fixed under the (dropped) header: centre it
             {"sel": "div.flex-col:has(> #btn-range-4)", "attr": {"data-param": "pitch_range"}},
             {"sel": "div.flex-col:has(> #btn-pwm-man)", "attr": {"data-param": "pwm_mod"}},
@@ -247,6 +248,14 @@ MAPS = {
                 "env-depth": "vcf_env", "vcf-lfo": "vcf_lfo", "dco-lfo": "pitch_mod", "pwm-depth": "pwm_depth",
                 "lfo-rate": "lfo_rate", "lfo-delay": "lfo_delay", "pulse": "pulse_level", "saw": "saw_level",
                 "sub": "sub_level", "noise": "noise_level", "chorus-1": "chorus_i", "chorus-2": "chorus_ii"},
+        # design QA 2026-10-03: a Q-Link column per panel (VCF | ENV | MASTER | PROGRAM + CHORUS; DCO | MIXER | LFO |
+        # VCA & HPF); the VCF panel's envelope display on the left of its knobs
+        "qlinks": {
+            0: ["vcf_cutoff", "vcf_resonance", "vcf_env", "vcf_lfo", "attack", "decay", "sustain", "release",
+                "octave_transpose", "volume", "hpf", "-", "preset", "chorus_i", "chorus_ii", "-"],
+            1: ["pitch_range", "pitch_mod", "pwm_depth", "pwm_mod", "pulse_level", "saw_level", "sub_level", "noise_level",
+                "lfo_rate", "lfo_delay", "lfo_trigger", "-", "vca_type", "vcf_key", "vcf_bend", "vca_depth"],
+        },
     },
     "libpo32": {
         # all three pages drawn; EDIT's knobs/switches with no parameter go (NOISE ENV takes CUTOFF FREQ's place)
