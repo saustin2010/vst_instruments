@@ -1000,9 +1000,26 @@ MAPS = {
         "button": {"item": ".hw-button", "selfLabel": True},
         "hide": [".scope-legend"],
         "canvas": {"#canvasMain": {"picture": "a_model", "fill": ".resonator-scope"}},
-        "augment": [{"sel": "button[onclick='randomizeAll()']", "attr": {"style": "margin-right: 44px;"}}],   # MPC's buttons are wider
+        "augment": [
+            # design QA 2026-10-03: the three random buttons together in PATCH, stacked beside a narrower scope (RND RESON
+            # was alone in OUT)
+            {"sel": "div.control-item:has(> button[onclick='randomizeResonators()'])", "remove": True},
+            {"sel": "button[onclick='randomizeExciter()']", "where": "afterend",
+             "html": '<button class="hw-button" onclick="randomizeResonators()" style="height:46px;">RND RESON</button>'},
+            {"sel": "div:has(> button[onclick='randomizeAll()'])",
+             "attr": {"style": "position:absolute; left:360px; top:50px; display:flex; flex-direction:column; gap:12px;"}},
+            {"sel": ".resonator-scope", "attr": {"style": "left:26px; top:120px; width:300px; height:140px;"}},
+        ],
         "map": {"presetPopup": "preset", "SHAPE": ["lfo1_shape", "lfo2_shape"], "TARGET": ["lfo1_target", "lfo2_target"],
                 "RANDOM ALL": "rnd_patch", "RND EXCITER": "rnd_exc", "RND RESON": "rnd_reson"},
+        # design QA 2026-10-03: a Q-Link column per panel or half row ("-" = an empty slot); MAIN's RANDOM buttons are
+        # touch only; EXCITER, DELAY / FX and LFO / AT were already a half row per column
+        "qlinks": {
+            0: ["a_model", "b_model", "couple", "balance", "cutoff", "resonance", "ftype", "voicing",
+                "drive", "width", "level", "-", "preset", "-", "-", "-"],
+            2: ["b_struct", "b_decay", "b_damp", "b_pos", "b_tone", "b_tune", "b_tension", "-",
+                "glide", "amp_attack", "amp_release", "spread", "rev_mix", "rev_size", "rev_damp", "-"],
+        },
     },
     "eucalypso": {
         # LANE 2-4 weren't drawn: copies of LANE 1 with the keys and titles swapped

@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Fizzik, page MAIN">
 
-Q-Link columns: **1** PRESET, RANDOM ALL, RND EXCITER, MODEL A  ·  **2** MODEL B, COUPLE, BALANCE, CUTOFF  ·  **3** RESONANCE, FILTER TYPE, VOICING, RND RESON  ·  **4** DRIVE, WIDTH, LEVEL
+Q-Link columns: **1** MODEL A, MODEL B, COUPLE, BALANCE  ·  **2** CUTOFF, RESONANCE, FILTER TYPE, VOICING  ·  **3** DRIVE, WIDTH, LEVEL  ·  **4** PRESET
 
 ### 2. EXCITER
 
@@ -36,7 +36,7 @@ Q-Link columns: **1** EXC MIX, CRACKLE, COLOR, ATTACK  ·  **2** DECAY, EXC RESO
 
 <img src="screenshots/page_2.png" width="760" alt="Fizzik, page RESONATOR B">
 
-Q-Link columns: **1** STRUCTURE B, DECAY B, DAMP B, POSITION B  ·  **2** TONE B, TUNE B, TENSION B, GLIDE  ·  **3** AMP ATK, AMP REL, SPREAD, REVERB  ·  **4** REV SIZE, REV DAMP
+Q-Link columns: **1** STRUCTURE B, DECAY B, DAMP B, POSITION B  ·  **2** TONE B, TUNE B, TENSION B  ·  **3** GLIDE, AMP ATK, AMP REL, SPREAD  ·  **4** REVERB, REV SIZE, REV DAMP
 
 ### 4. DELAY / FX
 
