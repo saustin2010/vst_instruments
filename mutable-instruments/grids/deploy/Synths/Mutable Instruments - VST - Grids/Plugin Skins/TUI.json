@@ -1448,7 +1448,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "22 414 130 103",
+                                    "bounds": "865 414 130 103",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1478,7 +1478,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "154 414 130 103",
+                                    "bounds": "996 414 130 103",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1508,7 +1508,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "285 414 130 103",
+                                    "bounds": "1128 414 130 103",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2137,9 +2137,10 @@
                 "fnKeyIndex": 0,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "198 159 499 122",
-                    "684 126 587 151",
-                    "16 405 405 118"
+                    "198 159 343 122",
+                    "555 159 400 118",
+                    "957 126 314 134",
+                    "859 405 405 118"
                 ],
                 "componentName": "GRIDS|GRIDS",
                 "initialSize": "0 0 1280 628",
@@ -2151,8 +2152,9 @@
                 "fnKeyIndex": 1,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "234 125 381 410",
-                    "665 245 577 184"
+                    "234 125 152 410",
+                    "473 277 334 118",
+                    "880 245 362 184"
                 ],
                 "componentName": "NOTES|NOTES",
                 "initialSize": "0 0 1280 628",

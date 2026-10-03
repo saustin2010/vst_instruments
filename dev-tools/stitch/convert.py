@@ -1278,7 +1278,15 @@ MAPS = {
             {"sel": "div.space-y-6:has(> div > input[type=range])", "where": "replace",
              "html": '<div class="flex justify-around items-center my-auto">@knob(accent_vel)@knob(normal_vel)</div>'},
             {"sel": "#page-notes div.recessed-display:has(> div > span.block):has(> div.rounded-full)", "remove": True},   # MIDI clock
+            # design QA 2026-10-03: the rhythm display on the left of the lower row, PATTERN LENGTHS on the right
+            {"sel": "#page-grids section.col-span-8", "attr": {"style": "order: -1"}},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel, 3-3-2-3 (MAP | DENSITY | ENGINE | LENGTHS) and 3-2-2 on NOTES
+        "qlinks": {
+            0: ["map_x", "map_y", "chaos", "-", "bd_fill", "sd_fill", "hh_fill", "-", "mode", "swing", "-", "-",
+                "len_bd", "len_sd", "len_hh", "-"],
+            1: ["bd_note", "sd_note", "hh_note", "-", "accent_vel", "normal_vel", "-", "-", "channel", "resolution"],
+        },
         "map": {"mapX": "map_x", "mapY": "map_y", "bdFill": "bd_fill", "sdFill": "sd_fill", "hhFill": "hh_fill",
                 "bdLen": "len_bd", "sdLen": "len_sd", "hhLen": "len_hh", "ACCENT VELOCITY": "accent_vel",
                 "NORMAL VELOCITY": "normal_vel"},
