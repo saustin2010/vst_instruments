@@ -89,6 +89,12 @@ MAPS = {
         "get": {"preset": "preset_name"},
         "map": {"amp_a": "attack", "amp_d": "decay", "amp_s": "sustain", "amp_r": "release",
                 "flt_a": "f_attack", "flt_d": "f_decay", "flt_s": "f_sustain", "flt_r": "f_release"},
+        # design QA 2026-10-03: a Q-Link column per panel (OSCILLATOR | FILTER + MOD | OUTPUT | PROGRAM); envelope
+        # curves on the left, sliders on the right (the owner's notes)
+        "qlinks": {0: ["engine", "timbre", "color", "-", "cutoff", "resonance", "filt_env", "fm",
+                       "octave_transpose", "volume", "-", "-", "preset", "-", "-", "-"]},
+        "augment": [{"sel": "#pageEnvelopes .envelope-bank-layout", "all": True,
+                     "attr": {"style": "flex-direction: row-reverse"}}],
     },
     "moog": {
         "sweep": 135,

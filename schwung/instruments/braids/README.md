@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Braids, page BRAIDS">
 
-Q-Link columns: **1** TIMBRE, COLOR, CUTOFF, RESONANCE  ·  **2** FILTER ENV, FM, OCTAVE, VOLUME  ·  **3** PATCH, ALGORITHM
+Q-Link columns: **1** ALGORITHM, TIMBRE, COLOR  ·  **2** CUTOFF, RESONANCE, FILTER ENV, FM  ·  **3** OCTAVE, VOLUME  ·  **4** PATCH
 
 ### 2. ENVELOPES
 
