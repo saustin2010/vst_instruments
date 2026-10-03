@@ -93,7 +93,7 @@ The first install of a plugin restarts MPC once (it asks first; `MPC.settings` i
 - Presets: every instrument that has presets lists them in MPC's own **PRESET menu** in the plugin header (also on the arrangement screen); checked on the Live II. OB-Xd and Noisemaker get a BANK selector for banks you add, Hush One reads TAL-BassLine-101 presets you add, and the menu follows what's loaded ([docs/presets-and-libraries.md](docs/presets-and-libraries.md)).
 - Every screen is checked offline before it ships: each control's binding, the Q-Link layout, the touch areas (`dev-tools/stitch/check_skin.py`) and the Q-Link column outlines MPC highlights (`dev-tools/stitch/qlink_overlay.py`).
 - Not yet tried on a device: the sequencers driving other tracks through their own MIDI port on a stock MPC (the mechanism works on a Force), and the three audio effects (whether MPC lists third-party effects at all).
-- Plugin browser groups: the sequencers report the category "Sequencer" and Libpo32 and Mr Drums "Drum Machine" (registered on the Live II 2026-10-03); whether MPC's plugin menu shows them in their own folders is being checked.
+- Plugin browser groups: MPC's plugin menu sorted by type shows only VST Instruments and VST Effects (it ignores the category plugins report); sorted by manufacturer it makes a folder per maker. All plugins keep their real makers.
 - Developed on a Live II. Other Gen1 devices run the same MPC software and should behave the same; Gen2 devices (e.g. Live III) are reported to be more locked down. Reports welcome.
 
 What's next is in [ROADMAP.md](ROADMAP.md). Found a problem? Open an issue with the plugin, your MPC model and firmware, and what you did.

@@ -116,10 +116,10 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..76df37f 100644
+index 6e0f9d4..8802ccc 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
-@@ -596,7 +596,252 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +596,258 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -350,6 +350,12 @@ index 6e0f9d4..76df37f 100644
 +  listed parameter through `set_parameter_locked`, as a touch would. Set every parameter in every preset so switching
 +  is deterministic, and order them as the engine needs (the 303's Devilfish switch first: it changes the decay range).
 +  The picked index isn't in the engine's state, so after a project reload the menu shows the first preset's name.
++- **MPC's plugin menu: type vs manufacturer (verified on a Live II, 2026-10-03).** MPC.settings has
++  `TouchNewPluginPopupSortByType` / `...SortByManufacturer` (and `NewPluginDialog...`). Sorted by type, VST plugins
++  fall into VST Instruments / VST Effects only: the plugin-list `category` ("Sequencer", "Drum Machine") changes
++  nothing. Sorted by manufacturer, each `manufacturer` value is a folder (Grids registered as "Sequencers" got one).
++  The manufacturer is also in the skin folder name, so changing it means a new skin folder and a re-registration.
++  install.sh now re-registers on a category change too (it compared only name, maker and type).
 +- **A Q-Link column per panel: `-` leaves a slot empty (2026-10-03).** Columns are fixed groups of four slots, so a
 +  page laid out 3-2-4-3 (or a two-knob panel) can still give each panel its own column, with its outline round that
 +  panel only: `qlinks "MAIN" = wave,tune,-,-,cutoff,reso,env,decay,...`. The empty slot does nothing on the knob.

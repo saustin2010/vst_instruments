@@ -32,11 +32,11 @@ parameter index, so existing projects keep working.
   values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays). Track it in README.md's Design QA column.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
 - [ ] Audio effects (Verglas, Warps, Rings FX): does MPC offer third-party VST effects in its insert list at all?
-- [ ] Plugin browser groups (2026-10-03): the 9 sequencers report `category="Sequencer"`, Libpo32 and Mr Drums
-  `"Drum Machine"`, the rest `"Synth"` / `"Effect"` (registered on the Live II 2026-10-03, MPC restarted). Grids' category had never reached the device (install.sh only
-  re-registered on a name/maker/type change; it now compares the category too). Check whether MPC's plugin pop-up
-  (its "sort by type" setting is on) shows them in their own folders and they still load on a plugin track. If not,
-  try a name prefix (SEQ / DRM) on one plugin, checking that an older project still finds it.
+- [ ] Plugin browser groups. Checked on the Live II 2026-10-03: MPC's plugin menu sorted **by type** shows only VST
+  Instruments / VST Effects (the plugin-list `category` is ignored; the sequencers and drum machines keep reporting
+  theirs); sorted **by manufacturer** it makes a folder per maker field (Grids as "Sequencers" got its own folder).
+  The owner sorts by type, so that was put back. Left for later: name prefixes (SEQ / DRM) to bunch them in the
+  by-type list, after checking that an older project still finds a renamed plugin.
 - [ ] `install.sh` / `uninstall.sh` on a real MPC (so far tested only against a simulated one:
   `dev-tools/fake-mpc/`).
 - [ ] CPU: run the framework's `tools/bench.sh` for the heavy ones (Helm, Chordism, Tablor, Mono Voice, Elements,
