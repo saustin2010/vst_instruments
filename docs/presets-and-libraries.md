@@ -34,19 +34,24 @@ and 40 rhythms. The others have no presets.
 | Mr Drums | `/sdcard/vst/mrdrums/kits/<kit name>/` | WAV or AIFF, up to 16 per folder; name order = pads 1-16 (notes 36-51) | as a kit in the KIT selector |
 | MIDI Player | `/sdcard/vst/midiplayer/MIDI/` | Standard MIDI Files (`.mid`) | in the FILE selector (sorted by name) |
 | Tablor | `/sdcard/vst/tablor/wavetables/<folder>/` | `.wav`, or FLAC wavetables named by frame size like the shipped packs (`.wt2048`) | in each oscillator's table selector |
+| OB-Xd | `/sdcard/vst/obxd/presets/` | `.fxb` banks (OB-Xd / discoDSP, up to 128 programs each, 32 banks). An OB-Xd 1.x LV2 bank (`presets.ttl`): `python3 tools/obxd-lv2-to-fxb.py <presets.ttl or its archive> "presets/obxd/presets/<Bank name>.fxb"` | in BANK (under PATCH), by file name; PATCH browses it |
+| Noisemaker | `/sdcard/vst/noisemaker/presets/<bank name>/` | TAL-NoiseMaker `.noisemakerpreset` files, subfolders included (a pack's BASS/LEAD/PAD... folders); up to 512 per bank, 64 banks | in BANK (under PATCH), by folder name; PATCH browses its first 256, by file name |
+| Hush One | `/sdcard/vst/hush1/presets/` (any subfolders) | TAL-BassLine-101 `.bassline` / `.vstpreset`, up to 512 | in PATCH after the 11 built-in presets, sorted and named by file name; read when the plugin is inserted |
 
 Copy them over SSH/SFTP (e.g. `scp -r "My Kit" root@<mpc>:/sdcard/vst/mrdrums/kits/`), then re-insert the plugin.
-Use only samples you have the right to use.
+Use only samples and presets you have the right to use.
+
+Or keep them in this repo's `presets/<plugin>/` (same layout, not tracked by git) and let `./install.sh` copy them:
+put an archive you unpacked in `presets/<plugin>/not-installed/` so it isn't copied too. Careful:
+`tools/fetch-presets.py --force <plugin>` replaces the whole `presets/<plugin>/` folder (OB-Xd's included), so keep
+your originals elsewhere as well.
 
 ## Missing or not reachable yet
 
 | # | Plugin | What | Why | Fix (see ROADMAP.md) |
 |---|---|---|---|---|
 | 1 | Tablor | its 9 factory presets (fetched to `presets/tablor/not-installed/factory.tbl`) | not installed and no preset control: upstream they're chosen in Move's own preset browser, which MPC doesn't have; their wavetable paths point at Move's folders (`/data/UserData/UserLibrary/Wavetables/...`) | install the file with paths rewritten to `/sdcard/vst/tablor/wavetables/`, and add a preset stepper that applies a preset's state blob (`TBLR2;key=value;...`, reset to defaults first) |
-| 2 | OB-Xd | extra `.fxb` banks | the engine lists every `.fxb` in its presets folder (`fxb_bank_list`, selected by `bank_index`), but the port only exposes the factory bank's 128 programs | add a BANK selector (`bank_index`) so `.fxb` banks dropped into `/sdcard/vst/obxd/presets/` can be picked |
-| 3 | Noisemaker | importing `.noisemakerpreset` banks | the engine imports TAL-NoiseMaker preset folders from `<module_dir>/presets`, but the port sets no `MODULE_DIR`, so imports are off | set `MODULE_DIR=/sdcard/vst/noisemaker` and add a bank selector |
-| 4 | Hush One | importing TAL-BassLine-101 presets (`.bassline`, `.vstpreset`) | same: no `MODULE_DIR`; and PATCH stops at the 11 built-in presets (the engine reports `preset_count` = built-in + imported) | set `MODULE_DIR=/sdcard/vst/hush1`, widen PATCH (the wrapper fixes a parameter's range at build time) |
-| 5 | Libpo32 | saving a kit | the engine has `save_kit` (writes `<module_dir>/presets/<kit>.json`) but there's no button, and the folder isn't created | add a SAVE KIT button and create its `presets/` folder on install |
+| 2 | Libpo32 | saving a kit | the engine has `save_kit` (writes `<module_dir>/presets/<kit>.json`) but there's no button, and the folder isn't created | add a SAVE KIT button and create its `presets/` folder on install |
 
 Move-only features with no MPC equivalent (nothing to fix):
 
@@ -57,5 +62,5 @@ Move-only features with no MPC equivalent (nothing to fix):
 - **Eucalypso, Super Arp, Mr Hyde** read their `module.json` only to describe their own controls to Move's UI.
 
 Searched upstream on 2026-10-03 for anything else to fetch: none of these projects publishes extra OB-Xd banks,
-Noisemaker preset banks or TAL-BassLine presets (TAL-BassLine-101 is a commercial plugin), so for items 2-4 users
-would bring files they own once the import is wired up.
+Noisemaker preset banks or TAL-BassLine presets (TAL-BassLine-101 is a commercial plugin), so `tools/fetch-presets.py`
+has none: OB-Xd, Noisemaker and Hush One read the files you bring ("Adding your own" above; done 2026-10-03).

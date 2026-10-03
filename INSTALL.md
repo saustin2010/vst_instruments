@@ -111,10 +111,16 @@ this repo's `presets/<name>/` folder (fetched from their original projects; git 
   It ships only a small starter kit, so this is how you make it yours.
 - **MIDI Player**: `.mid` files in `/sdcard/vst/midiplayer/MIDI/`.
 - **Tablor**: wavetables (`.wav`, or FLAC `.wt2048` like the shipped packs) in `/sdcard/vst/tablor/wavetables/`.
+- **OB-Xd**: `.fxb` banks in `/sdcard/vst/obxd/presets/`, picked with BANK under PATCH (an OB-Xd 1.x LV2 bank converts
+  with `tools/obxd-lv2-to-fxb.py`).
+- **Noisemaker**: TAL-NoiseMaker preset folders (`.noisemakerpreset`) in `/sdcard/vst/noisemaker/presets/`, one bank
+  per folder, picked with BANK under PATCH.
+- **Hush One**: TAL-BassLine-101 presets (`.bassline`, `.vstpreset`) in `/sdcard/vst/hush1/presets/`; they follow the
+  11 built-in presets in PATCH.
 
 Copy them with `scp -r` or an SFTP app (e.g. Cyberduck) using the same SSH login, then re-insert the plugin. Updating
 a plugin never deletes files you added. What every plugin ships, where it came from, and what isn't reachable yet
-(Tablor's factory presets, extra OB-Xd banks, Noisemaker and Hush One preset imports) is in
+(Tablor's factory presets) is in
 [docs/presets-and-libraries.md](docs/presets-and-libraries.md).
 
 ## 5. Play it
