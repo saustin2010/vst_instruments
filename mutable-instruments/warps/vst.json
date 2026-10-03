@@ -3,6 +3,7 @@
   "vendor": "Mutable Instruments",
   "uid": "MIwp",
   "so": "warps.so",
+  "presets": "presets.json",
   "effect": true,
   "build": {
     "sources": [

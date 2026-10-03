@@ -1,10 +1,12 @@
 # Warps
 
-**Audio effect** · Mutable Instruments Warps: a meta-modulator (ring mod, fold, vocoder...) as an audio effect. · maker in MPC: Mutable Instruments · licence: MIT
+**Audio effect** · Mutable Instruments Warps: a meta-modulator (ring mod, fold, vocoder...) as an audio effect, with 12 presets. · maker in MPC: Mutable Instruments · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Warps on the MPC touchscreen">
 
 Warps crosses two signals: its internal carrier oscillator (sine, triangle or saw at NOTE) and the track's audio, or, with EXTERNAL, the input's left and right channels. ALGORITHM morphs through crossfading, folding, analog and digital ring modulation, XOR, comparison, spectral morphing and a vocoder; TIMBRE adds the character of each. MODE's second entry is the module's hidden frequency shifter. MIX blends the dry sound back.
+
+Upstream has no presets, so the port brings 12 (Init, Ring Mod, Parallel Ring, Digital Ring, Cross Fold, XOR Crush, Comparator Grit, Robot Vocoder, Pulse Vocoder, Shift Up, Shift Down, Stereo Shift), in MPC's PRESET menu, each setting every control, with levels evened out (measured with a test signal through it).
 
 ## On the MPC
 

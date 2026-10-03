@@ -21,7 +21,8 @@ Q-Link columns before → after ("-" = an empty slot):
 Made in the design (convert.py MAPS `augment` / `qlinks` / `nudge`), so a rerun keeps it.
 
 ## Presets
-None upstream. See the batch's presets pass.
+Upstream has none, so the port brings 12 (`presets.json`, in MPC's PRESET menu): Init, Ring Mod, Parallel Ring, Digital Ring, Cross Fold, XOR Crush, Comparator Grit, Robot Vocoder, Pulse Vocoder, Shift Up, Shift Down, Stereo Shift. Each sets every control;
+levels evened out with a test signal through it (all within about 1 dB, Init a little louder at its defaults).
 
 ## Checked
 Offline test PASSED; check_skin OK; no Q-Link outlines overlap (qlink_overlay.py).
