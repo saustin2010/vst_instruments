@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Rings, page RINGS">
 
-Q-Link columns: **1** MODEL, POLYPHONY, STRUCTURE, BRIGHTNESS  ·  **2** DAMPING, POSITION, VELOCITY, OCTAVE  ·  **3** BEND RANGE, SYNTH FX, WIDTH, VOLUME
+Q-Link columns: **1** MODEL, POLYPHONY  ·  **2** STRUCTURE, BRIGHTNESS, DAMPING, POSITION  ·  **3** VELOCITY, OCTAVE, BEND RANGE, SYNTH FX  ·  **4** WIDTH, VOLUME
 
 ## Install
 

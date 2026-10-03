@@ -848,7 +848,20 @@ MAPS = {
             {"sel": "div.w-full.h-11", "attr": {"data-param": "model"}},
             {"sel": "div[class*='w-[134px]']", "attr": {"data-param": "synth_fx"}},
             {"sel": "div.grid.grid-cols-3:has(> button)", "attr": {"data-param": "polyphony"}},
+            # design QA 2026-10-03: MODEL's display on the left, its controls on the right; OUTPUT's made-up peak meter goes
+            {"sel": "div:has(> div > div > div.w-full.h-11)", "attr": {"class": "flex h-[195px] items-stretch pt-1 gap-2",
+                                                                      "style": "padding-right: 14px"}},
+            {"sel": "div:has(> div > div > div.w-full.h-11) > div.recessed-well", "attr": {"style": "order: -1"}},
+            {"sel": "div:has(> div > div > div.w-full.h-11) > div.recessed-well > div.border-t", "remove": True},   # made-up readouts
+            {"sel": "div:has(> div > div > div.w-full.h-11) > div.recessed-well span.text-primary", "remove": True},
+            {"sel": "div.recessed-well:has(> div > div > div.rounded-xs)", "remove": True},
+            {"sel": "section[class*='w-[310px]'] > div.justify-between:not(.border-b)", "attr": {"style": "justify-content: center"}},
+            {"sel": "section[class*='w-[310px]'] div.space-x-3", "attr": {"class": "flex gap-10"}},
+            {"sel": "div:has(> div[class*='w-[134px]'])", "attr": {"style": "margin-right: 26px"}},   # outline inside PLAYING
         ],
+        # design QA 2026-10-03: a Q-Link column per panel (MODEL | RESONATOR | PLAYING | OUTPUT)
+        "qlinks": {0: ["model", "polyphony", "-", "-", "structure", "brightness", "damping", "position",
+                       "velocity", "octave", "bend_range", "synth_fx", "width", "volume", "-", "-"]},
     },
     "ringsfx": {
         # one page, every control drawn
