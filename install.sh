@@ -99,7 +99,7 @@ if [ ${#NEW[@]} -gt 0 ]; then
   ok=$YES
   if [ $ok = 0 ]; then
     printf "MPC has to restart to list them (about 30 s). Save your project on the MPC first. Restart now? [y/N] "
-    read -r a; case "$a" in y|Y|yes) ok=1 ;; esac
+    read -r a || a=""; case "$a" in y|Y|yes) ok=1 ;; esac
   fi
   if [ $ok = 1 ]; then
     side register "$STAGE/entries.xml"
