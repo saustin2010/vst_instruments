@@ -1597,7 +1597,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_26x150.png",
-                                        "numFrames": 127,
+                                        "numFrames": 81,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -1613,7 +1613,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-9 0 150 150",
+                                    "bounds": "53 0 26 150",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1791,7 +1791,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_26x150.png",
-                                        "numFrames": 127,
+                                        "numFrames": 81,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -1807,7 +1807,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-7 0 150 150",
+                                    "bounds": "55 0 26 150",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1985,7 +1985,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_26x150.png",
-                                        "numFrames": 127,
+                                        "numFrames": 81,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -2001,7 +2001,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-5 0 150 150",
+                                    "bounds": "57 0 26 150",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2411,7 +2411,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "669 145 110 145",
+                                    "bounds": "836 145 110 145",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2441,7 +2441,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "792 152 96 131",
+                                    "bounds": "959 152 96 131",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2471,7 +2471,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "898 159 89 117",
+                                    "bounds": "1065 159 89 117",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2501,7 +2501,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "993 159 89 117",
+                                    "bounds": "1160 159 89 117",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -4878,7 +4878,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_32x240.png",
-                                        "numFrames": 127,
+                                        "numFrames": 51,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -4894,7 +4894,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-20 0 240 240",
+                                    "bounds": "84 0 32 240",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -5072,7 +5072,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_32x240.png",
-                                        "numFrames": 127,
+                                        "numFrames": 51,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -5088,7 +5088,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-22 0 240 240",
+                                    "bounds": "82 0 32 240",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -5266,7 +5266,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_32x240.png",
-                                        "numFrames": 127,
+                                        "numFrames": 51,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -5282,7 +5282,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-33 0 240 240",
+                                    "bounds": "71 0 32 240",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -9063,10 +9063,10 @@
                 "fnKeyIndex": 0,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "15 136 998 160",
-                    "37 150 1071 441",
-                    "465 373 639 218",
-                    "1106 405 142 146"
+                    "820 136 455 160",
+                    "37 373 570 218",
+                    "689 384 559 167",
+                    "15 138 258 86"
                 ],
                 "componentName": "MAIN|MAIN",
                 "initialSize": "0 0 1280 628",
@@ -9079,8 +9079,8 @@
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
                     "68 145 733 308",
-                    "12 463 487 140",
-                    "473 178 788 425",
+                    "12 463 367 140",
+                    "357 463 489 140",
                     "848 338 429 168"
                 ],
                 "componentName": "SOURCE|SOURCE",
@@ -9093,9 +9093,9 @@
                 "fnKeyIndex": 2,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "43 60 766 185",
-                    "17 146 1212 411",
-                    "329 406 613 151",
+                    "43 60 324 185",
+                    "17 417 454 140",
+                    "491 406 451 151",
                     "961 417 299 140"
                 ],
                 "componentName": "MODULATOR|MODULATOR",

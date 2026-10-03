@@ -387,6 +387,8 @@ MAPS = {
             "row": '<div class="flex items-center justify-around w-full">{items}</div>',
         },
         "augment": [
+            # design QA 2026-10-03: the VCF's response-curve display on the left of its knobs
+            {"sel": "div.recessed-display:has(> #filterCanvas)", "attr": {"style": "order: -1"}},
             {"sel": "svg circle[id^=arc-]", "all": True, "remove": True},   # value arcs drawn at one value
             {"sel": ".knob-indicator", "all": True, "attr": {"style": ""}},   # turned by the knob body instead
             {"sel": "div:has(> #btn-vca-env)", "attr": {"data-param": "vca_mode"}},
@@ -403,6 +405,17 @@ MAPS = {
                 "key-track-pointer": "key_follow", "velo-pointer": "velocity_sens", "vol-pointer": "volume"},
         "names": {"f_attack": "FLT ATTACK", "f_decay": "FLT DECAY", "f_sustain": "FLT SUSTAIN", "f_release": "FLT RELEASE"},
         "tab_order": ["MAIN", "SOURCE", "MODULATOR", "PERFORM"],
+        # design QA 2026-10-03: a Q-Link column per panel or part of one ("-" = an empty slot); SOURCE's SUB MODE and
+        # MODULATOR's four LFO switches are touch only; PERFORM was already a column per panel
+        "qlinks": {
+            0: ["cutoff", "resonance", "env_amt", "key_follow", "attack", "decay", "sustain", "release",
+                "vca_mode", "octave_transpose", "velocity_sens", "volume", "preset", "-", "-", "-"],
+            1: ["saw", "pulse", "sub", "noise", "transpose", "fine_tune", "white_noise", "-",
+                "f_attack", "f_decay", "f_sustain", "f_release", "pulse_width", "pwm_mode", "pwm_depth", "pwm_env_depth"],
+            2: ["lfo_rate", "lfo_waveform", "-", "-", "lfo_pitch", "lfo_filter", "lfo_pwm", "-",
+                "filter_velocity_sens", "filter_env_polarity", "filter_env_full_range", "-",
+                "filter_volume_correction", "adsr_declick", "-", "-"],
+        },
     }, grid={"tabs": ["MODULATOR", "PERFORM"], "tpl": None}),
     "mazelite": {
         # one page holds both of its tabs; the RESET choices are pop-ups (bar lengths), in place of a made-up route row
