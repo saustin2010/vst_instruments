@@ -24,31 +24,31 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="OB-Xd, page MAIN">
 
-Q-Link columns: **1** PATCH, VOLUME, TUNE, VOICES  ·  **2** SPREAD, UNISON, AS PLAYED, LEGATO  ·  **3** PORTAMENTO, BEND 12, BEND OSC2, BANK
+Q-Link columns: **1** VOLUME, TUNE  ·  **2** VOICES, SPREAD, UNISON, AS PLAYED  ·  **3** PORTAMENTO, LEGATO, BEND 12, BEND OSC2  ·  **4** PATCH, BANK
 
 ### 2. OSCILLATORS
 
 <img src="screenshots/page_1.png" width="760" alt="OB-Xd, page OSCILLATORS">
 
-Q-Link columns: **1** OSC1 PITCH, OSC1 SAW, OSC1 PULSE, OSC2 PITCH  ·  **2** OSC2 DETUNE, OSC2 SAW, OSC2 PULSE, OSC2 SYNC  ·  **3** PULSE WIDTH, PW OFFSET, PW ENV, PW ENV BOTH  ·  **4** X-MOD, BRIGHTNESS, OSC2 STEP
+Q-Link columns: **1** OSC1 PITCH, OSC1 SAW, OSC1 PULSE  ·  **2** OSC2 PITCH, OSC2 DETUNE, OSC2 SAW, OSC2 PULSE  ·  **3** PULSE WIDTH, PW OFFSET, PW ENV, PW ENV BOTH  ·  **4** X-MOD, BRIGHTNESS, OSC2 SYNC, OSC2 STEP
 
 ### 3. FILTER
 
 <img src="screenshots/page_2.png" width="760" alt="OB-Xd, page FILTER">
 
-Q-Link columns: **1** OSC1 LEVEL, OSC2 LEVEL, NOISE, CUTOFF  ·  **2** RESONANCE, ENV AMOUNT, KEY TRACK, MULTIMODE  ·  **3** BANDPASS, 24 dB, SELF OSC, ENV INVERT  ·  **4** FILTER VAR, GLIDE VAR, ENV VAR, LEVEL VAR
+Q-Link columns: **1** OSC1 LEVEL, OSC2 LEVEL, NOISE  ·  **2** CUTOFF, RESONANCE, ENV AMOUNT, KEY TRACK  ·  **3** MULTIMODE, BANDPASS, 24 dB, SELF OSC  ·  **4** FILTER VAR, GLIDE VAR, ENV VAR, LEVEL VAR
 
 ### 4. ENVELOPES
 
 <img src="screenshots/page_3.png" width="760" alt="OB-Xd, page ENVELOPES">
 
-Q-Link columns: **1** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE  ·  **2** FLT VEL, AMP ATTACK, AMP DECAY, AMP SUSTAIN  ·  **3** AMP RELEASE, AMP VEL
+Q-Link columns: **1** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE  ·  **2** FLT VEL, ENV INVERT  ·  **3** AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE  ·  **4** AMP VEL
 
 ### 5. MODULATION
 
 <img src="screenshots/page_4.png" width="760" alt="OB-Xd, page MODULATION">
 
-Q-Link columns: **1** LFO RATE, LFO SYNC, LFO SINE, LFO SQUARE  ·  **2** LFO S&H, PITCH ENV, P.ENV BOTH, VIBRATO  ·  **3** MOD AMOUNT, MOD OSC1, MOD OSC2, MOD FILTER  ·  **4** PWM AMOUNT, PWM OSC1, PWM OSC2
+Q-Link columns: **1** LFO RATE, LFO SINE, LFO SQUARE, LFO S&H  ·  **2** PITCH ENV, P.ENV BOTH, VIBRATO  ·  **3** MOD AMOUNT, MOD OSC1, MOD OSC2, MOD FILTER  ·  **4** PWM AMOUNT, PWM OSC1, PWM OSC2
 
 ## Install
 

@@ -675,9 +675,21 @@ MAPS = {
         "enum": {"item": "div:has(> .legato-btn), .aug-enum", "opt": "button", "label": "span"},
         "stepper": [{"item": "div:has(> div.recessed-well #preset-title)", "key": "preset"}, {"item": ".aug-stepper"}],
         "get": {"preset": "preset_name", "bank_index": "bank_name"},
-        # BANK (2026-10-03) went last so MAIN's Q-Link columns stayed where they were
-        "qlinks": {0: ["preset", "volume", "tune", "voice_count", "unison_det", "unison", "as_played", "legato", "portamento",
-                       "bend_range", "bend_osc2", "bank_index"]},
+        # design QA 2026-10-03: a Q-Link column per panel (MASTER | VOICE | GLIDE, LEGATO, BEND | PATCH + BANK; LEGATO
+        # moved into GLIDE // BEND); on the other pages OSC2 SYNC joined OSC MOD, MULTIMODE FILTER MODE and ENV INVERT
+        # the filter envelope (layout.grid.conf); LFO SYNC is touch only (15 controls on MODULATION)
+        "qlinks": {
+            0: ["volume", "tune", "-", "-", "voice_count", "unison_det", "unison", "as_played",
+                "portamento", "legato", "bend_range", "bend_osc2", "preset", "bank_index", "-", "-"],
+            1: ["osc1_pitch", "osc1_saw", "osc1_pulse", "-", "osc2_pitch", "osc2_detune", "osc2_saw", "osc2_pulse",
+                "pw", "pw_ofs", "pw_env", "pw_env_both", "xmod", "brightness", "osc2_sync", "osc_quantize"],
+            2: ["osc1_mix", "osc2_mix", "noise", "-", "cutoff", "resonance", "filter_env", "key_follow",
+                "multimode", "bandpass", "fourpole", "self_osc", "filter_var", "porta_var", "env_var", "level_var"],
+            3: ["f_attack", "f_decay", "f_sustain", "f_release", "vel_filter", "fenv_inv", "-", "-",
+                "attack", "decay", "sustain", "release", "vel_amp", "-", "-", "-"],
+            4: ["lfo_rate", "lfo_sin", "lfo_square", "lfo_sh", "env_pitch", "env_pitch_both", "vibrato", "-",
+                "lfo_amt1", "lfo_osc1", "lfo_osc2", "lfo_filter", "lfo_amt2", "lfo_pw1", "lfo_pw2", "-"],
+        },
         "tpl": {
             "frame": '<section class="absolute bg-ob-panel border border-ob-line rounded p-2.5 flex flex-col shadow-lg" style="left:{x}px; '
                      'top:{y}px; width:{w}px; height:{h}px;"><div class="flex items-center justify-between border-b border-[#2d2f34] '
@@ -713,6 +725,15 @@ MAPS = {
              'tracking-widest w-10">BANK</span><div class="aug-stepper flex-1 h-10 bg-ob-display-bg border border-[#48110b] '
              'rounded recessed-well crt-grid" data-param="bank_index"></div></div>'},
             {"sel": "div:has(> #scopeCanvas)", "attr": {"style": "height:80px"}},
+            # design QA 2026-10-03: LEGATO MODE into GLIDE // BEND (the bottom row now 6 + 6 columns, as the top); the
+            # made-up OUTPUT PEAK meter goes
+            {"sel": "div.recessed-well:has(> div > div > .meter-bar)", "remove": True},
+            {"sel": "section:has([data-param=voice_count])", "attr": {"style": "grid-column: span 6 / span 6"}},
+            {"sel": "section:has([data-param=glide_rate])", "attr": {"style": "grid-column: span 6 / span 6"}},
+            {"sel": "div.col-span-4:has(> div > .legato-btn)", "move": "div.flex-col:has(> div > div[data-param=glide_rate])",
+             "where": "afterend", "attr": {"class": "flex flex-col justify-center px-1"}},
+            {"sel": "section:has([data-param=voice_count]) div.col-span-5", "attr": {"class": "col-span-7 flex items-center justify-around border-r border-[#2d2f34] pr-2"}},
+            {"sel": "div:has(> #toggle-unison)", "attr": {"class": "col-span-5 flex flex-col items-center gap-12"}},
         ],
         "map": {"master_vol": "volume", "master_tune": "tune", "voice_spread": "unison_det", "glide_rate": "portamento",
                 "asplayed": "as_played"},
