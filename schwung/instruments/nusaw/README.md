@@ -24,13 +24,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="NuSaw, page MAIN">
 
-Q-Link columns: **1** PATCH, SAWS, DETUNE, SPREAD  ·  **2** SUB LEVEL, CUTOFF, RESONANCE, ENV MOD  ·  **3** ATTACK, DECAY, SUSTAIN, RELEASE
+Q-Link columns: **1** SAWS, DETUNE, SPREAD, SUB LEVEL  ·  **2** CUTOFF, RESONANCE, ENV MOD  ·  **3** ATTACK, DECAY, SUSTAIN, RELEASE  ·  **4** PATCH
 
 ### 2. MORE
 
 <img src="screenshots/page_1.png" width="760" alt="NuSaw, page MORE">
 
-Q-Link columns: **1** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE  ·  **2** SUB OCTAVE, VELOCITY, BEND RANGE, VOLUME  ·  **3** CHORUS, CHORUS DEPTH, DELAY, DELAY TIME  ·  **4** DELAY FBK, DELAY TONE
+Q-Link columns: **1** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE  ·  **2** SUB OCTAVE, VELOCITY, BEND RANGE, VOLUME  ·  **3** CHORUS, CHORUS DEPTH  ·  **4** DELAY, DELAY TIME, DELAY FBK, DELAY TONE
 
 ## Install
 

@@ -638,12 +638,29 @@ MAPS = {
                     'origin-bottom shadow-[0_0_8px_#4fe6ff]" style="bottom: 50%;"></div><div class="w-6 h-6 rounded-full '
                     'bg-[#110f1c] border border-[#4fe6ff]/40 flex items-center justify-center z-10 shadow"><span class="w-1.5 h-1.5 '
                     'rounded-full bg-[#4fe6ff]"></span></div></div></div>',
+            # the plan's logo plate (MORE's empty corner): a wordmark in the design's type
+            "art": '<section class="absolute rounded border border-[#2f2a52] bg-[#110f1c] flex flex-col items-center justify-center" '
+                   'style="left:{x}px; top:{y}px; width:{w}px; height:{h}px;"><div class="text-headline-md font-headline-md '
+                   'font-bold text-[#4fe6ff] tracking-[0.25em] glow-cyan" style="font-size: 40px;">NUSAW</div><div '
+                   'class="text-label-sm font-label-sm text-on-surface-variant mt-2 tracking-widest">SUPERSAW SYNTH</div></section>',
         },
         "augment": [
             {"sel": "circle[id^=arc-]", "all": True, "remove": True},
             {"sel": "div.flex.items-center.gap-2:has(> button + span)", "remove": True},   # 24dB LP / ANALOG SAT: no parameters
             {"sel": "main", "attr": {"style": "height: 604px; margin-top: 12px; margin-bottom: 12px;"}},
+            # design QA 2026-10-03: displays on the left of their panels (the scope, the filter curve)
+            {"sel": "div.lcd-display:has(> div > #scopeCanvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div.lcd-display:has(> div > #filterCanvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div:has(> div > div > #filterCanvas)", "attr": {"style": "padding-right: 30px"}},   # outline inside the panel
         ],
+        # design QA 2026-10-03: a Q-Link column per panel (SAWS | FILTER | AMP ENVELOPE | PATCH; FILTER ENVELOPE |
+        # PLAYING | CHORUS | DELAY)
+        "qlinks": {
+            0: ["saw_count", "detune", "spread", "sub_level", "cutoff", "resonance", "f_amount", "-",
+                "attack", "decay", "sustain", "release", "preset", "-", "-", "-"],
+            1: ["f_attack", "f_decay", "f_sustain", "f_release", "sub_octave", "vel_sens", "bend_range", "volume",
+                "chorus_mix", "chorus_depth", "-", "-", "delay_mix", "delay_time", "delay_fback", "delay_tone"],
+        },
         "map": {"saws": "saw_count", "sub": "sub_level", "reso": "resonance", "fenv": "f_amount", "groove-attack": "attack",
                 "groove-decay": "decay", "groove-sustain": "sustain", "groove-release": "release"},
         "grid": {"tabs": ["MORE"], "tpl": None},
