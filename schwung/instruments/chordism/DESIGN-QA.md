@@ -43,4 +43,5 @@ All made in the design (convert.py MAPS) and re-converted.
 57 built-in presets, in MPC's PRESET menu (there's no PRESET control on the pages).
 
 ## Checked
-Offline test PASSED; check_skin OK; Q-Link outlines don't overlap except bank 2 of CHORD MAP touching edge to edge.
+Offline test PASSED; check_skin OK; no Q-Link outlines overlap (CHORD MAP's bank 2 had two that crossed: its CONTROL row is two groups with a gap now,
+CC / TO CUTOFF / TO MORPH with SOURCE, and TO VIBRATO / TO SHAPE / TO FM).

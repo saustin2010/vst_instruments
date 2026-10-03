@@ -26,5 +26,5 @@ Made in the design (convert.py MAPS) and re-converted.
 11 built-in + the TAL-BassLine-101 files in /sdcard/vst/hush1/presets (124 installed), all in MPC's PRESET menu.
 
 ## Checked
-Offline test PASSED; check_skin OK; Q-Link outlines don't overlap (two neighbouring groups on SOURCE meet edge to
-edge).
+Offline test PASSED; check_skin OK; no Q-Link outlines overlap (SOURCE's TRANSPOSE / FINE TUNE / WHITE NOISE moved a
+little left, clear of the FLT envelope's column: their outlines had crossed).

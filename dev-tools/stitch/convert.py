@@ -447,6 +447,8 @@ MAPS = {
                 "key-track-pointer": "key_follow", "velo-pointer": "velocity_sens", "vol-pointer": "volume"},
         "names": {"f_attack": "FLT ATTACK", "f_decay": "FLT DECAY", "f_sustain": "FLT SUSTAIN", "f_release": "FLT RELEASE"},
         "tab_order": ["MAIN", "SOURCE", "MODULATOR", "PERFORM"],
+        # design QA 2026-10-03: SOURCE's TRANSPOSE / FINE TUNE / WHITE NOISE a little left, clear of the FLT envelope's column
+        "nudge": {"transpose": [-6, 0], "fine_tune": [-14, 0], "white_noise": [-24, 0]},
         # design QA 2026-10-03: a Q-Link column per panel or part of one ("-" = an empty slot); SOURCE's SUB MODE and
         # MODULATOR's four LFO switches are touch only; PERFORM was already a column per panel
         "qlinks": {
@@ -1595,8 +1597,9 @@ MAPS = {
             # CHORD MAP: intervals and the CTRL source routing
             {"sel": "#tab-page-8 > div.p-2", "where": "replace",
              "html": '<div class="grid grid-cols-10 gap-3"><div class="col-span-3"><box>INTERVALS@row(interval_1, interval_2, '
-                     'interval_3)</div></div><div class="col-span-7"><box>CONTROL@row(ctrl_source, ctrl_cc, ctrl_to_cutoff, '
-                     'ctrl_to_morph, ctrl_to_vib, ctrl_to_shape, ctrl_to_fm)</div></div></div>'},
+                     'interval_3)</div></div><div class="col-span-7"><box>CONTROL<div class="flex" style="gap: 44px"><div '
+                     'style="flex: 4; padding-left: 16px">@row(ctrl_source, ctrl_cc, ctrl_to_cutoff, ctrl_to_morph)</div><div style="flex: 3">'
+                     '@row(ctrl_to_vib, ctrl_to_shape, ctrl_to_fm)</div></div></div></div></div>'},   # two Q-Link groups, a gap
             # ARPEGGIATOR
             {"sel": "#tab-page-9 > .h-12", "where": "replace",
              "html": "@row(arp_hold, arp_direction, arp_variation_interval, arp_clock_sync, arp_clock_division)"},

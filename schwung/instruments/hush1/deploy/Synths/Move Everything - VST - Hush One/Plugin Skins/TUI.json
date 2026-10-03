@@ -2873,7 +2873,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n13v19_b109",
+                    "key": "shKnob32_83018408_n13v19_b101",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -2953,7 +2953,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 109 125",
+                                    "bounds": "0 0 101 125",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2983,7 +2983,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "17 0 74 74",
+                                    "bounds": "13 0 74 74",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3021,7 +3021,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 71 109 20",
+                                    "bounds": "0 71 101 20",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3059,7 +3059,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 93 109 26",
+                                    "bounds": "0 93 101 26",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -3067,7 +3067,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n13v19_b104",
+                    "key": "shKnob32_83018408_n13v19_b84",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3147,7 +3147,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 104 125",
+                                    "bounds": "0 0 84 125",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3177,7 +3177,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "15 0 74 74",
+                                    "bounds": "5 0 74 74",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3215,7 +3215,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 71 104 20",
+                                    "bounds": "0 71 84 20",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3253,7 +3253,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 93 104 26",
+                                    "bounds": "0 93 84 26",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -3261,7 +3261,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n15v19_b104",
+                    "key": "shKnob32_83018408_n15v19_b110",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3341,7 +3341,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 104 125",
+                                    "bounds": "0 0 110 125",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3371,7 +3371,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "15 0 74 74",
+                                    "bounds": "18 0 74 74",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3409,7 +3409,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 71 104 20",
+                                    "bounds": "0 71 110 20",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3447,7 +3447,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 93 104 26",
+                                    "bounds": "0 93 110 26",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -3584,6 +3584,200 @@
                                                 "name": "Titillium Web",
                                                 "style": "SemiBold",
                                                 "height": 16.0
+                                            },
+                                            "colour": "fff1f3f6",
+                                            "justification": "horizontallyCentred verticallyCentred",
+                                            "case": "Original"
+                                        },
+                                        "type": "Name",
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 71 109 20",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Value",
+                                    "type": "Label",
+                                    "data": {
+                                        "version": 1,
+                                        "textStyle": {
+                                            "version": 1,
+                                            "font": {
+                                                "version": 1,
+                                                "name": "Titillium Web",
+                                                "style": "SemiBold",
+                                                "height": 19.0
+                                            },
+                                            "colour": "ffc7ccd4",
+                                            "justification": "horizontallyCentred verticallyCentred",
+                                            "case": "Upper Case"
+                                        },
+                                        "type": "Value",
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 93 109 26",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "key": "shKnob32_83018408_n13v19_b109",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "onAction": "Double Click",
+                                "handler": "Show Overlay",
+                                "handleName": "",
+                                "additionalData": "knob overlay",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "onAction": "Enter Pressed",
+                                "handler": "Show Overlay",
+                                "handleName": "",
+                                "additionalData": "knob overlay",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Focus",
+                                    "type": "Focus",
+                                    "data": {
+                                        "version": 1,
+                                        "backgroundColour": "14ffffff",
+                                        "outlineColour": "ff5d9cf2",
+                                        "backgroundInset": 2.0,
+                                        "outlineThickness": 2.0
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "WhenFocussed",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 109 125",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Knob",
+                                    "type": "Knob",
+                                    "data": {
+                                        "version": 5,
+                                        "knobType": "FilmStrip",
+                                        "filmStrip": "sh_knob_r32_83018408.png",
+                                        "numFrames": 127,
+                                        "invert": false,
+                                        "dragOrientation": "Vertical",
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "17 0 74 74",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Name",
+                                    "type": "Label",
+                                    "data": {
+                                        "version": 1,
+                                        "textStyle": {
+                                            "version": 1,
+                                            "font": {
+                                                "version": 1,
+                                                "name": "Titillium Web",
+                                                "style": "SemiBold",
+                                                "height": 13.0
                                             },
                                             "colour": "fff1f3f6",
                                             "justification": "horizontallyCentred verticallyCentred",
@@ -5420,7 +5614,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "TRANSPOSE",
-                                    "type": "shKnob32_83018408_n13v19_b109",
+                                    "type": "shKnob32_83018408_n13v19_b101",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5441,7 +5635,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "29 472 109 125",
+                                    "bounds": "27 472 101 125",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -5450,7 +5644,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FINE TUNE",
-                                    "type": "shKnob32_83018408_n13v19_b104",
+                                    "type": "shKnob32_83018408_n13v19_b84",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5471,7 +5665,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "146 472 104 125",
+                                    "bounds": "142 472 84 125",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -5480,7 +5674,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT ATTACK",
-                                    "type": "shKnob32_83018408_n15v19_b104",
+                                    "type": "shKnob32_83018408_n15v19_b110",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5501,7 +5695,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "376 472 104 125",
+                                    "bounds": "373 472 110 125",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -5891,7 +6085,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "253 495 120 70",
+                                    "bounds": "229 495 120 70",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -9079,7 +9273,7 @@
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
                     "68 145 733 308",
-                    "12 463 367 140",
+                    "6 463 349 140",
                     "357 463 489 140",
                     "848 338 429 168"
                 ],
