@@ -1,10 +1,12 @@
 # Verglas
 
-**Audio effect** · Mutable Instruments Clouds: a granular texture processor as an audio effect. · maker in MPC: Mutable Instruments · licence: MIT
+**Audio effect** · Mutable Instruments Clouds: a granular texture processor as an audio effect, with 12 presets. · maker in MPC: Mutable Instruments · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Verglas on the MPC touchscreen">
 
-Clouds (here Verglas) records the track's audio into a buffer and plays it back as grains: POSITION, SIZE, PITCH, DENSITY and TEXTURE shape the cloud, FREEZE holds the buffer, and MODE switches between granular, stretch, looper and spectral processing. DRY/WET, SPREAD, FEEDBACK and REVERB blend it, high- and low-pass filters and a lo-fi QUALITY switch colour it, and the TONE page adds a low boost and a limiter. Ambient washes, frozen pads and glitchy textures from any sound.
+Clouds (here Verglas) records the track's audio into a buffer and plays it back as grains: POSITION, SIZE, PITCH, DENSITY and TEXTURE shape the cloud, FREEZE holds the buffer, and MODE switches between granular, stretch, looper and spectral processing. DRY/WET, SPREAD, FEEDBACK and REVERB blend it, a lo-fi QUALITY switch colours it, and the TONE page adds high- and low-pass filters, a low boost and a limiter. Ambient washes, frozen pads and glitchy textures from any sound.
+
+Upstream has no presets, so the port brings 12 (Init, Grain Cloud, Shimmer, Octave Down Haze, Ambient Wash, Stretch Time, Looper Delay, Spectral Smear, Lo-Fi Grains, Stutter, Dark Tail, Warm Tape), in MPC's PRESET menu, each setting every control. Levels are evened out with a test signal through it; where a preset came out quiet, its TONE page limiter is on with a little make-up gain.
 
 ## On the MPC
 
@@ -26,13 +28,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Verglas, page VERGLAS">
 
-Q-Link columns: **1** POSITION, SIZE, PITCH, DENSITY  ·  **2** TEXTURE, MODE, FREEZE, QUALITY  ·  **3** DRY/WET, FEEDBACK, REVERB, SPREAD  ·  **4** HIGH PASS, LOW PASS
+Q-Link columns: **1** POSITION, SIZE, PITCH  ·  **2** DENSITY, TEXTURE  ·  **3** MODE, FREEZE, QUALITY  ·  **4** DRY/WET, FEEDBACK, REVERB, SPREAD
 
 ### 2. TONE
 
 <img src="screenshots/page_1.png" width="760" alt="Verglas, page TONE">
 
-Q-Link columns: **1** LOW BOOST, LOW FREQ, LOW Q, LIMITER  ·  **2** LIM DRIVE, LIM OUTPUT
+Q-Link columns: **1** LOW BOOST, LOW FREQ, LOW Q  ·  **2** LIMITER, LIM DRIVE, LIM OUTPUT  ·  **3** HIGH PASS, LOW PASS
 
 ## Install
 

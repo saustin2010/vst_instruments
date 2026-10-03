@@ -31,13 +31,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Marbles, page MARBLES">
 
-Q-Link columns: **1** T MODEL, CLOCK DIV, T BIAS, JITTER  ·  **2** GATE LEN, DEJA VU, LENGTH, T DEJA VU  ·  **3** SCALE, X DEJA VU, SPREAD, X BIAS  ·  **4** STEPS, CHANNELS
+Q-Link columns: **1** T MODEL, CLOCK DIV, T BIAS, JITTER  ·  **2** DEJA VU, LENGTH, T DEJA VU, X DEJA VU  ·  **3** SCALE, SPREAD, X BIAS, STEPS  ·  **4** CHANNELS, GATE LEN
 
 ### 2. SETUP
 
 <img src="screenshots/page_1.png" width="760" alt="Marbles, page SETUP">
 
-Q-Link columns: **1** RATE BASE, T RANGE, GATE RAND, X RANGE  ·  **2** X MODE, BASE NOTE, VELOCITY
+Q-Link columns: **1** RATE BASE, T RANGE, GATE RAND  ·  **2** X RANGE, X MODE  ·  **3** BASE NOTE, VELOCITY
 
 ## Install
 

@@ -59,6 +59,7 @@ MONO_TPL = {
     "button": '<button class="aug-btn px-3 py-1.5 text-[10px] font-mono rounded bg-amber-500 text-black font-bold" '
               'data-param="{key}">{label}</button>',
 }
+LFO_Q = ("waveform", "amplitude", "retrigger", "-", "sync", "frequency", "tempo", "-")   # Helm's LFOs: what | how fast
 MONO_SPECS = {
     "sweep": 135, "design_labels": True,
     "knob": {"item": ".rotary-dial", "unit": ".rotary-group", "label": "span", "value": "div:has(> .knob-val)"},
@@ -89,6 +90,12 @@ MAPS = {
         "get": {"preset": "preset_name"},
         "map": {"amp_a": "attack", "amp_d": "decay", "amp_s": "sustain", "amp_r": "release",
                 "flt_a": "f_attack", "flt_d": "f_decay", "flt_s": "f_sustain", "flt_r": "f_release"},
+        # design QA 2026-10-03: a Q-Link column per panel (OSCILLATOR | FILTER + MOD | OUTPUT | PROGRAM); envelope
+        # curves on the left, sliders on the right (the owner's notes)
+        "qlinks": {0: ["engine", "timbre", "color", "-", "cutoff", "resonance", "filt_env", "fm",
+                       "octave_transpose", "volume", "-", "-", "preset", "-", "-", "-"]},
+        "augment": [{"sel": "#pageEnvelopes .envelope-bank-layout", "all": True,
+                     "attr": {"style": "flex-direction: row-reverse"}}],
     },
     "moog": {
         "sweep": 135,
@@ -100,10 +107,15 @@ MAPS = {
                    "#fltEnvSvg": {"env": ["f_attack", "f_decay", "f_sustain", "f_release"], "name": "flt"}},
         "get": {"preset": "preset_name"},
         "map": {},
+        # design QA 2026-10-03: MODULATION a Q-Link column per panel, 3-2-3-1 (LFO | MOD WHEEL | PLAYING | OUTPUT; its
+        # LFO column took in half of MOD WHEEL). Moog's MAIN is the reference and stays as it is
+        "qlinks": {2: ["lfo_rate", "lfo_pitch", "lfo_filter", "-", "mod_filter", "mod_pitch", "-", "-",
+                       "glide", "bend_range", "vel_sens", "-", "volume"]},
     },
     "noisemaker": {
         # ⚠ a rerun no longer reproduces this screen (it renders 25 px lower): layout.conf has hand edits since
-        # 2026-10-03 (BANK under PATCH, a shorter scope; see its header). Re-add those after any rerun.
+        # 2026-10-03 (BANK under PATCH, a shorter scope, the design QA's Q-Links and moves; see its header). Re-add
+        # those after any rerun.
         "sweep": 140,
         "knob": {"item": ".knob-body", "unit": ".knob-unit", "label": ".knob-label", "value": ".knob-val"},
         "slider": {"item": ".slider-track", "unit": ".slider-unit", "label": ".knob-label", "value": ".knob-val"},
@@ -142,7 +154,47 @@ MAPS = {
                 "LPF CUTOFF IN": "pb_lpf_cv", "INITIAL GAIN (VCA)": "pb_vca_in", "EXT SIGNAL IN": "pb_ext_sig",
                 "RANDOM": "rnd_patch", "MUTATE": "mutate", "RESET INITIAL PATCH": "reset_patch",
                 "GATE TRIGGER (C2)": "trigger", "VCO2 SYNC": "v2_sync", "VCO2 FM": "v2_xmod",
-                "MS-10 SINGLE OSC MODE": "ms10_mode", "GENERATE PARAM RANDOM": "rnd_mod"},
+                "MS-10 SINGLE OSC MODE": "ms10_mode", "GENERATE PARAM RANDOM": "rnd_mod", "GATE": "trigger",
+                "RESET": "reset_patch"},
+        # design QA 2026-10-03 (the owner's notes): one Q-Link column per panel or row ("-" = an empty slot), patch
+        # actions in their own box, VCO selectors above their knobs, the envelope curve on the left
+        "qlinks": {
+            0: ["lpf_cut", "lpf_reso", "hpf_cut", "hpf_reso", "mg_freq", "mg_depth", "volume", "-",
+                "octave", "portamento", "master_tune", "drive", "preset", "-", "-", "-"],
+            1: ["v1_pitch", "v1_wave", "-", "-", "v1_pw", "v1_drift", "vco_mg", "-",
+                "v2_pitch", "v2_wave", "v2_sync", "v2_xmod", "v2_fine", "v2_detune", "vco_eg", "v2_drift"],
+            2: ["mix_v1", "mix_v2", "mix_sub", "mix_noise", "noise_color", "mix_esp", "mix_fb", "-",
+                "hpf_mg", "hpf_eg", "lpf_mg", "lpf_eg", "filter_mode", "filter_rev", "-", "-"],
+            3: ["e1_delay", "e1_atk", "e1_rel", "-", "e2_atk", "e2_dcy", "e2_sus", "e2_rel",
+                "e2_hold", "-", "-", "-", "mg_shape", "mg_pw", "-", "-"],
+        },
+        "augment": [
+            # MAIN: RANDOM / MUTATE / GATE / RESET together in a PATCH ACTIONS box (the VOICE panel's trigger pad goes)
+            {"sel": "#view-main div.flex.flex-col:has(> #main-gate-btn)", "remove": True},
+            {"sel": "#view-main div.flex.flex-col.gap-2:has(> div.grid > button[onclick^='randomizePatch'])", "each": [
+                '<div class="border border-[#2a2a2a] bg-[#0a0a0a] p-2 rounded"><div class="text-[10px] text-[#7c7c74] '
+                'uppercase font-mono mb-2">PATCH ACTIONS</div><div class="grid grid-cols-2 gap-2">'
+                '<button class="h-9 bg-[#1e1e1e] border border-[#3c3c3c] text-xs font-bold text-[#cfcfc8] tracking-wider uppercase rounded" onclick="randomizePatch()">RANDOM</button>'
+                '<button class="h-9 bg-[#1e1e1e] border border-[#3c3c3c] text-xs font-bold text-[#cfcfc8] tracking-wider uppercase rounded" onclick="mutatePatch()">MUTATE</button>'
+                '<button class="h-9 bg-[#1e1e1e] border border-[#3c3c3c] text-xs font-bold text-[#cfcfc8] tracking-wider uppercase rounded" id="main-gate-btn">GATE</button>'
+                '<button class="h-9 bg-[#1e1e1e] border border-[#3c3c3c] text-xs font-bold text-[#cfcfc8] tracking-wider uppercase rounded" onclick="resetDefaults()">RESET</button>'
+                '</div></div>']},
+            # VCO: selectors on top, knobs at the bottom; VCO2's SYNC / FM between (the made-up status box goes)
+            {"sel": "#view-vco > div > div:nth-child(1) > div:nth-child(2)", "remove": True},
+            {"sel": "#view-vco > div > div:nth-child(1) > div:nth-child(1)", "attr": {"style": "display: contents"}},
+            {"sel": "#view-vco div.grid:has(> [data-knob='vco1Pw'])", "attr": {"style": "margin-top: auto"}},
+            {"sel": "#view-vco > div > div:nth-child(2) > div:nth-child(1)", "attr": {"style": "display: contents"}},
+            {"sel": "#view-vco div.grid:has(> [data-knob='vco2Pitch'])", "attr": {"style": "order: 2; margin-top: auto"}},
+            {"sel": "#view-vco div.grid:has(> button[onclick^='toggleActive'])", "attr": {"style": "order: 1"}},
+            # MIXER: room between the rows, so each row's Q-Link outline stays clear of the next
+            {"sel": "#view-mixer div.grid.grid-cols-3:has(> [data-knob='espLevel'])", "attr": {"style": "margin-top: 40px"}},
+            {"sel": "#view-mixer div.grid.grid-cols-2.gap-3", "attr": {"style": "margin-top: 40px"}},
+            # ENVELOPES: the curve on the left, the knobs on the right
+            {"sel": "#view-envelopes div.col-span-4.panel-frame", "attr": {"style": "order: -1"}},
+            # MODERN: a heading over a switch with no parameter, and a doubled word
+            {"sel": "#view-modern div.grid.grid-cols-3 > div:nth-child(2)", "each": [""]},
+            {"sel": "#view-modern", "retext": [["EMULATION EMULATION MODEL", "EMULATION MODEL"]]},
+        ],
     },
     "303": {
         "augment": [{"sel": "body", "retext": [["ROLAND", "OPEN303"], ["TB-303", "ACID"]]}],   # no maker badge in the art
@@ -153,6 +205,9 @@ MAPS = {
         "canvas": {"#acidScopeCanvas": {"picture": "waveform"}},
         "map": {"WAVEFORM": "waveform", "DRIVE MODEL": "drive_model", "selectWave": "waveform",
                 "selectDriveModel": "drive_model", "DEVILFISH": "devil_mod_switch"},
+        # one Q-Link column per panel (2026-10-03, design QA): VCO | VCF | ACCENT + OUT | DRIVE ("-" = an empty slot)
+        "qlinks": {0: ["waveform", "tuning", "-", "-", "cutoff", "resonance", "env_mod", "decay", "accent", "volume", "-", "-",
+                       "drive_model", "drive", "drive_mix", "tanh_shaper_drive"]},
     },
     "hera": {
         # both pages drawn; HPF / VCF KYBD / VCF BEND / VCA LEVEL / LFO TRIG added in its markup, the cutoff-envelope
@@ -184,6 +239,7 @@ MAPS = {
                         'border-outline-variant">{opt}</button>',
         },
         "augment": [
+            {"sel": "div:has(> div > div > #knob-cutoff)", "attr": {"style": "flex-direction: row-reverse"}},   # design QA
             {"sel": "body > main", "attr": {"style": "top: 55px;"}},   # fixed under the (dropped) header: centre it
             {"sel": "div.flex-col:has(> #btn-range-4)", "attr": {"data-param": "pitch_range"}},
             {"sel": "div.flex-col:has(> #btn-pwm-man)", "attr": {"data-param": "pwm_mod"}},
@@ -198,6 +254,14 @@ MAPS = {
                 "env-depth": "vcf_env", "vcf-lfo": "vcf_lfo", "dco-lfo": "pitch_mod", "pwm-depth": "pwm_depth",
                 "lfo-rate": "lfo_rate", "lfo-delay": "lfo_delay", "pulse": "pulse_level", "saw": "saw_level",
                 "sub": "sub_level", "noise": "noise_level", "chorus-1": "chorus_i", "chorus-2": "chorus_ii"},
+        # design QA 2026-10-03: a Q-Link column per panel (VCF | ENV | MASTER | PROGRAM + CHORUS; DCO | MIXER | LFO |
+        # VCA & HPF); the VCF panel's envelope display on the left of its knobs
+        "qlinks": {
+            0: ["vcf_cutoff", "vcf_resonance", "vcf_env", "vcf_lfo", "attack", "decay", "sustain", "release",
+                "octave_transpose", "volume", "hpf", "-", "preset", "chorus_i", "chorus_ii", "-"],
+            1: ["pitch_range", "pitch_mod", "pwm_depth", "pwm_mod", "pulse_level", "saw_level", "sub_level", "noise_level",
+                "lfo_rate", "lfo_delay", "lfo_trigger", "-", "vca_type", "vcf_key", "vcf_bend", "vca_depth"],
+        },
     },
     "libpo32": {
         # all three pages drawn; EDIT's knobs/switches with no parameter go (NOISE ENV takes CUTOFF FREQ's place)
@@ -211,7 +275,7 @@ MAPS = {
         "get": {"kit": "kit_name"},
         "tpl": {
             "enum": '<div class="flex flex-col gap-2 items-center mt-8"><span class="text-label-sm text-[#c3e2d4]">{label}</span>'
-                    '<div class="aug-enum grid grid-cols-1 gap-1" data-param="{key}">{opts}</div></div>',
+                    '<div class="aug-enum grid grid-cols-3 gap-1" data-param="{key}">{opts}</div></div>',
             "opt_enum": '<button class="py-1 px-3 text-[10px] font-bold rounded bg-[#071f19] text-[#c3e2d4] border '
                         'border-[#1c4a3d]">{opt}</button>',
         },
@@ -228,7 +292,22 @@ MAPS = {
             {"sel": "#view-edit div.flex-col:has(> .knob-pot[data-param=x_drop])", "remove": True},
             {"sel": "#view-edit div.flex-col:has(> .knob-pot[data-param=x_cutoff])", "where": "replace", "html": "@enum(inst_noise_env)"},
             {"sel": "#view-tune .knob-pot", "nth": ["v%02d_%s" % (v, k) for v in range(1, 9) for k in ("freq", "dcy")]},
+            # design QA 2026-10-03: RANDOM KIT (a utility button) beside the kit display, in the KIT panel and off the
+            # Q-Links; EDIT's MOD MODE on one row (its third option sat on MOD AMOUNT)
+            {"sel": "#view-kit div.grid-cols-2 > div:has(> .po-lcd)", "attr": {"style": "display: grid; grid-template-columns: "
+             "1fr 150px; grid-template-rows: auto 1fr; column-gap: 16px; row-gap: 8px; align-items: center"}},
+            {"sel": "div:has(> .po-lcd) > div.justify-between", "attr": {"style": "grid-column: 1 / -1"}},
+            {"sel": "div.flex-col:has(> button[onclick^=randomizeAllKit])", "move": "div:has(> .po-lcd)"},
+            {"sel": "#view-edit div.grid[data-param=inst_mod_mode]", "attr": {"class": "grid grid-cols-3 gap-1"}},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel (KIT: MASTER | PADS 1-4 | PADS 5-8 | KIT, the kit last as a
+        # preset; EDIT: OSCILLATOR | MODULATION | NOISE | AMP, EDIT PAD touch only); TUNE keeps two pads a column
+        "qlinks": {
+            0: ["level", "decay", "-", "-", "v01_lvl", "v02_lvl", "v03_lvl", "v04_lvl",
+                "v05_lvl", "v06_lvl", "v07_lvl", "v08_lvl", "kit", "-", "-", "-"],
+            1: ["inst_wave", "inst_freq", "inst_dcy", "-", "inst_mod_mode", "inst_mod_amt", "-", "-",
+                "inst_noise_filt", "inst_noise", "inst_noise_env", "-", "inst_dist", "inst_level", "-", "-"],
+        },
         "map": {"master-lvl": "level", "decay-scale": "decay", **{"fader-%d" % v: "v%02d_lvl" % v for v in range(1, 9)}},
         "names": {"inst_level": "PAD LEVEL", "inst_dist": "DISTORTION"},
     },
@@ -245,11 +324,14 @@ MAPS = {
             {"sel": "#loop-btn", "attr": {"data-param": "loop"}},
             {"sel": "#track-select", "attr": {"data-param": "track"}},
         ],
+        # design QA 2026-10-03: PLAYBACK (TRACK, LOOP) | FILE, a Q-Link column each (the one column took in both
+        # panels); the file last, as a preset
+        "qlinks": {0: ["track", "loop", "-", "-", "file_index"]},
     },
     "marbles": {
         # one drawn page; its frozen MIDI OUT note readouts become the routing controls; SETUP drawn in its style
         "sweep": 135, "design_labels": True, "tabs": "#tab-marbles", "drop": ["header", "footer"], "center": False,
-        "qlinks_skip": ["t1_out", "t2_out", "t3_out"],   # 17 on the page: the routing switches stay touch-only
+        "qlinks_skip": ["t1_out", "t2_out", "t3_out"],   # the routing switches stay touch-only
         "knob": {"item": ".knob-container", "unit": "div:has(> .knob-container)", "label": "[id^=readout-], .text-mpc-ink-dim"},
         "enum": [{"item": "div:has(> .deja-t-btn), .aug-enum", "opt": "button", "label": ".text-mpc-ink-dim"},
                  {"item": "div:has(> .deja-x-btn)", "opt": "button", "dir": "v"}],   # in a header: stacked, it fits
@@ -284,9 +366,27 @@ MAPS = {
              "attr": {"class": "flex flex-row gap-16 items-center"}},   # two small knobs side by side: room for MPC's text
             {"sel": "div:has(> .deja-t-btn)", "attr": {"data-param": "t_deja_vu"}},
             {"sel": "div:has(> .deja-x-btn)", "attr": {"data-param": "x_deja_vu"}},
+            # design QA 2026-10-03: GATE LEN (the MIDI notes' length) joins MIDI OUT and X DEJA VU joins DEJA VU, so each
+            # panel is one Q-Link column; the T and X displays on the left of their panels
+            {"sel": "div.flex.items-center.gap-2:has(> #knob-gate-len)", "remove": True},
             {"sel": "div.grid.grid-cols-3:has(> .recessed-display)", "where": "replace",
-             "html": "@row(channels, t1_out, t2_out, t3_out)"},
+             "html": "@row(channels, gate_len)@row(t1_out, t2_out, t3_out)"},
+            {"sel": "div.flex-col:has(> div > .deja-t-btn)", "where": "afterend", "html":
+             '<div class="flex flex-col items-center gap-1.5" id="aug-xdv"><span class="text-label-sm font-label-sm '
+             'text-mpc-ink-dim">X DEJA VU</span></div>'},
+            {"sel": "div:has(> .deja-x-btn)", "move": "#aug-xdv", "attr": {"class": "flex flex-col gap-1 w-24"}},
+            {"sel": "div.recessed-display:has(> #rhythm-canvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div.recessed-display:has(> #gaussian-canvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div.pt-2:has(> div > #rhythm-canvas), div.pt-2:has(> div > #gaussian-canvas)", "all": True,
+             "attr": {"style": "align-items: flex-start"}},   # knobs up: their values inside the panel
+            {"sel": "section:has(#rhythm-canvas), section:has(#gaussian-canvas)", "all": True,
+             "attr": {"style": "justify-content: flex-start; gap: 14px"}},
         ],
+        "qlinks": {
+            0: ["t_model", "clock_div", "t_bias", "jitter", "deja_vu", "length", "t_deja_vu", "x_deja_vu",
+                "scale", "spread", "x_bias", "steps", "channels", "gate_len", "-", "-"],
+            1: ["rate_base", "t_range", "gate_rand", "-", "x_range", "x_mode", "-", "-", "base_note", "velocity"],
+        },
         "map": {"t-model": "t_model", "clock-div": "clock_div"},
         "grid": {"tabs": ["SETUP"], "tpl": None, "skip": ["channels", "t1_out", "t2_out", "t3_out"]},
         "tab_order": ["MARBLES", "SETUP"],
@@ -329,6 +429,8 @@ MAPS = {
             "row": '<div class="flex items-center justify-around w-full">{items}</div>',
         },
         "augment": [
+            # design QA 2026-10-03: the VCF's response-curve display on the left of its knobs
+            {"sel": "div.recessed-display:has(> #filterCanvas)", "attr": {"style": "order: -1"}},
             {"sel": "svg circle[id^=arc-]", "all": True, "remove": True},   # value arcs drawn at one value
             {"sel": ".knob-indicator", "all": True, "attr": {"style": ""}},   # turned by the knob body instead
             {"sel": "div:has(> #btn-vca-env)", "attr": {"data-param": "vca_mode"}},
@@ -345,6 +447,19 @@ MAPS = {
                 "key-track-pointer": "key_follow", "velo-pointer": "velocity_sens", "vol-pointer": "volume"},
         "names": {"f_attack": "FLT ATTACK", "f_decay": "FLT DECAY", "f_sustain": "FLT SUSTAIN", "f_release": "FLT RELEASE"},
         "tab_order": ["MAIN", "SOURCE", "MODULATOR", "PERFORM"],
+        # design QA 2026-10-03: SOURCE's TRANSPOSE / FINE TUNE / WHITE NOISE a little left, clear of the FLT envelope's column
+        "nudge": {"transpose": [-6, 0], "fine_tune": [-14, 0], "white_noise": [-24, 0]},
+        # design QA 2026-10-03: a Q-Link column per panel or part of one ("-" = an empty slot); SOURCE's SUB MODE and
+        # MODULATOR's four LFO switches are touch only; PERFORM was already a column per panel
+        "qlinks": {
+            0: ["cutoff", "resonance", "env_amt", "key_follow", "attack", "decay", "sustain", "release",
+                "vca_mode", "octave_transpose", "velocity_sens", "volume", "preset", "-", "-", "-"],
+            1: ["saw", "pulse", "sub", "noise", "transpose", "fine_tune", "white_noise", "-",
+                "f_attack", "f_decay", "f_sustain", "f_release", "pulse_width", "pwm_mode", "pwm_depth", "pwm_env_depth"],
+            2: ["lfo_rate", "lfo_waveform", "-", "-", "lfo_pitch", "lfo_filter", "lfo_pwm", "-",
+                "filter_velocity_sens", "filter_env_polarity", "filter_env_full_range", "-",
+                "filter_volume_correction", "adsr_declick", "-", "-"],
+        },
     }, grid={"tabs": ["MODULATOR", "PERFORM"], "tpl": None}),
     "mazelite": {
         # one page holds both of its tabs; the RESET choices are pop-ups (bar lengths), in place of a made-up route row
@@ -365,7 +480,19 @@ MAPS = {
             {"sel": "#s1-bits, #s2-bits", "all": True, "attr": {"style": "grid-template-columns: repeat(16, minmax(0, 1fr));"}},
             {"sel": "div:has(> button[onclick='triggerResetBoth()'])", "where": "replace", "html": "@popup(g_reset)"},
             {"sel": "section div.mt-2.bg-surface-container-low", "where": "replace", "html": "@row(s1_reset, s2_reset)"},
+            # design QA 2026-10-03: the S1 / S2 knob rows spaced out (MPC's names and values overlapped), their
+            # "PARAMS:" captions go (MPC names each knob S1 / S2 ...); no maker badge
+            {"sel": "div.space-x-5:has(> div > #knob-s1-corrupt) > span, div.space-x-5:has(> div > #knob-s2-corrupt) > span",
+             "all": True, "remove": True},
+            {"sel": "div.space-x-5:has(> div > #knob-s1-corrupt)", "attr": {"class": "flex items-center",
+                                                                          "style": "gap: 54px; padding-left: 34px"}},
+            {"sel": "div.space-x-5:has(> div > #knob-s2-corrupt)", "attr": {"class": "flex items-center",
+                                                                          "style": "gap: 54px; padding-right: 34px"}},
+            {"sel": "body", "retext": [["AKAI MPC LIVE II", "SCHWUNG MIDI FX"]]},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel or group (OUTPUT | S1 | S2 | the two RESETs)
+        "qlinks": {0: ["scale", "note_rate", "note_length", "g_reset", "s1_corrupt", "s1_cv_range", "s1_length", "trig_mix",
+                       "s2_corrupt", "s2_cv_range", "s2_length", "trig_mix_b", "s1_reset", "s2_reset", "-", "-"]},
         "map": {"param-scale": "scale", "param-rate": "note_rate", "param-len": "note_length", "s1-corrupt": "s1_corrupt",
                 "s1-range": "s1_cv_range", "s1-len": "s1_length", "s1-trig": "trig_mix", "s2-corrupt": "s2_corrupt",
                 "s2-range": "s2_cv_range", "s2-len": "s2_length", "s2-trig": "trig_mix_b",
@@ -404,6 +531,14 @@ MAPS = {
         ],
         "grid": {"tabs": ["CHOIR"], "tpl": None},
         "tab_order": ["SINGER", "CHOIR"],
+        # design QA 2026-10-03: a Q-Link column per panel, as Moog's MAIN (VOICE | ENVELOPE | EXPRESSION | SINGER;
+        # UNISON | ECHO | PRESSURE)
+        "qlinks": {
+            0: ["vowel", "head_size", "aspiration", "level", "attack", "decay", "sustain", "release",
+                "glide", "vibrato", "vibrato_rate", "bend_range", "preset", "-", "-", "-"],
+            1: ["unison", "unison_detune", "unison_spread", "-", "delay", "delay_rate", "-", "-",
+                "pressure_routing", "pressure_depth", "-", "-"],
+        },
     },
     "mrdrums": {
         # KIT from the design; its pad buttons (MPC has real pads) become the EDIT PAD stepper, its PUNCH/CRISP/CLIP and
@@ -442,11 +577,23 @@ MAPS = {
             {"sel": "div.grid.grid-cols-4:has(> .mpc-pad-btn)", "where": "replace", "html":
              '<div class="aug-stepper mpc-well rounded h-24 flex items-center justify-center" data-param="ui_current_pad">'
              '<span class="font-label-lg text-label-lg text-secondary">EDIT PAD</span></div>'},
+            # design QA 2026-10-03: AUTO SELECT from the header's corner to above EDIT PAD (its outline left the panel)
+            {"sel": "div:has(> #toggle-autoselect)", "move": "div.aug-stepper[data-param=ui_current_pad]", "where": "beforebegin",
+             "attr": {"style": "align-self: center"}},
             {"sel": "div.justify-around:has(#knob-drive)", "where": "replace", "html":
              '<div class="flex items-center justify-around bg-surface-container-high border border-outline-variant rounded p-2 '
              'h-24">@knob(g_rand_loop_steps)</div>'},
         ],
         "map": {"vol": "g_master_vol", "poly": "g_polyphony", "jitter": "g_humanize_ms", "autoselect": "ui_auto_select_pad"},
+        # design QA 2026-10-03: a Q-Link column per panel (KIT: MASTER | 16-PAD MATRIX | RAND LOOP | KIT, the kit last as
+        # a preset; PAD: PAD | SOUND | PLAYBACK | RANDOM, PAD MODE / CHOKE moved in with the envelope, layout.grid.conf)
+        "qlinks": {
+            0: ["g_master_vol", "g_polyphony", "g_vel_curve", "g_humanize_ms", "ui_current_pad", "ui_auto_select_pad", "-", "-",
+                "g_rand_loop_steps", "-", "-", "-", "kit", "-", "-", "-"],
+            1: ["ui_current_pad", "-", "-", "-", "pad_vol", "pad_pan", "pad_tune", "pad_start",
+                "pad_mode", "pad_choke_group", "pad_attack_ms", "pad_decay_ms",
+                "pad_rand_vol_amt", "pad_rand_pan_amt", "pad_rand_decay_amt", "pad_chance_pct"],
+        },
         "grid": {"tabs": ["PAD"], "tpl": None, "skip": ["g_rand_loop_steps"]},
         "tab_order": ["KIT", "PAD"],
     },
@@ -481,13 +628,59 @@ MAPS = {
             "toggle": '<div class="flex flex-col items-center"><span class="font-label-sm text-label-sm text-[#d4c4b0] mb-1">{label}'
                       '</span><button class="aug-toggle py-1 px-3 font-label-md rounded bg-[#1e1a2b] text-[#93ee5a]" '
                       'data-param="{key}">OFF</button></div>',
+            # the plan's logo plate (VOICE's empty half): a wordmark in the design's type
+            "art": '<section class="panel-bezel rounded-md absolute flex flex-col items-center justify-center" style="left:{x}px; '
+                   'top:{y}px; width:{w}px; height:{h}px;"><div class="font-headline-sm font-bold text-[#93ee5a] tracking-[0.3em]" '
+                   'style="font-size: 56px; text-shadow: 0 0 18px rgba(147,238,90,.35);">MR HYDE</div><div class="font-label-sm '
+                   'text-label-sm text-[#d4c4b0] mt-3 tracking-widest">PLAITS ENGINE // MODULATION MATRIX</div></section>',
         },
         "augment": [
             {"sel": ".knob-arc", "all": True, "remove": True},
             {"sel": ".knob-indicator", "all": True, "attr": {"style": ""}},   # the core turns instead
             {"sel": "div:has(> .filter-mode-btn)", "attr": {"data-param": "filter_mode"}},
             {"sel": "#model-select", "attr": {"data-param": "model"}},
+            # design QA 2026-10-03: MAIN in four panels, a Q-Link column each (it had five, and the 14 controls ran
+            # across them): PLAITS ENGINE (the scope on the left, MODEL, FM AMOUNT, AUX MIX) | OSCILLATOR (PITCH,
+            # HARMONICS, TIMBRE, MORPH) / FILTER | LPG / OUTPUT (the MASTER OUT knobs join the LPG's)
+            {"sel": "main > section:has(#model-select)", "attr": {"id": "aug-engine", "style": "grid-column: span 6 / span 6; order: 1"}},
+            {"sel": "main > section:has([data-id=fm_amount])", "attr": {"id": "aug-osc", "style": "grid-column: span 6 / span 6; order: 2"}},
+            {"sel": "main > section:has(.filter-mode-btn)", "attr": {"style": "order: 3"}},
+            {"sel": "main > section:has([data-id=lpg_decay])", "attr": {"id": "aug-out", "style": "grid-column: span 6 / span 6; order: 4"}},
+            {"sel": "main > section:has([data-id=volume])", "attr": {"id": "aug-master"}},
+            {"sel": "#aug-osc > div:last-child", "remove": True},   # "INTERNAL LINEAR FM MOD"
+            {"sel": "#aug-osc div.grid-cols-2", "move": "#aug-engine div.grid-cols-12", "attr": {"class": "col-span-5 grid grid-cols-2 gap-2"}},
+            {"sel": "#aug-engine div.grid-cols-4", "move": "#aug-osc", "attr": {"class": "grid grid-cols-4 gap-2 my-auto"}},
+            {"sel": "#aug-engine div:has(> #osc-scope)", "attr": {"style": "grid-column: span 7 / span 7"}},
+            {"sel": "#aug-master .knob-control", "all": True, "move": "#aug-out div.grid-cols-2"},
+            {"sel": "#aug-out div.grid-cols-2", "attr": {"class": "grid grid-cols-4 gap-2 my-auto"}},
+            {"sel": "#aug-master", "remove": True},
+            {"sel": "#aug-engine h2", "text": "PLAITS ENGINE"},
+            {"sel": "#aug-osc h2", "text": "OSCILLATOR"},
+            {"sel": "#aug-out h2", "text": "LPG / OUTPUT"},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel; rows of six split 3 + 3 (4 + 3 with ASSIGN's target), and
+        # the generated pages' panels regrouped to match (layout.grid.conf)
+        "qlinks": {
+            0: ["model", "fm_amount", "aux_mix", "-", "pitch", "harmonics", "timbre", "morph",
+                "filter_mode", "filter_cutoff", "filter_resonance", "-", "lpg_decay", "lpg_color", "volume", "pan"],
+            1: ["lfo_shape", "lfo_rate", "lfo_phase", "lfo_rate_mode", "velocity_curve", "poly_aftertouch_curve", "-", "-",
+                "env_attack_ms", "env_decay_ms", "env_sustain", "env_release_ms", "lfo_retrig", "env_retrig", "-", "-"],
+            2: ["cycle_attack_ms", "cycle_decay_ms", "cycle_shape", "-", "cycle_sync", "cycle_retrig", "cycle_bipolar", "-",
+                "random_mode", "random_rate", "random_slew", "-", "random_rate_mode", "random_retrig", "-", "-"],
+            3: ["assign1_target", "assign1_mod_lfo_amt", "assign1_mod_env_amt", "assign1_mod_cycle_env_amt",
+                "assign1_mod_random_amt", "assign1_mod_velocity_amt", "assign1_mod_poly_aftertouch_amt", "-",
+                "assign2_target", "assign2_mod_lfo_amt", "assign2_mod_env_amt", "assign2_mod_cycle_env_amt",
+                "assign2_mod_random_amt", "assign2_mod_velocity_amt", "assign2_mod_poly_aftertouch_amt", "-"],
+            4: ["pitch_mod_lfo_amt", "pitch_mod_env_amt", "pitch_mod_cycle_env_amt", "-",
+                "pitch_mod_random_amt", "pitch_mod_velocity_amt", "pitch_mod_poly_aftertouch_amt", "-",
+                "harmonics_mod_lfo_amt", "harmonics_mod_env_amt", "harmonics_mod_cycle_env_amt", "-",
+                "harmonics_mod_random_amt", "harmonics_mod_velocity_amt", "harmonics_mod_poly_aftertouch_amt", "-"],
+            5: ["timbre_mod_lfo_amt", "timbre_mod_env_amt", "timbre_mod_cycle_env_amt", "-",
+                "timbre_mod_random_amt", "timbre_mod_velocity_amt", "timbre_mod_poly_aftertouch_amt", "-",
+                "cutoff_mod_lfo_amt", "cutoff_mod_env_amt", "cutoff_mod_cycle_env_amt", "-",
+                "cutoff_mod_random_amt", "cutoff_mod_velocity_amt", "cutoff_mod_poly_aftertouch_amt", "-"],
+            6: ["voice_mode", "polyphony", "glide_ms", "-", "unison", "detune", "spread", "-"],
+        },
         "grid": {"tabs": ["LFO ENV", "CYC RAND", "ASSIGN", "PITCH HARM", "TIMB CUT", "VOICE"], "tpl": None},
         "tab_order": ["MAIN", "LFO ENV", "CYC RAND", "ASSIGN", "PITCH HARM", "TIMB CUT", "VOICE"],
     },
@@ -512,12 +705,29 @@ MAPS = {
                     'origin-bottom shadow-[0_0_8px_#4fe6ff]" style="bottom: 50%;"></div><div class="w-6 h-6 rounded-full '
                     'bg-[#110f1c] border border-[#4fe6ff]/40 flex items-center justify-center z-10 shadow"><span class="w-1.5 h-1.5 '
                     'rounded-full bg-[#4fe6ff]"></span></div></div></div>',
+            # the plan's logo plate (MORE's empty corner): a wordmark in the design's type
+            "art": '<section class="absolute rounded border border-[#2f2a52] bg-[#110f1c] flex flex-col items-center justify-center" '
+                   'style="left:{x}px; top:{y}px; width:{w}px; height:{h}px;"><div class="text-headline-md font-headline-md '
+                   'font-bold text-[#4fe6ff] tracking-[0.25em] glow-cyan" style="font-size: 40px;">NUSAW</div><div '
+                   'class="text-label-sm font-label-sm text-on-surface-variant mt-2 tracking-widest">SUPERSAW SYNTH</div></section>',
         },
         "augment": [
             {"sel": "circle[id^=arc-]", "all": True, "remove": True},
             {"sel": "div.flex.items-center.gap-2:has(> button + span)", "remove": True},   # 24dB LP / ANALOG SAT: no parameters
             {"sel": "main", "attr": {"style": "height: 604px; margin-top: 12px; margin-bottom: 12px;"}},
+            # design QA 2026-10-03: displays on the left of their panels (the scope, the filter curve)
+            {"sel": "div.lcd-display:has(> div > #scopeCanvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div.lcd-display:has(> div > #filterCanvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div:has(> div > div > #filterCanvas)", "attr": {"style": "padding-right: 30px"}},   # outline inside the panel
         ],
+        # design QA 2026-10-03: a Q-Link column per panel (SAWS | FILTER | AMP ENVELOPE | PATCH; FILTER ENVELOPE |
+        # PLAYING | CHORUS | DELAY)
+        "qlinks": {
+            0: ["saw_count", "detune", "spread", "sub_level", "cutoff", "resonance", "f_amount", "-",
+                "attack", "decay", "sustain", "release", "preset", "-", "-", "-"],
+            1: ["f_attack", "f_decay", "f_sustain", "f_release", "sub_octave", "vel_sens", "bend_range", "volume",
+                "chorus_mix", "chorus_depth", "-", "-", "delay_mix", "delay_time", "delay_fback", "delay_tone"],
+        },
         "map": {"saws": "saw_count", "sub": "sub_level", "reso": "resonance", "fenv": "f_amount", "groove-attack": "attack",
                 "groove-decay": "decay", "groove-sustain": "sustain", "groove-release": "release"},
         "grid": {"tabs": ["MORE"], "tpl": None},
@@ -532,9 +742,21 @@ MAPS = {
         "enum": {"item": "div:has(> .legato-btn), .aug-enum", "opt": "button", "label": "span"},
         "stepper": [{"item": "div:has(> div.recessed-well #preset-title)", "key": "preset"}, {"item": ".aug-stepper"}],
         "get": {"preset": "preset_name", "bank_index": "bank_name"},
-        # BANK (2026-10-03) went last so MAIN's Q-Link columns stayed where they were
-        "qlinks": {0: ["preset", "volume", "tune", "voice_count", "unison_det", "unison", "as_played", "legato", "portamento",
-                       "bend_range", "bend_osc2", "bank_index"]},
+        # design QA 2026-10-03: a Q-Link column per panel (MASTER | VOICE | GLIDE, LEGATO, BEND | PATCH + BANK; LEGATO
+        # moved into GLIDE // BEND); on the other pages OSC2 SYNC joined OSC MOD, MULTIMODE FILTER MODE and ENV INVERT
+        # the filter envelope (layout.grid.conf); LFO SYNC is touch only (15 controls on MODULATION)
+        "qlinks": {
+            0: ["volume", "tune", "-", "-", "voice_count", "unison_det", "unison", "as_played",
+                "portamento", "legato", "bend_range", "bend_osc2", "preset", "bank_index", "-", "-"],
+            1: ["osc1_pitch", "osc1_saw", "osc1_pulse", "-", "osc2_pitch", "osc2_detune", "osc2_saw", "osc2_pulse",
+                "pw", "pw_ofs", "pw_env", "pw_env_both", "xmod", "brightness", "osc2_sync", "osc_quantize"],
+            2: ["osc1_mix", "osc2_mix", "noise", "-", "cutoff", "resonance", "filter_env", "key_follow",
+                "multimode", "bandpass", "fourpole", "self_osc", "filter_var", "porta_var", "env_var", "level_var"],
+            3: ["f_attack", "f_decay", "f_sustain", "f_release", "vel_filter", "fenv_inv", "-", "-",
+                "attack", "decay", "sustain", "release", "vel_amp", "-", "-", "-"],
+            4: ["lfo_rate", "lfo_sin", "lfo_square", "lfo_sh", "env_pitch", "env_pitch_both", "vibrato", "-",
+                "lfo_amt1", "lfo_osc1", "lfo_osc2", "lfo_filter", "lfo_amt2", "lfo_pw1", "lfo_pw2", "-"],
+        },
         "tpl": {
             "frame": '<section class="absolute bg-ob-panel border border-ob-line rounded p-2.5 flex flex-col shadow-lg" style="left:{x}px; '
                      'top:{y}px; width:{w}px; height:{h}px;"><div class="flex items-center justify-between border-b border-[#2d2f34] '
@@ -570,6 +792,15 @@ MAPS = {
              'tracking-widest w-10">BANK</span><div class="aug-stepper flex-1 h-10 bg-ob-display-bg border border-[#48110b] '
              'rounded recessed-well crt-grid" data-param="bank_index"></div></div>'},
             {"sel": "div:has(> #scopeCanvas)", "attr": {"style": "height:80px"}},
+            # design QA 2026-10-03: LEGATO MODE into GLIDE // BEND (the bottom row now 6 + 6 columns, as the top); the
+            # made-up OUTPUT PEAK meter goes
+            {"sel": "div.recessed-well:has(> div > div > .meter-bar)", "remove": True},
+            {"sel": "section:has([data-param=voice_count])", "attr": {"style": "grid-column: span 6 / span 6"}},
+            {"sel": "section:has([data-param=glide_rate])", "attr": {"style": "grid-column: span 6 / span 6"}},
+            {"sel": "div.col-span-4:has(> div > .legato-btn)", "move": "div.flex-col:has(> div > div[data-param=glide_rate])",
+             "where": "afterend", "attr": {"class": "flex flex-col justify-center px-1"}},
+            {"sel": "section:has([data-param=voice_count]) div.col-span-5", "attr": {"class": "col-span-7 flex items-center justify-around border-r border-[#2d2f34] pr-2"}},
+            {"sel": "div:has(> #toggle-unison)", "attr": {"class": "col-span-5 flex flex-col items-center gap-12"}},
         ],
         "map": {"master_vol": "volume", "master_tune": "tune", "voice_spread": "unison_det", "glide_rate": "portamento",
                 "asplayed": "as_played"},
@@ -583,8 +814,13 @@ MAPS = {
         "toggle": {"item": "#toggle-birth-note", "label": "span"},
         "button": {"item": "#btn-randomize, #btn-killall", "selfLabel": True},
         "augment": [{"sel": ".knob-arc", "all": True, "remove": True},
-                    {"sel": "div:has(> #btn-randomize)", "attr": {"class": "flex flex-col items-center gap-3 py-1"}}],
+                    {"sel": "div:has(> #btn-randomize)", "attr": {"class": "flex flex-col items-center gap-3 py-1"}},
+                    # design QA 2026-10-03: the WALKERS row inside its panel (its outline reached into MIDI OUT)
+                    {"sel": "div.justify-between:has(> div > #toggle-birth-note)", "attr": {"style": "padding-left: 40px; padding-right: 46px"}}],
         "nudge": {"birth_note": [12, 0]},   # its touch box reached past the left edge
+        # design QA 2026-10-03: WALKERS | WORLD DYNAMICS, a Q-Link column each; RANDOMIZE and KILL ALL (the ACTIONS
+        # box's buttons) touch only, as Aphex's: turning a knob fired them
+        "qlinks": {0: ["birth_note", "birth_level", "hit_level", "hit_decay", "bounce", "hardness", "tombola", "-"]},
         "map": {"birthLevel": "birth_level", "hitLevel": "hit_level", "hitDecay": "hit_decay", "birth-note": "birth_note",
                 "killall": "kill_all"},
     },
@@ -615,7 +851,21 @@ MAPS = {
             {"sel": "circle.val", "all": True, "remove": True},   # value arcs drawn at one value
             {"sel": ".val-text", "all": True, "remove": True},    # a value written on the cap would turn with it
             {"sel": "div.grid:has(> #btnPrevModel)", "remove": True},
+            # design QA 2026-10-03: four panels, a Q-Link column each: OCTAVE joins MODEL, AUX MIX joins MODULATION and
+            # the OUTPUT panel goes; MODEL's made-up footer ("16 ALGORITHMS", a pitch readout) goes
+            {"sel": "section:has(#modelName) > div.border-t", "remove": True},
+            {"sel": "div.flex-col:has(> [data-key=octave_transpose])", "move": "section:has(#modelName) > div.flex-1"},
+            {"sel": "div.flex-col:has(> [data-key=aux_mix])", "move": "section:has([data-key=fm_amount]) div.grid-cols-3"},
+            {"sel": "section:has([data-key=fm_amount]) div.grid-cols-3", "attr": {"class": "flex-1 grid grid-cols-4 gap-2 items-center"}},
+            {"sel": "section:has([data-key=fm_amount]) span.text-xs", "text": "\u25a0 MODULATION / AUX"},
+            {"sel": "section:has([data-key=fm_amount])", "attr": {"style": "grid-column: span 7 / span 7"}},
+            {"sel": "section:has(> div > span.text-xs):not(:has(.rotary-knob)):not(:has(#modelName))", "remove": True},
         ],
+        "qlinks": {
+            0: ["engine", "octave_transpose", "-", "-", "harmonics", "timbre", "morph", "-",
+                "decay", "lpg_colour", "attack", "-", "fm_amount", "timbre_mod", "morph_mod", "aux_mix"],
+            1: ["fm_preset_index", "-", "-", "-", "legato", "velocity_sensitivity", "volume", "-"],   # VOLUME added 2026-10-04
+        },
         "grid": {"tabs": ["PLAY"], "tpl": None},
         "tab_order": ["PLAITS", "PLAY"],
     },
@@ -651,7 +901,32 @@ MAPS = {
             {"sel": "div:has(> span + button + button + button)", "nth": ["range_a", "range_b"]},
             {"sel": "button.tactile-btn", "nth": ["cycle_a", "trig_a", "cycle_b", "trig_b"]},
             {"sel": "div[class*='w-[44px]']", "attr": {"data-param": "audio"}},
+            # design QA 2026-10-03: the channel scopes on the left; CHANNEL A / LOGIC / CHANNEL B CONTROLS as one
+            # CYCLE / TRIGGER / BALANCE panel (a Q-Link column: CYCLE A, BALANCE, CYCLE B; the TRIG buttons touch only);
+            # the made-up output meters go
+            {"sel": "div.col-span-4.scope-well", "all": True, "attr": {"class": "col-span-4 h-[150px] scope-well rounded-[2px] p-2 "
+             "flex flex-col justify-between relative overflow-hidden", "style": "order: -1"}},
+            {"sel": "div.col-span-2.border-r", "all": True, "attr": {"class": "col-span-2 flex flex-col items-center justify-center"}},
+            {"sel": "div.grid-cols-12:has(> div.scope-well)", "all": True, "attr": {"style": "padding-right: 26px"}},   # outlines inside
+            {"sel": "section.grid-cols-12 > div.col-span-3:has(button[data-param=cycle_a])",
+             "attr": {"id": "aug-cc", "style": "grid-column: span 8 / span 8"}},
+            {"sel": "section.grid-cols-12 > div.col-span-3:has(button[data-param=cycle_b])", "attr": {"id": "aug-ccb"}},
+            {"sel": "section.grid-cols-12 > div.col-span-2 > div.flex-col", "move": "#aug-cc > div.justify-around"},
+            {"sel": "#aug-ccb div.justify-around > div", "all": True, "move": "#aug-cc > div.justify-around"},
+            {"sel": "#aug-cc div.justify-around > div:has(> button[data-param=trig_a])", "move": "#aug-cc > div.justify-around",
+             "where": "afterbegin"},   # TRIG A | CYCLE A, BALANCE, CYCLE B | TRIG B: the column's outline leaves the triggers out
+            {"sel": "section.grid-cols-12 > div.col-span-2", "remove": True},
+            {"sel": "#aug-ccb", "remove": True},
+            {"sel": "#aug-cc span.font-label-md", "text": "CYCLE / TRIGGER / BALANCE"},
+            {"sel": "div.col-span-5 > div.justify-around:has(div.flex-col-reverse)", "remove": True},
         ],
+        "qlinks": {
+            0: ["range_a", "rise_a", "fall_a", "shape_a", "range_b", "rise_b", "fall_b", "shape_b",
+                "cycle_a", "balance", "cycle_b", "-", "audio", "volume", "-", "-"],
+            # MIDI: NOTES IN | CC OUT / CC RANGE | END OF CYCLE (CC OUT's five split in two; the empty MIDI OUT panel used)
+            1: ["mode_a", "mode_b", "keytrack_a", "keytrack_b", "cc_channel", "cc_a", "cc_b", "-", "cc_min", "cc_max", "-", "-",
+                "eoc_notes", "eoc_note_a", "eoc_note_b", "-"],
+        },
         "map": {"RISE": ["rise_a", "rise_b"], "FALL": ["fall_a", "fall_b"], "SHAPE": ["shape_a", "shape_b"]},
         "grid": {"tabs": ["MIDI"], "tpl": None},
         "tab_order": ["RAMPAGE", "MIDI"],
@@ -670,7 +945,20 @@ MAPS = {
             {"sel": "div.w-full.h-11", "attr": {"data-param": "model"}},
             {"sel": "div[class*='w-[134px]']", "attr": {"data-param": "synth_fx"}},
             {"sel": "div.grid.grid-cols-3:has(> button)", "attr": {"data-param": "polyphony"}},
+            # design QA 2026-10-03: MODEL's display on the left, its controls on the right; OUTPUT's made-up peak meter goes
+            {"sel": "div:has(> div > div > div.w-full.h-11)", "attr": {"class": "flex h-[195px] items-stretch pt-1 gap-2",
+                                                                      "style": "padding-right: 14px"}},
+            {"sel": "div:has(> div > div > div.w-full.h-11) > div.recessed-well", "attr": {"style": "order: -1"}},
+            {"sel": "div:has(> div > div > div.w-full.h-11) > div.recessed-well > div.border-t", "remove": True},   # made-up readouts
+            {"sel": "div:has(> div > div > div.w-full.h-11) > div.recessed-well span.text-primary", "remove": True},
+            {"sel": "div.recessed-well:has(> div > div > div.rounded-xs)", "remove": True},
+            {"sel": "section[class*='w-[310px]'] > div.justify-between:not(.border-b)", "attr": {"style": "justify-content: center"}},
+            {"sel": "section[class*='w-[310px]'] div.space-x-3", "attr": {"class": "flex gap-10"}},
+            {"sel": "div:has(> div[class*='w-[134px]'])", "attr": {"style": "margin-right: 26px"}},   # outline inside PLAYING
         ],
+        # design QA 2026-10-03: a Q-Link column per panel (MODEL | RESONATOR | PLAYING | OUTPUT)
+        "qlinks": {0: ["model", "polyphony", "-", "-", "structure", "brightness", "damping", "position",
+                       "velocity", "octave", "bend_range", "synth_fx", "width", "volume", "-", "-"]},
     },
     "ringsfx": {
         # one page, every control drawn
@@ -684,11 +972,15 @@ MAPS = {
             {"sel": ".knob-shadow span", "all": True, "remove": True},   # captions on the caps would turn with them
             {"sel": "div.cursor-pointer:has(> div > span.block)", "attr": {"data-param": "model"}},
             {"sel": "div.flex-col:has(> button > span + span.rounded-full)", "attr": {"data-param": "polyphony"}},
+            {"sel": "div.recessed-well:has(> div > div.flex-col-reverse)", "remove": True},   # a made-up peak meter (2026-10-03)
         ],
         "map": {"Q03: STRUCT": "structure", "Q04: BRIGHT": "brightness", "Q05: DAMP": "damping", "Q06: POS": "position",
                 "Q07: NOTE": "note", "Q08: FINE": "fine", "Q09: INPUT": "input_gain", "Q10: MIX": "mix", "Q11: WIDTH": "width",
                 "Q12: VOL": "volume"},
         "design_labels": False,   # its first labels are Q-Link hints
+        # design QA 2026-10-03: a Q-Link column per panel (MODEL | RESONATOR | PITCH / TUNING | INPUT & OUTPUT)
+        "qlinks": {0: ["model", "polyphony", "-", "-", "structure", "brightness", "damping", "position",
+                       "note", "fine", "-", "-", "input_gain", "mix", "width", "volume"]},
     },
     "superarp": {
         # MAIN from the design; PATTERN and MODIFY drawn in its style
@@ -730,7 +1022,22 @@ MAPS = {
             {"sel": "button[class*='h-[50px]']", "nth": ["triplet", "latch"]},
             {"sel": "div[class*='w-[134px]']", "attr": {"data-param": "octave_range"}},
             {"sel": "section.chassis-screws", "all": True, "attr": {"style": "overflow: hidden;"}},   # its event stream spills
+            # design QA 2026-10-03: the event stream on the left of the top row, CLOCK & TIMING on the right
+            {"sel": "section.chassis-screws:has(> div > span + span):nth-of-type(2), section.col-span-6:nth-of-type(2)",
+             "attr": {"style": "overflow: hidden; order: -1"}},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel or group (MAIN: CLOCK | LATCH + OCTAVES | the four feel knobs;
+        # PATTERN: MODE + PATTERN | the progression's trigger / missing note / seed | RHYTHM | RANDOM PATTERN; MODIFY: the
+        # modifiers' two fours | RANDOM OCTAVE | RANDOM NOTE)
+        "qlinks": {
+            0: ["sync", "rate", "triplet", "bpm", "latch", "octave_range", "-", "-", "gate", "velocity", "swing", "max_voices"],
+            1: ["progression_mode", "pattern_preset", "-", "-", "progression_trigger", "missing_note_policy", "progression_seed",
+                "-", "rhythm_preset", "rhythm_trigger", "-", "-", "random_pattern_length", "random_pattern_chords",
+                "random_pattern_chord_seed", "-"],
+            2: ["modifier_loop_length", "modifier_trigger", "drop_amount", "drop_seed", "velocity_random_amount",
+                "velocity_seed", "gate_random_amount", "gate_seed", "random_octave_amount", "random_octave_range",
+                "random_octave_seed", "-", "random_note_amount", "random_note_seed", "-", "-"],
+        },
         "map": {"TEMPO (BPM)": "bpm"},
         "grid": {"tabs": ["PATTERN", "MODIFY"], "tpl": None},
         "tab_order": ["MAIN", "PATTERN", "MODIFY"],
@@ -769,11 +1076,31 @@ MAPS = {
                       '</span><button class="aug-toggle h-8 px-4 bg-[#09221f] border border-[#21504b] rounded" data-param="{key}">'
                       '</button></div>',
             "stepper": '<div class="aug-stepper recessed-display rounded" style="width:{w}px; height:56px;" data-param="{key}"></div>',
+            # the plan's logo plates (empty corners): a wordmark in the design's type
+            "art": '<section class="module-card absolute rounded flex flex-col items-center justify-center" style="left:{x}px; '
+                   'top:{y}px; width:{w}px; height:{h}px;"><div class="text-label-lg font-label-lg font-bold text-[#5ff0cf] '
+                   'tracking-[0.3em]" style="font-size: 38px; text-shadow: 0 0 14px rgba(95,240,207,.45);">TABLOR</div><div '
+                   'class="text-label-sm font-label-sm text-[#bfe9e2] mt-2 tracking-widest">DUAL WAVETABLE SYNTH</div></section>',
         },
         "augment": [
             {"sel": "svg.-rotate-90 circle:nth-child(2)", "all": True, "remove": True},
             {"sel": "div[class*='h-[42px]']", "nth": ["wt1_select", "wt2_select"]},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel or group: each oscillator's TABLE, then its knobs; the
+        # generated pages' panels regrouped to match (layout.grid.conf)
+        "qlinks": {
+            0: ["wt1_select", "-", "-", "-", "wt1_pos", "wt1_level", "wt1_tune", "wt1_uni",
+                "wt2_select", "-", "-", "-", "wt2_pos", "wt2_level", "wt2_tune", "wt2_uni"],
+            1: ["flt_freq", "flt_res", "flt_type", "-", "flt_env", "flt_key", "flt_vel", "-",
+                "sub_level", "sub_wave", "sub_tune", "-", "noise_level", "noise_type", "-", "-"],
+            2: ["wt1_detune", "wt1_spread", "wt1_pan", "-", "wt2_detune", "wt2_spread", "wt2_pan", "-",
+                "wt1_bend", "wt1_formant", "-", "-", "wt2_bend", "wt2_formant", "-", "-"],
+            3: ["vca_a", "vca_d", "vca_s", "vca_r", "vca_vel", "-", "-", "-", "flt_a", "flt_d", "flt_s", "flt_r"],
+            4: ["me1_a", "me1_d", "me1_s", "me1_r", "me1_dst", "me1_amt", "-", "-",
+                "me2_a", "me2_d", "me2_s", "me2_r", "me2_dst", "me2_amt", "-", "-"],
+            5: ["voice_mode", "voices", "legato", "-", "glide", "glide_mode", "-", "-", "pb_range", "volume", "-", "-",
+                "preset"],   # the factory presets (2026-10-04)
+        },
         "grid": {"tabs": ["FILTER", "SHAPE", "ENVELOPES", "MOD ENVS", "VOICE"], "tpl": None},
         "tab_order": ["MAIN", "FILTER", "SHAPE", "ENVELOPES", "MOD ENVS", "VOICE"],
     },
@@ -805,8 +1132,20 @@ MAPS = {
             {"sel": "div:has(> .mode-btn)", "attr": {"data-param": "mode"}},
             {"sel": "div:has(> .quality-btn)", "attr": {"data-param": "quality"}},
             {"sel": "#freeze-toggle-btn", "attr": {"data-param": "freeze"}},
-            {"sel": "div:has(> #particle-cloud-canvas)", "attr": {"style": "height: 100px; flex: none;"}},   # knobs up: room for values
+            {"sel": "div:has(> #particle-cloud-canvas)", "attr": {"style": "height: 70px; flex: none;"}},   # knobs up: room for values (outlines inside the panel)
+            # design QA 2026-10-03: GRAIN's five knobs as POSITION / SIZE / PITCH and DENSITY / TEXTURE (two Q-Link columns,
+            # with a gap); COLOR FILTER moved to TONE (layout.grid.conf), BLEND takes its room
+            {"sel": "div.grid-cols-5:has(#knob-texture)", "attr": {"style": "grid-template-columns: repeat(3, 1fr) 0.6fr repeat(2, 1fr); padding-bottom: 34px"}},
+            {"sel": ".knob-container:has(#knob-density)", "where": "beforebegin", "html": "<div></div>"},
+            {"sel": "div.col-span-3.milled-panel:has(.knob-body)", "remove": True},
+            {"sel": "div.col-span-6.milled-panel", "attr": {"style": "grid-column: span 9 / span 9"}},
+            {"sel": "div.col-span-6.milled-panel div.grid-cols-4", "attr": {"style": "padding-bottom: 28px"}},
         ],
+        "qlinks": {
+            0: ["position", "size", "pitch", "-", "density", "texture", "-", "-", "mode", "freeze", "quality", "-",
+                "dry_wet", "feedback", "reverb", "stereo_spread"],
+            1: ["low_boost", "low_freq", "low_q", "-", "limiter_on", "limiter_pre", "limiter_post", "-", "filter_hp", "filter_lp"],
+        },
         "grid": {"tabs": ["TONE"], "tpl": None},
         "tab_order": ["VERGLAS", "TONE"],
     },
@@ -824,11 +1163,16 @@ MAPS = {
             {"sel": "div:has(> #btn-mode-meta)", "attr": {"data-param": "mode"}},
             {"sel": "#carrier-selector", "attr": {"data-param": "carrier"}},
             {"sel": "#output-selector", "attr": {"data-param": "output"}},
+            {"sel": "div.col-span-2:has(#meter-l)", "attr": {"style": "visibility: hidden"}},
         ],
         "option_labels": {"mode": ["META MOD", "FREQ"]},
-        "nowrap": ["carrier"], "nudge": {"carrier": [-40, 0], "output": [-50, 0]},
+        "nowrap": ["carrier"], "nudge": {"carrier": [-40, 0], "output": [-50, 28]},
         "map": {"needle-lvl2": "level_2"},
         "names": {"level_2": "MOD LEVEL"},   # (its first caption is a "SIG" light)
+        # design QA 2026-10-03: a Q-Link column per panel (MODULATION | CARRIER | INPUT | OUTPUT; INPUT's MOD LEVEL had
+        # shared OUTPUT's column); OUTPUT's made-up meters go
+        "qlinks": {0: ["mode", "algorithm", "timbre", "shift", "carrier", "note", "fine", "level_1",
+                       "level_2", "-", "-", "-", "output", "mix", "volume", "-"]},
     },
     "wurl": {
         # one page, every control drawn (its other tab buttons lead nowhere)
@@ -836,6 +1180,22 @@ MAPS = {
         "knob": {"item": ".knob-assembly", "body": ".knob-body", "unit": "div.flex-col:has(> .knob-assembly)", "label": "span",
                  "value": "[id^=val-]"},
         "popup": {"item": "#presetSelectorTrigger", "key": "preset"},
+        # design QA 2026-10-03: no maker badges (the emblem read "THE ORIGINAL Wurlitzer", a serial number, the
+        # factory town and "AKAI PROFESSIONAL"); the displays on the left of TONE MATRIX and CABINET
+        "augment": [
+            {"sel": "body", "retext": [["Akai MPC Standalone DSP Core // Active", ""], ["WURLITZER 200A", "WURL 200A"],
+                                       ["AKAI Q-LINK SYNC ACTIVE", ""]]},
+            {"sel": "div.border-2:has(> div > h1) > div.uppercase", "remove": True},   # THE ORIGINAL
+            {"sel": "div.border-2:has(> div > h1) > div.border-t", "remove": True},    # serial / town / maker
+            {"sel": "div.border-2 h1", "text": "WURL"},
+            {"sel": "div.border-2 p.uppercase", "text": "ELECTRIC PIANO"},
+            {"sel": "div.recessed-well:has(> #harmonicCanvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div.grid-cols-12:has(> div.recessed-well > #harmonicCanvas)", "attr": {"style": "padding-right: 26px"}},
+            {"sel": "div.grid-cols-12:has(> div.grid-cols-3) > div.recessed-well", "attr": {"style": "order: -1"}},
+        ],
+        # a Q-Link column per panel: TONE MATRIX | AMPLIFIER | CABINET | PRESET (the preset last, as on Aphex)
+        "qlinks": {0: ["brightness", "darken", "bark", "tune", "attack", "decay", "volume", "-",
+                       "tremolo", "speaker", "reverb", "-", "preset", "-", "-", "-"]},
     },
     "monovoice": dict(MONO_SPECS, **{
         # the design's MACHINE side (machine + LFO destinations); its Helm knobs go; 7 pages drawn in its style
@@ -852,7 +1212,24 @@ MAPS = {
             {"sel": "[data-purpose=lfo-dest-selectors]", "attr": {"class": "grid grid-cols-3 gap-6 mt-2"}},
             {"sel": "[data-purpose=lfo-dest-selectors] .lcd-screen-pattern", "all": True, "attr": {"style": "height: 40px;"}},
             {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-500:not(:only-child)", "remove": True},
+            # design QA 2026-10-03: the display on the left, the machine selector on the right; the "Q-LINK ROW" tags
+            # (Q-Links go by column) and the "TEST OSC BUS" line go
+            {"sel": "[data-purpose=osc-mix-section]", "attr": {"style": "order: -1"}},
+            {"sel": "#machine-trigger", "where": "afterend", "html":   # PATCH: the patch library (Init first), 2026-10-04
+             '<div class="flex flex-col mt-8"><span class="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold '
+             'mb-1">PATCH</span><div class="aug-stepper flex items-center bg-black rounded border border-neutral-700/80 p-0.5" '
+             'data-param="patch"><button class="px-1 text-amber-500 text-xs">&#9664;</button><div class="flex-1 '
+             'lcd-screen-pattern py-1 px-1 rounded text-center border border-emerald-950 font-mono text-[9px] '
+             'text-mpc-lcdText font-bold" style="height:40px;">&nbsp;</div><button class="px-1 text-amber-500 text-xs">&#9654;'
+             '</button></div></div>'},
+            {"sel": "[data-purpose=osc-mix-section] span.bg-amber-950", "remove": True},
+            {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-400.font-mono", "remove": True},
+            {"sel": "[data-purpose=sub-noise-lfo-matrix] div.pt-1:has(> span.text-neutral-500)", "remove": True},
         ],
+        # design QA 2026-10-03: MACHINE | LFO DESTINATIONS, a column each (it was one column over both panels); PATCH
+        # (the patch library, 2026-10-04) under MACHINE
+        "qlinks": {0: ["machine", "patch", "-", "-", "lfo1_1", "lfo2_1", "lfo3_1", "-"]},
+        "get": {"patch": "patch_name"},
         "map": {"machine-trigger": "machine", "lfo1": "lfo1_1", "lfo2": "lfo2_1", "lfo3": "lfo3_1"},
         "grid": {"tabs": ["SYNTH", "AMP", "FILTER", "EFFECT", "LFO 1", "LFO 2", "LFO 3"], "tpl": MONO_TPL, "keep": ".crt-scanlines"},
         "tab_order": ["MACHINE", "SYNTH", "AMP", "FILTER", "EFFECT", "LFO 1", "LFO 2", "LFO 3"],
@@ -869,7 +1246,58 @@ MAPS = {
             {"sel": "[data-purpose=sub-noise-lfo-matrix] > div:first-child > span", "text": "SUB OSC / NOISE"},
             {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-amber-500", "text": "HELM SUB OSCILLATOR"},
             {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-500:not(:only-child)", "remove": True},
+            # design QA 2026-10-03: the "Q-LINK ROW" tags (Q-Links go by column) and the "TEST OSC BUS" line go
+            {"sel": "[data-purpose=osc-mix-section] span.bg-amber-950", "remove": True},
+            {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-400.font-mono", "remove": True},
+            {"sel": "[data-purpose=sub-noise-lfo-matrix] div.pt-1:has(> span.text-neutral-500)", "remove": True},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel or group of up to four on every page; rows of six to eight
+        # split into groups with a gap, envelopes in A D S R order (layout.grid.conf)
+        "qlinks": {
+            0: ["volume", "polyphony", "octave_transpose", "legato", "cutoff", "resonance", "filter_type", "-",
+                "amp_attack", "amp_decay", "amp_sustain", "amp_release", "preset", "-", "-", "-"],
+            1: [k if k == "-" else k % n for n in (1, 2) for k in ("osc_%d_waveform", "osc_%d_transpose", "osc_%d_tune", "osc_%d_volume",
+                                                "osc_%d_unison_voices", "osc_%d_unison_detune", "unison_%d_harmonize", "-")],
+            2: ["cross_modulation", "osc_feedback_amount", "osc_feedback_transpose", "osc_feedback_tune", "osc_mix", "-", "-", "-",
+                "noise_volume", "-", "-", "-", "sub_octave", "sub_shuffle", "sub_volume", "sub_waveform"],
+            3: ["filter_on", "filter_style", "filter_shelf", "filter_blend", "filter_drive", "filter_saturation", "fil_env_depth",
+                "keytrack", "formant_on", "formant_x", "formant_y", "-", "fil_attack", "fil_decay", "fil_sustain", "fil_release"],
+            4: ["mod_attack", "mod_decay", "mod_sustain", "mod_release"] + [
+                k if k == "-" else "mono_lfo_1_" + k for k in LFO_Q],
+            5: [k if k == "-" else "mono_lfo_2_" + k for k in LFO_Q] + [
+                k if k == "-" else "poly_lfo_" + k for k in ("waveform", "amplitude", "-", "-", "sync", "frequency", "tempo", "-")],
+            6: ["num_steps", "step_smoothing", "step_sequencer_retrigger", "-", "step_sequencer_sync", "step_frequency",
+                "step_sequencer_tempo", "-"] + ["step_seq_%02d" % i for i in range(8)],
+            7: ["step_seq_%02d" % i for i in range(8, 16)] + ["arp_on", "arp_pattern", "arp_octaves", "arp_gate",
+                                                             "arp_sync", "arp_frequency", "arp_tempo", "-"],
+            8: ["distortion_on", "distortion_type", "distortion_drive", "distortion_mix", "delay_on", "delay_dry_wet",
+                "delay_feedback", "-", "delay_sync", "delay_frequency", "delay_tempo", "-"],
+            9: ["reverb_on", "reverb_dry_wet", "reverb_feedback", "reverb_damping", "stutter_on", "stutter_softness", "-", "-",
+                "stutter_sync", "stutter_frequency", "stutter_tempo", "-",
+                "stutter_resample_sync", "stutter_resample_frequency", "stutter_resample_tempo", "-"],
+            10: ["sync_bpm", "bpm", "velocity_track", "pitch_bend_range", "portamento_type", "portamento", "-", "-"] + [
+                "mod_%d_amount" % i for i in range(8)],
+            11: ["mod_%d_amount" % i for i in range(8, 16)],
+        },
+        # design QA 2026-10-03: readable names where Helm's own were cut at 12 characters (MPC shows these)
+        "names": {**{"mono_lfo_%d_%s" % (n, k): "LFO%d %s" % (n, v) for n in (1, 2) for k, v in (
+                      ("amplitude", "AMOUNT"), ("frequency", "FREQ"), ("retrigger", "RETRIG"), ("sync", "SYNC"),
+                      ("tempo", "TEMPO"), ("waveform", "WAVE"))},
+                  **{"poly_lfo_" + k: "PLFO " + v for k, v in (("amplitude", "AMOUNT"), ("frequency", "FREQ"),
+                                                              ("sync", "SYNC"), ("tempo", "TEMPO"), ("waveform", "WAVE"))},
+                  **{"osc_%d_%s" % (n, k): "OSC%d %s" % (n, v) for n in (1, 2) for k, v in (
+                      ("transpose", "TRANSP"), ("unison_detune", "DETUNE"), ("unison_voices", "VOICES"), ("volume", "VOLUME"),
+                      ("waveform", "WAVE"), ("tune", "TUNE"))},
+                  "unison_1_harmonize": "OSC1 HARMON", "unison_2_harmonize": "OSC2 HARMON",
+                  "osc_feedback_amount": "FBK AMOUNT", "osc_feedback_transpose": "FBK TRANSP", "osc_feedback_tune": "FBK TUNE",
+                  "fil_env_depth": "FLT ENV AMT", "keytrack": "FLT KEYTRACK", "filter_on": "FILTER ON",
+                  "fil_attack": "FLT ATTACK", "fil_decay": "FLT DECAY", "fil_sustain": "FLT SUSTAIN", "fil_release": "FLT RELEASE",
+                  "formant_on": "FORMANT ON", "pitch_bend_range": "BEND RANGE", "step_smoothing": "STEP SMOOTH",
+                  "reverb_damping": "REV DAMPING", "reverb_on": "REVERB ON", "distortion_on": "DIST ON", "delay_on": "DELAY ON",
+                  "arp_on": "ARP ON", "stutter_on": "STUTTER ON", "stutter_softness": "STUT SOFT", "stutter_sync": "STUT SYNC",
+                  "stutter_frequency": "STUT FREQ", "stutter_tempo": "STUT TEMPO", "stutter_resample_sync": "RESAMP SYNC",
+                  "stutter_resample_frequency": "RESAMP FREQ", "stutter_resample_tempo": "RESAMP TEMPO",
+                  "mod_attack": "MOD ATTACK", "mod_decay": "MOD DECAY", "mod_sustain": "MOD SUSTAIN", "mod_release": "MOD RELEASE"},
         "map": {"crossMod": "cross_modulation", "fbkAmt": "osc_feedback_amount", "fbkTran": "osc_feedback_transpose",
                 "fbkTune": "osc_feedback_tune", "oscMix": "osc_mix", "noiseVol": "noise_volume", "subOct": "sub_octave",
                 "subShuf": "sub_shuffle", "subVol": "sub_volume"},
@@ -890,6 +1318,10 @@ MAPS = {
         "canvas": {"#scopeCanvas": {"picture": "ratio", "fill": ".recessed-well:has(> #scopeCanvas)"},
                    "#envCanvas": {"env": ["attack", "decay", "sustain"], "name": "mod", "fill": ".recessed-well:has(> #envCanvas)"}},
         "drop": ["header", "footer"],
+        # design QA 2026-10-03: OPERATOR | MOD ENVELOPE | VOICE split 3 + 2 ("-" = an empty slot); the preset stepper is
+        # touch only (its arrows and MPC's PRESET menu)
+        "qlinks": {0: ["ratio", "bright", "bite", "tone", "attack", "decay", "sustain", "-",
+                       "noise", "glide", "voice_count", "-", "pitch", "volume", "-", "-"]},
     },
     "groovebank": {
         # one page; the MIDI monitor / chord readouts stay as the design's decoration, a dead button goes
@@ -901,7 +1333,12 @@ MAPS = {
         "get": {"pattern": "pattern_label"},
         "drop": ["header", "footer"], "page": "MAIN",
         "hide": ["div:has(> #groove-feel-tag)"],
-        "augment": [{"sel": "div:has(> div.flex-col > span + span.font-readout-numeric) > button", "remove": True}],   # BURST TEST
+        "augment": [{"sel": "div:has(> div.flex-col > span + span.font-readout-numeric) > button", "remove": True},   # BURST TEST
+                    {"sel": "div:has(> #latch-rocker) > div.mt-2", "remove": True},   # "HOLD SW" under MPC's LATCH name
+                    {"sel": "body", "retext": [["MPC EMBEDDED DSP", "SCHWUNG MIDI FX"]]}],   # not Akai's
+        # design QA 2026-10-03: FEEL's six as two Q-Link columns (VARIANT / SWING / GATE, STRUM / ACCENT / LATCH), then
+        # the GROOVE (the pattern, last as a preset)
+        "qlinks": {0: ["variant", "swing", "gate", "-", "strum", "accent", "latch", "-", "pattern"]},
     },
     "grids": {
         # drum-note steppers and the channel readout become the design's knobs (a stepper needs prev/next parameters)
@@ -936,7 +1373,15 @@ MAPS = {
             {"sel": "div.space-y-6:has(> div > input[type=range])", "where": "replace",
              "html": '<div class="flex justify-around items-center my-auto">@knob(accent_vel)@knob(normal_vel)</div>'},
             {"sel": "#page-notes div.recessed-display:has(> div > span.block):has(> div.rounded-full)", "remove": True},   # MIDI clock
+            # design QA 2026-10-03: the rhythm display on the left of the lower row, PATTERN LENGTHS on the right
+            {"sel": "#page-grids section.col-span-8", "attr": {"style": "order: -1"}},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel, 3-3-2-3 (MAP | DENSITY | ENGINE | LENGTHS) and 3-2-2 on NOTES
+        "qlinks": {
+            0: ["map_x", "map_y", "chaos", "-", "bd_fill", "sd_fill", "hh_fill", "-", "mode", "swing", "-", "-",
+                "len_bd", "len_sd", "len_hh", "-"],
+            1: ["bd_note", "sd_note", "hh_note", "-", "accent_vel", "normal_vel", "-", "-", "channel", "resolution"],
+        },
         "map": {"mapX": "map_x", "mapY": "map_y", "bdFill": "bd_fill", "sdFill": "sd_fill", "hhFill": "hh_fill",
                 "bdLen": "len_bd", "sdLen": "len_sd", "hhLen": "len_hh", "ACCENT VELOCITY": "accent_vel",
                 "NORMAL VELOCITY": "normal_vel"},
@@ -951,9 +1396,26 @@ MAPS = {
         "button": {"item": ".hw-button", "selfLabel": True},
         "hide": [".scope-legend"],
         "canvas": {"#canvasMain": {"picture": "a_model", "fill": ".resonator-scope"}},
-        "augment": [{"sel": "button[onclick='randomizeAll()']", "attr": {"style": "margin-right: 44px;"}}],   # MPC's buttons are wider
+        "augment": [
+            # design QA 2026-10-03: the three random buttons together in PATCH, stacked beside a narrower scope (RND RESON
+            # was alone in OUT)
+            {"sel": "div.control-item:has(> button[onclick='randomizeResonators()'])", "remove": True},
+            {"sel": "button[onclick='randomizeExciter()']", "where": "afterend",
+             "html": '<button class="hw-button" onclick="randomizeResonators()" style="height:46px;">RND RESON</button>'},
+            {"sel": "div:has(> button[onclick='randomizeAll()'])",
+             "attr": {"style": "position:absolute; left:360px; top:50px; display:flex; flex-direction:column; gap:12px;"}},
+            {"sel": ".resonator-scope", "attr": {"style": "left:26px; top:120px; width:300px; height:140px;"}},
+        ],
         "map": {"presetPopup": "preset", "SHAPE": ["lfo1_shape", "lfo2_shape"], "TARGET": ["lfo1_target", "lfo2_target"],
                 "RANDOM ALL": "rnd_patch", "RND EXCITER": "rnd_exc", "RND RESON": "rnd_reson"},
+        # design QA 2026-10-03: a Q-Link column per panel or half row ("-" = an empty slot); MAIN's RANDOM buttons are
+        # touch only; EXCITER, DELAY / FX and LFO / AT were already a half row per column
+        "qlinks": {
+            0: ["a_model", "b_model", "couple", "balance", "cutoff", "resonance", "ftype", "voicing",
+                "drive", "width", "level", "-", "preset", "-", "-", "-"],
+            2: ["b_struct", "b_decay", "b_damp", "b_pos", "b_tone", "b_tune", "b_tension", "-",
+                "glide", "amp_attack", "amp_release", "spread", "rev_mix", "rev_size", "rev_damp", "-"],
+        },
     },
     "eucalypso": {
         # LANE 2-4 weren't drawn: copies of LANE 1 with the keys and titles swapped
@@ -967,6 +1429,12 @@ MAPS = {
             {"sel": "#tab1 .knob-wrap", "nth": ["lane1_" + k for k in ['steps', 'pulses', 'rotation', 'drop', 'drop_seed', 'velocity', 'gate', 'note', 'n_rnd', 'n_seed', 'octave', 'oct_rnd', 'oct_seed']]},
             {"sel": "#tab1 .hw-toggle", "attr": {"data-param": "lane1_enabled"}},
             {"sel": "#tab1 .popup-box", "attr": {"data-param": "lane1_oct_rng"}},
+            # design QA 2026-10-03: the lane's NOTE trio and OCTAVE four as two groups (a Q-Link column each, copied to
+            # LANE 2-4); the wheel display on the left of MAIN's top row, CLOCK on the right
+            {"sel": "#tab1 .control-item:has(> .knob-wrap[data-param=lane1_octave])",
+             "attr": {"style": "position:static; transform:none; margin-left: 56px"}},
+            {"sel": "#tab0 > div.frame-box:has(#euclidWheelCanvas)", "attr": {"style": "left:10px; top:12px; width:626px; height:290px;"}},
+            {"sel": "#tab0 > div.frame-box:first-of-type", "attr": {"style": "left:644px; top:12px; width:626px; height:290px;"}},
             {"sel": "#tab1", "clone": [{"replace": [["lane1_", "lane%d_" % n], ['id="tab1"', 'id="tab%d"' % n],
                                                     ["LANE 1 RHYTHM (KICK / LOW BASS)", "LANE %d RHYTHM" % n],
                                                     ["LANE 1", "LANE %d" % n], ["L1 ON", "L%d ON" % n]]}
@@ -974,6 +1442,15 @@ MAPS = {
         ],
         # design labels on the lane pages would give four parameters one name: keep "L1 STEPS" etc. there
         "names": {},
+        "qlinks": {
+            0: ["sync", "rate", "bpm", "swing", "play_mode", "retrigger_mode", "max_voices", "rand_cycle",
+                "global_velocity", "global_v_rnd", "global_gate", "global_g_rnd"],
+            **{n: ["lane%d_%s" % (n, k) if k != "-" else k for k in (
+                "enabled", "steps", "pulses", "rotation", "drop", "drop_seed", "velocity", "gate",
+                "note", "n_rnd", "n_seed", "-", "octave", "oct_rnd", "oct_seed", "oct_rng")] for n in (1, 2, 3, 4)},
+            5: ["register_mode", "held_order", "missing_note_policy", "-", "scale_mode", "root_note", "scale_rng", "octave",
+                "held_order_seed", "missing_note_seed", "global_rnd_seed"],
+        },
     },
     "elements": {
         # same design family as Denis; the "real-time spectrum" box shows the resonator MODEL's waveform from the engine
@@ -987,6 +1464,14 @@ MAPS = {
             {"sel": ".tab-page", "all": True, "attr": {"style": "position: relative; top: 30px;"}},
         ],
         "map": {"legatoBtn": "legato"},
+        # design QA 2026-10-03: bank 1 = BOW | BLOW | STRIKE | RESONATOR knobs, bank 2 = CONTOUR | MODEL | SPACE (six panels
+        # of 1 to 5 controls don't fit one bank of four columns); PLAY: PITCH | PERFORMANCE | MASTER
+        "qlinks": {
+            0: ["bow", "bow_timbre", "-", "-", "blow", "flow", "blow_timbre", "-", "strike", "mallet", "strike_timbre", "-",
+                "geometry", "brightness", "damping", "position", "contour", "-", "-", "-", "model", "-", "-", "-",
+                "space", "-", "-", "-"],
+            1: ["octave", "fine", "bend_range", "-", "legato", "velocity", "signature", "-", "volume", "-", "-", "-"],
+        },
     },
     "denis": {
         # 4 pages; the 2x8 matrix cells (no control in the design) become small knobs in its own knob style
@@ -1015,6 +1500,14 @@ MAPS = {
             {"sel": ".tab-page", "all": True, "attr": {"style": "position: relative; top: 30px;"}},   # 548 px of frames, centred
         ],
         "map": {"RANDOM ALL": "rnd_patch", "RANDOM SOUND": "rnd_denis", "RANDOM MOD": "rnd_mod", "RESET MATRIX": "matrix_reset"},
+        # design QA 2026-10-03: a Q-Link column per panel ("-" = an empty slot); preset, RANDOM buttons and the filter
+        # type are touch only (no slot left in their groups); the matrix pages were already a half row per column
+        "qlinks": {
+            0: ["osc1_freq", "osc1_timbre", "-", "-", "osc2_pitch", "osc2_harmonics", "osc_mix", "-",
+                "fold_depth", "fold_type", "filter_cutoff", "filter_q", "vel_to_filter", "portamento", "legato", "-"],
+            1: ["attack", "decay", "sustain", "release", "noise_mix", "noise_type", "-", "-",
+                "lfo_rate", "sh_rate", "mod_depth_env", "mod_depth_noise"],
+        },
     },
     "chordism": {
         # 10 pages; ~55 of the 135 controls weren't in the design: added per page in its own markup (augment)
@@ -1082,8 +1575,10 @@ MAPS = {
             {"sel": "#tab-page-0 div:has(> button.vca-btn)", "attr": {"data-param": "vca_mode"}},
             {"sel": "#tab-page-1 select", "nth": ["wave_1", "wave_2", "wave_3", "wave_4"]},
             {"sel": "#tab-page-8 select", "nth": ["chord_pc_%d" % i for i in range(12)]},
-            # OSCILLATORS: LFO MODE joins the shape row
-            {"sel": "#tab-page-1 .grid-cols-7", "html": "@enum(shape_lfo_mode)"},
+            # OSCILLATORS (design QA 2026-10-03): each voice's SHAPE and LFO PHASE under its WAVE / MIX box, so a Q-Link
+            # column is one voice; the global SHAPE and LFO MODE move to the SHAPE page
+            {"sel": "#tab-page-1 .grid-cols-7", "each": ["".join("@knob(shape_%d)@knob(lfo_phase_%d)" % (v, v)
+                                                                 for v in range(1, 5))]},
             {"sel": "#tab-page-1 .grid-cols-7", "attr": {"class": "grid grid-cols-8 gap-3 items-center py-2"}},
             # SHAPE: pan morph under the phases, per-voice FM amounts + position under the FM row
             {"sel": "#tab-page-2 > div:nth-child(1) > .bg-mpc-lcd", "where": "replace",
@@ -1112,11 +1607,19 @@ MAPS = {
             # CHORD MAP: intervals and the CTRL source routing
             {"sel": "#tab-page-8 > div.p-2", "where": "replace",
              "html": '<div class="grid grid-cols-10 gap-3"><div class="col-span-3"><box>INTERVALS@row(interval_1, interval_2, '
-                     'interval_3)</div></div><div class="col-span-7"><box>CONTROL@row(ctrl_source, ctrl_cc, ctrl_to_cutoff, '
-                     'ctrl_to_morph, ctrl_to_vib, ctrl_to_shape, ctrl_to_fm)</div></div></div>'},
+                     'interval_3)</div></div><div class="col-span-7"><box>CONTROL<div class="flex" style="gap: 44px"><div '
+                     'style="flex: 4; padding-left: 16px">@row(ctrl_source, ctrl_cc, ctrl_to_cutoff, ctrl_to_morph)</div><div style="flex: 3">'
+                     '@row(ctrl_to_vib, ctrl_to_shape, ctrl_to_fm)</div></div></div></div></div>'},   # two Q-Link groups, a gap
             # ARPEGGIATOR
             {"sel": "#tab-page-9 > .h-12", "where": "replace",
              "html": "@row(arp_hold, arp_direction, arp_variation_interval, arp_clock_sync, arp_clock_division)"},
+            # SHAPE (design QA): its first panel holds the global SHAPE and LFO MODE with the pan morph pair
+            {"sel": "#tab-page-2 > div:nth-child(1) > span", "text": "SHAPE & PAN"},
+            {"sel": "#tab-page-2 > div:nth-child(1) > div.flex.justify-around", "each": ["@knob(shape)@enum(shape_lfo_mode)"]},
+            # CHORD MAP (design QA): room between the two rows of note pop-ups, so their Q-Link outlines stay apart
+            {"sel": "#tab-page-8 div.grid.grid-cols-6", "attr": {"style": "row-gap: 30px"}},
+            # FILTER ENV (design QA): the envelope panel's rows packed at the top instead of spread apart
+            {"sel": "#tab-page-3 > div:nth-child(1)", "attr": {"style": "justify-content: flex-start; gap: 28px"}},
         ],
         "map": {"cutoff": "filter_cutoff", "resonance": "filter_resonance", "fm_mod": "fm_modulator", "fm_amt": "fm_amount",
                 "morph_idx": "morph_index", "morph_int": "morph_intensity", "lfo_ph_1": "lfo_phase_1",
@@ -1129,6 +1632,28 @@ MAPS = {
                 "rev_decay": "reverb_decay", "rev_damp": "reverb_damp", "rev_shimmer": "reverb_shimmer",
                 "rev_size": "reverb_size", "arp_steps": "arp_euclid_steps", "arp_beats": "arp_euclid_beats",
                 "arp_var": "arp_variations", "arpToggleBtn": "arp_enabled"},
+        # design QA 2026-10-03: a Q-Link column per panel or row ("-" = an empty slot); MAIN and VIBRATO were fine
+        "qlinks": {
+            1: [k % v for v in range(1, 5) for k in ("wave_%d", "mix_%d", "shape_%d", "lfo_phase_%d")],
+            2: ["shape", "shape_lfo_mode", "pan_morph_index", "pan_morph_intensity", "fm_modulator", "fm_amount",
+                "morph_index", "morph_intensity", "fm_amount_1", "fm_amount_2", "fm_amount_3", "fm_amount_4",
+                "fm_position", "-", "-", "-"],
+            3: ["filter_env_attack", "filter_env_decay", "filter_env_depth", "drive", "filter_lfo_rate", "filter_lfo_depth",
+                "filter_lfo_spread", "filter_lfo_shape", "lfo_shape", "lfo_rate", "lfo_depth", "-",
+                "fenv_mode", "fenv_hard_reset", "quality_position", "-"],
+            5: ["amp_lfo_rate", "amp_lfo_depth", "glide_rate", "-", "amp_lfo_shape", "glide_legato", "vca_hard_reset",
+                "vca_drone", "grind", "bit_shift", "decimator", "-"],
+            6: ["delay_mix", "delay_time", "delay_feedback", "delay_tone", "delay_mode", "delay_tone_hi", "delay_tone_lo", "-",
+                "delay_mod_depth", "delay_mod_rate", "-", "-"],
+            7: ["reverb_mix", "reverb_decay", "reverb_damp", "reverb_shimmer", "reverb_size", "-", "-", "-",
+                "reverb_lowcut", "reverb_mod_rate", "reverb_mod_depth", "-"],
+            8: ["chord_pc_0", "chord_pc_1", "chord_pc_2", "chord_pc_3", "chord_pc_4", "chord_pc_5", "-", "-",
+                "chord_pc_6", "chord_pc_7", "chord_pc_8", "chord_pc_9", "chord_pc_10", "chord_pc_11", "-", "-",
+                "interval_1", "interval_2", "interval_3", "-", "ctrl_source", "ctrl_cc", "ctrl_to_cutoff", "ctrl_to_morph",
+                "ctrl_to_vib", "ctrl_to_shape", "ctrl_to_fm", "-"],
+            9: ["arp_euclid_steps", "arp_euclid_beats", "arp_tempo", "arp_variations", "arp_hold", "arp_direction",
+                "arp_variation_interval", "-", "arp_clock_sync", "arp_clock_division", "-", "-", "arp_enabled", "-", "-", "-"],
+        },
     },
 }
 
@@ -1190,7 +1715,7 @@ def expand(html, cfg, byk):
     """A design's missing controls, written in its own markup: @<kind>(key) for any template kind in cfg["tpl"] (knob,
        enum, select, toggle, or the design's own extras), @ctl(key) (picks one, see ctl_kind), @row(key, key, ...) (a grid
        row of @ctl) and <box>TITLE (a sub-panel), from the per-design templates cfg["tpl"]."""
-    tpl, labels = cfg["tpl"], cfg.get("labels", {})
+    tpl, labels = cfg.get("tpl", {}), cfg.get("labels", {})   # no "tpl": markup with no @macros
 
     def one(kind, key):
         if key not in byk:

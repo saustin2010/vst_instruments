@@ -2115,7 +2115,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "461 109 130 117",
+                                    "bounds": "1096 109 130 117",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2265,7 +2265,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "28 136 130 22",
+                                    "bounds": "663 136 130 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2295,7 +2295,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "28 160 130 22",
+                                    "bounds": "663 160 130 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2325,7 +2325,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "181 117 130 22",
+                                    "bounds": "816 117 130 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2355,7 +2355,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "181 141 130 22",
+                                    "bounds": "816 141 130 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2385,7 +2385,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "181 165 130 22",
+                                    "bounds": "816 165 130 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2415,7 +2415,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "181 189 130 22",
+                                    "bounds": "816 189 130 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -2445,7 +2445,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "313 138 120 70",
+                                    "bounds": "948 138 120 70",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3641,7 +3641,7 @@
                     }
                 },
                 {
-                    "key": "shStepText_dot_312x56",
+                    "key": "shStepText_dot_282x56",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3710,7 +3710,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 312 56",
+                                    "bounds": "0 0 282 56",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3748,7 +3748,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "8 0 296 56",
+                                    "bounds": "8 0 266 56",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -3885,6 +3885,121 @@
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
                                     "bounds": "0 0 56 56",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "key": "shStepText_dot_312x56",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "onAction": "Double Click",
+                                "handler": "Show Overlay",
+                                "handleName": "",
+                                "additionalData": "knob overlay",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Focus",
+                                    "type": "Focus",
+                                    "data": {
+                                        "version": 1,
+                                        "backgroundColour": "14ffffff",
+                                        "outlineColour": "ffc993ff",
+                                        "backgroundInset": 2.0,
+                                        "outlineThickness": 2.0
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "WhenFocussed",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 312 56",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Value",
+                                    "type": "Label",
+                                    "data": {
+                                        "version": 1,
+                                        "textStyle": {
+                                            "version": 1,
+                                            "font": {
+                                                "version": 1,
+                                                "name": "Titillium Web",
+                                                "style": "SemiBold",
+                                                "height": 26.0
+                                            },
+                                            "colour": "ffc993ff",
+                                            "justification": "horizontallyCentred verticallyCentred",
+                                            "case": "Original"
+                                        },
+                                        "type": "Value",
+                                        "handleName": "Text"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "8 0 296 56",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -4700,7 +4815,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "1113 126 130 117",
+                                    "bounds": "1105 126 130 117",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -4820,7 +4935,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "761 141 114 22",
+                                    "bounds": "733 141 114 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -4850,7 +4965,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "761 165 114 22",
+                                    "bounds": "733 165 114 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -4880,7 +4995,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "966 107 64 22",
+                                    "bounds": "953 107 64 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -4910,7 +5025,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "966 131 64 22",
+                                    "bounds": "953 131 64 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -4940,7 +5055,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "966 155 64 22",
+                                    "bounds": "953 155 64 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -4970,7 +5085,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "966 179 64 22",
+                                    "bounds": "953 179 64 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -5039,7 +5154,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "",
-                                    "type": "shStepText_dot_312x56",
+                                    "type": "shStepText_dot_282x56",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5064,7 +5179,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "303 145 312 56",
+                                    "bounds": "259 145 282 56",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -5094,7 +5209,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "244 145 56 56",
+                                    "bounds": "200 145 56 56",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -5124,7 +5239,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "618 145 56 56",
+                                    "bounds": "544 145 56 56",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -7246,9 +7361,9 @@
                 "fnKeyIndex": 0,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "22 71 575 161",
-                    "49 365 772 132",
-                    "883 365 347 132"
+                    "657 71 575 161",
+                    "49 369 347 100",
+                    "475 365 755 132"
                 ],
                 "componentName": "MAIN|MAIN",
                 "initialSize": "0 0 1280 628",
@@ -7260,9 +7375,10 @@
                 "fnKeyIndex": 1,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "26 61 1010 146",
-                    "23 117 1226 444",
-                    "884 429 350 132"
+                    "26 109 580 98",
+                    "727 61 514 188",
+                    "23 407 597 112",
+                    "675 429 559 132"
                 ],
                 "componentName": "PATTERN|PATTERN",
                 "initialSize": "0 0 1280 628",
@@ -7276,8 +7392,8 @@
                 "qlinkBoundsData": [
                     "17 95 614 154",
                     "646 117 614 132",
-                    "17 421 615 140",
-                    "645 429 142 132"
+                    "17 421 454 140",
+                    "490 429 297 132"
                 ],
                 "componentName": "MODIFY|MODIFY",
                 "initialSize": "0 0 1280 628",

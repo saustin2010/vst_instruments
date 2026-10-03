@@ -31,7 +31,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Groove Bank, page MAIN">
 
-Q-Link columns: **1** GROOVE, VARIANT, SWING, GATE  ·  **2** STRUM, ACCENT, LATCH
+Q-Link columns: **1** VARIANT, SWING, GATE  ·  **2** STRUM, ACCENT, LATCH  ·  **3** GROOVE
 
 ## Install
 

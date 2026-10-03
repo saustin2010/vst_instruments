@@ -114,7 +114,7 @@ def check(port, verbose=False):
                     out.append("QLINK %s: Q-Link on %s, which isn't on the page" % (tab["tabName"], k))
             if lt and lt["qlinks"]:
                 if sub < len(lt["qlinks"]):
-                    exp = [k for k in lt["qlinks"][sub][1]]
+                    exp = [k for k in lt["qlinks"][sub][1] if k != "-"]   # "-": an empty slot
                     if order != exp:
                         out.append("QLINK %s: order %s, layout says %s" % (tab["tabName"], ",".join(order), ",".join(exp)))
         if verbose:

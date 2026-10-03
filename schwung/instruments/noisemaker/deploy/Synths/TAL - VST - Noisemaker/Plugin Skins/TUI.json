@@ -695,7 +695,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_14x130.png",
-                                        "numFrames": 127,
+                                        "numFrames": 94,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -711,7 +711,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-22 0 130 130",
+                                    "bounds": "36 0 14 130",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -889,7 +889,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_14x130.png",
-                                        "numFrames": 127,
+                                        "numFrames": 94,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -905,7 +905,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-22 0 130 130",
+                                    "bounds": "36 0 14 130",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1083,7 +1083,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_14x130.png",
-                                        "numFrames": 127,
+                                        "numFrames": 94,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -1099,7 +1099,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-22 0 130 130",
+                                    "bounds": "36 0 14 130",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -7021,7 +7021,7 @@
                     }
                 },
                 {
-                    "key": "shKnob34_e7608323_n16v22_b121",
+                    "key": "shKnob34_e7608323_n16v22_b86",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -7101,7 +7101,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 121 129",
+                                    "bounds": "0 0 86 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -7131,7 +7131,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "21 0 78 78",
+                                    "bounds": "4 0 78 78",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -7169,7 +7169,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 75 121 20",
+                                    "bounds": "0 75 86 20",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -7207,7 +7207,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 97 121 26",
+                                    "bounds": "0 97 86 26",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -7215,7 +7215,7 @@
                     }
                 },
                 {
-                    "key": "shKnob34_e7608323_b121",
+                    "key": "shKnob34_e7608323_b86",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -7295,7 +7295,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 121 129",
+                                    "bounds": "0 0 86 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -7325,7 +7325,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "21 0 78 78",
+                                    "bounds": "4 0 78 78",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -7363,7 +7363,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 75 121 20",
+                                    "bounds": "0 75 86 20",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -7401,7 +7401,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 97 121 26",
+                                    "bounds": "0 97 86 26",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -8500,7 +8500,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC1 LEVEL",
-                                    "type": "shKnob34_e7608323_n16v22_b121",
+                                    "type": "shKnob34_e7608323_n16v22_b86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8521,7 +8521,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "33 417 121 129",
+                                    "bounds": "37 417 86 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -8530,7 +8530,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC2 LEVEL",
-                                    "type": "shKnob34_e7608323_n16v22_b121",
+                                    "type": "shKnob34_e7608323_n16v22_b86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8551,7 +8551,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "160 417 121 129",
+                                    "bounds": "130 417 86 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -8560,7 +8560,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "SUB LEVEL",
-                                    "type": "shKnob34_e7608323_b121",
+                                    "type": "shKnob34_e7608323_b86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8581,7 +8581,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "287 417 121 129",
+                                    "bounds": "224 417 86 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -8590,7 +8590,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "RING MOD",
-                                    "type": "shKnob34_e7608323",
+                                    "type": "shKnob34_e7608323_b86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8611,7 +8611,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "621 417 130 129",
+                                    "bounds": "317 417 86 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -8641,7 +8641,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "784 417 130 129",
+                                    "bounds": "700 417 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -8671,7 +8671,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "948 417 130 129",
+                                    "bounds": "903 417 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -8701,7 +8701,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "1110 417 130 129",
+                                    "bounds": "1105 417 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -8821,7 +8821,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "469 464 120 70",
+                                    "bounds": "500 464 120 70",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -9149,7 +9149,7 @@
                                         "version": 5,
                                         "knobType": "FilmStrip",
                                         "filmStrip": "sh_slider_v_14x130.png",
-                                        "numFrames": 127,
+                                        "numFrames": 94,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
                                         "handleName": "Data"
@@ -9165,7 +9165,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "-22 0 130 130",
+                                    "bounds": "36 0 14 130",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19520,7 +19520,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "88 145 130 129",
+                                    "bounds": "65 145 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19550,7 +19550,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "333 145 130 129",
+                                    "bounds": "245 145 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19580,7 +19580,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "578 145 130 129",
+                                    "bounds": "425 145 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19610,7 +19610,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "823 145 130 129",
+                                    "bounds": "835 145 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19640,7 +19640,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "1068 145 130 129",
+                                    "bounds": "1045 145 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19670,7 +19670,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "43 417 130 129",
+                                    "bounds": "35 417 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19700,7 +19700,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "199 417 130 129",
+                                    "bounds": "675 417 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19730,7 +19730,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "797 417 130 129",
+                                    "bounds": "185 417 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19760,7 +19760,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "957 417 130 129",
+                                    "bounds": "335 417 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19790,7 +19790,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "1113 417 130 129",
+                                    "bounds": "485 417 130 129",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19820,7 +19820,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "355 464 120 70",
+                                    "bounds": "825 464 120 70",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19850,7 +19850,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "501 464 120 70",
+                                    "bounds": "970 464 120 70",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -19880,7 +19880,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "646 464 120 70",
+                                    "bounds": "1115 464 120 70",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -19900,10 +19900,10 @@
                 "fnKeyIndex": 0,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "659 129 599 423",
-                    "230 383 1027 198",
-                    "24 68 626 513",
-                    "24 148 772 92"
+                    "694 129 564 158",
+                    "230 383 420 198",
+                    "659 408 598 144",
+                    "24 68 604 162"
                 ],
                 "componentName": "MAIN|MAIN",
                 "initialSize": "0 0 1280 628",
@@ -19915,10 +19915,10 @@
                 "fnKeyIndex": 1,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "238 136 738 144",
-                    "22 136 1235 416",
-                    "276 408 808 144",
-                    "19 158 1227 394"
+                    "19 136 611 144",
+                    "694 136 563 144",
+                    "9 408 422 144",
+                    "494 408 747 144"
                 ],
                 "componentName": "OSC|OSC",
                 "initialSize": "0 0 1280 628",
@@ -19931,9 +19931,9 @@
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
                     "33 136 586 144",
-                    "667 136 561 416",
-                    "230 383 1023 198",
-                    "322 383 327 198"
+                    "692 136 536 144",
+                    "230 383 419 198",
+                    "667 408 586 144"
                 ],
                 "componentName": "FILTER|FILTER",
                 "initialSize": "0 0 1280 628",
@@ -19945,10 +19945,10 @@
                 "fnKeyIndex": 3,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "241 136 1004 416",
-                    "423 190 824 362",
-                    "72 162 1016 368",
-                    "70 434 689 78"
+                    "72 136 673 144",
+                    "797 136 448 144",
+                    "70 408 689 144",
+                    "807 408 440 144"
                 ],
                 "componentName": "LFO|LFO",
                 "initialSize": "0 0 1280 628",
@@ -19960,9 +19960,10 @@
                 "fnKeyIndex": 4,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "25 136 792 144",
-                    "28 408 591 144",
-                    "452 162 762 78"
+                    "25 136 571 144",
+                    "675 136 539 144",
+                    "28 408 279 144",
+                    "350 462 269 68"
                 ],
                 "componentName": "MOD|MOD",
                 "initialSize": "0 0 1280 628",
@@ -19974,10 +19975,10 @@
                 "fnKeyIndex": 5,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "82 136 877 144",
-                    "37 136 1167 416",
-                    "349 408 900 144",
-                    "640 462 132 68"
+                    "59 136 502 144",
+                    "829 136 352 144",
+                    "29 408 592 144",
+                    "669 408 572 144"
                 ],
                 "componentName": "FX|FX",
                 "initialSize": "0 0 1280 628",

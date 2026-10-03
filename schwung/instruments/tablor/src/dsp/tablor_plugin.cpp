@@ -492,6 +492,14 @@ static void sync_table_index(tablor_instance *inst, int osc)
 static void set_table_path(tablor_instance *inst, int osc, const char *path)
 {
     if (!strcmp(path, "Init")) path = "";
+#ifdef MPC_PORT   /* the factory presets name Move's library; on the MPC the same packs are in <module>/wavetables */
+    static const char kMoveWt[] = "/data/UserData/UserLibrary/Wavetables/";
+    char mapped[600];
+    if (!strncmp(path, kMoveWt, sizeof kMoveWt - 1)) {
+        snprintf(mapped, sizeof mapped, "%s/wavetables/%s", inst->module_dir, path + sizeof kMoveWt - 1);
+        path = mapped;
+    }
+#endif
     snprintf(inst->wt_path[osc], sizeof inst->wt_path[osc], "%s", path);
 
     tb::WtEntry e;
@@ -774,6 +782,11 @@ static void build_state_blob(tablor_instance *inst)
                       "%s=%g;", tb_params[i].key, (double) v);
         if (o >= (int) sizeof inst->state_buf - 64) break;
     }
+#ifdef MPC_PORT   /* the preset chosen, so a reopened project doesn't take MPC's PRESET value as a new choice */
+    int pi = inst->preset_index.load(std::memory_order_relaxed);
+    if (pi > 0 && o < (int) sizeof inst->state_buf - 32)
+        snprintf(inst->state_buf + o, sizeof inst->state_buf - (size_t) o, "mpc_preset=%d;", pi);
+#endif
 }
 
 static void reset_to_defaults(tablor_instance *inst)
@@ -803,6 +816,9 @@ static void apply_state_blob(tablor_instance *inst, const char *val)
         if (kl < sizeof kbuf && vl < sizeof vbuf) {
             memcpy(kbuf, p, kl); kbuf[kl] = 0;
             memcpy(vbuf, eq + 1, vl); vbuf[vl] = 0;
+#ifdef MPC_PORT
+            if (!strcmp(kbuf, "mpc_preset")) inst->preset_index.store(atoi(vbuf), std::memory_order_relaxed);
+#endif
             int idx = param_index(kbuf);
             if (idx >= 0) {
                 if (tb_params[idx].type == TB_PATH)
@@ -840,6 +856,22 @@ static void tb_set_param(void *instance, const char *key, const char *val)
         apply_state_blob(inst, val);
         return;
     }
+#ifdef MPC_PORT   /* the PRESET menu: preset n = the defaults, then its state blob (what Move's preset browser does) */
+    if (!strcmp(k, "preset")) {
+        auto ps = inst->presetList();
+        if (ps->items.empty()) return;
+        int n = atoi(val);
+        if (n < 0) n = 0;
+        if (n >= (int) ps->items.size()) n = (int) ps->items.size() - 1;
+        /* the preset already chosen: nothing to do, so a project that restores every parameter after its chunk (as
+         * MPC does) keeps its edits instead of re-applying the preset over them (as Noisemaker's) */
+        if (n == inst->preset_index.load(std::memory_order_relaxed)) return;
+        reset_to_defaults(inst);
+        apply_state_blob(inst, ps->items[n].blob.c_str());
+        inst->preset_index.store(n, std::memory_order_relaxed);
+        return;
+    }
+#endif
 
     /* Turnable wavetable selection. Indices only: get_param reports an
      * index for these, so the host learns WIRE_INDEX and never sends a
@@ -944,6 +976,20 @@ static int tb_get_param(void *instance, const char *key, char *buf, int buf_len)
         return write_str(buf, buf_len,
                          snap->pack_list.empty() ? "[]" : snap->pack_list.c_str());
     }
+#ifdef MPC_PORT   /* the PRESET menu: current preset, its name, the count, and any preset's name */
+    if (!strcmp(key, "preset") || !strcmp(key, "preset_count")) {
+        char tmp[16];
+        snprintf(tmp, sizeof tmp, "%d", key[6] ? (int) inst->presetList()->items.size()
+                                                : inst->preset_index.load(std::memory_order_relaxed));
+        return write_str(buf, buf_len, tmp);
+    }
+    if (!strcmp(key, "preset_name") || !strncmp(key, "preset_name_at:", 15)) {
+        auto ps = inst->presetList();
+        int n = key[11] ? atoi(key + 15) : inst->preset_index.load(std::memory_order_relaxed);
+        if (n < 0 || n >= (int) ps->items.size()) return write_str(buf, buf_len, "");
+        return write_str(buf, buf_len, ps->items[n].name.c_str());
+    }
+#endif
     if (!strcmp(key, "wt1_name") || !strcmp(key, "wt2_name")) {   /* MPC port: the loaded table's name, for a readout */
         const std::string &path = inst->wt_path[key[2] == '2' ? 1 : 0];
         if (path.empty()) return write_str(buf, buf_len, "Init");
@@ -1058,6 +1104,10 @@ static void *tb_create_instance(const char *module_dir, const char *json_default
      * walk, a ~20 MB first-run copy and an FFT — none of which may happen
      * here. Start the worker and let it do all of it; the engine renders
      * silence until the Init table is published. */
+#ifdef MPC_PORT   /* the presets now, not on the worker: MPC reads the PRESET menu's size when it inserts the plugin
+                     (a ~2 KB file; the worker's own load_presets below just reads it again) */
+    load_presets(inst);
+#endif
     inst->loader.start();
     inst->loader.post([inst] {
 #ifndef MPC_PORT   /* MPC port: no first-run copy of the factory packs into a user folder */

@@ -1,6 +1,6 @@
 # Elements
 
-**Synth** · Mutable Instruments Elements: a modal synthesis voice you bow, blow and strike. · maker in MPC: Mutable Instruments · licence: MIT
+**Synth** · Mutable Instruments Elements: a modal synthesis voice you bow, blow and strike, with 12 presets. · maker in MPC: Mutable Instruments · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Elements on the MPC touchscreen">
 
@@ -24,13 +24,15 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Elements, page ELEMENTS">
 
-Q-Link columns: **1** BOW, BOW TIMBRE, BLOW, FLOW  ·  **2** BLOW TIMBRE, STRIKE, MALLET, STRK TIMBRE  ·  **3** CONTOUR, MODEL, GEOMETRY, BRIGHTNESS  ·  **4** DAMPING, POSITION, SPACE
+Q-Link columns (bank 1): **1** BOW, BOW TIMBRE  ·  **2** BLOW, FLOW, BLOW TIMBRE  ·  **3** STRIKE, MALLET, STRK TIMBRE  ·  **4** GEOMETRY, BRIGHTNESS, DAMPING, POSITION
+
+Q-Link columns (bank 2): **1** CONTOUR  ·  **2** MODEL  ·  **3** SPACE
 
 ### 2. PLAY
 
 <img src="screenshots/page_1.png" width="760" alt="Elements, page PLAY">
 
-Q-Link columns: **1** OCTAVE, FINE, BEND RANGE, LEGATO  ·  **2** VELOCITY, SIGNATURE, VOLUME
+Q-Link columns: **1** OCTAVE, FINE, BEND RANGE  ·  **2** LEGATO, VELOCITY, SIGNATURE  ·  **3** VOLUME
 
 ## Install
 

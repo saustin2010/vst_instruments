@@ -24,13 +24,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Hera, page MAIN">
 
-Q-Link columns: **1** PATCH, CHORUS I, CHORUS II, OCTAVE  ·  **2** VOLUME, HPF, VCF FREQ, RESONANCE  ·  **3** VCF ENV, VCF LFO, ATTACK, DECAY  ·  **4** SUSTAIN, RELEASE
+Q-Link columns: **1** VCF FREQ, RESONANCE, VCF ENV, VCF LFO  ·  **2** ATTACK, DECAY, SUSTAIN, RELEASE  ·  **3** OCTAVE, VOLUME, HPF  ·  **4** PATCH, CHORUS I, CHORUS II
 
 ### 2. DCO / LFO
 
 <img src="screenshots/page_1.png" width="760" alt="Hera, page DCO / LFO">
 
-Q-Link columns: **1** RANGE, DCO LFO, PWM DEPTH, PWM MODE  ·  **2** PULSE, SAW, SUB, NOISE  ·  **3** LFO RATE, LFO DELAY, LFO TRIG, VCA MODE  ·  **4** VCF KYBD, VCF BEND, VCA LEVEL
+Q-Link columns: **1** RANGE, DCO LFO, PWM DEPTH, PWM MODE  ·  **2** PULSE, SAW, SUB, NOISE  ·  **3** LFO RATE, LFO DELAY, LFO TRIG  ·  **4** VCA MODE, VCF KYBD, VCF BEND, VCA LEVEL
 
 ## Install
 

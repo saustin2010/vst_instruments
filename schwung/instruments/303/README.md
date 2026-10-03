@@ -1,6 +1,6 @@
 # 303
 
-**Synth** · TB-303 bass line: Open303 with the Devilfish mods and a drive stage. · maker in MPC: Robin Schmidt · licence: GPL-3.0
+**Synth** · TB-303 bass line: Open303 with the Devilfish mods, a drive stage and 13 presets. · maker in MPC: Robin Schmidt · licence: GPL-3.0
 
 <img src="screenshots/page_0.png" width="760" alt="303 on the MPC touchscreen">
 
@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="303, page 303 MAIN">
 
-Q-Link columns: **1** WAVEFORM, TUNING, CUTOFF, RESONANCE  ·  **2** ENV MOD, DECAY, ACCENT, VOLUME  ·  **3** DRIVE MODEL, DRIVE, DRIVE MIX, SHAPER DRIVE
+Q-Link columns: **1** WAVEFORM, TUNING  ·  **2** CUTOFF, RESONANCE, ENV MOD, DECAY  ·  **3** ACCENT, VOLUME  ·  **4** DRIVE MODEL, DRIVE, DRIVE MIX, SHAPER DRIVE
 
 ### 2. DEVILFISH MOD
 
@@ -51,6 +51,11 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Every parameter renamed readably (e.g. NORMAL DECAY, SHAPER DRIVE); WAVEFORM and DRIVE MODEL as switches.
 - **Wavetable init (2026-10-02)**: Open303 cleared four entries past its prototype table at start-up (into the next member, which is filled afterwards, so harmless, but undefined). `rosic_MipMappedWaveTable.cpp` under `MPC_PORT`; diff in `upstream-changes.diff`. Found with `dev-tools/fuzz`.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets (2026-10-03): the engine has none, so the port brings 13 (`presets.json`: Classic Acid, Squelch Lead, Deep Sub,
+  Rubber Square, Plucky Saw, Long Sweep, Rat Acid, Distorted Square, Acid Screamer, three Devilfish patches and Init),
+  in MPC's PRESET menu. Each sets every control; levels matched within about 4.5 dB.
+- Q-Links (2026-10-03, design QA): one column per panel on the main page, VCO | VCF | ACCENT + OUT | DRIVE, so the
+  outline MPC draws round the active column frames one panel (it used to split the VCF across two columns).
 
 ## Files
 

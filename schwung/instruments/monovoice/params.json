@@ -1293,6 +1293,37 @@
    "momentary": true,
    "step_of": "lfo3_1",
    "step_delta": 1
+  },
+  {
+   "key": "patch",
+   "name": "PATCH",
+   "min": 0,
+   "max": 12,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "patch_prev",
+   "name": "PREV PATCH",
+   "momentary": true,
+   "step_of": "patch",
+   "step_delta": -1
+  },
+  {
+   "key": "patch_next",
+   "name": "NEXT PATCH",
+   "momentary": true,
+   "step_of": "patch",
+   "step_delta": 1
+  },
+  {
+   "key": "patch_name",
+   "name": "PATCH NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
   }
  ]
 }

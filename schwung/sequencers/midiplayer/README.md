@@ -31,7 +31,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="MIDI Player, page PLAYER">
 
-Q-Link columns: **1** FILE, TRACK, LOOP
+Q-Link columns: **1** TRACK, LOOP  ·  **2** FILE
 
 ## Install
 

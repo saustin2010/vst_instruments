@@ -24,25 +24,25 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Aphex, page MAIN">
 
-Q-Link columns: **1** PRESET, RANDOM, MUTATE, LPF CUTOFF  ·  **2** LPF PEAK, HPF CUTOFF, HPF PEAK, MG FREQ  ·  **3** MG DEPTH, VOLUME, OCTAVE, PORTAMENTO  ·  **4** TUNE, DRIVE, TRIGGER, RESET
+Q-Link columns: **1** LPF CUTOFF, LPF PEAK, HPF CUTOFF, HPF PEAK  ·  **2** MG FREQ, MG DEPTH, VOLUME  ·  **3** OCTAVE, PORTAMENTO, TUNE, DRIVE  ·  **4** PRESET
 
 ### 2. VCO
 
 <img src="screenshots/page_1.png" width="760" alt="Aphex, page VCO">
 
-Q-Link columns: **1** VCO1 SCALE, VCO1 WAVE, VCO1 PW, V1 DRIFT  ·  **2** MG/T.EXT, VCO2 SCALE, VCO2 WAVE, VCO2 PITCH  ·  **3** VCO2 DETUNE, EG1/EXT, V2 DRIFT, VCO2 SYNC  ·  **4** VCO2 FM
+Q-Link columns: **1** VCO1 SCALE, VCO1 WAVE  ·  **2** VCO1 PW, V1 DRIFT, MG/T.EXT  ·  **3** VCO2 SCALE, VCO2 WAVE, VCO2 SYNC, VCO2 FM  ·  **4** VCO2 PITCH, VCO2 DETUNE, EG1/EXT, V2 DRIFT
 
 ### 3. MIXER
 
 <img src="screenshots/page_2.png" width="760" alt="Aphex, page MIXER">
 
-Q-Link columns: **1** VCO1 LEVEL, VCO2 LEVEL, SUB LEVEL, NOISE LEVEL  ·  **2** NOISE COLOR, ESP LEVEL, FEEDBACK, HPF MG  ·  **3** HPF EG, LPF MG, LPF EG, FILTER MODE  ·  **4** FILTER REV
+Q-Link columns: **1** VCO1 LEVEL, VCO2 LEVEL, SUB LEVEL, NOISE LEVEL  ·  **2** NOISE COLOR, ESP LEVEL, FEEDBACK  ·  **3** HPF MG, HPF EG, LPF MG, LPF EG  ·  **4** FILTER MODE, FILTER REV
 
 ### 4. ENVELOPES
 
 <img src="screenshots/page_3.png" width="760" alt="Aphex, page ENVELOPES">
 
-Q-Link columns: **1** E1 DELAY, E1 ATK, E1 REL, E2 HOLD  ·  **2** E2 ATK, E2 DCY, E2 SUS, E2 REL  ·  **3** MG SHAPE, MG PW
+Q-Link columns: **1** E1 DELAY, E1 ATK, E1 REL  ·  **2** E2 ATK, E2 DCY, E2 SUS, E2 REL  ·  **3** E2 HOLD  ·  **4** MG SHAPE, MG PW
 
 ### 5. ESP
 
@@ -84,6 +84,11 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - Presets in MPC's PRESET menu (2026-10-03): its 41 presets are VST programs (vst.json `programs`), so the PRESET
   dropdown in the plugin header, also on the arrangement screen, lists and loads them.
+- Design QA (2026-10-03, the owner's notes): one Q-Link column per panel or row on MAIN, VCO, MIXER and ENVELOPES, so
+  the outline MPC draws round the active column frames one group; the patch buttons (RANDOM, MUTATE, GATE, RESET)
+  in their own PATCH ACTIONS box and off the Q-Links; each VCO's selectors above its knobs, VCO2's SYNC / FM with its
+  selectors; the envelope curve on the left of ENVELOPES; MODERN loses a heading over a switch that had no
+  parameter. All made in the design (convert.py MAPS), so a rerun of the conversion keeps them.
 
 ## Files
 

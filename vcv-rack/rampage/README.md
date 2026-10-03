@@ -31,13 +31,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Rampage, page RAMPAGE">
 
-Q-Link columns: **1** A RANGE, A RISE, A FALL, A SHAPE  ·  **2** B RANGE, B RISE, B FALL, B SHAPE  ·  **3** CYCLE A, A TRIGGER, BALANCE, CYCLE B  ·  **4** B TRIGGER, AUDIO, VOLUME
+Q-Link columns: **1** A RANGE, A RISE, A FALL, A SHAPE  ·  **2** B RANGE, B RISE, B FALL, B SHAPE  ·  **3** CYCLE A, BALANCE, CYCLE B  ·  **4** AUDIO, VOLUME
 
 ### 2. MIDI
 
 <img src="screenshots/page_1.png" width="760" alt="Rampage, page MIDI">
 
-Q-Link columns: **1** A NOTES, B NOTES, A KEY TRACK, B KEY TRACK  ·  **2** CC CHANNEL, CC OUT A, CC OUT B, CC MIN  ·  **3** CC MAX, EOC NOTES, EOC NOTE A, EOC NOTE B
+Q-Link columns: **1** A NOTES, B NOTES, A KEY TRACK, B KEY TRACK  ·  **2** CC CHANNEL, CC OUT A, CC OUT B  ·  **3** CC MIN, CC MAX  ·  **4** EOC NOTES, EOC NOTE A, EOC NOTE B
 
 ## Install
 

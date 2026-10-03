@@ -23,7 +23,7 @@ copied.
 | `obxd/presets/` | factory bank, 128 programs | [charlesvestal/schwung-obxd](https://github.com/charlesvestal/schwung-obxd) `src/presets` |
 | `libpo32/kits/` | 3 kits | [mestela/schwung-libpo32](https://github.com/mestela/schwung-libpo32) `src/kits` |
 | `tablor/wavetables/` | 115 wavetables (Adventure Kid, Neu KatalYst) | [athousanddetails/schwung-tablor](https://github.com/athousanddetails/schwung-tablor) `src/wavetables` |
-| `tablor/not-installed/factory.tbl` | 9 factory presets: no control for them on the MPC yet (ROADMAP.md) | same repo, `src/presets` |
+| `tablor/presets/factory.tbl` | 9 factory presets, in MPC's PRESET menu | same repo, `src/presets` |
 | `groovebank/patterns/` | 14 groove files | [mission-minnow/groovebank](https://github.com/mission-minnow/groovebank) `src/patterns` |
 | `helm/helm-data/patches/` | 274 factory patches + Move Organ | [mtytel/helm](https://github.com/mtytel/helm) `patches` (CC BY 4.0); Move Organ from [andree182/schwung-helm](https://github.com/andree182/schwung-helm) |
 | `mrdrums/kits/01_Starter/` | 8 synthesised drum hits | made here: `dev-tools/skin-redesign/make_starter_kit.py` |

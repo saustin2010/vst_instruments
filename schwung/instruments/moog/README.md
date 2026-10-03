@@ -38,7 +38,7 @@ Q-Link columns: **1** NOISE, OSC1 WAVE, OSC1 RANGE, OSC1 LEVEL  ·  **2** OSC2 W
 
 <img src="screenshots/page_2.png" width="760" alt="Moog, page MODULATION">
 
-Q-Link columns: **1** LFO RATE, LFO PITCH, LFO FILTER, WHEEL FILTER  ·  **2** WHEEL PITCH, GLIDE, BEND RANGE, VELOCITY  ·  **3** VOLUME
+Q-Link columns: **1** LFO RATE, LFO PITCH, LFO FILTER  ·  **2** WHEEL FILTER, WHEEL PITCH  ·  **3** GLIDE, BEND RANGE, VELOCITY  ·  **4** VOLUME
 
 ## Install
 

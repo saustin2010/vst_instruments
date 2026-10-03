@@ -1,0 +1,208 @@
+{
+ "presets": [
+  {
+   "name": "Init",
+   "values": {
+    "model": "MODAL",
+    "polyphony": "2 VOICES",
+    "structure": 0.4,
+    "brightness": 0.5,
+    "damping": 0.6,
+    "position": 0.3,
+    "note": 48,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.7,
+    "width": 1.0,
+    "volume": 0.7
+   }
+  },
+  {
+   "name": "Resonant Body",
+   "values": {
+    "model": "MODAL",
+    "polyphony": "2 VOICES",
+    "structure": 0.3,
+    "brightness": 0.5,
+    "damping": 0.7,
+    "position": 0.3,
+    "note": 48,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.6,
+    "width": 1.0,
+    "volume": 0.777
+   }
+  },
+  {
+   "name": "Metal Plate",
+   "values": {
+    "model": "MODAL",
+    "polyphony": "2 VOICES",
+    "structure": 0.8,
+    "brightness": 0.8,
+    "damping": 0.75,
+    "position": 0.3,
+    "note": 48,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.5,
+    "width": 1.0,
+    "volume": 0.635
+   }
+  },
+  {
+   "name": "Bright Bell",
+   "values": {
+    "model": "MODAL",
+    "polyphony": "2 VOICES",
+    "structure": 0.65,
+    "brightness": 0.85,
+    "damping": 0.8,
+    "position": 0.3,
+    "note": 72,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.5,
+    "width": 1.0,
+    "volume": 0.671
+   }
+  },
+  {
+   "name": "Low Drone",
+   "values": {
+    "model": "MODAL",
+    "polyphony": "2 VOICES",
+    "structure": 0.2,
+    "brightness": 0.3,
+    "damping": 0.9,
+    "position": 0.3,
+    "note": 36,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.7,
+    "width": 1.0,
+    "volume": 0.729
+   }
+  },
+  {
+   "name": "Sympathetic Strings",
+   "values": {
+    "model": "SYMPATHETIC",
+    "polyphony": "2 VOICES",
+    "structure": 0.6,
+    "brightness": 0.5,
+    "damping": 0.8,
+    "position": 0.3,
+    "note": 48,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.5,
+    "width": 1.0,
+    "volume": 0.59
+   }
+  },
+  {
+   "name": "Sitar Drone",
+   "values": {
+    "model": "SYMPATHETIC",
+    "polyphony": "2 VOICES",
+    "structure": 0.45,
+    "brightness": 0.7,
+    "damping": 0.85,
+    "position": 0.1,
+    "note": 40,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.7,
+    "width": 1.0,
+    "volume": 0.541
+   }
+  },
+  {
+   "name": "Chord Resonator",
+   "values": {
+    "model": "SYMP CHORDS",
+    "polyphony": "2 VOICES",
+    "structure": 0.35,
+    "brightness": 0.5,
+    "damping": 0.85,
+    "position": 0.3,
+    "note": 48,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.6,
+    "width": 1.0,
+    "volume": 0.583
+   }
+  },
+  {
+   "name": "Plucked String",
+   "values": {
+    "model": "STRING",
+    "polyphony": "2 VOICES",
+    "structure": 0.4,
+    "brightness": 0.6,
+    "damping": 0.5,
+    "position": 0.3,
+    "note": 48,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.7,
+    "width": 1.0,
+    "volume": 0.839
+   }
+  },
+  {
+   "name": "FM Ring",
+   "values": {
+    "model": "FM VOICE",
+    "polyphony": "2 VOICES",
+    "structure": 0.5,
+    "brightness": 0.6,
+    "damping": 0.6,
+    "position": 0.3,
+    "note": 48,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.5,
+    "width": 1.0,
+    "volume": 0.795
+   }
+  },
+  {
+   "name": "String Reverb",
+   "values": {
+    "model": "STRING+VERB",
+    "polyphony": "2 VOICES",
+    "structure": 0.4,
+    "brightness": 0.5,
+    "damping": 0.8,
+    "position": 0.3,
+    "note": 48,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.6,
+    "width": 1.0,
+    "volume": 0.685
+   }
+  },
+  {
+   "name": "Shimmer Wash",
+   "values": {
+    "model": "STRING+VERB",
+    "polyphony": "4 VOICES",
+    "structure": 0.7,
+    "brightness": 0.8,
+    "damping": 0.9,
+    "position": 0.3,
+    "note": 60,
+    "fine": 0.0,
+    "input_gain": 0.5,
+    "mix": 0.45,
+    "width": 1.0,
+    "volume": 0.734
+   }
+  }
+ ]
+}

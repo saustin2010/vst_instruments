@@ -24,13 +24,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Denis, page DENIS">
 
-Q-Link columns: **1** PRESET, RANDOM ALL, OSC1 FREQ, OSC1 TIMBRE  ·  **2** OSC2 FREQ, HARMONICS, OSC MIX, FOLD DEPTH  ·  **3** FOLD TYPE, CUTOFF, Q (RESO), FILTER TYPE  ·  **4** VEL>FILTER, PORTAMENTO, LEGATO
+Q-Link columns: **1** OSC1 FREQ, OSC1 TIMBRE  ·  **2** OSC2 FREQ, HARMONICS, OSC MIX  ·  **3** FOLD DEPTH, FOLD TYPE, CUTOFF, Q (RESO)  ·  **4** VEL>FILTER, PORTAMENTO, LEGATO
 
 ### 2. ENV / MOD
 
 <img src="screenshots/page_1.png" width="760" alt="Denis, page ENV / MOD">
 
-Q-Link columns: **1** ATTACK, DECAY, SUSTAIN, RELEASE  ·  **2** NOISE MIX, NOISE TYPE, RANDOM SOUND, RANDOM MOD  ·  **3** RESET MATRIX, LFO RATE, S&H RATE, ENV DEPTH  ·  **4** NOISE DEPTH
+Q-Link columns: **1** ATTACK, DECAY, SUSTAIN, RELEASE  ·  **2** NOISE MIX, NOISE TYPE  ·  **3** LFO RATE, S&H RATE, ENV DEPTH, NOISE DEPTH
 
 ### 3. ENV LFO
 

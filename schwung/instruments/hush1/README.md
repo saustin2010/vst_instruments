@@ -24,19 +24,19 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Hush One, page MAIN">
 
-Q-Link columns: **1** PATCH, CUTOFF, RESONANCE, ENV AMT  ·  **2** KEY TRACK, ATTACK, DECAY, SUSTAIN  ·  **3** RELEASE, VCA MODE, OCTAVE, VELO SENS  ·  **4** MASTER VOL
+Q-Link columns: **1** CUTOFF, RESONANCE, ENV AMT, KEY TRACK  ·  **2** ATTACK, DECAY, SUSTAIN, RELEASE  ·  **3** VCA MODE, OCTAVE, VELO SENS, MASTER VOL  ·  **4** PATCH
 
 ### 2. SOURCE
 
 <img src="screenshots/page_1.png" width="760" alt="Hush One, page SOURCE">
 
-Q-Link columns: **1** SAW WAVE, PULSE / SQR, SUB OSC, NOISE  ·  **2** TRANSPOSE, FINE TUNE, WHITE NOISE, FLT ATTACK  ·  **3** FLT DECAY, FLT SUSTAIN, FLT RELEASE, SUB MODE  ·  **4** PULSE WIDTH, PWM SOURCE, PWM LFO, PWM ENV
+Q-Link columns: **1** SAW WAVE, PULSE / SQR, SUB OSC, NOISE  ·  **2** TRANSPOSE, FINE TUNE, WHITE NOISE  ·  **3** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE  ·  **4** PULSE WIDTH, PWM SOURCE, PWM LFO, PWM ENV
 
 ### 3. MODULATOR
 
 <img src="screenshots/page_2.png" width="760" alt="Hush One, page MODULATOR">
 
-Q-Link columns: **1** LFO RATE, LFO WAVE, LFO RETRIG, LFO SYNC  ·  **2** LFO INVERT, PITCH SNAP, LFO PITCH, LFO FILTER  ·  **3** LFO PWM, VEL FILTER, ENV POLARITY, ENV FULL  ·  **4** VOL CORRECT, DECLICK
+Q-Link columns: **1** LFO RATE, LFO WAVE  ·  **2** LFO PITCH, LFO FILTER, LFO PWM  ·  **3** VEL FILTER, ENV POLARITY, ENV FULL  ·  **4** VOL CORRECT, DECLICK
 
 ### 4. PERFORM
 

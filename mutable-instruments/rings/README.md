@@ -1,10 +1,12 @@
 # Rings
 
-**Synth** · Mutable Instruments Rings: a resonator, strummed by the notes you play. · maker in MPC: Mutable Instruments · licence: MIT
+**Synth** · Mutable Instruments Rings: a resonator, strummed by the notes you play, with 14 presets. · maker in MPC: Mutable Instruments · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Rings on the MPC touchscreen">
 
 Rings is a resonator with seven models (a modal resonator, sympathetic strings, a string, an FM voice, sympathetic chords, a string with reverb, and the module's hidden "Disastrous Peace" string synth), shaped by STRUCTURE, BRIGHTNESS, DAMPING and POSITION, with one, two or four voices ringing at once. Here every note strums it with Rings' internal exciter (velocity sets how hard) and the voices rotate as on the module. The string synth's effect (formant, chorus, reverb, ensemble) is SYNTH FX. Runs Mutable's own DSP.
+
+The module has no presets, so the port brings 14 (Init plus Glass Marimba, Tubular Bell, Wood Block, Sympathetic Sitar, Chord Harp, Nylon String, Steel String, Dulcimer, FM Tines, FM Gong, Verb String, Synth Strings and Choir Pad), in MPC's PRESET menu; each sets every control, with levels evened out.
 
 ## On the MPC
 
@@ -24,7 +26,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Rings, page RINGS">
 
-Q-Link columns: **1** MODEL, POLYPHONY, STRUCTURE, BRIGHTNESS  ·  **2** DAMPING, POSITION, VELOCITY, OCTAVE  ·  **3** BEND RANGE, SYNTH FX, WIDTH, VOLUME
+Q-Link columns: **1** MODEL, POLYPHONY  ·  **2** STRUCTURE, BRIGHTNESS, DAMPING, POSITION  ·  **3** VELOCITY, OCTAVE, BEND RANGE, SYNTH FX  ·  **4** WIDTH, VOLUME
 
 ## Install
 

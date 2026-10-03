@@ -9,7 +9,7 @@
             ],
             "localComponentDefinitions": [
                 {
-                    "key": "shKnob22_dee6a497_n15v22",
+                    "key": "shKnob22_dee6a497_n13v22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -137,7 +137,7 @@
                                                 "version": 1,
                                                 "name": "Titillium Web",
                                                 "style": "SemiBold",
-                                                "height": 15.0
+                                                "height": 13.0
                                             },
                                             "colour": "fff0f0ff",
                                             "justification": "horizontallyCentred verticallyCentred",
@@ -203,7 +203,7 @@
                     }
                 },
                 {
-                    "key": "shKnob22_e7608323",
+                    "key": "shKnob22_e7608323_n15v22_b123",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -283,7 +283,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 130 105",
+                                    "bounds": "0 0 123 105",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -313,7 +313,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "38 0 54 54",
+                                    "bounds": "34 0 54 54",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -331,7 +331,7 @@
                                                 "version": 1,
                                                 "name": "Titillium Web",
                                                 "style": "SemiBold",
-                                                "height": 17.0
+                                                "height": 15.0
                                             },
                                             "colour": "fff0f0ff",
                                             "justification": "horizontallyCentred verticallyCentred",
@@ -351,7 +351,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 51 130 20",
+                                    "bounds": "0 51 123 20",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -389,7 +389,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 73 130 26",
+                                    "bounds": "0 73 123 26",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -1392,7 +1392,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "BIRTH LEVEL",
-                                    "type": "shKnob22_dee6a497_n15v22",
+                                    "type": "shKnob22_dee6a497_n13v22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -1413,7 +1413,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "235 132 130 105",
+                                    "bounds": "232 132 130 105",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1422,7 +1422,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "HIT LEVEL",
-                                    "type": "shKnob22_e7608323",
+                                    "type": "shKnob22_e7608323_n15v22_b123",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -1443,7 +1443,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "385 132 130 105",
+                                    "bounds": "371 132 123 105",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1452,7 +1452,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "HIT DECAY",
-                                    "type": "shKnob22_e7608323",
+                                    "type": "shKnob22_e7608323_n15v22_b123",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -1473,7 +1473,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "530 132 130 105",
+                                    "bounds": "500 132 123 105",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1593,7 +1593,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "6 146 120 70",
+                                    "bounds": "34 146 120 70",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1673,9 +1673,8 @@
                 "fnKeyIndex": 0,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "0 123 666 120",
-                    "638 470 374 116",
-                    "0 0 0 0"
+                    "28 123 604 120",
+                    "638 470 374 116"
                 ],
                 "componentName": "MAIN|MAIN",
                 "initialSize": "0 0 1280 628",

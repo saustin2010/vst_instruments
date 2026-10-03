@@ -1,0 +1,208 @@
+{
+ "presets": [
+  {
+   "name": "Init",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.25,
+    "timbre": 0.5,
+    "carrier": "SINE",
+    "note": 48,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 0.7
+   }
+  },
+  {
+   "name": "Ring Mod",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.28,
+    "timbre": 0.5,
+    "carrier": "SINE",
+    "note": 60,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 0.537
+   }
+  },
+  {
+   "name": "Parallel Ring",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.28,
+    "timbre": 0.5,
+    "carrier": "SINE",
+    "note": 55,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 0.5,
+    "volume": 0.637
+   }
+  },
+  {
+   "name": "Digital Ring",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.4,
+    "timbre": 0.5,
+    "carrier": "TRIANGLE",
+    "note": 55,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 0.463
+   }
+  },
+  {
+   "name": "Cross Fold",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.14,
+    "timbre": 0.6,
+    "carrier": "SAW",
+    "note": 48,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 0.479
+   }
+  },
+  {
+   "name": "XOR Crush",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.52,
+    "timbre": 0.4,
+    "carrier": "SAW",
+    "note": 36,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 0.575
+   }
+  },
+  {
+   "name": "Comparator Grit",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.64,
+    "timbre": 0.6,
+    "carrier": "SINE",
+    "note": 43,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 0.484
+   }
+  },
+  {
+   "name": "Robot Vocoder",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.85,
+    "timbre": 0.5,
+    "carrier": "SINE",
+    "note": 48,
+    "fine": 0.0,
+    "level_1": 1.0,
+    "level_2": 1.0,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 0.92
+   }
+  },
+  {
+   "name": "Pulse Vocoder",
+   "values": {
+    "mode": "META MOD",
+    "algorithm": 0.95,
+    "timbre": 0.5,
+    "carrier": "TRIANGLE",
+    "note": 60,
+    "fine": 0.0,
+    "level_1": 1.0,
+    "level_2": 1.0,
+    "shift": 0.5,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 1.0
+   }
+  },
+  {
+   "name": "Shift Up",
+   "values": {
+    "mode": "FREQ SHIFTER",
+    "algorithm": 0.25,
+    "timbre": 0.5,
+    "carrier": "SINE",
+    "note": 48,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.6,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 1.0
+   }
+  },
+  {
+   "name": "Shift Down",
+   "values": {
+    "mode": "FREQ SHIFTER",
+    "algorithm": 0.25,
+    "timbre": 0.5,
+    "carrier": "SINE",
+    "note": 48,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.4,
+    "output": "OUT",
+    "mix": 1.0,
+    "volume": 0.91
+   }
+  },
+  {
+   "name": "Stereo Shift",
+   "values": {
+    "mode": "FREQ SHIFTER",
+    "algorithm": 0.25,
+    "timbre": 0.5,
+    "carrier": "SINE",
+    "note": 48,
+    "fine": 0.0,
+    "level_1": 0.8,
+    "level_2": 0.8,
+    "shift": 0.55,
+    "output": "OUT + AUX",
+    "mix": 0.7,
+    "volume": 0.97
+   }
+  }
+ ]
+}

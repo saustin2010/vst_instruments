@@ -3,6 +3,7 @@
   "vendor": "Mutable Instruments",
   "uid": "MIel",
   "so": "elements.so",
+  "presets": "presets.json",
   "build": {
     "sources": [
       "mpc/elements_engine.cc",

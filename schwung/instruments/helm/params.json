@@ -78,7 +78,7 @@
   },
   {
    "key": "arp_on",
-   "name": "ARP SWITCH",
+   "name": "ARP ON",
    "options": [
     "OFF",
     "ON"
@@ -159,7 +159,7 @@
   },
   {
    "key": "delay_on",
-   "name": "DELAY SWITCH",
+   "name": "DELAY ON",
    "options": [
     "OFF",
     "ON"
@@ -210,7 +210,7 @@
   },
   {
    "key": "distortion_on",
-   "name": "DIST SWITCH",
+   "name": "DIST ON",
    "options": [
     "OFF",
     "ON"
@@ -230,31 +230,31 @@
   },
   {
    "key": "fil_attack",
-   "name": "FLT ATK",
+   "name": "FLT ATTACK",
    "min": 0.0,
    "max": 4.0
   },
   {
    "key": "fil_decay",
-   "name": "FILTER DECAY",
+   "name": "FLT DECAY",
    "min": 0.0,
    "max": 4.0
   },
   {
    "key": "fil_env_depth",
-   "name": "FLT ENV DEPT",
+   "name": "FLT ENV AMT",
    "min": -128.0,
    "max": 128.0
   },
   {
    "key": "fil_release",
-   "name": "FLT REL",
+   "name": "FLT RELEASE",
    "min": 0.0,
    "max": 4.0
   },
   {
    "key": "fil_sustain",
-   "name": "FLT SUS",
+   "name": "FLT SUSTAIN",
    "min": 0.0,
    "max": 1.0
   },
@@ -272,7 +272,7 @@
   },
   {
    "key": "filter_on",
-   "name": "FLT SWITCH",
+   "name": "FILTER ON",
    "options": [
     "OFF",
     "ON"
@@ -314,7 +314,7 @@
   },
   {
    "key": "formant_on",
-   "name": "FORMA SWITCH",
+   "name": "FORMANT ON",
    "options": [
     "OFF",
     "ON"
@@ -335,7 +335,7 @@
   },
   {
    "key": "keytrack",
-   "name": "FLT KEY TRAC",
+   "name": "FLT KEYTRACK",
    "min": -1.0,
    "max": 1.0
   },
@@ -350,43 +350,43 @@
   },
   {
    "key": "mod_attack",
-   "name": "MOD ENV ATK",
+   "name": "MOD ATTACK",
    "min": 0.0,
    "max": 4.0
   },
   {
    "key": "mod_decay",
-   "name": "MOD ENV DCY",
+   "name": "MOD DECAY",
    "min": 0.0,
    "max": 4.0
   },
   {
    "key": "mod_release",
-   "name": "MOD ENV REL",
+   "name": "MOD RELEASE",
    "min": 0.0,
    "max": 4.0
   },
   {
    "key": "mod_sustain",
-   "name": "MOD ENV SUS",
+   "name": "MOD SUSTAIN",
    "min": 0.0,
    "max": 1.0
   },
   {
    "key": "mono_lfo_1_amplitude",
-   "name": "MON LFO 1 AM",
+   "name": "LFO1 AMOUNT",
    "min": -1.0,
    "max": 1.0
   },
   {
    "key": "mono_lfo_1_frequency",
-   "name": "MON LFO 1 FR",
+   "name": "LFO1 FREQ",
    "min": -7.0,
    "max": 6.0
   },
   {
    "key": "mono_lfo_1_retrigger",
-   "name": "MON LFO 1 RE",
+   "name": "LFO1 RETRIG",
    "options": [
     "FREE",
     "RETRIGGER",
@@ -396,7 +396,7 @@
   },
   {
    "key": "mono_lfo_1_sync",
-   "name": "MON LFO 1 SY",
+   "name": "LFO1 SYNC",
    "options": [
     "SECONDS",
     "TEMPO",
@@ -407,7 +407,7 @@
   },
   {
    "key": "mono_lfo_1_tempo",
-   "name": "MON LFO 1 TE",
+   "name": "LFO1 TEMPO",
    "options": [
     "32/1",
     "16/1",
@@ -426,7 +426,7 @@
   },
   {
    "key": "mono_lfo_1_waveform",
-   "name": "MON LFO 1 WA",
+   "name": "LFO1 WAVE",
    "options": [
     "SINE",
     "TRIANGLE",
@@ -446,19 +446,19 @@
   },
   {
    "key": "mono_lfo_2_amplitude",
-   "name": "MON LFO 2 AM",
+   "name": "LFO2 AMOUNT",
    "min": -1.0,
    "max": 1.0
   },
   {
    "key": "mono_lfo_2_frequency",
-   "name": "MON LFO 2 FR",
+   "name": "LFO2 FREQ",
    "min": -7.0,
    "max": 6.0
   },
   {
    "key": "mono_lfo_2_retrigger",
-   "name": "MON LFO 2 RE",
+   "name": "LFO2 RETRIG",
    "options": [
     "FREE",
     "RETRIGGER",
@@ -468,7 +468,7 @@
   },
   {
    "key": "mono_lfo_2_sync",
-   "name": "MON LFO 2 SY",
+   "name": "LFO2 SYNC",
    "options": [
     "SECONDS",
     "TEMPO",
@@ -479,7 +479,7 @@
   },
   {
    "key": "mono_lfo_2_tempo",
-   "name": "MON LFO 2 TE",
+   "name": "LFO2 TEMPO",
    "options": [
     "32/1",
     "16/1",
@@ -498,7 +498,7 @@
   },
   {
    "key": "mono_lfo_2_waveform",
-   "name": "MON LFO 2 WA",
+   "name": "LFO2 WAVE",
    "options": [
     "SINE",
     "TRIANGLE",
@@ -531,39 +531,39 @@
   },
   {
    "key": "osc_1_transpose",
-   "name": "OSC 1 TRANSP",
+   "name": "OSC1 TRANSP",
    "min": -48.0,
    "max": 48.0,
    "display": "int"
   },
   {
    "key": "osc_1_tune",
-   "name": "OSC 1 TUNE",
+   "name": "OSC1 TUNE",
    "min": -1.0,
    "max": 1.0
   },
   {
    "key": "osc_1_unison_detune",
-   "name": "OSC 1 UNI DT",
+   "name": "OSC1 DETUNE",
    "min": 0.0,
    "max": 100.0
   },
   {
    "key": "osc_1_unison_voices",
-   "name": "OSC 1 UNI VO",
+   "name": "OSC1 VOICES",
    "min": 1.0,
    "max": 15.0,
    "display": "int"
   },
   {
    "key": "osc_1_volume",
-   "name": "OSC 1 VOLUME",
+   "name": "OSC1 VOLUME",
    "min": 0.0,
    "max": 1.0
   },
   {
    "key": "osc_1_waveform",
-   "name": "OSC 1 WAVE",
+   "name": "OSC1 WAVE",
    "options": [
     "SINE",
     "TRIANGLE",
@@ -581,39 +581,39 @@
   },
   {
    "key": "osc_2_transpose",
-   "name": "OSC 2 TRANSP",
+   "name": "OSC2 TRANSP",
    "min": -48.0,
    "max": 48.0,
    "display": "int"
   },
   {
    "key": "osc_2_tune",
-   "name": "OSC 2 TUNE",
+   "name": "OSC2 TUNE",
    "min": -1.0,
    "max": 1.0
   },
   {
    "key": "osc_2_unison_detune",
-   "name": "OSC 2 UNI DT",
+   "name": "OSC2 DETUNE",
    "min": 0.0,
    "max": 100.0
   },
   {
    "key": "osc_2_unison_voices",
-   "name": "OSC 2 UNI VO",
+   "name": "OSC2 VOICES",
    "min": 1.0,
    "max": 15.0,
    "display": "int"
   },
   {
    "key": "osc_2_volume",
-   "name": "OSC 2 VOLUME",
+   "name": "OSC2 VOLUME",
    "min": 0.0,
    "max": 1.0
   },
   {
    "key": "osc_2_waveform",
-   "name": "OSC 2 WAVE",
+   "name": "OSC2 WAVE",
    "options": [
     "SINE",
     "TRIANGLE",
@@ -631,20 +631,20 @@
   },
   {
    "key": "osc_feedback_amount",
-   "name": "OSC FBK AMT",
+   "name": "FBK AMOUNT",
    "min": -1.0,
    "max": 1.0
   },
   {
    "key": "osc_feedback_transpose",
-   "name": "OSC FBK TRAN",
+   "name": "FBK TRANSP",
    "min": -24.0,
    "max": 24.0,
    "display": "int"
   },
   {
    "key": "osc_feedback_tune",
-   "name": "OSC FBK TUNE",
+   "name": "FBK TUNE",
    "min": -1.0,
    "max": 1.0
   },
@@ -656,26 +656,26 @@
   },
   {
    "key": "pitch_bend_range",
-   "name": "PIT BEN RANG",
+   "name": "BEND RANGE",
    "min": 0.0,
    "max": 48.0,
    "display": "int"
   },
   {
    "key": "poly_lfo_amplitude",
-   "name": "POLY LFO AMP",
+   "name": "PLFO AMOUNT",
    "min": -1.0,
    "max": 1.0
   },
   {
    "key": "poly_lfo_frequency",
-   "name": "POL LFO FREQ",
+   "name": "PLFO FREQ",
    "min": -7.0,
    "max": 6.0
   },
   {
    "key": "poly_lfo_sync",
-   "name": "POL LFO SYNC",
+   "name": "PLFO SYNC",
    "options": [
     "SECONDS",
     "TEMPO",
@@ -686,7 +686,7 @@
   },
   {
    "key": "poly_lfo_tempo",
-   "name": "POL LFO TEMP",
+   "name": "PLFO TEMPO",
    "options": [
     "32/1",
     "16/1",
@@ -705,7 +705,7 @@
   },
   {
    "key": "poly_lfo_waveform",
-   "name": "POL LFO WAVE",
+   "name": "PLFO WAVE",
    "options": [
     "SINE",
     "TRIANGLE",
@@ -754,7 +754,7 @@
   },
   {
    "key": "reverb_damping",
-   "name": "REVER DAMPIN",
+   "name": "REV DAMPING",
    "min": 0.0,
    "max": 1.0
   },
@@ -772,7 +772,7 @@
   },
   {
    "key": "reverb_on",
-   "name": "REVER SWITCH",
+   "name": "REVERB ON",
    "options": [
     "OFF",
     "ON"
@@ -1019,19 +1019,19 @@
   },
   {
    "key": "step_smoothing",
-   "name": "STEP SMOOTHI",
+   "name": "STEP SMOOTH",
    "min": 0.0,
    "max": 0.5
   },
   {
    "key": "stutter_frequency",
-   "name": "STUTTER FREQ",
+   "name": "STUT FREQ",
    "min": 0.0,
    "max": 7.0
   },
   {
    "key": "stutter_on",
-   "name": "STUTT SWITCH",
+   "name": "STUTTER ON",
    "options": [
     "OFF",
     "ON"
@@ -1040,13 +1040,13 @@
   },
   {
    "key": "stutter_resample_frequency",
-   "name": "RESAMPL FREQ",
+   "name": "RESAMP FREQ",
    "min": -7.0,
    "max": 4.0
   },
   {
    "key": "stutter_resample_sync",
-   "name": "STUTTER SY 1",
+   "name": "RESAMP SYNC",
    "options": [
     "SECONDS",
     "TEMPO",
@@ -1057,7 +1057,7 @@
   },
   {
    "key": "stutter_resample_tempo",
-   "name": "STUTTE TEM 1",
+   "name": "RESAMP TEMPO",
    "options": [
     "32/1",
     "16/1",
@@ -1076,13 +1076,13 @@
   },
   {
    "key": "stutter_softness",
-   "name": "STUTT SOFTNE",
+   "name": "STUT SOFT",
    "min": 0.0,
    "max": 1.0
   },
   {
    "key": "stutter_sync",
-   "name": "STUTTER SY 2",
+   "name": "STUT SYNC",
    "options": [
     "SECONDS",
     "TEMPO",
@@ -1093,7 +1093,7 @@
   },
   {
    "key": "stutter_tempo",
-   "name": "STUTTE TEM 2",
+   "name": "STUT TEMPO",
    "options": [
     "32/1",
     "16/1",
@@ -1149,7 +1149,7 @@
   },
   {
    "key": "unison_1_harmonize",
-   "name": "OSC 1 HARM",
+   "name": "OSC1 HARMON",
    "options": [
     "OFF",
     "ON"
@@ -1158,7 +1158,7 @@
   },
   {
    "key": "unison_2_harmonize",
-   "name": "OSC 2 HARM",
+   "name": "OSC2 HARMON",
    "options": [
     "OFF",
     "ON"

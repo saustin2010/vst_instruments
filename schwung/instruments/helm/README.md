@@ -24,67 +24,67 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Helm, page MAIN">
 
-Q-Link columns: **1** PATCH, VOLUME, POLYPHONY, OCTAVE  ·  **2** LEGATO, CUTOFF, RESONANCE, FILTER TYPE  ·  **3** AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE
+Q-Link columns: **1** VOLUME, POLYPHONY, OCTAVE, LEGATO  ·  **2** CUTOFF, RESONANCE, FILTER TYPE  ·  **3** AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE  ·  **4** PATCH
 
 ### 2. OSC
 
 <img src="screenshots/page_1.png" width="760" alt="Helm, page OSC">
 
-Q-Link columns: **1** OSC 1 TRANSP, OSC 1 TUNE, OSC 1 UNI DT, OSC 1 UNI VO  ·  **2** OSC 1 VOLUME, OSC 1 WAVE, OSC 1 HARM, OSC 2 TRANSP  ·  **3** OSC 2 TUNE, OSC 2 UNI DT, OSC 2 UNI VO, OSC 2 VOLUME  ·  **4** OSC 2 WAVE, OSC 2 HARM
+Q-Link columns: **1** OSC1 WAVE, OSC1 TRANSP, OSC1 TUNE, OSC1 VOLUME  ·  **2** OSC1 VOICES, OSC1 DETUNE, OSC1 HARMON  ·  **3** OSC2 WAVE, OSC2 TRANSP, OSC2 TUNE, OSC2 VOLUME  ·  **4** OSC2 VOICES, OSC2 DETUNE, OSC2 HARMON
 
 ### 3. OSC MIX
 
 <img src="screenshots/page_2.png" width="760" alt="Helm, page OSC MIX">
 
-Q-Link columns: **1** CROSS MOD, OSC FBK AMT, OSC FBK TRAN, OSC FBK TUNE  ·  **2** OSC MIX, NOISE VOL, SUB OCT, SUB SHUF  ·  **3** SUB VOL, SUB OSC WAVE
+Q-Link columns: **1** CROSS MOD, FBK AMOUNT, FBK TRANSP, FBK TUNE  ·  **2** OSC MIX  ·  **3** NOISE VOL  ·  **4** SUB OCT, SUB SHUF, SUB VOL, SUB OSC WAVE
 
 ### 4. FILTER
 
 <img src="screenshots/page_3.png" width="760" alt="Helm, page FILTER">
 
-Q-Link columns: **1** FLT ENV DEPT, FILTER BLEND, FILTER DRIVE, FLT SWITCH  ·  **2** SATURATION, FILTER SHELF, FILTER STYLE, FLT KEY TRAC  ·  **3** FORMA SWITCH, FORMANT X, FORMANT Y, FLT ATK  ·  **4** FILTER DECAY, FLT REL, FLT SUS
+Q-Link columns: **1** FILTER ON, FILTER STYLE, FILTER SHELF, FILTER BLEND  ·  **2** FILTER DRIVE, SATURATION, FLT ENV AMT, FLT KEYTRACK  ·  **3** FORMANT ON, FORMANT X, FORMANT Y  ·  **4** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE
 
 ### 5. MOD ENV
 
 <img src="screenshots/page_4.png" width="760" alt="Helm, page MOD ENV">
 
-Q-Link columns: **1** MOD ENV ATK, MOD ENV DCY, MOD ENV REL, MOD ENV SUS  ·  **2** MON LFO 1 AM, MON LFO 1 FR, MON LFO 1 RE, MON LFO 1 SY  ·  **3** MON LFO 1 TE, MON LFO 1 WA
+Q-Link columns: **1** MOD ATTACK, MOD DECAY, MOD SUSTAIN, MOD RELEASE  ·  **2** LFO1 WAVE, LFO1 AMOUNT, LFO1 RETRIG  ·  **3** LFO1 SYNC, LFO1 FREQ, LFO1 TEMPO
 
 ### 6. MONO LFO
 
 <img src="screenshots/page_5.png" width="760" alt="Helm, page MONO LFO">
 
-Q-Link columns: **1** MON LFO 2 AM, MON LFO 2 FR, MON LFO 2 RE, MON LFO 2 SY  ·  **2** MON LFO 2 TE, MON LFO 2 WA, POLY LFO AMP, POL LFO FREQ  ·  **3** POL LFO SYNC, POL LFO TEMP, POL LFO WAVE
+Q-Link columns: **1** LFO2 WAVE, LFO2 AMOUNT, LFO2 RETRIG  ·  **2** LFO2 SYNC, LFO2 FREQ, LFO2 TEMPO  ·  **3** PLFO WAVE, PLFO AMOUNT  ·  **4** PLFO SYNC, PLFO FREQ, PLFO TEMPO
 
 ### 7. STEP SEQ
 
 <img src="screenshots/page_6.png" width="760" alt="Helm, page STEP SEQ">
 
-Q-Link columns: **1** NUM STEPS, STEP FREQ, STEP RETRIG, STEP SYNC  ·  **2** STEP TEMPO, STEP SMOOTHI, STEP 1, STEP 2  ·  **3** STEP 3, STEP 4, STEP 5, STEP 6  ·  **4** STEP 7, STEP 8
+Q-Link columns: **1** NUM STEPS, STEP SMOOTH, STEP RETRIG  ·  **2** STEP SYNC, STEP FREQ, STEP TEMPO  ·  **3** STEP 1, STEP 2, STEP 3, STEP 4  ·  **4** STEP 5, STEP 6, STEP 7, STEP 8
 
 ### 8. STEPS
 
 <img src="screenshots/page_7.png" width="760" alt="Helm, page STEPS">
 
-Q-Link columns: **1** STEP 9, STEP 10, STEP 11, STEP 12  ·  **2** STEP 13, STEP 14, STEP 15, STEP 16  ·  **3** ARP FREQ, ARP GATE, ARP OCTAVES, ARP SWITCH  ·  **4** ARP PATTERN, ARP SYNC, ARP TEMPO
+Q-Link columns: **1** STEP 9, STEP 10, STEP 11, STEP 12  ·  **2** STEP 13, STEP 14, STEP 15, STEP 16  ·  **3** ARP ON, ARP PATTERN, ARP OCTAVES, ARP GATE  ·  **4** ARP SYNC, ARP FREQ, ARP TEMPO
 
 ### 9. DISTORTION
 
 <img src="screenshots/page_8.png" width="760" alt="Helm, page DISTORTION">
 
-Q-Link columns: **1** DIST DRIVE, DIST MIX, DIST SWITCH, DIST TYPE  ·  **2** DELAY MIX, DELAY FBK, DELAY FREQ, DELAY SWITCH  ·  **3** DELAY SYNC, DELAY TEMPO
+Q-Link columns: **1** DIST ON, DIST TYPE, DIST DRIVE, DIST MIX  ·  **2** DELAY ON, DELAY MIX, DELAY FBK  ·  **3** DELAY SYNC, DELAY FREQ, DELAY TEMPO
 
 ### 10. REVERB
 
 <img src="screenshots/page_9.png" width="760" alt="Helm, page REVERB">
 
-Q-Link columns: **1** REVER DAMPIN, REVERB MIX, REVERB FBK, REVER SWITCH  ·  **2** STUTTER FREQ, STUTT SWITCH, RESAMPL FREQ, STUTTER SY 1  ·  **3** STUTTE TEM 1, STUTT SOFTNE, STUTTER SY 2, STUTTE TEM 2
+Q-Link columns: **1** REVERB ON, REVERB MIX, REVERB FBK, REV DAMPING  ·  **2** STUTTER ON, STUT SOFT  ·  **3** STUT SYNC, STUT FREQ, STUT TEMPO  ·  **4** RESAMP SYNC, RESAMP FREQ, RESAMP TEMPO
 
 ### 11. PLAYING
 
 <img src="screenshots/page_10.png" width="760" alt="Helm, page PLAYING">
 
-Q-Link columns: **1** BPM, AUTO BPM, PIT BEN RANG, PORTAMENTO  ·  **2** PORTA TYPE, VEL TRACK, MOD 1 AMT, MOD 2 AMT  ·  **3** MOD 3 AMT, MOD 4 AMT, MOD 5 AMT, MOD 6 AMT  ·  **4** MOD 7 AMT, MOD 8 AMT
+Q-Link columns: **1** AUTO BPM, BPM, VEL TRACK, BEND RANGE  ·  **2** PORTA TYPE, PORTAMENTO  ·  **3** MOD 1 AMT, MOD 2 AMT, MOD 3 AMT, MOD 4 AMT  ·  **4** MOD 5 AMT, MOD 6 AMT, MOD 7 AMT, MOD 8 AMT
 
 ### 12. MOD AMOUNTS
 

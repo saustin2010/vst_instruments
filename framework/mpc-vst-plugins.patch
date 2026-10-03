@@ -116,10 +116,10 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..a51038f 100644
+index 6e0f9d4..b0a4f9a 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
-@@ -596,7 +596,242 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +596,263 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -313,6 +313,11 @@ index 6e0f9d4..a51038f 100644
 +`meter` as stock does: frames of the meter's own w x h, the strip's own frame count (`frames=`), `numFrames` = that
 +count, bounds = w x h. Envelope displays built that way drew correctly on the Live II (screen grab). Knob filmstrips
 +(128 square frames, `numFrames` 127) draw correctly as they are and were left alone.
++- **Sliders, the same way (2026-10-03).** Slider filmstrips were still square-padded 128-frame strips, 16640 to 30720
++  px tall (Braids 160x20480, Hush One 240x30720), and the owner saw their thumb animation go "silly" on the Live II.
++  Knob strips up to 96x12288 draw right; so `tools/shadow_skin.py` now builds a slider as stock does (Electric
++  `slider_distance` 250x6969, 101 frames of 69): frames of the slider's own w x h, as many as fit in 12288 px (up to
++  128; a 160 px slider gets 76), `numFrames` = that count, bounds = the slider. Device check pending.
 +- Screen grabs: MPC OS draws through a DRM plane, so `/dev/fb0` is black; the scanout buffer can be mapped read-only
 +  as root (`/dev/dri/card0`, GETPLANE -> GETFB -> MAP_DUMB): 800 x 1280 XRGB, portrait.
 +- Value pictures across two parameters (an envelope's decay segment depends on decay time and the sustain level):
@@ -342,7 +347,23 @@ index 6e0f9d4..a51038f 100644
 +  `"name_at"` (the engine answers `get_param("<key>:<value>")` with a preset's name without loading it). With
 +  `name_at` nothing is stepped or cached: `numPrograms` is re-read after every parameter set and chunk restore, and
 +  names are asked for when the host lists them, so the menu follows a bank switch (JUCE's VST host reads
-+  `numPrograms` and the names live). Still to confirm on a device: that MPC re-reads the list after a bank switch.
++  `numPrograms` and the names live). Names show and load in MPC's PRESET menu on a Live II (2026-10-03); still to
++  confirm there: that MPC re-reads the list after a bank switch.
++- **The wrapper's own presets (2026-10-03).** For an engine with no presets at all (303, Elements, the effects),
++  vst.json `"presets": "presets.json"` (`{"presets": [{"name", "values": {key: value}}]}`, values in each
++  parameter's own units or an option's label, checked by gen_vst.py) becomes the program list; picking one sets each
++  listed parameter through `set_parameter_locked`, as a touch would. Set every parameter in every preset so switching
++  is deterministic, and order them as the engine needs (the 303's Devilfish switch first: it changes the decay range).
++  The picked index isn't in the engine's state, so after a project reload the menu shows the first preset's name.
++- **MPC's plugin menu: type vs manufacturer (verified on a Live II, 2026-10-03).** MPC.settings has
++  `TouchNewPluginPopupSortByType` / `...SortByManufacturer` (and `NewPluginDialog...`). Sorted by type, VST plugins
++  fall into VST Instruments / VST Effects only: the plugin-list `category` ("Sequencer", "Drum Machine") changes
++  nothing. Sorted by manufacturer, each `manufacturer` value is a folder (Grids registered as "Sequencers" got one).
++  The manufacturer is also in the skin folder name, so changing it means a new skin folder and a re-registration.
++  install.sh now re-registers on a category change too (it compared only name, maker and type).
++- **A Q-Link column per panel: `-` leaves a slot empty (2026-10-03).** Columns are fixed groups of four slots, so a
++  page laid out 3-2-4-3 (or a two-knob panel) can still give each panel its own column, with its outline round that
++  panel only: `qlinks "MAIN" = wave,tune,-,-,cutoff,reso,env,decay,...`. The empty slot does nothing on the knob.
 +
 +## Animated displays cost MPC's screen thread too much; keep skin pictures still (2026-10-02, measured on a Live II)
 +A plugin can animate a skin: a display-only parameter the wrapper changes while it sounds, a filmstrip bound to it,
@@ -363,18 +384,20 @@ index 6e0f9d4..a51038f 100644
 +- Memory: MPC decodes skin images to 4 bytes a pixel; a 566x122 x 384-frame strip set is ~106 MB (the Live II had
 +  ~970 MB available and no swap). Keep filmstrips small.
 diff --git a/tools/gen_vst.py b/tools/gen_vst.py
-index 7a91d54..42e1544 100644
+index 7a91d54..3c3146d 100644
 --- a/tools/gen_vst.py
 +++ b/tools/gen_vst.py
-@@ -12,6 +12,7 @@ vst.json (paths are relative to the vst.json's folder):
+@@ -12,6 +12,9 @@ vst.json (paths are relative to the vst.json's folder):
        "params": "params.json",                   # parameter list (tools/params.py), in VST index order
        "layout": "layout.conf",                   # optional; without it the skin studio's auto-layout is used
        "short_names": {"LFO1 > ": "L1 "},          # optional on-screen name shortening
 +      "category": "Sequencer",                   # optional plugin-list category (default Synth, or Effect)
++      "presets": "presets.json",                 # optional: named sets of parameter values, shown as VST programs
++                                                 #   (MPC's PRESET menu) for an engine with no presets of its own
        "art": "html",                             # optional: draw the skin artwork in a browser (tools/html_art.py)
        "defines": {"HAS_LFO_BPM": 1},             # optional extra #defines in params.h
        "build": {"root": "..", "sources": ["src/engine.c"], "cflags": ["-Isrc"], "libs": ["-lm"]}
-@@ -62,7 +63,7 @@ def gen_params(cfg, params, out):
+@@ -62,7 +65,7 @@ def gen_params(cfg, params, out):
               "#pragma once",
               "typedef struct { const char *key, *name, *unit; float min, max, def; int nopts; "
               "const char *const *opts; int momentary; int string_display; int int_display; "
@@ -383,7 +406,7 @@ index 7a91d54..42e1544 100644
      key_to_index = {p["key"]: i for i, p in enumerate(params)}
      rows = []
      for i, p in enumerate(params):
-@@ -93,29 +94,91 @@ def gen_params(cfg, params, out):
+@@ -93,29 +96,118 @@ def gen_params(cfg, params, out):
              if isinstance(d, str):
                  d = opts.index(d) if d in opts else 0
              norm = d / (len(opts) - 1) if len(opts) > 1 else 0
@@ -463,6 +486,33 @@ index 7a91d54..42e1544 100644
 +        for k, d in (("count", "PLUG_PROGRAM_COUNT_KEY"), ("name_at", "PLUG_PROGRAM_NAME_AT")):
 +            if pr.get(k):
 +                lines.append("#define %s %s" % (d, c_str(pr[k])))
++    # "presets": a file of {"presets": [{"name": ..., "values": {key: value in the parameter's own units, or an option's
++    # label}}]} -- presets the wrapper keeps itself (vst2_wrap.c apply_preset), for an engine that has none: they become
++    # VST programs (MPC's PRESET menu); picking one sets each listed parameter as a touch on it would.
++    if cfg.get("presets"):
++        if pr:
++            raise SystemExit("presets: a port has either the engine's presets (\"programs\") or its own (\"presets\")")
++        port_dir = os.path.dirname(os.path.dirname(os.path.abspath(out)))
++        plist = json.load(open(os.path.join(port_dir, cfg["presets"])))["presets"]
++        byk = {q["key"]: q for q in params}
++        names, data = [], []
++        for ps in plist:
++            kv = []
++            for k, v in ps["values"].items():
++                q = byk.get(k)
++                if not q or q.get("momentary") or q.get("step_of") or q.get("display") == "string":
++                    raise SystemExit("presets: %r sets %r, which isn't a settable parameter" % (ps["name"], k))
++                if q.get("options"):
++                    if not (v in q["options"] or (isinstance(v, int) and 0 <= v < len(q["options"]))):
++                        raise SystemExit("presets: %r: %s=%r isn't one of %s" % (ps["name"], k, v, q["options"]))
++                elif not (q.get("min", 0) <= float(v) <= q.get("max", 1)):
++                    raise SystemExit("presets: %r: %s=%r is outside %s..%s" % (ps["name"], k, v, q.get("min"), q.get("max")))
++                kv.append("%s=%s" % (k, v))
++            names.append(c_str(ps["name"][:24]))
++            data.append(c_str(";".join(kv)))   # key=value;key=value
++        lines += ["#define PLUG_PRESET_COUNT %d" % len(names),
++                  "static const char *const PRESET_NAMES[] = {%s};" % ", ".join(names),
++                  "static const char *const PRESET_VALUES[] = {%s};" % ", ".join(data)]
      lines += ["#define %s %s" % (k, v) for k, v in cfg.get("defines", {}).items()]
      open(out, "w").write("\n".join(lines) + "\n")
  
@@ -481,7 +531,7 @@ index 7a91d54..42e1544 100644
  
  
  def main():
-@@ -140,23 +203,25 @@ def main():
+@@ -140,23 +232,25 @@ def main():
          return
      plist, sections = params.load(os.path.join(here, src))
      import shadow_skin
@@ -696,7 +746,7 @@ index 0d8dfa9..017eac1 100644
 -        return cfg["module"], "schwung"
      raise SystemExit('vst.json: needs "params" (or an adapter\'s source, e.g. "module")')
 diff --git a/tools/shadow_skin.py b/tools/shadow_skin.py
-index 5faa2a8..6bdb524 100644
+index 5faa2a8..4d97ac4 100644
 --- a/tools/shadow_skin.py
 +++ b/tools/shadow_skin.py
 @@ -8,11 +8,11 @@ backgrounds, knob filmstrips and button states; MPC draws live values.
@@ -714,17 +764,35 @@ index 5faa2a8..6bdb524 100644
      slider_v cx= cy= w= h= label="..." key=<param>     (vertical slider; value text below)
      slider_h cx= cy= w= h= label="..." key=<param>     (horizontal slider; value text below)
      readout cx= cy= w= h= label="..." key=<param>      (live value text)
-@@ -41,7 +41,8 @@ Controls can have looks: built-in drawings or images (look=, img=, img_on=, base
+@@ -40,8 +40,10 @@ Layout file:
+ Controls can have looks: built-in drawings or images (look=, img=, img_on=, base=, strip=, frames=, peak=, rms=;
  frames and popups take img=), per line or as top-level defaults (knob_look=moog): see tools/skin_assets.py. Looks,
  images and pictures need the browser renderer.
-     qlinks  "PAGE NAME" = key,key,...                  (optional, repeatable)
+-    qlinks  "PAGE NAME" = key,key,...                  (optional, repeatable)
 -Any widget line (frames too) can end in `when=<param>:<option>` (option name or index): it is shown only
++    qlinks  "PAGE NAME" = key,key,...                  (optional, repeatable; "-" leaves a slot empty, so a
++                                                       3-control panel can have a Q-Link column to itself)
 +Any widget line (frames too) can end in `when=<param>:<option>` (option name or index), or for a continuous
 +parameter `when=<param>:<i>/<N>` (band i of N of its range): it is shown only
  while that option parameter is at that option (MPC's IndexedEnabling), so a tab can swap control sets per
  mode. Its baked parts (frame, title, text boxes, group labels) go into a per-mode image over the background.
  Top level: `qlinks_track = key,...` sets the Q-Links used outside page-follow mode (default: page 1's).
-@@ -130,7 +131,7 @@ def parse_layout(path):
+@@ -70,6 +72,14 @@ LCD, LINE, BTN_BG, BTN_TEXT, BOX = "1a120d", "2a2823", "", "fdf3ea", "1f1f1f"
+ DISPLAY_INK = "cdeb63"   # theme_display_ink: live-text colour over a dotreadout/dotstepper (see readout/stepper below)
+ TD3 = False   # style=td3: frames are filled boxes, so widget crops sit on BOX, not the page bg
+ FRAMES = 128               # filmstrip frames (stock strips: 128, numFrames 127)
++MAX_STRIP = 12288          # tallest filmstrip MPC draws right (px; knobs up to 96x12288 do, sliders of 16640+ didn't)
++
++
++def slider_frames(sw_, sh_):
++    """A slider's filmstrip: frames of its own w x h, as many as fit in MAX_STRIP (up to FRAMES), numFrames = that
++    count (stock: Electric slider_distance 250x6969 = 101 frames of 69). Square-padded 128-frame slider strips (16640 to
++    30720 px tall) moved wrongly on a Live II: the owner saw the thumb's animation go "silly" (2026-10-03)."""
++    return max(2, min(FRAMES, MAX_STRIP // sh_))
+ KNOB_QLINKS = [13, 9, 5, 1, 14, 10, 6, 2]
+ CONTROL_KINDS = ("knob", "slider_v", "slider_h", "toggle", "button", "enum_h", "enum_v", "readout", "stepper", "list", "menu",
+                  "popup", "meter")
+@@ -130,7 +140,7 @@ def parse_layout(path):
      return tabs, top
  
  
@@ -733,7 +801,7 @@ index 5faa2a8..6bdb524 100644
  
  
  def parse_widget(line):
-@@ -271,10 +272,10 @@ def qlink_for_slot(slot):
+@@ -271,10 +281,10 @@ def qlink_for_slot(slot):
  def seg_rects(w):
      n = len(w["options"])
      if w["kind"] == "enum_v":
@@ -746,7 +814,7 @@ index 5faa2a8..6bdb524 100644
      rows = w.get("rows", 1)
      per = -(-n // rows)
      out = []
-@@ -462,6 +463,11 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -462,6 +472,11 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
          if not w.get("when"):
              return None
          k, _, o = w["when"].partition(":")
@@ -758,7 +826,7 @@ index 5faa2a8..6bdb524 100644
          opts = [str(x).lower() for x in (params[index[k]].get("options") or [])] if k in index else []
          if len(opts) < 2:
              raise SystemExit("layout: when=%s: %r is not an option parameter" % (w["when"], k))
-@@ -496,6 +502,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -496,6 +511,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
          return ppm
  
      radii, sliders, looks = set(), set(), {}   # knob (r, look id), slider (image, w, h, vert, look id); look id -> look
@@ -766,7 +834,7 @@ index 5faa2a8..6bdb524 100644
      for t, tab in enumerate(tabs_in):
          kids, controls = [], []
          for w in tab["widgets"]:
-@@ -596,14 +603,22 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -596,14 +612,22 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
              sfx = "_" + lid if lk else ""
              if lk:
                  looks[lid] = lk
@@ -790,7 +858,7 @@ index 5faa2a8..6bdb524 100644
                  defs.setdefault(key, _local(key, [_action("Mouse Down", "Q-Link"),
                                                    _action("Double Click", "Show Overlay", "knob overlay"),
                                                    _action("Enter Pressed", "Show Overlay", "knob overlay")], [
-@@ -611,9 +626,9 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -611,9 +635,9 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                      _sub("Knob", {"version": 5, "knobType": "FilmStrip", "filmStrip": "sh_knob_r%d%s.png" % (r, sfx),
                                    "numFrames": FRAMES - 1, "invert": False, "dragOrientation": "Vertical",
                                    "handleName": "Data"}, _bounds((cw - s) // 2, 0, s, s), "Knob"),
@@ -802,13 +870,18 @@ index 5faa2a8..6bdb524 100644
                                                                 "colour": "ff" + INK_DIM,
                                                                 "justification": "horizontallyCentred verticallyCentred",
                                                                 "case": "Upper Case"},
-@@ -663,10 +678,12 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -661,23 +685,25 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 vert = kind == "slider_v"
+                 img = "sh_%s_%dx%d%s" % (kind, sw_, sh_, sfx)
                  sliders.add((img, sw_, sh_, vert, lid))
-                 sq = max(sw_, sh_)   # filmstrip frames are square (as stock); padding is transparent
-                 cw = max(130, sq)
-+                if w.get("bw") and vert:   # (a vertical slider's square frame is transparent beside the slider)
+-                sq = max(sw_, sh_)   # filmstrip frames are square (as stock); padding is transparent
+-                cw = max(130, sq)
+-                name_y, name_h = (sq - sh_) // 2 + sh_ + 2, 20
++                nfr = meter_frames.get(img, slider_frames(sw_, sh_))   # frames of the slider's own w x h
++                cw = max(130, sw_)
++                if w.get("bw") and vert:
 +                    cw = max(sw_ + 20, w["bw"])
-                 name_y, name_h = (sq - sh_) // 2 + sh_ + 2, 20
++                name_y, name_h = sh_ + 2, 20
                  value_y = name_y + name_h + 2
                  ch = value_y + 26 + 6
 -                key = "shSlider_%s_%dx%d%s" % ("v" if vert else "h", sw_, sh_, sfx)
@@ -816,18 +889,23 @@ index 5faa2a8..6bdb524 100644
                  defs.setdefault(key, _local(key, [_action("Mouse Down", "Q-Link"),
                                                    _action("Double Click", "Show Overlay", "knob overlay"),
                                                    _action("Enter Pressed", "Show Overlay", "knob overlay")], [
-@@ -675,8 +692,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
-                                   "numFrames": FRAMES - 1, "invert": False,
+                     _focus(cw, ch),
+                     _sub("Knob", {"version": 5, "knobType": "FilmStrip", "filmStrip": img + ".png",
+-                                  "numFrames": FRAMES - 1, "invert": False,
++                                  "numFrames": nfr, "invert": False,
                                    "dragOrientation": "Vertical" if vert else "Horizontal",
-                                   "handleName": "Data"}, _bounds((cw - sq) // 2, 0, sq, sq), "Slider"),
+-                                  "handleName": "Data"}, _bounds((cw - sq) // 2, 0, sq, sq), "Slider"),
 -                    _name_label(0, name_y, cw, name_h, 17.0, INK),
 -                    _value_label(0, value_y, cw, 26, 22.0, INK_DIM)]))
+-                kids.append(_placed(key, name, i, w["cx"] - cw // 2, w["cy"] - sq // 2, cw, ch))
++                                  "handleName": "Data"}, _bounds((cw - sw_) // 2, 0, sw_, sh_), "Slider"),
 +                    _name_label(0, name_y, cw, name_h, float(ns), INK),
 +                    _value_label(0, value_y, cw, 26, float(vs), INK_DIM)]))
-                 kids.append(_placed(key, name, i, w["cx"] - cw // 2, w["cy"] - sq // 2, cw, ch))
++                kids.append(_placed(key, name, i, w["cx"] - cw // 2, w["cy"] - sh_ // 2, cw, ch))
              elif kind == "meter" and lk and lk.get("look") == "native":
                  # EXPERIMENTAL, unverified (docs/ROADMAP.md "A native Meter component"): a real Meter component
-@@ -704,13 +721,17 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 # instead of a Knob/FilmStrip pretending to be one. inactiveImage is the constant background;
+@@ -704,13 +730,17 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  mw, mh = w["w"], w["h"]
                  img = "sh_meter_%dx%d%s" % (mw, mh, sfx)
                  sliders.add((img, mw, mh, 1, lid))
@@ -849,7 +927,14 @@ index 5faa2a8..6bdb524 100644
              elif kind == "menu":
                  x, y, rw, rh = w["cx"] - w["w"] // 2, w["cy"] - w["h"] // 2, w["w"], w["h"]
                  key = "shMenu_%dx%d" % (rw, rh)
-@@ -827,7 +848,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -822,12 +852,14 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 raise SystemExit("layout: qlinks %r has %d keys (max 16)" % (title, len(keys)))
+             ql = {"Q-Link %d" % (q + 1): -1 for q in range(16)}
+             for s, k in enumerate(keys):
++                if k == "-":   # an empty slot: columns are fixed groups of four (slots 4c..4c+3)
++                    continue
+                 if k not in index:
+                     raise SystemExit("layout: qlinks key %r is not a parameter" % k)
                  ql["Q-Link %d" % qlink_for_slot(s)] = index[k]
              comp = "%s|%s" % (tab["name"], title)
              pages.append({"version": 3, "tabName": title, "fnKeyIndex": t, "fnKeySubIndex": sp,
@@ -858,30 +943,40 @@ index 5faa2a8..6bdb524 100644
                            "initialSize": "0 0 %d %d" % (W, H), "scale": 1.0})
              qmap.append({"Tab": t + 1, "SubTab": sp + 1, "Bank Direction": "Column", "Q-Links": ql})
              defs[comp] = {"key": comp, "value": {
-@@ -839,7 +860,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -839,9 +871,10 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
  
      for img, sw_, sh_, vert, lid in sorted(sliders):
          if lid:
 -            script.append("lsstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, FRAMES, 1 if vert else 0, skin_assets.encode(looks[lid])))
-+            script.append("lsstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, meter_frames.get(img, FRAMES), 1 if vert else 0,
-+                                                          skin_assets.encode(looks[lid])))
++            script.append("lsstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, meter_frames.get(img, slider_frames(sw_, sh_)),
++                                                          1 if vert else 0, skin_assets.encode(looks[lid])))
          else:
-             script.append("sstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, FRAMES, 1 if vert else 0, under()))
+-            script.append("sstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, FRAMES, 1 if vert else 0, under()))
++            script.append("sstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, slider_frames(sw_, sh_), 1 if vert else 0, under()))
      for r, lid in sorted(radii):
-@@ -867,7 +889,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+         if lid:
+             script.append("lstrip|%s|%d|%d|%s" % (art("sh_knob_r%d_%s" % (r, lid)), r, FRAMES, skin_assets.encode(looks[lid])))
+@@ -866,23 +899,34 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+             x, y = w["cx"] + w["w"] // 2 - 22 - ox, w["cy"] - oy
              dr.polygon([(x - 8, y - 4), (x + 8, y - 4), (x, y + 5)], fill="#" + ACCENT)
          im.save(path)
-     for img, sw_, sh_, vert, lid in sliders:
+-    for img, sw_, sh_, vert, lid in sliders:
 -        square_strip(os.path.join(skin_dir, img + ".png"), sw_, sh_)
-+        if img not in meter_frames:   # meters keep their own w x h frames (see the meter branch)
-+            square_strip(os.path.join(skin_dir, img + ".png"), sw_, sh_)
      for f in os.listdir(work):
          os.remove(os.path.join(work, f))
      os.rmdir(work)
-@@ -885,6 +908,30 @@ def square_strip(path, w, h):
-     out.save(path)
+     return list(defs.values()), pages, qmap
  
  
+-def square_strip(path, w, h):
+-    """w x h frames -> square max(w,h) frames with the slider centred and transparent padding."""
+-    from PIL import Image
+-    src = Image.open(path).convert("RGBA")
+-    n, sq = src.size[1] // h, max(w, h)
+-    out = Image.new("RGBA", (sq, sq * n), (0, 0, 0, 0))
+-    for k in range(n):
+-        out.paste(src.crop((0, k * h, w, (k + 1) * h)), ((sq - w) // 2, k * sq + (sq - h) // 2))
+-    out.save(path)
 +def qlink_columns(tab, keys):
 +    """One rectangle per Q-Link column, as stock skins have (AIR Filter Gate, Fuzz-Wah, Channel Strip: 4 per page).
 +    A 4-knob MPC (Live, One) works one column of the 4x4 grid at a time, the Q-Link button moving it along, and
@@ -904,11 +999,18 @@ index 5faa2a8..6bdb524 100644
 +        elif w.get("key") == key and w["kind"] not in ("button", "meter"):
 +            return True
 +    return False
-+
-+
+ 
+ 
  def qlink_bounds(tab, keys):
-     """Rectangle around the controls a page's Q-Links drive (plugin coords)."""
-     xs, ys = [], []
+@@ -938,6 +982,8 @@ def program_qlinks(layout_path, params, qmap):
+                 raise SystemExit("layout: qlinks_track has %d keys (max 16)" % len(keys))
+             ql = {"Q-Link %d" % (q + 1): -1 for q in range(16)}
+             for s_, k in enumerate(keys):
++                if k == "-":
++                    continue
+                 if k not in index:
+                     raise SystemExit("layout: qlinks_track key %r is not a parameter" % k)
+                 ql["Q-Link %d" % qlink_for_slot(s_)] = index[k]
 diff --git a/tools/studio.py b/tools/studio.py
 index f13ac8a..c988bdb 100644
 --- a/tools/studio.py
@@ -988,10 +1090,10 @@ index d3a8942..44739ae 100644
 + * int16 stereo, `frames` = 128) just before calling render for it. Weak, like the transport hook. */
 +void mpc_engine_input(void *inst, const int16_t *in_lr, int frames) __attribute__((weak));
 diff --git a/wrapper/vst2_wrap.c b/wrapper/vst2_wrap.c
-index 720ce46..808a172 100644
+index 720ce46..a183fd1 100644
 --- a/wrapper/vst2_wrap.c
 +++ b/wrapper/vst2_wrap.c
-@@ -15,10 +15,42 @@
+@@ -15,10 +15,47 @@
  #include <stdio.h>
  #include <math.h>
  #include <ctype.h>
@@ -1006,6 +1108,11 @@ index 720ce46..808a172 100644
 +#define PLUG_PROGRAM_COUNT 0
 +#define PLUG_PROGRAM_MIN 0
 +#endif
++#ifndef PLUG_PRESET_COUNT       /* vst.json "presets" (gen_vst.py): the wrapper's own presets, for an engine with none */
++#define PLUG_PRESET_COUNT 0
++static const char *const PRESET_NAMES[1] = {""}, *const PRESET_VALUES[1] = {""};
++#endif
++#define OWN_PRESETS (PLUG_PROGRAM_PARAM < 0 && PLUG_PRESET_COUNT > 0)
 +#ifdef PLUG_PROGRAM_COUNT_KEY   /* "programs" "count": the engine's own preset count, read live (banks, added files) */
 +#define PROGRAM_COUNTED 1
 +#else
@@ -1034,7 +1141,7 @@ index 720ce46..808a172 100644
  #ifndef MODULE_DIR
  #define MODULE_DIR NULL /* set via vst.json "defines" for a DSP that reads its own files
                            * (ROMs, etc.) from "<module_dir>/..." (see jv880's create_instance) */
-@@ -28,6 +60,9 @@
+@@ -28,6 +65,9 @@
  #include "popup.h"
  
  #define DSP_BLOCK 128
@@ -1044,7 +1151,7 @@ index 720ce46..808a172 100644
  
  /* ---- VST2 ABI (hand-written; no Steinberg SDK) -------------------------- */
  typedef struct AEffect AEffect;
-@@ -61,13 +96,15 @@ typedef struct {
+@@ -61,13 +101,15 @@ typedef struct {
  } VstTimeInfo;
  
  enum {
@@ -1062,7 +1169,7 @@ index 720ce46..808a172 100644
  enum { effFlagsCanReplacing = 1 << 4, effFlagsProgramChunks = 1 << 5, effFlagsIsSynth = 1 << 8 };
  
  /* ---- per-instance state ------------------------------------------------- */
-@@ -76,53 +113,132 @@ typedef struct {
+@@ -76,53 +118,133 @@ typedef struct {
      audioMasterCallback master;
      void *dsp;
      int16_t block[DSP_BLOCK * 2];
@@ -1077,6 +1184,7 @@ index 720ce46..808a172 100644
 +    pthread_mutex_t lock;    /* one engine call at a time (see engine_lock) */
 +    char (*prog)[25];        /* program (preset) names, PLUG_PROGRAM_COUNT of them (see program_names) */
 +    int nprog;
++    int cur_prog;            /* the wrapper's own presets (OWN_PRESETS): the one picked last */
 +#if PLUG_SCOPE_BANK >= 0
 +    float scope_ring[SCOPE_RING];   /* the last ~93 ms of output (see scope_tick) */
 +    unsigned scope_pos;
@@ -1203,7 +1311,7 @@ index 720ce46..808a172 100644
      if (p->step_target >= 0) {
          /* A momentary nudge of ANOTHER param (see gen_vst.py's step_of/step_delta comment). Reads
           * the target's CURRENT value straight from the DSP, not our own cached norm, so it's
-@@ -131,11 +247,19 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+@@ -131,11 +253,19 @@ static void setParameter(AEffect *e, int32_t i, float n) {
          if (n > 0.5f) {
              const param_t *tp = &PARAMS[p->step_target];
              if (g_api->get_param(w->dsp, tp->key, buf, sizeof buf) > 0) {
@@ -1227,7 +1335,7 @@ index 720ce46..808a172 100644
              }
              w->release[i] = 1;
          }
-@@ -148,31 +272,105 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+@@ -148,31 +278,129 @@ static void setParameter(AEffect *e, int32_t i, float n) {
           * tap and a direct Q-Link turn on the underlying param). Deferred to processReplacing(),
           * same as w->release[] -- the host must not be re-entered from inside its own call to us. */
          w->need_update_display = 1;
@@ -1298,6 +1406,7 @@ index 720ce46..808a172 100644
 +
 +static void program_name(wrap_t *w, int i, char *out) {   /* out: 25 bytes, VST's program-name size */
 +    char key[96], name[64] = "";
++    if (OWN_PRESETS) { copy_str(out, PRESET_NAMES[i], 25); return; }
 +    if (!PROGRAM_LIVE) { copy_str(out, w->prog[i], 25); return; }
 +    snprintf(key, sizeof key, "%s:%d", PLUG_PROGRAM_NAME_AT, PLUG_PROGRAM_MIN + i);
 +    engine_lock(w);
@@ -1332,7 +1441,30 @@ index 720ce46..808a172 100644
 +    w->nprog = w->prog ? n : 0;
 +}
 +
++/* The wrapper's own presets (vst.json "presets"): "key=value;..." in each parameter's own units (or an option's label),
++ * set one by one as a touch on that control would, so the engine and the screen follow. */
++static void apply_preset(wrap_t *w, int v) {
++    char kv[128];
++    const char *s = PRESET_VALUES[v];
++    while (*s) {
++        size_t n = strcspn(s, ";");
++        if (n < sizeof kv) {
++            memcpy(kv, s, n);
++            kv[n] = 0;
++            char *eq = strchr(kv, '=');
++            if (eq) {
++                *eq = 0;
++                for (int i = 0; i < NPARAMS; i++)
++                    if (!strcmp(PARAMS[i].key, kv)) { set_parameter_locked(w, i, str_to_norm(&PARAMS[i], eq + 1)); break; }
++            }
++        }
++        s += n + (s[n] == ';');
++    }
++    w->cur_prog = v;
++}
++
 +static int current_program(wrap_t *w) {
++    if (OWN_PRESETS) return w->cur_prog;
 +    const param_t *pp = &PARAMS[PLUG_PROGRAM_PARAM];
 +    float n = get_norm(w, PLUG_PROGRAM_PARAM);
 +    int i = pp->nopts > 1 ? (int)lroundf(n * (pp->nopts - 1)) : (int)lroundf(pp->min + n * (pp->max - pp->min)) - PLUG_PROGRAM_MIN;
@@ -1342,7 +1474,7 @@ index 720ce46..808a172 100644
  static void update_tempo(wrap_t *w) {
      VstTimeInfo *ti = (VstTimeInfo *)w->master(&w->fx, audioMasterGetTime, 0, kVstTempoValid, 0, 0);
      if (!ti || !(ti->flags & kVstTempoValid) || ti->tempo <= 0) return;
-@@ -180,18 +378,77 @@ static void update_tempo(wrap_t *w) {
+@@ -180,18 +408,77 @@ static void update_tempo(wrap_t *w) {
          char buf[32];
          w->bpm = ti->tempo;
          snprintf(buf, sizeof buf, "%.2f", w->bpm);
@@ -1421,7 +1553,7 @@ index 720ce46..808a172 100644
          float l = w->block[w->pos * 2] * (1.0f / 32768.0f), r = w->block[w->pos * 2 + 1] * (1.0f / 32768.0f);
          if (accumulate) { out[0][i] += l; out[1][i] += r; }
          else { out[0][i] = l; out[1][i] = r; }
-@@ -199,9 +456,17 @@ static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
+@@ -199,9 +486,17 @@ static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
      }
  }
  
@@ -1440,7 +1572,7 @@ index 720ce46..808a172 100644
      /* A trigger param (e.g. Generate) fired: tell the host it is back to 0 so
       * buttons bound to it drop their highlight. Done here, not inside
       * setParameter, so the host is not re-entered from its own call. */
-@@ -211,11 +476,12 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
+@@ -211,11 +506,12 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
          w->need_update_display = 0;
          w->master(&w->fx, audioMasterUpdateDisplay, 0, 0, 0, 0.0f);
      }
@@ -1456,12 +1588,16 @@ index 720ce46..808a172 100644
  
  static void copy_str(void *dst, const char *src, size_t max) {
      strncpy(dst, src, max - 1);
-@@ -227,11 +493,33 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -227,11 +523,37 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      (void)o;
      switch (op) {
      case effOpen: return 1;
 +    case effSetProgram:
-+        if (w->nprog > 0 && v >= 0 && v < w->nprog) {
++        if (OWN_PRESETS && v >= 0 && v < w->nprog) {
++            engine_lock(w);
++            apply_preset(w, (int)v);
++            engine_unlock(w);
++        } else if (w->nprog > 0 && v >= 0 && v < w->nprog) {
 +            const param_t *pp = &PARAMS[PLUG_PROGRAM_PARAM];
 +            float n = pp->nopts > 1 ? (float)v / (pp->nopts - 1)
 +                    : pp->max > pp->min ? (float)(PLUG_PROGRAM_MIN + v - pp->min) / (pp->max - pp->min) : 0.0f;
@@ -1491,7 +1627,7 @@ index 720ce46..808a172 100644
      case effGetEffectName:
      case effGetProductString: copy_str(p, PLUG_NAME, 32); return 1;
      case effGetVendorString: copy_str(p, PLUG_VENDOR, 32); return 1;
-@@ -247,31 +535,38 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -247,31 +569,38 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      case effGetParamDisplay: {
          char buf[64];
          if (idx < 0 || idx >= NPARAMS) return 0;
@@ -1531,7 +1667,7 @@ index 720ce46..808a172 100644
          if (len <= 0) return 0;
          *(void **)p = w->chunk;
          return (intptr_t)strlen(w->chunk) + 1;
-@@ -280,7 +575,10 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -280,7 +609,10 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
          if (v <= 0 || (size_t)v > sizeof w->chunk) return 0;
          memcpy(w->chunk, p, v);
          w->chunk[v - 1] = 0;
@@ -1542,7 +1678,7 @@ index 720ce46..808a172 100644
          return 1;
      }
      default: return 0;
-@@ -292,10 +590,18 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+@@ -292,10 +624,19 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
      if (!g_api) return NULL;
      wrap_t *w = calloc(1, sizeof *w);
      if (!w) return NULL;
@@ -1559,10 +1695,11 @@ index 720ce46..808a172 100644
      w->master = master;
      w->pos = DSP_BLOCK;
 +    program_names(w);
++    if (OWN_PRESETS) w->nprog = PLUG_PRESET_COUNT;
      AEffect *e = &w->fx;
      e->magic = 0x56737450; /* 'VstP' */
      e->dispatcher = dispatcher;
-@@ -304,9 +610,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+@@ -304,9 +645,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
      e->getParameter = getParameter;
      e->processReplacing = processReplacing;
      e->numParams = NPARAMS;

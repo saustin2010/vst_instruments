@@ -153,6 +153,9 @@ struct plaits_instance_t {
     int   octave_transpose;
     int   fm_preset;          // 0-31, selects preset within 6-Op FM banks (engines 2-4)
     float attack;             // 0.0 = instant, 1.0 = ~2s fade-in
+#ifdef MPC_PORT
+    float volume;             // MPC port: output level (gain 2 * v^2; 0.7071 = unity, the Move port's level)
+#endif
 
     // Attack envelope state
     float attack_env;         // current attack envelope level, 0.0-1.0
@@ -205,6 +208,9 @@ static void* create_instance(const char* module_dir, const char* json_defaults) 
     inst->octave_transpose   = 0;
     inst->fm_preset          = 0;
     inst->attack             = 0.0f;
+#ifdef MPC_PORT
+    inst->volume             = 0.70711f;
+#endif
     inst->attack_env         = 1.0f;  // start fully open (no attack)
     inst->legato_mode        = LEGATO_OFF;
 
@@ -497,6 +503,12 @@ static void set_param(void* instance, const char* key, const char* val) {
     /* MPC port: the FM patch as a plain index (the names differ per 6-Op bank, so a browser steps the number and
      * shows "fm_preset"'s name) */
     if (strcmp(key, "fm_preset_index") == 0) key = "fm_preset";
+    /* MPC port: VOLUME, so presets can be levelled (the engines differ by ~30 dB) */
+    if (strcmp(key, "volume") == 0) {
+        float v = (float)atof(val);
+        inst->volume = v < 0.0f ? 0.0f : v > 1.0f ? 1.0f : v;
+        return;
+    }
 #endif
 
     // State restore from patch save/load
@@ -670,6 +682,8 @@ static int get_single_param(const plaits_instance_t* inst, const char* key,
 #ifdef MPC_PORT
     if (strcmp(key, "fm_preset_index") == 0)
         return snprintf(buf, buf_len, "%d", inst->fm_preset);
+    if (strcmp(key, "volume") == 0)
+        return snprintf(buf, buf_len, "%.3f", inst->volume);
 #endif
     if (strcmp(key, "harmonics") == 0)
         return snprintf(buf, buf_len, "%.3f", inst->harmonics);
@@ -947,7 +961,11 @@ static void render_block(void* instance, int16_t* out_lr, int frames) {
     }
 
     // ── Convert Frame output to int16 stereo with output routing ────────
+#ifdef MPC_PORT
+    const float gain = kOutputVolume * 2.0f * inst->volume * inst->volume;   /* MPC port: VOLUME */
+#else
     const float gain = kOutputVolume;
+#endif
     const float eg = kGainTable[inst->engine];
 
     // Chiptune gate envelope: chiptune uses already_enveloped=true (bypasses

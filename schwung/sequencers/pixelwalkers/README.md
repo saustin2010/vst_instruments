@@ -31,7 +31,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Pixel Walkers, page MAIN">
 
-Q-Link columns: **1** BIRTH NOTE, BIRTH LEVEL, HIT LEVEL, HIT DECAY  ·  **2** BOUNCE, HARDNESS, TOMBOLA, RANDOMIZE  ·  **3** KILL ALL
+Q-Link columns: **1** BIRTH NOTE, BIRTH LEVEL, HIT LEVEL, HIT DECAY  ·  **2** BOUNCE, HARDNESS, TOMBOLA
 
 ## Install
 

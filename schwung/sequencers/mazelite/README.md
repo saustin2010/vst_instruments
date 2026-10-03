@@ -33,7 +33,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Maze Lite, page MAZE">
 
-Q-Link columns: **1** SCALE, NOTE RATE, NOTE LENGTH, RESET BOTH  ·  **2** S1 RESET, S2 RESET, S1 CORRUPT, S1 RANGE  ·  **3** S1 LENGTH, S1 TRIG MIX, S2 CORRUPT, S2 RANGE  ·  **4** S2 LENGTH, S2 TRIG MIX
+Q-Link columns: **1** SCALE, NOTE RATE, NOTE LENGTH, RESET BOTH  ·  **2** S1 CORRUPT, S1 RANGE, S1 LENGTH, S1 TRIG MIX  ·  **3** S2 CORRUPT, S2 RANGE, S2 LENGTH, S2 TRIG MIX  ·  **4** S1 RESET, S2 RESET
 
 ## Install
 

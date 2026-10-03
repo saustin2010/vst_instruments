@@ -824,7 +824,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "812 434 120 70",
+                                    "bounds": "812 444 120 70",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -938,8 +938,9 @@
                 "fnKeyIndex": 0,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "28 109 592 439",
-                    "492 392 446 156"
+                    "28 392 451 156",
+                    "492 392 446 156",
+                    "28 109 592 72"
                 ],
                 "componentName": "MAIN|MAIN",
                 "initialSize": "0 0 1280 628",

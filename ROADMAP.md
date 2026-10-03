@@ -7,10 +7,9 @@ Open items as of 2026-10-03, most useful first. Tick them off here (with the dat
 New parameters always go at the **end** of a plugin's `params.json`: MPC saves projects and Q-Link assignments by
 parameter index, so existing projects keep working.
 
-- [ ] **Tablor factory presets.** Install `presets/tablor/not-installed/factory.tbl` to `/sdcard/vst/tablor/presets/`
-  with its wavetable paths rewritten from `/data/UserData/UserLibrary/Wavetables/` to `/sdcard/vst/tablor/wavetables/`; add a PRESET
-  stepper (with a name readout) that applies a preset's `TBLR2;...` state blob after resetting to defaults. Needs a
-  small engine patch under `MPC_PORT` (upstream selects presets through Move's preset browser, not a parameter).
+- [x] **Tablor factory presets** (2026-10-04). `factory.tbl` installs to `/sdcard/vst/tablor/presets/`; the engine maps
+  its Move wavetable paths to `wavetables/`, and PRESET (appended params, MPC's PRESET menu, the VOICE page) applies a
+  preset's state blob after resetting to defaults.
 - [x] **OB-Xd banks** (2026-10-03). BANK selector under PATCH (`bank_index`/`bank_name`, appended); `.fxb` banks in
   `/sdcard/vst/obxd/presets/` are chosen there. `tools/obxd-lv2-to-fxb.py` converts OB-Xd 1.x LV2 banks.
 - [x] **Noisemaker imports** (2026-10-03). `MODULE_DIR` set; each folder in `/sdcard/vst/noisemaker/presets/` is a
@@ -24,19 +23,22 @@ parameter index, so existing projects keep working.
 
 ## On a device (nothing below has been tried on hardware yet)
 
-- [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Check
-  the menu on the device for each, and that OB-Xd / Noisemaker show the new bank's presets after a BANK switch (the
-  list is read live). Not included: Mono Voice (its patches load into a track; nothing reports the current one),
-  Plaits' FM patches (they belong to its 6-op model), Tablor (its presets aren't reachable yet), the sequencers.
+- [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Names
+  show and load on the Live II (checked 2026-10-03). Still to check: that OB-Xd / Noisemaker show the new bank's presets
+  after a BANK switch (the list is read live). Not included: Plaits' FM patches (they belong to its 6-op model), the
+  sequencers. Added 2026-10-04, to check on the device: Tablor's 9 and Mono Voice's 12 factory sets (both keep the chosen
+  one in their state), and presets made for Rings, Plaits (with a new VOLUME), Mr Hyde, Rings FX, Verglas and Warps.
 - [ ] Install everything on an MPC and re-insert each plugin; check every page of the new Stitch screens (names,
   values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays). Track it in README.md's Design QA column.
+  Design QA first pass done offline for all 36 (2026-10-04, branch design-qa-batch1): one Q-Link column per panel, each
+  plugin's `DESIGN-QA.md` says what changed and what to look at.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
 - [ ] Audio effects (Verglas, Warps, Rings FX): does MPC offer third-party VST effects in its insert list at all?
-- [ ] Plugin browser groups (2026-10-03): the 9 sequencers report `category="Sequencer"`, Libpo32 and Mr Drums
-  `"Drum Machine"`, the rest `"Synth"` / `"Effect"`. Grids' category had never reached the device (install.sh only
-  re-registered on a name/maker/type change; it now compares the category too). Check whether MPC's plugin pop-up
-  (its "sort by type" setting is on) shows them in their own folders and they still load on a plugin track. If not,
-  try a name prefix (SEQ / DRM) on one plugin, checking that an older project still finds it.
+- [ ] Plugin browser groups. Checked on the Live II 2026-10-03: MPC's plugin menu sorted **by type** shows only VST
+  Instruments / VST Effects (the plugin-list `category` is ignored; the sequencers and drum machines keep reporting
+  theirs); sorted **by manufacturer** it makes a folder per maker field (Grids as "Sequencers" got its own folder).
+  The owner sorts by type, so that was put back. Left for later: name prefixes (SEQ / DRM) to bunch them in the
+  by-type list, after checking that an older project still finds a renamed plugin.
 - [ ] `install.sh` / `uninstall.sh` on a real MPC (so far tested only against a simulated one:
   `dev-tools/fake-mpc/`).
 - [ ] CPU: run the framework's `tools/bench.sh` for the heavy ones (Helm, Chordism, Tablor, Mono Voice, Elements,

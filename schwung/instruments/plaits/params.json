@@ -197,6 +197,14 @@
    "max": 0,
    "display": "string",
    "type": "readout"
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "unit": "%",
+   "min": 0.0,
+   "max": 1.0,
+   "default": 0.7071
   }
  ]
 }

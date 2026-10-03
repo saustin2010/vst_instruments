@@ -1367,7 +1367,7 @@
                     }
                 },
                 {
-                    "key": "shKnob27_a182ae55_n15v14_b76",
+                    "key": "shKnob27_a182ae55_n17v18_b104",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1447,7 +1447,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 76 115",
+                                    "bounds": "0 0 104 115",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1477,7 +1477,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "6 0 64 64",
+                                    "bounds": "20 0 64 64",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1495,7 +1495,7 @@
                                                 "version": 1,
                                                 "name": "Titillium Web",
                                                 "style": "SemiBold",
-                                                "height": 15.0
+                                                "height": 17.0
                                             },
                                             "colour": "fff8f2ec",
                                             "justification": "horizontallyCentred verticallyCentred",
@@ -1515,7 +1515,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 61 76 20",
+                                    "bounds": "0 61 104 20",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1533,7 +1533,7 @@
                                                 "version": 1,
                                                 "name": "Titillium Web",
                                                 "style": "SemiBold",
-                                                "height": 14.0
+                                                "height": 18.0
                                             },
                                             "colour": "ffdccfc2",
                                             "justification": "horizontallyCentred verticallyCentred",
@@ -1553,7 +1553,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 83 76 26",
+                                    "bounds": "0 83 104 26",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -1561,7 +1561,7 @@
                     }
                 },
                 {
-                    "key": "shKnob27_ebffb31f_n13v14_b76",
+                    "key": "shKnob27_ebffb31f_n17v18_b104",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1641,7 +1641,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "WhenFocussed",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 0 76 115",
+                                    "bounds": "0 0 104 115",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1671,7 +1671,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "6 0 64 64",
+                                    "bounds": "20 0 64 64",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1689,7 +1689,7 @@
                                                 "version": 1,
                                                 "name": "Titillium Web",
                                                 "style": "SemiBold",
-                                                "height": 13.0
+                                                "height": 17.0
                                             },
                                             "colour": "fff8f2ec",
                                             "justification": "horizontallyCentred verticallyCentred",
@@ -1709,7 +1709,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 61 76 20",
+                                    "bounds": "0 61 104 20",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1727,7 +1727,7 @@
                                                 "version": 1,
                                                 "name": "Titillium Web",
                                                 "style": "SemiBold",
-                                                "height": 14.0
+                                                "height": 18.0
                                             },
                                             "colour": "ffdccfc2",
                                             "justification": "horizontallyCentred verticallyCentred",
@@ -1747,7 +1747,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "0 83 76 26",
+                                    "bounds": "0 83 104 26",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -3443,7 +3443,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "WIDTH",
-                                    "type": "shKnob27_a182ae55_n15v14_b76",
+                                    "type": "shKnob27_a182ae55_n17v18_b104",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -3464,7 +3464,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "660 422 76 115",
+                                    "bounds": "698 422 104 115",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3473,7 +3473,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "VOLUME",
-                                    "type": "shKnob27_ebffb31f_n13v14_b76",
+                                    "type": "shKnob27_ebffb31f_n17v18_b104",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -3494,7 +3494,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "742 422 76 115",
+                                    "bounds": "808 422 104 115",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3524,7 +3524,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "8 270 94 22",
+                                    "bounds": "184 270 94 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3554,7 +3554,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "104 270 94 22",
+                                    "bounds": "280 270 94 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3584,7 +3584,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "200 270 94 22",
+                                    "bounds": "376 270 94 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3618,7 +3618,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "21 122 260 44",
+                                    "bounds": "197 122 260 44",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3652,7 +3652,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "498 437 134 48",
+                                    "bounds": "472 437 134 48",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -3682,7 +3682,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "21 170 272 304",
+                                    "bounds": "197 170 272 304",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 12"
                                     ]
@@ -3714,7 +3714,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "27 176 260 40",
+                                    "bounds": "203 176 260 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 12"
                                     ]
@@ -3746,7 +3746,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "27 218 260 40",
+                                    "bounds": "203 218 260 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 12"
                                     ]
@@ -3778,7 +3778,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "27 260 260 40",
+                                    "bounds": "203 260 260 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 12"
                                     ]
@@ -3810,7 +3810,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "27 302 260 40",
+                                    "bounds": "203 302 260 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 12"
                                     ]
@@ -3842,7 +3842,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "27 344 260 40",
+                                    "bounds": "203 344 260 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 12"
                                     ]
@@ -3874,7 +3874,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "27 386 260 40",
+                                    "bounds": "203 386 260 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 12"
                                     ]
@@ -3906,7 +3906,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "27 428 260 40",
+                                    "bounds": "203 428 260 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 12"
                                     ]
@@ -3938,7 +3938,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "498 171 146 262",
+                                    "bounds": "472 171 146 262",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 13"
                                     ]
@@ -3970,7 +3970,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "504 177 134 40",
+                                    "bounds": "478 177 134 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 13"
                                     ]
@@ -4002,7 +4002,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "504 219 134 40",
+                                    "bounds": "478 219 134 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 13"
                                     ]
@@ -4034,7 +4034,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "504 261 134 40",
+                                    "bounds": "478 261 134 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 13"
                                     ]
@@ -4066,7 +4066,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "504 303 134 40",
+                                    "bounds": "478 303 134 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 13"
                                     ]
@@ -4098,7 +4098,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "504 345 134 40",
+                                    "bounds": "478 345 134 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 13"
                                     ]
@@ -4130,7 +4130,7 @@
                                     "showWhenDataModelInvalid": "Show",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "504 387 134 40",
+                                    "bounds": "478 387 134 40",
                                     "additionalInvalidatingHandles": [
                                         "IndexedEnabling/1/2/Parameter 13"
                                     ]
@@ -4152,9 +4152,10 @@
                 "fnKeyIndex": 0,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "2 90 854 208",
-                    "0 133 1237 413",
-                    "180 405 671 141"
+                    "178 90 298 208",
+                    "523 133 714 150",
+                    "0 405 612 141",
+                    "679 413 252 130"
                 ],
                 "componentName": "RINGS|RINGS",
                 "initialSize": "0 0 1280 628",

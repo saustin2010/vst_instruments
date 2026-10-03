@@ -31,13 +31,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Grids, page GRIDS">
 
-Q-Link columns: **1** MAP X, MAP Y, CHAOS, BD FILL  ·  **2** SD FILL, HH FILL, MODE, SWING  ·  **3** BD LEN, SD LEN, HH LEN
+Q-Link columns: **1** MAP X, MAP Y, CHAOS  ·  **2** BD FILL, SD FILL, HH FILL  ·  **3** MODE, SWING  ·  **4** BD LEN, SD LEN, HH LEN
 
 ### 2. NOTES
 
 <img src="screenshots/page_1.png" width="760" alt="Grids, page NOTES">
 
-Q-Link columns: **1** BD NOTE, SD NOTE, HH NOTE, ACCENT VEL  ·  **2** NORMAL VEL, CHANNEL, RESOLUTION
+Q-Link columns: **1** BD NOTE, SD NOTE, HH NOTE  ·  **2** ACCENT VEL, NORMAL VEL  ·  **3** CHANNEL, RESOLUTION
 
 ## Install
 

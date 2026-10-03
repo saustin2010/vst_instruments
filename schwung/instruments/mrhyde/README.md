@@ -1,10 +1,12 @@
 # Mr Hyde
 
-**Synth** · A MicroFreak-inspired voice: Plaits models with a low-pass gate, filter and a 6x6 mod matrix. · maker in MPC: Move Everything · licence: MIT
+**Synth** · A MicroFreak-inspired voice: Plaits models with a low-pass gate, filter and a 6x6 mod matrix, with 19 presets. · maker in MPC: Move Everything · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Mr Hyde on the MPC touchscreen">
 
 Built around Mutable Instruments' Plaits engine (17 models: virtual analog, wavetables, FM, grains, chords, speech, strings, modal and percussion models), Mr Hyde adds what a MicroFreak-style instrument needs: a low-pass gate, a filter, an LFO, envelopes, a cycling envelope, a random source, and a 6x6 modulation matrix whose rows are spread over the ASSIGN, PITCH HARM and TIMB CUT pages.
+
+Upstream has no presets, so the port brings 19 (Init, Freak Bass, Wobble Bass, Sync Lead, Terrain Pad, String Machine, Supersaw Stack, Folded Pluck, FM Keys, Formant Choir, Drawbar Organ, Wavetable Sweep, Chord Memory, Speech Synth, Swarm, Noise Sweep, Particle Rain, Glass String, Modal Bells), in MPC's PRESET menu. Each sets every control; levels are evened out as far as VOLUME allows (it drives the low-pass gate, which saturates), so a few models (organ, string machine, inharmonic string, particles) stay quieter by nature.
 
 ## On the MPC
 
@@ -24,43 +26,43 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Mr Hyde, page MAIN">
 
-Q-Link columns: **1** MODEL, PITCH, HARMONICS, TIMBRE  ·  **2** MORPH, LPG DECAY, LPG COLOR, FILTER MODE  ·  **3** CUTOFF FREQ, RESONANCE, FM AMOUNT, AUX MIX  ·  **4** VOLUME, PAN
+Q-Link columns: **1** MODEL, FM AMOUNT, AUX MIX  ·  **2** PITCH, HARMONICS, TIMBRE, MORPH  ·  **3** FILTER MODE, CUTOFF FREQ, RESONANCE  ·  **4** LPG DECAY, LPG COLOR, VOLUME, PAN
 
 ### 2. LFO ENV
 
 <img src="screenshots/page_1.png" width="760" alt="Mr Hyde, page LFO ENV">
 
-Q-Link columns: **1** LFO SHAPE, LFO RATE, LFO SYNC, LFO RETRIG  ·  **2** LFO PHASE, VEL CURVE, AT CURVE, ENV ATTACK  ·  **3** ENV DECAY, ENV SUSTAIN, ENV RELEASE, ENV RETRIG
+Q-Link columns: **1** LFO SHAPE, LFO RATE, LFO PHASE, LFO SYNC  ·  **2** VEL CURVE, AT CURVE  ·  **3** ENV ATTACK, ENV DECAY, ENV SUSTAIN, ENV RELEASE  ·  **4** LFO RETRIG, ENV RETRIG
 
 ### 3. CYC RAND
 
 <img src="screenshots/page_2.png" width="760" alt="Mr Hyde, page CYC RAND">
 
-Q-Link columns: **1** CYC ATTACK, CYC DECAY, CYC SHAPE, CYC SYNC  ·  **2** CYC RETRIG, CYC BIPOLAR, RND MODE, RND RATE  ·  **3** RND SYNC, RND SLEW, RND RETRIG
+Q-Link columns: **1** CYC ATTACK, CYC DECAY, CYC SHAPE  ·  **2** CYC SYNC, CYC RETRIG, CYC BIPOLAR  ·  **3** RND MODE, RND RATE, RND SLEW  ·  **4** RND SYNC, RND RETRIG
 
 ### 4. ASSIGN
 
 <img src="screenshots/page_3.png" width="760" alt="Mr Hyde, page ASSIGN">
 
-Q-Link columns: **1** A1 TARGET, A1 LFO, A1 ENV, A1 CYCLE  ·  **2** A1 RANDOM, A1 VEL, A1 AT, A2 TARGET  ·  **3** A2 LFO, A2 ENV, A2 CYCLE, A2 RANDOM  ·  **4** A2 VEL, A2 AT
+Q-Link columns: **1** A1 TARGET, A1 LFO, A1 ENV, A1 CYCLE  ·  **2** A1 RANDOM, A1 VEL, A1 AT  ·  **3** A2 TARGET, A2 LFO, A2 ENV, A2 CYCLE  ·  **4** A2 RANDOM, A2 VEL, A2 AT
 
 ### 5. PITCH HARM
 
 <img src="screenshots/page_4.png" width="760" alt="Mr Hyde, page PITCH HARM">
 
-Q-Link columns: **1** PITCH LFO, PITCH ENV, PITCH CYCLE, PITCH RANDOM  ·  **2** PITCH VEL, PITCH AT, HARM LFO, HARM ENV  ·  **3** HARM CYCLE, HARM RANDOM, HARM VEL, HARM AT
+Q-Link columns: **1** PITCH LFO, PITCH ENV, PITCH CYCLE  ·  **2** PITCH RANDOM, PITCH VEL, PITCH AT  ·  **3** HARM LFO, HARM ENV, HARM CYCLE  ·  **4** HARM RANDOM, HARM VEL, HARM AT
 
 ### 6. TIMB CUT
 
 <img src="screenshots/page_5.png" width="760" alt="Mr Hyde, page TIMB CUT">
 
-Q-Link columns: **1** TIMB LFO, TIMB ENV, TIMB CYCLE, TIMB RANDOM  ·  **2** TIMB VEL, TIMB AT, CUT LFO, CUT ENV  ·  **3** CUT CYCLE, CUT RANDOM, CUT VEL, CUT AT
+Q-Link columns: **1** TIMB LFO, TIMB ENV, TIMB CYCLE  ·  **2** TIMB RANDOM, TIMB VEL, TIMB AT  ·  **3** CUT LFO, CUT ENV, CUT CYCLE  ·  **4** CUT RANDOM, CUT VEL, CUT AT
 
 ### 7. VOICE
 
 <img src="screenshots/page_6.png" width="760" alt="Mr Hyde, page VOICE">
 
-Q-Link columns: **1** VOICE MODE, POLYPHONY, UNISON, DETUNE  ·  **2** SPREAD, GLIDE
+Q-Link columns: **1** VOICE MODE, POLYPHONY, GLIDE  ·  **2** UNISON, DETUNE, SPREAD
 
 ## Install
 
