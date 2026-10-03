@@ -142,7 +142,47 @@ MAPS = {
                 "LPF CUTOFF IN": "pb_lpf_cv", "INITIAL GAIN (VCA)": "pb_vca_in", "EXT SIGNAL IN": "pb_ext_sig",
                 "RANDOM": "rnd_patch", "MUTATE": "mutate", "RESET INITIAL PATCH": "reset_patch",
                 "GATE TRIGGER (C2)": "trigger", "VCO2 SYNC": "v2_sync", "VCO2 FM": "v2_xmod",
-                "MS-10 SINGLE OSC MODE": "ms10_mode", "GENERATE PARAM RANDOM": "rnd_mod"},
+                "MS-10 SINGLE OSC MODE": "ms10_mode", "GENERATE PARAM RANDOM": "rnd_mod", "GATE": "trigger",
+                "RESET": "reset_patch"},
+        # design QA 2026-10-03 (the owner's notes): one Q-Link column per panel or row ("-" = an empty slot), patch
+        # actions in their own box, VCO selectors above their knobs, the envelope curve on the left
+        "qlinks": {
+            0: ["lpf_cut", "lpf_reso", "hpf_cut", "hpf_reso", "mg_freq", "mg_depth", "volume", "-",
+                "octave", "portamento", "master_tune", "drive", "preset", "-", "-", "-"],
+            1: ["v1_pitch", "v1_wave", "-", "-", "v1_pw", "v1_drift", "vco_mg", "-",
+                "v2_pitch", "v2_wave", "v2_sync", "v2_xmod", "v2_fine", "v2_detune", "vco_eg", "v2_drift"],
+            2: ["mix_v1", "mix_v2", "mix_sub", "mix_noise", "noise_color", "mix_esp", "mix_fb", "-",
+                "hpf_mg", "hpf_eg", "lpf_mg", "lpf_eg", "filter_mode", "filter_rev", "-", "-"],
+            3: ["e1_delay", "e1_atk", "e1_rel", "-", "e2_atk", "e2_dcy", "e2_sus", "e2_rel",
+                "e2_hold", "-", "-", "-", "mg_shape", "mg_pw", "-", "-"],
+        },
+        "augment": [
+            # MAIN: RANDOM / MUTATE / GATE / RESET together in a PATCH ACTIONS box (the VOICE panel's trigger pad goes)
+            {"sel": "#view-main div.flex.flex-col:has(> #main-gate-btn)", "remove": True},
+            {"sel": "#view-main div.flex.flex-col.gap-2:has(> div.grid > button[onclick^='randomizePatch'])", "each": [
+                '<div class="border border-[#2a2a2a] bg-[#0a0a0a] p-2 rounded"><div class="text-[10px] text-[#7c7c74] '
+                'uppercase font-mono mb-2">PATCH ACTIONS</div><div class="grid grid-cols-2 gap-2">'
+                '<button class="h-9 bg-[#1e1e1e] border border-[#3c3c3c] text-xs font-bold text-[#cfcfc8] tracking-wider uppercase rounded" onclick="randomizePatch()">RANDOM</button>'
+                '<button class="h-9 bg-[#1e1e1e] border border-[#3c3c3c] text-xs font-bold text-[#cfcfc8] tracking-wider uppercase rounded" onclick="mutatePatch()">MUTATE</button>'
+                '<button class="h-9 bg-[#1e1e1e] border border-[#3c3c3c] text-xs font-bold text-[#cfcfc8] tracking-wider uppercase rounded" id="main-gate-btn">GATE</button>'
+                '<button class="h-9 bg-[#1e1e1e] border border-[#3c3c3c] text-xs font-bold text-[#cfcfc8] tracking-wider uppercase rounded" onclick="resetDefaults()">RESET</button>'
+                '</div></div>']},
+            # VCO: selectors on top, knobs at the bottom; VCO2's SYNC / FM between (the made-up status box goes)
+            {"sel": "#view-vco > div > div:nth-child(1) > div:nth-child(2)", "remove": True},
+            {"sel": "#view-vco > div > div:nth-child(1) > div:nth-child(1)", "attr": {"style": "display: contents"}},
+            {"sel": "#view-vco div.grid:has(> [data-knob='vco1Pw'])", "attr": {"style": "margin-top: auto"}},
+            {"sel": "#view-vco > div > div:nth-child(2) > div:nth-child(1)", "attr": {"style": "display: contents"}},
+            {"sel": "#view-vco div.grid:has(> [data-knob='vco2Pitch'])", "attr": {"style": "order: 2; margin-top: auto"}},
+            {"sel": "#view-vco div.grid:has(> button[onclick^='toggleActive'])", "attr": {"style": "order: 1"}},
+            # MIXER: room between the rows, so each row's Q-Link outline stays clear of the next
+            {"sel": "#view-mixer div.grid.grid-cols-3:has(> [data-knob='espLevel'])", "attr": {"style": "margin-top: 40px"}},
+            {"sel": "#view-mixer div.grid.grid-cols-2.gap-3", "attr": {"style": "margin-top: 40px"}},
+            # ENVELOPES: the curve on the left, the knobs on the right
+            {"sel": "#view-envelopes div.col-span-4.panel-frame", "attr": {"style": "order: -1"}},
+            # MODERN: a heading over a switch with no parameter, and a doubled word
+            {"sel": "#view-modern div.grid.grid-cols-3 > div:nth-child(2)", "each": [""]},
+            {"sel": "#view-modern", "retext": [["EMULATION EMULATION MODEL", "EMULATION MODEL"]]},
+        ],
     },
     "303": {
         "augment": [{"sel": "body", "retext": [["ROLAND", "OPEN303"], ["TB-303", "ACID"]]}],   # no maker badge in the art

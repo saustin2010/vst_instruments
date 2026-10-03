@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="303, page 303 MAIN">
 
-Q-Link columns, one per panel: **1** WAVEFORM, TUNING (VCO)  ·  **2** CUTOFF, RESONANCE, ENV MOD, DECAY (VCF)  ·  **3** ACCENT, VOLUME  ·  **4** DRIVE MODEL, DRIVE, DRIVE MIX, SHAPER DRIVE
+Q-Link columns: **1** WAVEFORM, TUNING  ·  **2** CUTOFF, RESONANCE, ENV MOD, DECAY  ·  **3** ACCENT, VOLUME  ·  **4** DRIVE MODEL, DRIVE, DRIVE MIX, SHAPER DRIVE
 
 ### 2. DEVILFISH MOD
 
