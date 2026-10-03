@@ -1131,8 +1131,10 @@ MAPS = {
             {"sel": "#tab-page-0 div:has(> button.vca-btn)", "attr": {"data-param": "vca_mode"}},
             {"sel": "#tab-page-1 select", "nth": ["wave_1", "wave_2", "wave_3", "wave_4"]},
             {"sel": "#tab-page-8 select", "nth": ["chord_pc_%d" % i for i in range(12)]},
-            # OSCILLATORS: LFO MODE joins the shape row
-            {"sel": "#tab-page-1 .grid-cols-7", "html": "@enum(shape_lfo_mode)"},
+            # OSCILLATORS (design QA 2026-10-03): each voice's SHAPE and LFO PHASE under its WAVE / MIX box, so a Q-Link
+            # column is one voice; the global SHAPE and LFO MODE move to the SHAPE page
+            {"sel": "#tab-page-1 .grid-cols-7", "each": ["".join("@knob(shape_%d)@knob(lfo_phase_%d)" % (v, v)
+                                                                 for v in range(1, 5))]},
             {"sel": "#tab-page-1 .grid-cols-7", "attr": {"class": "grid grid-cols-8 gap-3 items-center py-2"}},
             # SHAPE: pan morph under the phases, per-voice FM amounts + position under the FM row
             {"sel": "#tab-page-2 > div:nth-child(1) > .bg-mpc-lcd", "where": "replace",
@@ -1166,6 +1168,13 @@ MAPS = {
             # ARPEGGIATOR
             {"sel": "#tab-page-9 > .h-12", "where": "replace",
              "html": "@row(arp_hold, arp_direction, arp_variation_interval, arp_clock_sync, arp_clock_division)"},
+            # SHAPE (design QA): its first panel holds the global SHAPE and LFO MODE with the pan morph pair
+            {"sel": "#tab-page-2 > div:nth-child(1) > span", "text": "SHAPE & PAN"},
+            {"sel": "#tab-page-2 > div:nth-child(1) > div.flex.justify-around", "each": ["@knob(shape)@enum(shape_lfo_mode)"]},
+            # CHORD MAP (design QA): room between the two rows of note pop-ups, so their Q-Link outlines stay apart
+            {"sel": "#tab-page-8 div.grid.grid-cols-6", "attr": {"style": "row-gap: 30px"}},
+            # FILTER ENV (design QA): the envelope panel's rows packed at the top instead of spread apart
+            {"sel": "#tab-page-3 > div:nth-child(1)", "attr": {"style": "justify-content: flex-start; gap: 28px"}},
         ],
         "map": {"cutoff": "filter_cutoff", "resonance": "filter_resonance", "fm_mod": "fm_modulator", "fm_amt": "fm_amount",
                 "morph_idx": "morph_index", "morph_int": "morph_intensity", "lfo_ph_1": "lfo_phase_1",
@@ -1178,6 +1187,28 @@ MAPS = {
                 "rev_decay": "reverb_decay", "rev_damp": "reverb_damp", "rev_shimmer": "reverb_shimmer",
                 "rev_size": "reverb_size", "arp_steps": "arp_euclid_steps", "arp_beats": "arp_euclid_beats",
                 "arp_var": "arp_variations", "arpToggleBtn": "arp_enabled"},
+        # design QA 2026-10-03: a Q-Link column per panel or row ("-" = an empty slot); MAIN and VIBRATO were fine
+        "qlinks": {
+            1: [k % v for v in range(1, 5) for k in ("wave_%d", "mix_%d", "shape_%d", "lfo_phase_%d")],
+            2: ["shape", "shape_lfo_mode", "pan_morph_index", "pan_morph_intensity", "fm_modulator", "fm_amount",
+                "morph_index", "morph_intensity", "fm_amount_1", "fm_amount_2", "fm_amount_3", "fm_amount_4",
+                "fm_position", "-", "-", "-"],
+            3: ["filter_env_attack", "filter_env_decay", "filter_env_depth", "drive", "filter_lfo_rate", "filter_lfo_depth",
+                "filter_lfo_spread", "filter_lfo_shape", "lfo_shape", "lfo_rate", "lfo_depth", "-",
+                "fenv_mode", "fenv_hard_reset", "quality_position", "-"],
+            5: ["amp_lfo_rate", "amp_lfo_depth", "glide_rate", "-", "amp_lfo_shape", "glide_legato", "vca_hard_reset",
+                "vca_drone", "grind", "bit_shift", "decimator", "-"],
+            6: ["delay_mix", "delay_time", "delay_feedback", "delay_tone", "delay_mode", "delay_tone_hi", "delay_tone_lo", "-",
+                "delay_mod_depth", "delay_mod_rate", "-", "-"],
+            7: ["reverb_mix", "reverb_decay", "reverb_damp", "reverb_shimmer", "reverb_size", "-", "-", "-",
+                "reverb_lowcut", "reverb_mod_rate", "reverb_mod_depth", "-"],
+            8: ["chord_pc_0", "chord_pc_1", "chord_pc_2", "chord_pc_3", "chord_pc_4", "chord_pc_5", "-", "-",
+                "chord_pc_6", "chord_pc_7", "chord_pc_8", "chord_pc_9", "chord_pc_10", "chord_pc_11", "-", "-",
+                "interval_1", "interval_2", "interval_3", "-", "ctrl_source", "ctrl_cc", "ctrl_to_cutoff", "ctrl_to_morph",
+                "ctrl_to_vib", "ctrl_to_shape", "ctrl_to_fm", "-"],
+            9: ["arp_euclid_steps", "arp_euclid_beats", "arp_tempo", "arp_variations", "arp_hold", "arp_direction",
+                "arp_variation_interval", "-", "arp_clock_sync", "arp_clock_division", "-", "-", "arp_enabled", "-", "-", "-"],
+        },
     },
 }
 

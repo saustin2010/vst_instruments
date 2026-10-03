@@ -30,19 +30,19 @@ Q-Link columns: **1** CHORD, TUNING, SCALE, ROOT  ·  **2** DETUNE, WIDTH, SPREA
 
 <img src="screenshots/page_1.png" width="760" alt="Chordism, page OSCILLATORS">
 
-Q-Link columns: **1** WAVE 1, MIX 1, WAVE 2, MIX 2  ·  **2** WAVE 3, MIX 3, WAVE 4, MIX 4  ·  **3** SHAPE, SHAPE 1, SHAPE 2, SHAPE 3  ·  **4** SHAPE 4, LFO PHASE 1, LFO PHASE 2, LFO MODE
+Q-Link columns: **1** WAVE 1, MIX 1, SHAPE 1, LFO PHASE 1  ·  **2** WAVE 2, MIX 2, SHAPE 2, LFO PHASE 2  ·  **3** WAVE 3, MIX 3, SHAPE 3, LFO PHASE 3  ·  **4** WAVE 4, MIX 4, SHAPE 4, LFO PHASE 4
 
 ### 3. SHAPE
 
 <img src="screenshots/page_2.png" width="760" alt="Chordism, page SHAPE">
 
-Q-Link columns: **1** LFO PHASE 3, LFO PHASE 4, PAN MORPH, PAN MORPH IN  ·  **2** FM MOD, FM AMT, MORPH INDEX, MORPH INT  ·  **3** FM AMT 1, FM AMT 2, FM AMT 3, FM AMT 4  ·  **4** FM POSITION
+Q-Link columns: **1** SHAPE, LFO MODE, PAN MORPH, PAN MORPH IN  ·  **2** FM MOD, FM AMT, MORPH INDEX, MORPH INT  ·  **3** FM AMT 1, FM AMT 2, FM AMT 3, FM AMT 4  ·  **4** FM POSITION
 
 ### 4. FILTER ENV
 
 <img src="screenshots/page_3.png" width="760" alt="Chordism, page FILTER ENV">
 
-Q-Link columns: **1** ENV A, ENV D, ENV AMT, DRIVE  ·  **2** FLT ENV MODE, FENV RESET, LOFI POS, FLT LFO RATE  ·  **3** FLT LFO DPTH, FLT LFO SPRD, FLT LFO WAVE, FLT LFO MODE  ·  **4** SHP LFO WAVE, SHP LFO RATE, SHP LFO DPTH
+Q-Link columns: **1** ENV A, ENV D, ENV AMT, DRIVE  ·  **2** FLT LFO RATE, FLT LFO DPTH, FLT LFO SPRD, FLT LFO WAVE  ·  **3** SHP LFO WAVE, SHP LFO RATE, SHP LFO DPTH  ·  **4** FLT ENV MODE, FENV RESET, LOFI POS
 
 ### 5. VIBRATO
 
@@ -54,33 +54,33 @@ Q-Link columns: **1** VIB DEPTH, VIB SPEED, VIB DELAY, SWEEP  ·  **2** SWEEP RA
 
 <img src="screenshots/page_5.png" width="760" alt="Chordism, page TREMOLO">
 
-Q-Link columns: **1** TREM RATE, TREM DEPTH, GLIDE, TREMOLO WAVE  ·  **2** GLIDE LEGATO, VCA RESET, DRONE, GRIND  ·  **3** BIT SHIFT, DECIMATOR
+Q-Link columns: **1** TREM RATE, TREM DEPTH, GLIDE  ·  **2** TREMOLO WAVE, GLIDE LEGATO, VCA RESET, DRONE  ·  **3** GRIND, BIT SHIFT, DECIMATOR
 
 ### 7. DELAY
 
 <img src="screenshots/page_6.png" width="760" alt="Chordism, page DELAY">
 
-Q-Link columns: **1** DELAY MIX, DLY TIME, DLY FBK, DLY TONE  ·  **2** DLY MOD DPTH, DELAY MODE, DLY TONE HI, DLY TONE LO  ·  **3** DLY MOD RATE
+Q-Link columns: **1** DELAY MIX, DLY TIME, DLY FBK, DLY TONE  ·  **2** DELAY MODE, DLY TONE HI, DLY TONE LO  ·  **3** DLY MOD DPTH, DLY MOD RATE
 
 ### 8. REVERB
 
 <img src="screenshots/page_7.png" width="760" alt="Chordism, page REVERB">
 
-Q-Link columns: **1** REVERB MIX, REV DECAY, REV DAMPING, SHIMMER  ·  **2** ROOM SIZE, REV LOW CUT, REV MOD RATE, REV MOD DPTH
+Q-Link columns: **1** REVERB MIX, REV DECAY, REV DAMPING, SHIMMER  ·  **2** ROOM SIZE  ·  **3** REV LOW CUT, REV MOD RATE, REV MOD DPTH
 
 ### 9. CHORD MAP
 
 <img src="screenshots/page_8.png" width="760" alt="Chordism, page CHORD MAP">
 
-Q-Link columns (bank 1): **1** C, C#, D, D#  ·  **2** E, F, F#, G  ·  **3** G#, A, A#, B  ·  **4** INTERVAL 1, INTERVAL 2, INTERVAL 3, CTRL SRC
+Q-Link columns (bank 1): **1** C, C#, D, D#  ·  **2** E, F  ·  **3** F#, G, G#, A  ·  **4** A#, B
 
-Q-Link columns (bank 2): **1** CTRL CC, CTRL>CUTOFF, CTRL>MORPH, CTRL>VIBRATO  ·  **2** CTRL>SHAPE, CTRL>FM
+Q-Link columns (bank 2): **1** INTERVAL 1, INTERVAL 2, INTERVAL 3  ·  **2** CTRL SRC, CTRL CC, CTRL>CUTOFF, CTRL>MORPH  ·  **3** CTRL>VIBRATO, CTRL>SHAPE, CTRL>FM
 
 ### 10. ARPEGGIATOR
 
 <img src="screenshots/page_9.png" width="760" alt="Chordism, page ARPEGGIATOR">
 
-Q-Link columns: **1** EUCLID STEPS, EUCLID BEATS, ARP TEMPO, VAR COUNT  ·  **2** ARP STATUS, ARP HOLD, ARP DIRECTIO, ARP VAR INT  ·  **3** CLOCK SYNC, CLOCK DIVISI
+Q-Link columns: **1** EUCLID STEPS, EUCLID BEATS, ARP TEMPO, VAR COUNT  ·  **2** ARP HOLD, ARP DIRECTIO, ARP VAR INT  ·  **3** CLOCK SYNC, CLOCK DIVISI  ·  **4** ARP STATUS
 
 ## Install
 
