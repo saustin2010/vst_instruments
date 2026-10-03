@@ -59,6 +59,7 @@ MONO_TPL = {
     "button": '<button class="aug-btn px-3 py-1.5 text-[10px] font-mono rounded bg-amber-500 text-black font-bold" '
               'data-param="{key}">{label}</button>',
 }
+LFO_Q = ("waveform", "amplitude", "retrigger", "-", "sync", "frequency", "tempo", "-")   # Helm's LFOs: what | how fast
 MONO_SPECS = {
     "sweep": 135, "design_labels": True,
     "knob": {"item": ".rotary-dial", "unit": ".rotary-group", "label": "span", "value": "div:has(> .knob-val)"},
@@ -1151,7 +1152,58 @@ MAPS = {
             {"sel": "[data-purpose=sub-noise-lfo-matrix] > div:first-child > span", "text": "SUB OSC / NOISE"},
             {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-amber-500", "text": "HELM SUB OSCILLATOR"},
             {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-500:not(:only-child)", "remove": True},
+            # design QA 2026-10-03: the "Q-LINK ROW" tags (Q-Links go by column) and the "TEST OSC BUS" line go
+            {"sel": "[data-purpose=osc-mix-section] span.bg-amber-950", "remove": True},
+            {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-400.font-mono", "remove": True},
+            {"sel": "[data-purpose=sub-noise-lfo-matrix] div.pt-1:has(> span.text-neutral-500)", "remove": True},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel or group of up to four on every page; rows of six to eight
+        # split into groups with a gap, envelopes in A D S R order (layout.grid.conf)
+        "qlinks": {
+            0: ["volume", "polyphony", "octave_transpose", "legato", "cutoff", "resonance", "filter_type", "-",
+                "amp_attack", "amp_decay", "amp_sustain", "amp_release", "preset", "-", "-", "-"],
+            1: [k if k == "-" else k % n for n in (1, 2) for k in ("osc_%d_waveform", "osc_%d_transpose", "osc_%d_tune", "osc_%d_volume",
+                                                "osc_%d_unison_voices", "osc_%d_unison_detune", "unison_%d_harmonize", "-")],
+            2: ["cross_modulation", "osc_feedback_amount", "osc_feedback_transpose", "osc_feedback_tune", "osc_mix", "-", "-", "-",
+                "noise_volume", "-", "-", "-", "sub_octave", "sub_shuffle", "sub_volume", "sub_waveform"],
+            3: ["filter_on", "filter_style", "filter_shelf", "filter_blend", "filter_drive", "filter_saturation", "fil_env_depth",
+                "keytrack", "formant_on", "formant_x", "formant_y", "-", "fil_attack", "fil_decay", "fil_sustain", "fil_release"],
+            4: ["mod_attack", "mod_decay", "mod_sustain", "mod_release"] + [
+                k if k == "-" else "mono_lfo_1_" + k for k in LFO_Q],
+            5: [k if k == "-" else "mono_lfo_2_" + k for k in LFO_Q] + [
+                k if k == "-" else "poly_lfo_" + k for k in ("waveform", "amplitude", "-", "-", "sync", "frequency", "tempo", "-")],
+            6: ["num_steps", "step_smoothing", "step_sequencer_retrigger", "-", "step_sequencer_sync", "step_frequency",
+                "step_sequencer_tempo", "-"] + ["step_seq_%02d" % i for i in range(8)],
+            7: ["step_seq_%02d" % i for i in range(8, 16)] + ["arp_on", "arp_pattern", "arp_octaves", "arp_gate",
+                                                             "arp_sync", "arp_frequency", "arp_tempo", "-"],
+            8: ["distortion_on", "distortion_type", "distortion_drive", "distortion_mix", "delay_on", "delay_dry_wet",
+                "delay_feedback", "-", "delay_sync", "delay_frequency", "delay_tempo", "-"],
+            9: ["reverb_on", "reverb_dry_wet", "reverb_feedback", "reverb_damping", "stutter_on", "stutter_softness", "-", "-",
+                "stutter_sync", "stutter_frequency", "stutter_tempo", "-",
+                "stutter_resample_sync", "stutter_resample_frequency", "stutter_resample_tempo", "-"],
+            10: ["sync_bpm", "bpm", "velocity_track", "pitch_bend_range", "portamento_type", "portamento", "-", "-"] + [
+                "mod_%d_amount" % i for i in range(8)],
+            11: ["mod_%d_amount" % i for i in range(8, 16)],
+        },
+        # design QA 2026-10-03: readable names where Helm's own were cut at 12 characters (MPC shows these)
+        "names": {**{"mono_lfo_%d_%s" % (n, k): "LFO%d %s" % (n, v) for n in (1, 2) for k, v in (
+                      ("amplitude", "AMOUNT"), ("frequency", "FREQ"), ("retrigger", "RETRIG"), ("sync", "SYNC"),
+                      ("tempo", "TEMPO"), ("waveform", "WAVE"))},
+                  **{"poly_lfo_" + k: "PLFO " + v for k, v in (("amplitude", "AMOUNT"), ("frequency", "FREQ"),
+                                                              ("sync", "SYNC"), ("tempo", "TEMPO"), ("waveform", "WAVE"))},
+                  **{"osc_%d_%s" % (n, k): "OSC%d %s" % (n, v) for n in (1, 2) for k, v in (
+                      ("transpose", "TRANSP"), ("unison_detune", "DETUNE"), ("unison_voices", "VOICES"), ("volume", "VOLUME"),
+                      ("waveform", "WAVE"), ("tune", "TUNE"))},
+                  "unison_1_harmonize": "OSC1 HARMON", "unison_2_harmonize": "OSC2 HARMON",
+                  "osc_feedback_amount": "FBK AMOUNT", "osc_feedback_transpose": "FBK TRANSP", "osc_feedback_tune": "FBK TUNE",
+                  "fil_env_depth": "FLT ENV AMT", "keytrack": "FLT KEYTRACK", "filter_on": "FILTER ON",
+                  "fil_attack": "FLT ATTACK", "fil_decay": "FLT DECAY", "fil_sustain": "FLT SUSTAIN", "fil_release": "FLT RELEASE",
+                  "formant_on": "FORMANT ON", "pitch_bend_range": "BEND RANGE", "step_smoothing": "STEP SMOOTH",
+                  "reverb_damping": "REV DAMPING", "reverb_on": "REVERB ON", "distortion_on": "DIST ON", "delay_on": "DELAY ON",
+                  "arp_on": "ARP ON", "stutter_on": "STUTTER ON", "stutter_softness": "STUT SOFT", "stutter_sync": "STUT SYNC",
+                  "stutter_frequency": "STUT FREQ", "stutter_tempo": "STUT TEMPO", "stutter_resample_sync": "RESAMP SYNC",
+                  "stutter_resample_frequency": "RESAMP FREQ", "stutter_resample_tempo": "RESAMP TEMPO",
+                  "mod_attack": "MOD ATTACK", "mod_decay": "MOD DECAY", "mod_sustain": "MOD SUSTAIN", "mod_release": "MOD RELEASE"},
         "map": {"crossMod": "cross_modulation", "fbkAmt": "osc_feedback_amount", "fbkTran": "osc_feedback_transpose",
                 "fbkTune": "osc_feedback_tune", "oscMix": "osc_mix", "noiseVol": "noise_volume", "subOct": "sub_octave",
                 "subShuf": "sub_shuffle", "subVol": "sub_volume"},
