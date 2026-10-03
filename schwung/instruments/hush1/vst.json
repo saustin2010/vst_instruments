@@ -15,7 +15,8 @@
     ],
     "cflags": [
       "-Isrc",
-      "-Isrc/dsp"
+      "-Isrc/dsp",
+      "-DMPC_PORT"
     ],
     "libs": [
       "-lm"
@@ -23,5 +24,8 @@
   },
   "params": "params.json",
   "layout": "layout.conf",
-  "art": "html"
+  "art": "html",
+  "defines": {
+    "MODULE_DIR": "\"/sdcard/vst/hush1\""
+  }
 }

@@ -537,9 +537,15 @@ static void scan_external_presets_recursive(sh101_instance_t *inst, const char *
 
         dst = &inst->external_presets[inst->external_preset_count];
         snprintf(dst->path, sizeof(dst->path), "%s", full);
+#ifdef MPC_PORT
+        /* MPC_PORT: name a preset by its file, as the user sees it in their folder; a pack's programname is often
+           stale ("02 - Softy" in "SY Softy.bassline") and sorts out of its category prefixes. */
+        basename_no_ext(full, dst->name, sizeof(dst->name));
+#else
         if (!tal_attr_get_string(xml, xml_len, "programname", dst->name, sizeof(dst->name))) {
             basename_no_ext(full, dst->name, sizeof(dst->name));
         }
+#endif
         inst->external_preset_count += 1;
         free(blob);
     }

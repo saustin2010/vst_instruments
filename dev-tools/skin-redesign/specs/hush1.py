@@ -23,7 +23,7 @@ p.names({"volume": "VOLUME", "bend_range": "BEND RANGE", "saw": "SAW", "pulse": 
          "filter_env_full_range": "ENV FULL", "filter_env_polarity": "ENV POLARITY",
          "filter_volume_correction": "VOL CORRECT"})
 p.set("fine_tune", display="int").set("glide", display="int")
-p.preset_browser(count=11)
+p.preset_browser(count=523)   # 11 built-in + up to 512 TAL-BassLine-101 files in presets/ (2026-10-03)
 p.look({"bg": "16181c", "panel": "23262c", "line": "474c55", "ink": "f1f3f6", "ink_dim": "c7ccd4", "ink_faint": "7d848f",
         "accent": "3f7fd6", "accent_hi": "5d9cf2", "knob_face": "eef1f5", "knob_ring": "343841", "knob_dot": "5d9cf2",
         "lcd": "0d0e10", "seg_active": "f1f3f6", "seg_inactive": "30343b", "seg_active_tx": "16181c", "box": "23262c",
@@ -34,7 +34,7 @@ p.look({"bg": "16181c", "panel": "23262c", "line": "474c55", "ink": "f1f3f6", "i
        css=":root { --seg-size: 14px; }\n.slider-thumb { fill: #eef1f5; stroke: #343841; }\n")
 S = lambda k: {"key": k, "kind": "slider"}
 p.page("MAIN",
-       [("PROGRAM", 4, [{"key": "preset", "get": "preset_name", "caption": "11 PATCHES  ·  ARROWS OR Q-LINK TO BROWSE"}]),
+       [("PROGRAM", 4, [{"key": "preset", "get": "preset_name", "caption": "ARROWS OR Q-LINK TO BROWSE"}]),
         ("VCF", 4, [{"key": "cutoff", "big": True}, "resonance", "env_amt", "key_follow"])],
        [("ENV", 4, [S("attack"), S("decay"), S("sustain"), S("release")]),
         ("OUTPUT", 4, ["volume", "vca_mode", "velocity_sens", "octave_transpose"])])
@@ -52,4 +52,4 @@ p.page("PERFORM",
        [("PORTAMENTO", 4, ["glide", "portamento_mode", "portamento_linear", "bend_range"]),
         ("KEYBOARD", 4, ["retrigger", "priority", "hold", "same_note_quirk"])],
        [("TRIGGER", 4, ["gate_trig_mode", "velocity_mode"]), ("@logo", 4)])
-p.write()
+p.write(module_dir="/sdcard/vst/hush1")
