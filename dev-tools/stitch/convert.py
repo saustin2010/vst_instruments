@@ -995,7 +995,22 @@ MAPS = {
             {"sel": "button[class*='h-[50px]']", "nth": ["triplet", "latch"]},
             {"sel": "div[class*='w-[134px]']", "attr": {"data-param": "octave_range"}},
             {"sel": "section.chassis-screws", "all": True, "attr": {"style": "overflow: hidden;"}},   # its event stream spills
+            # design QA 2026-10-03: the event stream on the left of the top row, CLOCK & TIMING on the right
+            {"sel": "section.chassis-screws:has(> div > span + span):nth-of-type(2), section.col-span-6:nth-of-type(2)",
+             "attr": {"style": "overflow: hidden; order: -1"}},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel or group (MAIN: CLOCK | LATCH + OCTAVES | the four feel knobs;
+        # PATTERN: MODE + PATTERN | the progression's trigger / missing note / seed | RHYTHM | RANDOM PATTERN; MODIFY: the
+        # modifiers' two fours | RANDOM OCTAVE | RANDOM NOTE)
+        "qlinks": {
+            0: ["sync", "rate", "triplet", "bpm", "latch", "octave_range", "-", "-", "gate", "velocity", "swing", "max_voices"],
+            1: ["progression_mode", "pattern_preset", "-", "-", "progression_trigger", "missing_note_policy", "progression_seed",
+                "-", "rhythm_preset", "rhythm_trigger", "-", "-", "random_pattern_length", "random_pattern_chords",
+                "random_pattern_chord_seed", "-"],
+            2: ["modifier_loop_length", "modifier_trigger", "drop_amount", "drop_seed", "velocity_random_amount",
+                "velocity_seed", "gate_random_amount", "gate_seed", "random_octave_amount", "random_octave_range",
+                "random_octave_seed", "-", "random_note_amount", "random_note_seed", "-", "-"],
+        },
         "map": {"TEMPO (BPM)": "bpm"},
         "grid": {"tabs": ["PATTERN", "MODIFY"], "tpl": None},
         "tab_order": ["MAIN", "PATTERN", "MODIFY"],

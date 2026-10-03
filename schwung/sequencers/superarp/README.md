@@ -31,19 +31,19 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Super Arp, page MAIN">
 
-Q-Link columns: **1** SYNC, RATE, TRIPLET, TEMPO (BPM)  ·  **2** LATCH STATE, OCTAVES, GATE, VELOCITY  ·  **3** SWING, VOICES
+Q-Link columns: **1** SYNC, RATE, TRIPLET, TEMPO (BPM)  ·  **2** LATCH STATE, OCTAVES  ·  **3** GATE, VELOCITY, SWING, VOICES
 
 ### 2. PATTERN
 
 <img src="screenshots/page_1.png" width="760" alt="Super Arp, page PATTERN">
 
-Q-Link columns: **1** MODE, PATTERN, MODE TRIGGER, MISSING NOTE  ·  **2** MODE SEED, RHYTHM, RHY TRIGGER, RND LENGTH  ·  **3** RND CHORDS, RND CH SEED
+Q-Link columns: **1** MODE, PATTERN  ·  **2** MODE TRIGGER, MISSING NOTE, MODE SEED  ·  **3** RHYTHM, RHY TRIGGER  ·  **4** RND LENGTH, RND CHORDS, RND CH SEED
 
 ### 3. MODIFY
 
 <img src="screenshots/page_2.png" width="760" alt="Super Arp, page MODIFY">
 
-Q-Link columns: **1** MOD LOOP, MOD TRIGGER, DROP, DROP SEED  ·  **2** VEL RANDOM, VEL SEED, GATE RANDOM, GATE SEED  ·  **3** OCT RANDOM, OCT RANGE, OCT SEED, NOTE RANDOM  ·  **4** NOTE SEED
+Q-Link columns: **1** MOD LOOP, MOD TRIGGER, DROP, DROP SEED  ·  **2** VEL RANDOM, VEL SEED, GATE RANDOM, GATE SEED  ·  **3** OCT RANDOM, OCT RANGE, OCT SEED  ·  **4** NOTE RANDOM, NOTE SEED
 
 ## Install
 
