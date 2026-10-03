@@ -328,7 +328,7 @@ MAPS = {
     "marbles": {
         # one drawn page; its frozen MIDI OUT note readouts become the routing controls; SETUP drawn in its style
         "sweep": 135, "design_labels": True, "tabs": "#tab-marbles", "drop": ["header", "footer"], "center": False,
-        "qlinks_skip": ["t1_out", "t2_out", "t3_out"],   # 17 on the page: the routing switches stay touch-only
+        "qlinks_skip": ["t1_out", "t2_out", "t3_out"],   # the routing switches stay touch-only
         "knob": {"item": ".knob-container", "unit": "div:has(> .knob-container)", "label": "[id^=readout-], .text-mpc-ink-dim"},
         "enum": [{"item": "div:has(> .deja-t-btn), .aug-enum", "opt": "button", "label": ".text-mpc-ink-dim"},
                  {"item": "div:has(> .deja-x-btn)", "opt": "button", "dir": "v"}],   # in a header: stacked, it fits
@@ -363,9 +363,27 @@ MAPS = {
              "attr": {"class": "flex flex-row gap-16 items-center"}},   # two small knobs side by side: room for MPC's text
             {"sel": "div:has(> .deja-t-btn)", "attr": {"data-param": "t_deja_vu"}},
             {"sel": "div:has(> .deja-x-btn)", "attr": {"data-param": "x_deja_vu"}},
+            # design QA 2026-10-03: GATE LEN (the MIDI notes' length) joins MIDI OUT and X DEJA VU joins DEJA VU, so each
+            # panel is one Q-Link column; the T and X displays on the left of their panels
+            {"sel": "div.flex.items-center.gap-2:has(> #knob-gate-len)", "remove": True},
             {"sel": "div.grid.grid-cols-3:has(> .recessed-display)", "where": "replace",
-             "html": "@row(channels, t1_out, t2_out, t3_out)"},
+             "html": "@row(channels, gate_len)@row(t1_out, t2_out, t3_out)"},
+            {"sel": "div.flex-col:has(> div > .deja-t-btn)", "where": "afterend", "html":
+             '<div class="flex flex-col items-center gap-1.5" id="aug-xdv"><span class="text-label-sm font-label-sm '
+             'text-mpc-ink-dim">X DEJA VU</span></div>'},
+            {"sel": "div:has(> .deja-x-btn)", "move": "#aug-xdv", "attr": {"class": "flex flex-col gap-1 w-24"}},
+            {"sel": "div.recessed-display:has(> #rhythm-canvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div.recessed-display:has(> #gaussian-canvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div.pt-2:has(> div > #rhythm-canvas), div.pt-2:has(> div > #gaussian-canvas)", "all": True,
+             "attr": {"style": "align-items: flex-start"}},   # knobs up: their values inside the panel
+            {"sel": "section:has(#rhythm-canvas), section:has(#gaussian-canvas)", "all": True,
+             "attr": {"style": "justify-content: flex-start; gap: 14px"}},
         ],
+        "qlinks": {
+            0: ["t_model", "clock_div", "t_bias", "jitter", "deja_vu", "length", "t_deja_vu", "x_deja_vu",
+                "scale", "spread", "x_bias", "steps", "channels", "gate_len", "-", "-"],
+            1: ["rate_base", "t_range", "gate_rand", "-", "x_range", "x_mode", "-", "-", "base_note", "velocity"],
+        },
         "map": {"t-model": "t_model", "clock-div": "clock_div"},
         "grid": {"tabs": ["SETUP"], "tpl": None, "skip": ["channels", "t1_out", "t2_out", "t3_out"]},
         "tab_order": ["MARBLES", "SETUP"],
