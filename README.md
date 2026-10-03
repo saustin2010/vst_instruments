@@ -89,9 +89,11 @@ The first install of a plugin restarts MPC once (it asks first; `MPC.settings` i
 ## Status (2026-10-03)
 
 - All 36 build and pass the offline test: an x86 build under AddressSanitizer/UBSan that checks every parameter, presets, saving and restoring, Q-Link behaviour, notes to audio, and a stress test that hammers the plugin from two threads as MPC does.
-- All 36 were installed on an MPC Live II (MPC OS 3.9.1) on 2026-10-02 with their previous screens. Moog's Stitch screen was checked on that device.
-- The Stitch screens of the other plugins are new and checked offline only: every control's binding, the Q-Link layout and the touch areas (`dev-tools/stitch/check_skin.py`).
-- Not yet tried on a device: the sequencers driving other tracks through their own MIDI port on a stock MPC (the mechanism works on a Force), the three audio effects (whether MPC lists third-party effects at all), and the Sequencer category Grids reports to MPC's plugin browser.
+- All 36 run on an MPC Live II (MPC OS 3.9.1) with their Stitch screens (installed 2026-10-03). Moog's screen has been checked on the device; the others are going through an on-device design QA now: see the **Design QA** column above.
+- Presets: every instrument that has presets lists them in MPC's own **PRESET menu** in the plugin header (also on the arrangement screen); checked on the Live II. OB-Xd and Noisemaker get a BANK selector for banks you add, Hush One reads TAL-BassLine-101 presets you add, and the menu follows what's loaded ([docs/presets-and-libraries.md](docs/presets-and-libraries.md)).
+- Every screen is checked offline before it ships: each control's binding, the Q-Link layout, the touch areas (`dev-tools/stitch/check_skin.py`) and the Q-Link column outlines MPC highlights (`dev-tools/stitch/qlink_overlay.py`).
+- Not yet tried on a device: the sequencers driving other tracks through their own MIDI port on a stock MPC (the mechanism works on a Force), and the three audio effects (whether MPC lists third-party effects at all).
+- Plugin browser groups: the sequencers report the category "Sequencer" and Libpo32 and Mr Drums "Drum Machine" (registered on the Live II 2026-10-03); whether MPC's plugin menu shows them in their own folders is being checked.
 - Developed on a Live II. Other Gen1 devices run the same MPC software and should behave the same; Gen2 devices (e.g. Live III) are reported to be more locked down. Reports welcome.
 
 What's next is in [ROADMAP.md](ROADMAP.md). Found a problem? Open an issue with the plugin, your MPC model and firmware, and what you did.

@@ -24,16 +24,16 @@ parameter index, so existing projects keep working.
 
 ## On a device (nothing below has been tried on hardware yet)
 
-- [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Check
-  the menu on the device for each, and that OB-Xd / Noisemaker show the new bank's presets after a BANK switch (the
-  list is read live). Not included: Mono Voice (its patches load into a track; nothing reports the current one),
+- [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Names
+  show and load on the Live II (checked 2026-10-03). Still to check: that OB-Xd / Noisemaker show the new bank's presets
+  after a BANK switch (the list is read live). Not included: Mono Voice (its patches load into a track; nothing reports the current one),
   Plaits' FM patches (they belong to its 6-op model), Tablor (its presets aren't reachable yet), the sequencers.
 - [ ] Install everything on an MPC and re-insert each plugin; check every page of the new Stitch screens (names,
   values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays). Track it in README.md's Design QA column.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
 - [ ] Audio effects (Verglas, Warps, Rings FX): does MPC offer third-party VST effects in its insert list at all?
 - [ ] Plugin browser groups (2026-10-03): the 9 sequencers report `category="Sequencer"`, Libpo32 and Mr Drums
-  `"Drum Machine"`, the rest `"Synth"` / `"Effect"`. Grids' category had never reached the device (install.sh only
+  `"Drum Machine"`, the rest `"Synth"` / `"Effect"` (registered on the Live II 2026-10-03, MPC restarted). Grids' category had never reached the device (install.sh only
   re-registered on a name/maker/type change; it now compares the category too). Check whether MPC's plugin pop-up
   (its "sort by type" setting is on) shows them in their own folders and they still load on a plugin track. If not,
   try a name prefix (SEQ / DRM) on one plugin, checking that an older project still finds it.
