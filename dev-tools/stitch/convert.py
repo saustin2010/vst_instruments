@@ -153,6 +153,9 @@ MAPS = {
         "canvas": {"#acidScopeCanvas": {"picture": "waveform"}},
         "map": {"WAVEFORM": "waveform", "DRIVE MODEL": "drive_model", "selectWave": "waveform",
                 "selectDriveModel": "drive_model", "DEVILFISH": "devil_mod_switch"},
+        # one Q-Link column per panel (2026-10-03, design QA): VCO | VCF | ACCENT + OUT | DRIVE ("-" = an empty slot)
+        "qlinks": {0: ["waveform", "tuning", "-", "-", "cutoff", "resonance", "env_mod", "decay", "accent", "volume", "-", "-",
+                       "drive_model", "drive", "drive_mix", "tanh_shaper_drive"]},
     },
     "hera": {
         # both pages drawn; HPF / VCF KYBD / VCF BEND / VCA LEVEL / LFO TRIG added in its markup, the cutoff-envelope
