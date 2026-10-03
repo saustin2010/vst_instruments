@@ -899,7 +899,32 @@ MAPS = {
             {"sel": "div:has(> span + button + button + button)", "nth": ["range_a", "range_b"]},
             {"sel": "button.tactile-btn", "nth": ["cycle_a", "trig_a", "cycle_b", "trig_b"]},
             {"sel": "div[class*='w-[44px]']", "attr": {"data-param": "audio"}},
+            # design QA 2026-10-03: the channel scopes on the left; CHANNEL A / LOGIC / CHANNEL B CONTROLS as one
+            # CYCLE / TRIGGER / BALANCE panel (a Q-Link column: CYCLE A, BALANCE, CYCLE B; the TRIG buttons touch only);
+            # the made-up output meters go
+            {"sel": "div.col-span-4.scope-well", "all": True, "attr": {"class": "col-span-4 h-[150px] scope-well rounded-[2px] p-2 "
+             "flex flex-col justify-between relative overflow-hidden", "style": "order: -1"}},
+            {"sel": "div.col-span-2.border-r", "all": True, "attr": {"class": "col-span-2 flex flex-col items-center justify-center"}},
+            {"sel": "div.grid-cols-12:has(> div.scope-well)", "all": True, "attr": {"style": "padding-right: 26px"}},   # outlines inside
+            {"sel": "section.grid-cols-12 > div.col-span-3:has(button[data-param=cycle_a])",
+             "attr": {"id": "aug-cc", "style": "grid-column: span 8 / span 8"}},
+            {"sel": "section.grid-cols-12 > div.col-span-3:has(button[data-param=cycle_b])", "attr": {"id": "aug-ccb"}},
+            {"sel": "section.grid-cols-12 > div.col-span-2 > div.flex-col", "move": "#aug-cc > div.justify-around"},
+            {"sel": "#aug-ccb div.justify-around > div", "all": True, "move": "#aug-cc > div.justify-around"},
+            {"sel": "#aug-cc div.justify-around > div:has(> button[data-param=trig_a])", "move": "#aug-cc > div.justify-around",
+             "where": "afterbegin"},   # TRIG A | CYCLE A, BALANCE, CYCLE B | TRIG B: the column's outline leaves the triggers out
+            {"sel": "section.grid-cols-12 > div.col-span-2", "remove": True},
+            {"sel": "#aug-ccb", "remove": True},
+            {"sel": "#aug-cc span.font-label-md", "text": "CYCLE / TRIGGER / BALANCE"},
+            {"sel": "div.col-span-5 > div.justify-around:has(div.flex-col-reverse)", "remove": True},
         ],
+        "qlinks": {
+            0: ["range_a", "rise_a", "fall_a", "shape_a", "range_b", "rise_b", "fall_b", "shape_b",
+                "cycle_a", "balance", "cycle_b", "-", "audio", "volume", "-", "-"],
+            # MIDI: NOTES IN | CC OUT / CC RANGE | END OF CYCLE (CC OUT's five split in two; the empty MIDI OUT panel used)
+            1: ["mode_a", "mode_b", "keytrack_a", "keytrack_b", "cc_channel", "cc_a", "cc_b", "-", "cc_min", "cc_max", "-", "-",
+                "eoc_notes", "eoc_note_a", "eoc_note_b", "-"],
+        },
         "map": {"RISE": ["rise_a", "rise_b"], "FALL": ["fall_a", "fall_b"], "SHAPE": ["shape_a", "shape_b"]},
         "grid": {"tabs": ["MIDI"], "tpl": None},
         "tab_order": ["RAMPAGE", "MIDI"],
