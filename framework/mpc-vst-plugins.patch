@@ -695,6 +695,220 @@ index 0d8dfa9..017eac1 100644
 -    if cfg.get("module"):
 -        return cfg["module"], "schwung"
      raise SystemExit('vst.json: needs "params" (or an adapter\'s source, e.g. "module")')
+diff --git a/tools/shadow_skin.py b/tools/shadow_skin.py
+index 5faa2a8..6bdb524 100644
+--- a/tools/shadow_skin.py
++++ b/tools/shadow_skin.py
+@@ -8,11 +8,11 @@ backgrounds, knob filmstrips and button states; MPC draws live values.
+ Layout file:
+     [tab NAME]
+     frame   x= y= w= h= title="..."
+-    knob    cx= cy= r= label="..." key=<param>
++    knob    cx= cy= r= label="..." key=<param> [ns=<name px>] [vs=<value px>]
+     toggle  cx= cy= label="..." key=<param>
+     button  cx= cy= label="..." key=<param>          (trigger)
+-    enum_h  cx= cy= label="..." key=<param> [options="A,B,.."] [sw=<px>] [rows=<n>]
+-    enum_v  cx= cy= label="..." key=<param> [options="A,B,.."]   (options default to the param's)
++    enum_h  cx= cy= label="..." key=<param> [options="A,B,.."] [sw=<px>] [sh=<px>] [rows=<n>]
++    enum_v  cx= cy= label="..." key=<param> [options="A,B,.."] [sw=<px>] [sh=<px>]   (options default to the param's)
+     slider_v cx= cy= w= h= label="..." key=<param>     (vertical slider; value text below)
+     slider_h cx= cy= w= h= label="..." key=<param>     (horizontal slider; value text below)
+     readout cx= cy= w= h= label="..." key=<param>      (live value text)
+@@ -41,7 +41,8 @@ Controls can have looks: built-in drawings or images (look=, img=, img_on=, base
+ frames and popups take img=), per line or as top-level defaults (knob_look=moog): see tools/skin_assets.py. Looks,
+ images and pictures need the browser renderer.
+     qlinks  "PAGE NAME" = key,key,...                  (optional, repeatable)
+-Any widget line (frames too) can end in `when=<param>:<option>` (option name or index): it is shown only
++Any widget line (frames too) can end in `when=<param>:<option>` (option name or index), or for a continuous
++parameter `when=<param>:<i>/<N>` (band i of N of its range): it is shown only
+ while that option parameter is at that option (MPC's IndexedEnabling), so a tab can swap control sets per
+ mode. Its baked parts (frame, title, text boxes, group labels) go into a per-mode image over the background.
+ Top level: `qlinks_track = key,...` sets the Q-Links used outside page-follow mode (default: page 1's).
+@@ -130,7 +131,7 @@ def parse_layout(path):
+     return tabs, top
+ 
+ 
+-INT_KEYS = ("x", "y", "w", "h", "cx", "cy", "r", "sw", "rows", "cols", "th", "gap")
++INT_KEYS = ("x", "y", "w", "h", "cx", "cy", "r", "sw", "sh", "rows", "cols", "th", "gap", "ns", "vs", "bw")
+ 
+ 
+ def parse_widget(line):
+@@ -271,10 +272,10 @@ def qlink_for_slot(slot):
+ def seg_rects(w):
+     n = len(w["options"])
+     if w["kind"] == "enum_v":
+-        sw, sh, gap = 135, 30, 2
++        sw, sh, gap = w.get("sw") or 135, w.get("sh") or 30, 2
+         y0 = w["cy"] - (n * (sh + gap)) // 2
+         return [(w["cx"] - sw // 2, y0 + i * (sh + gap), sw, sh) for i in range(n)]
+-    sw, sh, gap = w.get("sw") or 117, 33, 2
++    sw, sh, gap = w.get("sw") or 117, w.get("sh") or 33, 2
+     rows = w.get("rows", 1)
+     per = -(-n // rows)
+     out = []
+@@ -462,6 +463,11 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+         if not w.get("when"):
+             return None
+         k, _, o = w["when"].partition(":")
++        if "/" in o and k in index:   # when=<param>:<i>/<N>: band i of N of a continuous parameter (e.g. sustain)
++            bi, bn = (int(x) for x in o.split("/"))
++            if not 0 <= bi < bn:
++                raise SystemExit("layout: when=%s: band %d of %d" % (w["when"], bi, bn))
++            return "IndexedEnabling/%d/%d/Parameter %d" % (bi, bn, index[k])
+         opts = [str(x).lower() for x in (params[index[k]].get("options") or [])] if k in index else []
+         if len(opts) < 2:
+             raise SystemExit("layout: when=%s: %r is not an option parameter" % (w["when"], k))
+@@ -496,6 +502,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+         return ppm
+ 
+     radii, sliders, looks = set(), set(), {}   # knob (r, look id), slider (image, w, h, vert, look id); look id -> look
++    meter_frames = {}   # meter image -> its strip's own frame count (see the meter branch)
+     for t, tab in enumerate(tabs_in):
+         kids, controls = [], []
+         for w in tab["widgets"]:
+@@ -596,14 +603,22 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+             sfx = "_" + lid if lk else ""
+             if lk:
+                 looks[lid] = lk
++            ns, vs = w.get("ns") or 17, w.get("vs") or 22   # name / value font px (smaller where controls sit close)
++            nsfx = "_n%dv%d" % (ns, vs) if (ns, vs) != (17, 22) else ""
++            # bw=: the touch box (and name/value width) of a knob or slider, narrower than the usual 130 px where
++            # neighbours sit closer (otherwise their boxes overlap and MPC gives a touch to the wrong one)
++            if w.get("bw"):
++                nsfx += "_b%d" % w["bw"]
+             if kind == "knob":
+                 r = w["r"]
+                 s, cw = 2 * r + 10, max(130, 2 * r + 10)   # value label width; LFO knobs sit 138 px apart
++                if w.get("bw"):
++                    cw = max(s, w["bw"])
+                 name_y, name_h = s // 2 + r + 2, 20
+                 value_y = name_y + name_h + 2
+                 ch = value_y + 26 + 6
+                 radii.add((r, lid))
+-                key = "shKnob%d%s" % (r, sfx)
++                key = "shKnob%d%s%s" % (r, sfx, nsfx)
+                 defs.setdefault(key, _local(key, [_action("Mouse Down", "Q-Link"),
+                                                   _action("Double Click", "Show Overlay", "knob overlay"),
+                                                   _action("Enter Pressed", "Show Overlay", "knob overlay")], [
+@@ -611,9 +626,9 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                     _sub("Knob", {"version": 5, "knobType": "FilmStrip", "filmStrip": "sh_knob_r%d%s.png" % (r, sfx),
+                                   "numFrames": FRAMES - 1, "invert": False, "dragOrientation": "Vertical",
+                                   "handleName": "Data"}, _bounds((cw - s) // 2, 0, s, s), "Knob"),
+-                    _name_label(0, name_y, cw, name_h, 17.0, INK),
++                    _name_label(0, name_y, cw, name_h, float(ns), INK),
+                     _sub("Label", {"version": 1, "textStyle": {"version": 1, "font": {"version": 1, "name": "Titillium Web",
+-                                                                                     "style": "SemiBold", "height": 22.0},
++                                                                                     "style": "SemiBold", "height": float(vs)},
+                                                                "colour": "ff" + INK_DIM,
+                                                                "justification": "horizontallyCentred verticallyCentred",
+                                                                "case": "Upper Case"},
+@@ -663,10 +678,12 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 sliders.add((img, sw_, sh_, vert, lid))
+                 sq = max(sw_, sh_)   # filmstrip frames are square (as stock); padding is transparent
+                 cw = max(130, sq)
++                if w.get("bw") and vert:   # (a vertical slider's square frame is transparent beside the slider)
++                    cw = max(sw_ + 20, w["bw"])
+                 name_y, name_h = (sq - sh_) // 2 + sh_ + 2, 20
+                 value_y = name_y + name_h + 2
+                 ch = value_y + 26 + 6
+-                key = "shSlider_%s_%dx%d%s" % ("v" if vert else "h", sw_, sh_, sfx)
++                key = "shSlider_%s_%dx%d%s%s" % ("v" if vert else "h", sw_, sh_, sfx, nsfx)
+                 defs.setdefault(key, _local(key, [_action("Mouse Down", "Q-Link"),
+                                                   _action("Double Click", "Show Overlay", "knob overlay"),
+                                                   _action("Enter Pressed", "Show Overlay", "knob overlay")], [
+@@ -675,8 +692,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                                   "numFrames": FRAMES - 1, "invert": False,
+                                   "dragOrientation": "Vertical" if vert else "Horizontal",
+                                   "handleName": "Data"}, _bounds((cw - sq) // 2, 0, sq, sq), "Slider"),
+-                    _name_label(0, name_y, cw, name_h, 17.0, INK),
+-                    _value_label(0, value_y, cw, 26, 22.0, INK_DIM)]))
++                    _name_label(0, name_y, cw, name_h, float(ns), INK),
++                    _value_label(0, value_y, cw, 26, float(vs), INK_DIM)]))
+                 kids.append(_placed(key, name, i, w["cx"] - cw // 2, w["cy"] - sq // 2, cw, ch))
+             elif kind == "meter" and lk and lk.get("look") == "native":
+                 # EXPERIMENTAL, unverified (docs/ROADMAP.md "A native Meter component"): a real Meter component
+@@ -704,13 +721,17 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 mw, mh = w["w"], w["h"]
+                 img = "sh_meter_%dx%d%s" % (mw, mh, sfx)
+                 sliders.add((img, mw, mh, 1, lid))
+-                sq = max(mw, mh)
++                # Laid out as Akai's own skins do (Bassline knob_phase 76x86 x3, DrumSynth names 190x43 x8, Electric
++                # sliders 250x69 x101): frames of the meter's own w x h, numFrames = the frame count, the strip's own
++                # count (frames=). Square-padded frames resampled to 128 with numFrames 127 (the knobs' layout) drew
++                # each frame displaced by a few px per frame on a Live II (2026-10-02, measured from a screen grab).
++                nf = meter_frames[img] = int((lk or {}).get("frames") or FRAMES)
+                 key = "shMeter_%dx%d%s" % (mw, mh, sfx)
+                 defs.setdefault(key, _local(key, [], [
+-                    _sub("Knob", {"version": 5, "knobType": "FilmStrip", "filmStrip": img + ".png", "numFrames": FRAMES - 1,
++                    _sub("Knob", {"version": 5, "knobType": "FilmStrip", "filmStrip": img + ".png", "numFrames": nf,
+                                   "invert": False, "dragOrientation": "Vertical", "handleName": "Data"},
+-                         _bounds(0, 0, sq, sq), "Meter")]))
+-                kids.append(_placed(key, name, i, w["cx"] - sq // 2, w["cy"] - sq // 2, sq, sq, focus="No"))
++                         _bounds(0, 0, mw, mh), "Meter")]))
++                kids.append(_placed(key, name, i, w["cx"] - mw // 2, w["cy"] - mh // 2, mw, mh, focus="No"))
+             elif kind == "menu":
+                 x, y, rw, rh = w["cx"] - w["w"] // 2, w["cy"] - w["h"] // 2, w["w"], w["h"]
+                 key = "shMenu_%dx%d" % (rw, rh)
+@@ -827,7 +848,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+                 ql["Q-Link %d" % qlink_for_slot(s)] = index[k]
+             comp = "%s|%s" % (tab["name"], title)
+             pages.append({"version": 3, "tabName": title, "fnKeyIndex": t, "fnKeySubIndex": sp,
+-                          "qlinkBoundsData": [qlink_bounds(tab, keys)], "componentName": comp,
++                          "qlinkBoundsData": qlink_columns(tab, keys), "componentName": comp,
+                           "initialSize": "0 0 %d %d" % (W, H), "scale": 1.0})
+             qmap.append({"Tab": t + 1, "SubTab": sp + 1, "Bank Direction": "Column", "Q-Links": ql})
+             defs[comp] = {"key": comp, "value": {
+@@ -839,7 +860,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+ 
+     for img, sw_, sh_, vert, lid in sorted(sliders):
+         if lid:
+-            script.append("lsstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, FRAMES, 1 if vert else 0, skin_assets.encode(looks[lid])))
++            script.append("lsstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, meter_frames.get(img, FRAMES), 1 if vert else 0,
++                                                          skin_assets.encode(looks[lid])))
+         else:
+             script.append("sstrip|%s|%d|%d|%d|%d|%s" % (art(img), sw_, sh_, FRAMES, 1 if vert else 0, under()))
+     for r, lid in sorted(radii):
+@@ -867,7 +889,8 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+             dr.polygon([(x - 8, y - 4), (x + 8, y - 4), (x, y + 5)], fill="#" + ACCENT)
+         im.save(path)
+     for img, sw_, sh_, vert, lid in sliders:
+-        square_strip(os.path.join(skin_dir, img + ".png"), sw_, sh_)
++        if img not in meter_frames:   # meters keep their own w x h frames (see the meter branch)
++            square_strip(os.path.join(skin_dir, img + ".png"), sw_, sh_)
+     for f in os.listdir(work):
+         os.remove(os.path.join(work, f))
+     os.rmdir(work)
+@@ -885,6 +908,30 @@ def square_strip(path, w, h):
+     out.save(path)
+ 
+ 
++def qlink_columns(tab, keys):
++    """One rectangle per Q-Link column, as stock skins have (AIR Filter Gate, Fuzz-Wah, Channel Strip: 4 per page).
++    A 4-knob MPC (Live, One) works one column of the 4x4 grid at a time, the Q-Link button moving it along, and
++    highlights that column's rectangle; with one rectangle round the whole page it can't show which four controls
++    the knobs are on. Slots 4c..4c+3 are column c (qlink_for_slot: Q-Links 13,9,5,1 / 14,10,6,2 / ...). A column with
++    no control gets an empty rectangle, so the list stays in column order. (2026-10-02)"""
++    cols = [keys[4 * c:4 * c + 4] for c in range((len(keys) + 3) // 4)] or [[]]
++    # qbox=no on a control keeps it out of its column's box (it still has its Q-Link; MPC's own Q-Link panel names it):
++    # for a control placed away from the rest of its column, whose box would otherwise take in another column's panel.
++    out = set(w.get("key") for w in tab["widgets"] if str(w.get("qbox", "")).lower() in ("no", "0", "off"))
++    return [qlink_bounds(tab, set(c) - out) if any(_drives(tab, k) for k in set(c) - out) else "0 0 0 0" for c in cols]
++
++
++def _drives(tab, key):
++    """Does the page show a control (not a meter or a bare button) for this key?"""
++    for w in tab["widgets"]:
++        if w["kind"] == "list":
++            if key in list_keys(w):
++                return True
++        elif w.get("key") == key and w["kind"] not in ("button", "meter"):
++            return True
++    return False
++
++
+ def qlink_bounds(tab, keys):
+     """Rectangle around the controls a page's Q-Links drive (plugin coords)."""
+     xs, ys = [], []
 diff --git a/tools/studio.py b/tools/studio.py
 index f13ac8a..c988bdb 100644
 --- a/tools/studio.py
