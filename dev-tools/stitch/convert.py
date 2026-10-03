@@ -475,7 +475,19 @@ MAPS = {
             {"sel": "#s1-bits, #s2-bits", "all": True, "attr": {"style": "grid-template-columns: repeat(16, minmax(0, 1fr));"}},
             {"sel": "div:has(> button[onclick='triggerResetBoth()'])", "where": "replace", "html": "@popup(g_reset)"},
             {"sel": "section div.mt-2.bg-surface-container-low", "where": "replace", "html": "@row(s1_reset, s2_reset)"},
+            # design QA 2026-10-03: the S1 / S2 knob rows spaced out (MPC's names and values overlapped), their
+            # "PARAMS:" captions go (MPC names each knob S1 / S2 ...); no maker badge
+            {"sel": "div.space-x-5:has(> div > #knob-s1-corrupt) > span, div.space-x-5:has(> div > #knob-s2-corrupt) > span",
+             "all": True, "remove": True},
+            {"sel": "div.space-x-5:has(> div > #knob-s1-corrupt)", "attr": {"class": "flex items-center",
+                                                                          "style": "gap: 54px; padding-left: 34px"}},
+            {"sel": "div.space-x-5:has(> div > #knob-s2-corrupt)", "attr": {"class": "flex items-center",
+                                                                          "style": "gap: 54px; padding-right: 34px"}},
+            {"sel": "body", "retext": [["AKAI MPC LIVE II", "SCHWUNG MIDI FX"]]},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel or group (OUTPUT | S1 | S2 | the two RESETs)
+        "qlinks": {0: ["scale", "note_rate", "note_length", "g_reset", "s1_corrupt", "s1_cv_range", "s1_length", "trig_mix",
+                       "s2_corrupt", "s2_cv_range", "s2_length", "trig_mix_b", "s1_reset", "s2_reset", "-", "-"]},
         "map": {"param-scale": "scale", "param-rate": "note_rate", "param-len": "note_length", "s1-corrupt": "s1_corrupt",
                 "s1-range": "s1_cv_range", "s1-len": "s1_length", "s1-trig": "trig_mix", "s2-corrupt": "s2_corrupt",
                 "s2-range": "s2_cv_range", "s2-len": "s2_length", "s2-trig": "trig_mix_b",
