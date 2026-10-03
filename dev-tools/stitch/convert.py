@@ -931,7 +931,15 @@ MAPS = {
             {"sel": "[data-purpose=lfo-dest-selectors]", "attr": {"class": "grid grid-cols-3 gap-6 mt-2"}},
             {"sel": "[data-purpose=lfo-dest-selectors] .lcd-screen-pattern", "all": True, "attr": {"style": "height: 40px;"}},
             {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-500:not(:only-child)", "remove": True},
+            # design QA 2026-10-03: the display on the left, the machine selector on the right; the "Q-LINK ROW" tags
+            # (Q-Links go by column) and the "TEST OSC BUS" line go
+            {"sel": "[data-purpose=osc-mix-section]", "attr": {"style": "order: -1"}},
+            {"sel": "[data-purpose=osc-mix-section] span.bg-amber-950", "remove": True},
+            {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-400.font-mono", "remove": True},
+            {"sel": "[data-purpose=sub-noise-lfo-matrix] div.pt-1:has(> span.text-neutral-500)", "remove": True},
         ],
+        # design QA 2026-10-03: MACHINE | LFO DESTINATIONS, a column each (it was one column over both panels)
+        "qlinks": {0: ["machine", "-", "-", "-", "lfo1_1", "lfo2_1", "lfo3_1", "-"]},
         "map": {"machine-trigger": "machine", "lfo1": "lfo1_1", "lfo2": "lfo2_1", "lfo3": "lfo3_1"},
         "grid": {"tabs": ["SYNTH", "AMP", "FILTER", "EFFECT", "LFO 1", "LFO 2", "LFO 3"], "tpl": MONO_TPL, "keep": ".crt-scanlines"},
         "tab_order": ["MACHINE", "SYNTH", "AMP", "FILTER", "EFFECT", "LFO 1", "LFO 2", "LFO 3"],

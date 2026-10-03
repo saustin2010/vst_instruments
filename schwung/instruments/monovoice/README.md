@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Mono Voice, page MACHINE">
 
-Q-Link columns: **1** MACHINE, LFO1 DEST, LFO2 DEST, LFO3 DEST
+Q-Link columns: **1** MACHINE  ·  **2** LFO1 DEST, LFO2 DEST, LFO3 DEST
 
 ### 2. SYNTH
 
