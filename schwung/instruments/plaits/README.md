@@ -24,13 +24,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Plaits, page PLAITS">
 
-Q-Link columns: **1** MODEL, HARMONICS, TIMBRE, MORPH  ·  **2** LPG DECAY, LPG COLOUR, ATTACK, FM  ·  **3** TIMBRE MOD, MORPH MOD, AUX MIX, OCTAVE
+Q-Link columns: **1** MODEL, OCTAVE  ·  **2** HARMONICS, TIMBRE, MORPH  ·  **3** LPG DECAY, LPG COLOUR, ATTACK  ·  **4** FM, TIMBRE MOD, MORPH MOD, AUX MIX
 
 ### 2. PLAY
 
 <img src="screenshots/page_1.png" width="760" alt="Plaits, page PLAY">
 
-Q-Link columns: **1** FM PATCH, LEGATO, VELOCITY
+Q-Link columns: **1** FM PATCH  ·  **2** LEGATO, VELOCITY
 
 ## Install
 

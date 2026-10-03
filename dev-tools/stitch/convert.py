@@ -779,7 +779,21 @@ MAPS = {
             {"sel": "circle.val", "all": True, "remove": True},   # value arcs drawn at one value
             {"sel": ".val-text", "all": True, "remove": True},    # a value written on the cap would turn with it
             {"sel": "div.grid:has(> #btnPrevModel)", "remove": True},
+            # design QA 2026-10-03: four panels, a Q-Link column each: OCTAVE joins MODEL, AUX MIX joins MODULATION and
+            # the OUTPUT panel goes; MODEL's made-up footer ("16 ALGORITHMS", a pitch readout) goes
+            {"sel": "section:has(#modelName) > div.border-t", "remove": True},
+            {"sel": "div.flex-col:has(> [data-key=octave_transpose])", "move": "section:has(#modelName) > div.flex-1"},
+            {"sel": "div.flex-col:has(> [data-key=aux_mix])", "move": "section:has([data-key=fm_amount]) div.grid-cols-3"},
+            {"sel": "section:has([data-key=fm_amount]) div.grid-cols-3", "attr": {"class": "flex-1 grid grid-cols-4 gap-2 items-center"}},
+            {"sel": "section:has([data-key=fm_amount]) span.text-xs", "text": "\u25a0 MODULATION / AUX"},
+            {"sel": "section:has([data-key=fm_amount])", "attr": {"style": "grid-column: span 7 / span 7"}},
+            {"sel": "section:has(> div > span.text-xs):not(:has(.rotary-knob)):not(:has(#modelName))", "remove": True},
         ],
+        "qlinks": {
+            0: ["engine", "octave_transpose", "-", "-", "harmonics", "timbre", "morph", "-",
+                "decay", "lpg_colour", "attack", "-", "fm_amount", "timbre_mod", "morph_mod", "aux_mix"],
+            1: ["fm_preset_index", "-", "-", "-", "legato", "velocity_sensitivity", "-", "-"],
+        },
         "grid": {"tabs": ["PLAY"], "tpl": None},
         "tab_order": ["PLAITS", "PLAY"],
     },
