@@ -2,6 +2,7 @@
   "name": "Chordism",
   "vendor": "Charles Vestal",
   "uid": "Chdm",
+  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count"},
   "so": "chordism.so",
   "module": "src/module.json",
   "build": {

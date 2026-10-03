@@ -51,6 +51,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Presets work: the build never pointed the engine at its presets folder (MODULE_DIR); now a PATCH browser shows the preset name.
 - **Pitch clamped (2026-10-02)**: the module's firmware keeps pitch in 0..16383, but this port's note + 44.1 kHz correction + FM + bend reached ~19800, and high notes on FLUTED read past the flute's body-filter table. `src/dsp/braids/macro_oscillator.h` under `MPC_PORT`; diff in `upstream-changes.diff`. Also `-fwrapv` (stmlib's fixed-point maths relies on wrap-around, as on the module's ARM). Found with `dev-tools/fuzz`.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets in MPC's PRESET menu (2026-10-03): its 10 presets are VST programs (vst.json `programs`), so the PRESET
+  dropdown in the plugin header, also on the arrangement screen, lists and loads them.
 
 ## Files
 

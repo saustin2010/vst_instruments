@@ -2,6 +2,7 @@
   "name": "Libpo32",
   "vendor": "mestela",
   "uid": "Po32",
+  "programs": {"param": "kit", "name": "kit_name", "count": "kit_count"},
   "category": "Drum Machine",
   "so": "libpo32.so",
   "module": "src/module.json",

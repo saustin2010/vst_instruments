@@ -70,6 +70,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 
 - `src/dsp/fizzik.c` (`-DMPC_PORT`, 2026-10-02): the waveguide's fractional read wraps a position that float rounding left at exactly the delay length (one past the line; found with dev-tools/fuzz). Diff: `upstream-changes.diff`.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets in MPC's PRESET menu (2026-10-03): its 31 presets are VST programs (vst.json `programs`), so the PRESET
+  dropdown in the plugin header, also on the arrangement screen, lists and loads them.
 
 ## Files
 

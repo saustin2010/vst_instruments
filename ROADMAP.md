@@ -24,6 +24,10 @@ parameter index, so existing projects keep working.
 
 ## On a device (nothing below has been tried on hardware yet)
 
+- [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Check
+  the menu on the device for each, and that OB-Xd / Noisemaker show the new bank's presets after a BANK switch (the
+  list is read live). Not included: Mono Voice (its patches load into a track; nothing reports the current one),
+  Plaits' FM patches (they belong to its 6-op model), Tablor (its presets aren't reachable yet), the sequencers.
 - [ ] Install everything on an MPC and re-insert each plugin; check every page of the new Stitch screens (names,
   values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays). Track it in README.md's Design QA column.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).

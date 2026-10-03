@@ -45,6 +45,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Presets work: the preset control only reached presets 0 and 1 (its range comes from the engine at run time, which the build ignored); now a PATCH browser over all 32.
 - **Sine lookup fixed (2026-10-02)**: a float rounding edge (a phase of -0.000001 wrapped to exactly 1.0) read one past Hank's sine table. `src/dsp/hank_engine.cpp` under `MPC_PORT` (vst.json defines it); diff in `upstream-changes.diff`. Found with `dev-tools/fuzz`.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets in MPC's PRESET menu (2026-10-03): its 32 presets are VST programs (vst.json `programs`), so the PRESET
+  dropdown in the plugin header, also on the arrangement screen, lists and loads them.
 
 ## Files
 

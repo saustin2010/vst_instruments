@@ -2,6 +2,7 @@
   "name": "Hank",
   "vendor": "Charles Vestal",
   "uid": "Hank",
+  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count"},
   "so": "hank.so",
   "module": "src/module.json",
   "build": {

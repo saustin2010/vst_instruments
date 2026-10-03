@@ -2005,6 +2005,12 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
         return snprintf(buf, buf_len, "%d", k < 0 ? 0 : k);
     }
     if (strcmp(key, "kit_count") == 0) return snprintf(buf, buf_len, "%d", inst->kits.count);
+    /* MPC port: kit N's name without loading it, for MPC's PRESET menu (vst.json "programs" "name_at"). */
+    if (strncmp(key, "kit_name_at:", 12) == 0) {
+        int k = atoi(key + 12);
+        if (k < 0 || k >= inst->kits.count) return -1;
+        return snprintf(buf, buf_len, "%s", inst->kits.names[k]);
+    }
     if (strcmp(key, "kit_name") == 0) {
         int k = mpc_kits_current(inst);
         return snprintf(buf, buf_len, "%s", k < 0 ? (inst->kits.count ? "(custom)" : "(no kits)") : inst->kits.names[k]);

@@ -53,6 +53,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - **`-fwrapv` (2026-10-02)**: Hera's noise generators rely on signed wrap-around; now defined behaviour. Found with `dev-tools/fuzz`, which otherwise ran clean.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - **VOLUME restored (2026-10-03)**: the engine saved VOLUME in its state but never read it back, so a project reopened at the default level. `src/dsp/hera_plugin.cpp` now reads it.
+- Presets in MPC's PRESET menu (2026-10-03): its 56 presets are VST programs (vst.json `programs`), so the PRESET
+  dropdown in the plugin header, also on the arrangement screen, lists and loads them.
 
 ## Files
 

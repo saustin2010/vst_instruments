@@ -10,7 +10,7 @@ A chord machine: every note you play becomes a four-voice chord (octaves, fifths
 
 - In the plugin browser: **Chordism** by **Charles Vestal** (Synth)
 - Files: `/sdcard/vst/chordism.so`, screen in `/sdcard/Synths/Charles Vestal - VST - Chordism/`
-- 135 parameters (all automatable) on 10 pages
+- 137 parameters (all automatable) on 10 pages
 
 ## Playing it
 
@@ -102,6 +102,9 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 
 - `params.base.json` comes from the module's `chain_params` (what the engine actually takes, saved as `chain_params.engine.json`), not its menu tree.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets (2026-10-03): its 57 built-in presets were never exposed. New parameters `preset` and `preset_name`
+  (appended, indices 135-136, so saved projects keep working) make them VST programs, so the PRESET dropdown in
+  the plugin header, also on the arrangement screen, lists and loads them. No control on the pages yet.
 
 ## Files
 

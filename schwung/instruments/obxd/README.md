@@ -70,6 +70,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Presets work: factory bank shipped + MODULE_DIR, PATCH browser with a red dot-matrix display.
 - BANK selector (2026-10-03), under PATCH on MAIN: every `.fxb` bank in `/sdcard/vst/obxd/presets/` (up to 32; Factory first, then by file name, which is the name shown), and PATCH browses the chosen one (up to 128 programs). The bank is saved with the project by name. An OB-Xd 1.x LV2 bank (`presets.ttl`) converts with `python3 tools/obxd-lv2-to-fxb.py <presets.ttl or its archive> "presets/obxd/presets/<Bank name>.fxb"`. The new parameters are appended (indices 70-73), so saved projects and Q-Link assignments keep working.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets in MPC's PRESET menu (2026-10-03): its presets are VST programs, listed live from the engine (vst.json
+  `programs` with `count` and `name_at`; the engine answers a preset's name by number, marked MPC port), so it lists the bank that's loaded and follows a BANK switch.
 
 ## Files
 

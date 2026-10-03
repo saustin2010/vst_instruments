@@ -2,6 +2,7 @@
   "name": "Denis",
   "vendor": "Filliformes",
   "uid": "Dnis",
+  "programs": {"param": "preset"},
   "so": "denis.so",
   "module": "src/module.json",
   "build": {

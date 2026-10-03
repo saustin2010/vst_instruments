@@ -1139,6 +1139,13 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
     if (strcmp(key, "preset_count") == 0) {
         return snprintf(buf, buf_len, "%d", inst->preset_count);
     }
+    /* MPC port: preset N's name in the loaded bank without loading it, for MPC's PRESET menu (vst.json "programs"
+     * "name_at"). */
+    if (strncmp(key, "preset_name_at:", 15) == 0) {
+        int idx = atoi(key + 15);
+        if (idx < 0 || idx >= inst->preset_count) return -1;
+        return snprintf(buf, buf_len, "%s", inst->presets[idx].name);
+    }
     if (strcmp(key, "preset_name") == 0) {
         return snprintf(buf, buf_len, "%s", inst->preset_name);
     }

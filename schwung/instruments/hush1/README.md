@@ -65,6 +65,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Four SH-101-style pages (MAIN, SOURCE, MODULATOR, PERFORM): faders for the source mixer and envelopes.
 - The engine reports option values as text, so option labels only changed case (matched case-insensitively).
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets in MPC's PRESET menu (2026-10-03): its presets, built-in and imported are VST programs, listed live from the engine (vst.json
+  `programs` with `count` and `name_at`; the engine answers a preset's name by number, marked MPC port), so presets you add show up.
 
 ## Files
 
