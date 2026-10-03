@@ -1215,12 +1215,21 @@ MAPS = {
             # design QA 2026-10-03: the display on the left, the machine selector on the right; the "Q-LINK ROW" tags
             # (Q-Links go by column) and the "TEST OSC BUS" line go
             {"sel": "[data-purpose=osc-mix-section]", "attr": {"style": "order: -1"}},
+            {"sel": "#machine-trigger", "where": "afterend", "html":   # PATCH: the patch library (Init first), 2026-10-04
+             '<div class="flex flex-col mt-8"><span class="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold '
+             'mb-1">PATCH</span><div class="aug-stepper flex items-center bg-black rounded border border-neutral-700/80 p-0.5" '
+             'data-param="patch"><button class="px-1 text-amber-500 text-xs">&#9664;</button><div class="flex-1 '
+             'lcd-screen-pattern py-1 px-1 rounded text-center border border-emerald-950 font-mono text-[9px] '
+             'text-mpc-lcdText font-bold" style="height:40px;">&nbsp;</div><button class="px-1 text-amber-500 text-xs">&#9654;'
+             '</button></div></div>'},
             {"sel": "[data-purpose=osc-mix-section] span.bg-amber-950", "remove": True},
             {"sel": "[data-purpose=sub-noise-lfo-matrix] span.text-neutral-400.font-mono", "remove": True},
             {"sel": "[data-purpose=sub-noise-lfo-matrix] div.pt-1:has(> span.text-neutral-500)", "remove": True},
         ],
-        # design QA 2026-10-03: MACHINE | LFO DESTINATIONS, a column each (it was one column over both panels)
-        "qlinks": {0: ["machine", "-", "-", "-", "lfo1_1", "lfo2_1", "lfo3_1", "-"]},
+        # design QA 2026-10-03: MACHINE | LFO DESTINATIONS, a column each (it was one column over both panels); PATCH
+        # (the patch library, 2026-10-04) under MACHINE
+        "qlinks": {0: ["machine", "patch", "-", "-", "lfo1_1", "lfo2_1", "lfo3_1", "-"]},
+        "get": {"patch": "patch_name"},
         "map": {"machine-trigger": "machine", "lfo1": "lfo1_1", "lfo2": "lfo2_1", "lfo3": "lfo3_1"},
         "grid": {"tabs": ["SYNTH", "AMP", "FILTER", "EFFECT", "LFO 1", "LFO 2", "LFO 3"], "tpl": MONO_TPL, "keep": ".crt-scanlines"},
         "tab_order": ["MACHINE", "SYNTH", "AMP", "FILTER", "EFFECT", "LFO 1", "LFO 2", "LFO 3"],

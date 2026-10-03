@@ -1,16 +1,18 @@
 # Mono Voice
 
-**Synth** · Elektron Monomachine-style digital voice: SuperWave, SID, DigiPRO, FM and more machines. · maker in MPC: timncox · licence: MIT
+**Synth** · Elektron Monomachine-style digital voice: SuperWave, SID, DigiPRO, FM and more machines; 12 factory patches. · maker in MPC: timncox · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Mono Voice on the MPC touchscreen">
 
 A digital synth voice modelled on the Elektron Monomachine: the MACHINE page picks the synthesis machine (SuperWave, SID-style chip sounds, user-wave DigiPRO, FM and others, with an arpeggiator), and the SYNTH page's 16 controls change meaning with the machine (they're numbered SYN 1-16 for that reason). Then an amp page, a filter page and an effect page, each with a SHIFT layer, and three LFOs that can each reach any of 114 destinations (picked with arrows).
 
+Its built-in patch library (Chrome Bass, Wide Current, Hollow Wire, PWM Basin, Glass Choir, Just Fifths, Arcade Lead, Dust Pulse, Scan Bell, Circuit Reed, Metal Key, Soft Operator) is in MPC's PRESET menu after an Init, and on the MACHINE page's PATCH selector (2026-10-04).
+
 ## On the MPC
 
 - In the plugin browser: **Mono Voice** by **timncox** (Synth)
 - Files: `/sdcard/vst/monovoice.so`, screen in `/sdcard/Synths/timncox - VST - Mono Voice/`
-- 119 parameters (all automatable) on 8 pages
+- 120 parameters (all automatable) on 8 pages
 
 ## Playing it
 
@@ -24,7 +26,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Mono Voice, page MACHINE">
 
-Q-Link columns: **1** MACHINE  ·  **2** LFO1 DEST, LFO2 DEST, LFO3 DEST
+Q-Link columns: **1** MACHINE, PATCH  ·  **2** LFO1 DEST, LFO2 DEST, LFO3 DEST
 
 ### 2. SYNTH
 
@@ -87,6 +89,7 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 ## Changes for the MPC
 
 - LFO destinations (114 options) are steppers with PREV/NEXT triggers instead of a pop-up.
+- `src/mono_voice.c` (`-DMPC_PORT`, 2026-10-04): the patch library in MPC's PRESET menu: `patch` / `patch_name` / `patch_name_at:<n>` / `patch_count` (appended params), Init first, then the library (Move loads them with `patch_init` / `patch_load` from its own UI). The chosen patch is kept in the state, so a reopened project keeps its edits. Diff: `upstream-changes.diff`.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 
 ## Files

@@ -11,7 +11,7 @@ Q-Link columns before → after ("-" = an empty slot):
 
 | Page | before | after |
 |---|---|---|
-| MACHINE | 1 MACHINE, LFO1 DEST, LFO2 DEST, LFO3 DEST | 1 MACHINE  ·  2 LFO1 DEST, LFO2 DEST, LFO3 DEST |
+| MACHINE | 1 MACHINE, LFO1 DEST, LFO2 DEST, LFO3 DEST | 1 MACHINE, PATCH  ·  2 LFO1 DEST, LFO2 DEST, LFO3 DEST |
 | SYNTH, AMP, FILTER, EFFECT, LFO 1-3 | four columns of four, one per row half | unchanged |
 
 - **MACHINE**: the one column took in the whole page (the machine selector and the LFO DESTINATIONS panel). Now
@@ -25,7 +25,8 @@ Q-Link columns before → after ("-" = an empty slot):
 Made in the design (convert.py MAPS `augment` / `qlinks`) and re-converted, so a rerun keeps it.
 
 ## Presets
-None upstream (the module's patches live on Move). See the batch's presets pass.
+Its built-in patch library (Chrome Bass, Wide Current, Hollow Wire, PWM Basin, Glass Choir, Just Fifths, Arcade Lead, Dust Pulse, Scan Bell, Circuit Reed, Metal Key, Soft Operator) is now in MPC's PRESET menu after an Init, and on a new PATCH selector under MACHINE
+(Q-Link column 1). That took a small patch to the plugin shell (see the README's "Changes for the MPC").
 
 ## Checked
 Offline test PASSED; check_skin OK; no Q-Link outlines overlap on any page (qlink_overlay.py).

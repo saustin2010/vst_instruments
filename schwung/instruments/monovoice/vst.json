@@ -3,6 +3,7 @@
   "vendor": "timncox",
   "uid": "MnoV",
   "so": "monovoice.so",
+  "programs": {"param": "patch", "name": "patch_name", "count": "patch_count", "name_at": "patch_name_at"},
   "module": "src/module.json",
   "build": {
     "sources": [
@@ -11,7 +12,8 @@
     ],
     "cflags": [
       "-Iinclude",
-      "-Isrc"
+      "-Isrc",
+      "-DMPC_PORT"
     ],
     "libs": [
       "-lm"

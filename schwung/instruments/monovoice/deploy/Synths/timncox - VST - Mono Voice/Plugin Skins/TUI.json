@@ -9,6 +9,257 @@
             ],
             "localComponentDefinitions": [
                 {
+                    "key": "shStepText_dot_196x46",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "onAction": "Double Click",
+                                "handler": "Show Overlay",
+                                "handleName": "",
+                                "additionalData": "knob overlay",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Focus",
+                                    "type": "Focus",
+                                    "data": {
+                                        "version": 1,
+                                        "backgroundColour": "14ffffff",
+                                        "outlineColour": "ffffbf47",
+                                        "backgroundInset": 2.0,
+                                        "outlineThickness": 2.0
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "WhenFocussed",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 196 46",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Value",
+                                    "type": "Label",
+                                    "data": {
+                                        "version": 1,
+                                        "textStyle": {
+                                            "version": 1,
+                                            "font": {
+                                                "version": 1,
+                                                "name": "Titillium Web",
+                                                "style": "SemiBold",
+                                                "height": 26.0
+                                            },
+                                            "colour": "ffcdeb63",
+                                            "justification": "horizontallyCentred verticallyCentred",
+                                            "case": "Original"
+                                        },
+                                        "type": "Value",
+                                        "handleName": "Text"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "8 0 180 46",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "key": "shTap_0_patch_prev",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Enter Pressed",
+                                "handler": "Toggle Switch",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Button",
+                                    "type": "Button",
+                                    "data": {
+                                        "version": 2,
+                                        "onImage": "sh_arrow_0_patch_prev.png",
+                                        "offImage": "sh_arrow_0_patch_prev.png",
+                                        "buttonId": 1,
+                                        "numButtonsInGroup": 1,
+                                        "handleName": "Data",
+                                        "gestureBehaviour": "Instant"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 46 46",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "key": "shTap_0_patch_next",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Enter Pressed",
+                                "handler": "Toggle Switch",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Button",
+                                    "type": "Button",
+                                    "data": {
+                                        "version": 2,
+                                        "onImage": "sh_arrow_0_patch_next.png",
+                                        "offImage": "sh_arrow_0_patch_next.png",
+                                        "buttonId": 1,
+                                        "numButtonsInGroup": 1,
+                                        "handleName": "Data",
+                                        "gestureBehaviour": "Instant"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 46 46",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
                     "key": "shStepText_dot_295x46",
                     "value": {
                         "version": 4,
@@ -1162,6 +1413,100 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "",
+                                    "type": "shStepText_dot_196x46",
+                                    "data": {
+                                        "version": 1,
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": [
+                                        {
+                                            "key": "Data",
+                                            "value": "Parameter 119"
+                                        },
+                                        {
+                                            "key": "Text",
+                                            "value": "Parameter 122"
+                                        }
+                                    ]
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "Yes",
+                                    "showWhenDataModelInvalid": "Hide",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "1009 163 196 46",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": " prev",
+                                    "type": "shTap_0_patch_prev",
+                                    "data": {
+                                        "version": 1,
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": [
+                                        {
+                                            "key": "Data",
+                                            "value": "Parameter 120"
+                                        }
+                                    ]
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Hide",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "960 163 46 46",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": " next",
+                                    "type": "shTap_0_patch_next",
+                                    "data": {
+                                        "version": 1,
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": [
+                                        {
+                                            "key": "Data",
+                                            "value": "Parameter 121"
+                                        }
+                                    ]
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Hide",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "1208 163 46 46",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "",
                                     "type": "shStepText_dot_295x46",
                                     "data": {
                                         "version": 1,
@@ -1455,7 +1800,7 @@
                                     "map": [
                                         {
                                             "key": "Data",
-                                            "value": "Parameter 119"
+                                            "value": "Parameter 123"
                                         },
                                         {
                                             "key": "Text",
@@ -1489,7 +1834,7 @@
                                     "map": [
                                         {
                                             "key": "Data",
-                                            "value": "Parameter 119"
+                                            "value": "Parameter 123"
                                         }
                                     ]
                                 },
@@ -1501,7 +1846,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "960 117 306 262",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 119"
+                                        "IndexedEnabling/1/2/Parameter 123"
                                     ]
                                 }
                             },
@@ -1533,7 +1878,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "966 123 294 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 119"
+                                        "IndexedEnabling/1/2/Parameter 123"
                                     ]
                                 }
                             },
@@ -1565,7 +1910,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "966 165 294 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 119"
+                                        "IndexedEnabling/1/2/Parameter 123"
                                     ]
                                 }
                             },
@@ -1597,7 +1942,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "966 207 294 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 119"
+                                        "IndexedEnabling/1/2/Parameter 123"
                                     ]
                                 }
                             },
@@ -1629,7 +1974,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "966 249 294 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 119"
+                                        "IndexedEnabling/1/2/Parameter 123"
                                     ]
                                 }
                             },
@@ -1661,7 +2006,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "966 291 294 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 119"
+                                        "IndexedEnabling/1/2/Parameter 123"
                                     ]
                                 }
                             },
@@ -1693,7 +2038,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "966 333 294 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 119"
+                                        "IndexedEnabling/1/2/Parameter 123"
                                     ]
                                 }
                             }
@@ -5548,7 +5893,7 @@
                 "fnKeyIndex": 0,
                 "fnKeySubIndex": 0,
                 "qlinkBoundsData": [
-                    "954 41 306 78",
+                    "954 41 306 174",
                     "21 524 1238 84"
                 ],
                 "componentName": "MACHINE|MACHINE",
