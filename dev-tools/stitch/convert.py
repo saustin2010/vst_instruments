@@ -270,7 +270,7 @@ MAPS = {
         "slider": {"item": ".fader-track", "unit": "div:has(> .fader-track)", "label": "span"},
         "enum": {"item": "#view-edit div.grid:has(> button), .aug-enum", "opt": "button", "label": "span"},
         "popup": {"item": "div:has(> .edit-voice-btn)", "label": "span"},
-        "button": {"item": "button[onclick^=randomizeAllKit]", "selfLabel": True},
+        "button": {"item": "button[onclick^=randomizeAllKit], .aug-savekit", "selfLabel": True},
         "stepper": {"item": ".po-lcd", "key": "kit"},
         "get": {"kit": "kit_name"},
         "tpl": {
@@ -298,6 +298,10 @@ MAPS = {
              "1fr 150px; grid-template-rows: auto 1fr; column-gap: 16px; row-gap: 8px; align-items: center"}},
             {"sel": "div:has(> .po-lcd) > div.justify-between", "attr": {"style": "grid-column: 1 / -1"}},
             {"sel": "div.flex-col:has(> button[onclick^=randomizeAllKit])", "move": "div:has(> .po-lcd)"},
+            # SAVE KIT (2026-10-04): the engine's save_kit writes presets/kitNNN.json and selects it; touch only
+            {"sel": "div.flex-col:has(> button[onclick^=randomizeAllKit]) > span", "where": "afterend", "html":
+             '<button class="aug-savekit w-24 h-10 rounded-lg bg-[#0b261f] border border-[#d9b43c]/60 text-[10px] font-bold '
+             'text-[#f1faf5] mt-3" data-param="save_kit">SAVE KIT</button>'},
             {"sel": "#view-edit div.grid[data-param=inst_mod_mode]", "attr": {"class": "grid grid-cols-3 gap-1"}},
         ],
         # design QA 2026-10-03: a Q-Link column per panel (KIT: MASTER | PADS 1-4 | PADS 5-8 | KIT, the kit last as a

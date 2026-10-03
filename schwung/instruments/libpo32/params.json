@@ -6,7 +6,7 @@
    "name": "KIT",
    "type": "stepper",
    "min": 0,
-   "max": 2,
+   "max": 63,
    "step": 1,
    "default": 0,
    "display": "int"
@@ -1506,6 +1506,11 @@
    "min": 0,
    "max": 100,
    "display": "int"
+  },
+  {
+   "key": "save_kit",
+   "name": "SAVE KIT",
+   "momentary": true
   }
  ]
 }

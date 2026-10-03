@@ -17,7 +17,8 @@ parameter index, so existing projects keep working.
 - [x] **Hush One imports** (2026-10-03). `MODULE_DIR` set; PATCH widened to 0-522 (11 built-in + 512); imported
   presets named by file (`MPC_PORT` patch). Check on the device: a project saved with the old PATCH range (0-10)
   may reopen showing a different PATCH number (MPC sets parameters back from normalized values).
-- [ ] **Libpo32 SAVE KIT** button (`save_kit`), and create its `presets/` folder on install for it to write to.
+- [x] **Libpo32 SAVE KIT** (2026-10-04): a SAVE KIT button on the KIT page (the engine's `save_kit`, which makes its
+  own `presets/` folder); saved kits join KIT and the PRESET menu.
 - [ ] INSTALL.md / plugin READMEs: document each of the above once it works (OB-Xd, Noisemaker, Hush One: done
   2026-10-03).
 

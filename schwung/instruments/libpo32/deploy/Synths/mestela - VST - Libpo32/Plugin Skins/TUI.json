@@ -310,6 +310,113 @@
                     }
                 },
                 {
+                    "key": "shTrig_save_kit_SAVE_KIT",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "onAction": "Enter Pressed",
+                                "handler": "Toggle Switch",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Focus",
+                                    "type": "Focus",
+                                    "data": {
+                                        "version": 1,
+                                        "backgroundColour": "14ffffff",
+                                        "outlineColour": "fff2cf55",
+                                        "backgroundInset": 2.0,
+                                        "outlineThickness": 2.0
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "WhenFocussed",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 126 39",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Button",
+                                    "type": "Button",
+                                    "data": {
+                                        "version": 2,
+                                        "onImage": "sh_btn_save_kit_SAVE_KIT_on.png",
+                                        "offImage": "sh_btn_save_kit_SAVE_KIT_off.png",
+                                        "buttonId": 1,
+                                        "numButtonsInGroup": 1,
+                                        "handleName": "Data",
+                                        "gestureBehaviour": "Instant"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 126 39",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
                     "key": "shSlider_v_8x140",
                     "value": {
                         "version": 4,
@@ -890,7 +997,37 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "472 179 149 39",
+                                    "bounds": "472 149 149 39",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "SAVE KIT",
+                                    "type": "shTrig_save_kit_SAVE_KIT",
+                                    "data": {
+                                        "version": 1,
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": [
+                                        {
+                                            "key": "Data",
+                                            "value": "Parameter 210"
+                                        }
+                                    ]
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "Yes",
+                                    "showWhenDataModelInvalid": "Hide",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "483 259 126 39",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -4297,7 +4434,7 @@
                                     "map": [
                                         {
                                             "key": "Data",
-                                            "value": "Parameter 210"
+                                            "value": "Parameter 211"
                                         },
                                         {
                                             "key": "Text",
@@ -4331,7 +4468,7 @@
                                     "map": [
                                         {
                                             "key": "Data",
-                                            "value": "Parameter 210"
+                                            "value": "Parameter 211"
                                         }
                                     ]
                                 },
@@ -4343,7 +4480,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "116 122 1164 346",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4375,7 +4512,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "122 128 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4407,7 +4544,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "122 170 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4439,7 +4576,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "122 212 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4471,7 +4608,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "122 254 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4503,7 +4640,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "122 296 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4535,7 +4672,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "122 338 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4567,7 +4704,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "122 380 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4599,7 +4736,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "122 422 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4631,7 +4768,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "699 128 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4663,7 +4800,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "699 170 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4695,7 +4832,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "699 212 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4727,7 +4864,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "699 254 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4759,7 +4896,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "699 296 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4791,7 +4928,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "699 338 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4823,7 +4960,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "699 380 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             },
@@ -4855,7 +4992,7 @@
                                     "boundsType": "Absolute",
                                     "bounds": "699 422 575 40",
                                     "additionalInvalidatingHandles": [
-                                        "IndexedEnabling/1/2/Parameter 210"
+                                        "IndexedEnabling/1/2/Parameter 211"
                                     ]
                                 }
                             }
