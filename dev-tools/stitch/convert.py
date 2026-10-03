@@ -528,8 +528,11 @@ MAPS = {
         "knob": {"item": ".moog-knob", "unit": "div.flex-col:has(> div > .moog-knob)", "label": "span", "value": ".recessed-well"},
         "toggle": {"item": "#toggle-unison, #toggle-asplayed, button.rocker-switch, .aug-toggle", "label": "span"},
         "enum": {"item": "div:has(> .legato-btn), .aug-enum", "opt": "button", "label": "span"},
-        "stepper": {"item": "div:has(> div.recessed-well #preset-title)", "key": "preset"},
-        "get": {"preset": "preset_name"},
+        "stepper": [{"item": "div:has(> div.recessed-well #preset-title)", "key": "preset"}, {"item": ".aug-stepper"}],
+        "get": {"preset": "preset_name", "bank_index": "bank_name"},
+        # BANK (2026-10-03) went last so MAIN's Q-Link columns stayed where they were
+        "qlinks": {0: ["preset", "volume", "tune", "voice_count", "unison_det", "unison", "as_played", "legato", "portamento",
+                       "bend_range", "bend_osc2", "bank_index"]},
         "tpl": {
             "frame": '<section class="absolute bg-ob-panel border border-ob-line rounded p-2.5 flex flex-col shadow-lg" style="left:{x}px; '
                      'top:{y}px; width:{w}px; height:{h}px;"><div class="flex items-center justify-between border-b border-[#2d2f34] '
@@ -559,6 +562,12 @@ MAPS = {
             {"sel": "div:has(> .legato-btn)", "attr": {"data-param": "legato"}},
             {"sel": "div:has(> #toggle-unison)", "attr": {"class": "flex flex-col items-center gap-12"}},   # room for MPC's names
             {"sel": "div:has(> div > button.rocker-switch)", "attr": {"class": "flex items-center gap-14"}},
+            # a BANK row (the .fxb banks in /sdcard/vst/obxd/presets) between the patch display and a shorter scope
+            {"sel": "div:has(> #scopeCanvas)", "where": "beforebegin", "html":
+             '<div class="flex items-center space-x-2 px-1"><span class="font-label-sm text-label-sm text-ob-ink-dim '
+             'tracking-widest w-10">BANK</span><div class="aug-stepper flex-1 h-10 bg-ob-display-bg border border-[#48110b] '
+             'rounded recessed-well crt-grid" data-param="bank_index"></div></div>'},
+            {"sel": "div:has(> #scopeCanvas)", "attr": {"style": "height:80px"}},
         ],
         "map": {"master_vol": "volume", "master_tune": "tune", "voice_spread": "unison_det", "glide_rate": "portamento",
                 "asplayed": "as_played"},
