@@ -107,6 +107,10 @@ MAPS = {
                    "#fltEnvSvg": {"env": ["f_attack", "f_decay", "f_sustain", "f_release"], "name": "flt"}},
         "get": {"preset": "preset_name"},
         "map": {},
+        # design QA 2026-10-03: MODULATION a Q-Link column per panel, 3-2-3-1 (LFO | MOD WHEEL | PLAYING | OUTPUT; its
+        # LFO column took in half of MOD WHEEL). Moog's MAIN is the reference and stays as it is
+        "qlinks": {2: ["lfo_rate", "lfo_pitch", "lfo_filter", "-", "mod_filter", "mod_pitch", "-", "-",
+                       "glide", "bend_range", "vel_sens", "-", "volume"]},
     },
     "noisemaker": {
         # ⚠ a rerun no longer reproduces this screen (it renders 25 px lower): layout.conf has hand edits since
