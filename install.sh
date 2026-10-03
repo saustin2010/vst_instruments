@@ -53,8 +53,8 @@ LISTED=$(side listed "${SOS[@]}")
 for i in "${!DIRS[@]}"; do
   d=${DIRS[$i]}; e=$d/deploy/pluginlist-entry.xml; so=${SOS[$i]}
   have=$(printf '%s\n' "$LISTED" | grep -F "$so|" | head -n 1)
-  want="$so|$(attr name "$e")|$(attr manufacturer "$e")|$(attr isInstrument "$e")"
-  if [ "$have" = "$so|||" ]; then state="new: MPC needs to list it"; NEW+=("$d")
+  want="$so|$(attr name "$e")|$(attr manufacturer "$e")|$(attr isInstrument "$e")|$(attr category "$e")"
+  if [ "$have" = "$so||||" ]; then state="new: MPC needs to list it"; NEW+=("$d")
   elif [ "$have" != "$want" ] || [ $FORCE_REG = 1 ]; then state="listed, entry to update"; NEW+=("$d")
   else state="listed"; fi
   printf "  %-34s %-30s %s\n" "$d" "$(attr name "$e")" "$state"
