@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Wurl, page WURL">
 
-Q-Link columns: **1** PRESET, BRIGHT, DARKEN, BARK  ·  **2** TUNE, ATTACK, DECAY, VOLUME  ·  **3** TREMOLO, SPEAKER, REVERB
+Q-Link columns: **1** BRIGHT, DARKEN, BARK, TUNE  ·  **2** ATTACK, DECAY, VOLUME  ·  **3** TREMOLO, SPEAKER, REVERB  ·  **4** PRESET
 
 ## Install
 

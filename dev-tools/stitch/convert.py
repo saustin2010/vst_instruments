@@ -1046,6 +1046,22 @@ MAPS = {
         "knob": {"item": ".knob-assembly", "body": ".knob-body", "unit": "div.flex-col:has(> .knob-assembly)", "label": "span",
                  "value": "[id^=val-]"},
         "popup": {"item": "#presetSelectorTrigger", "key": "preset"},
+        # design QA 2026-10-03: no maker badges (the emblem read "THE ORIGINAL Wurlitzer", a serial number, the
+        # factory town and "AKAI PROFESSIONAL"); the displays on the left of TONE MATRIX and CABINET
+        "augment": [
+            {"sel": "body", "retext": [["Akai MPC Standalone DSP Core // Active", ""], ["WURLITZER 200A", "WURL 200A"],
+                                       ["AKAI Q-LINK SYNC ACTIVE", ""]]},
+            {"sel": "div.border-2:has(> div > h1) > div.uppercase", "remove": True},   # THE ORIGINAL
+            {"sel": "div.border-2:has(> div > h1) > div.border-t", "remove": True},    # serial / town / maker
+            {"sel": "div.border-2 h1", "text": "WURL"},
+            {"sel": "div.border-2 p.uppercase", "text": "ELECTRIC PIANO"},
+            {"sel": "div.recessed-well:has(> #harmonicCanvas)", "attr": {"style": "order: -1"}},
+            {"sel": "div.grid-cols-12:has(> div.recessed-well > #harmonicCanvas)", "attr": {"style": "padding-right: 26px"}},
+            {"sel": "div.grid-cols-12:has(> div.grid-cols-3) > div.recessed-well", "attr": {"style": "order: -1"}},
+        ],
+        # a Q-Link column per panel: TONE MATRIX | AMPLIFIER | CABINET | PRESET (the preset last, as on Aphex)
+        "qlinks": {0: ["brightness", "darken", "bark", "tune", "attack", "decay", "volume", "-",
+                       "tremolo", "speaker", "reverb", "-", "preset", "-", "-", "-"]},
     },
     "monovoice": dict(MONO_SPECS, **{
         # the design's MACHINE side (machine + LFO destinations); its Helm knobs go; 7 pages drawn in its style
