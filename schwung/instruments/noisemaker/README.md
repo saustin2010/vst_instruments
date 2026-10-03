@@ -24,37 +24,37 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Noisemaker, page MAIN">
 
-Q-Link columns: **1** CUTOFF, RESONANCE, FILTER ENV, VOLUME  ·  **2** VOICES, PORTAMENTO, PORTA MODE, AMP ATTACK  ·  **3** AMP DECAY, AMP SUSTAIN, AMP RELEASE, PATCH  ·  **4** FILTER TYPE, BANK
+Q-Link columns: **1** FILTER TYPE, CUTOFF, RESONANCE, FILTER ENV  ·  **2** AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE  ·  **3** VOLUME, VOICES, PORTAMENTO, PORTA MODE  ·  **4** PATCH, BANK
 
 ### 2. OSC
 
 <img src="screenshots/page_1.png" width="760" alt="Noisemaker, page OSC">
 
-Q-Link columns: **1** OSC1 TUNE, OSC1 FINE, OSC1 PW, OSC2 TUNE  ·  **2** OSC2 FINE, OSC2 FM, OSC1 LEVEL, OSC2 LEVEL  ·  **3** SUB LEVEL, RING MOD, MASTER TUNE, OSC1 PHASE  ·  **4** OSC2 PHASE, OSC1 WAVE, OSC SYNC, OSC2 WAVE
+Q-Link columns: **1** OSC1 WAVE, OSC1 TUNE, OSC1 FINE, OSC1 PW  ·  **2** OSC2 WAVE, OSC2 TUNE, OSC2 FINE, OSC2 FM  ·  **3** OSC1 LEVEL, OSC2 LEVEL, SUB LEVEL, RING MOD  ·  **4** OSC SYNC, MASTER TUNE, OSC1 PHASE, OSC2 PHASE
 
 ### 3. FILTER
 
 <img src="screenshots/page_2.png" width="760" alt="Noisemaker, page FILTER">
 
-Q-Link columns: **1** KEY TRACK, DRIVE, HIGH PASS, VEL CUTOFF  ·  **2** DETUNE, VINTAGE, BITCRUSH, FLT TIME  ·  **3** AMP TIME, VEL VOLUME, VEL ENV, FLT ATTACK  ·  **4** FLT DECAY, FLT SUSTAIN, FLT RELEASE
+Q-Link columns: **1** KEY TRACK, DRIVE, HIGH PASS, VEL CUTOFF  ·  **2** DETUNE, VINTAGE, BITCRUSH  ·  **3** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE  ·  **4** FLT TIME, AMP TIME, VEL VOLUME, VEL ENV
 
 ### 4. LFO
 
 <img src="screenshots/page_3.png" width="760" alt="Noisemaker, page LFO">
 
-Q-Link columns: **1** LFO1 RATE, LFO1 AMOUNT, LFO1 PHASE, LFO2 RATE  ·  **2** LFO2 AMOUNT, LFO2 PHASE, LFO1 SYNC, LFO1 KEYTRIG  ·  **3** LFO2 SYNC, LFO2 KEYTRIG, LFO1 WAVE, LFO1 DEST  ·  **4** LFO2 WAVE, LFO2 DEST
+Q-Link columns: **1** LFO1 WAVE, LFO1 RATE, LFO1 AMOUNT, LFO1 DEST  ·  **2** LFO1 SYNC, LFO1 KEYTRIG, LFO1 PHASE  ·  **3** LFO2 WAVE, LFO2 RATE, LFO2 AMOUNT, LFO2 DEST  ·  **4** LFO2 SYNC, LFO2 KEYTRIG, LFO2 PHASE
 
 ### 5. MOD
 
 <img src="screenshots/page_4.png" width="760" alt="Noisemaker, page MOD">
 
-Q-Link columns: **1** ENV3 ATTACK, ENV3 DECAY, ENV3 AMOUNT, DRAW AMOUNT  ·  **2** WHEEL CUTOFF, BEND RANGE, CHORUS I, CHORUS II  ·  **3** ENV3 DEST, DRAW SPEED, DRAW DEST
+Q-Link columns: **1** ENV3 ATTACK, ENV3 DECAY, ENV3 AMOUNT, ENV3 DEST  ·  **2** DRAW AMOUNT, DRAW SPEED, DRAW DEST  ·  **3** WHEEL CUTOFF, BEND RANGE  ·  **4** CHORUS I, CHORUS II
 
 ### 6. FX
 
 <img src="screenshots/page_5.png" width="760" alt="Noisemaker, page FX">
 
-Q-Link columns: **1** REVERB WET, REV DECAY, REV PREDELAY, REV HI CUT  ·  **2** REV LO CUT, DELAY WET, DELAY TIME, DLY FEEDBACK  ·  **3** DLY HI CUT, DLY LO CUT, DELAY SYNC, DELAY 2X L  ·  **4** DELAY 2X R
+Q-Link columns: **1** REVERB WET, REV DECAY, REV PREDELAY  ·  **2** REV HI CUT, REV LO CUT  ·  **3** DELAY WET, DLY FEEDBACK, DLY HI CUT, DLY LO CUT  ·  **4** DELAY TIME, DELAY SYNC, DELAY 2X L, DELAY 2X R
 
 ## Install
 
