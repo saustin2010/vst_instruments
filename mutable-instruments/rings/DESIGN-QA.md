@@ -22,7 +22,7 @@ Q-Link columns before → after ("-" = an empty slot):
 Made in the design (convert.py MAPS `augment` / `qlinks`), so a rerun keeps it.
 
 ## Presets
-None upstream (the module has no presets). See the batch's presets pass.
+The module has none, so the port brings 14 (`presets.json`, the wrapper's own presets, in MPC's PRESET menu): Init, Glass Marimba, Tubular Bell, Wood Block, Sympathetic Sitar, Chord Harp, Nylon String, Steel String, Dulcimer, FM Tines, FM Gong, Verb String, Synth Strings, Choir Pad. Each sets every control; offline all 14 play, levels evened out with VOLUME (the short, percussive ones a little lower).
 
 ## Checked
 Offline test PASSED; check_skin OK; no Q-Link outlines overlap (qlink_overlay.py).
