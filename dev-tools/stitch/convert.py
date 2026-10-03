@@ -902,11 +902,15 @@ MAPS = {
             {"sel": ".knob-shadow span", "all": True, "remove": True},   # captions on the caps would turn with them
             {"sel": "div.cursor-pointer:has(> div > span.block)", "attr": {"data-param": "model"}},
             {"sel": "div.flex-col:has(> button > span + span.rounded-full)", "attr": {"data-param": "polyphony"}},
+            {"sel": "div.recessed-well:has(> div > div.flex-col-reverse)", "remove": True},   # a made-up peak meter (2026-10-03)
         ],
         "map": {"Q03: STRUCT": "structure", "Q04: BRIGHT": "brightness", "Q05: DAMP": "damping", "Q06: POS": "position",
                 "Q07: NOTE": "note", "Q08: FINE": "fine", "Q09: INPUT": "input_gain", "Q10: MIX": "mix", "Q11: WIDTH": "width",
                 "Q12: VOL": "volume"},
         "design_labels": False,   # its first labels are Q-Link hints
+        # design QA 2026-10-03: a Q-Link column per panel (MODEL | RESONATOR | PITCH / TUNING | INPUT & OUTPUT)
+        "qlinks": {0: ["model", "polyphony", "-", "-", "structure", "brightness", "damping", "position",
+                       "note", "fine", "-", "-", "input_gain", "mix", "width", "volume"]},
     },
     "superarp": {
         # MAIN from the design; PATTERN and MODIFY drawn in its style
