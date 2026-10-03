@@ -1193,7 +1193,7 @@ def expand(html, cfg, byk):
     """A design's missing controls, written in its own markup: @<kind>(key) for any template kind in cfg["tpl"] (knob,
        enum, select, toggle, or the design's own extras), @ctl(key) (picks one, see ctl_kind), @row(key, key, ...) (a grid
        row of @ctl) and <box>TITLE (a sub-panel), from the per-design templates cfg["tpl"]."""
-    tpl, labels = cfg["tpl"], cfg.get("labels", {})
+    tpl, labels = cfg.get("tpl", {}), cfg.get("labels", {})   # no "tpl": markup with no @macros
 
     def one(kind, key):
         if key not in byk:
