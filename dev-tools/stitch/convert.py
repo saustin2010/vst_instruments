@@ -475,6 +475,14 @@ MAPS = {
         ],
         "grid": {"tabs": ["CHOIR"], "tpl": None},
         "tab_order": ["SINGER", "CHOIR"],
+        # design QA 2026-10-03: a Q-Link column per panel, as Moog's MAIN (VOICE | ENVELOPE | EXPRESSION | SINGER;
+        # UNISON | ECHO | PRESSURE)
+        "qlinks": {
+            0: ["vowel", "head_size", "aspiration", "level", "attack", "decay", "sustain", "release",
+                "glide", "vibrato", "vibrato_rate", "bend_range", "preset", "-", "-", "-"],
+            1: ["unison", "unison_detune", "unison_spread", "-", "delay", "delay_rate", "-", "-",
+                "pressure_routing", "pressure_depth", "-", "-"],
+        },
     },
     "mrdrums": {
         # KIT from the design; its pad buttons (MPC has real pads) become the EDIT PAD stepper, its PUNCH/CRISP/CLIP and

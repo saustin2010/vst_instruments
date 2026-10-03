@@ -24,13 +24,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="MonkSynth, page SINGER">
 
-Q-Link columns: **1** SINGER, VOWEL, HEAD SIZE, BREATH  ·  **2** LEVEL, ATTACK, DECAY, SUSTAIN  ·  **3** RELEASE, GLIDE, VIBRATO, VIB RATE  ·  **4** BEND RNG
+Q-Link columns: **1** VOWEL, HEAD SIZE, BREATH, LEVEL  ·  **2** ATTACK, DECAY, SUSTAIN, RELEASE  ·  **3** GLIDE, VIBRATO, VIB RATE, BEND RNG  ·  **4** SINGER
 
 ### 2. CHOIR
 
 <img src="screenshots/page_1.png" width="760" alt="MonkSynth, page CHOIR">
 
-Q-Link columns: **1** UNISON, DETUNE, SPREAD, DELAY  ·  **2** DELAY RATE, PRESSURE TO, PRES DEPTH
+Q-Link columns: **1** UNISON, DETUNE, SPREAD  ·  **2** DELAY, DELAY RATE  ·  **3** PRESSURE TO, PRES DEPTH
 
 ## Install
 
