@@ -1261,7 +1261,12 @@ MAPS = {
         "get": {"pattern": "pattern_label"},
         "drop": ["header", "footer"], "page": "MAIN",
         "hide": ["div:has(> #groove-feel-tag)"],
-        "augment": [{"sel": "div:has(> div.flex-col > span + span.font-readout-numeric) > button", "remove": True}],   # BURST TEST
+        "augment": [{"sel": "div:has(> div.flex-col > span + span.font-readout-numeric) > button", "remove": True},   # BURST TEST
+                    {"sel": "div:has(> #latch-rocker) > div.mt-2", "remove": True},   # "HOLD SW" under MPC's LATCH name
+                    {"sel": "body", "retext": [["MPC EMBEDDED DSP", "SCHWUNG MIDI FX"]]}],   # not Akai's
+        # design QA 2026-10-03: FEEL's six as two Q-Link columns (VARIANT / SWING / GATE, STRUM / ACCENT / LATCH), then
+        # the GROOVE (the pattern, last as a preset)
+        "qlinks": {0: ["variant", "swing", "gate", "-", "strum", "accent", "latch", "-", "pattern"]},
     },
     "grids": {
         # drum-note steppers and the channel readout become the design's knobs (a stepper needs prev/next parameters)
