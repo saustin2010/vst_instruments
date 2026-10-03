@@ -26,13 +26,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Verglas, page VERGLAS">
 
-Q-Link columns: **1** POSITION, SIZE, PITCH, DENSITY  ·  **2** TEXTURE, MODE, FREEZE, QUALITY  ·  **3** DRY/WET, FEEDBACK, REVERB, SPREAD  ·  **4** HIGH PASS, LOW PASS
+Q-Link columns: **1** POSITION, SIZE, PITCH  ·  **2** DENSITY, TEXTURE  ·  **3** MODE, FREEZE, QUALITY  ·  **4** DRY/WET, FEEDBACK, REVERB, SPREAD
 
 ### 2. TONE
 
 <img src="screenshots/page_1.png" width="760" alt="Verglas, page TONE">
 
-Q-Link columns: **1** LOW BOOST, LOW FREQ, LOW Q, LIMITER  ·  **2** LIM DRIVE, LIM OUTPUT
+Q-Link columns: **1** LOW BOOST, LOW FREQ, LOW Q  ·  **2** LIMITER, LIM DRIVE, LIM OUTPUT  ·  **3** HIGH PASS, LOW PASS
 
 ## Install
 

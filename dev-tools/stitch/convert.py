@@ -1046,8 +1046,20 @@ MAPS = {
             {"sel": "div:has(> .mode-btn)", "attr": {"data-param": "mode"}},
             {"sel": "div:has(> .quality-btn)", "attr": {"data-param": "quality"}},
             {"sel": "#freeze-toggle-btn", "attr": {"data-param": "freeze"}},
-            {"sel": "div:has(> #particle-cloud-canvas)", "attr": {"style": "height: 100px; flex: none;"}},   # knobs up: room for values
+            {"sel": "div:has(> #particle-cloud-canvas)", "attr": {"style": "height: 70px; flex: none;"}},   # knobs up: room for values (outlines inside the panel)
+            # design QA 2026-10-03: GRAIN's five knobs as POSITION / SIZE / PITCH and DENSITY / TEXTURE (two Q-Link columns,
+            # with a gap); COLOR FILTER moved to TONE (layout.grid.conf), BLEND takes its room
+            {"sel": "div.grid-cols-5:has(#knob-texture)", "attr": {"style": "grid-template-columns: repeat(3, 1fr) 0.6fr repeat(2, 1fr); padding-bottom: 34px"}},
+            {"sel": ".knob-container:has(#knob-density)", "where": "beforebegin", "html": "<div></div>"},
+            {"sel": "div.col-span-3.milled-panel:has(.knob-body)", "remove": True},
+            {"sel": "div.col-span-6.milled-panel", "attr": {"style": "grid-column: span 9 / span 9"}},
+            {"sel": "div.col-span-6.milled-panel div.grid-cols-4", "attr": {"style": "padding-bottom: 28px"}},
         ],
+        "qlinks": {
+            0: ["position", "size", "pitch", "-", "density", "texture", "-", "-", "mode", "freeze", "quality", "-",
+                "dry_wet", "feedback", "reverb", "stereo_spread"],
+            1: ["low_boost", "low_freq", "low_q", "-", "limiter_on", "limiter_pre", "limiter_post", "-", "filter_hp", "filter_lp"],
+        },
         "grid": {"tabs": ["TONE"], "tpl": None},
         "tab_order": ["VERGLAS", "TONE"],
     },
