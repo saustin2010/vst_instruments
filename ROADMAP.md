@@ -25,7 +25,7 @@ parameter index, so existing projects keep working.
 ## On a device (nothing below has been tried on hardware yet)
 
 - [ ] Install everything on an MPC and re-insert each plugin; check every page of the new Stitch screens (names,
-  values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays).
+  values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays). Track it in README.md's Design QA column.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
 - [ ] Audio effects (Verglas, Warps, Rings FX): does MPC offer third-party VST effects in its insert list at all?
 - [ ] Plugin browser groups: Grids reports `category="Sequencer"`. If MPC groups it and it still loads on a plugin
