@@ -24,37 +24,37 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Tablor, page MAIN">
 
-Q-Link columns: **1** WT1 TABLE, WT1 POSITION, WT1 LEVEL, WT1 TUNE  ·  **2** WT1 UNISON, WT2 TABLE, WT2 POSITION, WT2 LEVEL  ·  **3** WT2 TUNE, WT2 UNISON
+Q-Link columns: **1** WT1 TABLE  ·  **2** WT1 POSITION, WT1 LEVEL, WT1 TUNE, WT1 UNISON  ·  **3** WT2 TABLE  ·  **4** WT2 POSITION, WT2 LEVEL, WT2 TUNE, WT2 UNISON
 
 ### 2. FILTER
 
 <img src="screenshots/page_1.png" width="760" alt="Tablor, page FILTER">
 
-Q-Link columns: **1** CUTOFF, RESONANCE, FILTER TYPE, FILTER ENV  ·  **2** KEY TRACK, VEL TRACK, SUB LEVEL, SUB WAVE  ·  **3** SUB TUNE, NOISE LEVEL, NOISE TYPE
+Q-Link columns: **1** CUTOFF, RESONANCE, FILTER TYPE  ·  **2** FILTER ENV, KEY TRACK, VEL TRACK  ·  **3** SUB LEVEL, SUB WAVE, SUB TUNE  ·  **4** NOISE LEVEL, NOISE TYPE
 
 ### 3. SHAPE
 
 <img src="screenshots/page_2.png" width="760" alt="Tablor, page SHAPE">
 
-Q-Link columns: **1** WT1 DETUNE, WT1 SPREAD, WT1 PAN, WT2 DETUNE  ·  **2** WT2 SPREAD, WT2 PAN, WT1 BEND, WT1 FORMANT  ·  **3** WT2 BEND, WT2 FORMANT
+Q-Link columns: **1** WT1 DETUNE, WT1 SPREAD, WT1 PAN  ·  **2** WT2 DETUNE, WT2 SPREAD, WT2 PAN  ·  **3** WT1 BEND, WT1 FORMANT  ·  **4** WT2 BEND, WT2 FORMANT
 
 ### 4. ENVELOPES
 
 <img src="screenshots/page_3.png" width="760" alt="Tablor, page ENVELOPES">
 
-Q-Link columns: **1** VCA ATTACK, VCA DECAY, VCA SUSTAIN, VCA RELEASE  ·  **2** VELOCITY, FLT ATTACK, FLT DECAY, FLT SUSTAIN  ·  **3** FLT RELEASE
+Q-Link columns: **1** VCA ATTACK, VCA DECAY, VCA SUSTAIN, VCA RELEASE  ·  **2** VELOCITY  ·  **3** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE
 
 ### 5. MOD ENVS
 
 <img src="screenshots/page_4.png" width="760" alt="Tablor, page MOD ENVS">
 
-Q-Link columns: **1** EG1 A, EG1 D, EG1 S, EG1 R  ·  **2** EG1 DST, EG1 AMT, EG2 A, EG2 D  ·  **3** EG2 S, EG2 R, EG2 DST, EG2 AMT
+Q-Link columns: **1** EG1 A, EG1 D, EG1 S, EG1 R  ·  **2** EG1 DST, EG1 AMT  ·  **3** EG2 A, EG2 D, EG2 S, EG2 R  ·  **4** EG2 DST, EG2 AMT
 
 ### 6. VOICE
 
 <img src="screenshots/page_5.png" width="760" alt="Tablor, page VOICE">
 
-Q-Link columns: **1** VOICE MODE, VOICES, GLIDE, GLIDE MODE  ·  **2** LEGATO, BEND RANGE, VOLUME
+Q-Link columns: **1** VOICE MODE, VOICES, LEGATO  ·  **2** GLIDE, GLIDE MODE  ·  **3** BEND RANGE, VOLUME
 
 ## Install
 

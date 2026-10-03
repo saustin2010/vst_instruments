@@ -960,11 +960,30 @@ MAPS = {
                       '</span><button class="aug-toggle h-8 px-4 bg-[#09221f] border border-[#21504b] rounded" data-param="{key}">'
                       '</button></div>',
             "stepper": '<div class="aug-stepper recessed-display rounded" style="width:{w}px; height:56px;" data-param="{key}"></div>',
+            # the plan's logo plates (empty corners): a wordmark in the design's type
+            "art": '<section class="module-card absolute rounded flex flex-col items-center justify-center" style="left:{x}px; '
+                   'top:{y}px; width:{w}px; height:{h}px;"><div class="text-label-lg font-label-lg font-bold text-[#5ff0cf] '
+                   'tracking-[0.3em]" style="font-size: 38px; text-shadow: 0 0 14px rgba(95,240,207,.45);">TABLOR</div><div '
+                   'class="text-label-sm font-label-sm text-[#bfe9e2] mt-2 tracking-widest">DUAL WAVETABLE SYNTH</div></section>',
         },
         "augment": [
             {"sel": "svg.-rotate-90 circle:nth-child(2)", "all": True, "remove": True},
             {"sel": "div[class*='h-[42px]']", "nth": ["wt1_select", "wt2_select"]},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel or group: each oscillator's TABLE, then its knobs; the
+        # generated pages' panels regrouped to match (layout.grid.conf)
+        "qlinks": {
+            0: ["wt1_select", "-", "-", "-", "wt1_pos", "wt1_level", "wt1_tune", "wt1_uni",
+                "wt2_select", "-", "-", "-", "wt2_pos", "wt2_level", "wt2_tune", "wt2_uni"],
+            1: ["flt_freq", "flt_res", "flt_type", "-", "flt_env", "flt_key", "flt_vel", "-",
+                "sub_level", "sub_wave", "sub_tune", "-", "noise_level", "noise_type", "-", "-"],
+            2: ["wt1_detune", "wt1_spread", "wt1_pan", "-", "wt2_detune", "wt2_spread", "wt2_pan", "-",
+                "wt1_bend", "wt1_formant", "-", "-", "wt2_bend", "wt2_formant", "-", "-"],
+            3: ["vca_a", "vca_d", "vca_s", "vca_r", "vca_vel", "-", "-", "-", "flt_a", "flt_d", "flt_s", "flt_r"],
+            4: ["me1_a", "me1_d", "me1_s", "me1_r", "me1_dst", "me1_amt", "-", "-",
+                "me2_a", "me2_d", "me2_s", "me2_r", "me2_dst", "me2_amt", "-", "-"],
+            5: ["voice_mode", "voices", "legato", "-", "glide", "glide_mode", "-", "-", "pb_range", "volume", "-", "-"],
+        },
         "grid": {"tabs": ["FILTER", "SHAPE", "ENVELOPES", "MOD ENVS", "VOICE"], "tpl": None},
         "tab_order": ["MAIN", "FILTER", "SHAPE", "ENVELOPES", "MOD ENVS", "VOICE"],
     },
