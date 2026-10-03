@@ -324,6 +324,9 @@ MAPS = {
             {"sel": "#loop-btn", "attr": {"data-param": "loop"}},
             {"sel": "#track-select", "attr": {"data-param": "track"}},
         ],
+        # design QA 2026-10-03: PLAYBACK (TRACK, LOOP) | FILE, a Q-Link column each (the one column took in both
+        # panels); the file last, as a preset
+        "qlinks": {0: ["track", "loop", "-", "-", "file_index"]},
     },
     "marbles": {
         # one drawn page; its frozen MIDI OUT note readouts become the routing controls; SETUP drawn in its style
@@ -809,8 +812,13 @@ MAPS = {
         "toggle": {"item": "#toggle-birth-note", "label": "span"},
         "button": {"item": "#btn-randomize, #btn-killall", "selfLabel": True},
         "augment": [{"sel": ".knob-arc", "all": True, "remove": True},
-                    {"sel": "div:has(> #btn-randomize)", "attr": {"class": "flex flex-col items-center gap-3 py-1"}}],
+                    {"sel": "div:has(> #btn-randomize)", "attr": {"class": "flex flex-col items-center gap-3 py-1"}},
+                    # design QA 2026-10-03: the WALKERS row inside its panel (its outline reached into MIDI OUT)
+                    {"sel": "div.justify-between:has(> div > #toggle-birth-note)", "attr": {"style": "padding-left: 40px; padding-right: 46px"}}],
         "nudge": {"birth_note": [12, 0]},   # its touch box reached past the left edge
+        # design QA 2026-10-03: WALKERS | WORLD DYNAMICS, a Q-Link column each; RANDOMIZE and KILL ALL (the ACTIONS
+        # box's buttons) touch only, as Aphex's: turning a knob fired them
+        "qlinks": {0: ["birth_note", "birth_level", "hit_level", "hit_decay", "bounce", "hardness", "tombola", "-"]},
         "map": {"birthLevel": "birth_level", "hitLevel": "hit_level", "hitDecay": "hit_decay", "birth-note": "birth_note",
                 "killall": "kill_all"},
     },
