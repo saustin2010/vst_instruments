@@ -26,13 +26,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Libpo32, page KIT">
 
-Q-Link columns: **1** KIT, LEVEL, DECAY SCALE, RANDOM KIT  ·  **2** 01: KICK, 02: SNARE, 03: CLAVE, 04: TOM  ·  **3** 05: HAT CL, 06: HAT OP, 07: CYMB, 08: NOISE
+Q-Link columns: **1** LEVEL, DECAY SCALE  ·  **2** 01: KICK, 02: SNARE, 03: CLAVE, 04: TOM  ·  **3** 05: HAT CL, 06: HAT OP, 07: CYMB, 08: NOISE  ·  **4** KIT
 
 ### 2. EDIT
 
 <img src="screenshots/page_1.png" width="760" alt="Libpo32, page EDIT">
 
-Q-Link columns: **1** EDIT PAD, WAVE, BASE PITCH, OSC DECAY  ·  **2** MOD MODE, MOD AMOUNT, NOISE FILTER, NOISE MIX  ·  **3** NOISE ENV, DISTORTION, PAD LEVEL
+Q-Link columns: **1** WAVE, BASE PITCH, OSC DECAY  ·  **2** MOD MODE, MOD AMOUNT  ·  **3** NOISE FILTER, NOISE MIX, NOISE ENV  ·  **4** DISTORTION, PAD LEVEL
 
 ### 3. TUNE
 

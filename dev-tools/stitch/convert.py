@@ -270,7 +270,7 @@ MAPS = {
         "get": {"kit": "kit_name"},
         "tpl": {
             "enum": '<div class="flex flex-col gap-2 items-center mt-8"><span class="text-label-sm text-[#c3e2d4]">{label}</span>'
-                    '<div class="aug-enum grid grid-cols-1 gap-1" data-param="{key}">{opts}</div></div>',
+                    '<div class="aug-enum grid grid-cols-3 gap-1" data-param="{key}">{opts}</div></div>',
             "opt_enum": '<button class="py-1 px-3 text-[10px] font-bold rounded bg-[#071f19] text-[#c3e2d4] border '
                         'border-[#1c4a3d]">{opt}</button>',
         },
@@ -287,7 +287,22 @@ MAPS = {
             {"sel": "#view-edit div.flex-col:has(> .knob-pot[data-param=x_drop])", "remove": True},
             {"sel": "#view-edit div.flex-col:has(> .knob-pot[data-param=x_cutoff])", "where": "replace", "html": "@enum(inst_noise_env)"},
             {"sel": "#view-tune .knob-pot", "nth": ["v%02d_%s" % (v, k) for v in range(1, 9) for k in ("freq", "dcy")]},
+            # design QA 2026-10-03: RANDOM KIT (a utility button) beside the kit display, in the KIT panel and off the
+            # Q-Links; EDIT's MOD MODE on one row (its third option sat on MOD AMOUNT)
+            {"sel": "#view-kit div.grid-cols-2 > div:has(> .po-lcd)", "attr": {"style": "display: grid; grid-template-columns: "
+             "1fr 150px; grid-template-rows: auto 1fr; column-gap: 16px; row-gap: 8px; align-items: center"}},
+            {"sel": "div:has(> .po-lcd) > div.justify-between", "attr": {"style": "grid-column: 1 / -1"}},
+            {"sel": "div.flex-col:has(> button[onclick^=randomizeAllKit])", "move": "div:has(> .po-lcd)"},
+            {"sel": "#view-edit div.grid[data-param=inst_mod_mode]", "attr": {"class": "grid grid-cols-3 gap-1"}},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel (KIT: MASTER | PADS 1-4 | PADS 5-8 | KIT, the kit last as a
+        # preset; EDIT: OSCILLATOR | MODULATION | NOISE | AMP, EDIT PAD touch only); TUNE keeps two pads a column
+        "qlinks": {
+            0: ["level", "decay", "-", "-", "v01_lvl", "v02_lvl", "v03_lvl", "v04_lvl",
+                "v05_lvl", "v06_lvl", "v07_lvl", "v08_lvl", "kit", "-", "-", "-"],
+            1: ["inst_wave", "inst_freq", "inst_dcy", "-", "inst_mod_mode", "inst_mod_amt", "-", "-",
+                "inst_noise_filt", "inst_noise", "inst_noise_env", "-", "inst_dist", "inst_level", "-", "-"],
+        },
         "map": {"master-lvl": "level", "decay-scale": "decay", **{"fader-%d" % v: "v%02d_lvl" % v for v in range(1, 9)}},
         "names": {"inst_level": "PAD LEVEL", "inst_dist": "DISTORTION"},
     },
