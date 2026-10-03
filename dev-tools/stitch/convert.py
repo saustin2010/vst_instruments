@@ -864,7 +864,7 @@ MAPS = {
         "qlinks": {
             0: ["engine", "octave_transpose", "-", "-", "harmonics", "timbre", "morph", "-",
                 "decay", "lpg_colour", "attack", "-", "fm_amount", "timbre_mod", "morph_mod", "aux_mix"],
-            1: ["fm_preset_index", "-", "-", "-", "legato", "velocity_sensitivity", "-", "-"],
+            1: ["fm_preset_index", "-", "-", "-", "legato", "velocity_sensitivity", "volume", "-"],   # VOLUME added 2026-10-04
         },
         "grid": {"tabs": ["PLAY"], "tpl": None},
         "tab_order": ["PLAITS", "PLAY"],

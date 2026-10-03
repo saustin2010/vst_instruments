@@ -1,0 +1,508 @@
+{
+ "presets": [
+  {
+   "name": "Init",
+   "values": {
+    "engine": "VA VCF",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 0.5,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.58
+   }
+  },
+  {
+   "name": "Analog Bass",
+   "values": {
+    "engine": "V. ANALOG",
+    "fm_preset_index": 0,
+    "harmonics": 0.3,
+    "timbre": 0.4,
+    "morph": 0.6,
+    "decay": 0.4,
+    "lpg_colour": 0.3,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": -1,
+    "volume": 0.605
+   }
+  },
+  {
+   "name": "Phase Lead",
+   "values": {
+    "engine": "PHASE DIST",
+    "fm_preset_index": 0,
+    "harmonics": 0.6,
+    "timbre": 0.5,
+    "morph": 0.4,
+    "decay": 0.7,
+    "lpg_colour": 0.6,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "ON",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.5
+   }
+  },
+  {
+   "name": "E-Piano",
+   "values": {
+    "engine": "6-OP II",
+    "fm_preset_index": 0,
+    "harmonics": 0.01562,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 0.7,
+    "lpg_colour": 0.7,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.514
+   }
+  },
+  {
+   "name": "Mallets",
+   "values": {
+    "engine": "6-OP II",
+    "fm_preset_index": 17,
+    "harmonics": 0.54688,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 0.55,
+    "lpg_colour": 0.8,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.411
+   }
+  },
+  {
+   "name": "Tubular Bells",
+   "values": {
+    "engine": "6-OP II",
+    "fm_preset_index": 22,
+    "harmonics": 0.70312,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 0.85,
+    "lpg_colour": 0.9,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.203
+   }
+  },
+  {
+   "name": "Drawbar Organ",
+   "values": {
+    "engine": "6-OP III",
+    "fm_preset_index": 2,
+    "harmonics": 0.07812,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 1.0,
+    "lpg_colour": 1.0,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.887
+   }
+  },
+  {
+   "name": "Glass Pad",
+   "values": {
+    "engine": "6-OP III",
+    "fm_preset_index": 10,
+    "harmonics": 0.32812,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 1.0,
+    "lpg_colour": 1.0,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.2,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.266
+   }
+  },
+  {
+   "name": "Wave Terrain",
+   "values": {
+    "engine": "WAVE TERR",
+    "fm_preset_index": 0,
+    "harmonics": 0.4,
+    "timbre": 0.6,
+    "morph": 0.3,
+    "decay": 0.8,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.3,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.379
+   }
+  },
+  {
+   "name": "String Machine",
+   "values": {
+    "engine": "STR MACH",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.6,
+    "morph": 0.5,
+    "decay": 1.0,
+    "lpg_colour": 0.7,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.3,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.88
+   }
+  },
+  {
+   "name": "Chip Arp",
+   "values": {
+    "engine": "CHIPTUNE",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.3,
+    "morph": 0.5,
+    "decay": 0.3,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.446
+   }
+  },
+  {
+   "name": "Wavefolder",
+   "values": {
+    "engine": "WAVESHAPE",
+    "fm_preset_index": 0,
+    "harmonics": 0.4,
+    "timbre": 0.65,
+    "morph": 0.5,
+    "decay": 0.5,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.4,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.574
+   }
+  },
+  {
+   "name": "FM Bell",
+   "values": {
+    "engine": "FM",
+    "fm_preset_index": 0,
+    "harmonics": 0.65,
+    "timbre": 0.55,
+    "morph": 0.3,
+    "decay": 0.75,
+    "lpg_colour": 0.8,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.358
+   }
+  },
+  {
+   "name": "Grain Cloud",
+   "values": {
+    "engine": "GRAIN",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.5,
+    "morph": 0.6,
+    "decay": 0.9,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.2,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.642
+   }
+  },
+  {
+   "name": "Additive Organ",
+   "values": {
+    "engine": "ADDITIVE",
+    "fm_preset_index": 0,
+    "harmonics": 0.3,
+    "timbre": 0.7,
+    "morph": 0.2,
+    "decay": 1.0,
+    "lpg_colour": 0.9,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.949
+   }
+  },
+  {
+   "name": "Wavetable Sweep",
+   "values": {
+    "engine": "WAVETABLE",
+    "fm_preset_index": 0,
+    "harmonics": 0.2,
+    "timbre": 0.6,
+    "morph": 0.5,
+    "decay": 0.8,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.4,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.945
+   }
+  },
+  {
+   "name": "Chord Stab",
+   "values": {
+    "engine": "CHORD",
+    "fm_preset_index": 0,
+    "harmonics": 0.35,
+    "timbre": 0.5,
+    "morph": 0.4,
+    "decay": 0.45,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.861
+   }
+  },
+  {
+   "name": "Talking Synth",
+   "values": {
+    "engine": "SPEECH",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 0.8,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.3,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.71
+   }
+  },
+  {
+   "name": "Swarm Pad",
+   "values": {
+    "engine": "SWARM",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.6,
+    "morph": 0.4,
+    "decay": 1.0,
+    "lpg_colour": 0.8,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.4,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.937
+   }
+  },
+  {
+   "name": "Plucked String",
+   "values": {
+    "engine": "STRING",
+    "fm_preset_index": 0,
+    "harmonics": 0.4,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 0.5,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.85
+   }
+  },
+  {
+   "name": "Modal Bell",
+   "values": {
+    "engine": "MODAL",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.6,
+    "morph": 0.6,
+    "decay": 0.6,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.695
+   }
+  },
+  {
+   "name": "Kick",
+   "values": {
+    "engine": "BASS DRUM",
+    "fm_preset_index": 0,
+    "harmonics": 0.3,
+    "timbre": 0.4,
+    "morph": 0.5,
+    "decay": 0.5,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": -1,
+    "volume": 0.625
+   }
+  },
+  {
+   "name": "Snare",
+   "values": {
+    "engine": "SNARE DRUM",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.5,
+    "morph": 0.5,
+    "decay": 0.5,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 0.86
+   }
+  },
+  {
+   "name": "Hi-Hat",
+   "values": {
+    "engine": "HI-HAT",
+    "fm_preset_index": 0,
+    "harmonics": 0.5,
+    "timbre": 0.6,
+    "morph": 0.3,
+    "decay": 0.5,
+    "lpg_colour": 0.5,
+    "fm_amount": 0.0,
+    "aux_mix": 0.0,
+    "attack": 0.0,
+    "timbre_mod": 0.0,
+    "morph_mod": 0.0,
+    "legato": "OFF",
+    "velocity_sensitivity": 0.5,
+    "octave_transpose": 0,
+    "volume": 1.0
+   }
+  }
+ ]
+}
