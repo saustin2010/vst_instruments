@@ -21,7 +21,7 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 
 | | Plugin | What it is | Design QA |
 |---|---|---|:---:|
-| <a href="schwung/instruments/303/"><img src="schwung/instruments/303/screenshots/page_0.png" width="220" alt="303"></a> | **[303](schwung/instruments/303/)**<br><sub>Synth · Robin Schmidt · GPL-3.0</sub> | TB-303 bass line: Open303 with the Devilfish mods, a drive stage and 13 presets. | ☐ |
+| <a href="schwung/instruments/303/"><img src="schwung/instruments/303/screenshots/page_0.png" width="220" alt="303"></a> | **[303](schwung/instruments/303/)**<br><sub>Synth · Robin Schmidt · GPL-3.0</sub> | TB-303 bass line: Open303 with the Devilfish mods, a drive stage and 13 presets. | ✅ |
 | <a href="schwung/instruments/aphex/"><img src="schwung/instruments/aphex/screenshots/page_0.png" width="220" alt="Aphex"></a> | **[Aphex](schwung/instruments/aphex/)**<br><sub>Synth · Filliformes · MIT</sub> | Korg MS-10/MS-20 style mono synth with a patch bay, an ESP section and both MS filters. | ☐ |
 | <a href="schwung/instruments/braids/"><img src="schwung/instruments/braids/screenshots/page_0.png" width="220" alt="Braids"></a> | **[Braids](schwung/instruments/braids/)**<br><sub>Synth · Mutable Instruments · MIT</sub> | Mutable Instruments Braids: a macro oscillator with 47 synthesis models. | ☐ |
 | <a href="schwung/instruments/chordism/"><img src="schwung/instruments/chordism/screenshots/page_0.png" width="220" alt="Chordism"></a> | **[Chordism](schwung/instruments/chordism/)**<br><sub>Synth · Charles Vestal · MIT</sub> | One key in, a four-voice chord out: morphing oscillators, FM, filter, lo-fi, delay, reverb and an arpeggiator. | ☐ |
