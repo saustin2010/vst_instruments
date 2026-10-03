@@ -1064,6 +1064,14 @@ MAPS = {
             {"sel": ".tab-page", "all": True, "attr": {"style": "position: relative; top: 30px;"}},   # 548 px of frames, centred
         ],
         "map": {"RANDOM ALL": "rnd_patch", "RANDOM SOUND": "rnd_denis", "RANDOM MOD": "rnd_mod", "RESET MATRIX": "matrix_reset"},
+        # design QA 2026-10-03: a Q-Link column per panel ("-" = an empty slot); preset, RANDOM buttons and the filter
+        # type are touch only (no slot left in their groups); the matrix pages were already a half row per column
+        "qlinks": {
+            0: ["osc1_freq", "osc1_timbre", "-", "-", "osc2_pitch", "osc2_harmonics", "osc_mix", "-",
+                "fold_depth", "fold_type", "filter_cutoff", "filter_q", "vel_to_filter", "portamento", "legato", "-"],
+            1: ["attack", "decay", "sustain", "release", "noise_mix", "noise_type", "-", "-",
+                "lfo_rate", "sh_rate", "mod_depth_env", "mod_depth_noise"],
+        },
     },
     "chordism": {
         # 10 pages; ~55 of the 135 controls weren't in the design: added per page in its own markup (augment)
