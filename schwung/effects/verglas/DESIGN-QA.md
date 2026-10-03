@@ -26,7 +26,9 @@ VERGLAS is made in the design (convert.py MAPS `augment` / `qlinks`); TONE in th
 (`layout.grid.conf`). A rerun keeps both.
 
 ## Presets
-None upstream. See the batch's presets pass.
+Upstream has none, so the port brings 12 (`presets.json`, in MPC's PRESET menu): Init, Grain Cloud, Shimmer, Octave Down Haze, Ambient Wash, Stretch Time, Looper Delay, Spectral Smear, Lo-Fi Grains, Stutter, Dark Tail, Warm Tape. Each sets every control;
+levels evened out to within about 3 dB with a test signal through it (the quieter ones turn on TONE's limiter for a
+little make-up gain). None uses FREEZE: it would hold an empty buffer.
 
 ## For the owner
 - The filter is one page further away now. If you'd rather keep it on the main page, the alternative is to take
