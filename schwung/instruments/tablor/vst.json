@@ -3,6 +3,7 @@
   "vendor": "athousanddetails",
   "uid": "Tblr",
   "so": "tablor.so",
+  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count", "name_at": "preset_name_at"},
   "module": "src/module.json",
   "build": {
     "sources": [

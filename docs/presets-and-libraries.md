@@ -17,6 +17,7 @@ Checked 2026-10-03 against every engine's source (what it opens at run time) and
 | Hera | 56 presets | `/sdcard/vst/hera/presets/` | the Schwung Hera module's preset files (jpcima's Hera) |
 | OB-Xd | factory bank, 128 programs (`factory.fxb`) | `/sdcard/vst/obxd/presets/` | the Schwung OB-Xd module (reales' OB-Xd) |
 | Libpo32 | 3 kits: tonic, tape, acid | `/sdcard/vst/libpo32/kits/` | the Schwung Libpo32 module (mestela) |
+| Tablor | 9 factory presets (`factory.tbl`) | `/sdcard/vst/tablor/presets/` | Tablor's repo |
 | Tablor | 115 wavetables: Adventure Kid (65), Neu KatalYst (50) | `/sdcard/vst/tablor/wavetables/` | Tablor's repo. Adventure Kid: public domain (Kristoffer Ekstrand); Neu KatalYst: free to use, per its readme |
 | Groove Bank | 14 groove files | `/sdcard/vst/groovebank/patterns/` | Groove Bank's repo |
 | Helm | 274 factory patches + "Move Organ" | `/sdcard/vst/helm/helm-data/patches/` | Helm's factory patches (CC BY 4.0, Matt Tytel and contributors); Move Organ from the Schwung Helm port |
@@ -51,8 +52,7 @@ your originals elsewhere as well.
 
 | # | Plugin | What | Why | Fix (see ROADMAP.md) |
 |---|---|---|---|---|
-| 1 | Tablor | its 9 factory presets (fetched to `presets/tablor/not-installed/factory.tbl`) | not installed and no preset control: upstream they're chosen in Move's own preset browser, which MPC doesn't have; their wavetable paths point at Move's folders (`/data/UserData/UserLibrary/Wavetables/...`) | install the file with paths rewritten to `/sdcard/vst/tablor/wavetables/`, and add a preset stepper that applies a preset's state blob (`TBLR2;key=value;...`, reset to defaults first) |
-| 2 | Libpo32 | saving a kit | the engine has `save_kit` (writes `<module_dir>/presets/<kit>.json`) but there's no button, and the folder isn't created | add a SAVE KIT button and create its `presets/` folder on install |
+| 1 | Libpo32 | saving a kit | the engine has `save_kit` (writes `<module_dir>/presets/<kit>.json`) but there's no button, and the folder isn't created | add a SAVE KIT button and create its `presets/` folder on install |
 
 Move-only features with no MPC equivalent (nothing to fix):
 

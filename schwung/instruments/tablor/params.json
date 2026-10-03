@@ -569,6 +569,37 @@
    "max": 0,
    "display": "string",
    "type": "readout"
+  },
+  {
+   "key": "preset",
+   "name": "PRESET",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "display": "int",
+   "type": "stepper"
+  },
+  {
+   "key": "preset_prev",
+   "name": "PREV PRESET",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": -1
+  },
+  {
+   "key": "preset_next",
+   "name": "NEXT PRESET",
+   "momentary": true,
+   "step_of": "preset",
+   "step_delta": 1
+  },
+  {
+   "key": "preset_name",
+   "name": "PRESET NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
   }
  ]
 }

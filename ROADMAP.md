@@ -7,10 +7,9 @@ Open items as of 2026-10-03, most useful first. Tick them off here (with the dat
 New parameters always go at the **end** of a plugin's `params.json`: MPC saves projects and Q-Link assignments by
 parameter index, so existing projects keep working.
 
-- [ ] **Tablor factory presets.** Install `presets/tablor/not-installed/factory.tbl` to `/sdcard/vst/tablor/presets/`
-  with its wavetable paths rewritten from `/data/UserData/UserLibrary/Wavetables/` to `/sdcard/vst/tablor/wavetables/`; add a PRESET
-  stepper (with a name readout) that applies a preset's `TBLR2;...` state blob after resetting to defaults. Needs a
-  small engine patch under `MPC_PORT` (upstream selects presets through Move's preset browser, not a parameter).
+- [x] **Tablor factory presets** (2026-10-04). `factory.tbl` installs to `/sdcard/vst/tablor/presets/`; the engine maps
+  its Move wavetable paths to `wavetables/`, and PRESET (appended params, MPC's PRESET menu, the VOICE page) applies a
+  preset's state blob after resetting to defaults.
 - [x] **OB-Xd banks** (2026-10-03). BANK selector under PATCH (`bank_index`/`bank_name`, appended); `.fxb` banks in
   `/sdcard/vst/obxd/presets/` are chosen there. `tools/obxd-lv2-to-fxb.py` converts OB-Xd 1.x LV2 banks.
 - [x] **Noisemaker imports** (2026-10-03). `MODULE_DIR` set; each folder in `/sdcard/vst/noisemaker/presets/` is a

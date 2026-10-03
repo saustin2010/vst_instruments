@@ -1,16 +1,18 @@
 # Tablor
 
-**Synth** · A two-oscillator wavetable synth that ships with its wavetables. · maker in MPC: athousanddetails · licence: BSD-3-Clause
+**Synth** · A two-oscillator wavetable synth that ships with its wavetables and 9 factory presets. · maker in MPC: athousanddetails · licence: BSD-3-Clause
 
 <img src="screenshots/page_0.png" width="760" alt="Tablor on the MPC touchscreen">
 
 Two wavetable oscillators, each scanning its own table (the table's name shows next to it, and the arrows step through the library), with unison and shape controls, a sub and noise, a filter, amp and filter envelopes, two modulation envelopes and a voice section. Its wavetable library ships with it; add your own tables to /sdcard/vst/tablor/wavetables on the MPC.
 
+Its 9 factory presets (Init, First Contact, Neu Bass, Formant Keys, Dust Pad, Sub Punch, Glass Bells, Res Bass, E Piano) are in MPC's PRESET menu and on the VOICE page's PRESET selector (2026-10-04).
+
 ## On the MPC
 
 - In the plugin browser: **Tablor** by **athousanddetails** (Synth)
 - Files: `/sdcard/vst/tablor.so`, presets/data in `/sdcard/vst/tablor/` (from this repo's `presets/tablor/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/athousanddetails - VST - Tablor/`
-- 65 parameters (all automatable) on 6 pages
+- 69 parameters (all automatable) on 6 pages
 
 ## Playing it
 
@@ -54,7 +56,7 @@ Q-Link columns: **1** EG1 A, EG1 D, EG1 S, EG1 R  ·  **2** EG1 DST, EG1 AMT  ·
 
 <img src="screenshots/page_5.png" width="760" alt="Tablor, page VOICE">
 
-Q-Link columns: **1** VOICE MODE, VOICES, LEGATO  ·  **2** GLIDE, GLIDE MODE  ·  **3** BEND RANGE, VOLUME
+Q-Link columns: **1** VOICE MODE, VOICES, LEGATO  ·  **2** GLIDE, GLIDE MODE  ·  **3** BEND RANGE, VOLUME  ·  **4** PRESET
 
 ## Install
 
@@ -76,6 +78,7 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 
 - `src/dsp/wt/scanner.h`: the user wavetable folder is `/sdcard/vst/tablor/wavetables` (where the shipped packs go), and the first-run copy into a user folder is skipped (`-DMPC_PORT`).
 - `src/dsp/tablor_plugin.cpp`: `wt1_name`/`wt2_name` readouts (the table's file name) for the screen.
+- `src/dsp/tablor_plugin.cpp` (2026-10-04): the factory presets on the MPC: `preset` / `preset_name` / `preset_count` / `preset_name_at:<n>` (appended params, and MPC's PRESET menu); choosing one resets to the defaults and applies its `TBLR2;` blob, as Move's preset browser does. The presets' Move wavetable paths (`/data/UserData/UserLibrary/Wavetables/`) map to `/sdcard/vst/tablor/wavetables/`; they're read when the plugin is created (MPC reads the menu's size then); the state remembers the chosen preset, so a reopened project keeps its edits.
 - `src/dsp/wt/loader.h` + `tb_destroy_instance`: the loader thread is joined before the instance is deleted. Upstream deletes members the loader may still be publishing into (ASan heap-use-after-free on a quick insert/remove, found by the offline test 2026-10-01).
 - Diff: `upstream-changes.diff`.
 - `params.base.json` comes from the module's `chain_params` (what the engine actually takes, saved as `chain_params.engine.json`), not its menu tree.

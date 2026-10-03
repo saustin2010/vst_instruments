@@ -1098,7 +1098,8 @@ MAPS = {
             3: ["vca_a", "vca_d", "vca_s", "vca_r", "vca_vel", "-", "-", "-", "flt_a", "flt_d", "flt_s", "flt_r"],
             4: ["me1_a", "me1_d", "me1_s", "me1_r", "me1_dst", "me1_amt", "-", "-",
                 "me2_a", "me2_d", "me2_s", "me2_r", "me2_dst", "me2_amt", "-", "-"],
-            5: ["voice_mode", "voices", "legato", "-", "glide", "glide_mode", "-", "-", "pb_range", "volume", "-", "-"],
+            5: ["voice_mode", "voices", "legato", "-", "glide", "glide_mode", "-", "-", "pb_range", "volume", "-", "-",
+                "preset"],   # the factory presets (2026-10-04)
         },
         "grid": {"tabs": ["FILTER", "SHAPE", "ENVELOPES", "MOD ENVS", "VOICE"], "tpl": None},
         "tab_order": ["MAIN", "FILTER", "SHAPE", "ENVELOPES", "MOD ENVS", "VOICE"],
