@@ -69,7 +69,7 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 
 | | Plugin | What it is | Design QA |
 |---|---|---|:---:|
-| <a href="mutable-instruments/ringsfx/"><img src="mutable-instruments/ringsfx/screenshots/page_0.png" width="220" alt="Rings FX"></a> | **[Rings FX](mutable-instruments/ringsfx/)**<br><sub>Audio effect · Mutable Instruments · MIT</sub> | Rings as an audio effect: the track's sound excites the resonator. | ☐ |
+| <a href="mutable-instruments/ringsfx/"><img src="mutable-instruments/ringsfx/screenshots/page_0.png" width="220" alt="Rings FX"></a> | **[Rings FX](mutable-instruments/ringsfx/)**<br><sub>Audio effect · Mutable Instruments · MIT</sub> | Rings as an audio effect: the track's sound excites the resonator; 12 presets. | ☐ |
 | <a href="schwung/effects/verglas/"><img src="schwung/effects/verglas/screenshots/page_0.png" width="220" alt="Verglas"></a> | **[Verglas](schwung/effects/verglas/)**<br><sub>Audio effect · Mutable Instruments · MIT</sub> | Mutable Instruments Clouds: a granular texture processor as an audio effect. | ☐ |
 | <a href="mutable-instruments/warps/"><img src="mutable-instruments/warps/screenshots/page_0.png" width="220" alt="Warps"></a> | **[Warps](mutable-instruments/warps/)**<br><sub>Audio effect · Mutable Instruments · MIT</sub> | Mutable Instruments Warps: a meta-modulator (ring mod, fold, vocoder...) as an audio effect. | ☐ |
 

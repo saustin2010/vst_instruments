@@ -20,7 +20,8 @@ Q-Link columns before → after ("-" = an empty slot):
 Made in the design (convert.py MAPS `augment` / `qlinks`), so a rerun keeps it.
 
 ## Presets
-None upstream. See the batch's presets pass.
+Upstream has none, so the port brings 12 (`presets.json`, in MPC's PRESET menu): Init, Resonant Body, Metal Plate, Bright Bell, Low Drone, Sympathetic Strings, Sitar Drone, Chord Resonator, Plucked String, FM Ring, String Reverb, Shimmer Wash. Each sets every control;
+levels evened out to within about 0.5 dB with a test signal through it.
 
 ## Checked
 Offline test PASSED; check_skin OK; no Q-Link outlines overlap (qlink_overlay.py).

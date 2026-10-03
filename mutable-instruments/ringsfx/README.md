@@ -1,10 +1,12 @@
 # Rings FX
 
-**Audio effect** · Rings as an audio effect: the track's sound excites the resonator. · maker in MPC: Mutable Instruments · licence: MIT
+**Audio effect** · Rings as an audio effect: the track's sound excites the resonator, with 12 presets. · maker in MPC: Mutable Instruments · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Rings FX on the MPC touchscreen">
 
 The same Rings resonator as an insert effect: the track's audio becomes the exciter and Rings' own onset detector strums it, tuned to NOTE. Drums turn into tuned metallic hits, voices and loops grow sympathetic string halos. INPUT gain and a dry/wet MIX sit alongside the module's controls.
+
+Upstream has no presets, so the port brings 12 (Init, Resonant Body, Metal Plate, Bright Bell, Low Drone, Sympathetic Strings, Sitar Drone, Chord Resonator, Plucked String, FM Ring, String Reverb, Shimmer Wash), in MPC's PRESET menu, each setting every control, with levels evened out (measured with a test signal through it).
 
 ## On the MPC
 
