@@ -63,7 +63,8 @@ JS_SETUP = r"""(cfg) => {
 # {sel, each: [html, ...]} sets each match's contents in order; {sel, clone: [{replace: [[a, b]]}]} adds copies of
 # the match after it with strings swapped (a design that drew one of four identical pages); {sel, text} sets its text;
 # {sel, unclass: regex} drops matching classes (a Tailwind rotate-45 baked into a knob);
-# {sel, remove: true} deletes (a design's made-up status text, say)
+# {sel, remove: true} deletes (a design's made-up status text, say); {sel, move: target, where} moves the match (every
+# match with all: true, in order) to the target, at where (default beforeend): a control into another panel, as is
 JS_AUGMENT = r"""(ops) => {
   const out = [];
   for (const op of ops || []) {
@@ -89,8 +90,11 @@ JS_AUGMENT = r"""(ops) => {
     if (op.each) { els.forEach((e, i) => op.each[i] !== undefined && (e.innerHTML = op.each[i])); }   // one per match
     if (op.each && !op.attr) continue;
     if (!op.all && !op.each) els = els.slice(0, 1);
+    const to = op.move && document.querySelector(op.move);
+    if (op.move && !to) { out.push('augment: nothing matches ' + op.move); continue; }
     for (const e of els) {
       if (op.remove) { e.remove(); continue; }
+      if (to) to.insertAdjacentElement(op.where || 'beforeend', e);
       for (const [k, v] of Object.entries(op.attr || {})) e.setAttribute(k, v);
       if (op.unclass) { const re = new RegExp(op.unclass); [...e.classList].filter(c => re.test(c)).forEach(c => e.classList.remove(c)); }
       if (op.text !== undefined) e.textContent = op.text;
