@@ -1660,7 +1660,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "415 355 104 22",
+                                    "bounds": "415 383 104 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -1690,7 +1690,7 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "521 355 104 22",
+                                    "bounds": "521 383 104 22",
                                     "additionalInvalidatingHandles": []
                                 }
                             }
@@ -1712,7 +1712,8 @@
                 "qlinkBoundsData": [
                     "51 27 589 224",
                     "683 27 573 217",
-                    "42 309 589 235"
+                    "42 408 142 136",
+                    "243 337 388 203"
                 ],
                 "componentName": "WARPS|WARPS",
                 "initialSize": "0 0 1280 628",

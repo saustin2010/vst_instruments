@@ -1077,11 +1077,16 @@ MAPS = {
             {"sel": "div:has(> #btn-mode-meta)", "attr": {"data-param": "mode"}},
             {"sel": "#carrier-selector", "attr": {"data-param": "carrier"}},
             {"sel": "#output-selector", "attr": {"data-param": "output"}},
+            {"sel": "div.col-span-2:has(#meter-l)", "attr": {"style": "visibility: hidden"}},
         ],
         "option_labels": {"mode": ["META MOD", "FREQ"]},
-        "nowrap": ["carrier"], "nudge": {"carrier": [-40, 0], "output": [-50, 0]},
+        "nowrap": ["carrier"], "nudge": {"carrier": [-40, 0], "output": [-50, 28]},
         "map": {"needle-lvl2": "level_2"},
         "names": {"level_2": "MOD LEVEL"},   # (its first caption is a "SIG" light)
+        # design QA 2026-10-03: a Q-Link column per panel (MODULATION | CARRIER | INPUT | OUTPUT; INPUT's MOD LEVEL had
+        # shared OUTPUT's column); OUTPUT's made-up meters go
+        "qlinks": {0: ["mode", "algorithm", "timbre", "shift", "carrier", "note", "fine", "level_1",
+                       "level_2", "-", "-", "-", "output", "mix", "volume", "-"]},
     },
     "wurl": {
         # one page, every control drawn (its other tab buttons lead nowhere)

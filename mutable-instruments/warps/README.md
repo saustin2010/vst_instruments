@@ -26,7 +26,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Warps, page WARPS">
 
-Q-Link columns: **1** MODE, ALGORITHM, TIMBRE, SHIFT  ·  **2** CARRIER, NOTE, FINE, CARRIER LVL  ·  **3** MOD LEVEL, OUTPUT, MIX, VOLUME
+Q-Link columns: **1** MODE, ALGORITHM, TIMBRE, SHIFT  ·  **2** CARRIER, NOTE, FINE, CARRIER LVL  ·  **3** MOD LEVEL  ·  **4** OUTPUT, MIX, VOLUME
 
 ## Install
 
