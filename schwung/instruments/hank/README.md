@@ -24,7 +24,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 <img src="screenshots/page_0.png" width="760" alt="Hank, page HANK">
 
-Q-Link columns: **1** PATCH, RATIO, BRIGHT, BITE (MOD)  ·  **2** TONE, ATTACK, DECAY, SUSTAIN  ·  **3** NOISE, GLIDE, VOICES, TRANSPOSE  ·  **4** VOLUME
+Q-Link columns: **1** RATIO, BRIGHT, BITE (MOD), TONE  ·  **2** ATTACK, DECAY, SUSTAIN  ·  **3** NOISE, GLIDE, VOICES  ·  **4** TRANSPOSE, VOLUME
 
 ## Install
 

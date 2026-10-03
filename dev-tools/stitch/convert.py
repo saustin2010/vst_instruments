@@ -939,6 +939,10 @@ MAPS = {
         "canvas": {"#scopeCanvas": {"picture": "ratio", "fill": ".recessed-well:has(> #scopeCanvas)"},
                    "#envCanvas": {"env": ["attack", "decay", "sustain"], "name": "mod", "fill": ".recessed-well:has(> #envCanvas)"}},
         "drop": ["header", "footer"],
+        # design QA 2026-10-03: OPERATOR | MOD ENVELOPE | VOICE split 3 + 2 ("-" = an empty slot); the preset stepper is
+        # touch only (its arrows and MPC's PRESET menu)
+        "qlinks": {0: ["ratio", "bright", "bite", "tone", "attack", "decay", "sustain", "-",
+                       "noise", "glide", "voice_count", "-", "pitch", "volume", "-", "-"]},
     },
     "groovebank": {
         # one page; the MIDI monitor / chord readouts stay as the design's decoration, a dead button goes
