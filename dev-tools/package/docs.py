@@ -195,7 +195,7 @@ The installer copies files to the MPC and edits its settings file, which needs a
   Akai update removes SSH again (your plugins stay installed; you just can't install more until SSH is back).
 
 Check it works, from your computer (the address is in the MPC's Wi-Fi settings; many units also answer to a
-`.local` name, e.g. `mpc-live-ii.local`):
+`<hostname>.local` name):
 
 ```
 ssh root@<mpc-address>

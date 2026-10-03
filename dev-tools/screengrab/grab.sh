@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Screenshot the MPC (steve/tools/screengrab, 2026-10-02):  steve/tools/screengrab/grab.sh [host] [out.png]
+# Screenshot the MPC (steve/tools/screengrab, 2026-10-02):  steve/tools/screengrab/grab.sh <mpc-address> [out.png]
 # Copies drmgrab to the device's /tmp if it isn't there, reads the framebuffer the display plane shows (read-only),
 # converts it to a landscape PNG in the mpc-vst-html-art container (Pillow). Default out: steve/screens/<time>.png
 set -euo pipefail
-HOST=${1:-mpc-live-ii.local}
+HOST=${1:-${MPC_HOST:?pass the MPC address or set MPC_HOST}}
 HERE=$(cd "$(dirname "$0")" && pwd); STEVE=$(dirname "$(dirname "$HERE")"); MV=$(dirname "$STEVE")
 OUT=${2:-$STEVE/screens/$(date +%Y%m%d-%H%M%S).png}
 mkdir -p "$(dirname "$OUT")" "$STEVE/screens"
