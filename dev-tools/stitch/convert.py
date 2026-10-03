@@ -102,6 +102,8 @@ MAPS = {
         "map": {},
     },
     "noisemaker": {
+        # ⚠ a rerun no longer reproduces this screen (it renders 25 px lower): layout.conf has hand edits since
+        # 2026-10-03 (BANK under PATCH, a shorter scope; see its header). Re-add those after any rerun.
         "sweep": 140,
         "knob": {"item": ".knob-body", "unit": ".knob-unit", "label": ".knob-label", "value": ".knob-val"},
         "slider": {"item": ".slider-track", "unit": ".slider-unit", "label": ".knob-label", "value": ".knob-val"},

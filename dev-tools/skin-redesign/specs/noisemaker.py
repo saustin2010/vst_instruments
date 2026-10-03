@@ -40,6 +40,7 @@ p.names({"fenv_time": "FLT TIME", "aenv_time": "AMP TIME", "volume": "VOLUME", "
          "delay_fb": "DLY FEEDBACK", "delay_hi": "DLY HI CUT", "delay_lo": "DLY LO CUT", "env_amt": "DRAW AMOUNT",
          "env_speed": "DRAW SPEED", "env_dest": "DRAW DEST"})
 p.preset_browser(count=256)
+p.preset_browser(key="bank_index", name_key="bank_name", count=64, name="BANK")   # preset folders (2026-10-03)
 p.look({"bg": "15181c", "panel": "1f2429", "line": "434c56", "ink": "f0f3f5", "ink_dim": "c3cbd2", "ink_faint": "76818c",
         "accent": "26a9b8", "accent_hi": "43d3e3", "knob_face": "e6ebef", "knob_ring": "2e353d", "knob_dot": "43d3e3",
         "lcd": "0b0d0f", "seg_active": "43d3e3", "seg_inactive": "2a3037", "seg_active_tx": "0e1114", "box": "1f2429",
@@ -75,4 +76,4 @@ p.page("FX",
        [("REVERB", 8, ["reverb_wet", "reverb_decay", "reverb_pre", "reverb_hi", "reverb_lo"])],
        [("DELAY", 8, ["delay_wet", "delay_time", "delay_sync", "delay_fac_l", "delay_fac_r", "delay_fb", "delay_hi",
                       "delay_lo"])])
-p.write()
+p.write(module_dir="/sdcard/vst/noisemaker")
