@@ -10,7 +10,9 @@ for port in "$@"; do
   MD=$(python3 -c "import json;print(json.load(open('$D/vst.json')).get('defines',{}).get('MODULE_DIR','').strip('\"'))")
   LIBS=$(python3 -c "import json;print(' '.join(json.load(open('$D/vst.json')).get('build',{}).get('libs',[])))")
   ARGS=()
-  [ -n "$MD" ] && [ -d "$D/deploy/vst/$(basename "$MD")" ] && ARGS=(-v "$D/deploy/vst/$(basename "$MD")":"$MD":ro)
+  DATA=$D/deploy/vst/$(basename "$MD")   # the data folder: in deploy/, or (vst_instruments) the repo's presets/<port>
+  [ -d "$DATA" ] || DATA=$(cd "$D" && git rev-parse --show-toplevel 2>/dev/null)/presets/$port
+  [ -n "$MD" ] && [ -d "$DATA" ] && ARGS=(-v "$DATA":"$MD":ro)
   ls "$D"/build/host_*.o >/dev/null 2>&1 || { echo "$port: no build/host_*.o (run build.sh $port)"; continue; }
   if docker run --rm -u "$(id -u):$(id -g)" -v "$D":"$D" -v "$HERE":"$HERE":ro "${ARGS[@]}" -w "$D/build" \
        -e ASAN_OPTIONS=detect_leaks=0 gcc:12 bash -c '
