@@ -1439,6 +1439,16 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
     if (strcmp(key, "import_name") == 0) return snprintf(buf, (size_t)buf_len, "%s", inst->import_name);
     if (strcmp(key, "preset") == 0) RETI(inst->current_preset);
     if (strcmp(key, "preset_count") == 0) RETI(SH101_PRESET_COUNT + inst->external_preset_count);
+#ifdef MPC_PORT
+    /* MPC_PORT: preset N's name without loading it, for MPC's PRESET menu (vst.json "programs" "name_at"). */
+    if (strncmp(key, "preset_name_at:", 15) == 0) {
+        int total = SH101_PRESET_COUNT + inst->external_preset_count;
+        int p = atoi(key + 15);
+        if (p < 0 || p >= total) return -1;
+        return snprintf(buf, (size_t)buf_len, "%s",
+                        p < SH101_PRESET_COUNT ? g_presets[p].name : inst->external_presets[p - SH101_PRESET_COUNT].name);
+    }
+#endif
     if (strcmp(key, "preset_name") == 0) {
         int total = SH101_PRESET_COUNT + inst->external_preset_count;
         int p;

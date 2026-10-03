@@ -2,6 +2,7 @@
   "name": "Aphex",
   "vendor": "Filliformes",
   "uid": "Aphx",
+  "programs": {"param": "preset"},
   "so": "aphex.so",
   "module": "src/module.json",
   "build": {

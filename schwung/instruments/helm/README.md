@@ -115,6 +115,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Vendored tree trimmed from 139 MB to 57 MB (2026-10-01): removed the unused second JUCE copy, JUCE's examples/extras/docs, concurrentqueue's benchmarks/tests, the GUI/standalone/builds folders and the bundled VST3_SDK (Steinberg's SDK is never kept here); the build and test pass without them.
 - `params.base.json` comes from the module's `chain_params` (what the engine actually takes, saved as `chain_params.engine.json`), not its menu tree.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets in MPC's PRESET menu (2026-10-03): its 275 patches are VST programs, listed live from the engine (vst.json
+  `programs` with `count` and `name_at`; the engine answers a preset's name by number, marked MPC port), named from their files without loading each one (stepping through them at every insert would take seconds).
 
 ## Files
 

@@ -61,6 +61,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - All 195 original per-pad parameters are still there (same indices) for automation; RANDOM KIT button.
 - Drums only sound on notes 36-51; the bundled kits fill pads 1-8 (tonic) or 1-4 (tape, acid).
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets in MPC's PRESET menu (2026-10-03): its kits are VST programs (vst.json `programs`), so the PRESET
+  dropdown in the plugin header, also on the arrangement screen, lists and loads them.
 
 ## Files
 

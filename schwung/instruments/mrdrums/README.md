@@ -56,6 +56,8 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - KIT page (kit browser, master volume, polyphony, velocity curve, humanize, pad select + AUTO SELECT) and PAD page (the selected pad's sound, envelope, randomisation).
 - **Crash fix (2026-10-02)**: a project load or a pad sample change no longer frees a sample a voice is still playing (upstream bug; see `VENDORED.md`).
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- Presets in MPC's PRESET menu (2026-10-03): its kits are VST programs, listed live from the engine (vst.json
+  `programs` with `count` and `name_at`; the engine answers a preset's name by number, marked MPC port), so kit folders you add show up.
 
 ## Files
 

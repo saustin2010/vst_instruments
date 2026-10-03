@@ -53,8 +53,8 @@ LISTED=$(side listed "${SOS[@]}")
 for i in "${!DIRS[@]}"; do
   d=${DIRS[$i]}; e=$d/deploy/pluginlist-entry.xml; so=${SOS[$i]}
   have=$(printf '%s\n' "$LISTED" | grep -F "$so|" | head -n 1)
-  want="$so|$(attr name "$e")|$(attr manufacturer "$e")|$(attr isInstrument "$e")"
-  if [ "$have" = "$so|||" ]; then state="new: MPC needs to list it"; NEW+=("$d")
+  want="$so|$(attr name "$e")|$(attr manufacturer "$e")|$(attr isInstrument "$e")|$(attr category "$e")"
+  if [ "$have" = "$so||||" ]; then state="new: MPC needs to list it"; NEW+=("$d")
   elif [ "$have" != "$want" ] || [ $FORCE_REG = 1 ]; then state="listed, entry to update"; NEW+=("$d")
   else state="listed"; fi
   printf "  %-34s %-30s %s\n" "$d" "$(attr name "$e")" "$state"
@@ -99,7 +99,7 @@ if [ ${#NEW[@]} -gt 0 ]; then
   ok=$YES
   if [ $ok = 0 ]; then
     printf "MPC has to restart to list them (about 30 s). Save your project on the MPC first. Restart now? [y/N] "
-    read -r a; case "$a" in y|Y|yes) ok=1 ;; esac
+    read -r a || a=""; case "$a" in y|Y|yes) ok=1 ;; esac
   fi
   if [ $ok = 1 ]; then
     side register "$STAGE/entries.xml"

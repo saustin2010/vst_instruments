@@ -2,6 +2,8 @@
   "name": "Mrdrums",
   "vendor": "Move Everything",
   "uid": "MrDr",
+  "programs": {"param": "kit", "name": "kit_name", "count": "kit_count", "name_at": "kit_name_at"},
+  "category": "Drum Machine",
   "so": "mrdrums.so",
   "module": "src/module.json",
   "build": {

@@ -1316,6 +1316,22 @@
     "RANDOM"
    ],
    "default": 0
+  },
+  {
+   "key": "preset",
+   "name": "PRESET",
+   "min": 0,
+   "max": 56,
+   "default": 0,
+   "display": "int"
+  },
+  {
+   "key": "preset_name",
+   "name": "PRESET NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
   }
  ]
 }

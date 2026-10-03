@@ -2,6 +2,7 @@
   "name": "NuSaw",
   "vendor": "Charles Vestal",
   "uid": "NuSw",
+  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count"},
   "so": "nusaw.so",
   "module": "src/module.json",
   "build": {

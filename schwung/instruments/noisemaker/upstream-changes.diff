@@ -493,3 +493,21 @@
 +};
  #endif 
 \ No newline at end of file
+--- a/src/dsp/noisemaker_plugin.cpp
++++ b/src/dsp/noisemaker_plugin.cpp
+@@ -1517,6 +1517,15 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
+         return snprintf(buf, buf_len, "Noisemaker");
+     if (strcmp(key, "state") == 0)
+         return build_state(inst, buf, buf_len);
++#ifdef MPC_PORT
++    /* MPC_PORT: preset N's name in the current bank without loading it, for MPC's PRESET menu (vst.json "programs"
++     * "name_at"). */
++    if (strncmp(key, "preset_name_at:", 15) == 0) {
++        char nm[NM_MAX_RELPATH];
++        nm_preset_name(inst, atoi(key + 15), nm, sizeof(nm));
++        return nm[0] ? snprintf(buf, buf_len, "%s", nm) : -1;
++    }
++#endif
+     if (strcmp(key, "preset_name") == 0) {
+         char nm[NM_MAX_RELPATH];
+         nm_preset_name(inst, inst->cur_preset, nm, sizeof(nm));

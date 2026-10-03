@@ -26,3 +26,7 @@ buffer first (`stop_voices_reading`). The kit loader above was already safe.
 ## Bundled kit
 `src/kits/01_Starter/` holds 8 drum hits synthesised by `dev-tools/skin-redesign/make_starter_kit.py`
 (no third-party samples). Add kits by copying folders of WAVs to /sdcard/vst/mrdrums/kits/ (USB or SFTP).
+
+## Local change: kit names by number (2026-10-03, marked `MPC port`)
+`src/dsp/mrdrums_plugin.cpp`, `v2_get_param()`: a new key `kit_name_at:<n>` answers kit n's folder name without
+loading it, so MPC's PRESET menu lists the kits live (vst.json `programs` `name_at`), including folders added later.

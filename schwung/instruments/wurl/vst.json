@@ -2,6 +2,7 @@
   "name": "Wurl",
   "vendor": "Filliformes",
   "uid": "Wurl",
+  "programs": {"param": "preset"},
   "so": "wurl.so",
   "module": "src/module.json",
   "build": {

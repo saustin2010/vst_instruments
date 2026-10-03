@@ -21,3 +21,19 @@
  
    void TriggerWait::waitTrigger(mopo_float trigger_value) {
      waiting_ = true;
+--- a/src/dsp/helm_plugin.cpp
++++ b/src/dsp/helm_plugin.cpp
+@@ -1180,6 +1180,13 @@ static int v2_get_param(void *instance, const char *key, char *buf,
+   }
+   if (strcmp(key, "preset_count") == 0)
+     return snprintf(buf, buf_len, "%d", inst->preset_count);
++  /* MPC port: patch N's name (its file name) without loading it, for MPC's PRESET menu (vst.json "programs"
++   * "name_at"): stepping through 275 patch files at every insert would take seconds. */
++  if (strncmp(key, "preset_name_at:", 15) == 0) {
++    int idx = atoi(key + 15);
++    if (idx < 0 || idx >= inst->preset_count) return -1;
++    return snprintf(buf, buf_len, "%s", inst->patches[idx].getFileNameWithoutExtension().toRawUTF8());
++  }
+   if (strcmp(key, "preset_name") == 0)
+     return snprintf(buf, buf_len, "%s", inst->preset_name);
+   if (strcmp(key, "name") == 0)

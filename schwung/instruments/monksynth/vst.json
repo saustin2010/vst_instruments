@@ -2,6 +2,7 @@
   "name": "MonkSynth",
   "vendor": "Jonathan Taylor",
   "uid": "Monk",
+  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count"},
   "so": "monksynth.so",
   "module": "src/module.json",
   "build": {

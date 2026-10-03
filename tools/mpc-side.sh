@@ -3,7 +3,7 @@
 # < tools/mpc-side.sh`). Plain POSIX sh for the MPC's own shell. You can also copy it to the MPC and run it there.
 #
 #   check                              is this an MPC OS device we can install on? (prints what it finds)
-#   listed <so path> ...               print "<so path>|<name>|<manufacturer>|<isInstrument>" per plugin-list entry
+#   listed <so path> ...               print "<so path>|<name>|<manufacturer>|<isInstrument>|<category>" per entry
 #   place <stage dir> <plugin> ...     move staged plugins (<stage dir>/<plugin>/{vst,Synths}, checked against their
 #                                      SHA256SUMS) into /sdcard/vst and /sdcard/Synths
 #   register <entries.xml>             add/replace these <PLUGIN/> entries in MPC.settings      } stop MPC, back up
@@ -42,7 +42,7 @@ listed() {
                 if (index(buf, "file=\"" so "\"")) { found = buf }
             }
             function attr(n,   i, r) { i = index(found, " " n "=\""); if (!i) return ""; r = substr(found, i + length(n) + 3); return substr(r, 1, index(r, "\"") - 1) }
-            END { if (found != "") printf "%s|%s|%s|%s\n", so, attr("name"), attr("manufacturer"), attr("isInstrument"); else printf "%s|||\n", so }
+            END { if (found != "") printf "%s|%s|%s|%s|%s\n", so, attr("name"), attr("manufacturer"), attr("isInstrument"), attr("category"); else printf "%s||||\n", so }
         ' "$s"
     done
 }

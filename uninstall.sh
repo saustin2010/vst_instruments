@@ -32,7 +32,7 @@ done
 printf '    %s\n' "${PATHS[@]}"
 if [ $YES = 0 ]; then
   printf "Remove these %d plugins? MPC will stop and restart (save your project first). [y/N] " "${#DIRS[@]}"
-  read -r a; case "$a" in y|Y|yes) ;; *) echo "cancelled"; exit 1 ;; esac
+  read -r a || a=""; case "$a" in y|Y|yes) ;; *) echo "cancelled"; exit 1 ;; esac
 fi
 "${SSH[@]}" "rm -rf $STAGE && mkdir -p $STAGE"
 COPYFILE_DISABLE=1 tar -C tools -cf - plugin_list.awk | "${SSH[@]}" "tar -C $STAGE -xf -"
