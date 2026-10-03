@@ -26,7 +26,7 @@ Checked 2026-10-03 against every engine's source (what it opens at run time) and
 Built into the plugin itself (nothing to install): Hank 32 presets, Hush One 11, Moog 14, Noisemaker 256, NuSaw 27,
 Aphex 41, Denis 30, Fizzik 31, Wurl 10, MonkSynth 12 singers, Plaits' three 6-op FM banks, Super Arp's 40 patterns
 and 40 rhythms. Made for this port, where upstream has none (`presets.json`, the wrapper's own presets): 303 13,
-Elements 12, Rings 14, Plaits 24. The others have no presets.
+Elements 12, Rings 14, Plaits 24, Mr Hyde 19. The others have no presets.
 
 ## Adding your own
 

@@ -43,7 +43,9 @@ MAIN is made in the design (convert.py MAPS `augment`, using a new `move` op in 
 own controls between panels); the other pages in the port's page plan (`layout.grid.conf`). A rerun keeps both.
 
 ## Presets
-None upstream. See the batch's presets pass.
+Upstream has none, so the port brings 19 (`presets.json`, in MPC's PRESET menu): Init, Freak Bass, Wobble Bass, Sync Lead, Terrain Pad, String Machine, Supersaw Stack, Folded Pluck, FM Keys, Formant Choir, Drawbar Organ, Wavetable Sweep, Chord Memory, Speech Synth, Swarm, Noise Sweep, Particle Rain, Glass String, Modal Bells. Each sets all 81 controls;
+offline all 19 play. VOLUME drives the low-pass gate (it saturates above about 1.3), so it evens the levels out only so far:
+the organ, string machine, inharmonic string and particle presets stay quieter by nature.
 
 ## Checked
 Offline test PASSED; check_skin OK; no Q-Link outlines overlap on any page (qlink_overlay.py).

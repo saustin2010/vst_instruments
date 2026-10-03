@@ -3,6 +3,7 @@
   "vendor": "Move Everything",
   "uid": "MrHy",
   "so": "mrhyde.so",
+  "presets": "presets.json",
   "module": "src/module.json",
   "build": {
     "sources": [
