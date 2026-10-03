@@ -560,13 +560,59 @@ MAPS = {
             "toggle": '<div class="flex flex-col items-center"><span class="font-label-sm text-label-sm text-[#d4c4b0] mb-1">{label}'
                       '</span><button class="aug-toggle py-1 px-3 font-label-md rounded bg-[#1e1a2b] text-[#93ee5a]" '
                       'data-param="{key}">OFF</button></div>',
+            # the plan's logo plate (VOICE's empty half): a wordmark in the design's type
+            "art": '<section class="panel-bezel rounded-md absolute flex flex-col items-center justify-center" style="left:{x}px; '
+                   'top:{y}px; width:{w}px; height:{h}px;"><div class="font-headline-sm font-bold text-[#93ee5a] tracking-[0.3em]" '
+                   'style="font-size: 56px; text-shadow: 0 0 18px rgba(147,238,90,.35);">MR HYDE</div><div class="font-label-sm '
+                   'text-label-sm text-[#d4c4b0] mt-3 tracking-widest">PLAITS ENGINE // MODULATION MATRIX</div></section>',
         },
         "augment": [
             {"sel": ".knob-arc", "all": True, "remove": True},
             {"sel": ".knob-indicator", "all": True, "attr": {"style": ""}},   # the core turns instead
             {"sel": "div:has(> .filter-mode-btn)", "attr": {"data-param": "filter_mode"}},
             {"sel": "#model-select", "attr": {"data-param": "model"}},
+            # design QA 2026-10-03: MAIN in four panels, a Q-Link column each (it had five, and the 14 controls ran
+            # across them): PLAITS ENGINE (the scope on the left, MODEL, FM AMOUNT, AUX MIX) | OSCILLATOR (PITCH,
+            # HARMONICS, TIMBRE, MORPH) / FILTER | LPG / OUTPUT (the MASTER OUT knobs join the LPG's)
+            {"sel": "main > section:has(#model-select)", "attr": {"id": "aug-engine", "style": "grid-column: span 6 / span 6; order: 1"}},
+            {"sel": "main > section:has([data-id=fm_amount])", "attr": {"id": "aug-osc", "style": "grid-column: span 6 / span 6; order: 2"}},
+            {"sel": "main > section:has(.filter-mode-btn)", "attr": {"style": "order: 3"}},
+            {"sel": "main > section:has([data-id=lpg_decay])", "attr": {"id": "aug-out", "style": "grid-column: span 6 / span 6; order: 4"}},
+            {"sel": "main > section:has([data-id=volume])", "attr": {"id": "aug-master"}},
+            {"sel": "#aug-osc > div:last-child", "remove": True},   # "INTERNAL LINEAR FM MOD"
+            {"sel": "#aug-osc div.grid-cols-2", "move": "#aug-engine div.grid-cols-12", "attr": {"class": "col-span-5 grid grid-cols-2 gap-2"}},
+            {"sel": "#aug-engine div.grid-cols-4", "move": "#aug-osc", "attr": {"class": "grid grid-cols-4 gap-2 my-auto"}},
+            {"sel": "#aug-engine div:has(> #osc-scope)", "attr": {"style": "grid-column: span 7 / span 7"}},
+            {"sel": "#aug-master .knob-control", "all": True, "move": "#aug-out div.grid-cols-2"},
+            {"sel": "#aug-out div.grid-cols-2", "attr": {"class": "grid grid-cols-4 gap-2 my-auto"}},
+            {"sel": "#aug-master", "remove": True},
+            {"sel": "#aug-engine h2", "text": "PLAITS ENGINE"},
+            {"sel": "#aug-osc h2", "text": "OSCILLATOR"},
+            {"sel": "#aug-out h2", "text": "LPG / OUTPUT"},
         ],
+        # design QA 2026-10-03: a Q-Link column per panel; rows of six split 3 + 3 (4 + 3 with ASSIGN's target), and
+        # the generated pages' panels regrouped to match (layout.grid.conf)
+        "qlinks": {
+            0: ["model", "fm_amount", "aux_mix", "-", "pitch", "harmonics", "timbre", "morph",
+                "filter_mode", "filter_cutoff", "filter_resonance", "-", "lpg_decay", "lpg_color", "volume", "pan"],
+            1: ["lfo_shape", "lfo_rate", "lfo_phase", "lfo_rate_mode", "velocity_curve", "poly_aftertouch_curve", "-", "-",
+                "env_attack_ms", "env_decay_ms", "env_sustain", "env_release_ms", "lfo_retrig", "env_retrig", "-", "-"],
+            2: ["cycle_attack_ms", "cycle_decay_ms", "cycle_shape", "-", "cycle_sync", "cycle_retrig", "cycle_bipolar", "-",
+                "random_mode", "random_rate", "random_slew", "-", "random_rate_mode", "random_retrig", "-", "-"],
+            3: ["assign1_target", "assign1_mod_lfo_amt", "assign1_mod_env_amt", "assign1_mod_cycle_env_amt",
+                "assign1_mod_random_amt", "assign1_mod_velocity_amt", "assign1_mod_poly_aftertouch_amt", "-",
+                "assign2_target", "assign2_mod_lfo_amt", "assign2_mod_env_amt", "assign2_mod_cycle_env_amt",
+                "assign2_mod_random_amt", "assign2_mod_velocity_amt", "assign2_mod_poly_aftertouch_amt", "-"],
+            4: ["pitch_mod_lfo_amt", "pitch_mod_env_amt", "pitch_mod_cycle_env_amt", "-",
+                "pitch_mod_random_amt", "pitch_mod_velocity_amt", "pitch_mod_poly_aftertouch_amt", "-",
+                "harmonics_mod_lfo_amt", "harmonics_mod_env_amt", "harmonics_mod_cycle_env_amt", "-",
+                "harmonics_mod_random_amt", "harmonics_mod_velocity_amt", "harmonics_mod_poly_aftertouch_amt", "-"],
+            5: ["timbre_mod_lfo_amt", "timbre_mod_env_amt", "timbre_mod_cycle_env_amt", "-",
+                "timbre_mod_random_amt", "timbre_mod_velocity_amt", "timbre_mod_poly_aftertouch_amt", "-",
+                "cutoff_mod_lfo_amt", "cutoff_mod_env_amt", "cutoff_mod_cycle_env_amt", "-",
+                "cutoff_mod_random_amt", "cutoff_mod_velocity_amt", "cutoff_mod_poly_aftertouch_amt", "-"],
+            6: ["voice_mode", "polyphony", "glide_ms", "-", "unison", "detune", "spread", "-"],
+        },
         "grid": {"tabs": ["LFO ENV", "CYC RAND", "ASSIGN", "PITCH HARM", "TIMB CUT", "VOICE"], "tpl": None},
         "tab_order": ["MAIN", "LFO ENV", "CYC RAND", "ASSIGN", "PITCH HARM", "TIMB CUT", "VOICE"],
     },
