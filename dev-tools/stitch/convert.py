@@ -1352,6 +1352,12 @@ MAPS = {
             {"sel": "#tab1 .knob-wrap", "nth": ["lane1_" + k for k in ['steps', 'pulses', 'rotation', 'drop', 'drop_seed', 'velocity', 'gate', 'note', 'n_rnd', 'n_seed', 'octave', 'oct_rnd', 'oct_seed']]},
             {"sel": "#tab1 .hw-toggle", "attr": {"data-param": "lane1_enabled"}},
             {"sel": "#tab1 .popup-box", "attr": {"data-param": "lane1_oct_rng"}},
+            # design QA 2026-10-03: the lane's NOTE trio and OCTAVE four as two groups (a Q-Link column each, copied to
+            # LANE 2-4); the wheel display on the left of MAIN's top row, CLOCK on the right
+            {"sel": "#tab1 .control-item:has(> .knob-wrap[data-param=lane1_octave])",
+             "attr": {"style": "position:static; transform:none; margin-left: 56px"}},
+            {"sel": "#tab0 > div.frame-box:has(#euclidWheelCanvas)", "attr": {"style": "left:10px; top:12px; width:626px; height:290px;"}},
+            {"sel": "#tab0 > div.frame-box:first-of-type", "attr": {"style": "left:644px; top:12px; width:626px; height:290px;"}},
             {"sel": "#tab1", "clone": [{"replace": [["lane1_", "lane%d_" % n], ['id="tab1"', 'id="tab%d"' % n],
                                                     ["LANE 1 RHYTHM (KICK / LOW BASS)", "LANE %d RHYTHM" % n],
                                                     ["LANE 1", "LANE %d" % n], ["L1 ON", "L%d ON" % n]]}
@@ -1359,6 +1365,15 @@ MAPS = {
         ],
         # design labels on the lane pages would give four parameters one name: keep "L1 STEPS" etc. there
         "names": {},
+        "qlinks": {
+            0: ["sync", "rate", "bpm", "swing", "play_mode", "retrigger_mode", "max_voices", "rand_cycle",
+                "global_velocity", "global_v_rnd", "global_gate", "global_g_rnd"],
+            **{n: ["lane%d_%s" % (n, k) if k != "-" else k for k in (
+                "enabled", "steps", "pulses", "rotation", "drop", "drop_seed", "velocity", "gate",
+                "note", "n_rnd", "n_seed", "-", "octave", "oct_rnd", "oct_seed", "oct_rng")] for n in (1, 2, 3, 4)},
+            5: ["register_mode", "held_order", "missing_note_policy", "-", "scale_mode", "root_note", "scale_rng", "octave",
+                "held_order_seed", "missing_note_seed", "global_rnd_seed"],
+        },
     },
     "elements": {
         # same design family as Denis; the "real-time spectrum" box shows the resonator MODEL's waveform from the engine
