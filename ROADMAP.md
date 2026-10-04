@@ -1,6 +1,6 @@
 # Roadmap
 
-Open items as of 2026-10-03, most useful first. Tick them off here (with the date) as they're done.
+Open items as of 2026-10-04, most useful first. Tick them off here (with the date) as they're done.
 
 ## Presets and libraries ([docs/presets-and-libraries.md](docs/presets-and-libraries.md))
 
@@ -32,7 +32,8 @@ parameter index, so existing projects keep working.
 - [ ] Install everything on an MPC and re-insert each plugin; check every page of the new Stitch screens (names,
   values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays). Track it in README.md's Design QA column.
   Design QA first pass done offline for all 36 (2026-10-04, branch design-qa-batch1): one Q-Link column per panel, each
-  plugin's `DESIGN-QA.md` says what changed and what to look at.
+  plugin's `DESIGN-QA.md` says what changed and what to look at. **Passed on the device (2026-10-04): 27 of 36**, every
+  synth, drum machine and audio effect. Left: the 9 sequencers and generators.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
 - [ ] Audio effects (Verglas, Warps, Rings FX): MPC lists them in a track's insert effect slots, under VST (2026-10-04,
   Live II). Still to check: that one processes audio in the slot.

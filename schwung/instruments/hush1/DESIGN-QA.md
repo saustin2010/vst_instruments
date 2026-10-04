@@ -1,6 +1,6 @@
 # Design QA: Hush One
 
-Status: done offline (2026-10-03), **waiting for the device check**. No owner's notes yet (its presets were the
+Status: **passed on the device** (2026-10-04, ✅ in the README). No owner's notes yet (its presets were the
 first fix of the day: your TAL-BassLine-101 presets show after the 11 built-in ones).
 
 ## What changed

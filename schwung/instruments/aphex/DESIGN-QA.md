@@ -1,6 +1,6 @@
 # Design QA: Aphex
 
-Status: done offline (2026-10-03), **waiting for the device check**.
+Status: **passed on the device** (2026-10-04, ✅ in the README).
 
 ## Owner's notes
 - Expose the presets in the PRESET menu.

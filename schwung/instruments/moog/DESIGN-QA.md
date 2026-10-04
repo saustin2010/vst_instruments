@@ -1,7 +1,7 @@
 # Design QA: Moog
 
-Status: **passed on the device** before this batch (MAIN is the batch's Q-Link reference); one fix since
-(2026-10-03), waiting for the device check.
+Status: **passed on the device** before this batch (MAIN is the batch's Q-Link reference); the fix since
+(2026-10-03) passed too (2026-10-04, ✅ in the README).
 
 ## What changed
 Q-Link columns before → after ("-" = an empty slot):
