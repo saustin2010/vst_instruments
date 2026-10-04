@@ -98,6 +98,7 @@ The first install of a plugin restarts MPC once (it asks first; `MPC.settings` i
 - Plugin browser: every name starts with its kind, **[SYN]**, **[DRUM]**, **[SEQ]** or **[FX]** (2026-10-04). MPC's plugin menu sorted by type puts every VST in one VST folder (it ignores the category a plugin reports, Akai's own folder names included: tested on the Live II), so the tags group them there; sorted by manufacturer it makes a folder per maker. All plugins keep their real makers.
 - Audio effects: Verglas, Warps and Rings FX are in a track's insert effect slots, under VST, and work there (Live II, 2026-10-04; their screens passed the design QA in the slot).
 - New: **[Stevequencer](originals/stevequencer/)**, a 64-step sequencer edited from the Q-Links, written for this repo (2026-10-04): built, offline test passed, installed and working on the Live II. Its browser prototype (`design/prototype.html`) plays in Chrome.
+- MIDI CC 20-35 move every plugin's first-page Q-Links (column 1 = CC 20-23, top to bottom, and so on), with no MIDI learn: a sequencer's per-step CCs or a controller drive the instrument through the track's MIDI input (2026-10-04, offline test in every plugin; to check on a device that MPC passes the CCs through).
 - Developed on a Live II. Other Gen1 devices run the same MPC software and should behave the same; Gen2 devices (e.g. Live III) are reported to be more locked down. Reports welcome.
 
 What's next is in [ROADMAP.md](ROADMAP.md). Found a problem? Open an issue with the plugin, your MPC model and firmware, and what you did.
