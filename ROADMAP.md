@@ -22,6 +22,16 @@ parameter index, so existing projects keep working.
 - [ ] INSTALL.md / plugin READMEs: document each of the above once it works (OB-Xd, Noisemaker, Hush One: done
   2026-10-03).
 
+## New plugins
+
+- [ ] **Stevequencer** ([originals/stevequencer](originals/stevequencer/)): a 16-step, four-page (64-step) melodic
+  sequencer edited from the Q-Links (pitch, length, on/off, velocity, chance, ratchet per step). Browser prototype
+  2026-10-04 (`design/prototype.html`); built and installed on the Live II the same day (engine, 418 parameters, 6
+  presets, the skin with per-sub-page controls and a step light; framework: `"live"` parameters, `banks=`); the owner
+  tried it: working (2026-10-04). Still to look at on the device: the step light's cost on MPC's screen thread and that it isn't recorded as automation, how MPC switches
+  six Q-Link sub-pages per tab, a project saving and reopening its pattern; then Design QA. Grid order is rows (steps
+  1-4 across the top) as in the prototype; beats or pads order is a one-line change in `mpc/gen.py`.
+
 ## On a device (nothing below has been tried on hardware yet)
 
 - [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Names

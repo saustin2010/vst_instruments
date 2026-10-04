@@ -1,6 +1,6 @@
 # MPC VST Instruments
 
-**36 plugins for Akai MPC OS standalone devices**: 22 synths, 2 drum machines, 9 MIDI sequencers and generators, and 3 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch and converted into MPC's skin format.
+**37 plugins for Akai MPC OS standalone devices**: 22 synths, 2 drum machines, 10 MIDI sequencers and generators, and 3 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for Stevequencer, a browser prototype) and converted into MPC's skin format.
 
 <img src="docs/images/gallery.png" alt="The first page of every plugin, as the MPC draws it">
 
@@ -51,7 +51,7 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 | <a href="schwung/instruments/libpo32/"><img src="schwung/instruments/libpo32/screenshots/page_0.png" width="220" alt="Libpo32"></a> | **[Libpo32](schwung/instruments/libpo32/)**<br><sub>Drum synth · mestela · not stated upstream</sub> | PO-32-style drum synth: 16 synthesised drum sounds on pads 36-51. | ✅ |
 | <a href="schwung/instruments/mrdrums/"><img src="schwung/instruments/mrdrums/screenshots/page_0.png" width="220" alt="Mr Drums"></a> | **[Mr Drums](schwung/instruments/mrdrums/)**<br><sub>Drum sampler · Move Everything · MIT</sub> | A 16-pad drum sampler: kits of samples on pads 36-51. | ✅ |
 
-### MIDI sequencers and generators (9)
+### MIDI sequencers and generators (10)
 
 | | Plugin | What it is | Design QA |
 |---|---|---|:---:|
@@ -63,6 +63,7 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 | <a href="schwung/sequencers/midiplayer/"><img src="schwung/sequencers/midiplayer/screenshots/page_0.png" width="220" alt="MIDI Player"></a> | **[MIDI Player](schwung/sequencers/midiplayer/)**<br><sub>MIDI sequencer · Charles Vestal · MIT</sub> | Plays Standard MIDI Files in time with MPC's transport. | ☐ |
 | <a href="schwung/sequencers/pixelwalkers/"><img src="schwung/sequencers/pixelwalkers/screenshots/page_0.png" width="220" alt="Pixel Walkers"></a> | **[Pixel Walkers](schwung/sequencers/pixelwalkers/)**<br><sub>MIDI sequencer · mestela · MIT</sub> | Generative: the notes you play become walkers that bounce and retrigger when they land. | ☐ |
 | <a href="vcv-rack/rampage/"><img src="vcv-rack/rampage/screenshots/page_0.png" width="220" alt="Rampage"></a> | **[Rampage](vcv-rack/rampage/)**<br><sub>Modulator · Befaco · GPL-3.0</sub> | Befaco Rampage: a dual slope generator (envelopes, LFOs, slew) that modulates other tracks. | ☐ |
+| <a href="originals/stevequencer/"><img src="originals/stevequencer/screenshots/page_0.png" width="220" alt="Stevequencer"></a> | **[Stevequencer](originals/stevequencer/)**<br><sub>MIDI sequencer · Steve A · written for this repo</sub> | A 64-step melodic step sequencer on a 4x4 grid, edited from the Q-Links: pitch, length, on/off, velocity, chance and ratchets per step. | ☐ |
 | <a href="schwung/sequencers/superarp/"><img src="schwung/sequencers/superarp/screenshots/page_0.png" width="220" alt="Super Arp"></a> | **[Super Arp](schwung/sequencers/superarp/)**<br><sub>Arpeggiator · handcraftedcc · MIT</sub> | A pattern and rhythm arpeggiator with 40 patterns, 40 rhythms and random modifiers. | ☐ |
 
 ### Audio effects (3)
@@ -96,6 +97,7 @@ The first install of a plugin restarts MPC once (it asks first; `MPC.settings` i
 - Sequencers on a stock MPC: on the Live II, MPC finds a sequencer's own MIDI port and connects to it by itself, no restart (2026-10-04); a second track plays from it (Monitor In on that track, Remote off for the port; confirmed 2026-10-04, as on a Force). [docs/sequencers.md](docs/sequencers.md) walks through the routing.
 - Plugin browser: every name starts with its kind, **[SYN]**, **[DRUM]**, **[SEQ]** or **[FX]** (2026-10-04). MPC's plugin menu sorted by type puts every VST in one VST folder (it ignores the category a plugin reports, Akai's own folder names included: tested on the Live II), so the tags group them there; sorted by manufacturer it makes a folder per maker. All plugins keep their real makers.
 - Audio effects: Verglas, Warps and Rings FX are in a track's insert effect slots, under VST, and work there (Live II, 2026-10-04; their screens passed the design QA in the slot).
+- New: **[Stevequencer](originals/stevequencer/)**, a 64-step sequencer edited from the Q-Links, written for this repo (2026-10-04): built, offline test passed, installed and working on the Live II. Its browser prototype (`design/prototype.html`) plays in Chrome.
 - Developed on a Live II. Other Gen1 devices run the same MPC software and should behave the same; Gen2 devices (e.g. Live III) are reported to be more locked down. Reports welcome.
 
 What's next is in [ROADMAP.md](ROADMAP.md). Found a problem? Open an issue with the plugin, your MPC model and firmware, and what you did.
@@ -108,6 +110,7 @@ schwung/sequencers/     6 MIDI sequencers from Schwung MIDI FX modules
 schwung/effects/        1 audio effect from a Schwung audio FX module
 mutable-instruments/    6 ported from Mutable Instruments' own firmware source
 vcv-rack/               1 ported from a VCV Rack module
+originals/              1 written for this repo (Stevequencer)
   <plugin>/            README.md, screenshots/, deploy/ (ready to install), source, screen design
 presets/               the plugins' presets, kits, wavetables (not in git: tools/fetch-presets.py)
 install.sh, uninstall.sh, tools/   the installer (and tools/build.sh to build from source)

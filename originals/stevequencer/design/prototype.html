@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stevequencer prototype</title>
+<!-- Stevequencer, browser prototype (2026-10-04). The MPC screen (1280x628 plugin area, MPC's own header and tab
+     strip around it), the Q-Links, and the sequencer engine as the plugin will run it, with a small synth standing in
+     for the track it plays. The parameter list below is the planned params.json; the engine logic is what the C
+     module will do. Open this file in Chrome; nothing else is needed. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --page: #0a0a0b;
+  --chrome: #161616;
+  --plate: #101216;
+  --cell: #191c21;
+  --cell-off: #131519;
+  --line: #2a2f37;
+  --ink: #eef1f4;
+  --dim: #a3abb5;
+  --faint: #5f6873;
+  --acc: #ffb020;
+  --acc-hi: #ffd27a;
+  --acc-ink: #1d1404;
+  --mpc-red: #e5173f;
+  --panel: #141619;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--page); color: var(--ink);
+  font-family: 'Titillium Web', system-ui, sans-serif; -webkit-user-select: none; user-select: none; }
+button { font-family: inherit; }
+#app { display: flex; gap: 16px; padding: 16px; height: 100vh; }
+#stage { flex: 1; min-width: 0; position: relative; }
+#device { position: absolute; left: 0; top: 0; width: 1280px; height: 800px; transform-origin: 0 0; background: #000;
+  border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 10px #050505, 0 20px 60px rgba(0,0,0,.6); }
+
+/* ---- MPC's own chrome (not ours: drawn here only so the plugin area sits where it will) ---- */
+.mpc-head { position: absolute; left: 0; top: 0; width: 1280px; height: 108px; background: var(--chrome); }
+.mpc-head .box { position: absolute; top: 14px; height: 78px; padding: 8px 14px; }
+.mpc-head .lab { font-size: 15px; color: #8a8a8a; letter-spacing: .04em; }
+.mpc-head .val { font-size: 27px; color: #fff; margin-top: 2px; white-space: nowrap; }
+.mpc-head .track { left: 16px; width: 318px; border: 2px solid var(--mpc-red); border-radius: 6px; background: #262626; }
+.mpc-head .plug { left: 360px; width: 320px; border-bottom: 1px solid #333; }
+.mpc-head .pre { left: 700px; width: 320px; border-bottom: 1px solid #333; }
+.mpc-head .bar { position: absolute; left: 0; top: 104px; width: 420px; height: 3px; background: var(--mpc-red); }
+.mpc-head .icons { position: absolute; right: 40px; top: 34px; display: flex; gap: 46px; }
+.mpc-head .icons svg { width: 40px; height: 40px; fill: #fff; }
+.tabs { position: absolute; left: 0; top: 736px; width: 1280px; height: 64px; background: #000; display: flex; }
+.tab { width: 213.33px; height: 64px; position: relative; color: #fff; font-size: 20px; display: flex;
+  align-items: center; justify-content: center; cursor: pointer; letter-spacing: .02em; }
+.tab .bars { position: absolute; top: 2px; left: 16px; right: 16px; height: 5px; display: flex; gap: 4px; }
+.tab .bars i { flex: 1; background: #3a3a3a; border-radius: 3px; }
+.tab.on .bars i.cur { background: var(--mpc-red); }
+.tab .arr { color: #777; padding: 0 10px; font-size: 22px; visibility: hidden; }
+.tab.on.multi .arr { visibility: visible; }
+.tab .arr:hover { color: #fff; }
+
+/* ---- the plugin area: our skin, 1280 x 628 ---- */
+#screen { position: absolute; left: 0; top: 108px; width: 1280px; height: 628px; background: var(--plate); overflow: hidden; }
+.page { position: absolute; inset: 0; display: none; }
+.page.show { display: block; }
+.cell { position: absolute; width: 238px; height: 140px; background: var(--cell); border: 1px solid var(--line);
+  border-radius: 10px; overflow: hidden; }
+.cell .hd { position: absolute; left: 0; top: 0; width: 100%; height: 36px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 12px; background: #22262c; cursor: pointer; }
+.cell .num { font-size: 18px; font-weight: 700; color: var(--faint); letter-spacing: .04em; }
+.cell .led { font-size: 14px; font-weight: 700; padding: 1px 10px; border-radius: 11px; background: #2d3238; color: var(--faint); }
+.cell.on .hd { background: var(--acc); }
+.cell.on .num { color: var(--acc-ink); }
+.cell.on .led { background: var(--acc-ink); color: var(--acc); }
+.cell .big { position: absolute; left: 0; top: 36px; width: 100%; height: 70px; cursor: ns-resize; touch-action: none; }
+.cell .big svg { position: absolute; left: 12px; top: 6px; width: 58px; height: 58px; }
+.cell .big .v { position: absolute; left: 82px; top: 4px; font-size: 40px; font-weight: 600; line-height: 60px; color: var(--ink); white-space: nowrap; }
+.cell .big .v.word { font-size: 34px; }
+.cell .ft { position: absolute; left: 8px; right: 8px; top: 108px; height: 26px; display: flex; justify-content: space-between; }
+.cell .ft span { flex: 1; text-align: center; font-size: 14px; font-weight: 600; color: var(--faint); line-height: 24px; border-radius: 6px; white-space: nowrap; }
+.cell .ft span.act { color: var(--acc); background: rgba(255,176,32,.10); }
+.cell.off .big .v { color: #59616b; }
+.cell.off .arc-v { stroke: #4a5059; }
+.cell.play { border: 2px solid #fff; box-shadow: 0 0 22px rgba(255,255,255,.35); }
+.cell.play .hd { filter: brightness(1.25); }
+.cell.outloop { opacity: .55; }
+.arc-bg { fill: none; stroke: #2b3037; stroke-width: 6; stroke-linecap: round; }
+.arc-v { fill: none; stroke: var(--acc); stroke-width: 6; stroke-linecap: round; }
+.cell.tool { background: var(--panel); }
+.cell.tool .hd, .cell.info .hd { background: #1f2227; cursor: default; }
+.cell.tool .btns { position: absolute; left: 10px; right: 10px; top: 46px; bottom: 10px; display: flex; gap: 10px; }
+.btn { flex: 1; border: 1px solid #3a4049; background: #23272d; color: var(--ink); border-radius: 8px; font-size: 17px;
+  font-weight: 700; letter-spacing: .04em; cursor: pointer; }
+.btn:active, .btn.flash { background: var(--acc); color: var(--acc-ink); border-color: var(--acc); }
+.cell.info .body { position: absolute; left: 12px; right: 12px; top: 42px; font-size: 15px; color: var(--dim); line-height: 1.35; }
+.cell.info .body b { color: var(--ink); }
+.coltag { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: .08em; }
+.cell.on .coltag { color: var(--acc-ink); }
+.cell.setting .hd { background: #1f2227; cursor: default; }
+.cell.setting .num { color: var(--dim); font-size: 16px; }
+.cell.setting.on .hd { background: var(--acc); }
+.cell.setting.on .num, .cell.setting.on .coltag { color: var(--acc-ink); }
+.cell.setting .ft span { color: var(--faint); font-weight: 400; }
+
+.strip { position: absolute; left: 1032px; top: 16px; width: 232px; height: 596px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.strip .k { font-size: 13px; font-weight: 700; color: var(--faint); letter-spacing: .1em; }
+.strip .title { font-size: 46px; font-weight: 700; line-height: 1; margin: 2px 0 12px; }
+.strip .mode { font-size: 26px; font-weight: 700; color: var(--acc); margin-bottom: 12px; }
+.strip hr { border: 0; border-top: 1px solid var(--line); margin: 12px 0; }
+.strip .row { display: flex; justify-content: space-between; font-size: 17px; color: var(--dim); margin: 4px 0; }
+.strip .row b { color: var(--ink); font-weight: 600; }
+.pages { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.pages div { font-size: 15px; font-weight: 700; text-align: center; padding: 6px 0; border-radius: 6px; background: #1b1e23;
+  color: #4d545e; border: 1px solid #252a31; position: relative; }
+.pages div.inloop { color: var(--dim); border-color: #3a4049; }
+.pages div.here { color: var(--ink); border-color: var(--acc); }
+.pages div.playing::after { content: ''; position: absolute; right: 7px; top: 50%; width: 8px; height: 8px; margin-top: -4px;
+  border-radius: 4px; background: #fff; }
+.tools { position: absolute; left: 16px; right: 16px; bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tools .btn { height: 56px; }
+.strip .help { font-size: 15px; color: var(--dim); line-height: 1.4; }
+.strip .help b { color: var(--ink); }
+.strip ol { padding-left: 18px; margin: 6px 0; }
+
+/* the active Q-Link column, as MPC outlines it on a 4-knob MPC */
+.qbox { position: absolute; border: 2px solid #fff; border-radius: 14px; pointer-events: none; display: none; }
+.qbox::before { content: 'Q'; position: absolute; left: -2px; top: -2px; background: #fff; color: #000; font-weight: 700;
+  font-size: 15px; padding: 0 7px; border-radius: 12px 0 8px 0; }
+.qbox.show { display: block; }
+.cell.qhit { box-shadow: 0 0 0 3px var(--acc-hi); }
+
+/* MPC's Q-Link sidebar: slides in over the right 255 px while a Q-Link is touched */
+#sidebar { position: absolute; left: 1025px; top: 108px; width: 255px; height: 628px; background: #141414;
+  border-left: 1px solid #333; transform: translateX(260px); transition: transform .15s; padding: 18px 10px; }
+#sidebar.show { transform: none; }
+#sidebar .q { display: flex; align-items: center; gap: 12px; height: 148px; }
+#sidebar .q svg { width: 80px; height: 80px; flex: none; }
+#sidebar .q .n { font-size: 16px; color: #bbb; }
+#sidebar .q .v { font-size: 26px; color: #fff; font-weight: 600; }
+#sidebar .q.hit .n { color: #fff; }
+
+/* ---- the hardware and test controls, beside the screen ---- */
+#hw { width: 410px; flex: none; overflow-y: auto; background: #121214; border: 1px solid #222; border-radius: 14px; padding: 16px; }
+#hw h2 { font-size: 13px; letter-spacing: .12em; color: #888; margin: 18px 0 8px; font-weight: 700; }
+#hw h2:first-child { margin-top: 0; }
+.transport { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.transport .play { width: 96px; height: 44px; font-size: 18px; font-weight: 700; border-radius: 8px; border: 0; cursor: pointer;
+  background: #2a2d31; color: #fff; }
+.transport .play.on { background: #1fb75a; }
+.field { display: flex; flex-direction: column; font-size: 11px; color: #888; letter-spacing: .08em; gap: 3px; }
+.field input, .field select { background: #1d1f22; color: #fff; border: 1px solid #333; border-radius: 6px; height: 32px;
+  font: 600 15px 'Titillium Web', sans-serif; padding: 0 8px; }
+.field input[type=number] { width: 70px; }
+.field input[type=range] { width: 110px; padding: 0; }
+.pos { font-size: 15px; color: #ccc; margin-left: auto; min-width: 92px; text-align: right; }
+.qgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.qgrid.four { grid-template-columns: 1fr; max-width: 120px; }
+.knob { text-align: center; padding: 6px 2px; border-radius: 10px; background: #18191c; cursor: ns-resize; touch-action: none; }
+.knob svg { width: 56px; height: 56px; display: block; margin: 0 auto; }
+.knob .ql { font-size: 11px; color: #777; font-weight: 700; }
+.knob .nm { font-size: 11px; color: #bbb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.knob .vl { font-size: 14px; color: #fff; font-weight: 600; }
+.knob.none { opacity: .3; cursor: default; }
+.knob.colon { background: #23252a; }
+.qrow { display: flex; gap: 14px; align-items: flex-start; }
+.qside { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.qbtn { height: 44px; border-radius: 8px; border: 1px solid #444; background: #202226; color: #fff; font-weight: 700; cursor: pointer; font-size: 15px; }
+.seg { display: flex; border: 1px solid #333; border-radius: 8px; overflow: hidden; }
+.seg button { flex: 1; height: 32px; background: #1a1c1f; color: #aaa; border: 0; cursor: pointer; font-weight: 600; font-size: 13px; }
+.seg button.on { background: #3a3d43; color: #fff; }
+.keys { position: relative; height: 92px; }
+.keys .w, .keys .b { position: absolute; top: 0; border-radius: 0 0 6px 6px; cursor: pointer; display: flex; align-items: flex-end;
+  justify-content: center; font-size: 10px; font-weight: 700; padding-bottom: 4px; }
+.keys .w { width: 41px; height: 92px; background: #ddd; color: #555; border: 1px solid #999; }
+.keys .b { width: 28px; height: 56px; background: #222; color: #888; z-index: 1; border: 1px solid #000; }
+.keys .on { background: var(--acc) !important; color: #000 !important; }
+.mon { font: 12px/1.5 ui-monospace, Menlo, monospace; color: #9fe39f; background: #0b0d0b; border-radius: 8px; padding: 8px 10px;
+  height: 120px; overflow: hidden; white-space: pre; }
+.note { font-size: 13px; color: #8d939a; line-height: 1.5; }
+.note b { color: #ddd; }
+.row2 { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.small { height: 32px; padding: 0 12px; border-radius: 6px; border: 1px solid #3a3a3a; background: #1d1f22; color: #ddd; cursor: pointer; font-weight: 600; }
+kbd { background: #222; border: 1px solid #444; border-radius: 4px; padding: 0 5px; font-size: 12px; color: #ddd; }
+@media (max-width: 1100px) { #app { flex-direction: column; height: auto; } #stage { height: 62vw; flex: none; } #hw { width: auto; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <div id="device">
+      <div class="mpc-head">
+        <div class="box track"><div class="lab">TRACK</div><div class="val">Plugin 001</div></div>
+        <div class="box plug"><div class="lab">PLUGIN</div><div class="val">[SEQ] Stevequencer</div></div>
+        <div class="box pre"><div class="lab">PRESET</div><div class="val" style="color:#666">Init</div></div>
+        <div class="icons">
+          <svg viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M4 3h13l3 3v15H4zM7 4v5h9V4zM7 13v7h10v-7z"/></svg>
+        </div>
+        <div class="bar"></div>
+      </div>
+      <div id="screen"></div>
+      <div id="sidebar"></div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+  </div>
+
+  <aside id="hw">
+    <h2>TRANSPORT (MPC)</h2>
+    <div class="transport">
+      <button class="play" id="play">▶ PLAY</button>
+      <label class="field">BPM<input type="number" id="bpm" min="40" max="240" value="120"></label>
+      <div class="pos" id="pos">stopped</div>
+    </div>
+
+    <h2>Q-LINKS</h2>
+    <div class="seg" id="hwmode" style="margin-bottom:10px">
+      <button data-m="16">16 knobs (MPC X)</button><button data-m="4">4 knobs (Live II, One)</button>
+    </div>
+    <div class="qrow">
+      <div class="qgrid" id="qgrid"></div>
+      <div class="qside" id="qside">
+        <button class="qbtn" id="qcol">Q-LINK ▸ column 1</button>
+        <div class="note">The Q-Link button steps the 4 knobs through the 4 columns; MPC outlines the active column on the screen.</div>
+      </div>
+    </div>
+
+    <h2>PADS INTO THE TRACK (KEY TRANSP)</h2>
+    <div class="keys" id="keys"></div>
+    <div class="note" id="keynote" style="margin-top:6px"></div>
+
+    <h2>OUT OF ITS MIDI PORT</h2>
+    <div class="mon" id="mon"></div>
+
+    <h2>PROTOTYPE SETTINGS (BROWSER ONLY)</h2>
+    <div class="row2">
+      <label class="field">STEP ORDER IN THE GRID
+        <select id="order">
+          <option value="rows">Rows: 1-4 across the top</option>
+          <option value="beats">Beats: 1-4 down column 1</option>
+          <option value="pads">Pads: 1 at bottom left, like MPC pads</option>
+        </select>
+      </label>
+    </div>
+    <div class="note" id="ordernote" style="margin:6px 0 10px"></div>
+    <div class="row2">
+      <label class="field">TEST SOUND<select id="sound"></select></label>
+      <label class="field">VOLUME<input type="range" id="vol" min="0" max="100" value="70"></label>
+    </div>
+    <div class="row2" style="margin-top:10px">
+      <button class="small" id="demo">Load demo pattern</button>
+      <button class="small" id="init">Reset to init</button>
+    </div>
+
+    <h2>KEYS</h2>
+    <div class="note">
+      <kbd>Space</kbd> play / stop · <kbd>1</kbd>–<kbd>5</kbd> tabs · <kbd>←</kbd> <kbd>→</kbd> Q-Link sub-page (or tap the
+      tab again) · <kbd>Q</kbd> next Q-Link column · <kbd>Z</kbd>–<kbd>,</kbd> key transpose<br>
+      Screen: tap a step's header for on/off, drag its big value up/down. Knobs: drag or scroll.
+      Your pattern is kept in this browser between reloads.
+    </div>
+  </aside>
+</div>
+
+<script>
+'use strict';
+
+/* =================================================================================================================
+ * The model: the planned params.json. MPC shows a control's parameter name, and saves projects and Q-Link
+ * assignments by parameter index, so this order is the order the plugin ships with (append-only after that).
+ * ================================================================================================================= */
+const NSTEPS = 64, PAGE = 16;
+const NOTE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const noteName = n => NOTE[n % 12] + (Math.floor(n / 12) - 2);   // MPC naming: 60 = C3
+const RATES = [['1/32', 3], ['1/16T', 4], ['1/16', 6], ['1/8T', 8], ['1/8', 12], ['1/4T', 16], ['1/4', 24], ['1/2', 48], ['1', 96]];
+const SCALES = [
+  ['CHROMATIC', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]], ['MAJOR', [0, 2, 4, 5, 7, 9, 11]], ['MINOR', [0, 2, 3, 5, 7, 8, 10]],
+  ['DORIAN', [0, 2, 3, 5, 7, 9, 10]], ['PHRYGIAN', [0, 1, 3, 5, 7, 8, 10]], ['LYDIAN', [0, 2, 4, 6, 7, 9, 11]],
+  ['MIXOLYDIAN', [0, 2, 4, 5, 7, 9, 10]], ['LOCRIAN', [0, 1, 3, 5, 6, 8, 10]], ['HARM MINOR', [0, 2, 3, 5, 7, 8, 11]],
+  ['MEL MINOR', [0, 2, 3, 5, 7, 9, 11]], ['PENTA MAJ', [0, 2, 4, 7, 9]], ['PENTA MIN', [0, 3, 5, 7, 10]],
+  ['BLUES', [0, 3, 5, 6, 7, 10]], ['WHOLE TONE', [0, 2, 4, 6, 8, 10]],
+];
+const DIRS = ['FWD', 'REV', 'PEND', 'RANDOM', 'DRUNK'];
+const OFFON = ['OFF', 'ON'];
+
+const PARAMS = [], P = {};
+const def = p => { p.index = PARAMS.length; PARAMS.push(p); P[p.key] = p; };
+def({ key: 'rate', name: 'RATE', options: RATES.map(r => r[0]), def: 2, hint: 'STEP SIZE' });
+def({ key: 'swing', name: 'SWING', min: 50, max: 75, def: 50, unit: '%', hint: '50 = STRAIGHT' });
+def({ key: 'direction', name: 'DIRECTION', options: DIRS, def: 0, hint: 'PLAY ORDER' });
+def({ key: 'gate', name: 'GATE', min: 10, max: 200, step: 5, def: 100, unit: '%', hint: 'SCALES EVERY LENGTH' });
+def({ key: 'loop_start', name: 'LOOP START', min: 1, max: 64, def: 1, hint: 'FIRST STEP' });
+def({ key: 'loop_len', name: 'LOOP LEN', min: 1, max: 64, def: 16, hint: 'STEPS IN THE LOOP' });
+def({ key: 'root', name: 'ROOT', options: NOTE, def: 0, hint: 'SCALE ROOT' });
+def({ key: 'scale', name: 'SCALE', options: SCALES.map(s => s[0]), def: 0, hint: 'PITCHES SNAP TO IT' });
+def({ key: 'transpose', name: 'TRANSPOSE', min: -24, max: 24, def: 0, signed: true, unit: ' st', hint: 'SEMITONES' });
+def({ key: 'key_transpose', name: 'KEY TRANSP', options: OFFON, def: 0, hint: 'PADS TRANSPOSE (C3 = 0)' });
+def({ key: 'channel', name: 'MIDI CH', min: 1, max: 16, def: 1, hint: 'OUTPUT CHANNEL' });
+def({ key: 'step_light', name: 'STEP LIGHT', options: OFFON, def: 1, hint: 'PLAYHEAD ON SCREEN' });
+def({ key: 'audition', name: 'AUDITION', options: OFFON, def: 1, hint: 'HEAR EDITS WHILE STOPPED' });
+for (const [k, n] of [['rotate_left', 'ROTATE L'], ['rotate_right', 'ROTATE R'], ['random_all', 'RANDOM ALL'], ['clear_all', 'CLEAR ALL']])
+  def({ key: k, name: n, momentary: true });
+for (let p = 1; p <= 4; p++)
+  for (const [k, n] of [['copy', 'COPY'], ['paste', 'PASTE'], ['clear', 'CLEAR'], ['random', 'RANDOM']])
+    def({ key: `p${p}_${k}`, name: `P${p} ${n}`, momentary: true });
+def({ key: 'play_step', name: 'PLAY STEP', min: 0, max: 64, def: 0, readonly: true });   // drives the step light
+
+// Per-step attributes, in Q-Link sub-page order (the order asked for: pitch, length, on/off, then the rest).
+const ATTRS = [
+  { id: 'pitch', tab: 'PITCH', name: 'PITCH', min: 36, max: 96, def: 60 },
+  { id: 'length', tab: 'LENGTH', name: 'LENGTH', min: 5, max: 400, step: 5, def: 50, unit: '%' },
+  { id: 'on', tab: 'ON/OFF', name: 'ON', options: OFFON, def: 1 },
+  { id: 'velo', tab: 'VELO', name: 'VELO', min: 1, max: 127, def: 100 },
+  { id: 'chance', tab: 'CHANCE', name: 'CHANCE', min: 0, max: 100, step: 5, def: 100, unit: '%' },
+  { id: 'ratchet', tab: 'RATCHET', name: 'RATCHET', min: 1, max: 4, def: 1 },
+];
+const A = Object.fromEntries(ATTRS.map(a => [a.id, a]));
+for (const a of ATTRS)
+  for (let s = 1; s <= NSTEPS; s++) {
+    const { tab, id, ...rest } = a;
+    def({ ...rest, key: `s${s}_${id}`, name: `S${s} ${a.name}`, attr: id, stepNo: s });
+  }
+const sk = (i, a) => `s${i + 1}_${a}`;   // step index 0..63 -> key
+
+/* =================================================================================================================
+ * The engine. Everything here is what the C module (midi_fx_api_v1, on 24-PPQN MIDI clock from the MPC transport)
+ * will do; only the clock and the note output differ in the browser.
+ * ================================================================================================================= */
+class Engine {
+  constructor() { this.v = {}; this.clip = null; this.keyOffset = 0; this.listeners = []; this.init(); }
+  on(f) { this.listeners.push(f); }
+  emit(key) { for (const f of this.listeners) f(key); }
+  init() {
+    for (const p of PARAMS) if (!p.momentary) this.v[p.key] = p.def ?? p.min ?? 0;
+    this.keyOffset = 0;
+  }
+  range(p) { return p.options ? [0, p.options.length - 1] : [p.min, p.max]; }
+  clamp(p, x) {
+    const [lo, hi] = this.range(p), st = p.step || 1;
+    x = Math.round((x - lo) / st) * st + lo;
+    return Math.max(lo, Math.min(hi, x));
+  }
+  norm(key) { const p = P[key], [lo, hi] = this.range(p); return hi > lo ? (this.v[key] - lo) / (hi - lo) : 0; }
+
+  // Scale: nearest scale note, a tie goes down.
+  quant(n) {
+    const deg = SCALES[this.v.scale][1];
+    if (deg.length === 12) return n;
+    const root = this.v.root, pc = ((n - root) % 12 + 12) % 12;
+    let best = 0, bd = 99;
+    for (const d of [...deg, 12]) { const dd = Math.abs(pc - d); if (dd < bd) { bd = dd; best = d; } }
+    return n - pc + best;
+  }
+  inScale(n) { return this.quant(n) === n; }
+  // A pitch set with a scale on: stored on the scale. A one-semitone nudge that lands on the same note moves on to
+  // the next scale note, so a Q-Link never has dead ticks.
+  pitchValue(old, x) {
+    if (SCALES[this.v.scale][1].length === 12) return x;
+    const p = A.pitch, d = Math.sign(x - old);
+    let y = this.quant(x);
+    if (d && Math.abs(x - old) <= 2 && y === this.quant(old)) {
+      let m = this.quant(old) + d;
+      while (m >= p.min && m <= p.max && !this.inScale(m)) m += d;
+      y = (m >= p.min && m <= p.max) ? m : this.quant(old);
+    }
+    if (y > p.max) { y = p.max; while (!this.inScale(y)) y--; }
+    if (y < p.min) { y = p.min; while (!this.inScale(y)) y++; }
+    return y;
+  }
+
+  set(key, x) {
+    const p = P[key];
+    if (!p || p.readonly) return;
+    if (p.momentary) { this.trigger(key); this.emit(key); return; }
+    x = this.clamp(p, x);
+    if (p.attr === 'pitch') x = this.pitchValue(this.v[key], x);
+    if (x === this.v[key]) return;
+    this.v[key] = x;
+    if (key === 'key_transpose' && !x) this.keyOffset = 0;
+    this.emit(key);
+  }
+  nudge(key, steps) {
+    const p = P[key];
+    if (!p || p.momentary || p.readonly) return;
+    this.set(key, this.v[key] + steps * (p.step || 1));
+  }
+  display(key) {
+    const p = P[key], x = this.v[key];
+    if (p.attr === 'pitch') return noteName(this.quant(x));
+    if (p.attr === 'ratchet') return 'x' + x;
+    if (key === 'key_transpose' && x) return 'ON ' + (this.keyOffset >= 0 ? '+' : '') + this.keyOffset;
+    if (p.options) return p.options[x];
+    if (p.signed) return (x > 0 ? '+' : '') + x + (p.unit || '');
+    return x + (p.unit || '');
+  }
+
+  // ---- step edits ----
+  getStep(i) { const o = {}; for (const a of ATTRS) o[a.id] = this.v[sk(i, a.id)]; return o; }
+  putStep(i, o) { for (const a of ATTRS) this.v[sk(i, a.id)] = o[a.id]; }
+  clearStep(i) { this.putStep(i, { pitch: 60, length: 50, on: 0, velo: 100, chance: 100, ratchet: 1 }); }
+  randomStep(i) {   // new notes and gates, in the scale, C2..C4 from the root; length, chance and ratchet stay
+    const s = this.getStep(i);
+    s.on = Math.random() < 0.75 ? 1 : 0;
+    s.pitch = this.quant(48 + this.v.root + Math.floor(Math.random() * 25));
+    s.velo = 80 + Math.floor(Math.random() * 48);
+    this.putStep(i, s);
+  }
+  loopSteps() { const out = []; for (let k = 0; k < this.v.loop_len; k++) out.push((this.v.loop_start - 1 + k) % NSTEPS); return out; }
+  trigger(key) {
+    const m = /^p(\d)_(\w+)$/.exec(key);
+    if (m) {
+      const base = (m[1] - 1) * PAGE, page = [...Array(PAGE).keys()].map(k => base + k);
+      if (m[2] === 'copy') this.clip = page.map(i => this.getStep(i));
+      if (m[2] === 'paste' && this.clip) page.forEach((i, k) => this.putStep(i, this.clip[k]));
+      if (m[2] === 'clear') page.forEach(i => this.clearStep(i));
+      if (m[2] === 'random') page.forEach(i => this.randomStep(i));
+      return;
+    }
+    const loop = this.loopSteps();
+    if (key === 'random_all') loop.forEach(i => this.randomStep(i));
+    if (key === 'clear_all') for (let i = 0; i < NSTEPS; i++) this.clearStep(i);
+    if (key === 'rotate_left' || key === 'rotate_right') {
+      const data = loop.map(i => this.getStep(i)), n = data.length;
+      const sh = key === 'rotate_left' ? 1 : n - 1;
+      loop.forEach((i, k) => this.putStep(i, data[(k + sh) % n]));
+    }
+  }
+
+  // ---- playback ----
+  // Step k of the run (k = 0 at Start) -> its offset in the loop, by DIRECTION.
+  order(k) {
+    const L = this.v.loop_len;
+    switch (DIRS[this.v.direction]) {
+      case 'REV': return L - 1 - (k % L);
+      case 'PEND': { if (L === 1) return 0; const per = 2 * (L - 1), m = k % per; return m < L ? m : per - m; }
+      case 'RANDOM': return Math.floor(Math.random() * L);
+      case 'DRUNK':
+        this.walk = k === 0 ? 0 : ((this.walk ?? 0) + (Math.random() < 0.5 ? -1 : 1) + L) % L;
+        return this.walk % L;
+      default: return k % L;
+    }
+  }
+  noteOut(i) {
+    let n = this.quant(this.v[sk(i, 'pitch')]) + this.v.transpose + (this.v.key_transpose ? this.keyOffset : 0);
+    return Math.max(0, Math.min(127, n));
+  }
+  // The notes step i plays, as [{at, dur} in steps, note, velocity]. CHANCE is rolled once per pass.
+  notesFor(i) {
+    const s = this.getStep(i);
+    if (!s.on || Math.random() * 100 >= s.chance) return [];
+    const r = s.ratchet, sub = 1 / r, len = s.length / 100 * this.v.gate / 100;
+    const out = [];
+    for (let j = 0; j < r; j++)
+      out.push({ at: j * sub, dur: r > 1 ? Math.min(sub * len, sub * 0.95) : len, note: this.noteOut(i), vel: s.velo });
+    return out;
+  }
+  stepTicks() { return RATES[this.v.rate][1]; }
+  swingDelay(k) { return (k & 1) ? 2 * this.v.swing / 100 - 1 : 0; }   // in steps: 66% = triplet feel, 75% = dotted
+}
+
+/* =================================================================================================================
+ * Browser stand-ins: the MPC transport (WebAudio clock) and a little synth for the track the sequencer plays.
+ * ================================================================================================================= */
+const SOUNDS = {
+  saw: { label: 'Saw bass', waves: [['sawtooth', 1, 0, 1], ['sawtooth', 1, 8, 1]], q: 7, cut: [3200, 260, 0.22], a: 0.003, d: 0.25, s: 0.75, r: 0.05, gain: 0.45 },
+  square: { label: 'Square lead', waves: [['square', 1, 0, 1], ['square', 2, 4, 0.25]], q: 1.5, cut: [5200, 1800, 0.3], a: 0.004, d: 0.2, s: 0.6, r: 0.1, gain: 0.28 },
+  pluck: { label: 'Pluck', waves: [['sawtooth', 1, 0, 1], ['triangle', 2, 0, 0.6]], q: 3, cut: [7000, 420, 0.16], a: 0.002, d: 0.35, s: 0, r: 0.15, gain: 0.45 },
+  sine: { label: 'Soft keys', waves: [['sine', 1, 0, 1], ['triangle', 2, 0, 0.3]], q: 0.7, cut: [6000, 5000, 0.1], a: 0.01, d: 0.4, s: 0.7, r: 0.25, gain: 0.55 },
+};
+class Synth {
+  constructor() { this.ctx = null; this.voices = new Set(); this.last = new Map(); this.sound = 'saw'; this.vol = 0.7; }
+  ensure() {
+    if (!this.ctx) {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = this.vol;
+      const comp = this.ctx.createDynamicsCompressor();
+      this.master.connect(comp).connect(this.ctx.destination);
+    }
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+    return this.ctx;
+  }
+  setVol(v) { this.vol = v; if (this.master) this.master.gain.value = v; }
+  cut(voice, t) {
+    try {
+      voice.g.gain.cancelScheduledValues(t);
+      voice.g.gain.setTargetAtTime(0, t, 0.004);
+      voice.os.forEach(o => o.stop(t + 0.04));
+    } catch (e) { /* already stopped */ }
+    voice.end = t;
+  }
+  note(t, n, vel, dur) {
+    const c = this.ensure(), S = SOUNDS[this.sound];
+    const prev = this.last.get(n);
+    if (prev && prev.end > t) this.cut(prev, t);   // the same note again: end the old one first (as the module does)
+    const f = 440 * Math.pow(2, (n - 69) / 12), v = 0.25 + 0.75 * vel / 127;
+    const g = c.createGain(), fl = c.createBiquadFilter();
+    fl.type = 'lowpass'; fl.Q.value = S.q;
+    fl.frequency.setValueAtTime(Math.min(16000, S.cut[0] * (0.45 + 0.55 * v)), t);
+    fl.frequency.exponentialRampToValueAtTime(Math.max(60, S.cut[1]), t + S.cut[2]);
+    const peak = S.gain * v, end = t + Math.max(dur, S.a + 0.01);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(peak, t + S.a);
+    g.gain.setTargetAtTime(peak * S.s, t + S.a, S.d / 3);
+    g.gain.setTargetAtTime(0, end, S.r / 3);
+    const stopAt = end + S.r * 4 + 0.05;
+    const os = S.waves.map(([type, m, cents, lvl]) => {
+      const o = c.createOscillator(), og = c.createGain();
+      o.type = type; o.frequency.value = f * m; o.detune.value = cents; og.gain.value = lvl;
+      o.connect(og).connect(fl); o.start(t); o.stop(stopAt);
+      return o;
+    });
+    fl.connect(g).connect(this.master);
+    const voice = { g, os, end: stopAt };
+    this.voices.add(voice); this.last.set(n, voice);
+    os[0].onended = () => { this.voices.delete(voice); if (this.last.get(n) === voice) this.last.delete(n); g.disconnect(); };
+  }
+  allOff() { if (!this.ctx) return; const t = this.ctx.currentTime; for (const v of this.voices) this.cut(v, t); }
+}
+
+class Player {   // MPC's transport + the module's clock handling
+  constructor(eng, syn) { this.eng = eng; this.syn = syn; this.on = false; this.queue = []; this.bpm = 120; }
+  start() {
+    const c = this.syn.ensure();
+    this.k = 0; this.t = c.currentTime + 0.06; this.on = true; this.queue = [];
+    this.timer = setInterval(() => this.pump(), 20);
+    this.pump();
+  }
+  stop() {
+    this.on = false; clearInterval(this.timer); this.syn.allOff(); this.queue = [];
+    this.eng.v.play_step = 0; this.eng.emit('play_step');
+    log('stop: all notes off');
+  }
+  stepSec() { return 60 / this.bpm * this.eng.stepTicks() / 24; }
+  pump() {
+    const c = this.syn.ctx, e = this.eng;
+    while (this.on && this.t < c.currentTime + 0.12) {
+      const D = this.stepSec(), off = e.order(this.k), i = (e.v.loop_start - 1 + off) % NSTEPS;
+      const t0 = this.t + e.swingDelay(this.k) * D;
+      this.queue.push({ t: t0, step: i + 1, k: this.k });
+      for (const n of e.notesFor(i)) {
+        const at = t0 + n.at * D, dur = n.dur * D;
+        this.syn.note(at, n.note, n.vel, dur);
+        this.queue.push({ t: at, msg: `NOTE ON  ${noteName(n.note).padEnd(4)} vel ${String(n.vel).padStart(3)}  ch ${e.v.channel}` });
+        this.queue.push({ t: at + dur, msg: `NOTE OFF ${noteName(n.note).padEnd(4)}          ch ${e.v.channel}` });
+      }
+      this.t += D; this.k++;
+    }
+    this.queue.sort((a, b) => a.t - b.t);
+  }
+}
+
+/* =================================================================================================================
+ * The screen. Cells are laid out where the skin builder will put them (4 x 4 grid left of x 1025, where MPC's
+ * Q-Link sidebar can't hide them; page tools in the strip on the right).
+ * ================================================================================================================= */
+const eng = new Engine(), syn = new Synth(), player = new Player(eng, syn);
+const ui = { tab: 0, sub: [0, 0, 0, 0], qcol: 0, hw: '16', order: 'rows', sound: 'saw', vol: 70, bpm: 120 };
+const TABS = ['1-16', '17-32', '33-48', '49-64', 'SETUP'];
+const subNames = t => t < 4 ? ATTRS.map(a => `${TABS[t]} ${a.tab}`) : ['SETUP'];
+const cellXY = (r, c) => [16 + c * 254, 16 + r * 152];
+const cellOffset = (r, c) => ui.order === 'beats' ? c * 4 + r : ui.order === 'pads' ? (3 - r) * 4 + c : r * 4 + c;
+const qnum = slot => (3 - (slot & 3)) * 4 + (slot >> 2) + 1;   // MPC counts the 4x4 Q-Links from the bottom row up
+
+const SETUP_COLS = [   // one panel per Q-Link column, top to bottom = knobs 1-4
+  { tag: 'TIMING', items: ['rate', 'swing', 'direction', 'gate'] },
+  { tag: 'LOOP', items: ['loop_start', 'loop_len', { tools: [['rotate_left', '◀ ROTATE'], ['rotate_right', 'ROTATE ▶']] }, { tools: [['random_all', 'RANDOM'], ['clear_all', 'CLEAR']] }] },
+  { tag: 'PITCH', items: ['root', 'scale', 'transpose', 'key_transpose'] },
+  { tag: 'OUTPUT', items: ['channel', 'step_light', 'audition', { info: true }] },
+];
+const SETUP_Q = SETUP_COLS.flatMap(col => col.items.map(it => typeof it === 'string' ? it : '-'));
+
+function qlinkKeys() {
+  if (ui.tab === 4) return SETUP_Q;
+  const a = ATTRS[ui.sub[ui.tab]].id, keys = [];
+  for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++) keys.push(sk(ui.tab * PAGE + cellOffset(r, c), a));
+  return keys;
+}
+
+const $ = (sel, el = document) => el.querySelector(sel);
+const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+function arcD(cx, cy, r, a0, a1) {
+  const p = a => [cx + r * Math.cos(a), cy + r * Math.sin(a)], [x0, y0] = p(a0), [x1, y1] = p(a1);
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+const A0 = Math.PI * 0.75, SWEEP = Math.PI * 1.5;
+function ringSVG(size, sw) {
+  const c = size / 2, r = c - sw;
+  return `<svg viewBox="0 0 ${size} ${size}"><path class="arc-bg" stroke-width="${sw}" d="${arcD(c, c, r, A0, A0 + SWEEP)}"/>` +
+         `<path class="arc-v" stroke-width="${sw}" d=""/></svg>`;
+}
+function setRing(svg, n) {
+  const vb = svg.viewBox.baseVal, c = vb.width / 2, sw = +svg.querySelector('.arc-bg').getAttribute('stroke-width');
+  svg.querySelector('.arc-v').setAttribute('d', n > 0.001 ? arcD(c, c, c - sw, A0, A0 + SWEEP * Math.min(1, n)) : '');
+}
+
+// Vertical drag (and wheel) on an element -> nudges. tap() runs when the pointer didn't move.
+function dragger(el, getKey, { tap, onTurn } = {}) {
+  let y0 = null, acc = 0, moved = false;
+  const px = () => { const k = getKey(); if (!k || k === '-') return 0; const p = P[k], [lo, hi] = eng.range(p); return Math.max(3, Math.min(16, 420 / ((hi - lo) / (p.step || 1)))); };
+  el.addEventListener('pointerdown', e => { y0 = e.clientY; acc = 0; moved = false; el.setPointerCapture(e.pointerId); });
+  el.addEventListener('pointermove', e => {
+    if (y0 == null) return;
+    const scale = deviceScale(el), dy = (y0 - e.clientY) / scale;
+    y0 = e.clientY; acc += dy;
+    const step = px(); if (!step) return;
+    const n = Math.trunc(acc / step);
+    if (n) { moved = true; acc -= n * step; const k = getKey(); eng.nudge(k, n * (e.shiftKey ? 5 : 1)); onTurn && onTurn(k); }
+    else if (Math.abs(acc) > 2) moved = true;
+  });
+  const up = () => { if (y0 != null && !moved && tap) tap(); y0 = null; };
+  el.addEventListener('pointerup', up);
+  el.addEventListener('pointercancel', () => { y0 = null; });
+  el.addEventListener('wheel', e => {
+    e.preventDefault();
+    const k = getKey(); if (!k || k === '-') return;
+    eng.nudge(k, (e.deltaY < 0 ? 1 : -1) * (e.shiftKey ? 5 : 1)); onTurn && onTurn(k);
+  }, { passive: false });
+}
+const deviceScale = el => el.closest('#device') ? scale : 1;
+
+// ---- step pages ----
+const pages = [];
+function buildStepPage(t) {
+  const pg = h('div', 'page'), cells = [];
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+    const [x, y] = cellXY(r, c), el = h('div', 'cell');
+    el.style.left = x + 'px'; el.style.top = y + 'px';
+    el.innerHTML = `<div class="hd"><span class="num"></span><span class="led"></span></div>
+      <div class="big">${ringSVG(58, 6)}<span class="v"></span></div>
+      <div class="ft">${['pitch', 'length', 'velo', 'chance', 'ratchet'].map(a => `<span data-a="${a}"></span>`).join('')}</div>`;
+    const cell = { el, r, c, step: () => t * PAGE + cellOffset(r, c) };
+    $('.hd', el).addEventListener('click', () => { eng.set(sk(cell.step(), 'on'), eng.v[sk(cell.step(), 'on')] ? 0 : 1); });
+    dragger($('.big', el), () => sk(cell.step(), ATTRS[ui.sub[t]].id), {
+      tap: () => { if (ATTRS[ui.sub[t]].id === 'on') eng.set(sk(cell.step(), 'on'), eng.v[sk(cell.step(), 'on')] ? 0 : 1); },
+    });
+    pg.appendChild(el); cells.push(cell);
+  }
+  const strip = h('div', 'strip');
+  strip.innerHTML = `<div class="k">STEPS</div><div class="title">${TABS[t].replace('-', '–')}</div>
+    <div class="k">Q-LINKS EDIT</div><div class="mode"></div><hr>
+    <div class="row"><span>LOOP</span><b class="loop"></b></div>
+    <div class="row"><span>RATE</span><b class="rate"></b></div>
+    <div class="pages">${TABS.slice(0, 4).map((n, i) => `<div data-p="${i}">${n}</div>`).join('')}</div>
+    <div class="tools">${['copy', 'paste', 'clear', 'random'].map(k => `<button class="btn" data-k="p${t + 1}_${k}">${k.toUpperCase()}</button>`).join('')}</div>`;
+  strip.querySelectorAll('.tools .btn').forEach(b => b.addEventListener('click', () => { eng.set(b.dataset.k); flash(b); }));
+  pg.appendChild(strip);
+  const qb = h('div', 'qbox'); pg.appendChild(qb);
+  return { el: pg, cells, strip, qb };
+}
+function flash(b) { b.classList.add('flash'); setTimeout(() => b.classList.remove('flash'), 160); }
+
+function renderStepPage(t) {
+  const pg = pages[t], attr = ATTRS[ui.sub[t]].id, loop = new Set(eng.loopSteps()), play = eng.v.step_light ? eng.v.play_step - 1 : -1;
+  for (const cell of pg.cells) {
+    const i = cell.step(), on = eng.v[sk(i, 'on')], el = cell.el;
+    el.classList.toggle('on', !!on); el.classList.toggle('off', !on);
+    el.classList.toggle('play', i === play && player.on);
+    el.classList.toggle('outloop', !loop.has(i));
+    $('.num', el).textContent = String(i + 1).padStart(2, '0');
+    $('.led', el).textContent = on ? 'ON' : 'OFF';
+    const v = $('.v', el), key = sk(i, attr);
+    v.textContent = eng.display(key);
+    v.classList.toggle('word', attr === 'on');
+    const svg = $('svg', el); svg.style.visibility = attr === 'on' ? 'hidden' : 'visible';
+    setRing(svg, eng.norm(key));
+    el.querySelectorAll('.ft span').forEach(s => { s.textContent = eng.display(sk(i, s.dataset.a)); s.classList.toggle('act', s.dataset.a === attr); });
+  }
+  const st = pg.strip, a = eng.v.loop_start, b = (a - 1 + eng.v.loop_len - 1) % NSTEPS + 1;
+  $('.mode', st).textContent = ATTRS[ui.sub[t]].tab;
+  $('.loop', st).textContent = `${a} → ${b}  (${eng.v.loop_len})`;
+  $('.rate', st).textContent = eng.display('rate');
+  const playPage = player.on && eng.v.play_step ? Math.floor((eng.v.play_step - 1) / PAGE) : -1;
+  st.querySelectorAll('.pages div').forEach(d => {
+    const p = +d.dataset.p, inl = [...loop].some(i => Math.floor(i / PAGE) === p);
+    d.classList.toggle('inloop', inl); d.classList.toggle('here', p === t); d.classList.toggle('playing', p === playPage);
+  });
+  // MPC outlines the active column's bounding box on a 4-knob MPC
+  pg.qb.classList.toggle('show', ui.hw === '4');
+  if (ui.hw === '4') { const [x, y] = cellXY(0, ui.qcol); Object.assign(pg.qb.style, { left: x - 6 + 'px', top: y - 6 + 'px', width: '250px', height: 4 * 152 - 12 + 12 + 'px' }); }
+}
+
+// ---- setup page ----
+let setup;
+function buildSetup() {
+  const pg = h('div', 'page'), cells = [];
+  SETUP_COLS.forEach((col, c) => col.items.forEach((it, r) => {
+    const [x, y] = cellXY(r, c), el = h('div', 'cell');
+    el.style.left = x + 'px'; el.style.top = y + 'px';
+    if (typeof it === 'string') {
+      const p = P[it];
+      el.classList.add('setting');
+      el.innerHTML = `<div class="hd"><span class="num">${p.name}</span><span class="coltag">${col.tag}</span></div>
+        <div class="big">${ringSVG(58, 6)}<span class="v"></span></div><div class="ft"><span>${p.hint}</span></div>`;
+      const isToggle = p.options && p.options.length === 2;
+      dragger($('.big', el), () => it, { tap: () => { if (isToggle) eng.set(it, eng.v[it] ? 0 : 1); } });
+      cells.push({ el, key: it });
+    } else if (it.tools) {
+      el.classList.add('tool');
+      el.innerHTML = `<div class="hd"><span class="num">${it.tools[0][0].startsWith('rot') ? 'ROTATE LOOP' : 'WHOLE LOOP'}</span><span class="coltag">${col.tag}</span></div>
+        <div class="btns">${it.tools.map(([k, n]) => `<button class="btn" data-k="${k}">${n}</button>`).join('')}</div>`;
+      el.querySelectorAll('.btn').forEach(b => b.addEventListener('click', () => { eng.set(b.dataset.k); flash(b); }));
+    } else {
+      el.classList.add('info');
+      el.innerHTML = `<div class="hd"><span class="num">MIDI OUT</span><span class="coltag">${col.tag}</span></div>
+        <div class="body">Port <b>Stevequencer</b><br>Pick it as another track's MIDI input.</div>`;
+    }
+    pg.appendChild(el);
+  }));
+  const strip = h('div', 'strip');
+  strip.innerHTML = `<div class="k">PAGE</div><div class="title">SETUP</div>
+    <div class="help">Stevequencer makes no sound: its notes leave through its own MIDI port.
+    <ol><li><b>Menu → Preferences → MIDI</b>: Track on for <b>Stevequencer</b>.</li>
+    <li>On the track to play: <b>MIDI input</b> = Stevequencer.</li>
+    <li>Press play: it follows MPC's tempo.</li></ol></div><hr>
+    <div class="row"><span>NOW</span><b class="now"></b></div>`;
+  pg.appendChild(strip);
+  const qb = h('div', 'qbox'); pg.appendChild(qb);
+  return { el: pg, cells, strip, qb };
+}
+function renderSetup() {
+  for (const { el, key } of setup.cells) {
+    const v = $('.v', el), txt = eng.display(key);
+    v.textContent = txt;
+    v.style.fontSize = txt.length > 8 ? '24px' : txt.length > 5 ? '32px' : '';
+    setRing($('svg', el), eng.norm(key));
+    const p = P[key]; el.classList.toggle('on', !!(p.options && p.options.length === 2 && eng.v[key]));
+  }
+  $('.now', setup.strip).textContent = player.on && eng.v.play_step ? 'step ' + eng.v.play_step : 'stopped';
+  setup.qb.classList.toggle('show', ui.hw === '4');
+  if (ui.hw === '4') {   // the bounding box of the column's Q-Linked controls
+    const keys = SETUP_Q.slice(ui.qcol * 4, ui.qcol * 4 + 4), rows = keys.map((k, r) => k !== '-' ? r : -1).filter(r => r >= 0);
+    const [x, y] = cellXY(rows[0], ui.qcol), last = rows[rows.length - 1];
+    Object.assign(setup.qb.style, { left: x - 6 + 'px', top: y - 6 + 'px', width: '250px', height: (last - rows[0]) * 152 + 152 + 'px' });
+  }
+}
+
+// ---- MPC chrome: tabs, sidebar ----
+function renderTabs() {
+  const tabs = $('#tabs'); tabs.innerHTML = '';
+  TABS.forEach((name, t) => {
+    const subs = subNames(t), cur = t < 4 ? ui.sub[t] : 0, el = h('div', 'tab' + (t === ui.tab ? ' on' : '') + (subs.length > 1 ? ' multi' : ''));
+    el.innerHTML = `<div class="bars">${subs.map((_, i) => `<i class="${i === cur ? 'cur' : ''}"></i>`).join('')}</div>
+      <span class="arr" data-d="-1">‹</span><span>${subs[cur]}</span><span class="arr" data-d="1">›</span>`;
+    el.addEventListener('click', e => {
+      const d = e.target.dataset.d;
+      if (d && t === ui.tab) cycleSub(+d);
+      else if (t === ui.tab) cycleSub(1);   // tapping the tab you're on goes to its next sub-page
+      else ui.tab = t;
+      ui.qcol = Math.min(ui.qcol, 3); refreshAll(); save();
+    });
+    tabs.appendChild(el);
+  });
+}
+function cycleSub(d) { if (ui.tab < 4) ui.sub[ui.tab] = (ui.sub[ui.tab] + d + ATTRS.length) % ATTRS.length; }
+
+let sideTimer = null, sideCol = 0, sideHit = -1;
+function showSidebar(slot) {
+  sideCol = slot >> 2; sideHit = slot;
+  const sb = $('#sidebar'); sb.classList.add('show');
+  clearTimeout(sideTimer); sideTimer = setTimeout(() => sb.classList.remove('show'), 1500);
+  renderSidebar();
+}
+function renderSidebar() {
+  const sb = $('#sidebar'), keys = qlinkKeys();
+  if (!sb.children.length) for (let r = 0; r < 4; r++) sb.appendChild(h('div', 'q', `${ringSVG(80, 7)}<div><div class="n"></div><div class="v"></div></div>`));
+  [...sb.children].forEach((q, r) => {
+    const k = keys[sideCol * 4 + r];
+    q.classList.toggle('hit', sideCol * 4 + r === sideHit);
+    $('.n', q).textContent = k === '-' ? '' : P[k].name;
+    $('.v', q).textContent = k === '-' ? '' : eng.display(k);
+    setRing($('svg', q), k === '-' ? 0 : eng.norm(k));
+  });
+}
+
+// ---- hardware: Q-Link knobs ----
+const knobs = [];
+function buildKnobs() {
+  const g = $('#qgrid');
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+    const slot = c * 4 + r, el = h('div', 'knob', `<div class="ql"></div>${ringSVG(56, 6)}<div class="nm"></div><div class="vl"></div>`);
+    el.dataset.slot = slot;
+    dragger(el, () => qlinkKeys()[knobSlot(slot)], { onTurn: () => turned(knobSlot(slot)) });
+    g.appendChild(el); knobs.push({ el, slot, r, c });
+  }
+}
+const knobSlot = slot => ui.hw === '4' ? ui.qcol * 4 + (slot & 3) : slot;   // 4-knob MPC: the knobs play the active column
+function turned(slot) {
+  showSidebar(slot);
+  if (ui.tab < 4) {   // a brief mark on the cell the knob moved
+    const cell = pages[ui.tab].cells.find(c => c.c === slot >> 2 && c.r === (slot & 3));
+    if (cell) { cell.el.classList.add('qhit'); clearTimeout(cell.t); cell.t = setTimeout(() => cell.el.classList.remove('qhit'), 400); }
+  }
+}
+function renderKnobs() {
+  const keys = qlinkKeys(), g = $('#qgrid');
+  g.classList.toggle('four', ui.hw === '4');
+  $('#qside').style.display = ui.hw === '4' ? '' : 'none';
+  $('#qcol').textContent = `Q-LINK ▸ column ${ui.qcol + 1}`;
+  for (const k of knobs) {
+    const show = ui.hw === '16' || k.c === 0;
+    k.el.style.display = show ? '' : 'none';
+    if (!show) continue;
+    const slot = knobSlot(k.slot), key = keys[slot];
+    $('.ql', k.el).textContent = ui.hw === '4' ? `KNOB ${k.r + 1}` : `Q${qnum(slot)}`;
+    k.el.classList.toggle('none', key === '-');
+    $('.nm', k.el).textContent = key === '-' ? '—' : P[key].name;
+    $('.vl', k.el).textContent = key === '-' ? '' : eng.display(key);
+    setRing($('svg', k.el), key === '-' ? 0 : eng.norm(key));
+  }
+}
+
+// ---- hardware: key transpose keyboard (notes played into the sequencer's own track) ----
+function buildKeys() {
+  const kb = $('#keys'), whites = [0, 2, 4, 5, 7, 9, 11, 12], blackX = { 1: 0, 3: 1, 6: 3, 8: 4, 10: 5 };
+  for (let s = 0; s <= 12; s++) {
+    const isW = whites.includes(s), el = h('div', isW ? 'w' : 'b', noteName(60 + s));
+    el.style.left = (isW ? whites.indexOf(s) * 42 : blackX[s] * 42 + 28) + 'px';
+    el.dataset.s = s;
+    el.addEventListener('pointerdown', () => keyIn(s));
+    kb.appendChild(el);
+  }
+}
+function keyIn(s) {   // latches, like a 303 / SQ-1 key transpose; C3 = no transpose. Ignored while KEY TRANSP is off.
+  if (!eng.v.key_transpose) { const n = $('#keynote'); n.style.color = '#ffd27a'; setTimeout(() => { n.style.color = ''; }, 500); return; }
+  eng.keyOffset = s; eng.emit('key_transpose');
+}
+function renderKeys() {
+  $('#keys').querySelectorAll('[data-s]').forEach(k => k.classList.toggle('on', !!eng.v.key_transpose && +k.dataset.s === eng.keyOffset));
+  $('#keynote').innerHTML = eng.v.key_transpose
+    ? `KEY TRANSP is on: the sequence is moved <b>${eng.keyOffset >= 0 ? '+' : ''}${eng.keyOffset}</b> semitones. C3 puts it back.`
+    : 'KEY TRANSP is off: turn it on in SETUP (column 3). On the MPC, notes played on Stevequencer\'s own track then transpose the sequence; here, these keys or Z–, on your keyboard.';
+}
+
+// ---- MIDI monitor ----
+const monLines = [];
+function log(s) { monLines.push(s); while (monLines.length > 7) monLines.shift(); $('#mon').textContent = monLines.join('\n'); }
+
+// ---- refresh / persistence ----
+function refreshAll() { draw(); }   // immediate: a tap must never land on the page that was showing before
+function draw() {
+  pages.forEach((p, t) => p.el.classList.toggle('show', t === ui.tab));
+  setup.el.classList.toggle('show', ui.tab === 4);
+  if (ui.tab < 4) renderStepPage(ui.tab); else renderSetup();
+  renderTabs(); renderKnobs(); renderKeys();
+  if ($('#sidebar').classList.contains('show')) renderSidebar();
+  $('#play').classList.toggle('on', player.on); $('#play').textContent = player.on ? '■ STOP' : '▶ PLAY';
+  $('#pos').textContent = player.on ? `step ${eng.v.play_step || '-'}` : 'stopped';
+  $('#ordernote').innerHTML = {
+    rows: 'Reads like text. On a 4-knob MPC the knobs reach one column: steps 1, 5, 9, 13.',
+    beats: 'Each column is one beat. On a 4-knob MPC the knobs reach 4 steps in a row: 1-4, then 5-8 …',
+    pads: 'Same order as MPC pads and Q-Links (bottom row = 1-4). Knobs reach 13, 9, 5, 1.',
+  }[ui.order];
+}
+const STORE = 'stevequencer.proto.v1';
+let saveTimer = null;
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { try { localStorage.setItem(STORE, JSON.stringify({ v: eng.v, ui })); } catch (e) { /* no storage */ } }, 300);
+}
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE) || 'null');
+    if (!s) return false;
+    for (const k in s.v) if (P[k] && !P[k].momentary) eng.v[k] = s.v[k];
+    Object.assign(ui, s.ui || {});
+    eng.v.play_step = 0;
+    return true;
+  } catch (e) { return false; }
+}
+
+const DEMO = {   // a 16-step bass line in C minor
+  set: { rate: 2, swing: 56, direction: 0, gate: 100, loop_start: 1, loop_len: 16, root: 0, scale: 2, transpose: 0 },
+  // pitch, on, length, velo, chance, ratchet
+  steps: [[48, 1, 60, 120, 100, 1], [48, 0, 50, 100, 100, 1], [60, 1, 40, 100, 100, 1], [48, 1, 30, 90, 100, 2],
+          [51, 1, 50, 110, 100, 1], [48, 0, 50, 100, 100, 1], [55, 1, 50, 100, 100, 1], [58, 1, 40, 90, 50, 1],
+          [48, 1, 80, 120, 100, 1], [48, 1, 25, 80, 100, 1], [60, 1, 40, 70, 100, 1], [55, 1, 50, 100, 100, 1],
+          [53, 1, 30, 100, 100, 3], [48, 0, 50, 100, 100, 1], [51, 1, 50, 100, 75, 1], [55, 1, 150, 110, 100, 1]],
+};
+function loadDemo() {
+  Object.assign(eng.v, DEMO.set);
+  DEMO.steps.forEach(([pitch, on, length, velo, chance, ratchet], i) => eng.putStep(i, { pitch, on, length, velo, chance, ratchet }));
+  eng.emit('demo');
+}
+
+// ---- wiring ----
+let scale = 1;
+function fit() {
+  const st = $('#stage'), r = st.getBoundingClientRect();
+  scale = Math.min(r.width / 1280, r.height / 800);
+  const d = $('#device');
+  d.style.transform = `scale(${scale})`;
+  d.style.left = Math.max(0, (r.width - 1280 * scale) / 2) + 'px';
+}
+eng.on(key => {
+  refreshAll(); save();
+  // AUDITION: hear a step's note when it's edited while the transport is stopped (the module sends it out too)
+  const p = P[key];
+  if (p && p.stepNo && !player.on && eng.v.audition && (p.attr === 'pitch' || (p.attr === 'on' && eng.v[key]))) {
+    const i = p.stepNo - 1, c = syn.ensure();
+    syn.note(c.currentTime + 0.01, eng.noteOut(i), eng.v[sk(i, 'velo')], 0.22);
+  }
+});
+
+function tick() {   // playhead and MIDI monitor, in step with the audio clock
+  if (player.on && syn.ctx) {
+    const now = syn.ctx.currentTime;
+    while (player.queue.length && player.queue[0].t <= now) {
+      const ev = player.queue.shift();
+      if (ev.step) { eng.v.play_step = ev.step; refreshAll(); }
+      if (ev.msg) log(ev.msg);
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+function togglePlay() { if (player.on) player.stop(); else player.start(); refreshAll(); }
+
+function boot() {
+  for (let t = 0; t < 4; t++) { const p = buildStepPage(t); pages.push(p); $('#screen').appendChild(p.el); }
+  setup = buildSetup(); $('#screen').appendChild(setup.el);
+  buildKnobs(); buildKeys();
+  if (!load()) loadDemo();
+  const snd = $('#sound');
+  for (const [k, s] of Object.entries(SOUNDS)) snd.appendChild(new Option(s.label, k));
+  snd.value = ui.sound; syn.sound = ui.sound; syn.setVol(ui.vol / 100);
+  $('#vol').value = ui.vol; $('#bpm').value = ui.bpm; player.bpm = ui.bpm; $('#order').value = ui.order;
+  snd.onchange = () => { ui.sound = syn.sound = snd.value; save(); };
+  $('#vol').oninput = e => { ui.vol = +e.target.value; syn.setVol(ui.vol / 100); save(); };
+  $('#bpm').onchange = e => { ui.bpm = player.bpm = Math.max(40, Math.min(240, +e.target.value || 120)); e.target.value = ui.bpm; save(); };
+  $('#order').onchange = e => { ui.order = e.target.value; refreshAll(); save(); };
+  $('#play').onclick = togglePlay;
+  $('#demo').onclick = () => { loadDemo(); };
+  $('#init').onclick = () => { eng.init(); eng.emit('init'); };
+  $('#qcol').onclick = () => { ui.qcol = (ui.qcol + 1) % 4; refreshAll(); save(); };
+  $('#hwmode').querySelectorAll('button').forEach(b => b.onclick = () => { ui.hw = b.dataset.m; markHw(); refreshAll(); save(); });
+  const markHw = () => $('#hwmode').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === ui.hw));
+  markHw();
+  const KEYROW = 'zsxdcvgbhnjm,';
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.metaKey || e.ctrlKey) return;
+    if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+    else if (e.key >= '1' && e.key <= '5') { ui.tab = +e.key - 1; refreshAll(); save(); }
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { cycleSub(e.key === 'ArrowRight' ? 1 : -1); refreshAll(); save(); }
+    else if (e.key === 'q' || e.key === 'Q') { ui.qcol = (ui.qcol + 1) % 4; refreshAll(); save(); }
+    else if (KEYROW.includes(e.key) && !e.repeat) keyIn(KEYROW.indexOf(e.key));
+  });
+  window.addEventListener('resize', fit);
+  fit(); draw(); log('MIDI out: nothing yet (press play)'); requestAnimationFrame(tick);
+}
+boot();
+</script>
+</body>
+</html>
