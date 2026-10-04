@@ -116,7 +116,7 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..2dba284 100644
+index 6e0f9d4..5de2c81 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
 @@ -46,7 +46,8 @@ from the Force and may differ on MPC Live/One/X/Key (e.g. `Force Documents` vs `
@@ -129,7 +129,7 @@ index 6e0f9d4..2dba284 100644
     (direct, unscheduled send).
  
  Resolved (details in the sections below): option params render as image-button radio groups or `popup`s,
-@@ -596,7 +597,340 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +597,344 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -470,8 +470,12 @@ index 6e0f9d4..2dba284 100644
 +  sliders, and its Q-Link outline follows. MPC Plaits' LED switches sit 80 px apart and their matrix LEDs 84 px right
 +  of a knob, so neighbouring boxes overlapped by 20-41 px (offline, check_skin.py). steve/tools/stitch/check_skin.py
 +  now also leaves out pairs that `when=` never shows together (RATE and DIV by a SYNC switch).
++- **Presets may set a Schwung integer.** The Schwung adapter marks a module's `int` parameters `"display": "string"`
++  (the value text is the engine's), and gen_vst.py refused them in a port's `presets.json` as text readouts. A
++  string display with a range is a number like any other; only a range-less one (a name readout) is refused now.
++  MPC Plaits' presets set NOTES, UNISON, GLIDE and the envelope times.
 diff --git a/tools/gen_vst.py b/tools/gen_vst.py
-index 7a91d54..205e1ac 100644
+index 7a91d54..2fbf682 100644
 --- a/tools/gen_vst.py
 +++ b/tools/gen_vst.py
 @@ -12,6 +12,9 @@ vst.json (paths are relative to the vst.json's folder):
@@ -501,7 +505,7 @@ index 7a91d54..205e1ac 100644
      key_to_index = {p["key"]: i for i, p in enumerate(params)}
      rows = []
      for i, p in enumerate(params):
-@@ -87,35 +91,158 @@ def gen_params(cfg, params, out):
+@@ -87,35 +91,160 @@ def gen_params(cfg, params, out):
          # "popup_of" -- a layout popup's hidden "open" flag (shadow_skin.popup_params): the wrapper
          # keeps its value itself, never sends it to the DSP, and clears it when that param is picked.
          popup_of = key_to_index.get(p.get("popup_of"), -1)
@@ -636,7 +640,9 @@ index 7a91d54..205e1ac 100644
 +            kv = []
 +            for k, v in ps["values"].items():
 +                q = byk.get(k)
-+                if not q or q.get("momentary") or q.get("step_of") or q.get("display") == "string":
++                # (a "string" display with a range is a number shown as the engine's text, e.g. a Schwung int: settable)
++                text_only = q and q.get("display") == "string" and not q.get("max", 0) > q.get("min", 0)
++                if not q or q.get("momentary") or q.get("step_of") or text_only:
 +                    raise SystemExit("presets: %r sets %r, which isn't a settable parameter" % (ps["name"], k))
 +                if q.get("options"):
 +                    if not (v in q["options"] or (isinstance(v, int) and 0 <= v < len(q["options"]))):
@@ -667,7 +673,7 @@ index 7a91d54..205e1ac 100644
  
  
  def main():
-@@ -140,23 +267,25 @@ def main():
+@@ -140,23 +269,25 @@ def main():
          return
      plist, sections = params.load(os.path.join(here, src))
      import shadow_skin
