@@ -5,7 +5,7 @@
 
 How: MPC OS draws through the display controller's DRM plane, not fbdev (`/dev/fb0` reads all black). `drmgrab`
 (ARM32, built from `drmgrab.c` in the `arm32v7/gcc:12` container, raw kernel ioctls, no libdrm) opens
-`/dev/dri/card0` (the display; `card1` is the GPU), finds the framebuffer the active plane scans out
+the display's `/dev/dri/card*` (`card0` or `card1`: it changes between boots, so `grab.sh` picks the one whose plane shows a framebuffer), finds the framebuffer the active plane scans out
 (GETPLANE/GETFB, root), maps it (MAP_DUMB) and writes it to stdout: 800 x 1280, 32 bpp XRGB, portrait.
 `rawpng.py` turns it into the 1280 x 800 landscape view (Pillow, in the `mpc-vst-html-art` container).
 

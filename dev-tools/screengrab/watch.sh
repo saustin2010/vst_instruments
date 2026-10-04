@@ -9,9 +9,13 @@ HERE=$(cd "$(dirname "$0")" && pwd); STEVE=$(dirname "$(dirname "$HERE")"); MV=$
 OUT="$STEVE/screens/watch-$(date +%Y%m%d-%H%M%S)"; mkdir -p "$OUT/raw"
 SSH=(ssh -o ConnectTimeout=10 -o ServerAliveInterval=5 ${MPC_KEY:+-i "$MPC_KEY"} "root@$HOST")
 "${SSH[@]}" '[ -x /tmp/drmgrab ]' || "${SSH[@]}" 'cat > /tmp/drmgrab.new && chmod +x /tmp/drmgrab.new && mv /tmp/drmgrab.new /tmp/drmgrab' < "$HERE/drmgrab"
+# the display's card: card0 on some boots, card1 on others (2026-10-04)
+CARD=$("${SSH[@]}" 'for c in /dev/dri/card*; do /tmp/drmgrab $c list 2>&1 | grep -q "fb [1-9]" && { echo $c; break; }; done')
+[ -n "$CARD" ] || { echo "no display plane found on /dev/dri/card*" >&2; exit 1; }
+REAL=$(cd "$HERE" && pwd -P)   # in a workspace, steve/tools links into the repo: mount the real folder too
 # one ssh session: the device loops and sends "FRAME <n> <hhmmss> <bytes>\n" + that many bytes of gzip per changed frame
 "${SSH[@]}" "last=; i=0; end=\$((\$(date +%s) + $SECS)); while [ \$(date +%s) -lt \$end ]; do
-  /tmp/drmgrab /dev/dri/card0 > /tmp/wg.raw 2>/dev/null; m=\$(md5sum /tmp/wg.raw | cut -c1-32)
+  /tmp/drmgrab $CARD > /tmp/wg.raw 2>/dev/null; m=\$(md5sum /tmp/wg.raw | cut -c1-32)
   if [ \"\$m\" != \"\$last\" ]; then last=\$m; i=\$((i+1)); gzip -1 -c /tmp/wg.raw > /tmp/wg.gz
     echo \"FRAME \$i \$(date +%H%M%S) \$(wc -c < /tmp/wg.gz)\"; cat /tmp/wg.gz; [ \$i -ge $MAX ] && break; fi
   sleep $IV; done; rm -f /tmp/wg.raw /tmp/wg.gz" |
@@ -31,6 +35,7 @@ while True:
 " "$OUT"
 for r in "$OUT"/raw/*.raw; do
   [ -f "$r" ] || continue
-  docker run --rm -v "$MV":"$MV" mpc-vst-html-art python3 "$HERE/rawpng.py" "$r" "${r%.raw}.png" >/dev/null && mv "${r%.raw}.png" "$OUT/"
+  docker run --rm -v "$MV":"$MV" -v "$REAL":"$REAL":ro mpc-vst-html-art python3 "$REAL/rawpng.py" "$r" "${r%.raw}.png" >/dev/null \
+    && mv "${r%.raw}.png" "$OUT/"
 done
 rm -rf "$OUT/raw"; ls "$OUT" | wc -l; echo "$OUT"
