@@ -35,8 +35,8 @@ parameter index, so existing projects keep working.
   plugin's `DESIGN-QA.md` says what changed and what to look at. **Passed on the device (2026-10-04): 27 of 36**, every
   synth, drum machine and audio effect. Left: the 9 sequencers and generators.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
-- [ ] Audio effects (Verglas, Warps, Rings FX): MPC lists them in a track's insert effect slots, under VST (2026-10-04,
-  Live II). Still to check: that one processes audio in the slot.
+- [x] Audio effects (Verglas, Warps, Rings FX) (2026-10-04, Live II): in a track's insert effect slots, under VST, and
+  they work there (their screens passed the design QA in the slot).
 - [x] Plugin browser groups (2026-10-04). Sorted **by type**, MPC puts every VST in one VST folder: the plugin-list
   `category` changes nothing, not even Akai's own folder names ("Drum", "Delay/Reverb", "Modulation", "Harmonic": tested
   on the Live II). So every name now starts with its kind: **[SYN]**, **[DRUM]**, **[SEQ]**, **[FX]** (MPC sorts the
