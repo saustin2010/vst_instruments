@@ -116,10 +116,10 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..b0a4f9a 100644
+index 6e0f9d4..5a93b43 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
-@@ -596,7 +596,263 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +596,273 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -361,6 +361,16 @@ index 6e0f9d4..b0a4f9a 100644
 +  nothing. Sorted by manufacturer, each `manufacturer` value is a folder (Grids registered as "Sequencers" got one).
 +  The manufacturer is also in the skin folder name, so changing it means a new skin folder and a re-registration.
 +  install.sh now re-registers on a category change too (it compared only name, maker and type).
++  More (2026-10-04, screen recorded with `screengrab/watch.sh`): sorted by type, the instrument list is Akai's own
++  plugins, an "MPC Drum Plugins" folder (Akai's DrumSynth, matched by its `MPC:DrumSynth` identifiers) and one **VST**
++  folder with every VST instrument. The insert-effect list is Akai's effect folders (Delay/Reverb, Dynamics, EQ/Filter,
++  Harmonic, Modulation, Vocal, Vintage Effects) plus a **VST** folder, where third-party VST effects (`isInstrument="0"`,
++  two inputs) are listed. A plugin-list `category` of "Drum", "Drums", "Delay/Reverb", "Modulation" or "Harmonic" moved
++  nothing out of the VST folders. Both lists sort case-sensitively by name (digits, capitals, then lower case: "DX7"
++  before "Denis"), so a bracketed prefix ("[SEQ] Grids") groups plugins after every capitalised name.
++- **The display's DRM card number changes between boots (Live II, 2026-10-04).** After a reboot the display plane was on
++  `/dev/dri/card1` (and `card0` answered `GETPLANERESOURCES` with "Operation not supported"); before, it was `card0`.
++  The screen grabber picks the card whose plane shows a framebuffer.
 +- **A Q-Link column per panel: `-` leaves a slot empty (2026-10-03).** Columns are fixed groups of four slots, so a
 +  page laid out 3-2-4-3 (or a two-knob panel) can still give each panel its own column, with its outline round that
 +  panel only: `qlinks "MAIN" = wave,tune,-,-,cutoff,reso,env,decay,...`. The empty slot does nothing on the knob.
