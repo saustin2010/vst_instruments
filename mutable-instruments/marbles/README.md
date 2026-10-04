@@ -8,8 +8,8 @@ Marbles generates random rhythms and melodies you can steer. The T section makes
 
 ## On the MPC
 
-- In the plugin browser: **Marbles** by **Mutable Instruments** (Synth)
-- Files: `/sdcard/vst/marbles.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - Marbles/`
+- In the plugin browser: **[SEQ] Marbles** by **Mutable Instruments** (Sequencer)
+- Files: `/sdcard/vst/marbles.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [SEQ] Marbles/`
 - 24 parameters (all automatable) on 2 pages
 
 ## Playing it

@@ -8,8 +8,8 @@ A drum sample player: each kit is a folder of up to 16 samples on MIDI notes 36-
 
 ## On the MPC
 
-- In the plugin browser: **Mrdrums** by **Move Everything** (Synth)
-- Files: `/sdcard/vst/mrdrums.so`, presets/data in `/sdcard/vst/mrdrums/` (from this repo's `presets/mrdrums/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Move Everything - VST - Mrdrums/`
+- In the plugin browser: **[DRUM] Mr Drums** by **Move Everything** (Drum machine)
+- Files: `/sdcard/vst/mrdrums.so`, presets/data in `/sdcard/vst/mrdrums/` (from this repo's `presets/mrdrums/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Move Everything - VST - [DRUM] Mr Drums/`
 - 26 parameters (all automatable) on 2 pages
 
 ## Playing it

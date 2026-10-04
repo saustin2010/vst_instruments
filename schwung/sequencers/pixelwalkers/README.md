@@ -8,8 +8,8 @@ A pixel-art gravity sequencer: every note you play on its track becomes a walker
 
 ## On the MPC
 
-- In the plugin browser: **Pixel Walkers** by **mestela** (Synth)
-- Files: `/sdcard/vst/pixelwalkers.so`, screen in `/sdcard/Synths/mestela - VST - Pixel Walkers/`
+- In the plugin browser: **[SEQ] Pixel Walkers** by **mestela** (Sequencer)
+- Files: `/sdcard/vst/pixelwalkers.so`, screen in `/sdcard/Synths/mestela - VST - [SEQ] Pixel Walkers/`
 - 9 parameters (all automatable) on 1 page
 
 ## Playing it

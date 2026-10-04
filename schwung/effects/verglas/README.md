@@ -10,8 +10,8 @@ Upstream has no presets, so the port brings 12 (Init, Grain Cloud, Shimmer, Octa
 
 ## On the MPC
 
-- In the plugin browser: **Verglas** by **Mutable Instruments** (Effect)
-- Files: `/sdcard/vst/verglas.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - Verglas/`
+- In the plugin browser: **[FX] Verglas** by **Mutable Instruments** (Audio effect)
+- Files: `/sdcard/vst/verglas.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [FX] Verglas/`
 - 20 parameters (all automatable) on 2 pages
 
 ## Playing it

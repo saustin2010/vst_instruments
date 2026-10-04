@@ -8,8 +8,8 @@ Two clock-synced 8-step generative sequencers in the style of the Moog Labyrinth
 
 ## On the MPC
 
-- In the plugin browser: **Maze Lite** by **sd88me** (Synth)
-- Files: `/sdcard/vst/mazelite.so`, screen in `/sdcard/Synths/sd88me - VST - Maze Lite/`
+- In the plugin browser: **[SEQ] Maze Lite** by **sd88me** (Sequencer)
+- Files: `/sdcard/vst/mazelite.so`, screen in `/sdcard/Synths/sd88me - VST - [SEQ] Maze Lite/`
 - 23 parameters (all automatable) on 1 page
 
 ## Playing it

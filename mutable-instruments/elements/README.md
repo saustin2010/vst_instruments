@@ -8,8 +8,8 @@ Elements models an acoustic instrument in two halves. The exciter bows, blows (w
 
 ## On the MPC
 
-- In the plugin browser: **Elements** by **Mutable Instruments** (Synth)
-- Files: `/sdcard/vst/elements.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - Elements/`
+- In the plugin browser: **[SYN] Elements** by **Mutable Instruments** (Synth)
+- Files: `/sdcard/vst/elements.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [SYN] Elements/`
 - 22 parameters (all automatable) on 2 pages
 
 ## Playing it

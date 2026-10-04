@@ -10,8 +10,8 @@ Its 9 factory presets (Init, First Contact, Neu Bass, Formant Keys, Dust Pad, Su
 
 ## On the MPC
 
-- In the plugin browser: **Tablor** by **athousanddetails** (Synth)
-- Files: `/sdcard/vst/tablor.so`, presets/data in `/sdcard/vst/tablor/` (from this repo's `presets/tablor/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/athousanddetails - VST - Tablor/`
+- In the plugin browser: **[SYN] Tablor** by **athousanddetails** (Synth)
+- Files: `/sdcard/vst/tablor.so`, presets/data in `/sdcard/vst/tablor/` (from this repo's `presets/tablor/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/athousanddetails - VST - [SYN] Tablor/`
 - 69 parameters (all automatable) on 6 pages
 
 ## Playing it

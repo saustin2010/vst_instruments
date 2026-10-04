@@ -8,8 +8,8 @@ Grids holds a map of drum patterns learned from real grooves. MAP X and MAP Y pi
 
 ## On the MPC
 
-- In the plugin browser: **Grids** by **Mutable Instruments** (Sequencer)
-- Files: `/sdcard/vst/grids.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - Grids/`
+- In the plugin browser: **[SEQ] Grids** by **Mutable Instruments** (Sequencer)
+- Files: `/sdcard/vst/grids.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [SEQ] Grids/`
 - 18 parameters (all automatable) on 2 pages
 
 ## Playing it

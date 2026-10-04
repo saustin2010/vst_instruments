@@ -8,8 +8,8 @@ The supersaw sound of trance and big-room synths: a stack of detuned saws (SAWS,
 
 ## On the MPC
 
-- In the plugin browser: **NuSaw** by **Charles Vestal** (Synth)
-- Files: `/sdcard/vst/nusaw.so`, screen in `/sdcard/Synths/Charles Vestal - VST - NuSaw/`
+- In the plugin browser: **[SYN] NuSaw** by **Charles Vestal** (Synth)
+- Files: `/sdcard/vst/nusaw.so`, screen in `/sdcard/Synths/Charles Vestal - VST - [SYN] NuSaw/`
 - 29 parameters (all automatable) on 2 pages
 
 ## Playing it

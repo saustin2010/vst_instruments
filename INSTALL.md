@@ -126,9 +126,11 @@ a plugin never deletes files you added. What every plugin ships, where it came f
 ## 5. Play it
 
 On the MPC, add a new track of the **Plugin** type and choose the plugin in the plugin browser. The browser lists it
-under its name and maker (e.g. **Hera**, by jpcima). Its touchscreen page appears with the track; the tabs along the
-bottom are its pages. Turn a control on screen or with the Q-Links (on a 4-knob MPC, the Q-Link button steps through
-the page's columns of four; the active column is outlined). Settings are saved with the project, and automation
+under its name and maker (e.g. **[SYN] Hera**, by jpcima): each name starts with its kind, **[SYN]**, **[DRUM]**,
+**[SEQ]** or **[FX]**, so sorted by type (where MPC puts every VST in one VST folder) they group together. The
+**[FX]** audio effects are in a track's insert effect slots instead, under VST. A plugin's touchscreen page appears
+with it; the tabs along the bottom are its pages. Turn a control on screen or with the Q-Links (on a 4-knob MPC, the
+Q-Link button steps through the page's columns of four; the active column is outlined). Settings are saved with the project, and automation
 works like on Akai's own plugins. Plugins with presets have a preset or patch selector on their first page, and
 their presets (kits for the drum machines) are also in MPC's own PRESET menu in the plugin header, which shows on the
 arrangement screen too. For OB-Xd and Noisemaker it lists the bank that's loaded.
@@ -178,7 +180,7 @@ If you'd rather not run the script, these are the same steps (from your computer
 # copy one plugin's files (example: Hera)
 cd schwung/instruments/hera/deploy
 scp vst/hera.so root@<mpc>:/sdcard/vst/
-scp -r "Synths/jpcima - VST - Hera" root@<mpc>:/sdcard/Synths/
+scp -r "Synths/jpcima - VST - [SYN] Hera" root@<mpc>:/sdcard/Synths/
 scp -r ../../../../presets/hera root@<mpc>:/sdcard/vst/       # its presets, if it has some
                                                                # (python3 tools/fetch-presets.py hera first)
 scp pluginlist-entry.xml ../../../../tools/plugin_list.awk root@<mpc>:/tmp/

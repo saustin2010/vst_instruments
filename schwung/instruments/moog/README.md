@@ -8,8 +8,8 @@ RaffoSynth, a Minimoog-inspired monosynth: four oscillators (waveform and footag
 
 ## On the MPC
 
-- In the plugin browser: **Moog** by **Raffo** (Synth)
-- Files: `/sdcard/vst/moog.so`, screen in `/sdcard/Synths/Raffo - VST - Moog/`
+- In the plugin browser: **[SYN] Moog** by **Raffo** (Synth)
+- Files: `/sdcard/vst/moog.so`, screen in `/sdcard/Synths/Raffo - VST - [SYN] Moog/`
 - 41 parameters (all automatable) on 3 pages
 
 ## Playing it

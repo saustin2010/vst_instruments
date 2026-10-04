@@ -8,8 +8,8 @@ Hold a chord on Groove Bank's track and it replays it in a rhythm template from 
 
 ## On the MPC
 
-- In the plugin browser: **Groove Bank** by **Mission Minnow** (Synth)
-- Files: `/sdcard/vst/groovebank.so`, presets/data in `/sdcard/vst/groovebank/` (from this repo's `presets/groovebank/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Mission Minnow - VST - Groove Bank/`
+- In the plugin browser: **[SEQ] Groove Bank** by **Mission Minnow** (Sequencer)
+- Files: `/sdcard/vst/groovebank.so`, presets/data in `/sdcard/vst/groovebank/` (from this repo's `presets/groovebank/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Mission Minnow - VST - [SEQ] Groove Bank/`
 - 10 parameters (all automatable) on 1 page
 
 ## Playing it

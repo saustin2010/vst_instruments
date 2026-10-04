@@ -10,8 +10,8 @@ Upstream has no presets, so the port brings 12 (Init, Ring Mod, Parallel Ring, D
 
 ## On the MPC
 
-- In the plugin browser: **Warps** by **Mutable Instruments** (Effect)
-- Files: `/sdcard/vst/warps.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - Warps/`
+- In the plugin browser: **[FX] Warps** by **Mutable Instruments** (Audio effect)
+- Files: `/sdcard/vst/warps.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [FX] Warps/`
 - 12 parameters (all automatable) on 1 page
 
 ## Playing it

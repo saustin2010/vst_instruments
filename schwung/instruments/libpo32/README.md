@@ -8,8 +8,8 @@ A drum synthesiser in the spirit of Teenage Engineering's PO-32 Tonic: every sou
 
 ## On the MPC
 
-- In the plugin browser: **Libpo32** by **mestela** (Synth)
-- Files: `/sdcard/vst/libpo32.so`, presets/data in `/sdcard/vst/libpo32/` (from this repo's `presets/libpo32/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/mestela - VST - Libpo32/`
+- In the plugin browser: **[DRUM] Libpo32** by **mestela** (Drum machine)
+- Files: `/sdcard/vst/libpo32.so`, presets/data in `/sdcard/vst/libpo32/` (from this repo's `presets/libpo32/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/mestela - VST - [DRUM] Libpo32/`
 - 210 parameters (all automatable) on 3 pages
 
 ## Playing it

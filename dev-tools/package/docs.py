@@ -330,7 +330,7 @@ If you'd rather not run the script, these are the same steps (from your computer
 # copy one plugin's files (example: Hera)
 cd schwung/instruments/hera/deploy
 scp vst/hera.so root@<mpc>:/sdcard/vst/
-scp -r "Synths/jpcima - VST - Hera" root@<mpc>:/sdcard/Synths/
+scp -r "Synths/jpcima - VST - [SYN] Hera" root@<mpc>:/sdcard/Synths/
 scp -r ../../../../presets/hera root@<mpc>:/sdcard/vst/       # its presets, if it has some
                                                                # (python3 tools/fetch-presets.py hera first)
 scp pluginlist-entry.xml ../../../../tools/plugin_list.awk root@<mpc>:/tmp/

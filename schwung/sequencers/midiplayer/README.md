@@ -8,8 +8,8 @@ Drop .mid files into /sdcard/vst/midiplayer/MIDI on the MPC and MIDI Player play
 
 ## On the MPC
 
-- In the plugin browser: **MIDI Player** by **Charles Vestal** (Synth)
-- Files: `/sdcard/vst/midiplayer.so`, presets/data in `/sdcard/vst/midiplayer/` (from this repo's `presets/midiplayer/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Charles Vestal - VST - MIDI Player/`
+- In the plugin browser: **[SEQ] MIDI Player** by **Charles Vestal** (Sequencer)
+- Files: `/sdcard/vst/midiplayer.so`, presets/data in `/sdcard/vst/midiplayer/` (from this repo's `presets/midiplayer/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Charles Vestal - VST - [SEQ] MIDI Player/`
 - 6 parameters (all automatable) on 1 page
 
 ## Playing it

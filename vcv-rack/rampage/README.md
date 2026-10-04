@@ -8,8 +8,8 @@ Rampage is Befaco's dual function generator: two channels that each make a rise 
 
 ## On the MPC
 
-- In the plugin browser: **Rampage** by **Befaco** (Synth)
-- Files: `/sdcard/vst/rampage.so`, screen in `/sdcard/Synths/Befaco - VST - Rampage/`
+- In the plugin browser: **[SEQ] Rampage** by **Befaco** (Sequencer)
+- Files: `/sdcard/vst/rampage.so`, screen in `/sdcard/Synths/Befaco - VST - [SEQ] Rampage/`
 - 27 parameters (all automatable) on 2 pages
 
 ## Playing it

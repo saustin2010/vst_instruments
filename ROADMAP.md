@@ -34,12 +34,13 @@ parameter index, so existing projects keep working.
   Design QA first pass done offline for all 36 (2026-10-04, branch design-qa-batch1): one Q-Link column per panel, each
   plugin's `DESIGN-QA.md` says what changed and what to look at.
 - [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
-- [ ] Audio effects (Verglas, Warps, Rings FX): does MPC offer third-party VST effects in its insert list at all?
-- [ ] Plugin browser groups. Checked on the Live II 2026-10-03: MPC's plugin menu sorted **by type** shows only VST
-  Instruments / VST Effects (the plugin-list `category` is ignored; the sequencers and drum machines keep reporting
-  theirs); sorted **by manufacturer** it makes a folder per maker field (Grids as "Sequencers" got its own folder).
-  The owner sorts by type, so that was put back. Left for later: name prefixes (SEQ / DRM) to bunch them in the
-  by-type list, after checking that an older project still finds a renamed plugin.
+- [ ] Audio effects (Verglas, Warps, Rings FX): MPC lists them in a track's insert effect slots, under VST (2026-10-04,
+  Live II). Still to check: that one processes audio in the slot.
+- [x] Plugin browser groups (2026-10-04). Sorted **by type**, MPC puts every VST in one VST folder: the plugin-list
+  `category` changes nothing, not even Akai's own folder names ("Drum", "Delay/Reverb", "Modulation", "Harmonic": tested
+  on the Live II). So every name now starts with its kind: **[SYN]**, **[DRUM]**, **[SEQ]**, **[FX]** (MPC sorts the
+  list case-sensitively, so they group after other makers' VSTs). Renamed before any project used them (no project on
+  the device referenced one). `install.sh` removes a renamed plugin's old screen folder when it re-registers it.
 - [ ] `install.sh` / `uninstall.sh` on a real MPC (so far tested only against a simulated one:
   `dev-tools/fake-mpc/`).
 - [ ] CPU: run the framework's `tools/bench.sh` for the heavy ones (Helm, Chordism, Tablor, Mono Voice, Elements,

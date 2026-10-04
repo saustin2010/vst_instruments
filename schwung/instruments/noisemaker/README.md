@@ -8,8 +8,8 @@ TAL-NoiseMaker by Patrick Kunz: two oscillators plus sub, 12 multimode filters w
 
 ## On the MPC
 
-- In the plugin browser: **Noisemaker** by **TAL** (Synth)
-- Files: `/sdcard/vst/noisemaker.so`, preset banks in `/sdcard/vst/noisemaker/presets/` (from this repo's `presets/noisemaker/`), screen in `/sdcard/Synths/TAL - VST - Noisemaker/`
+- In the plugin browser: **[SYN] Noisemaker** by **TAL** (Synth)
+- Files: `/sdcard/vst/noisemaker.so`, preset banks in `/sdcard/vst/noisemaker/presets/` (from this repo's `presets/noisemaker/`), screen in `/sdcard/Synths/TAL - VST - [SYN] Noisemaker/`
 - 91 parameters (all automatable) on 6 pages
 
 ## Playing it

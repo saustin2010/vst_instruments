@@ -8,8 +8,8 @@ A physical-modelling instrument. An exciter (an impulse and noise mix with crack
 
 ## On the MPC
 
-- In the plugin browser: **Fizzik** by **Filliformes** (Synth)
-- Files: `/sdcard/vst/fizzik.so`, screen in `/sdcard/Synths/Filliformes - VST - Fizzik/`
+- In the plugin browser: **[SYN] Fizzik** by **Filliformes** (Synth)
+- Files: `/sdcard/vst/fizzik.so`, screen in `/sdcard/Synths/Filliformes - VST - [SYN] Fizzik/`
 - 72 parameters (all automatable) on 5 pages
 
 ## Playing it

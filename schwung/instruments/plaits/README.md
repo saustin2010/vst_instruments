@@ -10,8 +10,8 @@ Upstream ships no presets for the synth alone, so the port brings 24 (one or two
 
 ## On the MPC
 
-- In the plugin browser: **Plaits** by **Mutable Instruments** (Synth)
-- Files: `/sdcard/vst/plaits.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - Plaits/`
+- In the plugin browser: **[SYN] Plaits** by **Mutable Instruments** (Synth)
+- Files: `/sdcard/vst/plaits.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [SYN] Plaits/`
 - 19 parameters (all automatable) on 2 pages
 
 ## Playing it

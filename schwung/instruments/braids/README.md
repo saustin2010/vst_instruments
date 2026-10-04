@@ -8,8 +8,8 @@ Emilie Gillet's Braids "macro oscillator" as a playable synth voice. One knob pi
 
 ## On the MPC
 
-- In the plugin browser: **Braids** by **Mutable Instruments** (Synth)
-- Files: `/sdcard/vst/braids.so`, presets/data in `/sdcard/vst/braids/` (from this repo's `presets/braids/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Mutable Instruments - VST - Braids/`
+- In the plugin browser: **[SYN] Braids** by **Mutable Instruments** (Synth)
+- Files: `/sdcard/vst/braids.so`, presets/data in `/sdcard/vst/braids/` (from this repo's `presets/braids/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Mutable Instruments - VST - [SYN] Braids/`
 - 21 parameters (all automatable) on 2 pages
 
 ## Playing it

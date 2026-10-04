@@ -10,8 +10,8 @@ Its built-in patch library (Chrome Bass, Wide Current, Hollow Wire, PWM Basin, G
 
 ## On the MPC
 
-- In the plugin browser: **Mono Voice** by **timncox** (Synth)
-- Files: `/sdcard/vst/monovoice.so`, screen in `/sdcard/Synths/timncox - VST - Mono Voice/`
+- In the plugin browser: **[SYN] Mono Voice** by **timncox** (Synth)
+- Files: `/sdcard/vst/monovoice.so`, screen in `/sdcard/Synths/timncox - VST - [SYN] Mono Voice/`
 - 120 parameters (all automatable) on 8 pages
 
 ## Playing it

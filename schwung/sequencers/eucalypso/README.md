@@ -8,8 +8,8 @@ Hold a chord (or a single note) on Eucalypso's track and its four lanes play it 
 
 ## On the MPC
 
-- In the plugin browser: **Eucalypso** by **handcraftedcc** (Synth)
-- Files: `/sdcard/vst/eucalypso.so`, screen in `/sdcard/Synths/handcraftedcc - VST - Eucalypso/`
+- In the plugin browser: **[SEQ] Eucalypso** by **handcraftedcc** (Sequencer)
+- Files: `/sdcard/vst/eucalypso.so`, screen in `/sdcard/Synths/handcraftedcc - VST - [SEQ] Eucalypso/`
 - 82 parameters (all automatable) on 6 pages
 
 ## Playing it

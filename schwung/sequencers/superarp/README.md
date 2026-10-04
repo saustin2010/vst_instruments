@@ -8,8 +8,8 @@ An arpeggiator that separates the note order from the rhythm: a MODE (up, down, 
 
 ## On the MPC
 
-- In the plugin browser: **Super Arp** by **handcraftedcc** (Synth)
-- Files: `/sdcard/vst/superarp.so`, screen in `/sdcard/Synths/handcraftedcc - VST - Super Arp/`
+- In the plugin browser: **[SEQ] Super Arp** by **handcraftedcc** (Sequencer)
+- Files: `/sdcard/vst/superarp.so`, screen in `/sdcard/Synths/handcraftedcc - VST - [SEQ] Super Arp/`
 - 37 parameters (all automatable) on 3 pages
 
 ## Playing it
