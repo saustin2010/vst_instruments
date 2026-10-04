@@ -147,6 +147,16 @@ $a"; fi
     sync
 }
 
+# rmskins <file>: remove the screen folders a renamed plugin left (one /sdcard/Synths/<maker> - VST - <name> per line)
+rmskins() {
+    while IFS= read -r f; do
+        case "$f" in */../*|*/./*) echo "  skipped $f"; continue ;; esac
+        case "$f" in "/sdcard/Synths/"?*" - VST - "?*) ;; *) echo "  skipped $f (not a plugin screen folder)"; continue ;; esac
+        if [ -d "$R$f" ]; then rm -rf "$R$f"; echo "  removed the old screen folder $f"; fi
+    done < "$1"
+    sync
+}
+
 cmd=${1:-}; [ $# -gt 0 ] && shift
 case "$cmd" in
     check) check ;;
@@ -154,5 +164,6 @@ case "$cmd" in
     place) place "$@" ;;
     register) register "$@" ;;
     unregister) unregister "$@" ;;
+    rmskins) rmskins "$@" ;;
     *) sed -n '2,14p' "$0" 2>/dev/null || true; exit 1 ;;
 esac

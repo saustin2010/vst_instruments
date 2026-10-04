@@ -47,7 +47,7 @@ echo "== $HOST"
 side check
 
 echo "== plugins (${#DIRS[@]})"
-NEW=(); SOS=()
+NEW=(); SOS=(); OLD_SKINS=()
 for d in "${DIRS[@]}"; do SOS+=("$(attr file "$d/deploy/pluginlist-entry.xml")"); done
 LISTED=$(side listed "${SOS[@]}")
 for i in "${!DIRS[@]}"; do
@@ -56,6 +56,11 @@ for i in "${!DIRS[@]}"; do
   want="$so|$(attr name "$e")|$(attr manufacturer "$e")|$(attr isInstrument "$e")|$(attr category "$e")"
   if [ "$have" = "$so||||" ]; then state="new: MPC needs to list it"; NEW+=("$d")
   elif [ "$have" != "$want" ] || [ $FORCE_REG = 1 ]; then state="listed, entry to update"; NEW+=("$d")
+    # a new name or maker means a new screen folder (<maker> - VST - <name>): the old one goes once MPC lists the new
+    IFS='|' read -r _ oname omaker _ <<< "$have"
+    if [ -n "$oname" ] && { [ "$oname" != "$(attr name "$e")" ] || [ "$omaker" != "$(attr manufacturer "$e")" ]; }; then
+      OLD_SKINS+=("/sdcard/Synths/$omaker - VST - $oname"); state="$state (was $oname)"
+    fi
   else state="listed"; fi
   printf "  %-34s %-30s %s\n" "$d" "$(attr name "$e")" "$state"
 done
@@ -103,6 +108,11 @@ if [ ${#NEW[@]} -gt 0 ]; then
   fi
   if [ $ok = 1 ]; then
     side register "$STAGE/entries.xml"
+    if [ ${#OLD_SKINS[@]} -gt 0 ]; then   # by file: the paths have spaces
+      printf '%s\n' "${OLD_SKINS[@]}" > "$TMP/oldskins.txt"
+      "${TAR[@]}" -C "$TMP" -cf - oldskins.txt | "${SSH[@]}" "tar -C $STAGE -xf -"
+      side rmskins "$STAGE/oldskins.txt"
+    fi
   else
     echo "not now: the files are in place; run the same command again with --yes when MPC can restart"
   fi
