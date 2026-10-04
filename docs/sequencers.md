@@ -1,60 +1,53 @@
 # Playing other tracks from a sequencer
 
-The nine **[SEQ]** plugins (Eucalypso, Grids, Groove Bank, Marbles, Maze Lite, MIDI Player, Pixel Walkers, Rampage,
-Super Arp) make no sound of their own: they play other tracks. MPC ignores the MIDI a plugin sends, so each one opens
-its own MIDI port instead, the way a USB MIDI keyboard would appear. While the sequencer is on a track, MPC lists that
-port as one of its MIDI inputs, named after the plugin:
+The **[SEQ]** plugins make no sound of their own: they play other tracks. MPC ignores the MIDI a plugin sends, so each
+sequencer opens its own MIDI port instead, the way a USB MIDI keyboard would appear. While the sequencer is on a track,
+MPC lists that port as one of its MIDI inputs, named after the plugin:
 
-    [SEQ] Super Arp MIDI Out
+    [SEQ] <sequencer> MIDI Out
 
-(A second copy of the same sequencer gets its own port, `[SEQ] Super Arp 2 MIDI Out`.) Any track can take that port
+(A second copy of the same sequencer gets its own port, `[SEQ] <sequencer> 2 MIDI Out`.) Any track can take that port
 as its MIDI input, like a keyboard plugged into the MPC.
 
 ## Setting it up
 
-Example: Super Arp playing Hera.
+You need two tracks: the instrument that should sound, and the sequencer that plays it.
 
-1. **Two tracks.** Put the instrument that should sound on one track (**[SYN] Hera**) and the sequencer on another
-   (**[SEQ] Super Arp**). Give it a few seconds: MPC connects to the new port by itself, with no restart.
-2. **Menu → Preferences → MIDI.** In the list of MIDI inputs, find **[SEQ] Super Arp MIDI Out** and switch **Track**
-   on (leave Remote off). It's only listed while the sequencer is on a track.
-3. **Select the Hera track** and set, in its track settings:
-   - **MIDI Input Port**: [SEQ] Super Arp MIDI Out
+1. **Two tracks.** Put the instrument on one track (any [SYN] or [DRUM] plugin, or one of MPC's own instruments) and
+   the sequencer on another. Give it a few seconds: MPC connects to the new port by itself, with no restart.
+2. **Menu → Preferences → MIDI.** In the list of MIDI inputs, find **[SEQ] &lt;sequencer&gt; MIDI Out** and switch
+   **Track** on (leave Remote off). It's only listed while the sequencer is on a track.
+3. **Select the instrument's track** and set, in its track settings:
+   - **MIDI Input Port**: [SEQ] &lt;sequencer&gt; MIDI Out
    - **MIDI Input Channel**: All
    - **Monitor**: **In** (or Merge). **Not Auto**: with Auto a track only listens while it's the selected track, and
-     you'll be on Super Arp's track to play it. This is the step that's easy to miss.
-4. **Select the Super Arp track, press play and hold some notes** on the pads or keys (or give its track a clip).
-   Super Arp's notes play Hera.
+     you'll be on the sequencer's track to play it. This is the step that's easy to miss.
+4. **Select the sequencer's track and press play.** If it plays from notes, hold some on the pads or keys (or give its
+   track a clip). The sequencer's notes play the instrument.
 
 Leave the sequencer's own track listening to your pads and keys as usual. Never set its input to its own port, or it
 plays itself.
 
-## What makes each one play
+## What makes a sequencer play
 
-All of them follow MPC's tempo and transport, so the transport has to run.
+Every sequencer follows MPC's tempo and transport, so the transport has to run. Beyond that, each works in one of three
+ways; its README says which, and covers its channels, voices and pages.
 
-| Plugin | Plays when | Sends |
-|---|---|---|
-| Eucalypso | you hold notes on its track | your notes as four Euclidean rhythms |
-| Grids | the transport runs | drum notes (kick, snare, hi-hat parts): point a drum track at it |
-| Groove Bank | you hold a chord on its track (LATCH keeps it going) | the chord in a groove |
-| Marbles | the transport runs | random melodies, up to three voices |
-| Maze Lite | the transport runs (a note on its track sets the key) | two generative note patterns |
-| MIDI Player | the transport runs | the `.mid` file you picked, from `/sdcard/vst/midiplayer/MIDI` |
-| Pixel Walkers | you play notes on its track | your notes, bouncing |
-| Super Arp | you hold notes on its track | the arpeggio |
-| Rampage | it cycles, or you play notes on its track | control changes (CC OUT A/B), not notes: MIDI-learn a parameter on the target track |
+- **It plays from the notes you hold on its own track** (arpeggiators, chord grooves, rhythms made from held notes):
+  hold notes on the pads or keys, or give its track a clip. Some have a LATCH that keeps it going after you let go.
+- **It plays by itself while the transport runs** (step sequencers, generative and random sequencers, drum pattern
+  generators, MIDI file players). A note on its track may set its key or transpose it.
+- **It sends control changes, not notes** (modulation sources): MIDI-learn a parameter on the target track to it.
 
-Each plugin's README has its own details (channels, voices, its pages).
+A sequencer that sends drum notes should play a drum track.
 
 ## When nothing plays
 
 - **The port isn't in the list.** The sequencer has to be on a track; wait a few seconds after inserting it. Removing
   and re-inserting the plugin makes a new port.
-- **The port is listed but the other track is silent.** Check, in order: **Track** is on for the port (step 2); the
-  target track's **MIDI Input Port** is the port and its channel is All; its **Monitor** is **In**, not Auto; the
-  transport is running; for Eucalypso, Groove Bank, Pixel Walkers and Super Arp, you're holding notes on the
-  sequencer's own track.
+- **The port is listed but the instrument's track is silent.** Check, in order: **Track** is on for the port (step 2);
+  the instrument track's **MIDI Input Port** is the port and its channel is All; its **Monitor** is **In**, not Auto; the
+  transport is running; for a sequencer that plays from notes, you're holding notes on the sequencer's own track.
 - **Doubled or runaway notes.** A track is listening to its own sequencer's port, or two tracks share an input
   you didn't mean to share.
 
