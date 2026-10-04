@@ -60,6 +60,6 @@ Each plugin's README has its own details (channels, voices, its pages).
 
 ## How far this is checked
 
-On a Live II (2026-10-04, stock MPC OS 3.9.1 with SSH): MPC finds the port and connects to it by itself, within seconds,
-with no restart (checked with Super Arp). The whole route, a second track playing from the port, works on a Force and is
-being confirmed on the Live II now. The framework's `docs/NOTES.md` ("MIDI-output plugins") has the technical side.
+On a Live II (2026-10-04, stock MPC OS 3.9.1 with SSH): MPC finds a sequencer's port and connects to it by itself, within
+seconds, with no restart, and a second track plays from it (MIDI Input Port = the port, Monitor In, Remote off for the
+port). It works on a Force too. The framework's `docs/NOTES.md` ("MIDI-output plugins") has the technical side.

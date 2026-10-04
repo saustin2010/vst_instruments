@@ -151,8 +151,7 @@ its own MIDI port, the way a USB MIDI device would appear (MPC picks it up witho
 
 Rampage works the same way but sends control changes: MIDI-learn a parameter on the target track to its CC.
 **[docs/sequencers.md](docs/sequencers.md)** has the whole walk-through, what makes each one play, and what to check
-when nothing plays. On a Live II, MPC connects to the port by itself (checked 2026-10-04); the full route is confirmed
-on a Force.
+when nothing plays. The routing is confirmed on a stock Live II (2026-10-04) and on a Force.
 
 ### Audio effects
 

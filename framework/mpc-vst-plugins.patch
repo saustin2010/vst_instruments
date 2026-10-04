@@ -116,10 +116,20 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..5a93b43 100644
+index 6e0f9d4..5848934 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
-@@ -596,7 +596,273 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -46,7 +46,8 @@ from the Force and may differ on MPC Live/One/X/Key (e.g. `Force Documents` vs `
+    new port, creates a matching input ("<client> <port>") and connects it with no restart. Enable Track on it in
+    Preferences → MIDI, then any track can select it as MIDI input. Plugin sequencers/arps can drive other tracks.
+    Most likely stock MPC OS behaviour: MockbaMod's MidiLoop (`tkgl_anyctrl_lt.so`) only filters or blacklists
+-   ports; it doesn't create them. **Still unconfirmed on a stock unit.** Latency is about one audio block
++   ports; it doesn't create them. **Confirmed on a stock Live II (2026-10-04):** a sequencer plugin's own port played
++   another track (MIDI input = the port, Monitor In, Remote off for the port). Latency is about one audio block
+    (direct, unscheduled send).
+ 
+ Resolved (details in the sections below): option params render as image-button radio groups or `popup`s,
+@@ -596,7 +597,283 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -371,6 +381,16 @@ index 6e0f9d4..5a93b43 100644
 +- **The display's DRM card number changes between boots (Live II, 2026-10-04).** After a reboot the display plane was on
 +  `/dev/dri/card1` (and `card0` answered `GETPLANERESOURCES` with "Operation not supported"); before, it was `card0`.
 +  The screen grabber picks the card whose plane shows a framebuffer.
++- **MPC mirrors every ALSA sequencer port it detects on its own client, so a lookup by name can find MPC's copy (Live II,
++  2026-10-04).** For a new port, MPC's client "MPC" (129 here) adds ports named "<client name> <port name>", the input
++  side writable (the engine port "Euclidier" of client "Mockba" became "Mockba Euclidier"). MPC's client number is lower
++  than any client started after it, so code that walks clients in order and matches a substring of the port name finds
++  MPC's mirror first. sd88me's Euclidier does: `euclidier_vst.cpp`'s `find_engine_input_port()` (strstr "Euclidier")
++  sent its synthesised clock into MPC, not its engine, which then never started (~56 events/s into MPC at 140 BPM,
++  nothing out of the engine). Fix: match the port name exactly, or the engine's pid (`snd_seq_client_info_get_pid`).
++  Workaround with no rebuild: switch MPC's MIDI clock out (**Sync**) on for the output "Mockba Euclidier", which MPC
++  already connects to the engine's input; the engine follows MPC's clock and start/stop (verified: notes on channels 1
++  and 10 straight away).
 +- **A Q-Link column per panel: `-` leaves a slot empty (2026-10-03).** Columns are fixed groups of four slots, so a
 +  page laid out 3-2-4-3 (or a two-knob panel) can still give each panel its own column, with its outline round that
 +  panel only: `qlinks "MAIN" = wave,tune,-,-,cutoff,reso,env,decay,...`. The empty slot does nothing on the knob.

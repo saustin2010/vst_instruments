@@ -34,7 +34,9 @@ parameter index, so existing projects keep working.
   Design QA first pass done offline for all 36 (2026-10-04, branch design-qa-batch1): one Q-Link column per panel, each
   plugin's `DESIGN-QA.md` says what changed and what to look at. **Passed on the device (2026-10-04): 27 of 36**, every
   synth, drum machine and audio effect. Left: the 9 sequencers and generators.
-- [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
+- [x] Sequencers on a **stock** MPC (2026-10-04, Live II): a sequencer's own MIDI port plays another track, as on a Force.
+  The two settings people miss: the target track's Monitor on In (not Auto), and Remote off for the port
+  ([docs/sequencers.md](docs/sequencers.md)). Each of the nine is still to be heard in its own design QA.
 - [x] Audio effects (Verglas, Warps, Rings FX) (2026-10-04, Live II): in a track's insert effect slots, under VST, and
   they work there (their screens passed the design QA in the slot).
 - [x] Plugin browser groups (2026-10-04). Sorted **by type**, MPC puts every VST in one VST folder: the plugin-list
