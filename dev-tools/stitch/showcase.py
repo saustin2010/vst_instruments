@@ -4,7 +4,8 @@ frame, switches and buttons lit by value, controls shown/hidden by their when= p
 text the wrapper reports (option label, or the number as effGetParamDisplay formats it), names and values in
 Titillium Web (the font MPC uses). No outlines, no Q-Link box. With <port>/build/state.json (dump_state.sh: the real
 engine's values and text right after an insert, preset names included) it uses those; without, the declared defaults
-and no run-time text. Writes <out_dir>/page_N.png (1280 x 628). Needs Pillow (the mpc-vst-html-art image has it):
+and no run-time text. Writes <out_dir>/page_N.png (1280 x 628); with a third argument --banks also every further Q-Link
+sub-page as page_N_S.png (for layouts whose sub-pages differ: banks=). Needs Pillow (the mpc-vst-html-art image has it):
   docker run --rm -v $PWD:$PWD -w $PWD mpc-vst-html-art python3 steve/tools/stitch/showcase.py hera /tmp/hera"""
 import glob, json, math, os, re, sys
 from PIL import Image, ImageDraw, ImageFont
@@ -80,7 +81,7 @@ def text(im, box, s, ts):
     im.alpha_composite(layer)
 
 
-def render(port, out_dir):
+def render(port, out_dir, banks=False):
     D = os.path.join(STEVE, "schwung-ports", port)
     sk = glob.glob(os.path.join(D, "deploy", "Synths", "*", "Plugin Skins"))[0]
     t = json.load(open(os.path.join(sk, "TUI.json")))["pageData"]
@@ -120,8 +121,8 @@ def render(port, out_dir):
     outs, drawn = [], set()
     for tab in t["tabs"]:
         page = tab["componentName"].split("|")[0]
-        if page in drawn:
-            continue   # a second Q-Link bank of a page already drawn: same screen
+        if page in drawn and not banks:
+            continue   # a second Q-Link bank of a page already drawn: same screen (unless it has banks= controls)
         drawn.add(page)
         im = Image.new("RGBA", (W, H), (0, 0, 0, 255))
         for c in defs[tab["componentName"]]["componentsData"]:
@@ -162,12 +163,16 @@ def render(port, out_dir):
                         text(im, (ox, oy, sw, sh), cd["name"].strip(), ts)
                     elif data.get("type") == "Value" and p is not None:
                         text(im, (ox, oy, sw, sh), shown_text[p], ts)
-        out = os.path.join(out_dir, "page_%d.png" % len(outs))
+        pages_done = list(dict.fromkeys(o[2] for o in outs))
+        if page in pages_done:   # --banks: every further Q-Link sub-page, page_<n>_<sub>.png
+            out = os.path.join(out_dir, "page_%d_%d.png" % (pages_done.index(page), sum(o[2] == page for o in outs)))
+        else:
+            out = os.path.join(out_dir, "page_%d.png" % len(pages_done))
         im.convert("RGB").save(out, optimize=True)
-        outs.append((out, tab["tabName"]))
-    return outs
+        outs.append((out, tab["tabName"], page))
+    return [(o, n) for o, n, _ in outs]
 
 
 if __name__ == "__main__":
-    for o, name in render(sys.argv[1], sys.argv[2]):
+    for o, name in render(sys.argv[1], sys.argv[2], "--banks" in sys.argv[3:]):
         print(o, name)
