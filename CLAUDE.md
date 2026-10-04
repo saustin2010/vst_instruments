@@ -18,7 +18,8 @@ owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai upda
 ## Layout
 
 - `schwung/{instruments,sequencers,effects}/<plugin>/`, `mutable-instruments/<plugin>/`, `vcv-rack/<plugin>/`,
-  `originals/<plugin>/` (written for this repo): one self-contained folder per plugin. `vst.json` (build),
+  `originals/<plugin>/` (written for this repo), `mpc-ports/<plugin>/` (written for MPC by other authors, built here from
+  their source): one self-contained folder per plugin. `vst.json` (build),
   `params.json` (what MPC sees), `layout.conf` (the screen),
   `images/`, `<plugin>.css`, `src/` (upstream source; local patches under `MPC_PORT`, summarised in
   `upstream-changes.diff`), `mpc/` (adapters/glue), `design/stitch.html`, `screenshots/`, `README.md`, and `deploy/`:

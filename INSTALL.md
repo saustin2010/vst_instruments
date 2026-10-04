@@ -58,10 +58,10 @@ Pick plugins by folder name, by group, or `all`:
 ./install.sh <mpc-address> --dry-run hera grids      # check the MPC and show what would happen
 ./install.sh <mpc-address> hera grids                # install
 ./install.sh <mpc-address> instruments               # groups: instruments, sequencers, effects,
-                                                     #   schwung, mutable-instruments, vcv-rack, originals, all
+                                                     #   schwung, mutable-instruments, vcv-rack, originals, mpc-ports, all
 ```
 
-Plugin names: `303`, `aphex`, `braids`, `chordism`, `denis`, `elements`, `eucalypso`, `fizzik`, `grids`, `groovebank`, `hank`, `helm`, `hera`, `hush1`, `libpo32`, `marbles`, `mazelite`, `midiplayer`, `monksynth`, `monovoice`, `moog`, `mrhyde`, `mrdrums`, `noisemaker`, `nusaw`, `obxd`, `pixelwalkers`, `plaits`, `rampage`, `rings`, `ringsfx`, `superarp`, `tablor`, `verglas`, `warps`, `wurl`.
+Plugin names: `303`, `aphex`, `braids`, `chordism`, `denis`, `elements`, `eucalypso`, `fizzik`, `grids`, `groovebank`, `hank`, `helm`, `hera`, `hush1`, `libpo32`, `marbles`, `mazelite`, `midiplayer`, `monksynth`, `monovoice`, `moog`, `mpcplaits`, `mrhyde`, `mrdrums`, `mutablevibe`, `noisemaker`, `nusaw`, `obxd`, `pixelwalkers`, `plaits`, `rampage`, `rings`, `ringsfx`, `superarp`, `tablor`, `verglas`, `warps`, `wurl`.
 
 What it does, in order:
 

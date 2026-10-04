@@ -15,6 +15,7 @@ STEVE = os.path.dirname(os.path.dirname(HERE))
 MV = os.path.dirname(STEVE)
 sys.path.insert(0, os.path.join(MV, "tools"))
 import shadow_skin  # noqa: E402
+import params as fw_params  # noqa: E402
 
 CONTROLS = ("knob", "slider_v", "slider_h", "toggle", "button", "enum_h", "enum_v", "popup", "stepper", "list", "menu")
 
@@ -30,6 +31,21 @@ def overlap(a, b):
     return max(0, min(ax + aw, bx + bw) - max(ax, bx)), max(0, min(ay + ah, by + bh) - max(ay, by))
 
 
+def shown_when(c):
+    """{parameter number: option} a widget is shown at (when=, IndexedEnabling in its bounds)"""
+    out = {}
+    for h in c["bounds"].get("additionalInvalidatingHandles", []):
+        m = re.match(r"IndexedEnabling/(\d+)/\d+/Parameter (\d+)$", h)
+        if m:
+            out[int(m.group(2))] = int(m.group(1))
+    return out
+
+
+def exclusive(w1, w2):
+    """two widgets never on screen together: shown at different options of the same parameter"""
+    return any(p in w2 and w2[p] != o for p, o in w1.items())
+
+
 def check(port, verbose=False):
     D = os.path.join(STEVE, "schwung-ports", port)
     skins = glob.glob(os.path.join(D, "deploy", "Synths", "*", "Plugin Skins"))
@@ -43,7 +59,8 @@ def check(port, verbose=False):
     lay = {t["name"]: t for t in layout}
     defs = {e["key"]: e["value"] for e in tui["componentDefinitions"]["localComponentDefinitions"]}
     out, minor = [], 0
-    popts = {p["key"]: p.get("options") for p in json.load(open(os.path.join(D, "params.json")))["params"]}
+    src, _ = fw_params.source(json.load(open(os.path.join(D, "vst.json"))))   # params.json, or a module.json
+    popts = {p["key"]: p.get("options") for p in fw_params.load(os.path.join(D, src))[0]}
     for t in layout:   # a switch's / pop-up's own option labels must line up with the parameter's options
         for w in t["widgets"]:
             if w["kind"] in ("enum_h", "enum_v", "popup") and w.get("options") and popts.get(w.get("key")) is not None:
@@ -74,19 +91,19 @@ def check(port, verbose=False):
                 if k not in ks:
                     ks.append(k)
             for k in ks:   # (one widget's own handles, e.g. a stepper and the name it shows, never "overlap")
-                bound.setdefault(k, []).append((rect(c["bounds"]["bounds"]), id(c)))
+                bound.setdefault(k, []).append((rect(c["bounds"]["bounds"]), id(c), shown_when(c)))
         if lt:
             want = {w["key"] for w in lt["widgets"] if w["kind"] in CONTROLS and "key" in w   # banks=: some sub-pages only
                     and (not shadow_skin.banks_of(w) or tab["tabName"] in shadow_skin.banks_of(w))}
             for k in sorted(want - set(bound)):
                 out.append("BIND  %s: %s is in the layout but no widget on the page is bound to it" % (page_name, k))
         # touch boxes of different parameters overlapping
-        items = [(k, r, nm) for k, rs in bound.items() for r, nm in rs]
+        items = [(k, r, nm, wh) for k, rs in bound.items() for r, nm, wh in rs]
         seen = set()
         for i in range(len(items)):
             for j in range(i + 1, len(items)):
-                (k1, r1, n1), (k2, r2, n2) = items[i], items[j]
-                if k1 == k2 or n1 == n2:
+                (k1, r1, n1, w1), (k2, r2, n2, w2) = items[i], items[j]
+                if k1 == k2 or n1 == n2 or exclusive(w1, w2):   # (when=: e.g. RATE and DIV, by a SYNC switch)
                     continue
                 ox, oy = overlap(r1, r2)
                 if ox > 0 and oy > 0 and (k1, k2) not in seen:
@@ -98,7 +115,7 @@ def check(port, verbose=False):
                     else:
                         out.append("TOUCH %s: %s and %s overlap %dx%d px" % (page_name, k1, k2, ox, oy))
         for k, rs in bound.items():
-            for (x, y, w, h), nm in rs:
+            for (x, y, w, h), nm, _ in rs:
                 if x < -2 or y < -2 or x + w > 1282 or y + h > 630:
                     out.append("EDGE  %s: %s box %d,%d %dx%d leaves the screen" % (page_name, k, x, y, w, h))
         # Q-Links of this tab (sub-tab = which qlinks line)

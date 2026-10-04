@@ -2,7 +2,7 @@
 # Install plugins from this repo onto an MPC OS device over SSH (see INSTALL.md first):
 #   ./install.sh <mpc address> <plugin|group> [...] [--yes] [--register] [--dry-run]
 #     plugin   a folder name, e.g. hera, grids, rampage (./install.sh --list shows them all)
-#     group    all, instruments, sequencers, effects, schwung, mutable-instruments, vcv-rack, originals
+#     group    all, instruments, sequencers, effects, schwung, mutable-instruments, vcv-rack, originals, mpc-ports
 #     --yes        don't ask before restarting MPC
 #     --register   (re)write the plugin-list entries even for plugins MPC already lists
 #     --dry-run    check the device and say what would happen; change nothing

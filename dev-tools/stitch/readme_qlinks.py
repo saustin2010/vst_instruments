@@ -6,6 +6,16 @@ Run it after changing a page's Q-Links, so the README says what the device does.
 import json, os, re, sys
 
 
+def param_list(d):
+    """The plugin's parameters: params.json, or (a port with only a "module") its module.json, read as the framework
+    reads it."""
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                                    "..", "tools"))
+    import params as fw_params
+    src, _ = fw_params.source(json.load(open(os.path.join(d, "vst.json"))))
+    return fw_params.load(os.path.join(d, src))[0]
+
+
 def pages(layout):
     """[(page name, [(bank title, [keys])])] in page order"""
     out = []
@@ -32,7 +42,7 @@ def columns(keys, names):
 
 def main():
     for d in sys.argv[1:]:
-        names = {p["key"]: p.get("name", p["key"]) for p in json.load(open(os.path.join(d, "params.json")))["params"]}
+        names = {p["key"]: p.get("name", p["key"]) for p in param_list(d)}
         readme = os.path.join(d, "README.md")
         text = open(readme).read()
         changed = 0
