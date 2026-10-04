@@ -1,6 +1,6 @@
 # MPC Plaits
 
-**Synth** · Mutable Instruments Plaits as a polyphonic instrument: all 24 models, LFOs, envelopes and two modulation matrices. · maker in MPC: poloq · licence: MIT (panel artwork CC-BY-SA 3.0)
+**Synth** · Mutable Instruments Plaits as a polyphonic instrument: all 24 models, LFOs, envelopes and two modulation matrices; 31 presets. · maker in MPC: poloq · licence: MIT (panel artwork CC-BY-SA 3.0)
 
 <img src="screenshots/page_0.png" width="760" alt="MPC Plaits on the MPC touchscreen">
 
@@ -14,7 +14,15 @@ Instruments' own panel artwork.
 It was written for MPC OS by poloq, starting from the Mr Hyde Schwung module (also in this repo, as **Mr Hyde**); this
 repo builds it from poloq's source with its own copy of the framework, keeps poloq's screen, and changes what some
 Q-Links do (one column per panel, see below and `DESIGN-QA.md`). It sits next to this repo's own **[Plaits](../../schwung/instruments/plaits/)**
-port, which is a simpler, monophonic take with 24 presets. Upstream has no presets, so the PRESET menu is empty for now.
+port, which is a simpler, monophonic take with 24 presets.
+
+Upstream has no presets, so the port brings 31, one or more for every model (Init, Analog Bass, Acid Line, Poly Brass,
+Super Saw Pad, Phase Keys; seven 6-op FM patches from the module's banks: E.Piano, Marimba, Tubular Bells, Hammond, Full
+Strings, FM Brass, Solid Bass; Terrain Pad, String Machine, Chip Arp, Fold Bass, FM Bell, Formant Choir, Additive Organ,
+Wavetable Sweep, Chord Stab, Talking Synth, Swarm Pad, Particle Rain, Noise Sweep, Plucked String, Modal Bell, Kick,
+Snare, Hi-Hat), in MPC's PRESET menu. Each sets every control; VOLUME evens out their levels as far as its +6 dB
+allows (measured offline with `dev-tools/presets/levels.sh`): most sit within a dB of each other, the drums and the
+quietest models (Plucked String, Solid Bass, Additive Organ) a little under.
 
 ## On the MPC
 
@@ -99,6 +107,7 @@ What this repo changed from upstream (the diff is in `upstream-changes.diff`):
   TIMBRE and MORPH, whose outline took in the whole page; now the left pair, the centre (MODEL and the three
   attenuverters), the right pair and OUT/AUX are a column each. The empty slots on VOICE and LFO took the AMP, shape and
   random-mode switches.
+- 31 presets (`presets.json`, written by `mpc/make_presets.py`, which keeps each preset's VOLUME).
 - Touch boxes narrowed where neighbours' overlapped (matrix knobs and their LEDs, the LFO page's LEDs, PHASE, SLEW,
   DIV); nothing moved.
 - Built with this repo's framework instead of poloq's fork of it; the fork's transport messages (`HAS_TRANSPORT`, so
@@ -114,6 +123,8 @@ What this repo changed from upstream (the diff is in `upstream-changes.diff`):
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `src/module.json` | the plugin's parameters as MPC sees them (VST index = order) |
+| `presets.json` | the presets in MPC's PRESET menu (`mpc/make_presets.py` writes it) |
+| `mpc/make_presets.py` | the presets: each one's settings and level |
 | `layout.conf` | the screen: control positions, art, Q-Links |
 | `mpcplaits.css` | the artwork stylesheet |
 | `images/` | artwork: backgrounds, knobs, model LEDs, envelope drawings |

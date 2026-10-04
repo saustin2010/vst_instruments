@@ -20,15 +20,16 @@ Q-Link columns before → after ("-" = an empty slot):
 | ENV 3-4 | 1 ENV 3 ADSR  ·  2 ENV 3 DEST, AMOUNT, ENV 4 ATTACK, DECAY  ·  3 ENV 4 SUSTAIN, RELEASE, DEST, AMOUNT | 1 ENV 3 ADSR  ·  2 ENV 3 DEST, AMOUNT  ·  3 ENV 4 ADSR  ·  4 ENV 4 DEST, AMOUNT |
 | LFO 1-2 | 1 LFO1 RATE, SHAPE, AMOUNT, DIV  ·  2 LFO1 WAVE, DEST, LFO2 RATE, SHAPE  ·  3 LFO2 AMOUNT, DIV, WAVE, DEST | 1 LFO1 RATE, SHAPE, AMOUNT, POLARITY  ·  2 LFO1 SYNC, DIV, WAVE, DEST  ·  3 LFO2 RATE, SHAPE, AMOUNT, POLARITY  ·  4 LFO2 SYNC, DIV, WAVE, DEST |
 | LFO 3-4 | as LFO 1-2, for LFO 3 and 4 | as LFO 1-2, for LFO 3 and 4 |
-| EFFECTS | 1 REVERB DECAY, DAMPING, HI-PASS, AMOUNT  ·  2 CHORUS RATE, DEPTH, AMOUNT, DELAY TIME  ·  3 DELAY FEEDBACK, TONE, AMOUNT, DIV  ·  4 DRIVE | 1 REVERB DECAY, DAMPING, HI-PASS, AMT  ·  2 CHORUS RATE, DEPTH, AMT  ·  3 DELAY TIME, FEEDBACK, TONE, AMT  ·  4 DELAY SYNC, DIV, DRIVE |
+| EFFECTS | 1 REVERB DECAY, DAMPING, HI-PASS, AMOUNT  ·  2 CHORUS RATE, DEPTH, AMOUNT, DELAY TIME  ·  3 DELAY FEEDBACK, TONE, AMOUNT, DIV  ·  4 DRIVE | 1 REVERB DECAY, DAMPING, HI-PASS, AMT  ·  2 CHORUS RATE, DEPTH, AMT  ·  3 DELAY TIME, FEEDBACK, TONE, AMT  ·  4 DELAY SYNC, DIV, DRIVE, VOLUME |
 | MOD | 1 VEL1 DEST, AMT, VEL2 DEST, AMT  ·  2 MW DEST, AMT, AT DEST, AT AMT | 1 VEL1 DEST, AMT  ·  2 VEL2 DEST, AMT  ·  3 MW DEST, AMT  ·  4 AT DEST, AMT |
 
 Layout:
 - **LFOS**: SYNC and POLARITY were stacked to the right of the knobs, so any split of an LFO's eight controls into two
   columns overlapped. POLARITY moved up into the knob row, SYNC down beside DIVISION (DIVISION and WAVE a little
   narrower): each LFO is two rows, a column each.
-- **EFFECTS**: DRIVE (one knob) shares the fourth column with DELAY's SYNC and DIVISION beside it, as the rules allow a
-  small panel; the outline takes in the right of the DELAY panel and DRIVE, and nothing of another column.
+- **EFFECTS**: the DRIVE panel became OUTPUT, DRIVE and the new VOLUME (2026-10-05). It shares the fourth column with
+  DELAY's SYNC and DIVISION beside it, as the rules allow a small panel; the outline takes in the right of the DELAY
+  panel and OUTPUT, and nothing of another column.
 - Names: the four effect levels were all AMOUNT (MPC shows the parameter's name, so OVERVIEW read AMOUNT four times):
   REVERB AMT, DELAY AMT, CHORUS AMT, DRIVE. LPG DECAY's fixed name was blank; the engine still leaves it unnamed on
   the Rings models, where it does nothing.
@@ -44,4 +45,4 @@ outlines overlap on any page).
   `audioMasterUpdateDisplay`, verified for labels upstream, not yet for this plugin.
 - The right of the screen (POLY, OCTAVE, CHORUS AMT, DRIVE and the right-hand LFO and ENV panels) sits under MPC's Q-Link
   sidebar while a Q-Link is touched; the sidebar shows their values.
-- Presets: upstream has none.
+- The 24 presets (2026-10-05, levels evened out offline): how they sound on the Live II.

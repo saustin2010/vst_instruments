@@ -238,6 +238,9 @@ typedef struct {
     float filterCutoff, filterResonance, filterMorph;   /* Hz, 0..1, 0..1 */
     int   filterSlope;                        /* 0=12 dB/oct  1=24 dB/oct */
     float reverbDecay, reverbDamping, reverbWet, reverbHipass;
+#ifdef MPC_PORT
+    float volumeDb, volumeGain, volumeCur;   /* VOLUME (vst_instruments): output level, -24..+24 dB */
+#endif
     float delayTime, delayFeedback, delayTone, delayWet;   /* delayTime in ms */
     float chorusRate, chorusDepth, chorusWet;              /* chorusRate in Hz */
     float satDrive;
@@ -406,6 +409,9 @@ static void apply(state_t *s, const char *key, double v) {
     }
     else if (!strcmp(key, "delaySync"))  { s->delaySync = (v >= 0.5) ? 1 : 0; }
     else if (!strcmp(key, "delayDiv"))   { int d = (int)(v + 0.5); s->delayDiv = (d < 0 ? 0 : (d > 6 ? 6 : d)); }
+#ifdef MPC_PORT
+    else if (!strcmp(key, "volume"))     { s->volumeDb = clampf((float)v, -24.f, 24.f); s->volumeGain = powf(10.f, s->volumeDb / 20.f); }
+#endif
 }
 
 static void *create(const char *data_dir) {
@@ -453,6 +459,9 @@ static void *create(const char *data_dir) {
     apply(s, "filterMorph", 0.0);       apply(s, "filterSlope", 1);
     apply(s, "reverbDecay", 0.7);   apply(s, "reverbDamping", 0.0);  apply(s, "reverbWet", 0.0);
     apply(s, "reverbHipass", 0.0);
+#ifdef MPC_PORT
+    apply(s, "volume", 0.0);   s->volumeCur = s->volumeGain;
+#endif
     apply(s, "delayTime", 300.0);   apply(s, "delayFeedback", 0.3);
     apply(s, "delayTone", 0.5);     apply(s, "delayWet", 0.0);
     apply(s, "chorusRate", 0.5);    apply(s, "chorusDepth", 0.3);    apply(s, "chorusWet", 0.0);
@@ -591,6 +600,9 @@ static int serialise(state_t *s, char *buf, int len) {
             ";modwheelTarget=%d;modwheelAmount=%.6g;aftertouchTarget=%d;aftertouchAmount=%.6g",
             s->lpgDecay, s->poly - 1, s->octaveSemis / 12, s->delaySync, s->delayDiv, s->reverbHipass,
             s->menv[4].target, s->menv[4].amount, s->menv[5].target, s->menv[5].amount);
+#ifdef MPC_PORT
+    if (n < len) n += snprintf(buf + n, len - n, ";volume=%.6g", s->volumeDb);
+#endif
     return n;
 }
 
@@ -632,6 +644,10 @@ static int get_param(void *inst, const char *key, char *buf, int buf_len) {
     if (!strcmp(key, "reverbDamping"))   return snprintf(buf, buf_len, "%.6g", s->reverbDamping);
     if (!strcmp(key, "reverbWet"))       return snprintf(buf, buf_len, "%.6g", s->reverbWet);
     if (!strcmp(key, "reverbHipass"))    return snprintf(buf, buf_len, "%.6g", s->reverbHipass);
+#ifdef MPC_PORT
+    if (!strcmp(key, "volume"))          return snprintf(buf, buf_len, "%.6g", s->volumeDb);
+    if (!strcmp(key, "volume_display"))  return snprintf(buf, buf_len, "%+.0f dB", s->volumeDb);
+#endif
     if (!strcmp(key, "delayTime")) {     /* string display: synced -> division + resulting ms, free -> ms */
         if (s->delaySync) {
             float ms = kDelayDivBeats[s->delayDiv] * 60000.f / (s->bpm > 1.f ? s->bpm : 120.f);
@@ -882,6 +898,14 @@ static void render(void *inst, int16_t *out_lr, int frames) {
         chorus_process(s->chorus, mix, mix, c);
         sat_process(s->sat, mix, c);
 
+#ifdef MPC_PORT
+        /* VOLUME: the output level before the limiter, glided over the chunk so a Q-Link turn doesn't click */
+        {
+            float g = s->volumeCur, dg = (s->volumeGain - g) / (float)c;
+            for (int i = 0; i < c; i++, g += dg) { mix[i * 2] *= g; mix[i * 2 + 1] *= g; }
+            s->volumeCur = s->volumeGain;
+        }
+#endif
         for (int i = 0; i < c; i++) {
             float l = soft_clip(mix[i * 2]);
             float r = soft_clip(mix[i * 2 + 1]);

@@ -27,8 +27,8 @@ Checked 2026-10-03 against every engine's source (what it opens at run time) and
 Built into the plugin itself (nothing to install): Hank 32 presets, Hush One 11, Moog 14, Noisemaker 256, NuSaw 27,
 Aphex 41, Denis 30, Fizzik 31, Wurl 10, MonkSynth 12 singers, Mono Voice 12 patches, Plaits' three 6-op FM banks, Super Arp's 40 patterns
 and 40 rhythms. Made for this port, where upstream has none (`presets.json`, the wrapper's own presets): 303 13,
-Elements 12, Rings 14, Plaits 24, Mr Hyde 19, Rings FX 12, Verglas 12, Warps 12. The other sequencers / generators have none.
-Mutable Vibe and MPC Plaits (made for MPC by other authors, 2026-10-05) have none yet: upstream ships none.
+Elements 12, Rings 14, Plaits 24, Mr Hyde 19, Rings FX 12, Verglas 12, Warps 12, Mutable Vibe 24, MPC Plaits 31
+(2026-10-05, levels measured with `dev-tools/presets/levels.sh`). The other sequencers / generators have none.
 
 ## Adding your own
 

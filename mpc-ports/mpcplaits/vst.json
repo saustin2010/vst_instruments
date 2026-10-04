@@ -3,6 +3,7 @@
   "vendor": "poloq",
   "uid": "MiPl",
   "so": "mpcplaits.so",
+  "presets": "presets.json",
   "module": "src/module.json",
   "defines": {
     "HAS_LFO_BPM": 1,

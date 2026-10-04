@@ -40,8 +40,9 @@ parameter index, so existing projects keep working.
   repo's framework (2026-10-05). Offline: built, test PASSED, Q-Links one column per panel on every page (checked with
   check_skin.py and the column outlines), names fixed where MPC would show AMOUNT four times. Framework gained what
   they use from newer upstream and poloq's fork: `dynamic_name` / `dynamic_display` (names and value text from the
-  engine) and `HAS_TRANSPORT`. Still to do: install (new plugins: one MPC restart), Design QA on the Live II
-  (per-model names on Mutable Vibe, synced LFOs restarting on MPC Plaits), and presets for both (upstream has none).
+  engine) and `HAS_TRANSPORT`. Installed; the owner: "seems to be working nicely" (2026-10-05). Presets: Mutable Vibe 24 (with a new VOLUME
+  control to level them), MPC Plaits 31, levels evened out offline (`dev-tools/presets/levels.sh`). Still to do: Design
+  QA on the Live II (per-model names on Mutable Vibe, synced LFOs restarting on MPC Plaits, how the presets sound).
 - [ ] MIDI CC 20-35 move every plugin's first-page Q-Links (wrapper, 2026-10-04, offline test in every plugin). Check
   on a device, with no MPC settings touched: a sequencer's CCs on the instrument track's MIDI input move its controls
   (MPC passes them through), and MPC doesn't keep any of 20-35 for itself.

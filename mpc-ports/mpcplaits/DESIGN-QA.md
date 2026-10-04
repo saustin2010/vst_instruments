@@ -42,4 +42,4 @@ outlines overlap on any page).
 - Synced LFOs restarting with MPC's transport (`HAS_TRANSPORT`, new in this repo's framework, from poloq's fork).
 - The model buttons and the model list; MPC's sidebar over HARMONICS and MORPH while a Q-Link is touched (it shows their
   values).
-- Presets: upstream has none.
+- The 31 presets (2026-10-05, levels evened out offline): how they sound on the Live II.

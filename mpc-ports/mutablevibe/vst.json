@@ -3,6 +3,7 @@
   "vendor": "nachtaktiv303",
   "uid": "MtVb",
   "so": "mutablevibe.so",
+  "presets": "presets.json",
   "build": {
     "sources": [
       "src/engine.cpp",
@@ -63,7 +64,8 @@
       "-Impc",
       "-Isrc/dsp/eurorack",
       "-DTEST=1",
-      "-DHAS_LFO_BPM=1"
+      "-DHAS_LFO_BPM=1",
+      "-DMPC_PORT"
     ],
     "libs": [
       "-lm"

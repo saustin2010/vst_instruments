@@ -1,6 +1,6 @@
 # Mutable Vibe
 
-**Synth** · Mutable Instruments Rings and Plaits in one polyphonic instrument, with a filter, four LFOs, four envelopes and effects. · maker in MPC: nachtaktiv303 · licence: MIT
+**Synth** · Mutable Instruments Rings and Plaits in one polyphonic instrument, with a filter, four LFOs, four envelopes and effects; 24 presets. · maker in MPC: nachtaktiv303 · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Mutable Vibe on the MPC touchscreen">
 
@@ -12,13 +12,21 @@ reverb, tape delay, chorus and drive.
 
 It was written for MPC OS by nachtaktiv303 on sd88me's framework, like the ports here; this repo builds it from the
 author's source with its own copy of the framework, keeps the author's screen, and changes what its Q-Links do (one
-column per panel, see below and `DESIGN-QA.md`). Upstream has no presets, so the PRESET menu is empty for now.
+column per panel, see below and `DESIGN-QA.md`).
+
+Upstream has no presets, so the port brings 24 (Init; on the Rings models Glass Marimba, Tubular Bells, Thumb Piano,
+Sitar Drone, Harp Chords, Bent Pluck, FM Tines, Verb String Pad, Steel Strum; on the Plaits models Analog Bass, VCF
+Lead, Phase Keys, Terrain Pad, String Machine, Chip Lead, Wavefold Pluck, FM Bell, Additive Organ, Wavetable Sweep,
+Chord Stab, Swarm Pad, Plucked String, Modal Mallet), in MPC's PRESET menu. Each sets every control, and a VOLUME
+control added for them evens out their levels: the Rings models play 15-35 dB quieter than the Plaits ones. Measured
+offline (`dev-tools/presets/levels.sh`), most sit within a dB of each other; the sharpest plucks (Thumb Piano, Bent
+Pluck, Glass Marimba) stay a little quieter, so their attacks don't hit the output limiter.
 
 ## On the MPC
 
 - In the plugin browser: **[SYN] Mutable Vibe** by **nachtaktiv303** (Synth)
 - Files: `/sdcard/vst/mutablevibe.so`, screen in `/sdcard/Synths/nachtaktiv303 - VST - [SYN] Mutable Vibe/`
-- 95 parameters (all automatable) on 5 pages; ENVELOPES and LFOS have two Q-Link sub-pages each
+- 96 parameters (all automatable) on 5 pages; ENVELOPES and LFOS have two Q-Link sub-pages each
 
 ## Playing it
 
@@ -57,7 +65,7 @@ Q-Link columns (bank 2): **1** LFO3 RATE, LFO3 SHAPE, LFO3 AMOUNT, LFO3 POLARITY
 
 <img src="screenshots/page_3.png" width="760" alt="Mutable Vibe, page EFFECTS">
 
-Q-Link columns: **1** REVERB DECAY, REVERB DAMPING, REVERB HI-PASS, REVERB AMT  ·  **2** CHORUS RATE, CHORUS DEPTH, CHORUS AMT  ·  **3** DELAY TIME, DELAY FEEDBACK, DELAY TONE, DELAY AMT  ·  **4** DELAY SYNC, DELAY DIV, DRIVE
+Q-Link columns: **1** REVERB DECAY, REVERB DAMPING, REVERB HI-PASS, REVERB AMT  ·  **2** CHORUS RATE, CHORUS DEPTH, CHORUS AMT  ·  **3** DELAY TIME, DELAY FEEDBACK, DELAY TONE, DELAY AMT  ·  **4** DELAY SYNC, DELAY DIV, DRIVE, VOLUME
 
 ### 5. MOD
 
@@ -97,6 +105,10 @@ What this repo changed from upstream (the diff is in `upstream-changes.diff`):
   controls moved 10-20 px so no Q-Link outline touches another.
 - POLY and the LFO DIVISION lists tell the wrapper the engine reports them by position (`send`): with this repo's
   framework a reported `2` read as the label "2" (2 bars), not 1/4.
+- VOLUME (appended, -24..+24 dB, on the EFFECTS page's OUTPUT panel beside DRIVE): the output level before the
+  engine's limiter, saved with the project (`src/engine.cpp`, under `MPC_PORT`). Its presets use it to even out their
+  levels.
+- 24 presets (`presets.json`, written by `mpc/make_presets.py`, which keeps each preset's level trim).
 - Built with this repo's framework, which gained what the port uses from newer upstream builds: per-model names and
   value text (`dynamic_name`, `dynamic_display`); `mpc/engine.h` is a copy of the framework's engine interface.
 
@@ -108,9 +120,11 @@ What this repo changed from upstream (the diff is in `upstream-changes.diff`):
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
+| `presets.json` | the presets in MPC's PRESET menu (`mpc/make_presets.py` writes it) |
 | `layout.conf` | the screen: control positions, Q-Links |
 | `mutablevibe.css` | the artwork stylesheet |
 | `mpc/engine.h` | the framework's engine interface the engine implements |
+| `mpc/make_presets.py` | the presets: each one's settings and level trim |
 | `src/` | the engine and DSP, vendored from upstream |
 | `design/upstream/` | the author's README, screenshots and test record, for reference |
 | `UPSTREAM`, `upstream-changes.diff` | where it comes from, and what this repo changed |
