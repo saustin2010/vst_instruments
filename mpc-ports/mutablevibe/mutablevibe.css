@@ -1,0 +1,30 @@
+/* Mutable Vibe MPC -- Mutable Instruments look on the browser renderer (loaded after
+ * tools/html_art.py's default.css). Neutral light-grey panel, matte black knobs with a white cap
+ * and a white position line across the skirt (knob_look=moog), thin faders with a rectangular white
+ * cap on a dark slot (slider_look=fader), cyan/magenta accents. Colours come from the layout's
+ * theme_* lines (var(--accent), var(--knob-face), var(--knob-dot), ...). */
+
+:root {
+  --title-size: 24px;        /* frame headings: readable but not bold */
+  --label-size: 16px;
+  --seg-size: 15px;
+  --sheen: 0;                /* flat matte, no gloss */
+  --shadow: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+}
+
+/* frame headings: magenta (theme accent_hi), regular weight (not bold), a touch of tracking */
+.frame-title { font-weight: 400; letter-spacing: 0.06em; }
+
+/* knobs (look=moog): black skirt + body, white position line, white cap, no knurl */
+.look-skirt { fill: var(--knob-face); }
+.look-body  { fill: var(--knob-face); stroke: #000; stroke-width: 1; }
+.look-knurl { stroke: none; }
+.knob .look-line { stroke: var(--knob-dot); }           /* white line on the black skirt */
+.look-cap   { fill: var(--knob-dot); stroke: #b8b8b8; stroke-width: 1; }
+
+/* faders (look=fader): thin dark slot, rectangular white cap with a grey centre line */
+.look-slot  { fill: #1a1a1a; stroke: none; }
+.look-tick  { display: none; }           /* no scale ticks (no numeric scale to go with them) */
+.look-fader { fill: var(--knob-dot); stroke: var(--knob-ring); stroke-width: 1; }
+.look-ridge { stroke: #c2c2c2; }
+.slider .look-line { stroke: #8a8a8a; }                 /* centre line on the white cap */

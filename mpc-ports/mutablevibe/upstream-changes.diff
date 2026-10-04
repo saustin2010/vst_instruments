@@ -1,0 +1,308 @@
+# What this repo changed in the author's files (upstream/vst/... = their repo at the commit in UPSTREAM; src/ is unchanged).
+diff --git upstream/vst/params.json params.json
+index 980ffb8..367ff51 100644
+--- upstream/vst/params.json
++++ params.json
+@@ -146,7 +146,7 @@
+     },
+     {
+       "key": "reverbWet",
+-      "name": "AMOUNT",
++      "name": "REVERB AMT",
+       "min": 0.0,
+       "max": 1.0,
+       "default": 0.0,
+@@ -177,7 +177,7 @@
+     },
+     {
+       "key": "delayWet",
+-      "name": "AMOUNT",
++      "name": "DELAY AMT",
+       "min": 0.0,
+       "max": 1.0,
+       "default": 0.0,
+@@ -201,7 +201,7 @@
+     },
+     {
+       "key": "chorusWet",
+-      "name": "AMOUNT",
++      "name": "CHORUS AMT",
+       "min": 0.0,
+       "max": 1.0,
+       "default": 0.0,
+@@ -209,7 +209,7 @@
+     },
+     {
+       "key": "satDrive",
+-      "name": "AMOUNT",
++      "name": "DRIVE",
+       "min": 0.0,
+       "max": 1.0,
+       "default": 0.0,
+@@ -749,7 +749,7 @@
+     },
+     {
+       "key": "lpgDecay",
+-      "name": " ",
++      "name": "LPG DECAY",
+       "min": 0.0,
+       "max": 1.0,
+       "default": 1.0,
+@@ -765,7 +765,13 @@
+         "3",
+         "4"
+       ],
+-      "default": "4"
++      "default": "4",
++      "send": [
++        "0",
++        "1",
++        "2",
++        "3"
++      ]
+     },
+     {
+       "key": "octave",
+@@ -819,7 +825,16 @@
+         "2",
+         "4"
+       ],
+-      "default": "1/4"
++      "default": "1/4",
++      "send": [
++        "0",
++        "1",
++        "2",
++        "3",
++        "4",
++        "5",
++        "6"
++      ]
+     },
+     {
+       "key": "lfo2Sync",
+@@ -842,7 +857,16 @@
+         "2",
+         "4"
+       ],
+-      "default": "1/4"
++      "default": "1/4",
++      "send": [
++        "0",
++        "1",
++        "2",
++        "3",
++        "4",
++        "5",
++        "6"
++      ]
+     },
+     {
+       "key": "lfo3Sync",
+@@ -865,7 +889,16 @@
+         "2",
+         "4"
+       ],
+-      "default": "1/4"
++      "default": "1/4",
++      "send": [
++        "0",
++        "1",
++        "2",
++        "3",
++        "4",
++        "5",
++        "6"
++      ]
+     },
+     {
+       "key": "lfo4Sync",
+@@ -888,7 +921,16 @@
+         "2",
+         "4"
+       ],
+-      "default": "1/4"
++      "default": "1/4",
++      "send": [
++        "0",
++        "1",
++        "2",
++        "3",
++        "4",
++        "5",
++        "6"
++      ]
+     },
+     {
+       "key": "reverbHipass",
+diff --git upstream/vst/layout.conf layout.conf
+index accae5c..9ebe18a 100644
+--- upstream/vst/layout.conf
++++ layout.conf
+@@ -21,15 +21,15 @@ theme_seg_active=0a97ad
+ theme_seg_inactive=c7c7c7
+ theme_seg_active_tx=ffffff
+ theme_lcd=eaeaea
+-art_css=skin.css
++art_css=mutablevibe.css
+ knob_look=moog
+ slider_look=fader
+ label_scale=1.5
+ 
+ [tab OVERVIEW]
+ frame x=10 y=92 w=1258 h=304 title="ENGINE"
+-popup cx=110 cy=222 w=170 h=48 label="MODEL" key=model
+-knob cx=245 cy=222 r=36 label="STRUCTURE" key=structure
++popup cx=103 cy=222 w=166 h=48 label="MODEL" key=model
++knob cx=245 cy=222 r=36 label="STRUCTURE" key=structure bw=116
+ knob cx=403 cy=222 r=36 label="BRIGHTNESS" key=brightness
+ knob cx=561 cy=222 r=36 label="DAMPING" key=damping
+ knob cx=719 cy=222 r=36 label="POSITION" key=position
+@@ -46,76 +46,76 @@ knob cx=719 cy=534 r=36 label="REVERB" key=reverbWet
+ knob cx=877 cy=534 r=36 label="DELAY" key=delayWet
+ knob cx=1035 cy=534 r=36 label="CHORUS" key=chorusWet
+ knob cx=1180 cy=534 r=36 label="DRIVE" key=satDrive
+-qlinks "OVERVIEW" = model,structure,brightness,damping,position,lpgDecay,octave,filterCutoff,filterResonance,filterEnvAmount,reverbWet,delayWet,chorusWet,satDrive
++qlinks "OVERVIEW" = model,structure,brightness,damping,position,lpgDecay,polyphony,octave,filterSlope,filterCutoff,filterResonance,filterEnvAmount,reverbWet,delayWet,chorusWet,satDrive
+ 
+ [tab ENVELOPES]
+ frame x=10 y=92 w=616 h=290 title="AMP ENV"
+-slider_v cx=90 cy=250 w=32 h=150 label="A" key=attack
+-slider_v cx=170 cy=250 w=32 h=150 label="D" key=decay
+-slider_v cx=250 cy=250 w=32 h=150 label="S" key=sustain
+-slider_v cx=330 cy=250 w=32 h=150 label="R" key=release
++slider_v cx=90 cy=250 w=32 h=150 label="A" key=attack bw=78
++slider_v cx=170 cy=250 w=32 h=150 label="D" key=decay bw=78
++slider_v cx=250 cy=250 w=32 h=150 label="S" key=sustain bw=78
++slider_v cx=330 cy=250 w=32 h=150 label="R" key=release bw=78
+ frame x=632 y=92 w=616 h=290 title="FILTER ENV (ENV2)"
+-slider_v cx=712 cy=250 w=32 h=150 label="A" key=env2Attack
+-slider_v cx=792 cy=250 w=32 h=150 label="D" key=env2Decay
+-slider_v cx=872 cy=250 w=32 h=150 label="S" key=env2Sustain
+-slider_v cx=952 cy=250 w=32 h=150 label="R" key=env2Release
++slider_v cx=712 cy=250 w=32 h=150 label="A" key=env2Attack bw=78
++slider_v cx=792 cy=250 w=32 h=150 label="D" key=env2Decay bw=78
++slider_v cx=872 cy=250 w=32 h=150 label="S" key=env2Sustain bw=78
++slider_v cx=952 cy=250 w=32 h=150 label="R" key=env2Release bw=78
+ knob cx=1108 cy=250 r=36 label="ENV AMT" key=filterEnvAmount
+ frame x=10 y=404 w=616 h=290 title="ENV 3"
+-slider_v cx=90 cy=562 w=32 h=150 label="A" key=env3Attack
+-slider_v cx=170 cy=562 w=32 h=150 label="D" key=env3Decay
+-slider_v cx=250 cy=562 w=32 h=150 label="S" key=env3Sustain
+-slider_v cx=330 cy=562 w=32 h=150 label="R" key=env3Release
+-popup cx=486 cy=505 w=170 h=44 label="DESTINATION" key=env3Target
+-knob cx=486 cy=610 r=36 label="AMOUNT" key=env3Amount
++slider_v cx=90 cy=562 w=32 h=150 label="A" key=env3Attack bw=78
++slider_v cx=170 cy=562 w=32 h=150 label="D" key=env3Decay bw=78
++slider_v cx=250 cy=562 w=32 h=150 label="S" key=env3Sustain bw=78
++slider_v cx=330 cy=562 w=32 h=150 label="R" key=env3Release bw=78
++popup cx=498 cy=505 w=170 h=44 label="DESTINATION" key=env3Target
++knob cx=498 cy=610 r=36 label="AMOUNT" key=env3Amount
+ frame x=632 y=404 w=616 h=290 title="ENV 4"
+-slider_v cx=712 cy=562 w=32 h=150 label="A" key=env4Attack
+-slider_v cx=792 cy=562 w=32 h=150 label="D" key=env4Decay
+-slider_v cx=872 cy=562 w=32 h=150 label="S" key=env4Sustain
+-slider_v cx=952 cy=562 w=32 h=150 label="R" key=env4Release
+-popup cx=1108 cy=505 w=170 h=44 label="DESTINATION" key=env4Target
+-knob cx=1108 cy=610 r=36 label="AMOUNT" key=env4Amount
++slider_v cx=712 cy=562 w=32 h=150 label="A" key=env4Attack bw=78
++slider_v cx=792 cy=562 w=32 h=150 label="D" key=env4Decay bw=78
++slider_v cx=872 cy=562 w=32 h=150 label="S" key=env4Sustain bw=78
++slider_v cx=952 cy=562 w=32 h=150 label="R" key=env4Release bw=78
++popup cx=1120 cy=505 w=170 h=44 label="DESTINATION" key=env4Target
++knob cx=1120 cy=610 r=36 label="AMOUNT" key=env4Amount
+ qlinks "ENV 1-2" = attack,decay,sustain,release,env2Attack,env2Decay,env2Sustain,env2Release,filterEnvAmount
+-qlinks "ENV 3-4" = env3Attack,env3Decay,env3Sustain,env3Release,env3Target,env3Amount,env4Attack,env4Decay,env4Sustain,env4Release,env4Target,env4Amount
++qlinks "ENV 3-4" = env3Attack,env3Decay,env3Sustain,env3Release,env3Target,env3Amount,-,-,env4Attack,env4Decay,env4Sustain,env4Release,env4Target,env4Amount
+ 
+ [tab LFOS]
+ frame x=10 y=92 w=616 h=304 title="LFO 1"
+-knob cx=85 cy=206 r=30 label="RATE" key=lfo1Rate
+-knob cx=215 cy=206 r=30 label="SHAPE" key=lfo1Shape
+-knob cx=345 cy=206 r=30 label="AMOUNT" key=lfo1Amount
+-enum_h cx=525 cy=184 label="SYNC" key=lfo1Sync options="FREE,SYNC" sw=64
+-enum_h cx=525 cy=256 label="POLARITY" key=lfo1Bipolar options="UNI,BI" sw=64
+-popup cx=110 cy=336 w=120 h=44 label="DIVISION" key=lfo1Div
+-popup cx=320 cy=336 w=120 h=44 label="WAVE" key=lfo1Wave
+-popup cx=510 cy=336 w=150 h=44 label="DESTINATION" key=lfo1Target
++knob cx=85 cy=196 r=30 label="RATE" key=lfo1Rate
++knob cx=215 cy=196 r=30 label="SHAPE" key=lfo1Shape
++knob cx=345 cy=196 r=30 label="AMOUNT" key=lfo1Amount
++enum_h cx=525 cy=196 label="POLARITY" key=lfo1Bipolar options="UNI,BI" sw=64
++enum_h cx=84 cy=356 label="SYNC" key=lfo1Sync options="FREE,SYNC" sw=64
++popup cx=218 cy=356 w=100 h=44 label="DIVISION" key=lfo1Div
++popup cx=355 cy=356 w=130 h=44 label="WAVE" key=lfo1Wave
++popup cx=520 cy=356 w=150 h=44 label="DESTINATION" key=lfo1Target
+ frame x=632 y=92 w=616 h=304 title="LFO 2"
+-knob cx=707 cy=206 r=30 label="RATE" key=lfo2Rate
+-knob cx=837 cy=206 r=30 label="SHAPE" key=lfo2Shape
+-knob cx=967 cy=206 r=30 label="AMOUNT" key=lfo2Amount
+-enum_h cx=1147 cy=184 label="SYNC" key=lfo2Sync options="FREE,SYNC" sw=64
+-enum_h cx=1147 cy=256 label="POLARITY" key=lfo2Bipolar options="UNI,BI" sw=64
+-popup cx=732 cy=336 w=120 h=44 label="DIVISION" key=lfo2Div
+-popup cx=942 cy=336 w=120 h=44 label="WAVE" key=lfo2Wave
+-popup cx=1132 cy=336 w=150 h=44 label="DESTINATION" key=lfo2Target
++knob cx=707 cy=196 r=30 label="RATE" key=lfo2Rate
++knob cx=837 cy=196 r=30 label="SHAPE" key=lfo2Shape
++knob cx=967 cy=196 r=30 label="AMOUNT" key=lfo2Amount
++enum_h cx=1147 cy=196 label="POLARITY" key=lfo2Bipolar options="UNI,BI" sw=64
++enum_h cx=706 cy=356 label="SYNC" key=lfo2Sync options="FREE,SYNC" sw=64
++popup cx=840 cy=356 w=100 h=44 label="DIVISION" key=lfo2Div
++popup cx=977 cy=356 w=130 h=44 label="WAVE" key=lfo2Wave
++popup cx=1142 cy=356 w=150 h=44 label="DESTINATION" key=lfo2Target
+ frame x=10 y=404 w=616 h=304 title="LFO 3"
+-knob cx=85 cy=518 r=30 label="RATE" key=lfo3Rate
+-knob cx=215 cy=518 r=30 label="SHAPE" key=lfo3Shape
+-knob cx=345 cy=518 r=30 label="AMOUNT" key=lfo3Amount
+-enum_h cx=525 cy=496 label="SYNC" key=lfo3Sync options="FREE,SYNC" sw=64
+-enum_h cx=525 cy=568 label="POLARITY" key=lfo3Bipolar options="UNI,BI" sw=64
+-popup cx=110 cy=648 w=120 h=44 label="DIVISION" key=lfo3Div
+-popup cx=320 cy=648 w=120 h=44 label="WAVE" key=lfo3Wave
+-popup cx=510 cy=648 w=150 h=44 label="DESTINATION" key=lfo3Target
++knob cx=85 cy=508 r=30 label="RATE" key=lfo3Rate
++knob cx=215 cy=508 r=30 label="SHAPE" key=lfo3Shape
++knob cx=345 cy=508 r=30 label="AMOUNT" key=lfo3Amount
++enum_h cx=525 cy=508 label="POLARITY" key=lfo3Bipolar options="UNI,BI" sw=64
++enum_h cx=84 cy=668 label="SYNC" key=lfo3Sync options="FREE,SYNC" sw=64
++popup cx=218 cy=668 w=100 h=44 label="DIVISION" key=lfo3Div
++popup cx=355 cy=668 w=130 h=44 label="WAVE" key=lfo3Wave
++popup cx=520 cy=668 w=150 h=44 label="DESTINATION" key=lfo3Target
+ frame x=632 y=404 w=616 h=304 title="LFO 4"
+-knob cx=707 cy=518 r=30 label="RATE" key=lfo4Rate
+-knob cx=837 cy=518 r=30 label="SHAPE" key=lfo4Shape
+-knob cx=967 cy=518 r=30 label="AMOUNT" key=lfo4Amount
+-enum_h cx=1147 cy=496 label="SYNC" key=lfo4Sync options="FREE,SYNC" sw=64
+-enum_h cx=1147 cy=568 label="POLARITY" key=lfo4Bipolar options="UNI,BI" sw=64
+-popup cx=732 cy=648 w=120 h=44 label="DIVISION" key=lfo4Div
+-popup cx=942 cy=648 w=120 h=44 label="WAVE" key=lfo4Wave
+-popup cx=1132 cy=648 w=150 h=44 label="DESTINATION" key=lfo4Target
+-qlinks "LFO 1-2" = lfo1Rate,lfo1Shape,lfo1Amount,lfo1Div,lfo1Wave,lfo1Target,lfo2Rate,lfo2Shape,lfo2Amount,lfo2Div,lfo2Wave,lfo2Target
+-qlinks "LFO 3-4" = lfo3Rate,lfo3Shape,lfo3Amount,lfo3Div,lfo3Wave,lfo3Target,lfo4Rate,lfo4Shape,lfo4Amount,lfo4Div,lfo4Wave,lfo4Target
++knob cx=707 cy=508 r=30 label="RATE" key=lfo4Rate
++knob cx=837 cy=508 r=30 label="SHAPE" key=lfo4Shape
++knob cx=967 cy=508 r=30 label="AMOUNT" key=lfo4Amount
++enum_h cx=1147 cy=508 label="POLARITY" key=lfo4Bipolar options="UNI,BI" sw=64
++enum_h cx=706 cy=668 label="SYNC" key=lfo4Sync options="FREE,SYNC" sw=64
++popup cx=840 cy=668 w=100 h=44 label="DIVISION" key=lfo4Div
++popup cx=977 cy=668 w=130 h=44 label="WAVE" key=lfo4Wave
++popup cx=1142 cy=668 w=150 h=44 label="DESTINATION" key=lfo4Target
++qlinks "LFO 1-2" = lfo1Rate,lfo1Shape,lfo1Amount,lfo1Bipolar,lfo1Sync,lfo1Div,lfo1Wave,lfo1Target,lfo2Rate,lfo2Shape,lfo2Amount,lfo2Bipolar,lfo2Sync,lfo2Div,lfo2Wave,lfo2Target
++qlinks "LFO 3-4" = lfo3Rate,lfo3Shape,lfo3Amount,lfo3Bipolar,lfo3Sync,lfo3Div,lfo3Wave,lfo3Target,lfo4Rate,lfo4Shape,lfo4Amount,lfo4Bipolar,lfo4Sync,lfo4Div,lfo4Wave,lfo4Target
+ 
+ [tab EFFECTS]
+ frame x=10 y=92 w=626 h=304 title="REVERB"
+@@ -136,7 +136,7 @@ enum_v cx=715 cy=534 label="SYNC" key=delaySync options="FREE,SYNC" sw=56
+ popup cx=850 cy=534 w=130 h=48 label="DIVISION" key=delayDiv
+ frame x=952 y=404 w=316 h=304 title="DRIVE"
+ knob cx=1111 cy=534 r=36 label="DRIVE" key=satDrive
+-qlinks "EFFECTS" = reverbDecay,reverbDamping,reverbHipass,reverbWet,chorusRate,chorusDepth,chorusWet,delayTime,delayFeedback,delayTone,delayWet,delayDiv,satDrive
++qlinks "EFFECTS" = reverbDecay,reverbDamping,reverbHipass,reverbWet,chorusRate,chorusDepth,chorusWet,-,delayTime,delayFeedback,delayTone,delayWet,delaySync,delayDiv,satDrive
+ 
+ [tab MOD]
+ frame x=10 y=92 w=626 h=304 title="VELOCITY MOD 1"
+@@ -151,4 +151,4 @@ knob cx=490 cy=534 r=44 label="AMOUNT" key=modwheelAmount
+ frame x=642 y=404 w=626 h=304 title="AFTERTOUCH"
+ popup cx=832 cy=512 w=250 h=56 label="DESTINATION" key=aftertouchTarget
+ knob cx=1122 cy=534 r=44 label="AMOUNT" key=aftertouchAmount
+-qlinks "MOD" = env5Target,env5Amount,env6Target,env6Amount,modwheelTarget,modwheelAmount,aftertouchTarget,aftertouchAmount
++qlinks "MOD" = env5Target,env5Amount,-,-,env6Target,env6Amount,-,-,modwheelTarget,modwheelAmount,-,-,aftertouchTarget,aftertouchAmount

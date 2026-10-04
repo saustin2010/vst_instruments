@@ -1,0 +1,1405 @@
+{
+  "id": "freak",
+  "name": "MPC Plaits",
+  "abbrev": "MRH",
+  "version": "0.0.1",
+  "description": "Mutable Instruments Plaits for MPC OS, with MrHyde's modulation (schwung-mrhyde)",
+  "author": "move-anything contributors",
+  "license": "MIT",
+  "dsp": "dsp.so",
+  "api_version": 2,
+  "capabilities": {
+    "audio_out": true,
+    "audio_in": false,
+    "midi_in": true,
+    "midi_out": false,
+    "aftertouch": true,
+    "chainable": true,
+    "component_type": "sound_generator",
+    "chain_params": [
+      {
+        "key": "model",
+        "name": "MODEL",
+        "type": "enum",
+        "options": [
+          "VA VCF",
+          "Phase Distortion",
+          "6-Op FM I",
+          "6-Op FM II",
+          "6-Op FM III",
+          "Wave Terrain",
+          "String Machine",
+          "Chiptune",
+          "Virtual Analog",
+          "Waveshaping",
+          "FM 2-Op",
+          "Grain Formant",
+          "Harmonic",
+          "Wavetable",
+          "Chords",
+          "Speech",
+          "Swarm",
+          "Noise",
+          "Particle",
+          "Inharm. String",
+          "Modal Resonator",
+          "Bass Drum",
+          "Snare Drum",
+          "Hi-Hat"
+        ],
+        "default": 8
+      },
+      {
+        "key": "pitch",
+        "name": "FREQUENCY",
+        "type": "float",
+        "min": -48.0,
+        "max": 48.0,
+        "default": 0.0
+      },
+      {
+        "key": "harmonics",
+        "name": "HARMONICS",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.5
+      },
+      {
+        "key": "timbre",
+        "name": "TIMBRE",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.5
+      },
+      {
+        "key": "morph",
+        "name": "MORPH",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.5
+      },
+      {
+        "key": "timbre_att",
+        "name": "TIMBRE ATT",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "fm_att",
+        "name": "FM ATT",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "morph_att",
+        "name": "MORPH ATT",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "aux_mix",
+        "name": "OUT / AUX",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "amp_mode",
+        "name": "AMP",
+        "type": "enum",
+        "options": [
+          "Gate",
+          "Ping",
+          "Env",
+          "Drone"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lpg_color",
+        "name": "LPG COLOR",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.55
+      },
+      {
+        "key": "lpg_decay",
+        "name": "DECAY",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.35
+      },
+      {
+        "key": "trig_rate",
+        "name": "TRIG RATE",
+        "type": "enum",
+        "options": [
+          "Off",
+          "1/4",
+          "1/4T",
+          "1/8",
+          "1/8T",
+          "1/16",
+          "1/16T",
+          "1/32"
+        ],
+        "default": 0
+      },
+      {
+        "key": "voice_mode",
+        "name": "VOICE",
+        "type": "enum",
+        "options": [
+          "Mono",
+          "Poly",
+          "Legato"
+        ],
+        "default": 1
+      },
+      {
+        "key": "polyphony",
+        "name": "NOTES",
+        "type": "int",
+        "min": 1,
+        "max": 8,
+        "default": 4,
+        "display": "string"
+      },
+      {
+        "key": "unison",
+        "name": "UNISON",
+        "type": "int",
+        "min": 1,
+        "max": 8,
+        "default": 1,
+        "display": "int"
+      },
+      {
+        "key": "detune",
+        "name": "DETUNE",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.1
+      },
+      {
+        "key": "spread",
+        "name": "SPREAD",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.25
+      },
+      {
+        "key": "glide_ms",
+        "name": "GLIDE",
+        "type": "int",
+        "min": 0,
+        "max": 2000,
+        "default": 0,
+        "display": "int"
+      },
+      {
+        "key": "bend_range",
+        "name": "BEND",
+        "type": "int",
+        "min": 0,
+        "max": 24,
+        "default": 2,
+        "display": "int"
+      },
+      {
+        "key": "velocity_curve",
+        "name": "VEL CURVE",
+        "type": "float",
+        "min": 0.1,
+        "max": 4.0,
+        "default": 1.0
+      },
+      {
+        "key": "poly_aftertouch_curve",
+        "name": "AT CURVE",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "filter_mode",
+        "name": "FILTER",
+        "type": "enum",
+        "options": [
+          "LP",
+          "BP",
+          "HP"
+        ],
+        "default": 0
+      },
+      {
+        "key": "filter_cutoff",
+        "name": "CUTOFF",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 1.0
+      },
+      {
+        "key": "filter_resonance",
+        "name": "RESO",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "volume",
+        "name": "VOLUME",
+        "type": "float",
+        "min": 0.0,
+        "max": 2.0,
+        "default": 1.0
+      },
+      {
+        "key": "pan",
+        "name": "PAN",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "env1_attack",
+        "name": "ATTACK 1",
+        "type": "int",
+        "min": 0,
+        "max": 5000,
+        "default": 5,
+        "display": "int"
+      },
+      {
+        "key": "env1_decay",
+        "name": "DECAY 1",
+        "type": "int",
+        "min": 0,
+        "max": 5000,
+        "default": 200,
+        "display": "int"
+      },
+      {
+        "key": "env1_sustain",
+        "name": "SUSTAIN 1",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.7
+      },
+      {
+        "key": "env1_release",
+        "name": "RELEASE 1",
+        "type": "int",
+        "min": 0,
+        "max": 5000,
+        "default": 300,
+        "display": "int"
+      },
+      {
+        "key": "env1_retrig",
+        "name": "RETRIG 1",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "env2_attack",
+        "name": "ATTACK 2",
+        "type": "int",
+        "min": 0,
+        "max": 5000,
+        "default": 5,
+        "display": "int"
+      },
+      {
+        "key": "env2_decay",
+        "name": "DECAY 2",
+        "type": "int",
+        "min": 0,
+        "max": 5000,
+        "default": 200,
+        "display": "int"
+      },
+      {
+        "key": "env2_sustain",
+        "name": "SUSTAIN 2",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "env2_release",
+        "name": "RELEASE 2",
+        "type": "int",
+        "min": 0,
+        "max": 5000,
+        "default": 300,
+        "display": "int"
+      },
+      {
+        "key": "env2_retrig",
+        "name": "RETRIG 2",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "lfo1_shape",
+        "name": "LFO1 SHAPE",
+        "type": "enum",
+        "options": [
+          "Sine",
+          "Triangle",
+          "Saw",
+          "Square",
+          "Random",
+          "Smooth"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lfo1_rate",
+        "name": "LFO1 RATE",
+        "type": "float",
+        "min": 0.01,
+        "max": 40.0,
+        "default": 2.0
+      },
+      {
+        "key": "lfo1_sync",
+        "name": "LFO1 SYNC",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lfo1_div",
+        "name": "LFO1 DIV",
+        "type": "enum",
+        "options": [
+          "4 Bars",
+          "2 Bars",
+          "1 Bar",
+          "1/2",
+          "1/4",
+          "1/4T",
+          "1/8",
+          "1/8T",
+          "1/16",
+          "1/16T",
+          "1/32"
+        ],
+        "default": 6
+      },
+      {
+        "key": "lfo1_retrig",
+        "name": "LFO1 RETRIG",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lfo1_per_voice",
+        "name": "LFO1 VOICE",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lfo1_phase",
+        "name": "LFO1 PHASE",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "lfo2_shape",
+        "name": "LFO2 SHAPE",
+        "type": "enum",
+        "options": [
+          "Sine",
+          "Triangle",
+          "Saw",
+          "Square",
+          "Random",
+          "Smooth"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lfo2_rate",
+        "name": "LFO2 RATE",
+        "type": "float",
+        "min": 0.01,
+        "max": 40.0,
+        "default": 2.0
+      },
+      {
+        "key": "lfo2_sync",
+        "name": "LFO2 SYNC",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lfo2_div",
+        "name": "LFO2 DIV",
+        "type": "enum",
+        "options": [
+          "4 Bars",
+          "2 Bars",
+          "1 Bar",
+          "1/2",
+          "1/4",
+          "1/4T",
+          "1/8",
+          "1/8T",
+          "1/16",
+          "1/16T",
+          "1/32"
+        ],
+        "default": 6
+      },
+      {
+        "key": "lfo2_retrig",
+        "name": "LFO2 RETRIG",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lfo2_per_voice",
+        "name": "LFO2 VOICE",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 0
+      },
+      {
+        "key": "lfo2_phase",
+        "name": "LFO2 PHASE",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "cycle_attack_ms",
+        "name": "RISE",
+        "type": "int",
+        "min": 1,
+        "max": 5000,
+        "default": 300,
+        "display": "int"
+      },
+      {
+        "key": "cycle_decay_ms",
+        "name": "FALL",
+        "type": "int",
+        "min": 1,
+        "max": 5000,
+        "default": 300,
+        "display": "int"
+      },
+      {
+        "key": "cycle_shape",
+        "name": "CYC SHAPE",
+        "type": "enum",
+        "options": [
+          "Linear",
+          "Exp",
+          "Log"
+        ],
+        "default": 0
+      },
+      {
+        "key": "cycle_bipolar",
+        "name": "BIPOLAR",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "cycle_retrig",
+        "name": "CYC RETRIG",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 0
+      },
+      {
+        "key": "random_mode",
+        "name": "RND MODE",
+        "type": "enum",
+        "options": [
+          "S&H",
+          "Smooth",
+          "Drift"
+        ],
+        "default": 0
+      },
+      {
+        "key": "random_rate",
+        "name": "RND RATE",
+        "type": "float",
+        "min": 0.01,
+        "max": 40.0,
+        "default": 3.0
+      },
+      {
+        "key": "random_sync",
+        "name": "RND SYNC",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 0
+      },
+      {
+        "key": "random_div",
+        "name": "RND DIV",
+        "type": "enum",
+        "options": [
+          "4 Bars",
+          "2 Bars",
+          "1 Bar",
+          "1/2",
+          "1/4",
+          "1/4T",
+          "1/8",
+          "1/8T",
+          "1/16",
+          "1/16T",
+          "1/32"
+        ],
+        "default": 8
+      },
+      {
+        "key": "random_slew",
+        "name": "SLEW",
+        "type": "float",
+        "min": 0.0,
+        "max": 1.0,
+        "default": 0.3
+      },
+      {
+        "key": "random_retrig",
+        "name": "RND RETRIG",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_lfo1_pitch",
+        "name": "LFO1 PITCH",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_lfo1_pitch_on",
+        "name": "LFO1 PITCH ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_lfo1_harm",
+        "name": "LFO1 HARM",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_lfo1_harm_on",
+        "name": "LFO1 HARM ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_lfo1_timbre",
+        "name": "LFO1 TIMBRE",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_lfo1_timbre_on",
+        "name": "LFO1 TIMBRE ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_lfo1_morph",
+        "name": "LFO1 MORPH",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_lfo1_morph_on",
+        "name": "LFO1 MORPH ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_env2_pitch",
+        "name": "ENV2 PITCH",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_env2_pitch_on",
+        "name": "ENV2 PITCH ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_env2_harm",
+        "name": "ENV2 HARM",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_env2_harm_on",
+        "name": "ENV2 HARM ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_env2_timbre",
+        "name": "ENV2 TIMBRE",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_env2_timbre_on",
+        "name": "ENV2 TIMBRE ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_env2_morph",
+        "name": "ENV2 MORPH",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_env2_morph_on",
+        "name": "ENV2 MORPH ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_cyc_pitch",
+        "name": "CYCLE PITCH",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_cyc_pitch_on",
+        "name": "CYCLE PITCH ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_cyc_harm",
+        "name": "CYCLE HARM",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_cyc_harm_on",
+        "name": "CYCLE HARM ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_cyc_timbre",
+        "name": "CYCLE TIMBRE",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_cyc_timbre_on",
+        "name": "CYCLE TIMBRE ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_cyc_morph",
+        "name": "CYCLE MORPH",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_cyc_morph_on",
+        "name": "CYCLE MORPH ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_rnd_pitch",
+        "name": "RND PITCH",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_rnd_pitch_on",
+        "name": "RND PITCH ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_rnd_harm",
+        "name": "RND HARM",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_rnd_harm_on",
+        "name": "RND HARM ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_rnd_timbre",
+        "name": "RND TIMBRE",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_rnd_timbre_on",
+        "name": "RND TIMBRE ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "mod_rnd_morph",
+        "name": "RND MORPH",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "mod_rnd_morph_on",
+        "name": "RND MORPH ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_src1",
+        "name": "SOURCE 1",
+        "type": "enum",
+        "options": [
+          "Off",
+          "LFO 1",
+          "LFO 2",
+          "Env 1",
+          "Env 2",
+          "Cycle",
+          "Random",
+          "Velocity",
+          "Aftertouch",
+          "Mod Wheel"
+        ],
+        "default": 2
+      },
+      {
+        "key": "asg_src2",
+        "name": "SOURCE 2",
+        "type": "enum",
+        "options": [
+          "Off",
+          "LFO 1",
+          "LFO 2",
+          "Env 1",
+          "Env 2",
+          "Cycle",
+          "Random",
+          "Velocity",
+          "Aftertouch",
+          "Mod Wheel"
+        ],
+        "default": 7
+      },
+      {
+        "key": "asg_src3",
+        "name": "SOURCE 3",
+        "type": "enum",
+        "options": [
+          "Off",
+          "LFO 1",
+          "LFO 2",
+          "Env 1",
+          "Env 2",
+          "Cycle",
+          "Random",
+          "Velocity",
+          "Aftertouch",
+          "Mod Wheel"
+        ],
+        "default": 8
+      },
+      {
+        "key": "asg_src4",
+        "name": "SOURCE 4",
+        "type": "enum",
+        "options": [
+          "Off",
+          "LFO 1",
+          "LFO 2",
+          "Env 1",
+          "Env 2",
+          "Cycle",
+          "Random",
+          "Velocity",
+          "Aftertouch",
+          "Mod Wheel"
+        ],
+        "default": 9
+      },
+      {
+        "key": "asg_dst1",
+        "name": "DEST 1",
+        "type": "enum",
+        "options": [
+          "Off",
+          "Pitch",
+          "Harmonics",
+          "Timbre",
+          "Morph",
+          "FM",
+          "LPG Decay",
+          "LPG Color",
+          "Cutoff",
+          "Resonance",
+          "Volume",
+          "Pan",
+          "Aux Mix"
+        ],
+        "default": 5
+      },
+      {
+        "key": "asg_dst2",
+        "name": "DEST 2",
+        "type": "enum",
+        "options": [
+          "Off",
+          "Pitch",
+          "Harmonics",
+          "Timbre",
+          "Morph",
+          "FM",
+          "LPG Decay",
+          "LPG Color",
+          "Cutoff",
+          "Resonance",
+          "Volume",
+          "Pan",
+          "Aux Mix"
+        ],
+        "default": 6
+      },
+      {
+        "key": "asg_dst3",
+        "name": "DEST 3",
+        "type": "enum",
+        "options": [
+          "Off",
+          "Pitch",
+          "Harmonics",
+          "Timbre",
+          "Morph",
+          "FM",
+          "LPG Decay",
+          "LPG Color",
+          "Cutoff",
+          "Resonance",
+          "Volume",
+          "Pan",
+          "Aux Mix"
+        ],
+        "default": 8
+      },
+      {
+        "key": "asg_dst4",
+        "name": "DEST 4",
+        "type": "enum",
+        "options": [
+          "Off",
+          "Pitch",
+          "Harmonics",
+          "Timbre",
+          "Morph",
+          "FM",
+          "LPG Decay",
+          "LPG Color",
+          "Cutoff",
+          "Resonance",
+          "Volume",
+          "Pan",
+          "Aux Mix"
+        ],
+        "default": 10
+      },
+      {
+        "key": "asg_1_1",
+        "name": "S1 > D1",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_1_1_on",
+        "name": "S1 > D1 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_1_2",
+        "name": "S1 > D2",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_1_2_on",
+        "name": "S1 > D2 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_1_3",
+        "name": "S1 > D3",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_1_3_on",
+        "name": "S1 > D3 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_1_4",
+        "name": "S1 > D4",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_1_4_on",
+        "name": "S1 > D4 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_2_1",
+        "name": "S2 > D1",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_2_1_on",
+        "name": "S2 > D1 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_2_2",
+        "name": "S2 > D2",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_2_2_on",
+        "name": "S2 > D2 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_2_3",
+        "name": "S2 > D3",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_2_3_on",
+        "name": "S2 > D3 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_2_4",
+        "name": "S2 > D4",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_2_4_on",
+        "name": "S2 > D4 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_3_1",
+        "name": "S3 > D1",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_3_1_on",
+        "name": "S3 > D1 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_3_2",
+        "name": "S3 > D2",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_3_2_on",
+        "name": "S3 > D2 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_3_3",
+        "name": "S3 > D3",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_3_3_on",
+        "name": "S3 > D3 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_3_4",
+        "name": "S3 > D4",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_3_4_on",
+        "name": "S3 > D4 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_4_1",
+        "name": "S4 > D1",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_4_1_on",
+        "name": "S4 > D1 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_4_2",
+        "name": "S4 > D2",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_4_2_on",
+        "name": "S4 > D2 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_4_3",
+        "name": "S4 > D3",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_4_3_on",
+        "name": "S4 > D3 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "asg_4_4",
+        "name": "S4 > D4",
+        "type": "float",
+        "min": -1.0,
+        "max": 1.0,
+        "default": 0.0
+      },
+      {
+        "key": "asg_4_4_on",
+        "name": "S4 > D4 ON",
+        "type": "enum",
+        "options": [
+          "Off",
+          "On"
+        ],
+        "default": 1
+      },
+      {
+        "key": "model_prev",
+        "name": "MODEL <",
+        "type": "enum",
+        "options": [
+          "off",
+          "go"
+        ],
+        "default": 0,
+        "access": "write",
+        "step_of": "model",
+        "step_delta": -1
+      },
+      {
+        "key": "model_next",
+        "name": "MODEL >",
+        "type": "enum",
+        "options": [
+          "off",
+          "go"
+        ],
+        "default": 0,
+        "access": "write",
+        "step_of": "model",
+        "step_delta": 1
+      }
+    ]
+  }
+}

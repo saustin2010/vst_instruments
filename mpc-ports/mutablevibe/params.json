@@ -1,0 +1,1113 @@
+{
+  "name": "Mutable Vibe MPC",
+  "params": [
+    {
+      "key": "structure",
+      "name": "STRUCTURE",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.5,
+      "dynamic_name": true,
+      "dynamic_display": true
+    },
+    {
+      "key": "brightness",
+      "name": "BRIGHTNESS",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.5,
+      "dynamic_name": true,
+      "dynamic_display": true
+    },
+    {
+      "key": "damping",
+      "name": "DAMPING",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.5,
+      "dynamic_name": true,
+      "dynamic_display": true
+    },
+    {
+      "key": "position",
+      "name": "POSITION",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.3,
+      "dynamic_name": true,
+      "dynamic_display": true
+    },
+    {
+      "key": "model",
+      "name": "MODEL",
+      "options": [
+        "R: MODAL",
+        "R: SYMPATHETIC",
+        "R: INHARM STRING",
+        "R: FM VOICE",
+        "R: QUANTIZED",
+        "R: REVERB STRING",
+        "P: VA VCF",
+        "P: PHASE DIST",
+        "P: WAVE TERRAIN",
+        "P: STRING MACHINE",
+        "P: CHIPTUNE",
+        "P: VIRTUAL ANALOG",
+        "P: WAVESHAPING",
+        "P: FM",
+        "P: ADDITIVE",
+        "P: WAVETABLE",
+        "P: CHORD",
+        "P: SWARM",
+        "P: STRING",
+        "P: MODAL SYNTH"
+      ],
+      "default": "R: SYMPATHETIC"
+    },
+    {
+      "key": "attack",
+      "name": "ATTACK",
+      "min": 0.0,
+      "max": 2000.0,
+      "default": 2.0,
+      "unit": "ms"
+    },
+    {
+      "key": "decay",
+      "name": "DECAY",
+      "min": 0.0,
+      "max": 2000.0,
+      "default": 400.0,
+      "unit": "ms"
+    },
+    {
+      "key": "sustain",
+      "name": "SUSTAIN",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.8,
+      "dynamic_display": true
+    },
+    {
+      "key": "release",
+      "name": "RELEASE",
+      "min": 0.0,
+      "max": 2000.0,
+      "default": 600.0,
+      "unit": "ms"
+    },
+    {
+      "key": "filterCutoff",
+      "name": "CUTOFF",
+      "min": 20.0,
+      "max": 20000.0,
+      "default": 20000.0,
+      "unit": "Hz"
+    },
+    {
+      "key": "filterResonance",
+      "name": "RESONANCE",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "filterMorph",
+      "name": "MORPH",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "filterSlope",
+      "name": "SLOPE",
+      "options": [
+        "12 DB",
+        "24 DB"
+      ],
+      "default": "24 DB"
+    },
+    {
+      "key": "reverbDecay",
+      "name": "REVERB DECAY",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.7,
+      "dynamic_display": true
+    },
+    {
+      "key": "reverbDamping",
+      "name": "REVERB DAMPING",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "reverbWet",
+      "name": "REVERB AMT",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "delayTime",
+      "name": "DELAY TIME",
+      "min": 10.0,
+      "max": 2000.0,
+      "default": 300.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "delayFeedback",
+      "name": "DELAY FEEDBACK",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.3
+    },
+    {
+      "key": "delayTone",
+      "name": "DELAY TONE",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.5,
+      "dynamic_display": true
+    },
+    {
+      "key": "delayWet",
+      "name": "DELAY AMT",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "chorusRate",
+      "name": "CHORUS RATE",
+      "min": 0.05,
+      "max": 8.0,
+      "default": 0.5,
+      "unit": "Hz"
+    },
+    {
+      "key": "chorusDepth",
+      "name": "CHORUS DEPTH",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.3,
+      "dynamic_display": true
+    },
+    {
+      "key": "chorusWet",
+      "name": "CHORUS AMT",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "satDrive",
+      "name": "DRIVE",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "filterEnvAmount",
+      "name": "FILTER ENV",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "env2Attack",
+      "name": "ATTACK",
+      "min": 1.0,
+      "max": 4000.0,
+      "default": 10.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env2Decay",
+      "name": "DECAY",
+      "min": 10.0,
+      "max": 3000.0,
+      "default": 300.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env2Sustain",
+      "name": "SUSTAIN",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "env2Release",
+      "name": "RELEASE",
+      "min": 50.0,
+      "max": 8000.0,
+      "default": 500.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env3Attack",
+      "name": "ATTACK",
+      "min": 1.0,
+      "max": 4000.0,
+      "default": 10.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env3Decay",
+      "name": "DECAY",
+      "min": 10.0,
+      "max": 3000.0,
+      "default": 300.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env3Sustain",
+      "name": "SUSTAIN",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "env3Release",
+      "name": "RELEASE",
+      "min": 50.0,
+      "max": 8000.0,
+      "default": 500.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env3Target",
+      "name": "DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "env3Amount",
+      "name": "AMOUNT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "env4Attack",
+      "name": "ATTACK",
+      "min": 1.0,
+      "max": 4000.0,
+      "default": 10.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env4Decay",
+      "name": "DECAY",
+      "min": 10.0,
+      "max": 3000.0,
+      "default": 300.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env4Sustain",
+      "name": "SUSTAIN",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "env4Release",
+      "name": "RELEASE",
+      "min": 50.0,
+      "max": 8000.0,
+      "default": 500.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env4Target",
+      "name": "DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "env4Amount",
+      "name": "AMOUNT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "env5Attack",
+      "name": "ATTACK",
+      "min": 1.0,
+      "max": 4000.0,
+      "default": 10.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env5Decay",
+      "name": "DECAY",
+      "min": 10.0,
+      "max": 3000.0,
+      "default": 300.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env5Sustain",
+      "name": "SUSTAIN",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "env5Release",
+      "name": "RELEASE",
+      "min": 50.0,
+      "max": 8000.0,
+      "default": 500.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env5Target",
+      "name": "VEL1 DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "env5Amount",
+      "name": "VEL1 AMT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "env6Attack",
+      "name": "ATTACK",
+      "min": 1.0,
+      "max": 4000.0,
+      "default": 10.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env6Decay",
+      "name": "DECAY",
+      "min": 10.0,
+      "max": 3000.0,
+      "default": 300.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env6Sustain",
+      "name": "SUSTAIN",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "env6Release",
+      "name": "RELEASE",
+      "min": 50.0,
+      "max": 8000.0,
+      "default": 500.0,
+      "unit": "ms"
+    },
+    {
+      "key": "env6Target",
+      "name": "VEL2 DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "env6Amount",
+      "name": "VEL2 AMT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "lfo1Rate",
+      "name": "LFO1 RATE",
+      "min": 0.05,
+      "max": 20.0,
+      "default": 1.0,
+      "unit": "Hz"
+    },
+    {
+      "key": "lfo1Wave",
+      "name": "LFO1 WAVE",
+      "options": [
+        "SINE",
+        "SAW-TRI",
+        "FOLD",
+        "SQUARE",
+        "S&H"
+      ],
+      "default": "SINE"
+    },
+    {
+      "key": "lfo1Shape",
+      "name": "LFO1 SHAPE",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "lfo1Target",
+      "name": "LFO1 DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "lfo1Amount",
+      "name": "LFO1 AMOUNT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "lfo1Bipolar",
+      "name": "LFO1 POLARITY",
+      "options": [
+        "UNIPOLAR",
+        "BIPOLAR"
+      ],
+      "default": "UNIPOLAR"
+    },
+    {
+      "key": "lfo2Rate",
+      "name": "LFO2 RATE",
+      "min": 0.05,
+      "max": 20.0,
+      "default": 1.0,
+      "unit": "Hz"
+    },
+    {
+      "key": "lfo2Wave",
+      "name": "LFO2 WAVE",
+      "options": [
+        "SINE",
+        "SAW-TRI",
+        "FOLD",
+        "SQUARE",
+        "S&H"
+      ],
+      "default": "SINE"
+    },
+    {
+      "key": "lfo2Shape",
+      "name": "LFO2 SHAPE",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "lfo2Target",
+      "name": "LFO2 DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "lfo2Amount",
+      "name": "LFO2 AMOUNT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "lfo2Bipolar",
+      "name": "LFO2 POLARITY",
+      "options": [
+        "UNIPOLAR",
+        "BIPOLAR"
+      ],
+      "default": "UNIPOLAR"
+    },
+    {
+      "key": "lfo3Rate",
+      "name": "LFO3 RATE",
+      "min": 0.05,
+      "max": 20.0,
+      "default": 1.0,
+      "unit": "Hz"
+    },
+    {
+      "key": "lfo3Wave",
+      "name": "LFO3 WAVE",
+      "options": [
+        "SINE",
+        "SAW-TRI",
+        "FOLD",
+        "SQUARE",
+        "S&H"
+      ],
+      "default": "SINE"
+    },
+    {
+      "key": "lfo3Shape",
+      "name": "LFO3 SHAPE",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "lfo3Target",
+      "name": "LFO3 DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "lfo3Amount",
+      "name": "LFO3 AMOUNT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "lfo3Bipolar",
+      "name": "LFO3 POLARITY",
+      "options": [
+        "UNIPOLAR",
+        "BIPOLAR"
+      ],
+      "default": "UNIPOLAR"
+    },
+    {
+      "key": "lfo4Rate",
+      "name": "LFO4 RATE",
+      "min": 0.05,
+      "max": 20.0,
+      "default": 1.0,
+      "unit": "Hz"
+    },
+    {
+      "key": "lfo4Wave",
+      "name": "LFO4 WAVE",
+      "options": [
+        "SINE",
+        "SAW-TRI",
+        "FOLD",
+        "SQUARE",
+        "S&H"
+      ],
+      "default": "SINE"
+    },
+    {
+      "key": "lfo4Shape",
+      "name": "LFO4 SHAPE",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "lfo4Target",
+      "name": "LFO4 DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "lfo4Amount",
+      "name": "LFO4 AMOUNT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "lfo4Bipolar",
+      "name": "LFO4 POLARITY",
+      "options": [
+        "UNIPOLAR",
+        "BIPOLAR"
+      ],
+      "default": "UNIPOLAR"
+    },
+    {
+      "key": "lpgDecay",
+      "name": "LPG DECAY",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 1.0,
+      "dynamic_name": true,
+      "dynamic_display": true
+    },
+    {
+      "key": "polyphony",
+      "name": "POLYPHONY",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "default": "4",
+      "send": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    {
+      "key": "octave",
+      "name": "OCTAVE",
+      "min": -2.0,
+      "max": 2.0,
+      "default": 0.0,
+      "display": "int"
+    },
+    {
+      "key": "delaySync",
+      "name": "DELAY SYNC",
+      "options": [
+        "FREE",
+        "SYNC"
+      ],
+      "default": "SYNC"
+    },
+    {
+      "key": "delayDiv",
+      "name": "DELAY DIV",
+      "options": [
+        "1/16",
+        "1/8",
+        "1/8.",
+        "1/4",
+        "1/4.",
+        "1/2",
+        "1/1"
+      ],
+      "default": "1/4"
+    },
+    {
+      "key": "lfo1Sync",
+      "name": "LFO1 SYNC",
+      "options": [
+        "FREE",
+        "SYNC"
+      ],
+      "default": "FREE"
+    },
+    {
+      "key": "lfo1Div",
+      "name": "LFO1 DIV",
+      "options": [
+        "1/16",
+        "1/8",
+        "1/4",
+        "1/2",
+        "1",
+        "2",
+        "4"
+      ],
+      "default": "1/4",
+      "send": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "key": "lfo2Sync",
+      "name": "LFO2 SYNC",
+      "options": [
+        "FREE",
+        "SYNC"
+      ],
+      "default": "FREE"
+    },
+    {
+      "key": "lfo2Div",
+      "name": "LFO2 DIV",
+      "options": [
+        "1/16",
+        "1/8",
+        "1/4",
+        "1/2",
+        "1",
+        "2",
+        "4"
+      ],
+      "default": "1/4",
+      "send": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "key": "lfo3Sync",
+      "name": "LFO3 SYNC",
+      "options": [
+        "FREE",
+        "SYNC"
+      ],
+      "default": "FREE"
+    },
+    {
+      "key": "lfo3Div",
+      "name": "LFO3 DIV",
+      "options": [
+        "1/16",
+        "1/8",
+        "1/4",
+        "1/2",
+        "1",
+        "2",
+        "4"
+      ],
+      "default": "1/4",
+      "send": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "key": "lfo4Sync",
+      "name": "LFO4 SYNC",
+      "options": [
+        "FREE",
+        "SYNC"
+      ],
+      "default": "FREE"
+    },
+    {
+      "key": "lfo4Div",
+      "name": "LFO4 DIV",
+      "options": [
+        "1/16",
+        "1/8",
+        "1/4",
+        "1/2",
+        "1",
+        "2",
+        "4"
+      ],
+      "default": "1/4",
+      "send": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "key": "reverbHipass",
+      "name": "REVERB HI-PASS",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.0,
+      "dynamic_display": true
+    },
+    {
+      "key": "modwheelTarget",
+      "name": "MW DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "aftertouchTarget",
+      "name": "AT DEST",
+      "options": [
+        "NONE",
+        "STRUCTURE",
+        "BRIGHTNESS",
+        "DAMPING",
+        "POSITION",
+        "LPG DECAY",
+        "CUTOFF",
+        "RESONANCE",
+        "MORPH",
+        "REV DECAY",
+        "REV WET",
+        "DLY TIME",
+        "DLY FBK"
+      ],
+      "default": "NONE"
+    },
+    {
+      "key": "modwheelAmount",
+      "name": "MW AMT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    },
+    {
+      "key": "aftertouchAmount",
+      "name": "AT AMT",
+      "min": -1.0,
+      "max": 1.0,
+      "default": 0.0
+    }
+  ],
+  "sections": [
+    {
+      "label": "SYNTH",
+      "keys": [
+        "model",
+        "structure",
+        "brightness",
+        "damping",
+        "position",
+        "attack",
+        "decay",
+        "sustain",
+        "release"
+      ]
+    },
+    {
+      "label": "FILTER",
+      "keys": [
+        "filterCutoff",
+        "filterResonance",
+        "filterMorph",
+        "filterSlope",
+        "filterEnvAmount",
+        "env2Attack",
+        "env2Decay",
+        "env2Sustain",
+        "env2Release"
+      ]
+    },
+    {
+      "label": "FX",
+      "keys": [
+        "reverbDecay",
+        "reverbDamping",
+        "reverbHipass",
+        "reverbWet",
+        "delayTime",
+        "delayFeedback",
+        "delayTone",
+        "delayWet",
+        "chorusRate",
+        "chorusDepth",
+        "chorusWet",
+        "satDrive"
+      ]
+    },
+    {
+      "label": "ENV 3-4",
+      "keys": [
+        "env3Attack",
+        "env3Decay",
+        "env3Sustain",
+        "env3Release",
+        "env3Target",
+        "env3Amount",
+        "env4Attack",
+        "env4Decay",
+        "env4Sustain",
+        "env4Release",
+        "env4Target",
+        "env4Amount"
+      ]
+    },
+    {
+      "label": "ENV 5-6",
+      "keys": [
+        "env5Attack",
+        "env5Decay",
+        "env5Sustain",
+        "env5Release",
+        "env5Target",
+        "env5Amount",
+        "env6Attack",
+        "env6Decay",
+        "env6Sustain",
+        "env6Release",
+        "env6Target",
+        "env6Amount"
+      ]
+    },
+    {
+      "label": "LFO 1-2",
+      "keys": [
+        "lfo1Rate",
+        "lfo1Wave",
+        "lfo1Shape",
+        "lfo1Target",
+        "lfo1Amount",
+        "lfo1Bipolar",
+        "lfo2Rate",
+        "lfo2Wave",
+        "lfo2Shape",
+        "lfo2Target",
+        "lfo2Amount",
+        "lfo2Bipolar"
+      ]
+    },
+    {
+      "label": "LFO 3-4",
+      "keys": [
+        "lfo3Rate",
+        "lfo3Wave",
+        "lfo3Shape",
+        "lfo3Target",
+        "lfo3Amount",
+        "lfo3Bipolar",
+        "lfo4Rate",
+        "lfo4Wave",
+        "lfo4Shape",
+        "lfo4Target",
+        "lfo4Amount",
+        "lfo4Bipolar"
+      ]
+    }
+  ]
+}

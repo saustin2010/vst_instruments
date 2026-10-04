@@ -1,0 +1,24 @@
+/* Plaits skin restyle, loaded after tools/html_art/default.css ("art": "html"). The panel itself is
+ * images/bg.png (art/make_art.py) and the knobs are images, so this only covers the MODEL field and its
+ * pop-up list, plus vars default.css uses that have no theme_* line. */
+:root {
+  --fill: #F4F4F2;
+  --border: #03A3AC;
+  --ink-faint: #BDBCBC;
+  --btn-text-plain: #231F20;
+  --display-bezel: #231F20;
+  --display-cell: #03A3AC;
+  --display-bg: #0c0c0b;
+  --label-size: 14px;
+  --seg-size: 15px;
+  --radius: 8px;
+  --sheen: 0.06;
+}
+.box { fill: #F4F4F2; stroke: #231F20; stroke-width: 2; }
+.arrow-bg { fill: #231F20; }
+.arrow { fill: #F4F4F2; }
+.tile-border { stroke-width: 2; }
+.seg-tx { font-weight: 700; letter-spacing: 0.04em; }
+/* The model stepper's two ends are the module's two round model buttons. */
+.arrow-bg { fill: #1f1f1f; rx: 26px; ry: 26px; filter: var(--shadow); }
+.arrow { fill: #F4F4F2; }

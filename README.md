@@ -1,6 +1,6 @@
 # MPC VST Instruments
 
-**37 plugins for Akai MPC OS standalone devices**: 22 synths, 2 drum machines, 10 MIDI sequencers and generators, and 3 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for Stevequencer, a browser prototype) and converted into MPC's skin format.
+**39 plugins for Akai MPC OS standalone devices**: 24 synths, 2 drum machines, 10 MIDI sequencers and generators, and 3 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for Stevequencer, a browser prototype) and converted into MPC's skin format; the two made for MPC by other authors keep their own.
 
 <img src="docs/images/gallery.png" alt="The first page of every plugin, as the MPC draws it">
 
@@ -17,7 +17,7 @@ Click a picture for the plugin's page: what it is, every screen, how to play it,
 Design QA: ☐ not checked on the MPC yet, ✅ every page checked on the device (names, values, touch controls,
 Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and swap the box to tick one.
 
-### Synths (22)
+### Synths (24)
 
 | | Plugin | What it is | Design QA |
 |---|---|---|:---:|
@@ -35,7 +35,9 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 | <a href="schwung/instruments/monksynth/"><img src="schwung/instruments/monksynth/screenshots/page_0.png" width="220" alt="MonkSynth"></a> | **[MonkSynth](schwung/instruments/monksynth/)**<br><sub>Synth · Jonathan Taylor · MIT</sub> | A formant (FOF) singing voice with 12 characters and a choir. | ✅ |
 | <a href="schwung/instruments/monovoice/"><img src="schwung/instruments/monovoice/screenshots/page_0.png" width="220" alt="Mono Voice"></a> | **[Mono Voice](schwung/instruments/monovoice/)**<br><sub>Synth · timncox · MIT</sub> | Elektron Monomachine-style digital voice: SuperWave, SID, DigiPRO, FM and more machines; 12 factory patches. | ✅ |
 | <a href="schwung/instruments/moog/"><img src="schwung/instruments/moog/screenshots/page_0.png" width="220" alt="Moog"></a> | **[Moog](schwung/instruments/moog/)**<br><sub>Synth · Raffo · MIT</sub> | RaffoSynth: a Minimoog-style mono synth with four oscillators and a ladder filter. | ✅ |
+| <a href="mpc-ports/mpcplaits/"><img src="mpc-ports/mpcplaits/screenshots/page_0.png" width="220" alt="MPC Plaits"></a> | **[MPC Plaits](mpc-ports/mpcplaits/)**<br><sub>Synth · poloq · MIT</sub> | poloq's polyphonic Plaits for MPC: all 24 models, up to 8 voices, four low-pass gate modes, LFOs, envelopes and two mod matrices, on the module's own panel art. | ☐ |
 | <a href="schwung/instruments/mrhyde/"><img src="schwung/instruments/mrhyde/screenshots/page_0.png" width="220" alt="Mr Hyde"></a> | **[Mr Hyde](schwung/instruments/mrhyde/)**<br><sub>Synth · Move Everything · MIT</sub> | A MicroFreak-inspired voice: Plaits models with a low-pass gate, filter and a 6x6 mod matrix; 19 presets. | ✅ |
+| <a href="mpc-ports/mutablevibe/"><img src="mpc-ports/mutablevibe/screenshots/page_0.png" width="220" alt="Mutable Vibe"></a> | **[Mutable Vibe](mpc-ports/mutablevibe/)**<br><sub>Synth · nachtaktiv303 · MIT</sub> | nachtaktiv303's Rings + Plaits instrument for MPC: 20 resonator and macro-oscillator engines with a filter, four LFOs, four envelopes, reverb, delay, chorus and drive. | ☐ |
 | <a href="schwung/instruments/noisemaker/"><img src="schwung/instruments/noisemaker/screenshots/page_0.png" width="220" alt="Noisemaker"></a> | **[Noisemaker](schwung/instruments/noisemaker/)**<br><sub>Synth · TAL · GPL-2.0</sub> | TAL-NoiseMaker: a classic virtual-analog polysynth with 256 factory presets, plus preset banks you add. | ✅ |
 | <a href="schwung/instruments/nusaw/"><img src="schwung/instruments/nusaw/screenshots/page_0.png" width="220" alt="NuSaw"></a> | **[NuSaw](schwung/instruments/nusaw/)**<br><sub>Synth · Charles Vestal · MIT</sub> | A detuned multi-saw (supersaw) polysynth with 27 presets. | ✅ |
 | <a href="schwung/instruments/obxd/"><img src="schwung/instruments/obxd/screenshots/page_0.png" width="220" alt="OB-Xd"></a> | **[OB-Xd](schwung/instruments/obxd/)**<br><sub>Synth · reales · GPL-3.0</sub> | Oberheim OB-X: reales' OB-Xd with its 128 factory presets, plus `.fxb` banks you add. | ✅ |
@@ -87,7 +89,7 @@ cd vst_instruments
 
 The first install of a plugin restarts MPC once (it asks first; `MPC.settings` is backed up). **[INSTALL.md](INSTALL.md)** walks through every step: getting SSH access, what the installer changes, adding a plugin to a track, routing the sequencers, updating, uninstalling, installing by hand and troubleshooting. Presets, kits and wavetables are fetched from their original projects into `presets/` and installed with each plugin; [docs/presets-and-libraries.md](docs/presets-and-libraries.md) lists them, where they come from and how to add your own.
 
-## Status (2026-10-04)
+## Status (2026-10-05)
 
 - All 36 build and pass the offline test: an x86 build under AddressSanitizer/UBSan that checks every parameter, presets, saving and restoring, Q-Link behaviour, notes to audio, and a stress test that hammers the plugin from two threads as MPC does.
 - All 36 run on an MPC Live II (MPC OS 3.9.1) with their Stitch screens (installed 2026-10-03).
@@ -99,6 +101,7 @@ The first install of a plugin restarts MPC once (it asks first; `MPC.settings` i
 - Audio effects: Verglas, Warps and Rings FX are in a track's insert effect slots, under VST, and work there (Live II, 2026-10-04; their screens passed the design QA in the slot).
 - New: **[Stevequencer](originals/stevequencer/)**, a 64-step sequencer edited from the Q-Links, written for this repo (2026-10-04): built, offline test passed, installed and working on the Live II. Its browser prototype (`design/prototype.html`) plays in Chrome. New since (offline, not yet on the device): two MOD lanes, a CC value per step that moves the instrument's controls.
 - MIDI CC 20-35 move every plugin's first-page Q-Links (column 1 = CC 20-23, top to bottom, and so on), with no MIDI learn: a sequencer's per-step CCs or a controller drive the instrument through the track's MIDI input (2026-10-04, offline test in every plugin; to check on a device that MPC passes the CCs through).
+- New: **[Mutable Vibe](mpc-ports/mutablevibe/)** (nachtaktiv303) and **[MPC Plaits](mpc-ports/mpcplaits/)** (poloq), two instruments their authors wrote for MPC OS on sd88me's framework, built here from their source with this repo's copy of it (2026-10-05): offline test passed, Q-Links one column per panel on every page (their screens are otherwise the authors'). Not installed on the Live II yet; neither has presets yet.
 - Developed on a Live II. Other Gen1 devices run the same MPC software and should behave the same; Gen2 devices (e.g. Live III) are reported to be more locked down. Reports welcome.
 
 What's next is in [ROADMAP.md](ROADMAP.md). Found a problem? Open an issue with the plugin, your MPC model and firmware, and what you did.
@@ -112,6 +115,7 @@ schwung/effects/        1 audio effect from a Schwung audio FX module
 mutable-instruments/    6 ported from Mutable Instruments' own firmware source
 vcv-rack/               1 ported from a VCV Rack module
 originals/              1 written for this repo (Stevequencer)
+mpc-ports/              2 written for MPC by other authors (Mutable Vibe, MPC Plaits), built here
   <plugin>/            README.md, screenshots/, deploy/ (ready to install), source, screen design
 presets/               the plugins' presets, kits, wavetables (not in git: tools/fetch-presets.py)
 install.sh, uninstall.sh, tools/   the installer (and tools/build.sh to build from source)
@@ -125,7 +129,7 @@ Each plugin's `deploy/` folder is the finished build, so installing needs only t
 
 ## Licences
 
-Each plugin keeps its upstream licence (GPL-2.0, GPL-3.0, MIT or BSD-3-Clause; two state none): see the plugin's README and [CREDITS.md](CREDITS.md). The GPL plugins' complete source is in their folders. The scripts and documents written for this repo don't have a licence of their own yet.
+Each plugin keeps its upstream licence (GPL-2.0, GPL-3.0, MIT or BSD-3-Clause; two state none; MPC Plaits' panel artwork is CC-BY-SA 3.0): see the plugin's README and [CREDITS.md](CREDITS.md). The GPL plugins' complete source is in their folders. The scripts and documents written for this repo don't have a licence of their own yet.
 
 ## Disclaimer
 

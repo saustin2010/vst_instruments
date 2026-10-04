@@ -1,6 +1,6 @@
 # Roadmap
 
-Open items as of 2026-10-04, most useful first. Tick them off here (with the date) as they're done.
+Open items as of 2026-10-05, most useful first. Tick them off here (with the date) as they're done.
 
 ## Presets and libraries ([docs/presets-and-libraries.md](docs/presets-and-libraries.md))
 
@@ -35,6 +35,13 @@ parameter index, so existing projects keep working.
   HOLD or RETURN to a base value; two more Q-Link sub-pages per step page and a MOD tab; 134 parameters appended (552);
   state SQ2 (SQ1 still loads); `mpc/mod_test.c` passes. On the device: that the CCs reach the instrument (below).
   Presets: 20 now (14 seeded random patterns added 2026-10-04, six of the 20 using the MOD lanes).
+- [ ] **Mutable Vibe and MPC Plaits** ([mpc-ports/](mpc-ports/)): two instruments other authors wrote for MPC OS
+  (nachtaktiv303's Rings + Plaits instrument; poloq's polyphonic Plaits), built here from their source with this
+  repo's framework (2026-10-05). Offline: built, test PASSED, Q-Links one column per panel on every page (checked with
+  check_skin.py and the column outlines), names fixed where MPC would show AMOUNT four times. Framework gained what
+  they use from newer upstream and poloq's fork: `dynamic_name` / `dynamic_display` (names and value text from the
+  engine) and `HAS_TRANSPORT`. Still to do: install (new plugins: one MPC restart), Design QA on the Live II
+  (per-model names on Mutable Vibe, synced LFOs restarting on MPC Plaits), and presets for both (upstream has none).
 - [ ] MIDI CC 20-35 move every plugin's first-page Q-Links (wrapper, 2026-10-04, offline test in every plugin). Check
   on a device, with no MPC settings touched: a sequencer's CCs on the instrument track's MIDI input move its controls
   (MPC passes them through), and MPC doesn't keep any of 20-35 for itself.
