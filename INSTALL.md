@@ -84,7 +84,7 @@ What it does, in order:
      | Hera | `/sdcard/vst/hera/` |
      | Libpo32 | `/sdcard/vst/libpo32/` |
      | MIDI Player | `/sdcard/vst/midiplayer/` |
-     | Mrdrums | `/sdcard/vst/mrdrums/` |
+     | Mr Drums | `/sdcard/vst/mrdrums/` |
      | OB-Xd | `/sdcard/vst/obxd/` |
      | Tablor | `/sdcard/vst/tablor/` |
 
