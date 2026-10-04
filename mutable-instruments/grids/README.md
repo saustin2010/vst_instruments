@@ -14,11 +14,13 @@ Grids holds a map of drum patterns learned from real grooves. MAP X and MAP Y pi
 
 ## Playing it
 
-MPC OS ignores a plugin's own MIDI output, so Grids opens its own MIDI port (named **Grids**, port **MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
+The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../docs/sequencers.md).
+
+MPC OS ignores a plugin's own MIDI output, so Grids opens its own MIDI port (MPC lists it as **[SEQ] Grids MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
 1. Put Grids on a plugin track. It needs no notes: it plays when MPC's transport runs.
-2. **Menu → Preferences → MIDI**: switch **Track** on for the Grids port.
-3. On the track(s) that should play, set **MIDI input** to that port (not *All*, and not on Grids's own track, or it hears itself).
+2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Grids MIDI Out**.
+3. On the track(s) that should play, set **MIDI Input Port** to that port and **Monitor** to **In** (not Auto, which only listens while that track is selected). Not on Grids' own track, or it hears itself.
 4. Press play: it follows MPC's tempo and transport (MIDI clock from the plugin host).
 
 Grids makes no sound of its own.

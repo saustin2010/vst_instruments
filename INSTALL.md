@@ -137,18 +137,22 @@ arrangement screen too. For OB-Xd and Noisemaker it lists the bank that's loaded
 
 ### Sequencers and other MIDI generators
 
-Eucalypso, Grids, Groove Bank, Marbles, Maze Lite, MIDI Player, Pixel Walkers, Rampage, Super Arp make no sound of their own: they play other tracks. MPC ignores a plugin's MIDI output, so each one opens its
-own MIDI port, the way a USB MIDI device would appear (MPC picks it up without a restart):
+Eucalypso, Grids, Groove Bank, Marbles, Maze Lite, MIDI Player, Pixel Walkers, Rampage, Super Arp make no sound of their own: they play other tracks. MPC ignores a plugin's MIDI output, so each one opens
+its own MIDI port, the way a USB MIDI device would appear (MPC picks it up without a restart). MPC lists it as
+**[SEQ] <name> MIDI Out**, e.g. **[SEQ] Super Arp MIDI Out**:
 
 1. Put the sequencer on a plugin track. Grids, Marbles, Maze Lite and MIDI Player play as soon as the transport runs
    (a note into Maze Lite sets its key); the others turn the notes you play or hold on their track into patterns.
-2. **Menu → Preferences → MIDI**: switch **Track** on for the port named after the plugin.
-3. On each track that should play, set its **MIDI input** to that port (not *All*, and not on the sequencer's own
-   track, or it hears itself).
+2. **Menu → Preferences → MIDI**: switch **Track** on for the sequencer's port.
+3. On each track that should play, set its **MIDI Input Port** to that port (channel All) and its **Monitor** to
+   **In**, not Auto: with Auto a track only listens while it's selected, and you'll be on the sequencer's track. Never
+   on the sequencer's own track, or it hears itself.
 4. Press play. They follow MPC's tempo and transport.
 
-Rampage works the same way but sends control changes: MIDI-learn a parameter on the target track to its CC. Each
-plugin's README has the details. This routing is confirmed on a Force; on a stock MPC it's still to be tried.
+Rampage works the same way but sends control changes: MIDI-learn a parameter on the target track to its CC.
+**[docs/sequencers.md](docs/sequencers.md)** has the whole walk-through, what makes each one play, and what to check
+when nothing plays. On a Live II, MPC connects to the port by itself (checked 2026-10-04); the full route is confirmed
+on a Force.
 
 ### Audio effects
 
@@ -214,4 +218,5 @@ it on exit, and a damaged file makes MPC fall back to default settings.
   plugin, and open an issue.
 - **`can't log in ... over SSH`.** Check the address and that `ssh root@<mpc-address>` works by itself (step 1).
 - **A sequencer plays nothing.** Its port needs **Track** switched on in Preferences → MIDI, and the target track's
-  MIDI input set to that port; the transport must be running.
+  MIDI Input Port set to that port with **Monitor: In** (not Auto); the transport must be running. More in
+  [docs/sequencers.md](docs/sequencers.md).
