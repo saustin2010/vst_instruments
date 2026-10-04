@@ -8,17 +8,19 @@ Rampage is Befaco's dual function generator: two channels that each make a rise 
 
 ## On the MPC
 
-- In the plugin browser: **Rampage** by **Befaco** (Synth)
-- Files: `/sdcard/vst/rampage.so`, screen in `/sdcard/Synths/Befaco - VST - Rampage/`
+- In the plugin browser: **[SEQ] Rampage** by **Befaco** (Sequencer)
+- Files: `/sdcard/vst/rampage.so`, screen in `/sdcard/Synths/Befaco - VST - [SEQ] Rampage/`
 - 27 parameters (all automatable) on 2 pages
 
 ## Playing it
 
-MPC OS ignores a plugin's own MIDI output, so Rampage opens its own MIDI port (named **Rampage**, port **MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
+The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../docs/sequencers.md).
+
+MPC OS ignores a plugin's own MIDI output, so Rampage opens its own MIDI port (MPC lists it as **[SEQ] Rampage MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
 1. Put Rampage on a plugin track and play or hold notes into it (pads, keys or a MIDI clip).
-2. **Menu → Preferences → MIDI**: switch **Track** on for the Rampage port.
-3. On the track to modulate, set **MIDI input** to that port, then MIDI-learn the parameter you want moved to CC OUT A or CC OUT B (MIDI page). MIN and MAX send too when given a CC number.
+2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Rampage MIDI Out**.
+3. On the track to modulate, set **MIDI Input Port** to that port (with **Monitor** on **In**), then MIDI-learn the parameter you want moved to CC OUT A or CC OUT B (MIDI page). MIN and MAX send too when given a CC number.
 4. EOC NOTES sends a short note at the end of each cycle, e.g. to fire a drum pad on another track.
 
 Rampage makes no sound of its own unless AUDIO is on.

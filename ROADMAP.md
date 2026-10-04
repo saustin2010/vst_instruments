@@ -1,6 +1,6 @@
 # Roadmap
 
-Open items as of 2026-10-03, most useful first. Tick them off here (with the date) as they're done.
+Open items as of 2026-10-04, most useful first. Tick them off here (with the date) as they're done.
 
 ## Presets and libraries ([docs/presets-and-libraries.md](docs/presets-and-libraries.md))
 
@@ -17,9 +17,20 @@ parameter index, so existing projects keep working.
 - [x] **Hush One imports** (2026-10-03). `MODULE_DIR` set; PATCH widened to 0-522 (11 built-in + 512); imported
   presets named by file (`MPC_PORT` patch). Check on the device: a project saved with the old PATCH range (0-10)
   may reopen showing a different PATCH number (MPC sets parameters back from normalized values).
-- [ ] **Libpo32 SAVE KIT** button (`save_kit`), and create its `presets/` folder on install for it to write to.
+- [x] **Libpo32 SAVE KIT** (2026-10-04): a SAVE KIT button on the KIT page (the engine's `save_kit`, which makes its
+  own `presets/` folder); saved kits join KIT and the PRESET menu.
 - [ ] INSTALL.md / plugin READMEs: document each of the above once it works (OB-Xd, Noisemaker, Hush One: done
   2026-10-03).
+
+## New plugins
+
+- [ ] **Stevequencer** ([originals/stevequencer](originals/stevequencer/)): a 16-step, four-page (64-step) melodic
+  sequencer edited from the Q-Links (pitch, length, on/off, velocity, chance, ratchet per step). Browser prototype
+  2026-10-04 (`design/prototype.html`); built and installed on the Live II the same day (engine, 418 parameters, 6
+  presets, the skin with per-sub-page controls and a step light; framework: `"live"` parameters, `banks=`); the owner
+  tried it: working (2026-10-04). Still to look at on the device: the step light's cost on MPC's screen thread and that it isn't recorded as automation, how MPC switches
+  six Q-Link sub-pages per tab, a project saving and reopening its pattern; then Design QA. Grid order is rows (steps
+  1-4 across the top) as in the prototype; beats or pads order is a one-line change in `mpc/gen.py`.
 
 ## On a device (nothing below has been tried on hardware yet)
 
@@ -31,14 +42,18 @@ parameter index, so existing projects keep working.
 - [ ] Install everything on an MPC and re-insert each plugin; check every page of the new Stitch screens (names,
   values, Q-Link columns, touch areas, pop-ups, envelope and waveform displays). Track it in README.md's Design QA column.
   Design QA first pass done offline for all 36 (2026-10-04, branch design-qa-batch1): one Q-Link column per panel, each
-  plugin's `DESIGN-QA.md` says what changed and what to look at.
-- [ ] Sequencers: route each one to another track through its own MIDI port on a **stock** MPC (works on a Force).
-- [ ] Audio effects (Verglas, Warps, Rings FX): does MPC offer third-party VST effects in its insert list at all?
-- [ ] Plugin browser groups. Checked on the Live II 2026-10-03: MPC's plugin menu sorted **by type** shows only VST
-  Instruments / VST Effects (the plugin-list `category` is ignored; the sequencers and drum machines keep reporting
-  theirs); sorted **by manufacturer** it makes a folder per maker field (Grids as "Sequencers" got its own folder).
-  The owner sorts by type, so that was put back. Left for later: name prefixes (SEQ / DRM) to bunch them in the
-  by-type list, after checking that an older project still finds a renamed plugin.
+  plugin's `DESIGN-QA.md` says what changed and what to look at. **Passed on the device (2026-10-04): 27 of 36**, every
+  synth, drum machine and audio effect. Left: the 9 sequencers and generators.
+- [x] Sequencers on a **stock** MPC (2026-10-04, Live II): a sequencer's own MIDI port plays another track, as on a Force.
+  The two settings people miss: the target track's Monitor on In (not Auto), and Remote off for the port
+  ([docs/sequencers.md](docs/sequencers.md)). Each of the nine is still to be heard in its own design QA.
+- [x] Audio effects (Verglas, Warps, Rings FX) (2026-10-04, Live II): in a track's insert effect slots, under VST, and
+  they work there (their screens passed the design QA in the slot).
+- [x] Plugin browser groups (2026-10-04). Sorted **by type**, MPC puts every VST in one VST folder: the plugin-list
+  `category` changes nothing, not even Akai's own folder names ("Drum", "Delay/Reverb", "Modulation", "Harmonic": tested
+  on the Live II). So every name now starts with its kind: **[SYN]**, **[DRUM]**, **[SEQ]**, **[FX]** (MPC sorts the
+  list case-sensitively, so they group after other makers' VSTs). Renamed before any project used them (no project on
+  the device referenced one). `install.sh` removes a renamed plugin's old screen folder when it re-registers it.
 - [ ] `install.sh` / `uninstall.sh` on a real MPC (so far tested only against a simulated one:
   `dev-tools/fake-mpc/`).
 - [ ] CPU: run the framework's `tools/bench.sh` for the heavy ones (Helm, Chordism, Tablor, Mono Voice, Elements,

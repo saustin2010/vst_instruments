@@ -1,6 +1,6 @@
 # Design QA: Elements
 
-Status: done offline (2026-10-03), **waiting for the device check**. No owner's notes yet.
+Status: **passed on the device** (2026-10-04, ✅ in the README). No owner's notes yet.
 
 ## What changed
 | Page | before | after |

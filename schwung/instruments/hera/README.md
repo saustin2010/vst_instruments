@@ -8,8 +8,8 @@ A Juno-60 emulation: one DCO per voice with saw, pulse (PWM from the LFO or enve
 
 ## On the MPC
 
-- In the plugin browser: **Hera** by **jpcima** (Synth)
-- Files: `/sdcard/vst/hera.so`, presets/data in `/sdcard/vst/hera/` (from this repo's `presets/hera/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/jpcima - VST - Hera/`
+- In the plugin browser: **[SYN] Hera** by **jpcima** (Synth)
+- Files: `/sdcard/vst/hera.so`, presets/data in `/sdcard/vst/hera/` (from this repo's `presets/hera/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/jpcima - VST - [SYN] Hera/`
 - 32 parameters (all automatable) on 2 pages
 
 ## Playing it

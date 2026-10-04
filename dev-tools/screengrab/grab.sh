@@ -10,9 +10,13 @@ mkdir -p "$(dirname "$OUT")" "$STEVE/screens"
 SSH=(ssh -o ConnectTimeout=10 ${MPC_KEY:+-i "$MPC_KEY"} "root@$HOST")
 "${SSH[@]}" '[ -x /tmp/drmgrab ]' || "${SSH[@]}" 'cat > /tmp/drmgrab.new && chmod +x /tmp/drmgrab.new && mv /tmp/drmgrab.new /tmp/drmgrab' < "$HERE/drmgrab"
 RAW="$STEVE/screens/.last.raw"
-"${SSH[@]}" '/tmp/drmgrab /dev/dri/card0' > "$RAW" 2>/dev/null
+# the display's card: card0 on some boots, card1 on others (2026-10-04): the one whose plane shows a framebuffer
+CARD=$("${SSH[@]}" 'for c in /dev/dri/card*; do /tmp/drmgrab $c list 2>&1 | grep -q "fb [1-9]" && { echo $c; break; }; done')
+[ -n "$CARD" ] || { echo "no display plane found on /dev/dri/card*" >&2; exit 1; }
+"${SSH[@]}" "/tmp/drmgrab $CARD" > "$RAW" 2>/dev/null
 case "$OUT" in /*) ;; *) OUT="$PWD/$OUT" ;; esac
-docker run --rm -v "$MV":"$MV" -v "$(dirname "$OUT")":"$(dirname "$OUT")" mpc-vst-html-art \
-  python3 "$HERE/rawpng.py" "$RAW" "$OUT" >/dev/null
+REAL=$(cd "$HERE" && pwd -P)   # in a workspace, steve/tools links into the repo: mount the real folder too
+docker run --rm -v "$MV":"$MV" -v "$REAL":"$REAL":ro -v "$(dirname "$OUT")":"$(dirname "$OUT")" mpc-vst-html-art \
+  python3 "$REAL/rawpng.py" "$RAW" "$OUT" >/dev/null
 rm -f "$RAW"
 echo "$OUT"

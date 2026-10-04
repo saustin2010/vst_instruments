@@ -8,17 +8,19 @@ A pixel-art gravity sequencer: every note you play on its track becomes a walker
 
 ## On the MPC
 
-- In the plugin browser: **Pixel Walkers** by **mestela** (Synth)
-- Files: `/sdcard/vst/pixelwalkers.so`, screen in `/sdcard/Synths/mestela - VST - Pixel Walkers/`
+- In the plugin browser: **[SEQ] Pixel Walkers** by **mestela** (Sequencer)
+- Files: `/sdcard/vst/pixelwalkers.so`, screen in `/sdcard/Synths/mestela - VST - [SEQ] Pixel Walkers/`
 - 9 parameters (all automatable) on 1 page
 
 ## Playing it
 
-MPC OS ignores a plugin's own MIDI output, so Pixel Walkers opens its own MIDI port (named **Pixel Walkers**, port **MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
+The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../../docs/sequencers.md).
+
+MPC OS ignores a plugin's own MIDI output, so Pixel Walkers opens its own MIDI port (MPC lists it as **[SEQ] Pixel Walkers MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
 1. Put Pixel Walkers on a plugin track and play or hold notes into it (pads, keys or a MIDI clip).
-2. **Menu → Preferences → MIDI**: switch **Track** on for the Pixel Walkers port.
-3. On the track(s) that should play, set **MIDI input** to that port (not *All*, and not on Pixel Walkers's own track, or it hears itself).
+2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Pixel Walkers MIDI Out**.
+3. On the track(s) that should play, set **MIDI Input Port** to that port and **Monitor** to **In** (not Auto, which only listens while that track is selected). Not on Pixel Walkers' own track, or it hears itself.
 4. Press play: it follows MPC's tempo and transport (MIDI clock from the plugin host).
 
 Pixel Walkers makes no sound of its own.

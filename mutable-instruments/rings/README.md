@@ -10,8 +10,8 @@ The module has no presets, so the port brings 14 (Init plus Glass Marimba, Tubul
 
 ## On the MPC
 
-- In the plugin browser: **Rings** by **Mutable Instruments** (Synth)
-- Files: `/sdcard/vst/rings.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - Rings/`
+- In the plugin browser: **[SYN] Rings** by **Mutable Instruments** (Synth)
+- Files: `/sdcard/vst/rings.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [SYN] Rings/`
 - 12 parameters (all automatable) on 1 page
 
 ## Playing it

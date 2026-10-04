@@ -8,8 +8,8 @@ A small, immediate FM synth, as its author puts it: "two-operator FM on eight kn
 
 ## On the MPC
 
-- In the plugin browser: **Hank** by **Charles Vestal** (Synth)
-- Files: `/sdcard/vst/hank.so`, screen in `/sdcard/Synths/Charles Vestal - VST - Hank/`
+- In the plugin browser: **[SYN] Hank** by **Charles Vestal** (Synth)
+- Files: `/sdcard/vst/hank.so`, screen in `/sdcard/Synths/Charles Vestal - VST - [SYN] Hank/`
 - 16 parameters (all automatable) on 1 page
 
 ## Playing it

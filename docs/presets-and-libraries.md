@@ -50,9 +50,7 @@ your originals elsewhere as well.
 
 ## Missing or not reachable yet
 
-| # | Plugin | What | Why | Fix (see ROADMAP.md) |
-|---|---|---|---|---|
-| 1 | Libpo32 | saving a kit | the engine has `save_kit` (writes `<module_dir>/presets/<kit>.json`) but there's no button, and the folder isn't created | add a SAVE KIT button and create its `presets/` folder on install |
+Nothing, as of 2026-10-04 (Tablor's factory presets and Libpo32's kit saving were the last two).
 
 Move-only features with no MPC equivalent (nothing to fix):
 

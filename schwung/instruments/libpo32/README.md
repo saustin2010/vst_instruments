@@ -8,8 +8,8 @@ A drum synthesiser in the spirit of Teenage Engineering's PO-32 Tonic: every sou
 
 ## On the MPC
 
-- In the plugin browser: **Libpo32** by **mestela** (Synth)
-- Files: `/sdcard/vst/libpo32.so`, presets/data in `/sdcard/vst/libpo32/` (from this repo's `presets/libpo32/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/mestela - VST - Libpo32/`
+- In the plugin browser: **[DRUM] Libpo32** by **mestela** (Drum machine)
+- Files: `/sdcard/vst/libpo32.so`, presets/data in `/sdcard/vst/libpo32/` (from this repo's `presets/libpo32/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/mestela - VST - [DRUM] Libpo32/`
 - 210 parameters (all automatable) on 3 pages
 
 ## Playing it
@@ -59,6 +59,7 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Kits work: they were never shipped and the kit control was a bare 0-31 knob; now a KIT browser shows the kit name.
 - A per-pad EDIT page (pick any of 16 pads: wave, pitch, decay, mod, noise, distortion, level) instead of 195 auto knobs; a pad mixer (levels 1-8) and a TUNE page (pitch/decay 1-8).
 - All 195 original per-pad parameters are still there (same indices) for automation; RANDOM KIT button.
+- SAVE KIT (2026-10-04, KIT page, appended param): saves the current sound as `kit001`, `kit002`... in `/sdcard/vst/libpo32/presets/` (the engine's own `save_kit`) and selects it; saved kits follow the shipped ones in KIT and MPC's PRESET menu, which re-reads the names (`kit_name_at:<n>`, `src/dsp/po32_drum.c` under `-DMPC_PORT`; diff: `upstream-changes.diff`). KIT now reaches 64 kits (the engine's limit). Reinstalling or uninstalling keeps saved kits.
 - Drums only sound on notes 36-51; the bundled kits fill pads 1-8 (tonic) or 1-4 (tape, acid).
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - Presets in MPC's PRESET menu (2026-10-03): its kits are VST programs (vst.json `programs`), so the PRESET

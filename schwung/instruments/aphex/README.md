@@ -8,8 +8,8 @@ A semi-modular, MS-20-flavoured mono synth: two VCOs with footage switches, both
 
 ## On the MPC
 
-- In the plugin browser: **Aphex** by **Filliformes** (Synth)
-- Files: `/sdcard/vst/aphex.so`, screen in `/sdcard/Synths/Filliformes - VST - Aphex/`
+- In the plugin browser: **[SYN] Aphex** by **Filliformes** (Synth)
+- Files: `/sdcard/vst/aphex.so`, screen in `/sdcard/Synths/Filliformes - VST - [SYN] Aphex/`
 - 83 parameters (all automatable) on 7 pages
 
 ## Playing it

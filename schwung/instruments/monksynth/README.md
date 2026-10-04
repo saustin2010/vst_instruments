@@ -8,8 +8,8 @@ A vocal synthesiser built on FOF formant synthesis: it sings vowels, and its 12 
 
 ## On the MPC
 
-- In the plugin browser: **MonkSynth** by **Jonathan Taylor** (Synth)
-- Files: `/sdcard/vst/monksynth.so`, screen in `/sdcard/Synths/Jonathan Taylor - VST - MonkSynth/`
+- In the plugin browser: **[SYN] MonkSynth** by **Jonathan Taylor** (Synth)
+- Files: `/sdcard/vst/monksynth.so`, screen in `/sdcard/Synths/Jonathan Taylor - VST - [SYN] MonkSynth/`
 - 25 parameters (all automatable) on 2 pages
 
 ## Playing it

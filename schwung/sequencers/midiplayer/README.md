@@ -8,17 +8,19 @@ Drop .mid files into /sdcard/vst/midiplayer/MIDI on the MPC and MIDI Player play
 
 ## On the MPC
 
-- In the plugin browser: **MIDI Player** by **Charles Vestal** (Synth)
-- Files: `/sdcard/vst/midiplayer.so`, presets/data in `/sdcard/vst/midiplayer/` (from this repo's `presets/midiplayer/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Charles Vestal - VST - MIDI Player/`
+- In the plugin browser: **[SEQ] MIDI Player** by **Charles Vestal** (Sequencer)
+- Files: `/sdcard/vst/midiplayer.so`, presets/data in `/sdcard/vst/midiplayer/` (from this repo's `presets/midiplayer/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Charles Vestal - VST - [SEQ] MIDI Player/`
 - 6 parameters (all automatable) on 1 page
 
 ## Playing it
 
-MPC OS ignores a plugin's own MIDI output, so MIDI Player opens its own MIDI port (named **MIDI Player**, port **MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
+The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../../docs/sequencers.md).
+
+MPC OS ignores a plugin's own MIDI output, so MIDI Player opens its own MIDI port (MPC lists it as **[SEQ] MIDI Player MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
 1. Put MIDI Player on a plugin track. It needs no notes: it plays when MPC's transport runs.
-2. **Menu → Preferences → MIDI**: switch **Track** on for the MIDI Player port.
-3. On the track(s) that should play, set **MIDI input** to that port (not *All*, and not on MIDI Player's own track, or it hears itself).
+2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] MIDI Player MIDI Out**.
+3. On the track(s) that should play, set **MIDI Input Port** to that port and **Monitor** to **In** (not Auto, which only listens while that track is selected). Not on MIDI Player's own track, or it hears itself.
 4. Press play: it follows MPC's tempo and transport (MIDI clock from the plugin host).
 
 MIDI Player makes no sound of its own.

@@ -1,8 +1,8 @@
 {
-  "name": "Libpo32",
+  "name": "[DRUM] Libpo32",
   "vendor": "mestela",
   "uid": "Po32",
-  "programs": {"param": "kit", "name": "kit_name", "count": "kit_count"},
+  "programs": {"param": "kit", "name": "kit_name", "count": "kit_count", "name_at": "kit_name_at"},
   "category": "Drum Machine",
   "so": "libpo32.so",
   "module": "src/module.json",
@@ -14,7 +14,8 @@
       "src/dsp/po32_synth.c"
     ],
     "cflags": [
-      "-Isrc/dsp"
+      "-Isrc/dsp",
+      "-DMPC_PORT"
     ],
     "libs": [
       "-lm"

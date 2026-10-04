@@ -35,7 +35,7 @@ These plugins are other people's instruments, ported to MPC OS. Thank you to all
 | [Mono Voice](schwung/instruments/monovoice/) | Tim Cox | https://github.com/timncox/schwung-mono | MIT |
 | [Moog](schwung/instruments/moog/) | Nicolas Roulet, Julian Palladino (port: charlesvestal) | Schwung module "RaffoSynth" v0.2.5 | MIT |
 | [Mr Hyde](schwung/instruments/mrhyde/) | move-anything contributors | Schwung module "MrHyde" v0.0.1 | MIT |
-| [Mrdrums](schwung/instruments/mrdrums/) | move-anything contributors | Schwung module "MrDrums" v0.0.4 | MIT |
+| [Mr Drums](schwung/instruments/mrdrums/) | move-anything contributors | Schwung module "MrDrums" v0.0.4 | MIT |
 | [Noisemaker](schwung/instruments/noisemaker/) | legsmechanical (engine: Patrick Kunz / TAL) | Schwung module "Noisemaker" v0.2.2 | GPL-2.0 |
 | [NuSaw](schwung/instruments/nusaw/) | Charles Vestal | https://github.com/charlesvestal/schwung-nusaw | MIT |
 | [OB-Xd](schwung/instruments/obxd/) | reales (port: charlesvestal) | Schwung module "OB-Xd" v0.4.9 | GPL-3.0 |

@@ -8,8 +8,8 @@ A West Coast voice in the Serge / Buchla tradition: two oscillators (frequency, 
 
 ## On the MPC
 
-- In the plugin browser: **Denis** by **Filliformes** (Synth)
-- Files: `/sdcard/vst/denis.so`, screen in `/sdcard/Synths/Filliformes - VST - Denis/`
+- In the plugin browser: **[SYN] Denis** by **Filliformes** (Synth)
+- Files: `/sdcard/vst/denis.so`, screen in `/sdcard/Synths/Filliformes - VST - [SYN] Denis/`
 - 61 parameters (all automatable) on 4 pages
 
 ## Playing it

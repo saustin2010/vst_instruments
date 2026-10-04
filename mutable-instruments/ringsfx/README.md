@@ -10,8 +10,8 @@ Upstream has no presets, so the port brings 12 (Init, Resonant Body, Metal Plate
 
 ## On the MPC
 
-- In the plugin browser: **Rings FX** by **Mutable Instruments** (Effect)
-- Files: `/sdcard/vst/ringsfx.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - Rings FX/`
+- In the plugin browser: **[FX] Rings FX** by **Mutable Instruments** (Audio effect)
+- Files: `/sdcard/vst/ringsfx.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [FX] Rings FX/`
 - 12 parameters (all automatable) on 1 page
 
 ## Playing it

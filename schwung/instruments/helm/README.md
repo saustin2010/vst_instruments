@@ -8,8 +8,8 @@ Helm is a full polyphonic subtractive synth: two oscillators with unison and cro
 
 ## On the MPC
 
-- In the plugin browser: **Helm** by **Matt Tytel** (Synth)
-- Files: `/sdcard/vst/helm.so`, presets/data in `/sdcard/vst/helm/` (from this repo's `presets/helm/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Matt Tytel - VST - Helm/`
+- In the plugin browser: **[SYN] Helm** by **Matt Tytel** (Synth)
+- Files: `/sdcard/vst/helm.so`, presets/data in `/sdcard/vst/helm/` (from this repo's `presets/helm/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Matt Tytel - VST - [SYN] Helm/`
 - 164 parameters (all automatable) on 12 pages
 
 ## Playing it

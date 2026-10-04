@@ -8,8 +8,8 @@ A chord machine: every note you play becomes a four-voice chord (octaves, fifths
 
 ## On the MPC
 
-- In the plugin browser: **Chordism** by **Charles Vestal** (Synth)
-- Files: `/sdcard/vst/chordism.so`, screen in `/sdcard/Synths/Charles Vestal - VST - Chordism/`
+- In the plugin browser: **[SYN] Chordism** by **Charles Vestal** (Synth)
+- Files: `/sdcard/vst/chordism.so`, screen in `/sdcard/Synths/Charles Vestal - VST - [SYN] Chordism/`
 - 137 parameters (all automatable) on 10 pages
 
 ## Playing it

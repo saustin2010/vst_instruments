@@ -8,17 +8,19 @@ An arpeggiator that separates the note order from the rhythm: a MODE (up, down, 
 
 ## On the MPC
 
-- In the plugin browser: **Super Arp** by **handcraftedcc** (Synth)
-- Files: `/sdcard/vst/superarp.so`, screen in `/sdcard/Synths/handcraftedcc - VST - Super Arp/`
+- In the plugin browser: **[SEQ] Super Arp** by **handcraftedcc** (Sequencer)
+- Files: `/sdcard/vst/superarp.so`, screen in `/sdcard/Synths/handcraftedcc - VST - [SEQ] Super Arp/`
 - 37 parameters (all automatable) on 3 pages
 
 ## Playing it
 
-MPC OS ignores a plugin's own MIDI output, so Super Arp opens its own MIDI port (named **Super Arp**, port **MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
+The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../../docs/sequencers.md).
+
+MPC OS ignores a plugin's own MIDI output, so Super Arp opens its own MIDI port (MPC lists it as **[SEQ] Super Arp MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
 1. Put Super Arp on a plugin track and play or hold notes into it (pads, keys or a MIDI clip).
-2. **Menu → Preferences → MIDI**: switch **Track** on for the Super Arp port.
-3. On the track(s) that should play, set **MIDI input** to that port (not *All*, and not on Super Arp's own track, or it hears itself).
+2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Super Arp MIDI Out**.
+3. On the track(s) that should play, set **MIDI Input Port** to that port and **Monitor** to **In** (not Auto, which only listens while that track is selected). Not on Super Arp's own track, or it hears itself.
 4. Press play: it follows MPC's tempo and transport (MIDI clock from the plugin host).
 
 Super Arp makes no sound of its own.

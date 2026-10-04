@@ -8,8 +8,8 @@ A model of the Wurlitzer 200A electric piano (the OpenWurli engine) rather than 
 
 ## On the MPC
 
-- In the plugin browser: **Wurl** by **Filliformes** (Synth)
-- Files: `/sdcard/vst/wurl.so`, screen in `/sdcard/Synths/Filliformes - VST - Wurl/`
+- In the plugin browser: **[SYN] Wurl** by **Filliformes** (Synth)
+- Files: `/sdcard/vst/wurl.so`, screen in `/sdcard/Synths/Filliformes - VST - [SYN] Wurl/`
 - 11 parameters (all automatable) on 1 page
 
 ## Playing it

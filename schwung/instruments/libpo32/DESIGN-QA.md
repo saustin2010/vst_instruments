@@ -1,6 +1,6 @@
 # Design QA: Libpo32
 
-Status: done offline (2026-10-03), **waiting for the device check**.
+Status: **passed on the device** (2026-10-04, ✅ in the README).
 
 ## Owner's notes
 None specific; checked against the batch rules (one Q-Link column per panel, as Moog; outlines that frame one
@@ -17,6 +17,7 @@ Q-Link columns before → after ("-" = an empty slot):
 
 - **KIT**: MASTER (LEVEL, DECAY SCALE) | PADS 1-4 | PADS 5-8 | KIT (the kit last, as a preset). RANDOM KIT is a
   utility button: it moved into the KIT panel beside the kit display, and off the Q-Links (turning a knob fired it).
+  SAVE KIT (2026-10-04) sits under it, touch only too.
 - **EDIT**: OSCILLATOR | MODULATION | NOISE / VCF | AMP & DRIVE, a column each. The EDIT PAD selector (the bar across
   the top) is touch only: as a Q-Link its column would have taken in the whole page. MOD MODE's three options are
   on one row now (the third sat on top of MOD AMOUNT), and NOISE ENV's are a row too.

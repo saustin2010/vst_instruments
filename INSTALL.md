@@ -58,7 +58,7 @@ Pick plugins by folder name, by group, or `all`:
 ./install.sh <mpc-address> --dry-run hera grids      # check the MPC and show what would happen
 ./install.sh <mpc-address> hera grids                # install
 ./install.sh <mpc-address> instruments               # groups: instruments, sequencers, effects,
-                                                     #   schwung, mutable-instruments, vcv-rack, all
+                                                     #   schwung, mutable-instruments, vcv-rack, originals, all
 ```
 
 Plugin names: `303`, `aphex`, `braids`, `chordism`, `denis`, `elements`, `eucalypso`, `fizzik`, `grids`, `groovebank`, `hank`, `helm`, `hera`, `hush1`, `libpo32`, `marbles`, `mazelite`, `midiplayer`, `monksynth`, `monovoice`, `moog`, `mrhyde`, `mrdrums`, `noisemaker`, `nusaw`, `obxd`, `pixelwalkers`, `plaits`, `rampage`, `rings`, `ringsfx`, `superarp`, `tablor`, `verglas`, `warps`, `wurl`.
@@ -84,7 +84,7 @@ What it does, in order:
      | Hera | `/sdcard/vst/hera/` |
      | Libpo32 | `/sdcard/vst/libpo32/` |
      | MIDI Player | `/sdcard/vst/midiplayer/` |
-     | Mrdrums | `/sdcard/vst/mrdrums/` |
+     | Mr Drums | `/sdcard/vst/mrdrums/` |
      | OB-Xd | `/sdcard/vst/obxd/` |
      | Tablor | `/sdcard/vst/tablor/` |
 
@@ -126,27 +126,32 @@ a plugin never deletes files you added. What every plugin ships, where it came f
 ## 5. Play it
 
 On the MPC, add a new track of the **Plugin** type and choose the plugin in the plugin browser. The browser lists it
-under its name and maker (e.g. **Hera**, by jpcima). Its touchscreen page appears with the track; the tabs along the
-bottom are its pages. Turn a control on screen or with the Q-Links (on a 4-knob MPC, the Q-Link button steps through
-the page's columns of four; the active column is outlined). Settings are saved with the project, and automation
+under its name and maker (e.g. **[SYN] Hera**, by jpcima): each name starts with its kind, **[SYN]**, **[DRUM]**,
+**[SEQ]** or **[FX]**, so sorted by type (where MPC puts every VST in one VST folder) they group together. The
+**[FX]** audio effects are in a track's insert effect slots instead, under VST. A plugin's touchscreen page appears
+with it; the tabs along the bottom are its pages. Turn a control on screen or with the Q-Links (on a 4-knob MPC, the
+Q-Link button steps through the page's columns of four; the active column is outlined). Settings are saved with the project, and automation
 works like on Akai's own plugins. Plugins with presets have a preset or patch selector on their first page, and
 their presets (kits for the drum machines) are also in MPC's own PRESET menu in the plugin header, which shows on the
 arrangement screen too. For OB-Xd and Noisemaker it lists the bank that's loaded.
 
 ### Sequencers and other MIDI generators
 
-Eucalypso, Grids, Groove Bank, Marbles, Maze Lite, MIDI Player, Pixel Walkers, Rampage, Super Arp make no sound of their own: they play other tracks. MPC ignores a plugin's MIDI output, so each one opens its
-own MIDI port, the way a USB MIDI device would appear (MPC picks it up without a restart):
+Eucalypso, Grids, Groove Bank, Marbles, Maze Lite, MIDI Player, Pixel Walkers, Rampage, Super Arp make no sound of their own: they play other tracks. MPC ignores a plugin's MIDI output, so each one opens
+its own MIDI port, the way a USB MIDI device would appear (MPC picks it up without a restart). MPC lists it as
+**[SEQ] <name> MIDI Out**, e.g. **[SEQ] Super Arp MIDI Out**:
 
 1. Put the sequencer on a plugin track. Grids, Marbles, Maze Lite and MIDI Player play as soon as the transport runs
    (a note into Maze Lite sets its key); the others turn the notes you play or hold on their track into patterns.
-2. **Menu → Preferences → MIDI**: switch **Track** on for the port named after the plugin.
-3. On each track that should play, set its **MIDI input** to that port (not *All*, and not on the sequencer's own
-   track, or it hears itself).
+2. **Menu → Preferences → MIDI**: switch **Track** on for the sequencer's port.
+3. On each track that should play, set its **MIDI Input Port** to that port (channel All) and its **Monitor** to
+   **In**, not Auto: with Auto a track only listens while it's selected, and you'll be on the sequencer's track. Never
+   on the sequencer's own track, or it hears itself.
 4. Press play. They follow MPC's tempo and transport.
 
-Rampage works the same way but sends control changes: MIDI-learn a parameter on the target track to its CC. Each
-plugin's README has the details. This routing is confirmed on a Force; on a stock MPC it's still to be tried.
+Rampage works the same way but sends control changes: MIDI-learn a parameter on the target track to its CC.
+**[docs/sequencers.md](docs/sequencers.md)** has the whole walk-through, what makes each one play, and what to check
+when nothing plays. The routing is confirmed on a stock Live II (2026-10-04) and on a Force.
 
 ### Audio effects
 
@@ -178,7 +183,7 @@ If you'd rather not run the script, these are the same steps (from your computer
 # copy one plugin's files (example: Hera)
 cd schwung/instruments/hera/deploy
 scp vst/hera.so root@<mpc>:/sdcard/vst/
-scp -r "Synths/jpcima - VST - Hera" root@<mpc>:/sdcard/Synths/
+scp -r "Synths/jpcima - VST - [SYN] Hera" root@<mpc>:/sdcard/Synths/
 scp -r ../../../../presets/hera root@<mpc>:/sdcard/vst/       # its presets, if it has some
                                                                # (python3 tools/fetch-presets.py hera first)
 scp pluginlist-entry.xml ../../../../tools/plugin_list.awk root@<mpc>:/tmp/
@@ -212,4 +217,5 @@ it on exit, and a damaged file makes MPC fall back to default settings.
   plugin, and open an issue.
 - **`can't log in ... over SSH`.** Check the address and that `ssh root@<mpc-address>` works by itself (step 1).
 - **A sequencer plays nothing.** Its port needs **Track** switched on in Preferences → MIDI, and the target track's
-  MIDI input set to that port; the transport must be running.
+  MIDI Input Port set to that port with **Monitor: In** (not Auto); the transport must be running. More in
+  [docs/sequencers.md](docs/sequencers.md).

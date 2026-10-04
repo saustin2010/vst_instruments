@@ -8,8 +8,8 @@ An SH-101 emulation: one oscillator with saw, pulse (with PWM), sub-oscillator a
 
 ## On the MPC
 
-- In the plugin browser: **Hush One** by **Move Everything** (Synth)
-- Files: `/sdcard/vst/hushone.so`, presets you add in `/sdcard/vst/hush1/presets/` (from this repo's `presets/hush1/`), screen in `/sdcard/Synths/Move Everything - VST - Hush One/`
+- In the plugin browser: **[SYN] Hush One** by **Move Everything** (Synth)
+- Files: `/sdcard/vst/hushone.so`, presets you add in `/sdcard/vst/hush1/presets/` (from this repo's `presets/hush1/`), screen in `/sdcard/Synths/Move Everything - VST - [SYN] Hush One/`
 - 56 parameters (all automatable) on 4 pages
 
 ## Playing it

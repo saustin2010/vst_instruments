@@ -931,6 +931,12 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
         if (m->kit_index >= 0 && m->kit_index < m->kit_count)
             return snprintf(buf, buf_len, "%s", m->kit_names[m->kit_index]);
         if (buf_len > 0) buf[0] = '\0'; return 0;
+#ifdef MPC_PORT   /* any kit's name, for MPC's PRESET menu (it re-reads them after SAVE KIT adds one) */
+    } else if (strncmp(key, "kit_name_at:", 12) == 0) {
+        int i = atoi(key + 12);
+        if (i >= 0 && i < m->kit_count) return snprintf(buf, buf_len, "%s", m->kit_names[i]);
+        if (buf_len > 0) buf[0] = '\0'; return 0;
+#endif
     } else if (strcmp(key, "kit_query_name") == 0) {
         if (m->kit_query_idx >= 0 && m->kit_query_idx < m->kit_count)
             return snprintf(buf, buf_len, "%s", m->kit_names[m->kit_query_idx]);

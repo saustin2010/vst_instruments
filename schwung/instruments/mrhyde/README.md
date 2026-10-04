@@ -10,8 +10,8 @@ Upstream has no presets, so the port brings 19 (Init, Freak Bass, Wobble Bass, S
 
 ## On the MPC
 
-- In the plugin browser: **Mr Hyde** by **Move Everything** (Synth)
-- Files: `/sdcard/vst/mrhyde.so`, screen in `/sdcard/Synths/Move Everything - VST - Mr Hyde/`
+- In the plugin browser: **[SYN] Mr Hyde** by **Move Everything** (Synth)
+- Files: `/sdcard/vst/mrhyde.so`, screen in `/sdcard/Synths/Move Everything - VST - [SYN] Mr Hyde/`
 - 81 parameters (all automatable) on 7 pages
 
 ## Playing it

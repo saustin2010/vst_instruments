@@ -8,8 +8,8 @@ The OB-Xd emulation of Oberheim's OB-X: two oscillators per voice with sync, cro
 
 ## On the MPC
 
-- In the plugin browser: **OB-Xd** by **reales** (Synth)
-- Files: `/sdcard/vst/obxd.so`, presets/data in `/sdcard/vst/obxd/` (from this repo's `presets/obxd/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/reales - VST - OB-Xd/`
+- In the plugin browser: **[SYN] OB-Xd** by **reales** (Synth)
+- Files: `/sdcard/vst/obxd.so`, presets/data in `/sdcard/vst/obxd/` (from this repo's `presets/obxd/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/reales - VST - [SYN] OB-Xd/`
 - 74 parameters (all automatable) on 5 pages
 
 ## Playing it

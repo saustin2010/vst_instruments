@@ -8,8 +8,8 @@ A Roland TB-303 emulation built on Robin Schmidt's Open303 engine, with the "Dev
 
 ## On the MPC
 
-- In the plugin browser: **303** by **Robin Schmidt** (Synth)
-- Files: `/sdcard/vst/acid303.so`, screen in `/sdcard/Synths/Robin Schmidt - VST - 303/`
+- In the plugin browser: **[SYN] 303** by **Robin Schmidt** (Synth)
+- Files: `/sdcard/vst/acid303.so`, screen in `/sdcard/Synths/Robin Schmidt - VST - [SYN] 303/`
 - 18 parameters (all automatable) on 2 pages
 
 ## Playing it

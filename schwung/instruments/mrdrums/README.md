@@ -1,15 +1,15 @@
-# Mrdrums
+# Mr Drums
 
 **Drum sampler** · A 16-pad drum sampler: kits of samples on pads 36-51. · maker in MPC: Move Everything · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Mrdrums on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Mr Drums on the MPC touchscreen">
 
 A drum sample player: each kit is a folder of up to 16 samples on MIDI notes 36-51, so MPC's pads play it. Per pad: volume, pan, tune, start, attack, decay, choke group, gate or one-shot, and random pan, volume and decay plus a play chance for humanised hits. Master volume, polyphony, velocity curve and humanize apply to the kit. Kits live in /sdcard/vst/mrdrums/kits on the MPC (add your own folders there); a starter kit of synthesised hits ships with it.
 
 ## On the MPC
 
-- In the plugin browser: **Mrdrums** by **Move Everything** (Synth)
-- Files: `/sdcard/vst/mrdrums.so`, presets/data in `/sdcard/vst/mrdrums/` (from this repo's `presets/mrdrums/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Move Everything - VST - Mrdrums/`
+- In the plugin browser: **[DRUM] Mr Drums** by **Move Everything** (Drum machine)
+- Files: `/sdcard/vst/mrdrums.so`, presets/data in `/sdcard/vst/mrdrums/` (from this repo's `presets/mrdrums/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Move Everything - VST - [DRUM] Mr Drums/`
 - 26 parameters (all automatable) on 2 pages
 
 ## Playing it
@@ -24,13 +24,13 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 ### 1. KIT
 
-<img src="screenshots/page_0.png" width="760" alt="Mrdrums, page KIT">
+<img src="screenshots/page_0.png" width="760" alt="Mr Drums, page KIT">
 
 Q-Link columns: **1** MASTER VOL, POLYPHONY, VEL CURVE, HUMANIZE  ·  **2** EDIT PAD, AUTO SELECT  ·  **3** RAND LOOP  ·  **4** KIT
 
 ### 2. PAD
 
-<img src="screenshots/page_1.png" width="760" alt="Mrdrums, page PAD">
+<img src="screenshots/page_1.png" width="760" alt="Mr Drums, page PAD">
 
 Q-Link columns: **1** EDIT PAD  ·  **2** PAD VOLUME, PAD PAN, PAD TUNE, PAD START  ·  **3** PAD MODE, CHOKE GROUP, PAD ATTACK, PAD DECAY  ·  **4** RAND VOLUME, RAND PAN, RAND DECAY, CHANCE
 
