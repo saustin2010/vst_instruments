@@ -4,11 +4,13 @@
 Then mpc/make_png.py (in the mpc-vst-html-art container) for the PNG pictures, then tools/build.sh stevequencer.
 
 The parameter order is the plugin's VST parameter order: MPC saves projects and Q-Link assignments by index, so once
-released, only ever append. The screen mirrors design/prototype.html: tabs = pages of 16 steps (and SETUP), each with
-six Q-Link sub-pages (PITCH, LENGTH, ON/OFF, VELO, CHANCE, RATCHET); a cell's big value and its highlighted chip
-follow the sub-page (banks=)."""
+released, only ever append. The screen mirrors design/prototype.html: tabs = pages of 16 steps (then SETUP and MOD),
+each with eight Q-Link sub-pages (PITCH, LENGTH, ON/OFF, VELO, CHANCE, RATCHET, MOD A, MOD B); a cell's big value and
+its highlighted chip follow the sub-page (banks=). The MOD lanes (a CC value per step) came after the first release:
+their parameters are appended after the per-step ones, then the MOD settings."""
 import json
 import os
+import random
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IMG = os.path.join(HERE, "images")
@@ -46,6 +48,7 @@ SETTINGS = [   # key, name, definition, hint (SETUP footer)
 ]
 TRIGGERS = [("rotate_left", "ROTATE L"), ("rotate_right", "ROTATE R"), ("random_all", "RANDOM ALL"), ("clear_all", "CLEAR ALL")]
 PAGE_TOOLS = [("copy", "COPY"), ("paste", "PASTE"), ("clear", "CLEAR"), ("random", "RANDOM")]
+MODV = ["-"] + [str(v) for v in range(128)]
 # per-step attributes, in Q-Link sub-page order: (id, sub-page name, parameter name, definition, chip?)
 ATTRS = [
     ("pitch", "PITCH", "PITCH", {"options": [note_name(n) for n in PITCHES], "default": 24}, True),
@@ -54,6 +57,19 @@ ATTRS = [
     ("velo", "VELO", "VELO", {"min": 1, "max": 127, "default": 100, "display": "int"}, True),
     ("chance", "CHANCE", "CHANCE", {"options": pct(range(0, 101, 5)), "default": 20}, True),
     ("ratchet", "RATCHET", "RATCHET", {"options": ["x1", "x2", "x3", "x4"], "default": 0}, True),
+    # "-" = none. The labels are numbers, so the options carry "values": the wrapper sends and reads the value itself
+    # (-1 for "-"), never an index a label could be mistaken for
+    ("moda", "MOD A", "MOD A", {"options": MODV, "values": list(range(-1, 128)), "default": 0}, False),
+    ("modb", "MOD B", "MOD B", {"options": MODV, "values": list(range(-1, 128)), "default": 0}, False),
+]
+CCS = ["OFF"] + ["CC %d" % n for n in range(1, 120)]
+MOD_SETTINGS = [   # appended after every per-step parameter (key, name, definition, hint)
+    ("moda_cc", "MOD A CC", {"options": CCS, "default": 20}, "CC 20 = 1ST Q-LINK"),
+    ("moda_mode", "MOD A MODE", {"options": ["HOLD", "RETURN"], "default": 0}, "EMPTY STEP: KEEP / BASE"),
+    ("moda_base", "MOD A BASE", {"min": 0, "max": 127, "default": 64, "display": "int"}, "RETURN SENDS THIS"),
+    ("modb_cc", "MOD B CC", {"options": CCS, "default": 21}, "CC 21 = 2ND Q-LINK"),
+    ("modb_mode", "MOD B MODE", {"options": ["HOLD", "RETURN"], "default": 0}, "EMPTY STEP: KEEP / BASE"),
+    ("modb_base", "MOD B BASE", {"min": 0, "max": 127, "default": 64, "display": "int"}, "RETURN SENDS THIS"),
 ]
 TABS = ["1-16", "17-32", "33-48", "49-64"]
 
@@ -67,6 +83,7 @@ def params():
     out.append({"key": "play_step", "name": "PLAY STEP", "options": ["-"] + [str(i) for i in range(1, 65)], "default": 0})
     for a, _, name, d, _ in ATTRS:
         out += [dict(key="s%d_%s" % (s, a), name="S%d %s" % (s, name), **d) for s in range(1, NSTEPS + 1)]
+    out += [dict(key=k, name=n, **d) for k, n, d, _ in MOD_SETTINGS]
     return out
 
 
@@ -80,11 +97,12 @@ def quant(n, root, scale):
     return n
 
 
-def preset(name, steps, **settings):
-    """steps: up to 64 (pitch, on, length %, velo, chance %, ratchet); the rest are init steps."""
-    base = {k: d["options"][d["default"]] if "options" in d else d["default"] for k, _, d, _ in SETTINGS}
+def preset(name, steps, mods=(), **settings):
+    """steps: up to 64 (pitch, on, length %, velo, chance %, ratchet); the rest are init steps. mods: up to 64
+    (MOD A, MOD B) values, None = none."""
+    base = {k: d["options"][d["default"]] if "options" in d else d["default"] for k, _, d, _ in SETTINGS + MOD_SETTINGS}
     for k, v in settings.items():
-        d = dict((s[0], s[2]) for s in SETTINGS)[k]
+        d = dict((s[0], s[2]) for s in SETTINGS + MOD_SETTINGS)[k]
         base[k] = v if "options" not in d or isinstance(v, str) else d["options"][v]
     vals = dict(base)
     root, scale = NOTE.index(base["root"]), SCALES.index(base["scale"])
@@ -94,7 +112,42 @@ def preset(name, steps, **settings):
         vals.update({"s%d_pitch" % (i + 1): note_name(p), "s%d_length" % (i + 1): "%d%%" % ln,
                      "s%d_on" % (i + 1): OFFON[on], "s%d_velo" % (i + 1): ve, "s%d_chance" % (i + 1): "%d%%" % ch,
                      "s%d_ratchet" % (i + 1): "x%d" % ra})
+        ma, mb = mods[i] if i < len(mods) else (None, None)
+        vals.update({"s%d_moda" % (i + 1): "-" if ma is None else str(ma), "s%d_modb" % (i + 1): "-" if mb is None else str(mb)})
     return {"name": name, "values": vals}
+
+
+def walk(seed, n=16, lo=48, hi=72, jump=3, density=0.8, lengths=(50,), velo=(85, 115), chance=(100, 100),
+         ratchet=0.0, accent=4):
+    """A seeded random walk of n steps (the same every run): pitch moves up to `jump` semitones a step inside lo..hi
+    (the preset puts it on the scale), `density` of the steps play (the first always does), lengths picked from
+    `lengths`, every `accent`-th step louder, `ratchet` the share of steps that repeat x2-x4."""
+    rng = random.Random(seed)
+    p, out = rng.randint(lo, hi), []
+    for i in range(n):
+        p = max(lo, min(hi, p + rng.randint(-jump, jump)))
+        on = 1 if i == 0 or rng.random() < density else 0
+        ve = min(127, rng.randint(*velo) + (15 if accent and i % accent == 0 else 0))
+        ch = 5 * round(rng.randint(*chance) / 5)
+        ra = rng.choice((2, 2, 3, 4)) if rng.random() < ratchet else 1
+        out.append((p, on, rng.choice(lengths), ve, ch, ra))
+    return out
+
+
+def lane(seed, n=16, shape="random", lo=20, hi=110, every=1):
+    """MOD values for n steps: "ramp" (rising), "tri" (up and down), "random", "steps" (a few held levels); a value on
+    every `every`-th step, None (none) between."""
+    rng = random.Random(seed)
+    vals = []
+    for i in range(n):
+        if i % every:
+            vals.append(None)
+            continue
+        f = i / max(1, n - 1)
+        v = {"ramp": lo + (hi - lo) * f, "tri": lo + (hi - lo) * (1 - abs(2 * f - 1)),
+             "random": rng.randint(lo, hi), "steps": rng.choice((lo, (lo + hi) // 2, hi))}[shape]
+        vals.append(int(round(v)))
+    return vals
 
 
 def presets():
@@ -114,11 +167,49 @@ def presets():
     return {"presets": [
         preset("Init", []),
         preset("Bass Line", bass, scale="MINOR", swing="56%"),
-        preset("Acid Line", acid, scale="MINOR", root="A", swing="54%"),
+        # MOD A on CC 20 (the first Q-Link: the filter cutoff on most of this repo's synths): a sweep that builds up
+        preset("Acid Line", acid, [(v, None) for v in (30, None, 45, None, 60, 75, None, 90, 40, None, 55, 100, None, 80, 65, 110)],
+               scale="MINOR", root="A", swing="54%"),
         preset("Arp Climb", arp, scale="MAJOR", rate="1/16"),
         preset("Offbeat Stabs", stabs, scale="MINOR"),
         preset("Drunk Walk", walk, scale="PENTA MAJ", direction="DRUNK", loop_len=32, rate="1/8"),
-    ]}
+    ] + more_presets()}
+
+
+def more_presets():
+    """Seeded random patterns (walk, lane): varied, and the same every time gen.py runs."""
+    z = lambda a, b=None: [(x, y) for x, y in zip(a, b or [None] * len(a))]
+    euclid = [(57 if (i * 5) % 8 < 5 else 60, 1 if (i * 5) % 8 < 5 else 0, 45, 100 + 20 * (i % 8 == 0), 100, 1)
+              for i in range(16)]
+    return [
+        preset("Minor Pulse", walk(11, lo=50, hi=62, jump=5, density=0.95, lengths=(40, 50)), scale="MINOR", root="D"),
+        preset("Pentatonic Rain", walk(12, lo=60, hi=84, jump=4, density=0.7, lengths=(25, 35, 50), chance=(60, 100)),
+               scale="PENTA MIN", root="E", rate="1/16"),
+        preset("Dorian Groove", walk(13, lo=48, hi=67, jump=3, density=0.75, lengths=(30, 60, 90)),
+               z(lane(13, every=2, shape="random", lo=40, hi=100)), scale="DORIAN", root="G", swing="58%"),
+        preset("Phrygian Run", walk(14, lo=52, hi=76, jump=2, density=0.9, lengths=(45,), ratchet=0.2),
+               scale="PHRYGIAN", root="E"),
+        preset("Lydian Float", walk(15, lo=60, hi=79, jump=4, density=0.6, lengths=(150, 200, 120), velo=(70, 95)),
+               z(lane(15, shape="tri", lo=30, hi=90)), scale="LYDIAN", root="F", rate="1/8"),
+        preset("Blues Shuffle", walk(16, lo=48, hi=65, jump=3, density=0.8, lengths=(60, 40)), scale="BLUES", root="A",
+               swing="66%", rate="1/8"),
+        preset("Whole Tone Drift", walk(17, n=32, lo=55, hi=80, jump=2, density=0.85, lengths=(70, 100)),
+               scale="WHOLE TONE", direction="DRUNK", loop_len=32),
+        preset("Ratchet Stabs", walk(18, lo=55, hi=67, jump=7, density=0.45, lengths=(25,), ratchet=0.45, velo=(95, 120)),
+               scale="MINOR", root="C", gate="80%"),
+        preset("Pendulum Arp", walk(19, lo=60, hi=88, jump=5, density=1.0, lengths=(40,), accent=8), scale="MAJOR",
+               root="D", direction="PEND"),
+        preset("Garden Chance", walk(20, lo=55, hi=84, jump=6, density=0.9, lengths=(30, 50, 80), chance=(40, 90)),
+               scale="MIXOLYDIAN", root="G", direction="RANDOM"),
+        preset("Harmonic Steps", walk(21, n=32, lo=48, hi=72, jump=3, density=0.85, lengths=(45, 90)),
+               z(lane(21, n=32, shape="ramp", lo=20, hi=120, every=4)), scale="HARM MINOR", root="B", loop_len=32),
+        preset("Low Slow Bass", walk(22, lo=36, hi=50, jump=4, density=0.65, lengths=(90, 140, 180), velo=(100, 120)),
+               scale="MINOR", root="F", rate="1/8"),
+        preset("Five of Eight", euclid, z(lane(23, shape="steps", lo=40, hi=110, every=2)), scale="MINOR", root="A"),
+        preset("Sixty-Four Walk", walk(24, n=64, lo=50, hi=80, jump=3, density=0.8, lengths=(40, 60), chance=(75, 100)),
+               z(lane(24, n=64, shape="tri", lo=25, hi=115, every=2), lane(25, n=64, shape="random", lo=30, hi=100, every=8)),
+               scale="MEL MINOR", root="C", loop_len=64),
+    ]
 
 
 # ---- screen geometry (plugin area 1280 x 628; layout y = screen y + 86) ---------------------------------------------
@@ -184,7 +275,10 @@ SETUP_COLS = [   # one panel per Q-Link column, top to bottom = knobs 1-4
     ("OUTPUT", ["channel", "step_light", "audition", ("MIDI OUT", None)]),
 ]
 SETUP_Q = [it if isinstance(it, str) else "-" for _, items in SETUP_COLS for it in items]
-SETTING = {k: (n, d, hint) for k, n, d, hint in SETTINGS}
+SETTING = {k: (n, d, hint) for k, n, d, hint in SETTINGS + MOD_SETTINGS}
+MOD_COLS = [("MOD A", ["moda_cc", "moda_mode", "moda_base"]), ("MOD B", ["modb_cc", "modb_mode", "modb_base"])]
+MOD_Q = [k for _, items in MOD_COLS for k in items + ["-"]]
+mode_file = lambda a_tab: "images/mode_%s.svg" % a_tab.replace("/", "").replace(" ", "").lower()
 is_toggle = lambda k: SETTING[k][1].get("options") == OFFON
 
 
@@ -219,6 +313,49 @@ def bg_setup():
              "3. Press play: it follows", "   MPC's tempo."]
     for k, line in enumerate(help_):
         o += text(x + 16, y + 110 + k * 22, line, 15, THEME["ink_dim"] if line[:1].isdigit() else "8d949c", 400, spacing=0.01)
+    o += hr(x + 16, y + 390, w - 32)
+    o += text(x + 16, y + 414, "NOW PLAYING", 13, THEME["ink_faint"], 700, spacing=0.12)
+    return svg(1280, 628, o)
+
+
+def bg_mod():
+    o = rrect(0, 0, 1280, 628, 0, THEME["bg"])
+    for c, (tag, items) in enumerate(MOD_COLS):
+        for r, it in enumerate(items):
+            x, y = cell_xy(r, c)
+            o += cell_box(x, y)
+            name, _, hint = SETTING[it]
+            o += rrect(x + 1, y + 1, CW - 2, HD - 1, 9, "1f2227")
+            o += text(x + 12, y + 18, name.replace(tag + " ", ""), 16, THEME["ink_dim"], 700, spacing=0.04)
+            o += text(x + CW - 12, y + 18, tag, 12, THEME["ink_faint"], 700, "end", 0.08)
+            o += text(x + CW / 2, y + CHIP_Y + 13, hint, 13, THEME["ink_faint"], 400, "middle", 0.04)
+    for c in range(2):   # under each lane: where its values are set
+        x, y = cell_xy(3, c)
+        o += cell_box(x, y)
+        for k, line in enumerate(("Values per step: the", "1-16 %s Q-Link sub-page" % MOD_COLS[c][0], "of each step page.")):
+            o += text(x + 12, y + 30 + k * 22, line, 15, THEME["ink_dim"], 400, spacing=0.01)
+    x, y = cell_xy(0, 2)
+    w, h = 2 * CW + (GX - CW), 4 * CH + 3 * (GY - CH)
+    o += rrect(x + 0.5, y + 0.5, w - 1, h - 1, 10, THEME["panel"], THEME["line"])
+    o += text(x + 16, y + 26, "PER-STEP MODULATION", 13, THEME["ink_faint"], 700, spacing=0.12)
+    lines = ["A step can carry a MOD A and a MOD B value (or - for",
+             "none). At the step, each lane sends its value as a",
+             "MIDI CC on MIDI CH, just before the step's note, and",
+             "only when it changes. A lane plays on every step of",
+             "the loop, with or without a note.", "",
+             "HOLD: a step without a value keeps the last one.",
+             "RETURN: a step without a value sends BASE.", "",
+             "On this repo's instruments, CC 20-35 move the first",
+             "page's Q-Links: CC 20-23 = column 1, top to bottom,",
+             "24-27 = column 2, 28-31 = column 3, 32-35 = column 4.",
+             "So CC 20 is the first knob (often the filter cutoff).",
+             "Other instruments don't follow these CCs."]
+    for k, line in enumerate(lines):
+        o += text(x + 16, y + 62 + k * 24, line, 16, THEME["ink_dim"], 400, spacing=0.01)
+    x, y, w, h = STRIP
+    o += rrect(x + 0.5, y + 0.5, w - 1, h - 1, 10, "141619", THEME["line"])
+    o += text(x + 16, y + 26, "PAGE", 13, THEME["ink_faint"], 700, spacing=0.12)
+    o += text(x + 16, y + 66, "MOD", 46, THEME["ink"], 700, spacing=0)
     o += hr(x + 16, y + 390, w - 32)
     o += text(x + 16, y + 414, "NOW PLAYING", 13, THEME["ink_faint"], 700, spacing=0.12)
     return svg(1280, 628, o)
@@ -270,8 +407,7 @@ def layout():
         sx, sy, sw, sh = STRIP
         sy += Y_OFF
         for _, a_tab, _, _, _ in ATTRS:
-            o.append(L("art", file="images/mode_%s.svg" % a_tab.replace("/", "").lower(), x=sx + 16, y=sy + 120, w=200, h=40,
-                       banks=bank(t, a_tab)))
+            o.append(L("art", file=mode_file(a_tab), x=sx + 16, y=sy + 120, w=200, h=40, banks=bank(t, a_tab)))
         for k, (key, yy) in enumerate((("loop_start", 196), ("loop_len", 226), ("rate", 256))):
             o.append(L("readout", cx=sx + sw - 56, cy=sy + yy, w=84, h=28, vs=24, ink="ink", box="no", key=key))
         o.append(L("readout", cx=sx + sw // 2, cy=sy + 350, w=sw - 32, h=64, vs=60, ink="accent", box="no", key="play_step"))
@@ -300,6 +436,14 @@ def layout():
     sx, sy, sw, sh = STRIP
     o.append(L("readout", cx=sx + sw // 2, cy=sy + Y_OFF + 462, w=sw - 32, h=64, vs=60, ink="accent", box="no", key="play_step"))
     o.append('qlinks "SETUP" = %s' % ",".join(SETUP_Q))
+    o += ["", "[tab MOD]", L("art", file="images/bg_mod.svg", x=0, y=Y_OFF, w=1280, h=628)]
+    for c, (tag, items) in enumerate(MOD_COLS):
+        for r, it in enumerate(items):
+            x, y = cell_xy(r, c)
+            o.append(L("knob", cx=x + CW // 2, cy=y + Y_OFF + BIG_Y + BIG_H // 2, r=24, lay="side", bw=CW - 12, bh=BIG_H,
+                       vs=46 if it.endswith("base") else 34, key=it, strip="images/arc.png", frames=128))
+    o.append(L("readout", cx=sx + sw // 2, cy=sy + Y_OFF + 462, w=sw - 32, h=64, vs=60, ink="accent", box="no", key="play_step"))
+    o.append('qlinks "MOD" = %s' % ",".join(MOD_Q))
     return "\n".join(o) + "\n"
 
 
@@ -317,9 +461,10 @@ def main():
     for t in range(4):
         write(os.path.join(IMG, "bg_steps_%d.svg" % t), bg_steps(t))
     write(os.path.join(IMG, "bg_setup.svg"), bg_setup())
+    write(os.path.join(IMG, "bg_mod.svg"), bg_mod())
     write(os.path.join(IMG, "playhead.svg"), playhead())
     for _, a_tab, _, _, _ in ATTRS:
-        write(os.path.join(IMG, "mode_%s.svg" % a_tab.replace("/", "").lower()), mode_label(a_tab))
+        write(os.path.join(HERE, mode_file(a_tab)), mode_label(a_tab))
     print("params.json: %d parameters; presets.json; layout.conf; images/*.svg" % len(ps))
 
 

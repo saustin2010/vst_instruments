@@ -12,7 +12,13 @@
  * lists, so MPC shows "C3", "150%", "x2": the wrapper sends an option's index and this engine turns it into the value
  * (value = base + mul * index, the tables below). The others (velocity, loop, MIDI channel) are plain numbers.
  * "state" is the whole pattern as one string (VST chunk). The browser prototype (design/prototype.html) runs the
- * same logic in JavaScript. */
+ * same logic in JavaScript (without the MOD lanes).
+ *
+ * MOD lanes (s<n>_moda / s<n>_modb, appended after the first release): a value per step ("-" = none) that goes out as
+ * a MIDI CC on the notes' channel at the step's start, just before its note, and only when it changes. On this repo's
+ * instruments CC 20-35 move the first page's Q-Links (the wrapper's CC map), so a lane on CC 20 sweeps their first
+ * control with no MIDI learn. A lane plays on every step of the loop, note or not. HOLD keeps the last value on a step
+ * without one; RETURN sends the lane's BASE there. */
 #include <math.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -41,17 +47,21 @@ static const uint16_t SCALES[] = {   /* bit n = n semitones above the root */
 };
 #define NSCALES ((int)(sizeof SCALES / sizeof SCALES[0]))
 
-typedef struct { int pitch, length, on, velo, chance, ratchet; } step_t;
-static const step_t STEP_INIT = {60, 50, 1, 100, 100, 1};
-static const step_t STEP_CLEAR = {60, 50, 0, 100, 100, 1};
+#define NMOD 2   /* MOD A, MOD B */
+typedef struct { int pitch, length, on, velo, chance, ratchet, mod[NMOD]; } step_t;   /* mod: 0..127, -1 = none */
+static const step_t STEP_INIT = {60, 50, 1, 100, 100, 1, {-1, -1}};
+static const step_t STEP_CLEAR = {60, 50, 0, 100, 100, 1, {-1, -1}};
+enum { MOD_HOLD, MOD_RETURN };
 
-enum { EV_ON, EV_OFF, EV_LIGHT };
+enum { EV_ON, EV_OFF, EV_LIGHT, EV_CC };   /* EV_CC: note = controller, vel = value */
 typedef struct { int64_t t; uint32_t id; uint8_t type, note, vel, ch; } ev_t;
 
 typedef struct {
     step_t s[NSTEPS];
     int rate, swing, dir, gate, loop_start, loop_len, root, scale, transpose, key_tr, channel, step_light, audition;
     int key_offset, play_step;
+    int mod_cc[NMOD], mod_mode[NMOD], mod_base[NMOD];   /* controller (0 = off), HOLD/RETURN, RETURN's value */
+    int mod_last[NMOD];                                 /* value sent last (-1: none yet, send the next one) */
     step_t clip[PAGE];
     int have_clip;
     /* transport */
@@ -112,10 +122,17 @@ static void note(sq_t *q, int64_t t, int64_t dur, int n, int vel) {   /* a note-
     push(q, t, EV_ON, n, vel, ch, id);
     push(q, t + (dur < 64 ? 64 : dur), EV_OFF, n, 0, ch, id);
 }
-static void drop_pending_ons(sq_t *q) {   /* future note-ons and lights go; note-offs stay */
+static void drop_pending_ons(sq_t *q) {   /* future note-ons, lights and CCs go; note-offs stay */
     int k = 0;
     for (int i = 0; i < q->nq; i++) if (q->q[i].type == EV_OFF) q->q[k++] = q->q[i];
     q->nq = k;
+    for (int l = 0; l < NMOD; l++) q->mod_last[l] = -1;   /* a dropped CC may not have gone out: send the next one */
+}
+/* A MOD lane's CC, when the value differs from the one sent last. */
+static void mod_out(sq_t *q, int64_t t, int l, int value) {
+    if (q->mod_cc[l] <= 0 || value < 0 || value == q->mod_last[l]) return;
+    q->mod_last[l] = value;
+    push(q, t, EV_CC, q->mod_cc[l], value, q->channel - 1, 0);
 }
 
 /* ---- playing ------------------------------------------------------------------------------------------------------ */
@@ -141,6 +158,8 @@ static void fire(sq_t *q, long n, int64_t t, double len) {
     if (n & 1) t += (int64_t)((2.0 * q->swing / 100.0 - 1.0) * len);   /* 66% = triplet feel, 75% = dotted */
     push(q, t, EV_LIGHT, i, 0, 0, 0);
     const step_t *s = &q->s[i];
+    for (int l = 0; l < NMOD; l++)   /* before the note's chance: a lane plays on every step of the loop */
+        mod_out(q, t, l, s->mod[l] >= 0 ? s->mod[l] : q->mod_mode[l] == MOD_RETURN ? q->mod_base[l] : -1);
     if (!s->on || (s->chance < 100 && (int)(rnd(q) % 100) >= s->chance)) return;
     int nn = note_out(q, i), r = s->ratchet;
     double gate = s->length / 100.0 * q->gate / 100.0, sub = len / r;
@@ -158,7 +177,9 @@ static void all_off(sq_t *q, uint8_t out[][3], int lens[], int max, int *k) {
         }
 }
 
-/* Events due before `until`, oldest first (note-offs before note-ons at the same time), up to max messages. */
+/* Events due before `until`, oldest first (at the same time: note-offs, then CCs, then note-ons, so a note starts with
+ * its step's MOD values), up to max messages. */
+static int prio(int type) { return type == EV_OFF ? 0 : type == EV_CC ? 1 : 2; }
 static int emit_due(sq_t *q, int64_t until, uint8_t out[][3], int lens[], int max) {
     int k = 0;
     for (;;) {
@@ -166,15 +187,17 @@ static int emit_due(sq_t *q, int64_t until, uint8_t out[][3], int lens[], int ma
         for (int i = 0; i < q->nq; i++) {
             const ev_t *e = &q->q[i];
             if (e->t >= until) continue;
-            if (best < 0 || e->t < q->q[best].t || (e->t == q->q[best].t && e->type == EV_OFF && q->q[best].type != EV_OFF))
+            if (best < 0 || e->t < q->q[best].t || (e->t == q->q[best].t && prio(e->type) < prio(q->q[best].type)))
                 best = i;
         }
         if (best < 0) break;
         ev_t e = q->q[best];
         if (e.type == EV_ON && k + 2 > max) break;
-        if (e.type == EV_OFF && k + 1 > max) break;
+        if ((e.type == EV_OFF || e.type == EV_CC) && k + 1 > max) break;
         q->q[best] = q->q[--q->nq];
-        if (e.type == EV_LIGHT) {
+        if (e.type == EV_CC) {
+            out[k][0] = (uint8_t)(0xB0 | e.ch); out[k][1] = e.note; out[k][2] = e.vel; lens[k++] = 3;
+        } else if (e.type == EV_LIGHT) {
             if (q->step_light) q->play_step = e.note + 1;
         } else if (e.type == EV_ON) {
             if (q->playing[e.note]) {   /* the same note again: end the old one first */
@@ -202,7 +225,7 @@ static int tick(void *inst, int frames, int sr, uint8_t out[][3], int lens[], in
         double spb = sr * 60.0 / bpm, start = end - frames / spb;
         if (!q->running || fabs(start - q->last_beat) > 1e-4) {   /* started, or MPC looped / located */
             if (q->running) drop_pending_ons(q);
-            else q->last_n = -1000000;
+            else { q->last_n = -1000000; for (int l = 0; l < NMOD; l++) q->mod_last[l] = -1; }
             q->last_beat = start;
         }
         q->running = 1;
@@ -264,33 +287,54 @@ static void audition(sq_t *q, int i) {   /* a step's note when it's edited with 
     q->last_audition = q->now;
     note(q, q->now, 44100 / 4, note_out(q, i), q->s[i].velo);
 }
+static void audition_mod(sq_t *q, int l, int value) {   /* a MOD value edited while stopped: its CC, so the target moves */
+    if (q->running || !q->audition || q->now < q->quiet_until) return;
+    mod_out(q, q->now, l, value);
+}
 
 /* ---- state (the VST chunk) ------------------------------------------------------------------------------------------ */
-#define STATE_HEAD "SQ1 %d %d %d %d %d %d %d %d %d %d %d %d %d "
+/* SQ2: the settings, the MOD settings (cc, mode, base per lane), then 15 hex digits per step (pitch, length, on, velo,
+ * chance, ratchet, MOD A, MOD B; ff = no MOD value). SQ1 (before the MOD lanes) still loads, without MOD values. */
+#define STATE_HEAD "%d %d %d %d %d %d %d %d %d %d %d %d %d "
 static int get_state(sq_t *q, char *buf, int len) {
-    int n = snprintf(buf, len, STATE_HEAD, q->rate, q->swing, q->dir, q->gate, q->loop_start, q->loop_len, q->root,
-                     q->scale, q->transpose, q->key_tr, q->channel, q->step_light, q->audition);
+    int n = snprintf(buf, len, "SQ2 " STATE_HEAD "%d %d %d %d %d %d ", q->rate, q->swing, q->dir, q->gate, q->loop_start,
+                     q->loop_len, q->root, q->scale, q->transpose, q->key_tr, q->channel, q->step_light, q->audition,
+                     q->mod_cc[0], q->mod_mode[0], q->mod_base[0], q->mod_cc[1], q->mod_mode[1], q->mod_base[1]);
     for (int i = 0; i < NSTEPS && n > 0 && n < len; i++) {
         const step_t *s = &q->s[i];
-        n += snprintf(buf + n, len - n, "%02x%03x%x%02x%02x%x", s->pitch, s->length, s->on, s->velo, s->chance, s->ratchet);
+        n += snprintf(buf + n, len - n, "%02x%03x%x%02x%02x%x%02x%02x", s->pitch, s->length, s->on, s->velo, s->chance,
+                      s->ratchet, s->mod[0] < 0 ? 0xff : s->mod[0], s->mod[1] < 0 ? 0xff : s->mod[1]);
     }
     return n > 0 && n < len ? n : -1;
 }
 static void set_state(sq_t *q, const char *v) {
-    int g[13], used = 0;
-    if (sscanf(v, STATE_HEAD "%n", &g[0], &g[1], &g[2], &g[3], &g[4], &g[5], &g[6], &g[7], &g[8], &g[9], &g[10],
-               &g[11], &g[12], &used) < 13 || !used)
+    int g[19], used = 0, v2 = !strncmp(v, "SQ2 ", 4);
+    if (v2 ? sscanf(v + 4, STATE_HEAD "%d %d %d %d %d %d %n", &g[0], &g[1], &g[2], &g[3], &g[4], &g[5], &g[6], &g[7],
+                    &g[8], &g[9], &g[10], &g[11], &g[12], &g[13], &g[14], &g[15], &g[16], &g[17], &g[18], &used) < 19
+           : strncmp(v, "SQ1 ", 4) || sscanf(v + 4, STATE_HEAD "%n", &g[0], &g[1], &g[2], &g[3], &g[4], &g[5], &g[6],
+                                             &g[7], &g[8], &g[9], &g[10], &g[11], &g[12], &used) < 13)
         return;
+    if (!used) return;
+    used += 4;
     q->rate = clampi(g[0], 0, NRATES - 1); q->swing = clampi(g[1], 50, 75); q->dir = clampi(g[2], 0, NDIRS - 1);
     q->gate = clampi(g[3], 10, 200); q->loop_start = clampi(g[4], 1, NSTEPS); q->loop_len = clampi(g[5], 1, NSTEPS);
     q->root = clampi(g[6], 0, 11); q->scale = clampi(g[7], 0, NSCALES - 1); q->transpose = clampi(g[8], -24, 24);
     q->key_tr = !!g[9]; q->channel = clampi(g[10], 1, 16); q->step_light = !!g[11]; q->audition = !!g[12];
+    for (int l = 0; l < NMOD; l++) {
+        q->mod_cc[l] = v2 ? clampi(g[13 + 3 * l], 0, 119) : 20 + l;
+        q->mod_mode[l] = v2 ? clampi(g[14 + 3 * l], 0, 1) : MOD_HOLD;
+        q->mod_base[l] = v2 ? clampi(g[15 + 3 * l], 0, 127) : 64;
+        q->mod_last[l] = -1;
+    }
     const char *p = v + used;
-    for (int i = 0; i < NSTEPS && strlen(p) >= 11; i++, p += 11) {
-        unsigned a, b, c, d, e, f;
+    int per = v2 ? 15 : 11;
+    for (int i = 0; i < NSTEPS && (int)strlen(p) >= per; i++, p += per) {
+        unsigned a, b, c, d, e, f, ma = 0xff, mb = 0xff;
         if (sscanf(p, "%2x%3x%1x%2x%2x%1x", &a, &b, &c, &d, &e, &f) != 6) break;
+        if (v2 && sscanf(p + 11, "%2x%2x", &ma, &mb) != 2) break;
         q->s[i] = (step_t){clampi((int)a, PITCH_MIN, PITCH_MAX), clampi((int)b / 5 * 5, 5, 400), !!c,
-                           clampi((int)d, 1, 127), clampi((int)e / 5 * 5, 0, 100), clampi((int)f, 1, 4)};
+                           clampi((int)d, 1, 127), clampi((int)e / 5 * 5, 0, 100), clampi((int)f, 1, 4),
+                           {ma > 127 ? -1 : (int)ma, mb > 127 ? -1 : (int)mb}};
     }
     q->key_offset = 0;
     q->quiet_until = q->now + 44100;   /* a project loading: no auditions */
@@ -301,6 +345,7 @@ typedef struct { const char *k; int base, mul, lo, hi; } conv_t;   /* value = ba
 static const conv_t STEP_CONV[] = {
     {"pitch", PITCH_MIN, 1, PITCH_MIN, PITCH_MAX}, {"length", 5, 5, 5, 400}, {"on", 0, 1, 0, 1},
     {"velo", 0, 1, 1, 127}, {"chance", 0, 5, 0, 100}, {"ratchet", 1, 1, 1, 4},
+    {"moda", 0, 1, -1, 127}, {"modb", 0, 1, -1, 127},   /* the value itself (params.json "values"), -1 = "-" (none) */
 };
 static const conv_t *conv_of(const conv_t *t, size_t n, const char *k) {
     for (size_t i = 0; i < n; i++) if (!strcmp(t[i].k, k)) return &t[i];
@@ -325,6 +370,9 @@ static int *setting(sq_t *q, const char *key, const conv_t **c) {
         {{"transpose", -24, 1, -24, 24}, offsetof(sq_t, transpose)}, {{"key_transpose", 0, 1, 0, 1}, offsetof(sq_t, key_tr)},
         {{"channel", 0, 1, 1, 16}, offsetof(sq_t, channel)}, {{"step_light", 0, 1, 0, 1}, offsetof(sq_t, step_light)},
         {{"audition", 0, 1, 0, 1}, offsetof(sq_t, audition)},
+        {{"moda_cc", 0, 1, 0, 119}, offsetof(sq_t, mod_cc[0])}, {{"modb_cc", 0, 1, 0, 119}, offsetof(sq_t, mod_cc[1])},
+        {{"moda_mode", 0, 1, 0, 1}, offsetof(sq_t, mod_mode[0])}, {{"modb_mode", 0, 1, 0, 1}, offsetof(sq_t, mod_mode[1])},
+        {{"moda_base", 0, 1, 0, 127}, offsetof(sq_t, mod_base[0])}, {{"modb_base", 0, 1, 0, 127}, offsetof(sq_t, mod_base[1])},
     };
     for (size_t k = 0; k < sizeof T / sizeof T[0]; k++)
         if (!strcmp(key, T[k].c.k)) { *c = &T[k].c; return (int *)((char *)q + T[k].off); }
@@ -348,10 +396,14 @@ static void set_param(void *inst, const char *key, const char *val) {
         else if (!strcmp(attr, "velo")) s->velo = x;
         else if (!strcmp(attr, "chance")) s->chance = x;
         else if (!strcmp(attr, "ratchet")) s->ratchet = x;
+        else if (!strncmp(attr, "mod", 3)) { int l = attr[3] == 'b'; if (x != s->mod[l]) { s->mod[l] = x; audition_mod(q, l, x); } }
         return;
     }
     if ((p = setting(q, key, &c))) {
+        int old = *p;
         *p = from_index(c, v);
+        for (int l = 0; l < NMOD; l++)   /* another controller or mode: the lane's next value goes out whatever it is */
+            if ((p == &q->mod_cc[l] || p == &q->mod_mode[l] || p == &q->mod_base[l]) && *p != old) q->mod_last[l] = -1;
         if (p == &q->key_tr && !*p) q->key_offset = 0;
         if (p == &q->step_light && !*p) q->play_step = 0;
         return;
@@ -371,7 +423,7 @@ static int get_param(void *inst, const char *key, char *buf, int len) {
         if (!(c = conv_of(STEP_CONV, sizeof STEP_CONV / sizeof STEP_CONV[0], attr))) return -1;
         int v = !strcmp(attr, "pitch") ? quant_range(q, s->pitch) : !strcmp(attr, "length") ? s->length
               : !strcmp(attr, "on") ? s->on : !strcmp(attr, "velo") ? s->velo : !strcmp(attr, "chance") ? s->chance
-              : s->ratchet;
+              : !strcmp(attr, "ratchet") ? s->ratchet : s->mod[attr[3] == 'b'];
         return snprintf(buf, len, "%d", to_index(c, v));
     }
     if ((p = setting(q, key, &c))) return snprintf(buf, len, "%d", to_index(c, *p));
@@ -393,6 +445,7 @@ static void *create_instance(const char *dir, const char *json) {
     for (int i = 0; i < NSTEPS; i++) q->s[i] = STEP_INIT;
     q->rate = 2; q->swing = 50; q->dir = DIR_FWD; q->gate = 100; q->loop_start = 1; q->loop_len = PAGE;
     q->channel = 1; q->step_light = 1; q->audition = 1;
+    for (int l = 0; l < NMOD; l++) { q->mod_cc[l] = 20 + l; q->mod_mode[l] = MOD_HOLD; q->mod_base[l] = 64; q->mod_last[l] = -1; }
     q->rng = (uint32_t)time(NULL) ^ (uint32_t)(uintptr_t)q ^ 0x9E3779B9u;
     if (!q->rng) q->rng = 1;
     q->quiet_until = 44100;   /* MPC sets every parameter as it opens a project: no auditions for a second */

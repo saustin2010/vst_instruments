@@ -20,7 +20,7 @@ MPC OS ignores a plugin's own MIDI output, so Rampage opens its own MIDI port (M
 
 1. Put Rampage on a plugin track and play or hold notes into it (pads, keys or a MIDI clip).
 2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Rampage MIDI Out**.
-3. On the track to modulate, set **MIDI Input Port** to that port (with **Monitor** on **In**), then MIDI-learn the parameter you want moved to CC OUT A or CC OUT B (MIDI page). MIN and MAX send too when given a CC number.
+3. On the track to modulate, set **MIDI Input Port** to that port (with **Monitor** on **In**). On this repo's instruments, CC 20-35 move the first page's Q-Links (CC 20-23 = the first column, top to bottom, and so on), so CC OUT A and CC OUT B (MIDI page; 20 and 21 by default) move the first two knobs straight away, no MIDI learn. MIN and MAX send too when given a CC number. Learning Rampage's CCs in MPC's MIDI Learn isn't recommended: with the port's Remote switched on, its stream of CCs froze MPC once (2026-10-04).
 4. EOC NOTES sends a short note at the end of each cycle, e.g. to fire a drum pad on another track.
 
 Rampage makes no sound of its own unless AUDIO is on.

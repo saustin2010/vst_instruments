@@ -41,6 +41,15 @@ ways; its README says which, and covers its channels, voices and pages.
 
 A sequencer that sends drum notes should play a drum track.
 
+## Moving the instrument's controls
+
+A sequencer can also send control changes (CC) along with its notes: Stevequencer's MOD lanes send a value per step,
+Rampage sends its envelopes and LFOs. This repo's instruments take **CC 20-35** as their first page's Q-Links, in Q-Link
+order (CC 20-23 = column 1, top to bottom, 24-27 = column 2, 28-31 = column 3, 32-35 = column 4), so CC 20 moves the
+first knob. It needs nothing more than the routing above: the CCs arrive on the same MIDI input as the notes. Akai's
+own instruments don't follow these CCs. (Not yet checked on a device: that MPC passes CCs from a track's MIDI input
+through to the plugin.)
+
 ## When nothing plays
 
 - **The port isn't in the list.** The sequencer has to be on a track; wait a few seconds after inserting it. Removing

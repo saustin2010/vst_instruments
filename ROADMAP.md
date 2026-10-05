@@ -31,6 +31,15 @@ parameter index, so existing projects keep working.
   tried it: working (2026-10-04). Still to look at on the device: the step light's cost on MPC's screen thread and that it isn't recorded as automation, how MPC switches
   six Q-Link sub-pages per tab, a project saving and reopening its pattern; then Design QA. Grid order is rows (steps
   1-4 across the top) as in the prototype; beats or pads order is a one-line change in `mpc/gen.py`.
+  MOD lanes (2026-10-04, offline): MOD A / MOD B, a CC value per step ("-" = none) sent just before the step's note,
+  HOLD or RETURN to a base value; two more Q-Link sub-pages per step page and a MOD tab; 134 parameters appended (552);
+  state SQ2 (SQ1 still loads); `mpc/mod_test.c` passes. On the device: that the CCs reach the instrument (below).
+  Presets: 20 now (14 seeded random patterns added 2026-10-04, six of the 20 using the MOD lanes).
+- [ ] MIDI CC 20-35 move every plugin's first-page Q-Links (wrapper, 2026-10-04, offline test in every plugin). Check
+  on a device, with no MPC settings touched: a sequencer's CCs on the instrument track's MIDI input move its controls
+  (MPC passes them through), and MPC doesn't keep any of 20-35 for itself.
+  Rampage sends a CC almost every block on a fast LFO (~290 a second per output): the wrapper only tells MPC ~40 times a
+  second, but a rate limit in Rampage itself would be kinder.
 
 ## On a device (nothing below has been tried on hardware yet)
 
