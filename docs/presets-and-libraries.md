@@ -28,7 +28,9 @@ Built into the plugin itself (nothing to install): Hank 32 presets, Hush One 11,
 Aphex 41, Denis 30, Fizzik 31, Wurl 10, MonkSynth 12 singers, Mono Voice 12 patches, Plaits' three 6-op FM banks, Super Arp's 40 patterns
 and 40 rhythms. Made for this port, where upstream has none (`presets.json`, the wrapper's own presets): 303 13,
 Elements 12, Rings 14, Plaits 24, Mr Hyde 19, Rings FX 12, Verglas 12, Warps 12, Mutable Vibe 24, MPC Plaits 31
-(2026-10-05, levels measured with `dev-tools/presets/levels.sh`). The other sequencers / generators have none.
+(2026-10-05, levels measured with `dev-tools/presets/levels.sh`). Patterns written for this repo's own
+sequencers: Stevequencer 20, Stevequencer 16 14 (most with modulation lanes). The other sequencers / generators
+have none.
 
 ## Adding your own
 
