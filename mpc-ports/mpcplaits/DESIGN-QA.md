@@ -1,6 +1,7 @@
 # Design QA: MPC Plaits
 
-Status: **checked offline** (2026-10-05); not yet on the device (☐ in the README).
+Status: **checked offline** (2026-10-05); installed and working on the Live II (2026-10-05, the owner: "seems to be
+working nicely"). The page-by-page check on the device (☐ in the README) is still to do.
 
 ## Owner's notes
 Added on request, "check the interfaces so that the qlinks work for all pages". Checked against the batch rules (one

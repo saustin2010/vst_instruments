@@ -1,6 +1,6 @@
 # vst_instruments: agent guide
 
-36 native VST2 plugins for Akai MPC OS standalone devices (Gen1, 32-bit ARM: Live, Live II, One, X, Force), loaded
+40 native VST2 plugins for Akai MPC OS standalone devices (Gen1, 32-bit ARM: Live, Live II, One, X, Force), loaded
 by MPC's built-in JUCE plugin host, each with a native touchscreen skin converted from a Google Stitch design. The
 owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai update).
 

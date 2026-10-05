@@ -50,7 +50,7 @@ parameter index, so existing projects keep working.
   as its parameter n, any page: `docs/parameter-numbers.md`); per lane HOLD, RETURN, SLIDE (across empty steps), LFO
   (six shapes, a cycle of 1-64 steps) or FOLLOW (modulation groups: lanes that follow a leader, each with its own
   target and range), and its own RATE and LENGTH. A separate plugin, so projects using Stevequencer keep working. All
-  40 plugins rebuilt for NRPN. On the device: that MPC passes NRPN (CC 99/98/6) through, eight sub-pages on MOD and
+  40 plugins rebuilt for NRPN; all installed on the Live II (2026-10-05). On the device: that MPC passes NRPN (CC 99/98/6) through, eight sub-pages on MOD and
   LANES, the load with several sliding lanes; then Design QA.
   Rampage sends a CC almost every block on a fast LFO (~290 a second per output): the wrapper only tells MPC ~40 times a
   second, but a rate limit in Rampage itself would be kinder.

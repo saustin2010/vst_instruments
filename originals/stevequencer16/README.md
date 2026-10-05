@@ -24,7 +24,7 @@ projects that use it.
   Half-Time Mod, Group of Three, Accent Return, Bass Line, Arp Climb, Blues Shuffle, Ratchet Stabs, Pendulum Arp, Drunk
   Garden. Their lanes go to CC 20 and CC 21 (the first two Q-Links of this repo's instruments) until you nominate other
   targets.
-- Built and tested offline (2026-10-05); not yet on the device.
+- Built and tested offline, and installed on the Live II (2026-10-05); the checks under "To check on the device" are next.
 
 ## Playing it
 
