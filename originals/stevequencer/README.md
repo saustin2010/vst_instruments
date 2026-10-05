@@ -138,9 +138,11 @@ From the top of this repo (see [INSTALL.md](../../INSTALL.md)):
   and that recording with automation doesn't record PLAY STEP.
 - Six Q-Link sub-pages per tab: how MPC names and switches them (25 pages in all; the skin is twice Helm's size).
 - That 552 parameters load and save with a project, and that a project reopens with its pattern (and its MOD values).
-- MOD lanes: that MPC passes the CCs from a track's MIDI input on to the instrument, so its first page's Q-Links move
-  (checked offline only: the engine's CCs, and the wrapper's CC map in every plugin's offline test). 33 Q-Link
-  sub-pages in all now.
+- ~~MOD lanes: that MPC passes the CCs from a track's MIDI input on to the instrument~~: working on the Live II
+  (2026-10-05). 33 Q-Link sub-pages in all now.
+
+For more lanes, lanes to any parameter of the instrument (not just its first page), slides, LFOs and lanes that follow
+each other, see **[Stevequencer 16](../stevequencer16/)** (16 steps, eight lanes).
 
 ## Files
 

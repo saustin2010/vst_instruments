@@ -1,0 +1,220 @@
+# What this repo changed in the author's files (upstream/vst/... = their repo at the commit in UPSTREAM; src/ is unchanged).
+diff --git upstream/vst/layout.conf layout.conf
+index 884721f..0ff2c52 100644
+--- upstream/vst/layout.conf
++++ layout.conf
+@@ -16,7 +16,7 @@
+ # docs/NOTES.md), so r <= 58 (the largest seen working). Knob names/values are MPC's own live labels (the param names in src/module.json).
+ 
+ style=plaits
+-art_css=plaits.css
++art_css=mpcplaits.css
+ theme_bg=E8E8E6
+ theme_ink=231F20
+ theme_ink_dim=6E6B6C
+@@ -49,7 +49,7 @@ knob cx=640 cy=470 r=30 label="FM" key=fm_att img=images/knob_small.svg base=ima
+ knob cx=810 cy=470 r=30 label="MORPH" key=morph_att img=images/knob_small.svg base=images/knob_shadow.svg
+ knob cx=640 cy=612 r=26 label="MIX" key=aux_mix img=images/knob_small.svg base=images/knob_shadow.svg
+ 
+-qlinks "PLAITS" = pitch,harmonics,timbre,morph,model,timbre_att,fm_att,morph_att,aux_mix
++qlinks "PLAITS" = pitch,timbre,-,-,model,timbre_att,fm_att,morph_att,harmonics,morph,-,-,aux_mix
+ 
+ [tab VOICE]
+ art file=images/bg_voice.png fit=stretch
+@@ -71,7 +71,7 @@ knob cx=738 cy=606 r=34 label="CUTOFF" key=filter_cutoff img=images/knob_small.s
+ knob cx=871 cy=606 r=34 label="RESO" key=filter_resonance img=images/knob_small.svg base=images/knob_shadow.svg
+ knob cx=1004 cy=606 r=34 label="VOLUME" key=volume img=images/knob_small.svg base=images/knob_shadow.svg
+ knob cx=1137 cy=606 r=34 label="PAN" key=pan img=images/knob_small.svg base=images/knob_shadow.svg
+-qlinks "VOICE" = lpg_color,lpg_decay,trig_rate,-,polyphony,unison,detune,spread,glide_ms,bend_range,velocity_curve,poly_aftertouch_curve,filter_cutoff,filter_resonance,volume,pan
++qlinks "VOICE" = amp_mode,lpg_color,lpg_decay,trig_rate,polyphony,unison,detune,spread,glide_ms,bend_range,velocity_curve,poly_aftertouch_curve,filter_cutoff,filter_resonance,volume,pan
+ 
+ [tab ENV]
+ art file=images/bg_env.png fit=stretch
+@@ -109,66 +109,66 @@ qlinks "ENV" = env1_attack,env1_decay,env1_sustain,env1_release,env2_attack,env2
+ art file=images/bg_lfo.png fit=stretch
+ enum_h cx=342 cy=232 sw=80 label="" key=lfo1_shape options="SIN,TRI,SAW,SQR,RND,SMTH"
+ knob cx=142 cy=338 r=32 label="RATE" key=lfo1_rate img=images/knob_big.svg base=images/knob_shadow.svg when=lfo1_sync:Off
+-popup cx=159 cy=338 w=150 h=46 label="DIV" key=lfo1_div when=lfo1_sync:On wheel=1
+-knob cx=275 cy=338 r=32 label="PHASE" key=lfo1_phase img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=384 cy=330 label="SYNC" key=lfo1_sync img=images/led_off.svg img_on=images/led_on.svg
+-toggle cx=464 cy=330 label="RETRIG" key=lfo1_retrig img=images/led_off.svg img_on=images/led_on.svg
+-toggle cx=544 cy=330 label="PER VOICE" key=lfo1_per_voice img=images/led_off.svg img_on=images/led_on.svg
++popup cx=159 cy=338 w=136 h=46 label="DIV" key=lfo1_div when=lfo1_sync:On wheel=1
++knob cx=275 cy=338 r=32 label="PHASE" key=lfo1_phase img=images/knob_small.svg base=images/knob_shadow.svg bw=96
++toggle cx=384 cy=330 label="SYNC" key=lfo1_sync img=images/led_off.svg img_on=images/led_on.svg bw=80
++toggle cx=464 cy=330 label="RETRIG" key=lfo1_retrig img=images/led_off.svg img_on=images/led_on.svg bw=80
++toggle cx=544 cy=330 label="PER VOICE" key=lfo1_per_voice img=images/led_off.svg img_on=images/led_on.svg bw=80
+ enum_h cx=938 cy=232 sw=80 label="" key=lfo2_shape options="SIN,TRI,SAW,SQR,RND,SMTH"
+ knob cx=738 cy=338 r=32 label="RATE" key=lfo2_rate img=images/knob_big.svg base=images/knob_shadow.svg when=lfo2_sync:Off
+-popup cx=755 cy=338 w=150 h=46 label="DIV" key=lfo2_div when=lfo2_sync:On wheel=1
+-knob cx=871 cy=338 r=32 label="PHASE" key=lfo2_phase img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=980 cy=330 label="SYNC" key=lfo2_sync img=images/led_off.svg img_on=images/led_on.svg
+-toggle cx=1060 cy=330 label="RETRIG" key=lfo2_retrig img=images/led_off.svg img_on=images/led_on.svg
+-toggle cx=1140 cy=330 label="PER VOICE" key=lfo2_per_voice img=images/led_off.svg img_on=images/led_on.svg
++popup cx=755 cy=338 w=136 h=46 label="DIV" key=lfo2_div when=lfo2_sync:On wheel=1
++knob cx=871 cy=338 r=32 label="PHASE" key=lfo2_phase img=images/knob_small.svg base=images/knob_shadow.svg bw=96
++toggle cx=980 cy=330 label="SYNC" key=lfo2_sync img=images/led_off.svg img_on=images/led_on.svg bw=80
++toggle cx=1060 cy=330 label="RETRIG" key=lfo2_retrig img=images/led_off.svg img_on=images/led_on.svg bw=80
++toggle cx=1140 cy=330 label="PER VOICE" key=lfo2_per_voice img=images/led_off.svg img_on=images/led_on.svg bw=80
+ enum_h cx=342 cy=512 sw=100 label="" key=cycle_shape options="LIN,EXP,LOG"
+ knob cx=142 cy=608 r=32 label="RISE" key=cycle_attack_ms img=images/knob_big.svg base=images/knob_shadow.svg
+ knob cx=275 cy=608 r=32 label="FALL" key=cycle_decay_ms img=images/knob_big.svg base=images/knob_shadow.svg
+-toggle cx=444 cy=600 label="BIPOLAR" key=cycle_bipolar img=images/led_off.svg img_on=images/led_on.svg
+-toggle cx=544 cy=600 label="RETRIG" key=cycle_retrig img=images/led_off.svg img_on=images/led_on.svg
++toggle cx=444 cy=600 label="BIPOLAR" key=cycle_bipolar img=images/led_off.svg img_on=images/led_on.svg bw=100
++toggle cx=544 cy=600 label="RETRIG" key=cycle_retrig img=images/led_off.svg img_on=images/led_on.svg bw=100
+ enum_h cx=938 cy=512 sw=100 label="" key=random_mode options="S&H,SMOOTH,DRIFT"
+ knob cx=738 cy=608 r=32 label="RATE" key=random_rate img=images/knob_big.svg base=images/knob_shadow.svg when=random_sync:Off
+-popup cx=755 cy=608 w=150 h=46 label="DIV" key=random_div when=random_sync:On wheel=1
+-knob cx=871 cy=608 r=32 label="SLEW" key=random_slew img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1040 cy=600 label="SYNC" key=random_sync img=images/led_off.svg img_on=images/led_on.svg
+-toggle cx=1140 cy=600 label="RETRIG" key=random_retrig img=images/led_off.svg img_on=images/led_on.svg
+-qlinks "LFO" = lfo1_rate,lfo1_div,lfo1_phase,-,lfo2_rate,lfo2_div,lfo2_phase,-,cycle_attack_ms,cycle_decay_ms,-,-,random_rate,random_div,random_slew
++popup cx=755 cy=608 w=136 h=46 label="DIV" key=random_div when=random_sync:On wheel=1
++knob cx=871 cy=608 r=32 label="SLEW" key=random_slew img=images/knob_small.svg base=images/knob_shadow.svg bw=96
++toggle cx=1040 cy=600 label="SYNC" key=random_sync img=images/led_off.svg img_on=images/led_on.svg bw=100
++toggle cx=1140 cy=600 label="RETRIG" key=random_retrig img=images/led_off.svg img_on=images/led_on.svg bw=100
++qlinks "LFO" = lfo1_shape,lfo1_rate,lfo1_div,lfo1_phase,lfo2_shape,lfo2_rate,lfo2_div,lfo2_phase,cycle_shape,cycle_attack_ms,cycle_decay_ms,-,random_mode,random_rate,random_div,random_slew
+ 
+ [tab MOD]
+ art file=images/bg_mod.png fit=stretch
+ # each amount has an on/off LED to its right: off mutes that path without moving its knob
+-knob cx=398 cy=280 r=26 label="" key=mod_lfo1_pitch img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=482 cy=280 label="" key=mod_lfo1_pitch_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=634 cy=280 r=26 label="" key=mod_lfo1_harm img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=718 cy=280 label="" key=mod_lfo1_harm_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=870 cy=280 r=26 label="" key=mod_lfo1_timbre img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=954 cy=280 label="" key=mod_lfo1_timbre_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=1106 cy=280 r=26 label="" key=mod_lfo1_morph img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1190 cy=280 label="" key=mod_lfo1_morph_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=398 cy=390 r=26 label="" key=mod_env2_pitch img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=482 cy=390 label="" key=mod_env2_pitch_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=634 cy=390 r=26 label="" key=mod_env2_harm img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=718 cy=390 label="" key=mod_env2_harm_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=870 cy=390 r=26 label="" key=mod_env2_timbre img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=954 cy=390 label="" key=mod_env2_timbre_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=1106 cy=390 r=26 label="" key=mod_env2_morph img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1190 cy=390 label="" key=mod_env2_morph_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=398 cy=500 r=26 label="" key=mod_cyc_pitch img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=482 cy=500 label="" key=mod_cyc_pitch_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=634 cy=500 r=26 label="" key=mod_cyc_harm img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=718 cy=500 label="" key=mod_cyc_harm_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=870 cy=500 r=26 label="" key=mod_cyc_timbre img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=954 cy=500 label="" key=mod_cyc_timbre_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=1106 cy=500 r=26 label="" key=mod_cyc_morph img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1190 cy=500 label="" key=mod_cyc_morph_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=398 cy=610 r=26 label="" key=mod_rnd_pitch img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=482 cy=610 label="" key=mod_rnd_pitch_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=634 cy=610 r=26 label="" key=mod_rnd_harm img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=718 cy=610 label="" key=mod_rnd_harm_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=870 cy=610 r=26 label="" key=mod_rnd_timbre img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=954 cy=610 label="" key=mod_rnd_timbre_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=1106 cy=610 r=26 label="" key=mod_rnd_morph img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1190 cy=610 label="" key=mod_rnd_morph_on img=images/led_off.svg img_on=images/led_on.svg
++knob cx=398 cy=280 r=26 label="" key=mod_lfo1_pitch img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=482 cy=280 label="" key=mod_lfo1_pitch_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=634 cy=280 r=26 label="" key=mod_lfo1_harm img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=718 cy=280 label="" key=mod_lfo1_harm_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=870 cy=280 r=26 label="" key=mod_lfo1_timbre img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=954 cy=280 label="" key=mod_lfo1_timbre_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=1106 cy=280 r=26 label="" key=mod_lfo1_morph img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=1190 cy=280 label="" key=mod_lfo1_morph_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=398 cy=390 r=26 label="" key=mod_env2_pitch img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=482 cy=390 label="" key=mod_env2_pitch_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=634 cy=390 r=26 label="" key=mod_env2_harm img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=718 cy=390 label="" key=mod_env2_harm_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=870 cy=390 r=26 label="" key=mod_env2_timbre img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=954 cy=390 label="" key=mod_env2_timbre_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=1106 cy=390 r=26 label="" key=mod_env2_morph img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=1190 cy=390 label="" key=mod_env2_morph_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=398 cy=500 r=26 label="" key=mod_cyc_pitch img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=482 cy=500 label="" key=mod_cyc_pitch_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=634 cy=500 r=26 label="" key=mod_cyc_harm img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=718 cy=500 label="" key=mod_cyc_harm_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=870 cy=500 r=26 label="" key=mod_cyc_timbre img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=954 cy=500 label="" key=mod_cyc_timbre_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=1106 cy=500 r=26 label="" key=mod_cyc_morph img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=1190 cy=500 label="" key=mod_cyc_morph_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=398 cy=610 r=26 label="" key=mod_rnd_pitch img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=482 cy=610 label="" key=mod_rnd_pitch_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=634 cy=610 r=26 label="" key=mod_rnd_harm img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=718 cy=610 label="" key=mod_rnd_harm_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=870 cy=610 r=26 label="" key=mod_rnd_timbre img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=954 cy=610 label="" key=mod_rnd_timbre_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=1106 cy=610 r=26 label="" key=mod_rnd_morph img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=1190 cy=610 label="" key=mod_rnd_morph_on img=images/led_off.svg img_on=images/led_on.svg bw=84
+ qlinks "MOD" = mod_lfo1_pitch,mod_env2_pitch,mod_cyc_pitch,mod_rnd_pitch,mod_lfo1_harm,mod_env2_harm,mod_cyc_harm,mod_rnd_harm,mod_lfo1_timbre,mod_env2_timbre,mod_cyc_timbre,mod_rnd_timbre,mod_lfo1_morph,mod_env2_morph,mod_cyc_morph,mod_rnd_morph
+ 
+ [tab ASSIGN]
+@@ -179,39 +179,39 @@ popup cx=634 cy=222 w=200 h=40 label="" key=asg_dst2 wheel=1
+ popup cx=870 cy=222 w=200 h=40 label="" key=asg_dst3 wheel=1
+ popup cx=1106 cy=222 w=200 h=40 label="" key=asg_dst4 wheel=1
+ popup cx=170 cy=290 w=180 h=40 label="" key=asg_src1 wheel=1
+-knob cx=398 cy=280 r=26 label="" key=asg_1_1 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=482 cy=280 label="" key=asg_1_1_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=634 cy=280 r=26 label="" key=asg_1_2 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=718 cy=280 label="" key=asg_1_2_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=870 cy=280 r=26 label="" key=asg_1_3 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=954 cy=280 label="" key=asg_1_3_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=1106 cy=280 r=26 label="" key=asg_1_4 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1190 cy=280 label="" key=asg_1_4_on img=images/led_off.svg img_on=images/led_on.svg
++knob cx=398 cy=280 r=26 label="" key=asg_1_1 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=482 cy=280 label="" key=asg_1_1_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=634 cy=280 r=26 label="" key=asg_1_2 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=718 cy=280 label="" key=asg_1_2_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=870 cy=280 r=26 label="" key=asg_1_3 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=954 cy=280 label="" key=asg_1_3_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=1106 cy=280 r=26 label="" key=asg_1_4 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=1190 cy=280 label="" key=asg_1_4_on img=images/led_off.svg img_on=images/led_on.svg bw=84
+ popup cx=170 cy=400 w=180 h=40 label="" key=asg_src2 wheel=1
+-knob cx=398 cy=390 r=26 label="" key=asg_2_1 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=482 cy=390 label="" key=asg_2_1_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=634 cy=390 r=26 label="" key=asg_2_2 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=718 cy=390 label="" key=asg_2_2_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=870 cy=390 r=26 label="" key=asg_2_3 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=954 cy=390 label="" key=asg_2_3_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=1106 cy=390 r=26 label="" key=asg_2_4 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1190 cy=390 label="" key=asg_2_4_on img=images/led_off.svg img_on=images/led_on.svg
++knob cx=398 cy=390 r=26 label="" key=asg_2_1 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=482 cy=390 label="" key=asg_2_1_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=634 cy=390 r=26 label="" key=asg_2_2 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=718 cy=390 label="" key=asg_2_2_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=870 cy=390 r=26 label="" key=asg_2_3 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=954 cy=390 label="" key=asg_2_3_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=1106 cy=390 r=26 label="" key=asg_2_4 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=1190 cy=390 label="" key=asg_2_4_on img=images/led_off.svg img_on=images/led_on.svg bw=84
+ popup cx=170 cy=510 w=180 h=40 label="" key=asg_src3 wheel=1
+-knob cx=398 cy=500 r=26 label="" key=asg_3_1 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=482 cy=500 label="" key=asg_3_1_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=634 cy=500 r=26 label="" key=asg_3_2 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=718 cy=500 label="" key=asg_3_2_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=870 cy=500 r=26 label="" key=asg_3_3 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=954 cy=500 label="" key=asg_3_3_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=1106 cy=500 r=26 label="" key=asg_3_4 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1190 cy=500 label="" key=asg_3_4_on img=images/led_off.svg img_on=images/led_on.svg
++knob cx=398 cy=500 r=26 label="" key=asg_3_1 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=482 cy=500 label="" key=asg_3_1_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=634 cy=500 r=26 label="" key=asg_3_2 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=718 cy=500 label="" key=asg_3_2_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=870 cy=500 r=26 label="" key=asg_3_3 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=954 cy=500 label="" key=asg_3_3_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=1106 cy=500 r=26 label="" key=asg_3_4 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=1190 cy=500 label="" key=asg_3_4_on img=images/led_off.svg img_on=images/led_on.svg bw=84
+ popup cx=170 cy=620 w=180 h=40 label="" key=asg_src4 wheel=1
+-knob cx=398 cy=610 r=26 label="" key=asg_4_1 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=482 cy=610 label="" key=asg_4_1_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=634 cy=610 r=26 label="" key=asg_4_2 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=718 cy=610 label="" key=asg_4_2_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=870 cy=610 r=26 label="" key=asg_4_3 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=954 cy=610 label="" key=asg_4_3_on img=images/led_off.svg img_on=images/led_on.svg
+-knob cx=1106 cy=610 r=26 label="" key=asg_4_4 img=images/knob_small.svg base=images/knob_shadow.svg
+-toggle cx=1190 cy=610 label="" key=asg_4_4_on img=images/led_off.svg img_on=images/led_on.svg
++knob cx=398 cy=610 r=26 label="" key=asg_4_1 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=482 cy=610 label="" key=asg_4_1_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=634 cy=610 r=26 label="" key=asg_4_2 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=718 cy=610 label="" key=asg_4_2_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=870 cy=610 r=26 label="" key=asg_4_3 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=954 cy=610 label="" key=asg_4_3_on img=images/led_off.svg img_on=images/led_on.svg bw=84
++knob cx=1106 cy=610 r=26 label="" key=asg_4_4 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
++toggle cx=1190 cy=610 label="" key=asg_4_4_on img=images/led_off.svg img_on=images/led_on.svg bw=84
+ qlinks "ASSIGN" = asg_1_1,asg_2_1,asg_3_1,asg_4_1,asg_1_2,asg_2_2,asg_3_2,asg_4_2,asg_1_3,asg_2_3,asg_3_3,asg_4_3,asg_1_4,asg_2_4,asg_3_4,asg_4_4

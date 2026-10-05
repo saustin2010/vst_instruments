@@ -1,0 +1,4 @@
+https://github.com/poloq-instruments/mpc-vst-plaits
+commit 859ce99acdf53f44d5c0d525aa653a9147bb9948 2026-10-01
+vendored 2026-10-05: src/ (Plaits + the Mr Hyde bridge: see src/VENDORED.md), vst/layout.conf, vst/plaits.css, vst/images/, vst/art/ (as design/art/)
+framework: built upstream on poloq-instruments/mpc-vst-plugins poloq-dev 1384deb

@@ -14,7 +14,7 @@ This guide takes you from a stock MPC to playing these plugins. The short versio
 - **Root SSH access to it** (step 1). Stock MPC OS has none.
 - **A computer** on the same network: macOS or Linux with `bash`, `ssh`, `tar` and `git` (all standard). On Windows,
   use WSL.
-- **Space**: all 36 plugins take about 130 MB on the MPC's internal drive (`/sdcard`). The biggest are the ones
+- **Space**: all 40 plugins take about 170 MB on the MPC's internal drive (`/sdcard`), their libraries included. The biggest are the ones
   that ship presets, wavetables or samples (Tablor, Aphex, Braids, Moog).
 - **Save your project.** Adding plugins MPC hasn't seen before restarts MPC once.
 
@@ -58,10 +58,10 @@ Pick plugins by folder name, by group, or `all`:
 ./install.sh <mpc-address> --dry-run hera grids      # check the MPC and show what would happen
 ./install.sh <mpc-address> hera grids                # install
 ./install.sh <mpc-address> instruments               # groups: instruments, sequencers, effects,
-                                                     #   schwung, mutable-instruments, vcv-rack, originals, all
+                                                     #   schwung, mutable-instruments, vcv-rack, originals, mpc-ports, all
 ```
 
-Plugin names: `303`, `aphex`, `braids`, `chordism`, `denis`, `elements`, `eucalypso`, `fizzik`, `grids`, `groovebank`, `hank`, `helm`, `hera`, `hush1`, `libpo32`, `marbles`, `mazelite`, `midiplayer`, `monksynth`, `monovoice`, `moog`, `mrhyde`, `mrdrums`, `noisemaker`, `nusaw`, `obxd`, `pixelwalkers`, `plaits`, `rampage`, `rings`, `ringsfx`, `superarp`, `tablor`, `verglas`, `warps`, `wurl`.
+Plugin names: `303`, `aphex`, `braids`, `chordism`, `denis`, `elements`, `eucalypso`, `fizzik`, `grids`, `groovebank`, `hank`, `helm`, `hera`, `hush1`, `libpo32`, `marbles`, `mazelite`, `midiplayer`, `monksynth`, `monovoice`, `moog`, `mpcplaits`, `mrhyde`, `mrdrums`, `mutablevibe`, `noisemaker`, `nusaw`, `obxd`, `pixelwalkers`, `plaits`, `rampage`, `rings`, `ringsfx`, `stevequencer`, `stevequencer16`, `superarp`, `tablor`, `verglas`, `warps`, `wurl`.
 
 What it does, in order:
 

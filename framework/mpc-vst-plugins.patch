@@ -116,7 +116,7 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..622615c 100644
+index 6e0f9d4..34c685a 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
 @@ -46,7 +46,8 @@ from the Force and may differ on MPC Live/One/X/Key (e.g. `Force Documents` vs `
@@ -129,7 +129,7 @@ index 6e0f9d4..622615c 100644
     (direct, unscheduled send).
  
  Resolved (details in the sections below): option params render as image-button radio groups or `popup`s,
-@@ -596,7 +597,311 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +597,361 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -400,8 +400,9 @@ index 6e0f9d4..622615c 100644
 +  plugin's port with **Remote** switched on, while MIDI Learn was open, froze MPC (it had to be forced off) with
 +  Rampage sending ~575 CCs a second; learning from a plugin's port is still unexplored. The CC map needs nothing from
 +  MPC beyond the track's MIDI input (the routing a sequencer's notes already use): a sequencer's per-step CCs
-+  (Stevequencer's MOD lanes) or a controller move the instrument directly. Still to check on a device: that MPC passes
-+  CCs from a track's MIDI input through to the plugin, and whether it keeps any of 20-35 for itself.
++  (Stevequencer's MOD lanes) or a controller move the instrument directly. **Verified on the Live II (2026-10-05):**
++  Stevequencer's MOD lanes on CC 20/21 move the instrument's controls through the track's MIDI input (the owner: "the
++  automation lanes are working"); none of 20-35 seen kept by MPC so far.
 +- **A Q-Link column per panel: `-` leaves a slot empty (2026-10-03).** Columns are fixed groups of four slots, so a
 +  page laid out 3-2-4-3 (or a two-knob panel) can still give each panel its own column, with its outline round that
 +  panel only: `qlinks "MAIN" = wave,tune,-,-,cutoff,reso,env,decay,...`. The empty slot does nothing on the knob.
@@ -441,8 +442,57 @@ index 6e0f9d4..622615c 100644
 +  showcase.py (`--banks`) know banks=.
 +- Not checked on a device yet: how MPC names and switches six sub-pages per tab (25 pages, 5.3 MB TUI.json: twice
 +  Helm's), and that 418 parameters load and save without trouble.
++
++## Ports made for other forks of this framework (2026-10-05, offline; MPC Plaits, Mutable Vibe)
++Two MPC-native ports from other authors, built here unchanged where possible: poloq's MPC Plaits (made on
++poloq-instruments/mpc-vst-plugins, branch `poloq-dev`) and nachtaktiv303's Mutable Vibe (made on a newer `main`).
++- **`HAS_TRANSPORT`** (from poloq's fork, b27da6b): vst.json `"defines": {"HAS_TRANSPORT": 1}` makes the wrapper tell
++  the engine `"transport"` = `"1"` when the host starts playing or jumps back while playing (a loop, a locate) and `"0"`
++  when it stops, so synced LFOs and retriggers restart with the song. Compiled out unless defined. Not yet seen on a
++  device here (poloq: MPC One).
++- **`dynamic_name` / `dynamic_display`** (newer upstream, c20f4ea and 26b4c58): a parameter flagged in params.json
++  gets its name from the engine's `get_param("<key>_name")` and its value text from `"<key>_display"` (falling back to
++  the static name and the usual text), so Mutable Vibe's macro knobs read STRUCTURE on a Rings model and HARMONICS on a
++  Plaits one, and DELAY TIME reads "375 ms (1/8.)". The value stays numeric. Here the engine calls take the engine lock.
++  host_test's range check skips `dynamic_display` parameters (their text isn't their value); the restore check still
++  covers them. Device check pending: that MPC's knob label and Q-Link sidebar follow a renamed parameter after a model
++  change (upstream: MPC re-reads a Label "Name" on `audioMasterUpdateDisplay`).
++- Not taken from that fork: `settle()` (this wrapper's shadow position already makes a Q-Link turn on a stepped value
++  move one detent per step's width, verified on a Live II) and popup `wheel=1` (marked experimental there; without it a
++  pop-up still opens on a tap and its Q-Link still turns it). Option targets of `step_of` clamp at the ends here; the
++  fork wraps round.
++- **Option labels that are numbers.** This wrapper reads an engine's answer as an option's label before reading it as
++  an index (so `8'` is a label, not option 8); upstream reads a leading digit as an index. An engine that reports its
++  options by index while some labels are numbers needs `"send"` with the indexes: Mutable Vibe's POLY (`1,2,3,4`, the
++  engine reporting `3` for 4 voices restored as 3) and LFO DIVISION (`... 1/2, 1, 2, 4`: `2`, i.e. 1/4, showed as
++  2 bars). The restore check caught POLY only: DIVISION was wrong but stable (same position read back).
++- Newer upstream builds add `-I wrapper` for `engine.h`; here a port keeps its own copy (`mpc/engine.h`).
++- **`bw=` on a toggle drawn as a picture** (`img=`): its box (and name width) instead of 120 px, as for knobs and
++  sliders, and its Q-Link outline follows. MPC Plaits' LED switches sit 80 px apart and their matrix LEDs 84 px right
++  of a knob, so neighbouring boxes overlapped by 20-41 px (offline, check_skin.py). steve/tools/stitch/check_skin.py
++  now also leaves out pairs that `when=` never shows together (RATE and DIV by a SYNC switch).
++- **Presets may set a Schwung integer.** The Schwung adapter marks a module's `int` parameters `"display": "string"`
++  (the value text is the engine's), and gen_vst.py refused them in a port's `presets.json` as text readouts. A
++  string display with a range is a number like any other; only a range-less one (a name readout) is refused now.
++  MPC Plaits' presets set NOTES, UNISON, GLIDE and the envelope times.
++
++## Any parameter by NRPN; Stevequencer 16 (2026-10-05, offline)
++- **NRPN n sets parameter n**, any page, in every plugin (wrapper `nrpn_locked()`): CC 99 / 98 pick the number (high /
++  low 7 bits), CC 6 sets the value (7 bits, 127 = the top), CC 38 refines it (14 bits). Numbers are VST indexes, so
++  `docs/parameter-numbers.md` (vst_instruments, from `tools/param-numbers.py`) lists them as P = index + 1. Pop-up open
++  flags, step buttons and text readouts aren't settable this way. The data CCs are the wrapper's only while an NRPN is
++  selected: after an RPN (CC 101 / 100) CC 6 / 38 reach the engine as before. The CC map (CC 20-35) and NRPN share
++  one per-parameter "tell MPC" path (`midi_set_locked`, throttled per parameter as before).
++- Why NRPN and not more CCs: every page of every plugin, with no MIDI learn and no per-plugin CC table to remember;
++  the owner picks the parameter per project ("too many synths and too many parameters"). host_test sends NRPN to the
++  last settable parameter (exercising a 14-bit number, e.g. 551 on Stevequencer) and checks an RPN doesn't reach it.
++- Still to check on a device: that MPC passes CC 99 / 98 / 6 from a track's MIDI input (CC 20/21 do).
++- Stevequencer 16 (vst_instruments `originals/stevequencer16`): 16 steps, eight lanes (CC or PARAM = NRPN; HOLD,
++  RETURN, SLIDE, LFO, FOLLOW; per-lane RATE and LENGTH), lane values worked out eight times a step and sent on change.
++  Its copy of Schwung's `midi_fx_api_v1.h` raises MIDI_FX_MAX_OUT_MSGS 16 -> 64 (eight NRPN lanes at a step are 24
++  messages); the adapter only sizes its buffer with it.
 diff --git a/tools/gen_vst.py b/tools/gen_vst.py
-index 7a91d54..75c89f8 100644
+index 7a91d54..2fbf682 100644
 --- a/tools/gen_vst.py
 +++ b/tools/gen_vst.py
 @@ -12,6 +12,9 @@ vst.json (paths are relative to the vst.json's folder):
@@ -455,7 +505,7 @@ index 7a91d54..75c89f8 100644
        "art": "html",                             # optional: draw the skin artwork in a browser (tools/html_art.py)
        "defines": {"HAS_LFO_BPM": 1},             # optional extra #defines in params.h
        "build": {"root": "..", "sources": ["src/engine.c"], "cflags": ["-Isrc"], "libs": ["-lm"]}
-@@ -56,13 +59,13 @@ def short(name, table):
+@@ -56,13 +59,14 @@ def short(name, table):
      return name
  
  
@@ -467,11 +517,23 @@ index 7a91d54..75c89f8 100644
               "typedef struct { const char *key, *name, *unit; float min, max, def; int nopts; "
               "const char *const *opts; int momentary; int string_display; int int_display; "
 -             "int step_target; float step_delta; int popup_of; } param_t;"]
-+             "int step_target; float step_delta; int popup_of; const float *values; const char *const *send; } param_t;"]
++             "int step_target; float step_delta; int popup_of; const float *values; const char *const *send; "
++             "int dynamic_name; int dynamic_display; } param_t;"]
      key_to_index = {p["key"]: i for i, p in enumerate(params)}
      rows = []
      for i, p in enumerate(params):
-@@ -93,29 +96,147 @@ def gen_params(cfg, params, out):
+@@ -87,35 +91,160 @@ def gen_params(cfg, params, out):
+         # "popup_of" -- a layout popup's hidden "open" flag (shadow_skin.popup_params): the wrapper
+         # keeps its value itself, never sends it to the DSP, and clears it when that param is picked.
+         popup_of = key_to_index.get(p.get("popup_of"), -1)
++        # "dynamic_name" / "dynamic_display" (upstream c20f4ea, 26b4c58; Mutable Vibe): effGetParamName asks the DSP for
++        # get_param("<key>_name") first and effGetParamDisplay for "<key>_display", falling back to the static name and
++        # the usual value text, so a knob's name and value can follow e.g. the selected model. MPC re-reads both on
++        # audioMasterUpdateDisplay. The value itself stays numeric: knobs, Q-Links and automation work as usual.
++        dyn = "%d, %d" % (bool(p.get("dynamic_name")), bool(p.get("dynamic_display")))
+         if opts:
+             lines.append("static const char *const OPTS_%d[] = {%s};" % (i, ", ".join(c_str(o) for o in opts)))
+             d = p.get("default", 0)
              if isinstance(d, str):
                  d = opts.index(d) if d in opts else 0
              norm = d / (len(opts) - 1) if len(opts) > 1 else 0
@@ -491,18 +553,19 @@ index 7a91d54..75c89f8 100644
 +                if len(send) != len(opts):
 +                    raise SystemExit("%s: %d send strings for %d options" % (p["key"], len(send), len(opts)))
 +                lines.append("static const char *const SEND_%d[] = {%s};" % (i, ", ".join(c_str(o) for o in send)))
-+            rows.append("    {%s, %s, \"\", 0, 0, %s, %d, OPTS_%d, %d, %d, %d, %d, %s, %d, %s, %s}," % (
++            rows.append("    {%s, %s, \"\", 0, 0, %s, %d, OPTS_%d, %d, %d, %d, %d, %s, %d, %s, %s, %s}," % (
                  c_str(p["key"]), name, fl(norm), len(opts), i, bool(p.get("momentary")), is_str, is_int,
 -                step_target, fl(step_delta), popup_of))
-+                step_target, fl(step_delta), popup_of, "VALS_%d" % i if vals else "0", "SEND_%d" % i if send else "0"))
++                step_target, fl(step_delta), popup_of, "VALS_%d" % i if vals else "0", "SEND_%d" % i if send else "0", dyn))
          else:
              lo, hi = p.get("min", 0), p.get("max", 1)
              d = p.get("default", lo)
              norm = (d - lo) / (hi - lo) if hi > lo else 0
 -            rows.append("    {%s, %s, %s, %s, %s, %s, 0, 0, %d, %d, %d, %d, %s, %d}," % (
-+            rows.append("    {%s, %s, %s, %s, %s, %s, 0, 0, %d, %d, %d, %d, %s, %d, 0, 0}," % (
++            rows.append("    {%s, %s, %s, %s, %s, %s, 0, 0, %d, %d, %d, %d, %s, %d, 0, 0, %s}," % (
                  c_str(p["key"]), name, c_str(p.get("unit", "")), fl(lo), fl(hi), fl(norm),
-                 bool(p.get("momentary")), is_str, is_int, step_target, fl(step_delta), popup_of))
+-                bool(p.get("momentary")), is_str, is_int, step_target, fl(step_delta), popup_of))
++                bool(p.get("momentary")), is_str, is_int, step_target, fl(step_delta), popup_of, dyn))
      lines += ["static const param_t PARAMS[] = {"] + rows + ["};", "#define NPARAMS %d" % len(params),
                "#define PLUG_NAME %s" % c_str(cfg["name"]), "#define PLUG_VENDOR %s" % c_str(cfg["vendor"]),
                "#define PLUG_UID 0x%08x /* '%s' */" % (int.from_bytes(cfg["uid"].encode(), "big"), cfg["uid"]),
@@ -594,7 +657,9 @@ index 7a91d54..75c89f8 100644
 +            kv = []
 +            for k, v in ps["values"].items():
 +                q = byk.get(k)
-+                if not q or q.get("momentary") or q.get("step_of") or q.get("display") == "string":
++                # (a "string" display with a range is a number shown as the engine's text, e.g. a Schwung int: settable)
++                text_only = q and q.get("display") == "string" and not q.get("max", 0) > q.get("min", 0)
++                if not q or q.get("momentary") or q.get("step_of") or text_only:
 +                    raise SystemExit("presets: %r sets %r, which isn't a settable parameter" % (ps["name"], k))
 +                if q.get("options"):
 +                    if not (v in q["options"] or (isinstance(v, int) and 0 <= v < len(q["options"]))):
@@ -625,7 +690,7 @@ index 7a91d54..75c89f8 100644
  
  
  def main():
-@@ -140,23 +261,25 @@ def main():
+@@ -140,23 +269,25 @@ def main():
          return
      plist, sections = params.load(os.path.join(here, src))
      import shadow_skin
@@ -662,7 +727,7 @@ index 7a91d54..75c89f8 100644
      shutil.rmtree(os.path.join(build, "skin"), ignore_errors=True)   # no stale images from older builds
      art = os.environ.get("SHADOW_ART") or (os.path.join(TOOLS, "html_art.py") if cfg.get("art") == "html"
 diff --git a/tools/host_test.c b/tools/host_test.c
-index 0435619..bbfd93d 100644
+index 0435619..b5f860e 100644
 --- a/tools/host_test.c
 +++ b/tools/host_test.c
 @@ -4,6 +4,7 @@
@@ -673,7 +738,16 @@ index 0435619..bbfd93d 100644
  #include <string.h>
  #include <math.h>
  #include "params.h"
-@@ -26,6 +27,45 @@ static intptr_t host(AEffect*e,int32_t op,int32_t i,intptr_t v,void*p,float o){
+@@ -14,7 +15,7 @@ struct AEffect { int32_t magic; intptr_t (*d)(AEffect*,int32_t,int32_t,intptr_t,
+  int32_t np,npar,ni,no,flags; intptr_t r1,r2; int32_t a,b,c; float io; void*obj,*user; int32_t uid,ver;
+  void (*pr)(AEffect*,float**,float**,int32_t); void*pdr; char f[56]; };
+ typedef struct { int32_t type,byteSize,deltaFrames,flags,noteLength,noteOffset; unsigned char m[4]; char x[4]; } ME;
+-typedef struct { int32_t n; intptr_t r; void* ev[2]; } EV;
++typedef struct { int32_t n; intptr_t r; void* ev[4]; } EV;
+ extern AEffect* VSTPluginMain(cb);
+ 
+ static int automated[NPARAMS > 0 ? NPARAMS : 1], fails;
+@@ -26,6 +27,46 @@ static intptr_t host(AEffect*e,int32_t op,int32_t i,intptr_t v,void*p,float o){
  }
  #define CHECK(c, ...) do { printf("%s ", (c) ? "ok  " : "FAIL"); printf(__VA_ARGS__); printf("\n"); if (!(c)) fails++; } while (0)
  static void run(AEffect *a, int blocks) { float L[128], R[128], *o[2] = {L, R}; for (int k = 0; k < blocks; k++) a->pr(a, 0, o, 128); }
@@ -700,6 +774,7 @@ index 0435619..bbfd93d 100644
 +        const param_t *p = &PARAMS[i];
 +        before[i][0] = 0; c->d(c, 7, i, 0, before[i], 0);
 +        if (!restorable(p) || p->nopts || p->string_display || p->max <= p->min) continue;
++        if (p->dynamic_display) continue;   /* its text is the DSP's own ("50 %"), not the value: the restore check below still covers it */
 +        float v = atof(before[i]), tol = (p->max - p->min) * 0.005f + 0.05f;
 +        if (v < p->min - tol || v > p->max + tol) {
 +            if (out++ < 5) printf("     %s = \"%s\", declared %g..%g\n", p->key, before[i], p->min, p->max);
@@ -719,7 +794,7 @@ index 0435619..bbfd93d 100644
  
  int main(void) {
      AEffect *a = VSTPluginMain(host), *b = VSTPluginMain(host);
-@@ -44,8 +84,22 @@ int main(void) {
+@@ -44,8 +85,22 @@ int main(void) {
      int cont = -1, en = -1, pop = -1;
      for (int i = 0; i < NPARAMS; i++) {
          const param_t *p = &PARAMS[i];
@@ -744,7 +819,7 @@ index 0435619..bbfd93d 100644
          if (pop < 0 && p->popup_of >= 0) pop = i;
      }
      if (cont >= 0) {
-@@ -53,13 +107,22 @@ int main(void) {
+@@ -53,13 +108,22 @@ int main(void) {
          a->setP(a, cont, 0.25f); a->d(a, 7, cont, 0, d, 0);
          CHECK(fabsf(a->getP(a, cont) - 0.25f) <= tol, "set %s 0.25 -> get %.3f (\"%s\")", PARAMS[cont].key, a->getP(a, cont), d);
          CHECK(fabsf(b->getP(b, cont) - 0.25f) > 1e-4f || PARAMS[cont].def == 0.25f, "instance b unaffected");
@@ -769,7 +844,7 @@ index 0435619..bbfd93d 100644
      }
      if (pop >= 0) {
          int t = PARAMS[pop].popup_of, n = PARAMS[t].nopts;
-@@ -76,6 +139,19 @@ int main(void) {
+@@ -76,6 +140,19 @@ int main(void) {
      for (int k = 0; k < 40; k++) { a->pr(a, 0, o, 128); for (int i = 0; i < 128; i++) e += L[i] * L[i] + R[i] * R[i]; }
      double rms = sqrt(e / (40 * 256));
      printf("%s note 60 -> rms %.4f\n", rms > 1e-5 ? "ok  " : "warn", rms);   /* an effect or a silent patch may be legitimately 0 */
@@ -789,7 +864,7 @@ index 0435619..bbfd93d 100644
  
      {   /* instance b never got a note: the legacy process() must add silence, leaving 1.0 */
          float L1[128], R1[128], *o1[2] = {L1, R1}; int kept = 1;
-@@ -87,11 +163,51 @@ int main(void) {
+@@ -87,11 +164,81 @@ int main(void) {
      void *ch = 0; intptr_t n = a->d(a, 23, 0, 0, &ch, 0);
      if (n > 0) {
          b->d(b, 24, 0, n, ch, 0);
@@ -827,6 +902,36 @@ index 0435619..bbfd93d 100644
 +        }
 +    }
 +#endif
++    {   /* NRPN n sets parameter n (any page) as setParameter would: the last parameter a set/get moves, so the 14-bit
++         * number is exercised. (An engine may clamp the top, e.g. a preset number to the presets installed: compare.) */
++        int i = NPARAMS - 1;
++        float v1 = 0, v0 = 0;
++        for (; i >= 0; i--) {
++            if (PARAMS[i].momentary || PARAMS[i].step_target >= 0 || PARAMS[i].popup_of >= 0 || PARAMS[i].string_display) continue;
++            a->setP(a, i, 1.0f); run(a, 1); v1 = a->getP(a, i);
++            a->setP(a, i, 0.0f); run(a, 1); v0 = a->getP(a, i);
++            if (v1 > v0) break;
++        }
++        if (i < 0) printf("warn no parameter moves offline (NRPN not tried)\n");
++        else {
++            int told = automated[i];
++            ME m[4]; EV ev = {4, 0, {&m[0], &m[1], &m[2], &m[3]}};
++            unsigned char cc[4][2] = {{99, (unsigned char)(i >> 7)}, {98, (unsigned char)(i & 127)}, {6, 127}, {38, 127}};
++            for (int k = 0; k < 4; k++) m[k] = (ME){1, sizeof(ME), 0, 0, 0, 0, {0xB0, cc[k][0], cc[k][1], 0}};
++            a->d(a, 25, 0, 0, &ev, 0); run(a, 10);
++            float hi = a->getP(a, i);
++            m[2].m[2] = 0; m[3].m[2] = 0;
++            a->d(a, 25, 0, 0, &ev, 0); run(a, 10);
++            float lo = a->getP(a, i);
++            CHECK(hi > lo && fabsf(hi - v1) < 0.02f && fabsf(lo - v0) < 0.02f && automated[i] >= told + 2,
++                  "NRPN %d moves %s as setParameter does (%.2f at the top, %.2f at 0) and tells the host", i, PARAMS[i].key, hi, lo);
++            ME r[3] = {{1, sizeof(ME), 0, 0, 0, 0, {0xB0, 101, 0, 0}}, {1, sizeof(ME), 0, 0, 0, 0, {0xB0, 100, 0, 0}},
++                       {1, sizeof(ME), 0, 0, 0, 0, {0xB0, 6, 127, 0}}};
++            EV rev = {3, 0, {&r[0], &r[1], &r[2], 0}};
++            a->d(a, 25, 0, 0, &rev, 0); run(a, 2);
++            CHECK(a->getP(a, i) == lo, "after an RPN, data entry goes to the engine, not parameter %d", i);
++        }
++    }
 +    if (a->np > 0) {   /* vst.json "programs": names for every program, and picking one selects it */
 +        char nm[64] = "", cur[64] = "";
 +        int named = 1;
@@ -865,7 +970,7 @@ index 0d8dfa9..017eac1 100644
 -        return cfg["module"], "schwung"
      raise SystemExit('vst.json: needs "params" (or an adapter\'s source, e.g. "module")')
 diff --git a/tools/shadow_skin.py b/tools/shadow_skin.py
-index 5faa2a8..b8375a5 100644
+index 5faa2a8..1d22d38 100644
 --- a/tools/shadow_skin.py
 +++ b/tools/shadow_skin.py
 @@ -8,11 +8,11 @@ backgrounds, knob filmstrips and button states; MPC draws live values.
@@ -1092,15 +1197,16 @@ index 5faa2a8..b8375a5 100644
                                                                 "colour": "ff" + INK_DIM,
                                                                 "justification": "horizontallyCentred verticallyCentred",
                                                                 "case": "Upper Case"},
-@@ -622,16 +689,17 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -622,16 +689,18 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  kids.append(_placed(key, name, i, w["cx"] - cw // 2, w["cy"] - s // 2, cw, ch))
              elif kind == "toggle" and lk:
                  tw, th = skin_assets.toggle_size(w, lk)
 -                key = "shToggle_%s_%dx%d" % (lid, tw, th)
 -                cw, ch = max(120, tw + 10), th + 26
 +                nn = w.get("ns") == 0   # no name label: just the picture, its own size
-+                key = "shToggle_%s_%dx%d%s" % (lid, tw, th, "_nn" if nn else "")
-+                cw, ch = (tw, th) if nn else (max(120, tw + 10), th + 26)
++                bw = 0 if nn else w.get("bw") or 0   # bw=: a narrower box (and name) than 120 px, for close neighbours
++                key = "shToggle_%s_%dx%d%s%s" % (lid, tw, th, "_nn" if nn else "", "_b%d" % bw if bw else "")
++                cw, ch = (tw, th) if nn else (max(bw or 120, tw + 10), th + 26)
                  if key not in defs:
                      img = "sh_tog_%s_%dx%d" % (lid, tw, th)
                      for on in (0, 1):
@@ -1114,7 +1220,7 @@ index 5faa2a8..b8375a5 100644
                  kids.append(_placed(key, name, i, w["cx"] - cw // 2, w["cy"] - th // 2, cw, ch))
              elif kind == "toggle":
                  key = "shToggle"
-@@ -661,23 +729,25 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -661,23 +730,25 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  vert = kind == "slider_v"
                  img = "sh_%s_%dx%d%s" % (kind, sw_, sh_, sfx)
                  sliders.add((img, sw_, sh_, vert, lid))
@@ -1149,7 +1255,7 @@ index 5faa2a8..b8375a5 100644
              elif kind == "meter" and lk and lk.get("look") == "native":
                  # EXPERIMENTAL, unverified (docs/ROADMAP.md "A native Meter component"): a real Meter component
                  # instead of a Knob/FilmStrip pretending to be one. inactiveImage is the constant background;
-@@ -704,13 +774,17 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -704,13 +775,17 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  mw, mh = w["w"], w["h"]
                  img = "sh_meter_%dx%d%s" % (mw, mh, sfx)
                  sliders.add((img, mw, mh, 1, lid))
@@ -1171,7 +1277,7 @@ index 5faa2a8..b8375a5 100644
              elif kind == "menu":
                  x, y, rw, rh = w["cx"] - w["w"] // 2, w["cy"] - w["h"] // 2, w["w"], w["h"]
                  key = "shMenu_%dx%d" % (rw, rh)
-@@ -756,8 +830,12 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -756,8 +831,12 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
              elif kind == "readout":
                  x, y, rw, rh = w["cx"] - w["w"] // 2, w["cy"] - w["h"] // 2, w["w"], w["h"]
                  dot = w.get("style") == "dotmatrix"
@@ -1186,7 +1292,7 @@ index 5faa2a8..b8375a5 100644
                  kids.append(_placed(key, name, i, x, y, rw, rh, focus="No"))
              elif kind == "stepper":
                  x0, y0 = w["cx"] - w["w"] // 2, w["cy"] - w["h"] // 2
-@@ -815,6 +893,10 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -815,6 +894,10 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  c["bounds"]["showWhenDataModelInvalid"] = "Show"
                  c["bounds"]["additionalInvalidatingHandles"].append(cond(w))
          tagged.clear()
@@ -1197,7 +1303,7 @@ index 5faa2a8..b8375a5 100644
          kids += on_top
          sets = tab["qlinks"] or [(tab["name"], controls[:16])]
          for sp, (title, keys) in enumerate(sets):
-@@ -822,12 +904,14 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -822,12 +905,14 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  raise SystemExit("layout: qlinks %r has %d keys (max 16)" % (title, len(keys)))
              ql = {"Q-Link %d" % (q + 1): -1 for q in range(16)}
              for s, k in enumerate(keys):
@@ -1213,7 +1319,7 @@ index 5faa2a8..b8375a5 100644
                            "initialSize": "0 0 %d %d" % (W, H), "scale": 1.0})
              qmap.append({"Tab": t + 1, "SubTab": sp + 1, "Bank Direction": "Column", "Q-Links": ql})
              defs[comp] = {"key": comp, "value": {
-@@ -835,13 +919,15 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -835,13 +920,15 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  "backgroundData": {"version": 1, "focussed": {"version": 1, "colour": "ff" + PLATE, "image": ""},
                                     "unfocussed": {"version": 1, "colour": "ff" + PLATE, "image": ""}},
                  "ignoreMousePresses": False, "disableCoarseDataWheel": False, "repeats": 1,
@@ -1232,7 +1338,7 @@ index 5faa2a8..b8375a5 100644
      for r, lid in sorted(radii):
          if lid:
              script.append("lstrip|%s|%d|%d|%s" % (art("sh_knob_r%d_%s" % (r, lid)), r, FRAMES, skin_assets.encode(looks[lid])))
-@@ -866,23 +952,34 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -866,23 +953,34 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
              x, y = w["cx"] + w["w"] // 2 - 22 - ox, w["cy"] - oy
              dr.polygon([(x - 8, y - 4), (x + 8, y - 4), (x, y + 5)], fill="#" + ACCENT)
          im.save(path)
@@ -1278,7 +1384,7 @@ index 5faa2a8..b8375a5 100644
  
  
  def qlink_bounds(tab, keys):
-@@ -905,12 +1002,19 @@ def qlink_bounds(tab, keys):
+@@ -905,14 +1003,22 @@ def qlink_bounds(tab, keys):
              xs += [w["cx"] - w["w"] // 2, w["cx"] + w["w"] // 2]
              ys += [w["cy"] - w["h"] // 2 - 26, w["cy"] + w["h"] // 2]
              continue
@@ -1297,9 +1403,13 @@ index 5faa2a8..b8375a5 100644
 +            xs += [w["cx"] - w["w"] // 2, w["cx"] + w["w"] // 2]
 +            ys += [w["cy"] - w["h"] // 2, w["cy"] + w["h"] // 2]
          elif w["kind"] == "toggle":
-             xs += [w["cx"] - 60, w["cx"] + 60]
+-            xs += [w["cx"] - 60, w["cx"] + 60]
++            half = (w.get("bw") or 120) // 2   # bw= (a toggle drawn as a picture): its narrower box
++            xs += [w["cx"] - half, w["cx"] + half]
              ys += [w["cy"] - 18, w["cy"] + 38]
-@@ -938,6 +1042,8 @@ def program_qlinks(layout_path, params, qmap):
+         else:
+             for x, y, sw, sh in seg_rects(w):
+@@ -938,6 +1044,8 @@ def program_qlinks(layout_path, params, qmap):
                  raise SystemExit("layout: qlinks_track has %d keys (max 16)" % len(keys))
              ql = {"Q-Link %d" % (q + 1): -1 for q in range(16)}
              for s_, k in enumerate(keys):
@@ -1387,10 +1497,10 @@ index d3a8942..44739ae 100644
 + * int16 stereo, `frames` = 128) just before calling render for it. Weak, like the transport hook. */
 +void mpc_engine_input(void *inst, const int16_t *in_lr, int frames) __attribute__((weak));
 diff --git a/wrapper/vst2_wrap.c b/wrapper/vst2_wrap.c
-index 720ce46..14c7ae3 100644
+index 720ce46..02b5ecf 100644
 --- a/wrapper/vst2_wrap.c
 +++ b/wrapper/vst2_wrap.c
-@@ -15,10 +15,57 @@
+@@ -15,10 +15,61 @@
  #include <stdio.h>
  #include <math.h>
  #include <ctype.h>
@@ -1399,6 +1509,10 @@ index 720ce46..14c7ae3 100644
  #ifndef HAS_LFO_BPM
  #define HAS_LFO_BPM 0 /* 1: pass the host tempo to the DSP as "lfo_bpm" */
  #endif
++#ifndef HAS_TRANSPORT
++#define HAS_TRANSPORT 0 /* 1: tell the DSP when the host transport plays/stops as "transport" = "1"/"0"; a jump back in
++                          * song position while playing (a loop, a locate) is sent as "1" again (poloq's fork) */
++#endif
 +#ifndef PLUG_PROGRAM_PARAM   /* vst.json "programs" (gen_vst.py): a preset parameter shown as VST programs */
 +#define PLUG_PROGRAM_PARAM -1
 +#define PLUG_PROGRAM_NAME_PARAM -1
@@ -1448,7 +1562,7 @@ index 720ce46..14c7ae3 100644
  #ifndef MODULE_DIR
  #define MODULE_DIR NULL /* set via vst.json "defines" for a DSP that reads its own files
                            * (ROMs, etc.) from "<module_dir>/..." (see jv880's create_instance) */
-@@ -28,6 +75,9 @@
+@@ -28,6 +79,9 @@
  #include "popup.h"
  
  #define DSP_BLOCK 128
@@ -1458,7 +1572,7 @@ index 720ce46..14c7ae3 100644
  
  /* ---- VST2 ABI (hand-written; no Steinberg SDK) -------------------------- */
  typedef struct AEffect AEffect;
-@@ -61,13 +111,15 @@ typedef struct {
+@@ -61,13 +115,15 @@ typedef struct {
  } VstTimeInfo;
  
  enum {
@@ -1476,7 +1590,7 @@ index 720ce46..14c7ae3 100644
  enum { effFlagsCanReplacing = 1 << 4, effFlagsProgramChunks = 1 << 5, effFlagsIsSynth = 1 << 8 };
  
  /* ---- per-instance state ------------------------------------------------- */
-@@ -76,53 +128,137 @@ typedef struct {
+@@ -76,53 +132,142 @@ typedef struct {
      audioMasterCallback master;
      void *dsp;
      int16_t block[DSP_BLOCK * 2];
@@ -1493,9 +1607,14 @@ index 720ce46..14c7ae3 100644
 +    int nprog;
 +    int cur_prog;            /* the wrapper's own presets (OWN_PRESETS): the one picked last */
 +    float live_last[PLUG_LIVE_COUNT > 0 ? PLUG_LIVE_COUNT : 1];   /* "live" params: the value MPC was last told */
-+    float cc_val[PLUG_CC_COUNT > 0 ? PLUG_CC_COUNT : 1];          /* CC-driven Q-Link controls: value to report, */
-+    char cc_dirty[PLUG_CC_COUNT > 0 ? PLUG_CC_COUNT : 1];         /* whether MPC still has to be told, */
-+    int cc_wait[PLUG_CC_COUNT > 0 ? PLUG_CC_COUNT : 1];           /* and frames since it last was */
++    float midi_val[NPARAMS];  /* params a MIDI CC or NRPN moved (midi_set_locked): value to report, */
++    char midi_dirty[NPARAMS]; /* whether MPC still has to be told, */
++    int midi_wait[NPARAMS];   /* and frames since it last was */
++    int nrpn[16], nrpn_hi[16], nrpn_msb[16];   /* per MIDI channel: the NRPN selected (-1: none / an RPN), its parts */
++#if HAS_TRANSPORT
++    int tp_playing;          /* the transport state last sent */
++    double tp_ppq;           /* the song position at the last block, to spot a jump back */
++#endif
 +#if PLUG_SCOPE_BANK >= 0
 +    float scope_ring[SCOPE_RING];   /* the last ~93 ms of output (see scope_tick) */
 +    unsigned scope_pos;
@@ -1594,15 +1713,15 @@ index 720ce46..14c7ae3 100644
 +        w->shadow[i] = -1;
 +    }
 +    return v;
- }
- 
++}
++
 +static float get_norm(wrap_t *w, int i) {
 +    engine_lock(w);
 +    float v = get_norm_locked(w, i);
 +    engine_unlock(w);
 +    return v;
-+}
-+
+ }
+ 
 +static void set_parameter_locked(wrap_t *w, int32_t i, float n);
 +static void refresh_programs(wrap_t *w);
  static void setParameter(AEffect *e, int32_t i, float n) {
@@ -1622,7 +1741,7 @@ index 720ce46..14c7ae3 100644
      if (p->step_target >= 0) {
          /* A momentary nudge of ANOTHER param (see gen_vst.py's step_of/step_delta comment). Reads
           * the target's CURRENT value straight from the DSP, not our own cached norm, so it's
-@@ -131,11 +267,19 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+@@ -131,11 +276,19 @@ static void setParameter(AEffect *e, int32_t i, float n) {
          if (n > 0.5f) {
              const param_t *tp = &PARAMS[p->step_target];
              if (g_api->get_param(w->dsp, tp->key, buf, sizeof buf) > 0) {
@@ -1646,7 +1765,7 @@ index 720ce46..14c7ae3 100644
              }
              w->release[i] = 1;
          }
-@@ -148,31 +292,150 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+@@ -148,31 +301,176 @@ static void setParameter(AEffect *e, int32_t i, float n) {
           * tap and a direct Q-Link turn on the underlying param). Deferred to processReplacing(),
           * same as w->release[] -- the host must not be re-entered from inside its own call to us. */
          w->need_update_display = 1;
@@ -1696,21 +1815,47 @@ index 720ce46..14c7ae3 100644
 + * CCs or a controller move the instrument's main controls with no MIDI learn in MPC. Audio thread, engine locked
 + * (effProcessEvents). Lighter than setParameter: no program refresh or display update per message, because a CC LFO
 + * can send one every block; run_block() tells MPC the new value, at most every CC_NOTIFY_FRAMES per control. */
-+static int cc_set_locked(wrap_t *w, int cc, int value) {
-+    int k = cc - PLUG_CC_FIRST;
-+    if (k < 0 || k >= PLUG_CC_COUNT || PLUG_CC[k] < 0) return 0;
-+    int i = PLUG_CC[k];
++static void midi_set_locked(wrap_t *w, int i, float n) {
 +    const param_t *p = &PARAMS[i];
-+    float n = value / 127.0f;
-+    if (p->nopts > 1) n = roundf(n * (p->nopts - 1)) / (p->nopts - 1);
++    n = clamp01(n);
++    if (p->nopts > 1) n = roundf(n * (p->nopts - 1)) / (p->nopts - 1);   /* an option list: the nearest option */
 +    char buf[64], cur[64];
 +    norm_to_str(p, n, buf, sizeof buf);
 +    if (g_api->get_param(w->dsp, p->key, cur, sizeof cur) <= 0 || strcmp(cur, buf))
 +        g_api->set_param(w->dsp, p->key, buf);
 +    w->shadow[i] = p->nopts > 1 ? -1 : n;
-+    w->cc_val[k] = n;
-+    w->cc_dirty[k] = 1;
++    w->midi_val[i] = n;
++    w->midi_dirty[i] = 1;
++}
++static int cc_set_locked(wrap_t *w, int cc, int value) {
++    int k = cc - PLUG_CC_FIRST;
++    if (k < 0 || k >= PLUG_CC_COUNT || PLUG_CC[k] < 0) return 0;
++    midi_set_locked(w, PLUG_CC[k], value / 127.0f);
 +    return 1;
++}
++
++/* NRPN n sets parameter n (its VST index: P1 in docs/parameter-numbers.md is NRPN 0), any parameter on any page:
++ * CC 99 / 98 pick the number (high / low 7 bits), CC 6 sets the value (7 bits, 127 = the top) and CC 38 refines it
++ * (14 bits: (CC 6 x 128 + CC 38) / 16383). A sequencer reaches anything with no MIDI learn (Stevequencer 16's lanes).
++ * The wrapper keeps these CCs while an NRPN is selected; after an RPN (CC 101 / 100: pitch-bend range...) CC 6 / 38
++ * go to the engine as before. A pop-up's open flag, a step button or a text readout isn't settable this way. */
++static int nrpn_target(int i) {
++    return i >= 0 && i < NPARAMS && !popup_is(i) && PARAMS[i].step_target < 0 &&
++           !(PARAMS[i].string_display && PARAMS[i].max <= PARAMS[i].min);
++}
++static int nrpn_locked(wrap_t *w, int ch, int cc, int v) {
++    switch (cc) {
++    case 99: w->nrpn_hi[ch] = v; w->nrpn[ch] = -1; return 1;
++    case 98: w->nrpn[ch] = (w->nrpn_hi[ch] < 0 ? 0 : w->nrpn_hi[ch]) * 128 + v; w->nrpn_msb[ch] = -1; return 1;
++    case 101: case 100: w->nrpn[ch] = -1; w->nrpn_hi[ch] = -1; return 0;   /* an RPN: the engine's */
++    case 6: case 38:
++        if (w->nrpn[ch] < 0) return 0;
++        if (cc == 6) w->nrpn_msb[ch] = v;
++        if (nrpn_target(w->nrpn[ch]))
++            midi_set_locked(w, w->nrpn[ch], cc == 6 ? v / 127.0f : ((w->nrpn_msb[ch] < 0 ? 0 : w->nrpn_msb[ch]) * 128 + v) / 16383.0f);
++        return 1;
++    }
++    return 0;
 +}
 +
 +/* VST programs from a preset parameter (vst.json "programs"), so MPC's PRESET menu in the plugin header lists and
@@ -1806,16 +1951,35 @@ index 720ce46..14c7ae3 100644
  static void update_tempo(wrap_t *w) {
      VstTimeInfo *ti = (VstTimeInfo *)w->master(&w->fx, audioMasterGetTime, 0, kVstTempoValid, 0, 0);
      if (!ti || !(ti->flags & kVstTempoValid) || ti->tempo <= 0) return;
-@@ -180,18 +443,77 @@ static void update_tempo(wrap_t *w) {
+@@ -180,18 +478,96 @@ static void update_tempo(wrap_t *w) {
          char buf[32];
          w->bpm = ti->tempo;
          snprintf(buf, sizeof buf, "%.2f", w->bpm);
 +        engine_lock(w);
          g_api->set_param(w->dsp, "lfo_bpm", buf);
 +        engine_unlock(w);
++    }
++}
++
++#if HAS_TRANSPORT
++/* vst.json "defines": {"HAS_TRANSPORT": 1}, as in poloq's fork of this framework (MPC Plaits): the engine hears
++ * "transport" = "1" when the host starts playing or jumps back while playing (a loop, a locate), "0" when it stops,
++ * so synced LFOs and retriggers can restart with the song. */
++static void update_transport(wrap_t *w) {
++    VstTimeInfo *ti = (VstTimeInfo *)w->master(&w->fx, audioMasterGetTime, 0, kVstPpqPosValid, 0, 0);
++    if (!ti) return;
++    int playing = (ti->flags & kVstTransportPlaying) != 0, ppq_ok = (ti->flags & kVstPpqPosValid) != 0;
++    int restart = playing && w->tp_playing && ppq_ok && ti->ppqPos < w->tp_ppq - 0.01;
++    if (playing != w->tp_playing || restart) {
++        engine_lock(w);
++        g_api->set_param(w->dsp, "transport", playing ? "1" : "0");
++        engine_unlock(w);
      }
- }
- 
++    w->tp_playing = playing;
++    if (ppq_ok) w->tp_ppq = ti->ppqPos;
++}
++#endif
++
 +/* A scope that follows the real sound at the cost of one or two parameter changes per redraw (vst.json "scope").
 + * MPC spends ~1 ms of its screen thread per parameter change it is told about and ~40 ms per "re-read everything"
 + * (measured on a Live II, 2026-10-02), so a scope drawn from many display parameters (one per column) was far too
@@ -1859,8 +2023,8 @@ index 720ce46..14c7ae3 100644
 +#else
 +    (void)w; (void)out; (void)n;
 +#endif
-+}
-+
+ }
+ 
  /* accumulate=1 is VST2's legacy process(), which must ADD to the output buffers; hosts here call
   * processReplacing, but a NULL e->process would crash any host that tried the old call. */
 -static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
@@ -1885,7 +2049,7 @@ index 720ce46..14c7ae3 100644
          float l = w->block[w->pos * 2] * (1.0f / 32768.0f), r = w->block[w->pos * 2 + 1] * (1.0f / 32768.0f);
          if (accumulate) { out[0][i] += l; out[1][i] += r; }
          else { out[0][i] = l; out[1][i] = r; }
-@@ -199,9 +521,17 @@ static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
+@@ -199,9 +575,20 @@ static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
      }
  }
  
@@ -1893,6 +2057,9 @@ index 720ce46..14c7ae3 100644
 +static void run_block(AEffect *e, float **in, float **out, int32_t n, int accumulate) {
      wrap_t *w = e->object;
      if (HAS_LFO_BPM) update_tempo(w);
++#if HAS_TRANSPORT
++    update_transport(w);
++#endif
 +    if (mpc_engine_transport) {   /* engines that follow the transport (engine.h) */
 +        VstTimeInfo *ti = (VstTimeInfo *)w->master(&w->fx, audioMasterGetTime, 0, kVstTempoValid | kVstPpqPosValid, 0, 0);
 +        engine_lock(w);
@@ -1904,7 +2071,7 @@ index 720ce46..14c7ae3 100644
      /* A trigger param (e.g. Generate) fired: tell the host it is back to 0 so
       * buttons bound to it drop their highlight. Done here, not inside
       * setParameter, so the host is not re-entered from its own call. */
-@@ -211,11 +541,29 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
+@@ -211,11 +598,29 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
          w->need_update_display = 0;
          w->master(&w->fx, audioMasterUpdateDisplay, 0, 0, 0, 0.0f);
      }
@@ -1918,14 +2085,14 @@ index 720ce46..14c7ae3 100644
 +        float v = get_norm(w, PLUG_LIVE[k]);
 +        if (v != w->live_last[k]) { w->live_last[k] = v; w->master(&w->fx, audioMasterAutomate, PLUG_LIVE[k], 0, 0, v); }
 +    }
-+    /* Q-Link controls a MIDI CC moved (cc_set_locked): tell MPC so the screen follows, throttled per control. Same
-+     * thread as effProcessEvents, which sets these, so no lock. */
-+    for (int k = 0; k < PLUG_CC_COUNT; k++) {
-+        if (w->cc_wait[k] < CC_NOTIFY_FRAMES) w->cc_wait[k] += n;
-+        if (w->cc_dirty[k] && w->cc_wait[k] >= CC_NOTIFY_FRAMES) {
-+            w->cc_dirty[k] = 0;
-+            w->cc_wait[k] = 0;
-+            w->master(&w->fx, audioMasterAutomate, PLUG_CC[k], 0, 0, w->cc_val[k]);
++    /* Parameters a MIDI CC or NRPN moved (midi_set_locked): tell MPC so the screen follows, throttled per control.
++     * Same thread as effProcessEvents, which sets these, so no lock. */
++    for (int i = 0; i < NPARAMS; i++) {
++        if (w->midi_wait[i] < CC_NOTIFY_FRAMES) w->midi_wait[i] += n;
++        if (w->midi_dirty[i] && w->midi_wait[i] >= CC_NOTIFY_FRAMES) {
++            w->midi_dirty[i] = 0;
++            w->midi_wait[i] = 0;
++            w->master(&w->fx, audioMasterAutomate, i, 0, 0, w->midi_val[i]);
 +        }
 +    }
  }
@@ -1937,7 +2104,7 @@ index 720ce46..14c7ae3 100644
  
  static void copy_str(void *dst, const char *src, size_t max) {
      strncpy(dst, src, max - 1);
-@@ -227,11 +575,37 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -227,11 +632,37 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      (void)o;
      switch (op) {
      case effOpen: return 1;
@@ -1976,15 +2143,41 @@ index 720ce46..14c7ae3 100644
      case effGetEffectName:
      case effGetProductString: copy_str(p, PLUG_NAME, 32); return 1;
      case effGetVendorString: copy_str(p, PLUG_VENDOR, 32); return 1;
-@@ -247,31 +621,40 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -239,7 +670,19 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+     case effGetVstVersion: return 2400;
+     case effCanBeAutomated: return idx >= 0 && idx < NPARAMS;
+     case effGetParamName:
+-        if (idx >= 0 && idx < NPARAMS) copy_str(p, PARAMS[idx].name, 32);
++        if (idx >= 0 && idx < NPARAMS) {
++            /* "dynamic_name" params: the DSP may rename them (Mutable Vibe's macro knobs follow the model); MPC
++             * re-reads names on audioMasterUpdateDisplay, which every setParameter asks for */
++            char buf[64], k2[96];
++            int got = 0;
++            if (PARAMS[idx].dynamic_name) {
++                snprintf(k2, sizeof k2, "%s_name", PARAMS[idx].key);
++                engine_lock(w);
++                got = g_api->get_param(w->dsp, k2, buf, sizeof buf) > 0;
++                engine_unlock(w);
++            }
++            copy_str(p, got ? buf : PARAMS[idx].name, 32);
++        }
+         return 1;
+     case effGetParamLabel:
+         if (idx >= 0 && idx < NPARAMS) copy_str(p, PARAMS[idx].unit, 8);
+@@ -247,31 +690,45 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      case effGetParamDisplay: {
          char buf[64];
          if (idx < 0 || idx >= NPARAMS) return 0;
 +        if (is_scope(idx)) { copy_str(p, "", 24); return 1; }
          const param_t *pp = &PARAMS[idx];
-+        engine_lock(w);
-         if (pp->nopts) {
+-        if (pp->nopts) {
 -            int k = (int)lroundf(get_norm(w, idx) * (pp->nopts - 1));
++        engine_lock(w);
++        char k2[96];
++        snprintf(k2, sizeof k2, "%s_display", pp->key);
++        if (pp->dynamic_display && g_api->get_param(w->dsp, k2, buf, sizeof buf) > 0) {
++            copy_str(p, buf, 24);   /* text the DSP composes ("375 ms (1/8.)", "50 %") */
++        } else if (pp->nopts) {
 +            int k = (int)lroundf(get_norm_locked(w, idx) * (pp->nopts - 1));
              copy_str(p, pp->opts[k], 24);
          } else if (g_api->get_param(w->dsp, pp->key, buf, sizeof buf) > 0) {
@@ -2002,7 +2195,8 @@ index 720ce46..14c7ae3 100644
              if (ev->events[i]->type == 1) {
                  VstMidiEvent *m = (VstMidiEvent *)ev->events[i];
 +                const uint8_t *d = (const uint8_t *)m->midiData;
-+                if ((d[0] & 0xF0) == 0xB0 && cc_set_locked(w, d[1], d[2])) continue;   /* a Q-Link CC: not the engine's */
++                if ((d[0] & 0xF0) == 0xB0 && (cc_set_locked(w, d[1], d[2]) || nrpn_locked(w, d[0] & 0x0F, d[1], d[2])))
++                    continue;   /* a Q-Link CC or an NRPN: the wrapper's, not the engine's */
                  g_api->midi(w->dsp, m->midiData, 3);
              }
 +        engine_unlock(w);
@@ -2018,7 +2212,7 @@ index 720ce46..14c7ae3 100644
          if (len <= 0) return 0;
          *(void **)p = w->chunk;
          return (intptr_t)strlen(w->chunk) + 1;
-@@ -280,7 +663,10 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -280,7 +737,10 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
          if (v <= 0 || (size_t)v > sizeof w->chunk) return 0;
          memcpy(w->chunk, p, v);
          w->chunk[v - 1] = 0;
@@ -2029,11 +2223,12 @@ index 720ce46..14c7ae3 100644
          return 1;
      }
      default: return 0;
-@@ -292,10 +678,20 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+@@ -292,10 +752,21 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
      if (!g_api) return NULL;
      wrap_t *w = calloc(1, sizeof *w);
      if (!w) return NULL;
 +    for (int i = 0; i < NPARAMS; i++) w->shadow[i] = -1;
++    for (int c = 0; c < 16; c++) w->nrpn[c] = w->nrpn_hi[c] = w->nrpn_msb[c] = -1;
 +    pthread_mutexattr_t ma;
 +    pthread_mutexattr_init(&ma);
 +    pthread_mutexattr_settype(&ma, PTHREAD_MUTEX_RECURSIVE);
@@ -2051,7 +2246,7 @@ index 720ce46..14c7ae3 100644
      AEffect *e = &w->fx;
      e->magic = 0x56737450; /* 'VstP' */
      e->dispatcher = dispatcher;
-@@ -304,9 +700,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+@@ -304,9 +775,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
      e->getParameter = getParameter;
      e->processReplacing = processReplacing;
      e->numParams = NPARAMS;

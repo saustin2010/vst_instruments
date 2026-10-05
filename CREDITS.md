@@ -34,8 +34,10 @@ These plugins are other people's instruments, ported to MPC OS. Thank you to all
 | [MonkSynth](schwung/instruments/monksynth/) | Jonathan Taylor | https://github.com/charlesvestal/schwung-monksynth | MIT |
 | [Mono Voice](schwung/instruments/monovoice/) | Tim Cox | https://github.com/timncox/schwung-mono | MIT |
 | [Moog](schwung/instruments/moog/) | Nicolas Roulet, Julian Palladino (port: charlesvestal) | Schwung module "RaffoSynth" v0.2.5 | MIT |
+| [MPC Plaits](mpc-ports/mpcplaits/) | poloq (bridge from schwung-mrhyde, move-anything contributors; DSP: Emilie Gillet) | https://github.com/poloq-instruments/mpc-vst-plaits | MIT (panel artwork CC-BY-SA 3.0) |
 | [Mr Hyde](schwung/instruments/mrhyde/) | move-anything contributors | Schwung module "MrHyde" v0.0.1 | MIT |
 | [Mr Drums](schwung/instruments/mrdrums/) | move-anything contributors | Schwung module "MrDrums" v0.0.4 | MIT |
+| [Mutable Vibe](mpc-ports/mutablevibe/) | nachtaktiv303 (DSP: Emilie Gillet) | https://github.com/nachtaktiv303/mpc-vst-mutable-vibe | MIT |
 | [Noisemaker](schwung/instruments/noisemaker/) | legsmechanical (engine: Patrick Kunz / TAL) | Schwung module "Noisemaker" v0.2.2 | GPL-2.0 |
 | [NuSaw](schwung/instruments/nusaw/) | Charles Vestal | https://github.com/charlesvestal/schwung-nusaw | MIT |
 | [OB-Xd](schwung/instruments/obxd/) | reales (port: charlesvestal) | Schwung module "OB-Xd" v0.4.9 | GPL-3.0 |

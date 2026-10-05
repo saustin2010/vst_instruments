@@ -1,13 +1,13 @@
 # Shared by install.sh and uninstall.sh: finding plugins and talking to the MPC over SSH.
 
-plugin_dirs() { { find schwung mutable-instruments vcv-rack originals -mindepth 2 -maxdepth 3 -name vst.json 2>/dev/null || true; } | xargs -n1 dirname | sort; }
+plugin_dirs() { { find schwung mutable-instruments vcv-rack originals mpc-ports -mindepth 2 -maxdepth 3 -name vst.json 2>/dev/null || true; } | xargs -n1 dirname | sort; }
 lookup() {   # lookup <name|group> -> plugin folders
   case "$1" in
     all) plugin_dirs ;;
-    instruments) plugin_dirs | grep -E '^schwung/instruments/|^mutable-instruments/(rings|elements)$' ;;
-    sequencers) plugin_dirs | grep -E '^schwung/sequencers/|^mutable-instruments/(grids|marbles)$|^vcv-rack/|^originals/stevequencer$' ;;
+    instruments) plugin_dirs | grep -E '^schwung/instruments/|^mutable-instruments/(rings|elements)$|^mpc-ports/' ;;
+    sequencers) plugin_dirs | grep -E '^schwung/sequencers/|^mutable-instruments/(grids|marbles)$|^vcv-rack/|^originals/stevequencer(16)?$' ;;
     effects) plugin_dirs | grep -E '^schwung/effects/|^mutable-instruments/(warps|ringsfx)$' ;;
-    schwung|mutable-instruments|vcv-rack|originals) plugin_dirs | grep "^$1/" ;;
+    schwung|mutable-instruments|vcv-rack|originals|mpc-ports) plugin_dirs | grep "^$1/" ;;
     *) plugin_dirs | grep -E "/$1\$" || { echo "no plugin or group called '$1' (./install.sh --list)" >&2; exit 1; } ;;
   esac
 }

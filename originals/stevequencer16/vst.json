@@ -1,0 +1,27 @@
+{
+  "name": "[SEQ] Stevequencer 16",
+  "vendor": "Steve A",
+  "uid": "SQ16",
+  "category": "Sequencer",
+  "so": "stevequencer16.so",
+  "build": {
+    "sources": [
+      "src/stevequencer16.c",
+      "mpc/schwung_midi_fx.c"
+    ],
+    "cflags": [
+      "-Impc",
+      "-Impc/host",
+      "-Isrc"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "presets": "presets.json",
+  "live": ["play_step"],
+  "art": "html"
+}
