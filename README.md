@@ -1,6 +1,6 @@
 # MPC VST Instruments
 
-**39 plugins for Akai MPC OS standalone devices**: 24 synths, 2 drum machines, 10 MIDI sequencers and generators, and 3 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for Stevequencer, a browser prototype) and converted into MPC's skin format; the two made for MPC by other authors keep their own.
+**40 plugins for Akai MPC OS standalone devices**: 24 synths, 2 drum machines, 11 MIDI sequencers and generators, and 3 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for the Stevequencers, a browser prototype and a generator) and converted into MPC's skin format; the two made for MPC by other authors keep their own.
 
 <img src="docs/images/gallery.png" alt="The first page of every plugin, as the MPC draws it">
 
@@ -53,7 +53,7 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 | <a href="schwung/instruments/libpo32/"><img src="schwung/instruments/libpo32/screenshots/page_0.png" width="220" alt="Libpo32"></a> | **[Libpo32](schwung/instruments/libpo32/)**<br><sub>Drum synth · mestela · not stated upstream</sub> | PO-32-style drum synth: 16 synthesised drum sounds on pads 36-51. | ✅ |
 | <a href="schwung/instruments/mrdrums/"><img src="schwung/instruments/mrdrums/screenshots/page_0.png" width="220" alt="Mr Drums"></a> | **[Mr Drums](schwung/instruments/mrdrums/)**<br><sub>Drum sampler · Move Everything · MIT</sub> | A 16-pad drum sampler: kits of samples on pads 36-51. | ✅ |
 
-### MIDI sequencers and generators (10)
+### MIDI sequencers and generators (11)
 
 | | Plugin | What it is | Design QA |
 |---|---|---|:---:|
@@ -66,6 +66,7 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 | <a href="schwung/sequencers/pixelwalkers/"><img src="schwung/sequencers/pixelwalkers/screenshots/page_0.png" width="220" alt="Pixel Walkers"></a> | **[Pixel Walkers](schwung/sequencers/pixelwalkers/)**<br><sub>MIDI sequencer · mestela · MIT</sub> | Generative: the notes you play become walkers that bounce and retrigger when they land. | ☐ |
 | <a href="vcv-rack/rampage/"><img src="vcv-rack/rampage/screenshots/page_0.png" width="220" alt="Rampage"></a> | **[Rampage](vcv-rack/rampage/)**<br><sub>Modulator · Befaco · GPL-3.0</sub> | Befaco Rampage: a dual slope generator (envelopes, LFOs, slew) that modulates other tracks. | ☐ |
 | <a href="originals/stevequencer/"><img src="originals/stevequencer/screenshots/page_0.png" width="220" alt="Stevequencer"></a> | **[Stevequencer](originals/stevequencer/)**<br><sub>MIDI sequencer · Steve A · written for this repo</sub> | A 64-step melodic step sequencer on a 4x4 grid, edited from the Q-Links: pitch, length, on/off, velocity, chance and ratchets per step. | ☐ |
+| <a href="originals/stevequencer16/"><img src="originals/stevequencer16/screenshots/page_0.png" width="220" alt="Stevequencer 16"></a> | **[Stevequencer 16](originals/stevequencer16/)**<br><sub>MIDI sequencer · Steve A · written for this repo</sub> | 16 steps and eight modulation lanes to any parameter of the instrument, Elektron-style: hold, return, slide across steps, LFO, follow another lane; per-lane rate and length. | ☐ |
 | <a href="schwung/sequencers/superarp/"><img src="schwung/sequencers/superarp/screenshots/page_0.png" width="220" alt="Super Arp"></a> | **[Super Arp](schwung/sequencers/superarp/)**<br><sub>Arpeggiator · handcraftedcc · MIT</sub> | A pattern and rhythm arpeggiator with 40 patterns, 40 rhythms and random modifiers. | ☐ |
 
 ### Audio effects (3)
@@ -102,6 +103,7 @@ The first install of a plugin restarts MPC once (it asks first; `MPC.settings` i
 - New: **[Stevequencer](originals/stevequencer/)**, a 64-step sequencer edited from the Q-Links, written for this repo (2026-10-04): built, offline test passed, installed and working on the Live II. Its browser prototype (`design/prototype.html`) plays in Chrome. New since (offline, not yet on the device): two MOD lanes, a CC value per step that moves the instrument's controls.
 - MIDI CC 20-35 move every plugin's first-page Q-Links (column 1 = CC 20-23, top to bottom, and so on), with no MIDI learn: a sequencer's per-step CCs or a controller drive the instrument through the track's MIDI input (2026-10-04, offline test in every plugin; to check on a device that MPC passes the CCs through).
 - New: **[Mutable Vibe](mpc-ports/mutablevibe/)** (nachtaktiv303) and **[MPC Plaits](mpc-ports/mpcplaits/)** (poloq), two instruments their authors wrote for MPC OS on sd88me's framework, built here from their source with this repo's copy of it (2026-10-05): offline test passed, Q-Links one column per panel on every page (their screens are otherwise the authors'). Installed and working on the Live II (2026-10-05). Presets made for both, levels evened out offline (24 and 31; Mutable Vibe gained a VOLUME control for it).
+- New: **[Stevequencer 16](originals/stevequencer16/)** (2026-10-05, offline): 16 steps and eight modulation lanes that can move any parameter of the instrument, on any page (NRPN, which every plugin here now takes as its parameter number: [docs/parameter-numbers.md](docs/parameter-numbers.md)), with slides across steps, LFOs, per-lane rate and length, and lanes that follow each other (modulation groups). Stevequencer's MOD lanes are confirmed working on the Live II (2026-10-05): MPC passes a track's MIDI CCs through to the instrument.
 - Developed on a Live II. Other Gen1 devices run the same MPC software and should behave the same; Gen2 devices (e.g. Live III) are reported to be more locked down. Reports welcome.
 
 What's next is in [ROADMAP.md](ROADMAP.md). Found a problem? Open an issue with the plugin, your MPC model and firmware, and what you did.
@@ -114,14 +116,14 @@ schwung/sequencers/     6 MIDI sequencers from Schwung MIDI FX modules
 schwung/effects/        1 audio effect from a Schwung audio FX module
 mutable-instruments/    6 ported from Mutable Instruments' own firmware source
 vcv-rack/               1 ported from a VCV Rack module
-originals/              1 written for this repo (Stevequencer)
+originals/              2 written for this repo (Stevequencer, Stevequencer 16)
 mpc-ports/              2 written for MPC by other authors (Mutable Vibe, MPC Plaits), built here
   <plugin>/            README.md, screenshots/, deploy/ (ready to install), source, screen design
 presets/               the plugins' presets, kits, wavetables (not in git: tools/fetch-presets.py)
 install.sh, uninstall.sh, tools/   the installer (and tools/build.sh to build from source)
 framework/             our changes to sd88me's mpc-vst-plugins, as a patch, and setup.sh
 dev-tools/             the tools the ports and screens were made with
-docs/                  extra guides (presets and libraries, root SSH on a stock MPC) and images
+docs/                  extra guides (presets and libraries, parameter numbers, root SSH on a stock MPC) and images
 licenses/              licence texts the plugins refer to
 ```
 

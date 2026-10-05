@@ -43,9 +43,15 @@ parameter index, so existing projects keep working.
   engine) and `HAS_TRANSPORT`. Installed; the owner: "seems to be working nicely" (2026-10-05). Presets: Mutable Vibe 24 (with a new VOLUME
   control to level them), MPC Plaits 31, levels evened out offline (`dev-tools/presets/levels.sh`). Still to do: Design
   QA on the Live II (per-model names on Mutable Vibe, synced LFOs restarting on MPC Plaits, how the presets sound).
-- [ ] MIDI CC 20-35 move every plugin's first-page Q-Links (wrapper, 2026-10-04, offline test in every plugin). Check
-  on a device, with no MPC settings touched: a sequencer's CCs on the instrument track's MIDI input move its controls
-  (MPC passes them through), and MPC doesn't keep any of 20-35 for itself.
+- [x] MIDI CC 20-35 move every plugin's first-page Q-Links (wrapper, 2026-10-04). On the Live II (2026-10-05): a
+  sequencer's CCs on the instrument track's MIDI input move its controls; the owner: "the automation lanes are working".
+- [ ] **Stevequencer 16** ([originals/stevequencer16](originals/stevequencer16/), 2026-10-05, offline): 16 steps and eight
+  modulation lanes, each to a CC or to any parameter of the instrument (PARAM = NRPN, which every plugin here now takes
+  as its parameter n, any page: `docs/parameter-numbers.md`); per lane HOLD, RETURN, SLIDE (across empty steps), LFO
+  (six shapes, a cycle of 1-64 steps) or FOLLOW (modulation groups: lanes that follow a leader, each with its own
+  target and range), and its own RATE and LENGTH. A separate plugin, so projects using Stevequencer keep working. All
+  40 plugins rebuilt for NRPN. On the device: that MPC passes NRPN (CC 99/98/6) through, eight sub-pages on MOD and
+  LANES, the load with several sliding lanes; then Design QA.
   Rampage sends a CC almost every block on a fast LFO (~290 a second per output): the wrapper only tells MPC ~40 times a
   second, but a rate limit in Rampage itself would be kinder.
 

@@ -1,0 +1,6 @@
+/* Stevequencer 16's look for the browser-rendered skin artwork (loaded after tools/html_art/default.css).
+ * Most of the screen is its own art (images/, made by mpc/gen.py and mpc/make_png.py); this styles the parts the
+ * renderer draws: the tool buttons' labels. */
+:root { --button-size: 17px; --sheen: 0; }
+.button-tx { fill: #eef1f4; font-weight: 700; letter-spacing: 0.06em; }
+.button.on .button-tx { fill: #1d1404; }

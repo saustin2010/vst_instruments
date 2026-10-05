@@ -61,7 +61,7 @@ Pick plugins by folder name, by group, or `all`:
                                                      #   schwung, mutable-instruments, vcv-rack, originals, mpc-ports, all
 ```
 
-Plugin names: `303`, `aphex`, `braids`, `chordism`, `denis`, `elements`, `eucalypso`, `fizzik`, `grids`, `groovebank`, `hank`, `helm`, `hera`, `hush1`, `libpo32`, `marbles`, `mazelite`, `midiplayer`, `monksynth`, `monovoice`, `moog`, `mpcplaits`, `mrhyde`, `mrdrums`, `mutablevibe`, `noisemaker`, `nusaw`, `obxd`, `pixelwalkers`, `plaits`, `rampage`, `rings`, `ringsfx`, `superarp`, `tablor`, `verglas`, `warps`, `wurl`.
+Plugin names: `303`, `aphex`, `braids`, `chordism`, `denis`, `elements`, `eucalypso`, `fizzik`, `grids`, `groovebank`, `hank`, `helm`, `hera`, `hush1`, `libpo32`, `marbles`, `mazelite`, `midiplayer`, `monksynth`, `monovoice`, `moog`, `mpcplaits`, `mrhyde`, `mrdrums`, `mutablevibe`, `noisemaker`, `nusaw`, `obxd`, `pixelwalkers`, `plaits`, `rampage`, `rings`, `ringsfx`, `stevequencer`, `stevequencer16`, `superarp`, `tablor`, `verglas`, `warps`, `wurl`.
 
 What it does, in order:
 
