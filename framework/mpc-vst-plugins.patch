@@ -116,7 +116,7 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..5de2c81 100644
+index 6e0f9d4..34c685a 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
 @@ -46,7 +46,8 @@ from the Force and may differ on MPC Live/One/X/Key (e.g. `Force Documents` vs `
@@ -129,7 +129,7 @@ index 6e0f9d4..5de2c81 100644
     (direct, unscheduled send).
  
  Resolved (details in the sections below): option params render as image-button radio groups or `popup`s,
-@@ -596,7 +597,344 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +597,361 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -400,8 +400,9 @@ index 6e0f9d4..5de2c81 100644
 +  plugin's port with **Remote** switched on, while MIDI Learn was open, froze MPC (it had to be forced off) with
 +  Rampage sending ~575 CCs a second; learning from a plugin's port is still unexplored. The CC map needs nothing from
 +  MPC beyond the track's MIDI input (the routing a sequencer's notes already use): a sequencer's per-step CCs
-+  (Stevequencer's MOD lanes) or a controller move the instrument directly. Still to check on a device: that MPC passes
-+  CCs from a track's MIDI input through to the plugin, and whether it keeps any of 20-35 for itself.
++  (Stevequencer's MOD lanes) or a controller move the instrument directly. **Verified on the Live II (2026-10-05):**
++  Stevequencer's MOD lanes on CC 20/21 move the instrument's controls through the track's MIDI input (the owner: "the
++  automation lanes are working"); none of 20-35 seen kept by MPC so far.
 +- **A Q-Link column per panel: `-` leaves a slot empty (2026-10-03).** Columns are fixed groups of four slots, so a
 +  page laid out 3-2-4-3 (or a two-knob panel) can still give each panel its own column, with its outline round that
 +  panel only: `qlinks "MAIN" = wave,tune,-,-,cutoff,reso,env,decay,...`. The empty slot does nothing on the knob.
@@ -474,6 +475,22 @@ index 6e0f9d4..5de2c81 100644
 +  (the value text is the engine's), and gen_vst.py refused them in a port's `presets.json` as text readouts. A
 +  string display with a range is a number like any other; only a range-less one (a name readout) is refused now.
 +  MPC Plaits' presets set NOTES, UNISON, GLIDE and the envelope times.
++
++## Any parameter by NRPN; Stevequencer 16 (2026-10-05, offline)
++- **NRPN n sets parameter n**, any page, in every plugin (wrapper `nrpn_locked()`): CC 99 / 98 pick the number (high /
++  low 7 bits), CC 6 sets the value (7 bits, 127 = the top), CC 38 refines it (14 bits). Numbers are VST indexes, so
++  `docs/parameter-numbers.md` (vst_instruments, from `tools/param-numbers.py`) lists them as P = index + 1. Pop-up open
++  flags, step buttons and text readouts aren't settable this way. The data CCs are the wrapper's only while an NRPN is
++  selected: after an RPN (CC 101 / 100) CC 6 / 38 reach the engine as before. The CC map (CC 20-35) and NRPN share
++  one per-parameter "tell MPC" path (`midi_set_locked`, throttled per parameter as before).
++- Why NRPN and not more CCs: every page of every plugin, with no MIDI learn and no per-plugin CC table to remember;
++  the owner picks the parameter per project ("too many synths and too many parameters"). host_test sends NRPN to the
++  last settable parameter (exercising a 14-bit number, e.g. 551 on Stevequencer) and checks an RPN doesn't reach it.
++- Still to check on a device: that MPC passes CC 99 / 98 / 6 from a track's MIDI input (CC 20/21 do).
++- Stevequencer 16 (vst_instruments `originals/stevequencer16`): 16 steps, eight lanes (CC or PARAM = NRPN; HOLD,
++  RETURN, SLIDE, LFO, FOLLOW; per-lane RATE and LENGTH), lane values worked out eight times a step and sent on change.
++  Its copy of Schwung's `midi_fx_api_v1.h` raises MIDI_FX_MAX_OUT_MSGS 16 -> 64 (eight NRPN lanes at a step are 24
++  messages); the adapter only sizes its buffer with it.
 diff --git a/tools/gen_vst.py b/tools/gen_vst.py
 index 7a91d54..2fbf682 100644
 --- a/tools/gen_vst.py
@@ -710,7 +727,7 @@ index 7a91d54..2fbf682 100644
      shutil.rmtree(os.path.join(build, "skin"), ignore_errors=True)   # no stale images from older builds
      art = os.environ.get("SHADOW_ART") or (os.path.join(TOOLS, "html_art.py") if cfg.get("art") == "html"
 diff --git a/tools/host_test.c b/tools/host_test.c
-index 0435619..66d39cf 100644
+index 0435619..b5f860e 100644
 --- a/tools/host_test.c
 +++ b/tools/host_test.c
 @@ -4,6 +4,7 @@
@@ -721,6 +738,15 @@ index 0435619..66d39cf 100644
  #include <string.h>
  #include <math.h>
  #include "params.h"
+@@ -14,7 +15,7 @@ struct AEffect { int32_t magic; intptr_t (*d)(AEffect*,int32_t,int32_t,intptr_t,
+  int32_t np,npar,ni,no,flags; intptr_t r1,r2; int32_t a,b,c; float io; void*obj,*user; int32_t uid,ver;
+  void (*pr)(AEffect*,float**,float**,int32_t); void*pdr; char f[56]; };
+ typedef struct { int32_t type,byteSize,deltaFrames,flags,noteLength,noteOffset; unsigned char m[4]; char x[4]; } ME;
+-typedef struct { int32_t n; intptr_t r; void* ev[2]; } EV;
++typedef struct { int32_t n; intptr_t r; void* ev[4]; } EV;
+ extern AEffect* VSTPluginMain(cb);
+ 
+ static int automated[NPARAMS > 0 ? NPARAMS : 1], fails;
 @@ -26,6 +27,46 @@ static intptr_t host(AEffect*e,int32_t op,int32_t i,intptr_t v,void*p,float o){
  }
  #define CHECK(c, ...) do { printf("%s ", (c) ? "ok  " : "FAIL"); printf(__VA_ARGS__); printf("\n"); if (!(c)) fails++; } while (0)
@@ -838,7 +864,7 @@ index 0435619..66d39cf 100644
  
      {   /* instance b never got a note: the legacy process() must add silence, leaving 1.0 */
          float L1[128], R1[128], *o1[2] = {L1, R1}; int kept = 1;
-@@ -87,11 +164,51 @@ int main(void) {
+@@ -87,11 +164,81 @@ int main(void) {
      void *ch = 0; intptr_t n = a->d(a, 23, 0, 0, &ch, 0);
      if (n > 0) {
          b->d(b, 24, 0, n, ch, 0);
@@ -876,6 +902,36 @@ index 0435619..66d39cf 100644
 +        }
 +    }
 +#endif
++    {   /* NRPN n sets parameter n (any page) as setParameter would: the last parameter a set/get moves, so the 14-bit
++         * number is exercised. (An engine may clamp the top, e.g. a preset number to the presets installed: compare.) */
++        int i = NPARAMS - 1;
++        float v1 = 0, v0 = 0;
++        for (; i >= 0; i--) {
++            if (PARAMS[i].momentary || PARAMS[i].step_target >= 0 || PARAMS[i].popup_of >= 0 || PARAMS[i].string_display) continue;
++            a->setP(a, i, 1.0f); run(a, 1); v1 = a->getP(a, i);
++            a->setP(a, i, 0.0f); run(a, 1); v0 = a->getP(a, i);
++            if (v1 > v0) break;
++        }
++        if (i < 0) printf("warn no parameter moves offline (NRPN not tried)\n");
++        else {
++            int told = automated[i];
++            ME m[4]; EV ev = {4, 0, {&m[0], &m[1], &m[2], &m[3]}};
++            unsigned char cc[4][2] = {{99, (unsigned char)(i >> 7)}, {98, (unsigned char)(i & 127)}, {6, 127}, {38, 127}};
++            for (int k = 0; k < 4; k++) m[k] = (ME){1, sizeof(ME), 0, 0, 0, 0, {0xB0, cc[k][0], cc[k][1], 0}};
++            a->d(a, 25, 0, 0, &ev, 0); run(a, 10);
++            float hi = a->getP(a, i);
++            m[2].m[2] = 0; m[3].m[2] = 0;
++            a->d(a, 25, 0, 0, &ev, 0); run(a, 10);
++            float lo = a->getP(a, i);
++            CHECK(hi > lo && fabsf(hi - v1) < 0.02f && fabsf(lo - v0) < 0.02f && automated[i] >= told + 2,
++                  "NRPN %d moves %s as setParameter does (%.2f at the top, %.2f at 0) and tells the host", i, PARAMS[i].key, hi, lo);
++            ME r[3] = {{1, sizeof(ME), 0, 0, 0, 0, {0xB0, 101, 0, 0}}, {1, sizeof(ME), 0, 0, 0, 0, {0xB0, 100, 0, 0}},
++                       {1, sizeof(ME), 0, 0, 0, 0, {0xB0, 6, 127, 0}}};
++            EV rev = {3, 0, {&r[0], &r[1], &r[2], 0}};
++            a->d(a, 25, 0, 0, &rev, 0); run(a, 2);
++            CHECK(a->getP(a, i) == lo, "after an RPN, data entry goes to the engine, not parameter %d", i);
++        }
++    }
 +    if (a->np > 0) {   /* vst.json "programs": names for every program, and picking one selects it */
 +        char nm[64] = "", cur[64] = "";
 +        int named = 1;
@@ -1441,7 +1497,7 @@ index d3a8942..44739ae 100644
 + * int16 stereo, `frames` = 128) just before calling render for it. Weak, like the transport hook. */
 +void mpc_engine_input(void *inst, const int16_t *in_lr, int frames) __attribute__((weak));
 diff --git a/wrapper/vst2_wrap.c b/wrapper/vst2_wrap.c
-index 720ce46..e726d41 100644
+index 720ce46..02b5ecf 100644
 --- a/wrapper/vst2_wrap.c
 +++ b/wrapper/vst2_wrap.c
 @@ -15,10 +15,61 @@
@@ -1534,7 +1590,7 @@ index 720ce46..e726d41 100644
  enum { effFlagsCanReplacing = 1 << 4, effFlagsProgramChunks = 1 << 5, effFlagsIsSynth = 1 << 8 };
  
  /* ---- per-instance state ------------------------------------------------- */
-@@ -76,53 +132,141 @@ typedef struct {
+@@ -76,53 +132,142 @@ typedef struct {
      audioMasterCallback master;
      void *dsp;
      int16_t block[DSP_BLOCK * 2];
@@ -1551,9 +1607,10 @@ index 720ce46..e726d41 100644
 +    int nprog;
 +    int cur_prog;            /* the wrapper's own presets (OWN_PRESETS): the one picked last */
 +    float live_last[PLUG_LIVE_COUNT > 0 ? PLUG_LIVE_COUNT : 1];   /* "live" params: the value MPC was last told */
-+    float cc_val[PLUG_CC_COUNT > 0 ? PLUG_CC_COUNT : 1];          /* CC-driven Q-Link controls: value to report, */
-+    char cc_dirty[PLUG_CC_COUNT > 0 ? PLUG_CC_COUNT : 1];         /* whether MPC still has to be told, */
-+    int cc_wait[PLUG_CC_COUNT > 0 ? PLUG_CC_COUNT : 1];           /* and frames since it last was */
++    float midi_val[NPARAMS];  /* params a MIDI CC or NRPN moved (midi_set_locked): value to report, */
++    char midi_dirty[NPARAMS]; /* whether MPC still has to be told, */
++    int midi_wait[NPARAMS];   /* and frames since it last was */
++    int nrpn[16], nrpn_hi[16], nrpn_msb[16];   /* per MIDI channel: the NRPN selected (-1: none / an RPN), its parts */
 +#if HAS_TRANSPORT
 +    int tp_playing;          /* the transport state last sent */
 +    double tp_ppq;           /* the song position at the last block, to spot a jump back */
@@ -1656,15 +1713,15 @@ index 720ce46..e726d41 100644
 +        w->shadow[i] = -1;
 +    }
 +    return v;
- }
- 
++}
++
 +static float get_norm(wrap_t *w, int i) {
 +    engine_lock(w);
 +    float v = get_norm_locked(w, i);
 +    engine_unlock(w);
 +    return v;
-+}
-+
+ }
+ 
 +static void set_parameter_locked(wrap_t *w, int32_t i, float n);
 +static void refresh_programs(wrap_t *w);
  static void setParameter(AEffect *e, int32_t i, float n) {
@@ -1684,7 +1741,7 @@ index 720ce46..e726d41 100644
      if (p->step_target >= 0) {
          /* A momentary nudge of ANOTHER param (see gen_vst.py's step_of/step_delta comment). Reads
           * the target's CURRENT value straight from the DSP, not our own cached norm, so it's
-@@ -131,11 +275,19 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+@@ -131,11 +276,19 @@ static void setParameter(AEffect *e, int32_t i, float n) {
          if (n > 0.5f) {
              const param_t *tp = &PARAMS[p->step_target];
              if (g_api->get_param(w->dsp, tp->key, buf, sizeof buf) > 0) {
@@ -1708,7 +1765,7 @@ index 720ce46..e726d41 100644
              }
              w->release[i] = 1;
          }
-@@ -148,31 +300,150 @@ static void setParameter(AEffect *e, int32_t i, float n) {
+@@ -148,31 +301,176 @@ static void setParameter(AEffect *e, int32_t i, float n) {
           * tap and a direct Q-Link turn on the underlying param). Deferred to processReplacing(),
           * same as w->release[] -- the host must not be re-entered from inside its own call to us. */
          w->need_update_display = 1;
@@ -1758,21 +1815,47 @@ index 720ce46..e726d41 100644
 + * CCs or a controller move the instrument's main controls with no MIDI learn in MPC. Audio thread, engine locked
 + * (effProcessEvents). Lighter than setParameter: no program refresh or display update per message, because a CC LFO
 + * can send one every block; run_block() tells MPC the new value, at most every CC_NOTIFY_FRAMES per control. */
-+static int cc_set_locked(wrap_t *w, int cc, int value) {
-+    int k = cc - PLUG_CC_FIRST;
-+    if (k < 0 || k >= PLUG_CC_COUNT || PLUG_CC[k] < 0) return 0;
-+    int i = PLUG_CC[k];
++static void midi_set_locked(wrap_t *w, int i, float n) {
 +    const param_t *p = &PARAMS[i];
-+    float n = value / 127.0f;
-+    if (p->nopts > 1) n = roundf(n * (p->nopts - 1)) / (p->nopts - 1);
++    n = clamp01(n);
++    if (p->nopts > 1) n = roundf(n * (p->nopts - 1)) / (p->nopts - 1);   /* an option list: the nearest option */
 +    char buf[64], cur[64];
 +    norm_to_str(p, n, buf, sizeof buf);
 +    if (g_api->get_param(w->dsp, p->key, cur, sizeof cur) <= 0 || strcmp(cur, buf))
 +        g_api->set_param(w->dsp, p->key, buf);
 +    w->shadow[i] = p->nopts > 1 ? -1 : n;
-+    w->cc_val[k] = n;
-+    w->cc_dirty[k] = 1;
++    w->midi_val[i] = n;
++    w->midi_dirty[i] = 1;
++}
++static int cc_set_locked(wrap_t *w, int cc, int value) {
++    int k = cc - PLUG_CC_FIRST;
++    if (k < 0 || k >= PLUG_CC_COUNT || PLUG_CC[k] < 0) return 0;
++    midi_set_locked(w, PLUG_CC[k], value / 127.0f);
 +    return 1;
++}
++
++/* NRPN n sets parameter n (its VST index: P1 in docs/parameter-numbers.md is NRPN 0), any parameter on any page:
++ * CC 99 / 98 pick the number (high / low 7 bits), CC 6 sets the value (7 bits, 127 = the top) and CC 38 refines it
++ * (14 bits: (CC 6 x 128 + CC 38) / 16383). A sequencer reaches anything with no MIDI learn (Stevequencer 16's lanes).
++ * The wrapper keeps these CCs while an NRPN is selected; after an RPN (CC 101 / 100: pitch-bend range...) CC 6 / 38
++ * go to the engine as before. A pop-up's open flag, a step button or a text readout isn't settable this way. */
++static int nrpn_target(int i) {
++    return i >= 0 && i < NPARAMS && !popup_is(i) && PARAMS[i].step_target < 0 &&
++           !(PARAMS[i].string_display && PARAMS[i].max <= PARAMS[i].min);
++}
++static int nrpn_locked(wrap_t *w, int ch, int cc, int v) {
++    switch (cc) {
++    case 99: w->nrpn_hi[ch] = v; w->nrpn[ch] = -1; return 1;
++    case 98: w->nrpn[ch] = (w->nrpn_hi[ch] < 0 ? 0 : w->nrpn_hi[ch]) * 128 + v; w->nrpn_msb[ch] = -1; return 1;
++    case 101: case 100: w->nrpn[ch] = -1; w->nrpn_hi[ch] = -1; return 0;   /* an RPN: the engine's */
++    case 6: case 38:
++        if (w->nrpn[ch] < 0) return 0;
++        if (cc == 6) w->nrpn_msb[ch] = v;
++        if (nrpn_target(w->nrpn[ch]))
++            midi_set_locked(w, w->nrpn[ch], cc == 6 ? v / 127.0f : ((w->nrpn_msb[ch] < 0 ? 0 : w->nrpn_msb[ch]) * 128 + v) / 16383.0f);
++        return 1;
++    }
++    return 0;
 +}
 +
 +/* VST programs from a preset parameter (vst.json "programs"), so MPC's PRESET menu in the plugin header lists and
@@ -1868,16 +1951,16 @@ index 720ce46..e726d41 100644
  static void update_tempo(wrap_t *w) {
      VstTimeInfo *ti = (VstTimeInfo *)w->master(&w->fx, audioMasterGetTime, 0, kVstTempoValid, 0, 0);
      if (!ti || !(ti->flags & kVstTempoValid) || ti->tempo <= 0) return;
-@@ -180,18 +451,96 @@ static void update_tempo(wrap_t *w) {
+@@ -180,18 +478,96 @@ static void update_tempo(wrap_t *w) {
          char buf[32];
          w->bpm = ti->tempo;
          snprintf(buf, sizeof buf, "%.2f", w->bpm);
 +        engine_lock(w);
          g_api->set_param(w->dsp, "lfo_bpm", buf);
 +        engine_unlock(w);
-     }
- }
- 
++    }
++}
++
 +#if HAS_TRANSPORT
 +/* vst.json "defines": {"HAS_TRANSPORT": 1}, as in poloq's fork of this framework (MPC Plaits): the engine hears
 + * "transport" = "1" when the host starts playing or jumps back while playing (a loop, a locate), "0" when it stops,
@@ -1891,7 +1974,7 @@ index 720ce46..e726d41 100644
 +        engine_lock(w);
 +        g_api->set_param(w->dsp, "transport", playing ? "1" : "0");
 +        engine_unlock(w);
-+    }
+     }
 +    w->tp_playing = playing;
 +    if (ppq_ok) w->tp_ppq = ti->ppqPos;
 +}
@@ -1940,8 +2023,8 @@ index 720ce46..e726d41 100644
 +#else
 +    (void)w; (void)out; (void)n;
 +#endif
-+}
-+
+ }
+ 
  /* accumulate=1 is VST2's legacy process(), which must ADD to the output buffers; hosts here call
   * processReplacing, but a NULL e->process would crash any host that tried the old call. */
 -static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
@@ -1966,7 +2049,7 @@ index 720ce46..e726d41 100644
          float l = w->block[w->pos * 2] * (1.0f / 32768.0f), r = w->block[w->pos * 2 + 1] * (1.0f / 32768.0f);
          if (accumulate) { out[0][i] += l; out[1][i] += r; }
          else { out[0][i] = l; out[1][i] = r; }
-@@ -199,9 +548,20 @@ static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
+@@ -199,9 +575,20 @@ static void render_frames(wrap_t *w, float **out, int32_t n, int accumulate) {
      }
  }
  
@@ -1988,7 +2071,7 @@ index 720ce46..e726d41 100644
      /* A trigger param (e.g. Generate) fired: tell the host it is back to 0 so
       * buttons bound to it drop their highlight. Done here, not inside
       * setParameter, so the host is not re-entered from its own call. */
-@@ -211,11 +571,29 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
+@@ -211,11 +598,29 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
          w->need_update_display = 0;
          w->master(&w->fx, audioMasterUpdateDisplay, 0, 0, 0, 0.0f);
      }
@@ -2002,14 +2085,14 @@ index 720ce46..e726d41 100644
 +        float v = get_norm(w, PLUG_LIVE[k]);
 +        if (v != w->live_last[k]) { w->live_last[k] = v; w->master(&w->fx, audioMasterAutomate, PLUG_LIVE[k], 0, 0, v); }
 +    }
-+    /* Q-Link controls a MIDI CC moved (cc_set_locked): tell MPC so the screen follows, throttled per control. Same
-+     * thread as effProcessEvents, which sets these, so no lock. */
-+    for (int k = 0; k < PLUG_CC_COUNT; k++) {
-+        if (w->cc_wait[k] < CC_NOTIFY_FRAMES) w->cc_wait[k] += n;
-+        if (w->cc_dirty[k] && w->cc_wait[k] >= CC_NOTIFY_FRAMES) {
-+            w->cc_dirty[k] = 0;
-+            w->cc_wait[k] = 0;
-+            w->master(&w->fx, audioMasterAutomate, PLUG_CC[k], 0, 0, w->cc_val[k]);
++    /* Parameters a MIDI CC or NRPN moved (midi_set_locked): tell MPC so the screen follows, throttled per control.
++     * Same thread as effProcessEvents, which sets these, so no lock. */
++    for (int i = 0; i < NPARAMS; i++) {
++        if (w->midi_wait[i] < CC_NOTIFY_FRAMES) w->midi_wait[i] += n;
++        if (w->midi_dirty[i] && w->midi_wait[i] >= CC_NOTIFY_FRAMES) {
++            w->midi_dirty[i] = 0;
++            w->midi_wait[i] = 0;
++            w->master(&w->fx, audioMasterAutomate, i, 0, 0, w->midi_val[i]);
 +        }
 +    }
  }
@@ -2021,7 +2104,7 @@ index 720ce46..e726d41 100644
  
  static void copy_str(void *dst, const char *src, size_t max) {
      strncpy(dst, src, max - 1);
-@@ -227,11 +605,37 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -227,11 +632,37 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      (void)o;
      switch (op) {
      case effOpen: return 1;
@@ -2060,7 +2143,7 @@ index 720ce46..e726d41 100644
      case effGetEffectName:
      case effGetProductString: copy_str(p, PLUG_NAME, 32); return 1;
      case effGetVendorString: copy_str(p, PLUG_VENDOR, 32); return 1;
-@@ -239,7 +643,19 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -239,7 +670,19 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      case effGetVstVersion: return 2400;
      case effCanBeAutomated: return idx >= 0 && idx < NPARAMS;
      case effGetParamName:
@@ -2081,7 +2164,7 @@ index 720ce46..e726d41 100644
          return 1;
      case effGetParamLabel:
          if (idx >= 0 && idx < NPARAMS) copy_str(p, PARAMS[idx].unit, 8);
-@@ -247,31 +663,44 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -247,31 +690,45 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      case effGetParamDisplay: {
          char buf[64];
          if (idx < 0 || idx >= NPARAMS) return 0;
@@ -2112,7 +2195,8 @@ index 720ce46..e726d41 100644
              if (ev->events[i]->type == 1) {
                  VstMidiEvent *m = (VstMidiEvent *)ev->events[i];
 +                const uint8_t *d = (const uint8_t *)m->midiData;
-+                if ((d[0] & 0xF0) == 0xB0 && cc_set_locked(w, d[1], d[2])) continue;   /* a Q-Link CC: not the engine's */
++                if ((d[0] & 0xF0) == 0xB0 && (cc_set_locked(w, d[1], d[2]) || nrpn_locked(w, d[0] & 0x0F, d[1], d[2])))
++                    continue;   /* a Q-Link CC or an NRPN: the wrapper's, not the engine's */
                  g_api->midi(w->dsp, m->midiData, 3);
              }
 +        engine_unlock(w);
@@ -2128,7 +2212,7 @@ index 720ce46..e726d41 100644
          if (len <= 0) return 0;
          *(void **)p = w->chunk;
          return (intptr_t)strlen(w->chunk) + 1;
-@@ -280,7 +709,10 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -280,7 +737,10 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
          if (v <= 0 || (size_t)v > sizeof w->chunk) return 0;
          memcpy(w->chunk, p, v);
          w->chunk[v - 1] = 0;
@@ -2139,11 +2223,12 @@ index 720ce46..e726d41 100644
          return 1;
      }
      default: return 0;
-@@ -292,10 +724,20 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+@@ -292,10 +752,21 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
      if (!g_api) return NULL;
      wrap_t *w = calloc(1, sizeof *w);
      if (!w) return NULL;
 +    for (int i = 0; i < NPARAMS; i++) w->shadow[i] = -1;
++    for (int c = 0; c < 16; c++) w->nrpn[c] = w->nrpn_hi[c] = w->nrpn_msb[c] = -1;
 +    pthread_mutexattr_t ma;
 +    pthread_mutexattr_init(&ma);
 +    pthread_mutexattr_settype(&ma, PTHREAD_MUTEX_RECURSIVE);
@@ -2161,7 +2246,7 @@ index 720ce46..e726d41 100644
      AEffect *e = &w->fx;
      e->magic = 0x56737450; /* 'VstP' */
      e->dispatcher = dispatcher;
-@@ -304,9 +746,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+@@ -304,9 +775,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
      e->getParameter = getParameter;
      e->processReplacing = processReplacing;
      e->numParams = NPARAMS;
