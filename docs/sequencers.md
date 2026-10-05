@@ -46,9 +46,13 @@ A sequencer that sends drum notes should play a drum track.
 A sequencer can also send control changes (CC) along with its notes: Stevequencer's MOD lanes send a value per step,
 Rampage sends its envelopes and LFOs. This repo's instruments take **CC 20-35** as their first page's Q-Links, in Q-Link
 order (CC 20-23 = column 1, top to bottom, 24-27 = column 2, 28-31 = column 3, 32-35 = column 4), so CC 20 moves the
-first knob. It needs nothing more than the routing above: the CCs arrive on the same MIDI input as the notes. Akai's
-own instruments don't follow these CCs. (Not yet checked on a device: that MPC passes CCs from a track's MIDI input
-through to the plugin.)
+first knob. It needs nothing more than the routing above: the CCs arrive on the same MIDI input as the notes (working
+on the Live II, 2026-10-05). Akai's own instruments don't follow these CCs.
+
+To reach **any parameter on any page**, not only the first page's Q-Links, every instrument here also takes **NRPN n**
+as its parameter n+1: [Stevequencer 16](../originals/stevequencer16/)'s lanes set to DEST **PARAM** use it, with the
+parameter's P number from [parameter-numbers.md](parameter-numbers.md). (Not yet checked on a device: that MPC passes
+NRPN through as it does CCs.)
 
 ## When nothing plays
 
