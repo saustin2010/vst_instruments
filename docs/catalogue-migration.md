@@ -318,7 +318,10 @@ it builds on the release tools.
 Still open:
 
 1. The pilot's device test: installing each draft's zip on the Live II stops and restarts MPC.
-2. Publishing the 26 ready ones: going ahead (2026-10-08, the pilot is in the catalogue); 10 repos are up, 16 to go.
+2. Publishing the 26 ready ones: going ahead (2026-10-08, the pilot is in the catalogue); 20 repos are up, 8 to go
+   (midiplayer pixelwalkers rampage superarp eucalypso verglas hank tablor). GitHub stops repo creation after 10 in a
+   window, however far apart (hit twice, 2026-10-08/09): run the rest as one batch later. Catalogue entries for all 20 are
+   in `dev-tools/catalogue/entries/` (sd88me's `--check-registry`: 0 problems); the PR waits for their v1.0.0 releases.
 3. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
 4. Offering the 14 framework commits to sd88me as PRs.
 5. The project board: `gh auth refresh -s project` lets Claude create it.
