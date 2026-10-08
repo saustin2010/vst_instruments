@@ -24,20 +24,6 @@
      }
  
      /* Called on the WORKER with each table as it finishes, before the engine
---- a/src/dsp/wt/scanner.h
-+++ b/src/dsp/wt/scanner.h
-@@ -28,7 +28,11 @@
- 
- class WtScanner {
- public:
-+#ifdef MPC_PORT   /* MPC port: user wavetables live next to the plugin, not in the Move's user library */
-+    static constexpr const char *kUserDir = "/sdcard/vst/tablor/wavetables";   /* the shipped packs; add yours in a subfolder */
-+#else
-     static constexpr const char *kUserDir = "/data/UserData/UserLibrary/Wavetables";
-+#endif
- 
-     /* One-time: copy the module's factory packs into the USER folder, so the
-      * user sees and manages everything in one place (Move Manager /
 --- a/src/dsp/tablor_plugin.cpp
 +++ b/src/dsp/tablor_plugin.cpp
 @@ -492,6 +492,14 @@
@@ -129,7 +115,7 @@
      if (!strcmp(key, "wt1_select") || !strcmp(key, "wt2_select")) {
          auto snap = inst->selection();
          char tmp[16];
-@@ -1050,9 +1104,15 @@
+@@ -1050,10 +1104,16 @@
       * walk, a ~20 MB first-run copy and an FFT — none of which may happen
       * here. Start the worker and let it do all of it; the engine renders
       * silence until the Init table is published. */
@@ -141,10 +127,12 @@
      inst->loader.post([inst] {
 +#ifndef MPC_PORT   /* MPC port: no first-run copy of the factory packs into a user folder */
          tb::WtScanner::seedUserFolder(inst->module_dir);   /* first-run copy */
+-        inst->scanner.scan();                              /* opendir walk   */
 +#endif
-         inst->scanner.scan();                              /* opendir walk   */
++        inst->scanner.scan(inst->module_dir);              /* opendir walk   */
          /* Derive the pack list and the published option lists ONCE, off the
           * single scan — so get_param never has to. */
+         tb_publish_selection(inst);
 @@ -1099,6 +1159,9 @@
  
  static void tb_destroy_instance(void *instance)
@@ -155,3 +143,26 @@
      delete (tablor_instance *) instance;
  }
  
+--- a/src/dsp/wt/scanner.h
++++ b/src/dsp/wt/scanner.h
+@@ -48,13 +48,19 @@
+         if (f) { ::fputs("v1\n", f); ::fclose(f); }
+     }
+ 
+-    void scan()
++    void scan(const std::string &moduleDir = std::string())
+     {
+         entries.clear();
+         entries.push_back({ "Init", "", 0 });
+ 
++#ifdef MPC_PORT   /* MPC port: the wavetables live next to the plugin, in <module>/wavetables (the shipped packs; add
++                     yours in a subfolder), not in the Move's user library */
++        scanDir(moduleDir + "/wavetables", "", 0);
++#else
++        (void) moduleDir;
+         ::mkdir(kUserDir, 0755);
+         scanDir(kUserDir, "", 0);
++#endif
+ 
+         /* keep Init first, sort the rest by name */
+         std::sort(entries.begin() + 1, entries.end(),

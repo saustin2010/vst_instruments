@@ -76,9 +76,9 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 
 ## Changes for the MPC
 
-- `src/dsp/wt/scanner.h`: the user wavetable folder is `/sdcard/vst/tablor/wavetables` (where the shipped packs go), and the first-run copy into a user folder is skipped (`-DMPC_PORT`).
+- `src/dsp/wt/scanner.h`: the wavetables are read from the plugin's data folder, `<data folder>/wavetables` (`/sdcard/vst/tablor/wavetables` with this repo's installer, the folder beside the plugin in a release), where the shipped packs go and you add your own; the first-run copy into a user folder is skipped (`-DMPC_PORT`).
 - `src/dsp/tablor_plugin.cpp`: `wt1_name`/`wt2_name` readouts (the table's file name) for the screen.
-- `src/dsp/tablor_plugin.cpp` (2026-10-04): the factory presets on the MPC: `preset` / `preset_name` / `preset_count` / `preset_name_at:<n>` (appended params, and MPC's PRESET menu); choosing one resets to the defaults and applies its `TBLR2;` blob, as Move's preset browser does. The presets' Move wavetable paths (`/data/UserData/UserLibrary/Wavetables/`) map to `/sdcard/vst/tablor/wavetables/`; they're read when the plugin is created (MPC reads the menu's size then); the state remembers the chosen preset, so a reopened project keeps its edits.
+- `src/dsp/tablor_plugin.cpp` (2026-10-04): the factory presets on the MPC: `preset` / `preset_name` / `preset_count` / `preset_name_at:<n>` (appended params, and MPC's PRESET menu); choosing one resets to the defaults and applies its `TBLR2;` blob, as Move's preset browser does. The presets' Move wavetable paths (`/data/UserData/UserLibrary/Wavetables/`) map to `<data folder>/wavetables/`; they're read when the plugin is created (MPC reads the menu's size then); the state remembers the chosen preset, so a reopened project keeps its edits.
 - `src/dsp/wt/loader.h` + `tb_destroy_instance`: the loader thread is joined before the instance is deleted. Upstream deletes members the loader may still be publishing into (ASan heap-use-after-free on a quick insert/remove, found by the offline test 2026-10-01).
 - Diff: `upstream-changes.diff`.
 - `params.base.json` comes from the module's `chain_params` (what the engine actually takes, saved as `chain_params.engine.json`), not its menu tree.
