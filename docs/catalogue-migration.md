@@ -258,23 +258,24 @@ The pilots (303, Hera) are the worked examples: copy from their folders.
 ## Phase 3: the rest
 
 Status 2026-10-08. "Ready" means the folder has its repo files (`dev-tools/catalogue/prepare.py`) and
-`dev-tools/catalogue/check.sh` says PASSED and "screen: same" on the release tools (`f210a56`). None of them is
-published yet: they wait for the pilot's review, then `tools/publish.sh <plugin> --create` each.
+`dev-tools/catalogue/check.sh` says PASSED and "screen: same" on the release tools (`f210a56`). They waited
+for the pilot to be in the catalogue (2026-10-08); each goes up with `tools/publish.sh <plugin> --create`. GitHub stops an account creating repos after about ten in quick succession ("You have created too many
+repositories, too quickly"): space them a couple of minutes apart.
 
 | Plugin | Repo | Catalogue id | Licence | Ships | Status |
 |---|---|---|---|---|---|
-| 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **released** v1.0.0, catalogue PR #231 |
-| Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **released** v1.0.0, catalogue PR #230 |
-| Aphex | mpc-vst-aphex | `aphex` | MIT | | ready; envelope displays 28 frames (above) |
-| Braids | mpc-vst-braids | `braids` | MIT | 10 presets | ready |
-| Chordism | mpc-vst-chordism | `chordism` | MIT | | ready |
-| Denis | mpc-vst-denis | `denis` | MIT | | ready |
-| Elements | mpc-vst-elements | `elements` | MIT | | ready |
-| Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | ready |
-| MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | ready |
-| Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | ready (near neighbour: your call) |
-| Moog | mpc-vst-moog | `raffosynth` | MIT | | ready |
-| Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | ready |
+| 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **in the catalogue**: v1.0.0, PR #231 merged 2026-10-08 |
+| Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **in the catalogue**: v1.0.0, PR #230 merged 2026-10-08 |
+| Aphex | mpc-vst-aphex | `aphex` | MIT | | **repo published** 2026-10-08, no release yet; envelope displays 28 frames (above) |
+| Braids | mpc-vst-braids | `braids` | MIT | 10 presets | **repo published** 2026-10-08, no release yet |
+| Chordism | mpc-vst-chordism | `chordism` | MIT | | **repo published** 2026-10-08, no release yet |
+| Denis | mpc-vst-denis | `denis` | MIT | | **repo published** 2026-10-08, no release yet |
+| Elements | mpc-vst-elements | `elements` | MIT | | **repo published** 2026-10-08, no release yet |
+| Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | **repo published** 2026-10-08, no release yet |
+| MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | **repo published** 2026-10-08, no release yet |
+| Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | **repo published** 2026-10-08, no release yet (near neighbour: your call) |
+| Moog | mpc-vst-moog | `raffosynth` | MIT | | **repo published** 2026-10-08, no release yet |
+| Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | **repo published** 2026-10-08, no release yet |
 | Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | ready |
 | Noisemaker | mpc-vst-noisemaker | `noisemaker` | GPL-2.0-only | keeps your banks | ready |
 | NuSaw | mpc-vst-nusaw | `nusaw` | MIT | | ready |
@@ -317,7 +318,7 @@ it builds on the release tools.
 Still open:
 
 1. The pilot's device test: installing each draft's zip on the Live II stops and restarts MPC.
-2. Publishing the 26 ready ones: after the pilot's review, or now.
+2. Publishing the 26 ready ones: going ahead (2026-10-08, the pilot is in the catalogue); 10 repos are up, 16 to go.
 3. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
 4. Offering the 14 framework commits to sd88me as PRs.
 5. The project board: `gh auth refresh -s project` lets Claude create it.
