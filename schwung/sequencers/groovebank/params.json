@@ -12,7 +12,7 @@
    "type": "stepper"
   },
   {
-   "key": "variant",
+   "key": "variant", "clamped": true,
    "name": "VARIANT",
    "min": 0,
    "max": 5,
