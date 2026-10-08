@@ -163,7 +163,7 @@ is meant to go to sd88me as a PR. `tools/build.sh` keeps using the old base and 
       per-event stepping flipped two-option switches when other Q-Links were turned. `"defines": {"QLINK_TRAVEL": 1,
       "SET_IF_CHANGED": 1}` (on in all 30) brings back this repo's behaviour: ticks add up like a detented knob, and a set
       to the value the engine holds is skipped. Release tools now `f210a56` (the pilots' drafts: `10d8f5f`, same wrapper).
-- [ ] Offer the 16 commits to sd88me as PRs (ask the owner first), and move the pins to his repo as they're merged.
+- [ ] Offer the 14 commits to sd88me as PRs (each plugin's `FRAMEWORK.md` and `framework/README.md` explain them) (ask the owner first), and move the pins to his repo as they're merged.
 - [ ] Not ported yet: `"category"` in the plugin list (13 plugins: his entries are Synth or Effect, so our sequencers
       and drum machines are Synth in a release's entry; harmless, since MPC ignores the category and the kind tags do
       the sorting), `"live"` parameters (the two Stevequencers, held anyway), and the
@@ -319,7 +319,7 @@ Still open:
 1. The pilot's device test: installing each draft's zip on the Live II stops and restarts MPC.
 2. Publishing the 26 ready ones: after the pilot's review, or now.
 3. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
-4. Offering the 12 framework commits to sd88me as PRs.
+4. Offering the 14 framework commits to sd88me as PRs.
 5. The project board: `gh auth refresh -s project` lets Claude create it.
 6. Licences: asking Charles Vestal for a LICENSE file in schwung-hank, the Neu KatalYst author about the Tablor
    wavetables, the Hush One and Libpo32 authors; and yours for the Stevequencers.

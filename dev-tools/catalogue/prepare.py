@@ -10,6 +10,8 @@ For each plugin:
   data is found next to the .so;
 - README sections for a reader of the plugin repo: the files on the MPC, Install, Building and Development, the new
   files in the table, and absolute links into this repo.
+- FRAMEWORK.md: which of the fork's changes to sd88me's tools the plugin uses, what each does there, what happens without
+  it, and what to change once sd88me has them (--framework-doc [<plugin> ... | --all]: only that).
 Run it again after changing PLUGINS or the pin: it rewrites the same things. Then dev-tools/catalogue/check.sh <plugin>."""
 import json
 import os
@@ -259,6 +261,149 @@ releases. Issues and pull requests are welcome in either.""" % dict(fork=FORK, l
     return write(p, s)
 
 
+# The changes on saustin2010/mpc-vst-plugins steve-features (sd88me's main + these), for each plugin's FRAMEWORK.md:
+# commit, short title, what it does for a plugin that uses it, what happens without it.
+FORK_CHANGES = [
+    ("b1c39bc", "module_params", "A hand-made `params.json` beside the Schwung `module`",
+     "`vst.json` names both the Schwung module and this folder's `params.json` (readable names, ranges and options the "
+     "module doesn't declare). The params file sets the parameter list and the Schwung adapter is still linked.",
+     "The build fails: sd88me's tools take `params.json` alone and don't link the adapter (undefined `mpc_engine`)."),
+    ("81f473b", "focus_ring", "`focus_ring=1` in `layout.conf`",
+     "The control you touch gets a light tint and an accent outline, as on the screen checked on the device.",
+     "No highlight on the touched control (sd88me's default since 26 September 2026)."),
+    ("01da4b3", "qlink_box", "`qlink_box=slot` in `layout.conf`",
+     "The outline MPC draws round the active Q-Link column frames each control's whole slot (a knob's 130 px box down "
+     "to its value), leaves trigger buttons out and honours `qbox=no`: the boxes checked on a Live II.",
+     "Tighter outlines round the knob rings, which can cut through names and values."),
+    ("81a2edd", "when_bands", "`when=<param>:<i>/<N>` in `layout.conf`",
+     "A picture shown only while a continuous parameter is in band i of N (an envelope drawing per sustain level).",
+     "The build stops (\"is not an option parameter\")."),
+    ("8a6ed80", "values_send", "Option `values` / `send` in `params.json`",
+     "An option sends the engine its own value or word instead of its index, because this engine parses those.",
+     "The options send their index and select the wrong setting."),
+    ("2da5066", "transport", "`mpc_engine_transport()`",
+     "The engine gets MPC's tempo, song position and play state every buffer, so it runs in time with the transport.",
+     "It builds and passes the offline test, but on the MPC it never plays in time."),
+    ("ea27eda", "programs", "`\"programs\"` `count` / `name_at` / `name` in `vst.json`",
+     "MPC's PRESET menu lists exactly the engine's presets (its own count), named without loading each one "
+     "(`name_at`), or by reading them once at creation (`name`).",
+     "The PRESET menu lists empty slots up to the parameter's range, or numbered names."),
+    ("55e60a0", "clamped", "`\"clamped\": true` in `params.json`",
+     "Marks a parameter the engine holds to what it has loaded (a file, pattern or track number); the host test "
+     "doesn't expect it to read back as set.",
+     "The plugin is the same; the host test fails (and so the release build)."),
+    ("10d8f5f", "travel", "`QLINK_TRAVEL` and `SET_IF_CHANGED` in `vst.json` `defines`",
+     "Q-Link and data-wheel ticks add up like a detented knob, and a switch moves after half an option's width of "
+     "turn; a set to the value the engine already holds is skipped. This is how the plugin was checked on the device.",
+     "Every tick steps an option: on a Live II, turning one Q-Link flipped other switches (8 October 2026)."),
+]
+# changes every plugin here relies on: release, install and test tooling
+FORK_TOOLING = [
+    ("9595071", "The release's `install.sh` matches the plugin's path as text",
+     "The plugin's name has a kind tag in brackets (`[SYN]`, `[SEQ]` ...), which sd88me's installer read as a pattern: "
+     "it refused to install, leaving `MPC.settings` unchanged."),
+    ("6c87b6d", "`tools_repo` in the release workflow",
+     "Lets `.github/workflows/release.yml` build with the fork's tools instead of sd88me's."),
+    ("50f459d", "The host test runs in Docker on macOS",
+     "Apple's AddressSanitizer hangs on macOS 26 before the test starts."),
+    ("6303f4e", "Host test: long whole-number ranges",
+     "A data-wheel click moves 1/100 of a long range (0-5000 ms), as it should; the test expected one step."),
+    ("f210a56", "Host test with `QLINK_TRAVEL`",
+     "Skips the travel check on a placeholder parameter, and allows half a step when a saved state is restored."),
+]
+
+
+def fork_uses(D, cfg, params, layout):
+    """Which FORK_CHANGES this plugin relies on, from its own files."""
+    used = set()
+    if cfg.get("module") and cfg.get("params"):
+        used.add("module_params")
+    if re.search(r"^focus_ring=1", layout, re.M):
+        used.add("focus_ring")
+    if re.search(r"^qlink_box=slot", layout, re.M):
+        used.add("qlink_box")
+    if re.search(r"when=[\w.]+:\d+/\d+", layout):
+        used.add("when_bands")
+    if any(q.get("values") or q.get("send") for q in params):
+        used.add("values_send")
+    if any(q.get("clamped") for q in params):
+        used.add("clamped")
+    pr = cfg.get("programs") or {}
+    if pr.get("count") or pr.get("name_at") or pr.get("name"):
+        used.add("programs")
+    d = cfg.get("defines", {})
+    if d.get("QLINK_TRAVEL") or d.get("SET_IF_CHANGED"):
+        used.add("travel")
+    for sub in ("src", "mpc"):
+        for root, _, files in os.walk(os.path.join(D, sub)):
+            for f in files:
+                if f.endswith((".c", ".cc", ".cpp")) and "mpc_engine_transport(" in open(
+                        os.path.join(root, f), errors="replace").read():
+                    used.add("transport")
+    return used
+
+
+def framework_doc(name):
+    """Write <plugin>/FRAMEWORK.md: the fork changes this plugin uses, why, and what to do when sd88me has them."""
+    rel = folder_of(name)
+    D = os.path.join(REPO, rel)
+    cfg = json.load(open(os.path.join(D, "vst.json")))
+    pfile = cfg.get("params") or cfg.get("module")
+    params = json.load(open(os.path.join(D, pfile)))
+    params = params if isinstance(params, list) else params.get("params") or []
+    layout = open(os.path.join(D, cfg["layout"])).read() if cfg.get("layout") else ""
+    wf = os.path.join(D, ".github", "workflows", "release.yml")
+    pin = re.search(r"tools_ref:\s*([0-9a-f]{40})", open(wf).read()).group(1)
+    up = os.path.join(REPO, "framework", "upstream")
+    def has(c):   # the commit is in what this plugin builds with (the pilots pin an earlier one)
+        return subprocess.run(["git", "-C", up, "merge-base", "--is-ancestor", c, pin], capture_output=True).returncode == 0
+    used = fork_uses(D, cfg, params, layout)
+    rows = [(c, t, what, without) for c, key, t, what, without in FORK_CHANGES if key in used and has(c)]
+    tooling = [(c, t, why) for c, t, why in FORK_TOOLING if has(c)]
+    link = lambda c: "[`%s`](%s/commit/%s)" % (c, FORK, c)
+    out = ["# The framework changes this plugin uses", "",
+           "This plugin is built with [saustin2010/mpc-vst-plugins](%s/tree/%s) at `%s` (the commit in "
+           "`.github/workflows/release.yml`): sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) with "
+           "changes added on top, each meant to be offered to him. This page lists the ones this plugin relies on, what "
+           "each does here and what happens without it. The full list, for every plugin: "
+           "[framework/README.md](%s/blob/main/framework/README.md) in vst_instruments." % (FORK, pin, pin[:7], VI), ""]
+    if rows:
+        out += ["## What this plugin needs", "", "| Change | What it does here | Without it |", "|---|---|---|"]
+        out += ["| %s %s | %s | %s |" % (t, link(c), what, without) for c, t, what, without in rows]
+        out.append("")
+    lines = [l for l in ("qlink_bounds=column", "qlink_box=slot", "label_scale=1", "focus_ring=1")
+             if re.search("^" + re.escape(l), layout, re.M)]
+    if lines:
+        out += ["## The layout lines at the top of `layout.conf`", "",
+                "They make the tools draw the screen as it was checked on the device:", ""]
+        notes = {"qlink_bounds=column": "one Q-Link outline per column (sd88me's own option)",
+                 "qlink_box=slot": "those outlines measured by whole slots (a fork change, above)",
+                 "label_scale=1": "names and values at their designed size (sd88me's option; his default is 1.15)",
+                 "focus_ring=1": "the touched control highlighted (a fork change, above)"}
+        out += ["- `%s`: %s" % (l, notes[l]) for l in lines] + [""]
+    out += ["## Every plugin here also relies on", "", "| Change | Why |", "|---|---|"]
+    out += ["| %s %s | %s |" % (t, link(c), why) for c, t, why in tooling] + [""]
+    out += ["## When sd88me's mpc-vst-plugins has them", "",
+            "1. In `.github/workflows/release.yml`, point `uses:` at `sd88me/mpc-vst-plugins/.github/workflows/vst-release.yml@<his "
+            "commit>`, set `tools_ref` to the same commit and delete the `tools_repo` line.",
+            "2. Nothing else changes: the layout lines, `defines`, `params.json` and `vst.json` stay as they are.",
+            "3. If he leaves one out or names it differently, keep building from the fork until that's settled; the table "
+            "above says what changes for this plugin without it.", ""]
+    write(os.path.join(D, "FRAMEWORK.md"), "\n".join(out))
+    r = os.path.join(D, "README.md")
+    t = open(r).read()
+    row = "| `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |"
+    if row not in t:
+        anchor = "| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |"
+        if anchor in t:
+            t = t.replace(anchor, anchor + "\n" + row)
+    t = t.replace("plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`):",
+                  "plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`, "
+                  "and [FRAMEWORK.md](FRAMEWORK.md) says which changes this plugin uses and why):")
+    write(r, t)
+    return len(rows)
+
+
 def prepare(name):
     if name not in PLUGINS:
         raise SystemExit("%s: not in PLUGINS (dev-tools/catalogue/prepare.py)" % name)
@@ -322,11 +467,17 @@ print("made", os.path.join(dest, %r))
         changed.append("release.yml")
     if readme(rel, D, cfg, sub, made, bool(lic), user_data):
         changed.append("README.md")
+    framework_doc(name)
     print("%-14s %-14s %-16s %s" % (name, pid, spdx, ", ".join(changed) or "unchanged"))
     return src
 
 
 def main():
+    if "--framework-doc" in sys.argv:   # only FRAMEWORK.md (and its README pointers), e.g. for the released pilots
+        names = sorted(PLUGINS) if "--all" in sys.argv else [a for a in sys.argv[1:] if not a.startswith("-")]
+        for n in names:
+            print("%-14s FRAMEWORK.md: %d changes it needs" % (n, framework_doc(n)))
+        return
     names = (sorted(set(PLUGINS) - PILOTS) if "--ready" in sys.argv
              else [a for a in sys.argv[1:] if not a.startswith("-")])
     if not names:

@@ -97,6 +97,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
 | `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
 | `LICENSE` | the licence |
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
@@ -114,7 +115,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 
 With Docker (32-bit ARM emulation for the build), Python 3 and the tools from
 [saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins)
-plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`):
+plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`, and [FRAMEWORK.md](FRAMEWORK.md) says which changes this plugin uses and why):
 
 ```
 git clone -b steve-features https://github.com/saustin2010/mpc-vst-plugins
