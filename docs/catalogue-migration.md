@@ -61,7 +61,7 @@ page, [docs/CATALOG_SPEC.md](https://github.com/sd88me/mpc-vst-plugins/blob/main
 |---|---|---|
 | **Already in the catalogue** (6) | MPC Plaits (poloq's), Mutable Vibe (nachtaktiv303's), Helm (Lewinator56's), Maze Lite (sd88me's own Maze Sequencer), Plaits (poloq's MPC Plaits has all 24 models, polyphonic), Marbles (FullPace's Glass Spheres) | Don't release. Offer the screens as skins (below) |
 | **Near neighbours** (4) | Eucalypso (Euclidier is also Euclidean, but from a different source), Mono Voice (Monomodule is the real Monomachine engine but build-yourself only), Rings and Rings FX (Mutable Vibe includes six Rings resonator models) | Different plugins, so release them unless you'd rather not |
-| **Waiting on a licence** (4) | Hush One, Libpo32 (no licence upstream: ask the authors to add one), Stevequencer, Stevequencer 16 (yours: pick one, for example MIT or GPL-3.0) | Hold |
+| **Waiting on a licence** (4) | Hush One, Libpo32 (no licence upstream, and the authors can't be asked: not published), Stevequencer, Stevequencer 16 (MIT, chosen 2026-10-08) | Hush One and Libpo32 stay here only; the Stevequencers wait for their device checks |
 | **New to the catalogue** (26) | Instruments: 303, Aphex, Braids, Chordism, Denis, Elements, Fizzik, Hank, Hera, MonkSynth, Moog, Mr Drums, Mr Hyde, Noisemaker, NuSaw, OB-Xd, Tablor, Wurl. Sequencers: Grids, Groove Bank, MIDI Player, Pixel Walkers, Rampage, Super Arp. Effects: Verglas, Warps | Release |
 
 No catalogue entry shares a uid, `.so` name or skin folder name with the 30 candidates (checked 2026-10-08 against
@@ -292,10 +292,10 @@ repositories, too quickly"): space them a couple of minutes apart.
 | Super Arp | mpc-vst-superarp | `super-arp` | MIT | | ready |
 | Eucalypso | mpc-vst-eucalypso | `eucalypso` | MIT | | ready (near neighbour: your call) |
 | Verglas | mpc-vst-verglas | `verglas` | MIT | | ready |
-| Hank | | | MIT (declared) | | **held**: charlesvestal/schwung-hank has no LICENSE file to ship |
-| Tablor | | | BSD-3-Clause | 115 wavetables, 9 presets | **held**: the Neu KatalYst wavetables are "free to use"; shipping them needs their author's OK (or ship Adventure Kid only) |
-| Hush One, Libpo32 | | | none upstream | | **held**: ask the authors for a licence |
-| Stevequencer, Stevequencer 16 | | | yours to pick | | **held**: device checks, a licence, and `"live"` parameters on the release tools |
+| Hank | mpc-vst-hank | `hank` | MIT | | ready: upstream declares MIT in its README and module.json but has no file, so `LICENSE` is the MIT text naming the author (2026-10-08) |
+| Tablor | mpc-vst-tablor | `tablor` | BSD-3-Clause | 115 wavetables, 9 presets; keeps your tables | ready: ships both wavetable packs, as Tablor's repo does (Neu KatalYst: "use them in all your synths"; owner's choice 2026-10-08) |
+| Hush One, Libpo32 | | | none upstream | | **not published**: no licence, and the authors can't be asked (2026-10-08) |
+| Stevequencer, Stevequencer 16 | | | MIT (2026-10-08) | | **held**: device checks, and `"live"` parameters on the release tools |
 
 - [ ] Publish the ready ones after the pilot's review: `tools/publish.sh <plugin> --create`, the workflow's dry run,
       a draft each, device tests.
@@ -322,5 +322,5 @@ Still open:
 3. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
 4. Offering the 14 framework commits to sd88me as PRs.
 5. The project board: `gh auth refresh -s project` lets Claude create it.
-6. Licences: asking Charles Vestal for a LICENSE file in schwung-hank, the Neu KatalYst author about the Tablor
-   wavetables, the Hush One and Libpo32 authors; and yours for the Stevequencers.
+6. Licences (answered 2026-10-08, the authors can't be contacted): Hank ships with the MIT text its author declares;
+   Tablor ships both wavetable packs; Hush One and Libpo32 aren't published; the Stevequencers are MIT.

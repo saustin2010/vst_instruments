@@ -56,6 +56,8 @@ PLUGINS = {
     "eucalypso": ("eucalypso", "MIT", None, []),
     "rings": ("rings", "MIT", None, []),
     "ringsfx": ("rings-fx", "MIT", None, []),
+    "hank": ("hank", "MIT", None, []),   # LICENSE written here: upstream declares MIT (README, module.json), no file
+    "tablor": ("tablor", "BSD-3-Clause", None, ["tablor/wavetables"]),
 }
 PILOTS = {"303", "hera"}   # done by hand and published first: --ready leaves them alone
 # libraries this repo makes with its own scripts (tools/fetch-presets.py MADE): the script, and where its output goes

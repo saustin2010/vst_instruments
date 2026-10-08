@@ -15,11 +15,6 @@ PRESETS = os.path.join(REPO, "presets")
 # plugin: [(GitHub repo, commit, path in that repo (folder or file), where it goes inside presets/<plugin>/)]
 SOURCES = {
     "libpo32": [("mestela/schwung-libpo32", "4125e2989df1747a66f56388eb0b5bd7e1310079", "src/kits", "kits")],
-    "tablor": [("athousanddetails/schwung-tablor", "d51887187f7a03f7b32cc4a74f5c60c5532e65fa", "src/wavetables",
-                "wavetables"),
-               # its factory presets, in MPC's PRESET menu (the engine maps their Move wavetable paths to wavetables/)
-               ("athousanddetails/schwung-tablor", "d51887187f7a03f7b32cc4a74f5c60c5532e65fa", "src/presets/factory.tbl",
-                "presets/factory.tbl")],
     "helm": [("mtytel/helm", "abdedd527e6e1cf86636f0f1e8a3e75b06ed166a", "patches/Factory Presets",
               "helm-data/patches/Factory Presets"),
              ("andree182/schwung-helm", "10823a8ebc3a0e1a0cd43d0c459e8bae63996c9d", "data/Move Organ.helm",
