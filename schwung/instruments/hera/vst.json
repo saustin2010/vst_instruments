@@ -2,7 +2,7 @@
   "name": "[SYN] Hera",
   "vendor": "jpcima",
   "uid": "Hera",
-  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count"},
+  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count", "name_at": "preset"},
   "so": "hera.so",
   "module": "src/module.json",
   "build": {
