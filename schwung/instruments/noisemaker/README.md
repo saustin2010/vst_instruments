@@ -9,7 +9,7 @@ TAL-NoiseMaker by Patrick Kunz: two oscillators plus sub, 12 multimode filters w
 ## On the MPC
 
 - In the plugin browser: **[SYN] Noisemaker** by **TAL** (Synth)
-- Files: `/sdcard/vst/noisemaker.so`, preset banks in `/sdcard/vst/noisemaker/presets/` (from this repo's `presets/noisemaker/`), screen in `/sdcard/Synths/TAL - VST - [SYN] Noisemaker/`
+- Files: the release installs one folder, `/sdcard/Synths/TAL - VST - [SYN] Noisemaker/`, holding `noisemaker.so`, its screen. The vst_instruments installer puts `noisemaker.so` in `/sdcard/vst/` instead.
 - 91 parameters (all automatable) on 6 pages
 
 ## Playing it
@@ -58,17 +58,26 @@ Q-Link columns: **1** REVERB WET, REV DECAY, REV PREDELAY  ·  **2** REV HI CUT,
 
 ## Install
 
-From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `SYN-Noisemaker-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-noisemaker/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+Your own files in `noisemaker/presets/` are kept when you update or uninstall.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
 ./install.sh <mpc-address> noisemaker
 ```
 
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
+
 ## Where it comes from
 
 - Schwung module "Noisemaker" v0.2.2 by legsmechanical (engine: Patrick Kunz / TAL)
-- Licence: GPL-2.0, as declared in the module's `src/module.json` (text: [licenses/](../../../licenses/))
-- MPC port and screen: this repo, built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
+- Licence: GPL-2.0, as declared in the module's `src/module.json` (text: [LICENSE](LICENSE))
+- MPC port and screen: [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/noisemaker`), built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
 
 ## Changes for the MPC
 
@@ -87,7 +96,9 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | Path | What |
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
-| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (its presets/kits are in the repo's `presets/` folder, not here) |
+| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `LICENSE` | the licence |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
 | `params.base.json` | the engine's own parameter list it was derived from |
@@ -99,4 +110,24 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | `src/` | the engine's source, vendored from upstream |
 | `upstream-changes.diff` | every local change to the upstream source |
 
-To rebuild from source see [BUILDING.md](../../../BUILDING.md); to change the screen, [RESKINNING.md](../../../RESKINNING.md).
+## Building
+
+With Docker (32-bit ARM emulation for the build), Python 3 and the tools from
+[saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins)
+plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`):
+
+```
+git clone -b steve-features https://github.com/saustin2010/mpc-vst-plugins
+MPC_VST=$PWD/mpc-vst-plugins
+bash "$MPC_VST/tools/build_port.sh" vst.json        # build/: noisemaker.so, the screen, the plugin-list entry
+bash "$MPC_VST/tools/test_port.sh" vst.json         # the offline host test (ASan/UBSan): must print PASSED
+```
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`, "Release (draft)") as a draft, installed and checked
+on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/vst_instruments/blob/main/BUILDING.md), and to change the screen, [RESKINNING.md](https://github.com/saustin2010/vst_instruments/blob/main/RESKINNING.md).
+
+## Development
+
+This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/noisemaker`), next to the other plugins
+and the tools that made its screen, and published to [mpc-vst-noisemaker](https://github.com/saustin2010/mpc-vst-noisemaker) for its
+releases. Issues and pull requests are welcome in either.

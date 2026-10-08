@@ -9,12 +9,12 @@ Grids holds a map of drum patterns learned from real grooves. MAP X and MAP Y pi
 ## On the MPC
 
 - In the plugin browser: **[SEQ] Grids** by **Mutable Instruments** (Sequencer)
-- Files: `/sdcard/vst/grids.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [SEQ] Grids/`
+- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [SEQ] Grids/`, holding `grids.so`, its screen. The vst_instruments installer puts `grids.so` in `/sdcard/vst/` instead.
 - 18 parameters (all automatable) on 2 pages
 
 ## Playing it
 
-The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../docs/sequencers.md).
+The walk-through, with what to check when nothing plays: [docs/sequencers.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/sequencers.md).
 
 MPC OS ignores a plugin's own MIDI output, so Grids opens its own MIDI port (MPC lists it as **[SEQ] Grids MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
@@ -43,18 +43,26 @@ Q-Link columns: **1** BD NOTE, SD NOTE, HH NOTE  ·  **2** ACCENT VEL, NORMAL VE
 
 ## Install
 
-From the top of this repo (see [INSTALL.md](../../INSTALL.md)):
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `SEQ-Grids-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-grids/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
 ./install.sh <mpc-address> grids
 ```
+
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
 
 ## Where it comes from
 
 - Upstream: https://github.com/pichenettes/eurorack (grids/)
 - Vendored at commit 08460a69a7e1f7a81c5a2abcc7189c9a6b7208d4 2023-08-16
 - Licence: GPL-3.0 ([`LICENSE`](LICENSE))
-- MPC port and screen: this repo, built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
+- MPC port and screen: [vst_instruments](https://github.com/saustin2010/vst_instruments) (`mutable-instruments/grids`), built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
 
 ## Changes for the MPC
 
@@ -70,7 +78,8 @@ From the top of this repo (see [INSTALL.md](../../INSTALL.md)):
 | Path | What |
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
-| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (its presets/kits are in the repo's `presets/` folder, not here) |
+| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
 | `params.base.json` | the engine's own parameter list it was derived from |
@@ -84,4 +93,24 @@ From the top of this repo (see [INSTALL.md](../../INSTALL.md)):
 | `mpc/` | MPC-side glue: the engine wrapper or MIDI/audio adapter, and headers |
 | `UPSTREAM` | where the source came from, and at which commit |
 
-To rebuild from source see [BUILDING.md](../../BUILDING.md); to change the screen, [RESKINNING.md](../../RESKINNING.md).
+## Building
+
+With Docker (32-bit ARM emulation for the build), Python 3 and the tools from
+[saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins)
+plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`):
+
+```
+git clone -b steve-features https://github.com/saustin2010/mpc-vst-plugins
+MPC_VST=$PWD/mpc-vst-plugins
+bash "$MPC_VST/tools/build_port.sh" vst.json        # build/: grids.so, the screen, the plugin-list entry
+bash "$MPC_VST/tools/test_port.sh" vst.json         # the offline host test (ASan/UBSan): must print PASSED
+```
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`, "Release (draft)") as a draft, installed and checked
+on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/vst_instruments/blob/main/BUILDING.md), and to change the screen, [RESKINNING.md](https://github.com/saustin2010/vst_instruments/blob/main/RESKINNING.md).
+
+## Development
+
+This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`mutable-instruments/grids`), next to the other plugins
+and the tools that made its screen, and published to [mpc-vst-grids](https://github.com/saustin2010/mpc-vst-grids) for its
+releases. Issues and pull requests are welcome in either.

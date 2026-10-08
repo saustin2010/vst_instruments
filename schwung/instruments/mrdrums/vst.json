@@ -24,6 +24,7 @@
   "layout": "layout.conf",
   "art": "html",
   "defines": {
-    "MODULE_DIR": "\"/sdcard/vst/mrdrums\""
+    "MODULE_DIR": "\"/sdcard/vst/mrdrums\"",
+    "MODULE_SUBDIR": "\"mrdrums\""
   }
 }

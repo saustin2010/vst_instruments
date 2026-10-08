@@ -1,0 +1,11 @@
+{
+  "about": "This plugin's library, fetched from the projects it belongs to at the commit it was built and tested with (every file checked against its git hash). release/fetch-library.py puts it in library/, which the release ships as the plugin folder's groovebank/ (its data folder, MODULE_SUBDIR).",
+  "sources": [
+    {
+      "repo": "mission-minnow/groovebank",
+      "commit": "4edfa2f0a65f953f685e60b5753e725b0e5df7ce",
+      "path": "src/patterns",
+      "to": "patterns"
+    }
+  ]
+}

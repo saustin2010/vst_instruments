@@ -25,6 +25,7 @@
   "layout": "layout.conf",
   "art": "html",
   "defines": {
-    "MODULE_DIR": "\"/sdcard/vst/midiplayer\""
+    "MODULE_DIR": "\"/sdcard/vst/midiplayer\"",
+    "MODULE_SUBDIR": "\"midiplayer\""
   }
 }

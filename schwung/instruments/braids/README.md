@@ -9,7 +9,7 @@ Emilie Gillet's Braids "macro oscillator" as a playable synth voice. One knob pi
 ## On the MPC
 
 - In the plugin browser: **[SYN] Braids** by **Mutable Instruments** (Synth)
-- Files: `/sdcard/vst/braids.so`, presets/data in `/sdcard/vst/braids/` (from this repo's `presets/braids/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Mutable Instruments - VST - [SYN] Braids/`
+- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [SYN] Braids/`, holding `braids.so`, its screen and its library (`braids/`). The vst_instruments installer puts `braids.so` in `/sdcard/vst/` and its data in `/sdcard/vst/braids/` instead; the plugin finds them either way (its data folder is `braids/` next to the `.so`).
 - 21 parameters (all automatable) on 2 pages
 
 ## Playing it
@@ -34,17 +34,25 @@ Q-Link columns: **1** AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE  ·  **2**
 
 ## Install
 
-From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `SYN-Braids-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-braids/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
 ./install.sh <mpc-address> braids
 ```
 
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
+
 ## Where it comes from
 
 - Schwung module "Braids" v0.2.8 by Emilie Gillet (port: charlesvestal)
-- Licence: MIT, as declared in the module's `src/module.json` (text: [licenses/](../../../licenses/))
-- MPC port and screen: this repo, built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
+- Licence: MIT, as declared in the module's `src/module.json` (text: [LICENSE](LICENSE))
+- MPC port and screen: [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/braids`), built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
 
 ## Changes for the MPC
 
@@ -59,7 +67,10 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | Path | What |
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
-| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (its presets/kits are in the repo's `presets/` folder, not here) |
+| `release/` | `library.json` (where its library comes from, pinned) and `fetch-library.py` (fetches it) |
+| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `LICENSE` | the licence |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
 | `params.base.json` | the engine's own parameter list it was derived from |
@@ -71,4 +82,25 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | `src/` | the engine's source, vendored from upstream |
 | `upstream-changes.diff` | every local change to the upstream source |
 
-To rebuild from source see [BUILDING.md](../../../BUILDING.md); to change the screen, [RESKINNING.md](../../../RESKINNING.md).
+## Building
+
+With Docker (32-bit ARM emulation for the build), Python 3 and the tools from
+[saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins)
+plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`):
+
+```
+git clone -b steve-features https://github.com/saustin2010/mpc-vst-plugins
+MPC_VST=$PWD/mpc-vst-plugins
+python3 release/fetch-library.py library        # its library, from its project at a pinned commit
+bash "$MPC_VST/tools/build_port.sh" vst.json        # build/: braids.so, the screen, the plugin-list entry
+bash "$MPC_VST/tools/test_port.sh" vst.json         # the offline host test (ASan/UBSan): must print PASSED
+```
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`, "Release (draft)") as a draft, installed and checked
+on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/vst_instruments/blob/main/BUILDING.md), and to change the screen, [RESKINNING.md](https://github.com/saustin2010/vst_instruments/blob/main/RESKINNING.md).
+
+## Development
+
+This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/braids`), next to the other plugins
+and the tools that made its screen, and published to [mpc-vst-braids](https://github.com/saustin2010/mpc-vst-braids) for its
+releases. Issues and pull requests are welcome in either.

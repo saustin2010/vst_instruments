@@ -28,6 +28,7 @@
   "layout": "layout.conf",
   "art": "html",
   "defines": {
-    "MODULE_DIR": "\"/sdcard/vst/braids\""
+    "MODULE_DIR": "\"/sdcard/vst/braids\"",
+    "MODULE_SUBDIR": "\"braids\""
   }
 }

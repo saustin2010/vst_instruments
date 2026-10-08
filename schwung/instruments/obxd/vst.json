@@ -19,7 +19,8 @@
     ]
   },
   "defines": {
-    "MODULE_DIR": "\"/sdcard/vst/obxd\""
+    "MODULE_DIR": "\"/sdcard/vst/obxd\"",
+    "MODULE_SUBDIR": "\"obxd\""
   },
   "layout": "layout.conf",
   "art": "html"

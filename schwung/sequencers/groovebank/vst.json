@@ -26,6 +26,7 @@
   "layout": "layout.conf",
   "art": "html",
   "defines": {
-    "MODULE_DIR": "\"/sdcard/vst/groovebank\""
+    "MODULE_DIR": "\"/sdcard/vst/groovebank\"",
+    "MODULE_SUBDIR": "\"groovebank\""
   }
 }

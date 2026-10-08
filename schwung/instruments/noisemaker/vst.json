@@ -26,6 +26,7 @@
   "layout": "layout.conf",
   "art": "html",
   "defines": {
-    "MODULE_DIR": "\"/sdcard/vst/noisemaker\""
+    "MODULE_DIR": "\"/sdcard/vst/noisemaker\"",
+    "MODULE_SUBDIR": "\"noisemaker\""
   }
 }
