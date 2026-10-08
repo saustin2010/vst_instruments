@@ -19,6 +19,7 @@
     ]
   },
   "defines": {
+    "QLINK_TRAVEL": 1, "SET_IF_CHANGED": 1,
     "MODULE_DIR": "\"/sdcard/vst/obxd\"",
     "MODULE_SUBDIR": "\"obxd\""
   },

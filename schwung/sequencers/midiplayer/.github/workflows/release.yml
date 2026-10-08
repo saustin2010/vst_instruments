@@ -19,14 +19,14 @@ on:
 
 jobs:
   vst:
-    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@9595071449a2e6ee09049d1a3ce6d78357091189
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@10d8f5f06d01af1507b92b8525d49a08f1943334
     permissions:
       contents: write
     with:
       tag: v${{ inputs.version }}
       version: ${{ inputs.version }}
       tools_repo: saustin2010/mpc-vst-plugins
-      tools_ref: 9595071449a2e6ee09049d1a3ce6d78357091189
+      tools_ref: 10d8f5f06d01af1507b92b8525d49a08f1943334
       vst_dir: .
       # its library into library/, shipped as the plugin folder's midiplayer/ (MODULE_SUBDIR)
       build: python3 release/make-library.py library && bash "$MPC_VST/tools/build_port.sh" vst.json
