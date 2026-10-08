@@ -78,6 +78,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 | `screenshots/` | the pages as MPC draws them |
 | `LICENSE` | the licence (GPL-3.0) |
 | `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `tested.json` | the devices each release was checked on (the catalogue shows it) |
 | `release/` | `library.json` (where its presets come from, pinned) and `fetch-library.py` (fetches them) |
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
