@@ -60,13 +60,21 @@ owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai upda
   up `MPC.settings` first (the installer does), stage files as `x.new` then `mv`. Never edit `MPC.settings` while
   MPC runs. A plugin crash takes MPC down.
 - Never commit: anything in `presets/` but its README (add a library by adding its source to
-  `tools/fetch-presets.py`), Akai's stock skins or artwork, the Steinberg VST SDK (the VST2 ABI here is hand-written), ROMs or other
-  copyrighted sample content, `framework/mpc-vst-plugins/`, build output, SSH keys, IPs or device serials.
+  `tools/fetch-presets.py`, or for a plugin with its own repo to its `release/library.json`), Akai's stock skins or
+  artwork, the Steinberg VST SDK (the VST2 ABI here is hand-written), ROMs or other copyrighted sample content,
+  `framework/mpc-vst-plugins/`, `framework/release-tools/`, build output, SSH keys, IPs or device serials.
+- **Plugins with their own repo** (`docs/catalogue-migration.md`): this repo stays the master. `tools/publish.sh <plugin>`
+  pushes the committed folder to `saustin2010/mpc-vst-<plugin>`; never commit there directly (a PR merged there comes
+  back with `git subtree pull`, see the script). Its releases build with `framework/setup-release.sh`'s tools;
+  `dev-tools/catalogue/check.sh <plugin>` must say PASSED and "screen: same" before a release.
 - No maker badges in screen art (no Akai/Roland/Oberheim logos implying origin); naming what a plugin emulates is fine.
 - sd88me's framework files stay in his repo: change them through `framework/mpc-vst-plugins.patch`
-  (`git diff` in the framework clone, plus new files), never by copying them here.
+  (`git diff` in the framework clone, plus new files), never by copying them here. The release tools are his current
+  `main` plus commits on `steve-features` of `saustin2010/mpc-vst-plugins` (each offered to him as a PR); a change
+  there means a new pin in `framework/setup-release.sh` and the plugins' `release.yml`.
 - Device facts that matter: plugins go in `/sdcard/vst` (the SD card and SSD are `noexec`), skins in `/sdcard/Synths`,
   the plugin list is `pluginList-arm` in `/media/az01-internal/Settings/MPC/MPC.settings`, read only at MPC start-up.
   MPC shows a control's **parameter name**, not the layout label. MPC ignores plugin MIDI out: sequencers open their own
   ALSA MIDI port.
-- Commits and pushes go to `github.com/saustin2010/vst_instruments` (the owner's). Push only when asked.
+- Commits and pushes go to `github.com/saustin2010/vst_instruments` (the owner's), its plugins' own repos
+  (`tools/publish.sh`) and `saustin2010/mpc-vst-plugins` (`steve-features`). Push only when asked.

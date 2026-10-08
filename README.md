@@ -120,10 +120,10 @@ originals/              2 written for this repo (Stevequencer, Stevequencer 16)
 mpc-ports/              2 written for MPC by other authors (Mutable Vibe, MPC Plaits), built here
   <plugin>/            README.md, screenshots/, deploy/ (ready to install), source, screen design
 presets/               the plugins' presets, kits, wavetables (not in git: tools/fetch-presets.py)
-install.sh, uninstall.sh, tools/   the installer (and tools/build.sh to build from source)
-framework/             our changes to sd88me's mpc-vst-plugins, as a patch, and setup.sh
+install.sh, uninstall.sh, tools/   the installer (and tools/build.sh to build from source, tools/publish.sh to publish a plugin to its own repo)
+framework/             our changes to sd88me's mpc-vst-plugins, as a patch, and setup.sh (setup-release.sh: the tools the plugins' own repos release with)
 dev-tools/             the tools the ports and screens were made with
-docs/                  extra guides (presets and libraries, parameter numbers, root SSH on a stock MPC) and images
+docs/                  extra guides (presets and libraries, parameter numbers, root SSH on a stock MPC, the catalogue migration plan) and images
 licenses/              licence texts the plugins refer to
 ```
 

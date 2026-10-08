@@ -2,6 +2,15 @@
 
 Open items as of 2026-10-05, most useful first. Tick them off here (with the date) as they're done.
 
+## Catalogue ([docs/catalogue-migration.md](docs/catalogue-migration.md))
+
+- [ ] **One repo per plugin for sd88me's catalogue** (planned 2026-10-08): this repo stays the master, each released
+  plugin is split into `saustin2010/mpc-vst-<plugin>` (`tools/publish.sh`). The 6 plugins already in the catalogue are
+  offered as skins instead.
+  - [x] Pilot 303 + Hera ready to publish (2026-10-08): they build on the release tools (sd88me's `main` + six commits
+    on `saustin2010/mpc-vst-plugins` `steve-features`), pass the host test and the catalogue check, same screens.
+  - [ ] Pilot repos, draft releases, device test, review, catalogue PRs; then the other 28 (Phase 0 in the doc).
+
 ## Presets and libraries ([docs/presets-and-libraries.md](docs/presets-and-libraries.md))
 
 New parameters always go at the **end** of a plugin's `params.json`: MPC saves projects and Q-Link assignments by
