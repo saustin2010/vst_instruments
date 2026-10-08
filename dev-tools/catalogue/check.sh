@@ -39,7 +39,9 @@ for name in "$@"; do
   else
     echo "TEST FAILED (build/check-test.log)"; grep -E '^FAIL' "$D/build/check-test.log" | head -5 || true; status=1; continue
   fi
-  if python3 dev-tools/catalogue/skin_same.py "$D" > "$D/build/check-skin.log" 2>&1; then
+  # skin_same.py compares pictures by their pixels with Pillow: the html-art image has it (built by build_port.sh)
+  if docker run --rm -u "$(id -u):$(id -g)" -v "$REPO":"$REPO" -w "$REPO" mpc-vst-html-art \
+       python3 dev-tools/catalogue/skin_same.py "$D" > "$D/build/check-skin.log" 2>&1; then
     echo "screen: same"
   else
     echo "screen: DIFFERENT (build/check-skin.log)"; head -12 "$D/build/check-skin.log"; status=1

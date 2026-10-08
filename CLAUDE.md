@@ -66,7 +66,8 @@ owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai upda
 - **Plugins with their own repo** (`docs/catalogue-migration.md`): this repo stays the master. `tools/publish.sh <plugin>`
   pushes the committed folder to `saustin2010/mpc-vst-<plugin>`; never commit there directly (a PR merged there comes
   back with `git subtree pull`, see the script). Its releases build with `framework/setup-release.sh`'s tools;
-  `dev-tools/catalogue/check.sh <plugin>` must say PASSED and "screen: same" before a release.
+  `dev-tools/catalogue/prepare.py <plugin>` writes its repo files and `dev-tools/catalogue/check.sh <plugin>` must
+  say PASSED and "screen: same" before a release. Don't edit the tools while a check runs (bash reads scripts as it goes).
 - No maker badges in screen art (no Akai/Roland/Oberheim logos implying origin); naming what a plugin emulates is fine.
 - sd88me's framework files stay in his repo: change them through `framework/mpc-vst-plugins.patch`
   (`git diff` in the framework clone, plus new files), never by copying them here. The release tools are his current
