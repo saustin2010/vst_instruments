@@ -151,21 +151,30 @@ is meant to go to sd88me as a PR. `tools/build.sh` keeps using the old base and 
       host test in the Linux container on macOS (Apple's ASan hangs on macOS 26); `focus_ring=1` and `qlink_box=slot`
       (opt-in layout lines that keep our screens' look: his defaults hide the focus ring and draw tighter Q-Link
       boxes); `when=<param>:<i>/<N>` bands on a continuous parameter; a `tools_repo` input on the release workflow.
-- [ ] Offer those commits to sd88me as PRs (ask the owner first), and move the pins to his repo as they're merged.
-- [ ] What the other plugins still need, from their `vst.json` (2026-10-08 inventory): `"category"` in the plugin
-      list (13 plugins); `"programs"` `count` / `name_at` / `name` (19: on his tools an engine names preset n by
-      answering `get_param("<preset key>:<n>")`, so each engine learns that, as Hera's did, or `name_at` goes upstream);
-      `"live"` parameters (the two Stevequencers); the effects' input hook `mpc_engine_input` (Rings FX, Warps, Verglas:
-      his effects use `process()` instead) and the sequencers' `mpc_engine_transport` (tempo, position, play: his has
-      `HAS_TRANSPORT` and `HAS_LFO_BPM` only); option `values` / `send` (Eucalypso, Super Arp); the wrapper behaviours
-      in our patch that his may do differently (Q-Link steps on stepped values, option labels before numbers); the
-      host test's extra checks. `dev-tools/catalogue/check.sh <plugin>` shows what a plugin still lacks.
+- [x] For the rest (2026-10-08, at `55e60a0`): option `values` / `send` (Eucalypso, Super Arp, MIDI Player), option
+      labels matched before numbers, and a fix for a read past an option list (his wrapper overflowed on Aphex's preset
+      under ASan); `mpc_engine_transport()`, the host's tempo, position and play state for engines clocked from it (the
+      sequencers: without it they'd pass offline and never play in time on the MPC); the host test's wheel check on
+      long whole-number ranges (a click moves 1/100 of a 0-5000 ms range, rightly); `"programs"` `count`, `name_at` and
+      `name` (19 plugins: menus without empty slots, names without loading each preset); `"clamped"` params the engine
+      limits to what it has loaded (Groove Bank's pattern, MIDI Player's file and track), which the host test skips.
+- [ ] Offer the 12 commits to sd88me as PRs (ask the owner first), and move the pins to his repo as they're merged.
+- [ ] Not ported yet: `"category"` in the plugin list (13 plugins: his entries are Synth or Effect, so our sequencers
+      and drum machines are Synth in a release's entry; harmless, since MPC ignores the category and the kind tags do
+      the sorting), `"live"` parameters (the two Stevequencers, held anyway), and the
+      host test's extra checks from our patch (restore, slow Q-Link, effect and program checks).
 - [ ] When all 40 build on the new base: replace `mpc-vst-plugins.patch` and `setup.sh`'s pin, and update
       `framework/README.md` and BUILDING.md.
 
 Each plugin's `layout.conf` gets four lines so his tools draw the screen it was checked with (`check.sh` then says
 "screen: same"): `qlink_bounds=column`, `qlink_box=slot`, `label_scale=1` (his default scales value text by 1.15) and
-`focus_ring=1`. The old tools ignore them.
+`focus_ring=1`. The old tools ignore them. Glue changes in the plugins themselves (both tools build them): the three
+effects (Verglas, Warps, Rings FX) give his wrapper the `process()` it asks effects for (it read past their engine
+table otherwise); Hera answers `preset:<n>` with a preset's name.
+
+One screen changes on his tools: **Aphex's** envelope displays get 28 frames instead of 32, because 32 frames of
+428 px make a 13,696 px strip, over the 12,288 px a filmstrip draws right at (our own Live II finding). Check it on the
+device with the release.
 
 ## Phase 1: the project and the publish tooling
 
@@ -176,8 +185,10 @@ Each plugin's `layout.conf` gets four lines so his tools draw the screen it was 
       to `saustin2010/mpc-vst-<plugin>`; refuses a dirty folder or a plugin repo with commits this repo lacks.
 - [x] `dev-tools/catalogue/check.sh <plugin>` (2026-10-08): build with the release tools, host test, screen the same
       as `deploy/` (`skin_same.py`, by content). `framework/setup-release.sh` fetches those tools.
-- [ ] A generator for the per-plugin files (README sections, `release.yml`, `.gitignore`, `LICENSE`), from the two
-      pilots' hand-made ones, before the batches.
+- [x] `dev-tools/catalogue/prepare.py <plugin>` (2026-10-08): writes a folder's repo files from its table of ids,
+      licences and user folders (LICENSE fetched from the upstream repo or the text in `licenses/`, `release.yml`,
+      `release/` for a library, `MODULE_SUBDIR`, README sections). `check.sh` compares pictures by their pixels (the
+      newer tools re-encode and share pop-up images).
 
 ## Per-plugin checklist
 
@@ -230,22 +241,57 @@ The pilots (303, Hera) are the worked examples: copy from their folders.
       build on the old tools too (2026-10-08).
 - [x] Local release zips pass `catalog_check.py --catalog` (2026-10-08): `SYN-303-1.0.0` (`open303`, 2.0 MB) and
       `SYN-Hera-1.0.0` (`hera`, 3.5 MB, presets in `hera/`). Both MPC OS 3.x only, as every Stitch skin will be.
-- [ ] Repos created and published (`tools/publish.sh 303 --create`, `hera`), the release workflow's dry run, then
-      a draft release each.
+- [x] Repos created and published (2026-10-08): [mpc-vst-303](https://github.com/saustin2010/mpc-vst-303),
+      [mpc-vst-hera](https://github.com/saustin2010/mpc-vst-hera). The release workflow's dry run and then a draft
+      release v1.0.0 each, built by GitHub Actions.
 - [ ] Device test of each draft's zip (it stops and restarts MPC: with the owner's go-ahead), `bench.txt`, `tested.json`.
 - [ ] The peer review, then the catalogue PRs.
 
 ## Phase 3: the rest
 
-Once the pilot is listed, release in batches by group, with one issue each on the board:
+Status 2026-10-08. "Ready" means the folder has its repo files (`dev-tools/catalogue/prepare.py`) and
+`dev-tools/catalogue/check.sh` says PASSED and "screen: same" on the release tools (`55e60a0`). None of them is
+published yet: they wait for the pilot's review, then `tools/publish.sh <plugin> --create` each.
 
-- [ ] Mutable Instruments: Elements, Rings, Rings FX, Warps, Grids.
-- [ ] Schwung instruments: Aphex, Braids, Chordism, Denis, Fizzik, Hank, MonkSynth, Mono Voice, Moog, Mr Drums,
-      Mr Hyde, Noisemaker, NuSaw, OB-Xd, Tablor, Wurl.
-- [ ] Sequencers and effects: Eucalypso, Groove Bank, MIDI Player, Pixel Walkers, Rampage, Super Arp, Verglas.
-- [ ] Held: ask the Hush One and Libpo32 authors for a licence; Stevequencer and Stevequencer 16 after their device
-      checks and a licence.
-- [ ] Skins: the offers above.
+| Plugin | Repo | Catalogue id | Licence | Ships | Status |
+|---|---|---|---|---|---|
+| 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **published**, draft v1.0.0 |
+| Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **published**, draft v1.0.0 |
+| Aphex | mpc-vst-aphex | `aphex` | MIT | | ready; envelope displays 28 frames (above) |
+| Braids | mpc-vst-braids | `braids` | MIT | 10 presets | ready |
+| Chordism | mpc-vst-chordism | `chordism` | MIT | | ready |
+| Denis | mpc-vst-denis | `denis` | MIT | | ready |
+| Elements | mpc-vst-elements | `elements` | MIT | | ready |
+| Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | ready |
+| MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | ready |
+| Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | ready (near neighbour: your call) |
+| Moog | mpc-vst-moog | `raffosynth` | MIT | | ready |
+| Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | ready |
+| Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | ready |
+| Noisemaker | mpc-vst-noisemaker | `noisemaker` | GPL-2.0-only | keeps your banks | ready |
+| NuSaw | mpc-vst-nusaw | `nusaw` | MIT | | ready |
+| OB-Xd | mpc-vst-obxd | `obxd` | GPL-3.0-only | factory bank; keeps your banks | ready |
+| Wurl | mpc-vst-wurl | `wurl` | GPL-3.0-only | | ready |
+| Rings | mpc-vst-rings | `rings` | MIT | | ready (near neighbour: your call) |
+| Rings FX | mpc-vst-ringsfx | `rings-fx` | MIT | | ready (near neighbour: your call) |
+| Warps | mpc-vst-warps | `warps` | MIT | | ready |
+| Grids | mpc-vst-grids | `grids` | GPL-3.0-only | | ready |
+| Groove Bank | mpc-vst-groovebank | `groove-bank` | MIT | 14 grooves | ready |
+| MIDI Player | mpc-vst-midiplayer | `midi-player` | MIT | demo file (made here); keeps your files | ready |
+| Pixel Walkers | mpc-vst-pixelwalkers | `pixel-walkers` | MIT | | ready |
+| Rampage | mpc-vst-rampage | `rampage` | GPL-3.0-or-later | | ready |
+| Super Arp | mpc-vst-superarp | `super-arp` | MIT | | ready |
+| Eucalypso | mpc-vst-eucalypso | `eucalypso` | MIT | | ready (near neighbour: your call) |
+| Verglas | mpc-vst-verglas | `verglas` | MIT | | ready |
+| Hank | | | MIT (declared) | | **held**: charlesvestal/schwung-hank has no LICENSE file to ship |
+| Tablor | | | BSD-3-Clause | 115 wavetables, 9 presets | **held**: the Neu KatalYst wavetables are "free to use"; shipping them needs their author's OK (or ship Adventure Kid only) |
+| Hush One, Libpo32 | | | none upstream | | **held**: ask the authors for a licence |
+| Stevequencer, Stevequencer 16 | | | yours to pick | | **held**: device checks, a licence, and `"live"` parameters on the release tools |
+
+- [ ] Publish the ready ones after the pilot's review: `tools/publish.sh <plugin> --create`, the workflow's dry run,
+      a draft each, device tests.
+- [ ] The held ones, as above.
+- [ ] Skins for the plugins already listed: the offers above.
 
 ## The device and this repo's installer
 
@@ -262,6 +308,10 @@ it builds on the release tools.
 
 Still open:
 
-1. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
-2. Licences for Stevequencer and Stevequencer 16, when they're ready.
-3. Offering the framework commits to sd88me as PRs.
+1. The pilot's device test: installing each draft's zip on the Live II stops and restarts MPC.
+2. Publishing the 26 ready ones: after the pilot's review, or now.
+3. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
+4. Offering the 12 framework commits to sd88me as PRs.
+5. The project board: `gh auth refresh -s project` lets Claude create it.
+6. Licences: asking Charles Vestal for a LICENSE file in schwung-hank, the Neu KatalYst author about the Tablor
+   wavetables, the Hush One and Libpo32 authors; and yours for the Stevequencers.

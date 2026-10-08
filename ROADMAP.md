@@ -7,9 +7,12 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
 - [ ] **One repo per plugin for sd88me's catalogue** (planned 2026-10-08): this repo stays the master, each released
   plugin is split into `saustin2010/mpc-vst-<plugin>` (`tools/publish.sh`). The 6 plugins already in the catalogue are
   offered as skins instead.
-  - [x] Pilot 303 + Hera ready to publish (2026-10-08): they build on the release tools (sd88me's `main` + six commits
-    on `saustin2010/mpc-vst-plugins` `steve-features`), pass the host test and the catalogue check, same screens.
-  - [ ] Pilot repos, draft releases, device test, review, catalogue PRs; then the other 28 (Phase 0 in the doc).
+  - [x] Pilot 303 + Hera published (2026-10-08): `saustin2010/mpc-vst-303`, `mpc-vst-hera`, draft releases v1.0.0
+    built by GitHub Actions on the release tools (sd88me's `main` + commits on `saustin2010/mpc-vst-plugins`
+    `steve-features`), catalogue check OK, same screens.
+  - [x] 26 more ready to publish (2026-10-08; `dev-tools/catalogue/prepare.py`, `check.sh`). Held: Hank, Tablor,
+    Hush One, Libpo32 (licences), the Stevequencers.
+  - [ ] Device test of the pilot drafts, the review, catalogue PRs; then publish the 26 (status table in the doc).
 
 ## Presets and libraries ([docs/presets-and-libraries.md](docs/presets-and-libraries.md))
 

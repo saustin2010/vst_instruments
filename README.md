@@ -90,6 +90,12 @@ cd vst_instruments
 
 The first install of a plugin restarts MPC once (it asks first; `MPC.settings` is backed up). **[INSTALL.md](INSTALL.md)** walks through every step: getting SSH access, what the installer changes, adding a plugin to a track, routing the sequencers, updating, uninstalling, installing by hand and troubleshooting. Presets, kits and wavetables are fetched from their original projects into `presets/` and installed with each plugin; [docs/presets-and-libraries.md](docs/presets-and-libraries.md) lists them, where they come from and how to add your own.
 
+**One plugin at a time, as a release zip:** the plugins are moving into their own repos for
+[sd88me's plugin catalogue](https://sd88me.github.io/mpc-vst-plugins/), each with its own releases. First two (their
+releases follow a device test): [mpc-vst-303](https://github.com/saustin2010/mpc-vst-303) and
+[mpc-vst-hera](https://github.com/saustin2010/mpc-vst-hera).
+This repo stays where they're developed; the plan and where each plugin stands: [docs/catalogue-migration.md](docs/catalogue-migration.md).
+
 ## Status (2026-10-05)
 
 - All 40 build and pass the offline test (all rebuilt 2026-10-05): an x86 build under AddressSanitizer/UBSan that checks every parameter, presets, saving and restoring, Q-Link behaviour, notes to audio, and a stress test that hammers the plugin from two threads as MPC does.
