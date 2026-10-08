@@ -320,8 +320,12 @@ Still open:
 1. The pilot's device test: installing each draft's zip on the Live II stops and restarts MPC.
 2. Publishing the 26 ready ones: going ahead (2026-10-08, the pilot is in the catalogue); 20 repos are up, 8 to go
    (midiplayer pixelwalkers rampage superarp eucalypso verglas hank tablor). GitHub stops repo creation after 10 in a
-   window, however far apart (hit twice, 2026-10-08/09): run the rest as one batch later. Catalogue entries for all 20 are
-   in `dev-tools/catalogue/entries/` (sd88me's `--check-registry`: 0 problems); the PR waits for their v1.0.0 releases.
+   window, however far apart (hit twice, 2026-10-08/09): run the rest as one batch later. 2026-10-09: 19 of the 20
+   released (v1.0.0, every zip OK in sd88me's `catalog_check --catalog` and his `catalog_build.py`) and proposed in
+   [sd88me/mpc-vst-plugins#236](https://github.com/sd88me/mpc-vst-plugins/pull/236), marked offline only: the owner
+   skipped the device test of the release zips, so they get `tested.json` only after one. Noisemaker's release run
+   failed its host test: LeakSanitizer (on in GitHub's runner, not in our emulated Docker) finds ~1 KB per instance
+   leaked (`FilterHandler`'s filters, the preset spline points): fix, publish, release, then its own entry.
 3. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
 4. Offering the 14 framework commits to sd88me as PRs.
 5. The project board: `gh auth refresh -s project` lets Claude create it.
