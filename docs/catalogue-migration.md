@@ -249,8 +249,11 @@ The pilots (303, Hera) are the worked examples: copy from their folders.
 - [x] Repos created and published (2026-10-08): [mpc-vst-303](https://github.com/saustin2010/mpc-vst-303),
       [mpc-vst-hera](https://github.com/saustin2010/mpc-vst-hera). The release workflow's dry run and then a draft
       release v1.0.0 each, built by GitHub Actions.
-- [ ] Device test of each draft's zip (it stops and restarts MPC: with the owner's go-ahead), `bench.txt`, `tested.json`.
-- [ ] The peer review, then the catalogue PRs.
+- [x] Device test of each draft's zip on the Live II (2026-10-08), after two fixes (above); `tested.json` in both repos.
+- [x] Releases v1.0.0 published and proposed to the catalogue (2026-10-08): sd88me/mpc-vst-plugins
+      [#230](https://github.com/sd88me/mpc-vst-plugins/pull/230) (Hera) and [#231](https://github.com/sd88me/mpc-vst-plugins/pull/231) (303);
+      his catalogue build, run locally on the two entries, found no problems.
+- [ ] sd88me's review and merge; `bench.txt` (CPU) for the next release.
 
 ## Phase 3: the rest
 
@@ -260,8 +263,8 @@ published yet: they wait for the pilot's review, then `tools/publish.sh <plugin>
 
 | Plugin | Repo | Catalogue id | Licence | Ships | Status |
 |---|---|---|---|---|---|
-| 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **published**, draft v1.0.0 |
-| Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **published**, draft v1.0.0 |
+| 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **released** v1.0.0, catalogue PR #231 |
+| Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **released** v1.0.0, catalogue PR #230 |
 | Aphex | mpc-vst-aphex | `aphex` | MIT | | ready; envelope displays 28 frames (above) |
 | Braids | mpc-vst-braids | `braids` | MIT | 10 presets | ready |
 | Chordism | mpc-vst-chordism | `chordism` | MIT | | ready |
