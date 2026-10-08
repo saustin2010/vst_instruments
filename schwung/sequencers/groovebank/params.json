@@ -2,7 +2,7 @@
  "name": "Groove Bank",
  "params": [
   {
-   "key": "pattern",
+   "key": "pattern", "clamped": true,
    "name": "GROOVE",
    "min": 0,
    "max": 599,
