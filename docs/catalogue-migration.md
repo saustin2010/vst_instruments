@@ -158,7 +158,12 @@ is meant to go to sd88me as a PR. `tools/build.sh` keeps using the old base and 
       long whole-number ranges (a click moves 1/100 of a 0-5000 ms range, rightly); `"programs"` `count`, `name_at` and
       `name` (19 plugins: menus without empty slots, names without loading each preset); `"clamped"` params the engine
       limits to what it has loaded (Groove Bank's pattern, MIDI Player's file and track), which the host test skips.
-- [ ] Offer the 12 commits to sd88me as PRs (ask the owner first), and move the pins to his repo as they're merged.
+- [x] From the first device test (2026-10-08, Live II): the installer refused names with brackets (`[SYN] 303`: its
+      check read them as a grep pattern; MPC.settings was left unchanged), fixed with a test; and his wrapper's
+      per-event stepping flipped two-option switches when other Q-Links were turned. `"defines": {"QLINK_TRAVEL": 1,
+      "SET_IF_CHANGED": 1}` (on in all 30) brings back this repo's behaviour: ticks add up like a detented knob, and a set
+      to the value the engine holds is skipped. Release tools now `f210a56` (the pilots' drafts: `10d8f5f`, same wrapper).
+- [ ] Offer the 16 commits to sd88me as PRs (ask the owner first), and move the pins to his repo as they're merged.
 - [ ] Not ported yet: `"category"` in the plugin list (13 plugins: his entries are Synth or Effect, so our sequencers
       and drum machines are Synth in a release's entry; harmless, since MPC ignores the category and the kind tags do
       the sorting), `"live"` parameters (the two Stevequencers, held anyway), and the
@@ -250,7 +255,7 @@ The pilots (303, Hera) are the worked examples: copy from their folders.
 ## Phase 3: the rest
 
 Status 2026-10-08. "Ready" means the folder has its repo files (`dev-tools/catalogue/prepare.py`) and
-`dev-tools/catalogue/check.sh` says PASSED and "screen: same" on the release tools (`55e60a0`). None of them is
+`dev-tools/catalogue/check.sh` says PASSED and "screen: same" on the release tools (`f210a56`). None of them is
 published yet: they wait for the pilot's review, then `tools/publish.sh <plugin> --create` each.
 
 | Plugin | Repo | Catalogue id | Licence | Ships | Status |
