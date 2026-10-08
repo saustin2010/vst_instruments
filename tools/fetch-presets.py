@@ -6,7 +6,7 @@ every file is checked against that commit's git hash. Two are made here instead 
 starter kit and MIDI Player's demo file. presets/<plugin>/ mirrors the plugin's data folder on the MPC,
 /sdcard/vst/<plugin>/, which is where install.sh copies it (except a not-installed/ folder). Already-fetched
 plugins are skipped unless --force. Needs Python 3 and internet access to github.com; no account or token."""
-import hashlib, json, os, shutil, subprocess, sys, tempfile, urllib.parse, urllib.request
+import glob, hashlib, json, os, shutil, subprocess, sys, tempfile, urllib.parse, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,7 +15,6 @@ PRESETS = os.path.join(REPO, "presets")
 # plugin: [(GitHub repo, commit, path in that repo (folder or file), where it goes inside presets/<plugin>/)]
 SOURCES = {
     "braids": [("charlesvestal/schwung-braids", "fca75ad402bf1237fe374555b4876af0a3295f25", "src/presets", "presets")],
-    "hera": [("charlesvestal/schwung-hera", "255be0655d882bb983d3ade276ba40a123093ed6", "src/presets", "presets")],
     "obxd": [("charlesvestal/schwung-obxd", "9ad0ad1adb7b057820e6836ab65b66b636567c7f", "src/presets", "presets")],
     "libpo32": [("mestela/schwung-libpo32", "4125e2989df1747a66f56388eb0b5bd7e1310079", "src/kits", "kits")],
     "tablor": [("athousanddetails/schwung-tablor", "d51887187f7a03f7b32cc4a74f5c60c5532e65fa", "src/wavetables",
@@ -30,6 +29,12 @@ SOURCES = {
              ("andree182/schwung-helm", "10823a8ebc3a0e1a0cd43d0c459e8bae63996c9d", "data/Move Organ.helm",
               "helm-data/patches/Factory Presets/Keys/Move Organ.helm")],
 }
+# a plugin that pins its own library in its folder (release/library.json: its release build reads it too, through
+# release/fetch-library.py, so the pin is in one place)
+for _lib in sorted(glob.glob(os.path.join(REPO, "*", "*", "release", "library.json")) +
+                   glob.glob(os.path.join(REPO, "*", "*", "*", "release", "library.json"))):
+    SOURCES[os.path.basename(os.path.dirname(os.path.dirname(_lib)))] = [
+        (s["repo"], s["commit"], s["path"], s["to"]) for s in json.load(open(_lib))["sources"]]
 # made by this repo's own scripts (original material)
 MADE = {
     "mrdrums": (["dev-tools/skin-redesign/make_starter_kit.py", "{out}/kits/01_Starter"], "kits/01_Starter"),

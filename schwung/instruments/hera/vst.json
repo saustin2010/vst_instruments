@@ -18,7 +18,8 @@
     "cflags": [
       "-Isrc/dsp",
       "-Isrc/dsp/Engine",
-      "-std=gnu++14", "-fwrapv"
+      "-std=gnu++14", "-fwrapv",
+      "-DMPC_PORT"
     ],
     "libs": [
       "-lm"
@@ -28,6 +29,7 @@
   "layout": "layout.conf",
   "art": "html",
   "defines": {
-    "MODULE_DIR": "\"/sdcard/vst/hera\""
+    "MODULE_DIR": "\"/sdcard/vst/hera\"",
+    "MODULE_SUBDIR": "\"hera\""
   }
 }

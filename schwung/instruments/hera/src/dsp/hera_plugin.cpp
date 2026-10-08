@@ -1006,6 +1006,14 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
     if (strcmp(key, "preset_name") == 0) {
         return snprintf(buf, buf_len, "%s", inst->preset_name);
     }
+#ifdef MPC_PORT
+    /* "preset:<n>": preset n's name without loading it, for MPC's PRESET menu (the wrapper's VST programs) */
+    if (strncmp(key, "preset:", 7) == 0) {
+        int n = atoi(key + 7);
+        if (n < 0 || n >= inst->preset_count) return -1;
+        return snprintf(buf, buf_len, "%s", inst->presets[n].name);
+    }
+#endif
     if (strcmp(key, "name") == 0) {
         return snprintf(buf, buf_len, "Hera");
     }
