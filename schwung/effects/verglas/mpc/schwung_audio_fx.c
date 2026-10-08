@@ -78,7 +78,13 @@ static void render(void *p, int16_t *out, int frames) {
     api->process_block(in->mod, out, frames);
 }
 
-static const mpc_engine_t engine = { create, destroy, midi, set_param, get_param, render };
+/* The newer wrapper's effect call (engine.h process()): this block's input, then render() on it. */
+static void process(void *p, const int16_t *in_lr, int16_t *out_lr, int frames) {
+    mpc_engine_input(p, in_lr, frames);
+    render(p, out_lr, frames);
+}
+
+static const mpc_engine_t engine = { create, destroy, midi, set_param, get_param, render, process };
 
 const mpc_engine_t *mpc_engine(void) {
     if (!api) {

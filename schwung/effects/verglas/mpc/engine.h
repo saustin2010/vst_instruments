@@ -1,7 +1,13 @@
 /* The engine interface vst2_wrap.c drives: any synth/effect core that provides mpc_engine().
  * Contract: 44100 Hz, interleaved int16 stereo, rendered in 128-frame blocks. Parameters are
  * string key/value pairs; the keys and their ranges come from the port's generated params.h.
- * An engine written for another host plugs in through a small adapter (see adapters/). */
+ * An engine written for another host plugs in through a small adapter (see adapters/).
+ * Optional keys the wrapper asks get_param() for: "state" (chunk save/restore), "<key>_name" / "<key>_display"
+ * (dynamic names and value text), and with vst.json "programs" on a whole-number param, "<key>:<n>" (preset n's
+ * name, without loading it; unanswered = "<Name> <n>").
+ * Threads: the wrapper never calls two of these at once for one instance (a per-instance lock, vst2_wrap.c eng_set()),
+ * though they may come from different threads (screen and audio). A slow set_param (a file load) holds audio for its
+ * duration: keep such work a discrete trigger, or hand it to a worker thread. */
 #pragma once
 #include <stdint.h>
 
@@ -12,16 +18,22 @@ typedef struct {
     void (*set_param)(void *inst, const char *key, const char *val);
     int (*get_param)(void *inst, const char *key, char *buf, int buf_len);   /* > 0 on success */
     void (*render)(void *inst, int16_t *out_lr, int frames);
+    /* Effects only (a port built with "effect": true in vst.json): filter one block of the host's audio, same format as
+     * render (interleaved int16 stereo, 128 frames); in_lr may not alias out_lr. NULL for synths (add it last: engines
+     * initialise this struct positionally).
+ * A port that sets "defines": {"SAMPLE_ACCURATE": 1} in vst.json (instruments only) has render() called with any
+ * frame count from 1 to 128, so MIDI can start at its in-block position: the engine must not assume 128. */
+    void (*process)(void *inst, const int16_t *in_lr, int16_t *out_lr, int frames);
 } mpc_engine_t;
 
 const mpc_engine_t *mpc_engine(void);
 
-/* Optional: an engine that follows the host transport (e.g. a MIDI sequencer) defines this; the wrapper calls it once
- * per host audio buffer, before rendering it, with the tempo (BPM, 0 if unknown), the song position in quarter notes
- * at the start of the buffer (<0 if unknown) and whether the transport is playing. Weak: engines that don't define
- * it are unaffected. */
+/* Optional: an engine that follows the host transport (a MIDI sequencer clocked from the host) defines this; the wrapper
+ * calls it once per host buffer, before rendering it, with the tempo (BPM, 0 if unknown), the song position in quarter
+ * notes at the start of the buffer (<0 if unknown) and whether the transport is playing. Weak: engines that don't define
+ * it are unaffected, and HAS_TRANSPORT / HAS_LFO_BPM (vst2_wrap.c) still work alongside it. */
 void mpc_engine_transport(void *inst, double bpm, double ppq, int playing) __attribute__((weak));
 
-/* Optional, for audio effects (vst.json "effect": true): the wrapper hands over the next block's input (interleaved
- * int16 stereo, `frames` = 128) just before calling render for it. Weak, like the transport hook. */
+/* For the older wrapper (framework/setup.sh's): it hands over each block's input here just before calling render for
+ * it, and knows no process(). An effect defines both (process() = this, then render), so it builds with either. Weak. */
 void mpc_engine_input(void *inst, const int16_t *in_lr, int frames) __attribute__((weak));
