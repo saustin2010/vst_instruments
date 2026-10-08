@@ -12,7 +12,10 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
     `steve-features`), catalogue check OK, same screens.
   - [x] 26 more ready to publish (2026-10-08; `dev-tools/catalogue/prepare.py`, `check.sh`). Held: Hank, Tablor,
     Hush One, Libpo32 (licences), the Stevequencers.
-  - [ ] Device test of the pilot drafts, the review, catalogue PRs; then publish the 26 (status table in the doc).
+  - [x] Device test of the pilot drafts (2026-10-08): Q-Links fine after QLINK_TRAVEL (see the doc).
+  - [ ] The review, catalogue PRs; then publish the 26 (status table in the doc).
+- [ ] Idea, not now (owner, 2026-10-08: "static is fine"): Hera's top wave display could show one still picture per preset,
+  drawn from the engine (dev-tools/stitch/waveforms.py, switched with `when=preset:<i>/56`), instead of one for all.
 
 ## Presets and libraries ([docs/presets-and-libraries.md](docs/presets-and-libraries.md))
 
