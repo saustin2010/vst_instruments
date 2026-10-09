@@ -324,9 +324,11 @@ Still open:
    released (v1.0.0, every zip OK in sd88me's `catalog_check --catalog` and his `catalog_build.py`) and in the
    catalogue: [sd88me/mpc-vst-plugins#236](https://github.com/sd88me/mpc-vst-plugins/pull/236), merged 2026-10-09,
    marked offline only: the owner
-   skipped the device test of the release zips, so they get `tested.json` only after one. Noisemaker's release run
-   failed its host test: LeakSanitizer (on in GitHub's runner, not in our emulated Docker) finds ~1 KB per instance
-   leaked (`FilterHandler`'s filters, the preset spline points): fix, publish, release, then its own entry.
+   skipped the device test of the release zips, so they get `tested.json` only after one. 2026-10-10: the other 8
+   repos created in one batch; Noisemaker's leaks fixed (`FilterHandler`'s Moog filter and its noise source, the
+   Envelope Editor's points), and `dev-tools/catalogue/check.sh` now runs with leak detection on, as the release
+   workflow does. All 9 released v1.0.0 (zips OK in `catalog_check --catalog` and `catalog_build.py`) and proposed in
+   [sd88me/mpc-vst-plugins#255](https://github.com/sd88me/mpc-vst-plugins/pull/255), offline only like #236.
 3. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
 4. Offering the 14 framework commits to sd88me as PRs.
 5. The project board: `gh auth refresh -s project` lets Claude create it.
