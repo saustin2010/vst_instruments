@@ -321,8 +321,9 @@ Still open:
 2. Publishing the 26 ready ones: going ahead (2026-10-08, the pilot is in the catalogue); 20 repos are up, 8 to go
    (midiplayer pixelwalkers rampage superarp eucalypso verglas hank tablor). GitHub stops repo creation after 10 in a
    window, however far apart (hit twice, 2026-10-08/09): run the rest as one batch later. 2026-10-09: 19 of the 20
-   released (v1.0.0, every zip OK in sd88me's `catalog_check --catalog` and his `catalog_build.py`) and proposed in
-   [sd88me/mpc-vst-plugins#236](https://github.com/sd88me/mpc-vst-plugins/pull/236), marked offline only: the owner
+   released (v1.0.0, every zip OK in sd88me's `catalog_check --catalog` and his `catalog_build.py`) and in the
+   catalogue: [sd88me/mpc-vst-plugins#236](https://github.com/sd88me/mpc-vst-plugins/pull/236), merged 2026-10-09,
+   marked offline only: the owner
    skipped the device test of the release zips, so they get `tested.json` only after one. Noisemaker's release run
    failed its host test: LeakSanitizer (on in GitHub's runner, not in our emulated Docker) finds ~1 KB per instance
    leaked (`FilterHandler`'s filters, the preset spline points): fix, publish, release, then its own entry.

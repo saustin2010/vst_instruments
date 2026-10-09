@@ -14,7 +14,12 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
     Hush One, Libpo32 (licences), the Stevequencers.
   - [x] Device test of the pilot drafts (2026-10-08): Q-Links fine after QLINK_TRAVEL (see the doc).
   - [x] Released v1.0.0 and proposed to the catalogue (2026-10-08): sd88me/mpc-vst-plugins #230 (Hera), #231 (303).
-  - [ ] sd88me's merge; then publish the 26 (status table in the doc).
+  - [x] sd88me merged the pilot (2026-10-08). 20 more repos published; 19 released v1.0.0 and in the catalogue
+    (sd88me/mpc-vst-plugins #236, merged 2026-10-09), checked offline only.
+  - [ ] The other 9: 8 repos to create (MIDI Player, Pixel Walkers, Rampage, Super Arp, Eucalypso, Verglas, Hank,
+    Tablor; GitHub allows about 10 repo creations per window) and Noisemaker's leak fix; then their releases and a
+    second catalogue PR.
+  - [ ] Device test of the 19 release zips, then each repo's `tested.json`.
 - [ ] Idea, not now (owner, 2026-10-08: "static is fine"): Hera's top wave display could show one still picture per preset,
   drawn from the engine (dev-tools/stitch/waveforms.py, switched with `when=preset:<i>/56`), instead of one for all.
 
