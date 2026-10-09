@@ -29,7 +29,8 @@ for name in "$@"; do
   fi
   def() { python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('defines',{}).get(sys.argv[2],'').strip('\"'))" "$D/vst.json" "$1"; }
   P=$REPO/presets/$n MD=$(def MODULE_DIR) SUB=$(def MODULE_SUBDIR)
-  export TEST_DOCKER_ARGS="-e ASAN_OPTIONS=detect_leaks=0"
+  # leak detection on, as in the release workflow's host test (a leak fails the release run; tools/build.sh has it off)
+  export TEST_DOCKER_ARGS="-e ASAN_OPTIONS=detect_leaks=1"
   if [ -d "$P" ]; then
     [ -n "$MD" ] && TEST_DOCKER_ARGS="$TEST_DOCKER_ARGS -v $P:$MD:ro"
     [ -n "$SUB" ] && { rm -rf "${D:?}/build/$SUB"; cp -R "$P" "$D/build/$SUB"; }
