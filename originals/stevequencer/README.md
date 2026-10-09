@@ -13,7 +13,7 @@ MIDI port to whatever track you point at it.
 ## On the MPC
 
 - In the plugin browser: **[SEQ] Stevequencer** by **Steve A** (Sequencer)
-- Files: `/sdcard/vst/stevequencer.so`, screen in `/sdcard/Synths/Steve A - VST - [SEQ] Stevequencer/`
+- Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [SEQ] Stevequencer/`, holding `stevequencer.so`, its screen. The vst_instruments installer puts `stevequencer.so` in `/sdcard/vst/` instead.
 - 552 parameters (all automatable) on 6 pages; each step page has 8 Q-Link sub-pages
 - 20 patterns in MPC's PRESET menu: Init, Bass Line, Acid Line, Arp Climb, Offbeat Stabs, Drunk Walk, and 14 seeded
   random ones (2026-10-04): Minor Pulse, Pentatonic Rain, Dorian Groove, Phrygian Run, Lydian Float, Blues Shuffle,
@@ -24,7 +24,7 @@ MIDI port to whatever track you point at it.
 
 ## Playing it
 
-The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../docs/sequencers.md). In short: put
+The walk-through, with what to check when nothing plays: [docs/sequencers.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/sequencers.md). In short: put
 Stevequencer and an instrument on two tracks; **Menu → Preferences → MIDI**: **Track** on for
 **[SEQ] Stevequencer MIDI Out**; on the instrument's track, **MIDI Input Port** = that port and **Monitor** = **In**;
 press play. Stevequencer plays by itself while the transport runs (no notes needed) and follows MPC's tempo, locked to
@@ -113,11 +113,19 @@ It predates the MOD lanes and doesn't have them.
 
 ## Install
 
-From the top of this repo (see [INSTALL.md](../../INSTALL.md)):
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `SEQ-Stevequencer-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-stevequencer/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
 ./install.sh <mpc-address> stevequencer
 ```
+
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
 
 ## How it's made
 
@@ -142,13 +150,15 @@ From the top of this repo (see [INSTALL.md](../../INSTALL.md)):
   (2026-10-05). 33 Q-Link sub-pages in all now.
 
 For more lanes, lanes to any parameter of the instrument (not just its first page), slides, LFOs and lanes that follow
-each other, see **[Stevequencer 16](../stevequencer16/)** (16 steps, eight lanes).
+each other, see **[Stevequencer 16](https://github.com/saustin2010/vst_instruments/tree/main/originals/stevequencer16)** (16 steps, eight lanes).
 
 ## Files
 
 | Path | What |
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
+| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
 | `vst.json` | build settings: name, maker, sources, presets, the live parameter |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order; append-only once released) |
