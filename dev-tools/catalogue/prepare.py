@@ -58,7 +58,12 @@ PLUGINS = {
     "ringsfx": ("rings-fx", "MIT", None, []),
     "hank": ("hank", "MIT", None, []),   # LICENSE written here: upstream declares MIT (README, module.json), no file
     "tablor": ("tablor", "BSD-3-Clause", None, ["tablor/wavetables"]),
+    "stevequencer": ("stevequencer", "MIT", None, []),   # the owner's own, MIT chosen 2026-10-08
+    "stevequencer16": ("stevequencer-16", "MIT", None, []),
 }
+# releases that ship this repo's own skin (deploy/Synths, built by framework/setup.sh's tools) instead of rebuilding it
+# with sd88me's: his skin builder lays out their per-sub-page controls (banks=) and readouts differently
+OWN_SKIN = {"stevequencer", "stevequencer16"}
 PILOTS = {"303", "hera"}   # done by hand and published first: --ready leaves them alone
 # libraries this repo makes with its own scripts (tools/fetch-presets.py MADE): the script, and where its output goes
 MADE = {
@@ -125,6 +130,8 @@ def license_file(D, src):
 def workflow(rel, pid, spdx, about, sub, lib_cmd, user_data):
     ref = release_ref()
     build = 'bash "$MPC_VST/tools/build_port.sh" vst.json'
+    if os.path.basename(rel) in OWN_SKIN:   # the .so from his tools, the screen from deploy/ (checked on the device)
+        build += " && rm -rf build/skin && mkdir -p build/skin && cp -R deploy/Synths/* build/skin/"
     test = '\'"$MPC_VST/tools/test_port.sh" vst.json\''
     extra = ""
     if sub:
@@ -294,6 +301,13 @@ FORK_CHANGES = [
      "Marks a parameter the engine holds to what it has loaded (a file, pattern or track number); the host test "
      "doesn't expect it to read back as set.",
      "The plugin is the same; the host test fails (and so the release build)."),
+    ("94e85dd", "preset_values", "Option `values` / `send` in the presets (`presets.json`)",
+     "The host test reads a preset's option setting as the option's own value or word, as `gen_vst.py` writes it.",
+     "The plugin is the same; the host test expects the wrong option and fails (and so the release build)."),
+    ("7afa72e", "live", "`\"live\"` in `vst.json`",
+     "The step light: after every block the wrapper tells MPC when the engine has moved the playing step, so the "
+     "skin follows playback.",
+     "The step light stays where it was when the page was drawn."),
     ("10d8f5f", "travel", "`QLINK_TRAVEL` and `SET_IF_CHANGED` in `vst.json` `defines`",
      "Q-Link and data-wheel ticks add up like a detented knob, and a switch moves after half an option's width of "
      "turn; a set to the value the engine already holds is skipped. This is how the plugin was checked on the device.",
@@ -336,6 +350,10 @@ def fork_uses(D, cfg, params, layout):
     d = cfg.get("defines", {})
     if d.get("QLINK_TRAVEL") or d.get("SET_IF_CHANGED"):
         used.add("travel")
+    if cfg.get("live"):
+        used.add("live")
+    if cfg.get("presets") and any(q.get("values") or q.get("send") for q in params):
+        used.add("preset_values")
     for sub in ("src", "mpc"):
         for root, _, files in os.walk(os.path.join(D, sub)):
             for f in files:
@@ -360,6 +378,8 @@ def framework_doc(name):
     def has(c):   # the commit is in what this plugin builds with (the pilots pin an earlier one)
         return subprocess.run(["git", "-C", up, "merge-base", "--is-ancestor", c, pin], capture_output=True).returncode == 0
     used = fork_uses(D, cfg, params, layout)
+    if name in OWN_SKIN:   # its skin isn't built by these tools: their skin changes don't apply
+        used -= {"focus_ring", "qlink_box", "when_bands"}
     rows = [(c, t, what, without) for c, key, t, what, without in FORK_CHANGES if key in used and has(c)]
     tooling = [(c, t, why) for c, t, why in FORK_TOOLING if has(c)]
     link = lambda c: "[`%s`](%s/commit/%s)" % (c, FORK, c)
@@ -374,7 +394,7 @@ def framework_doc(name):
         out += ["| %s %s | %s | %s |" % (t, link(c), what, without) for c, t, what, without in rows]
         out.append("")
     lines = [l for l in ("qlink_bounds=column", "qlink_box=slot", "label_scale=1", "focus_ring=1")
-             if re.search("^" + re.escape(l), layout, re.M)]
+             if re.search("^" + re.escape(l), layout, re.M) and name not in OWN_SKIN]
     if lines:
         out += ["## The layout lines at the top of `layout.conf`", "",
                 "They make the tools draw the screen as it was checked on the device:", ""]
@@ -383,6 +403,12 @@ def framework_doc(name):
                  "label_scale=1": "names and values at their designed size (sd88me's option; his default is 1.15)",
                  "focus_ring=1": "the touched control highlighted (a fork change, above)"}
         out += ["- `%s`: %s" % (l, notes[l]) for l in lines] + [""]
+    if name in OWN_SKIN:
+        out += ["## The screen ships as built here", "",
+                "The release builds the plugin with these tools but ships the skin in `deploy/Synths/`, built by "
+                "vst_instruments' own tools (`tools/build.sh`) and checked on the device: sd88me's skin builder lays out "
+                "this plugin's per-sub-page controls (`banks=`) and readouts differently. Rebuild `deploy/` with "
+                "`tools/build.sh` in vst_instruments after changing `layout.conf` or `mpc/gen.py`, before a release.", ""]
     out += ["## Every plugin here also relies on", "", "| Change | Why |", "|---|---|"]
     out += ["| %s %s | %s |" % (t, link(c), why) for c, t, why in tooling] + [""]
     out += ["## When sd88me's mpc-vst-plugins has them", "",

@@ -40,6 +40,8 @@ for name in "$@"; do
   else
     echo "TEST FAILED (build/check-test.log)"; grep -E '^FAIL' "$D/build/check-test.log" | head -5 || true; status=1; continue
   fi
+  # a release that ships this repo's deploy/ skin (prepare.py OWN_SKIN) has nothing of his to compare
+  if grep -q 'cp -R deploy/Synths' "$D/.github/workflows/release.yml" 2>/dev/null; then echo "screen: ships deploy/"; continue; fi
   # skin_same.py compares pictures by their pixels with Pillow: the html-art image has it (built by build_port.sh)
   if docker run --rm -u "$(id -u):$(id -g)" -v "$REPO":"$REPO" -w "$REPO" mpc-vst-html-art \
        python3 dev-tools/catalogue/skin_same.py "$D" > "$D/build/check-skin.log" 2>&1; then
