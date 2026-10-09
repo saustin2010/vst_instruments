@@ -1,6 +1,6 @@
 # Stevequencer
 
-**MIDI step sequencer** · 16 steps on a 4x4 grid, up to four pages (64 steps), edited from the Q-Links. · maker in MPC: Steve A · written for this repo
+**MIDI step sequencer** · 16 steps on a 4x4 grid, up to four pages (64 steps), edited from the Q-Links. · maker in MPC: Steve A · written for this repo · licence: MIT ([`LICENSE`](LICENSE))
 
 <img src="screenshots/page_0.png" width="760" alt="Stevequencer on the MPC touchscreen">
 

@@ -1113,7 +1113,7 @@ static void *tb_create_instance(const char *module_dir, const char *json_default
 #ifndef MPC_PORT   /* MPC port: no first-run copy of the factory packs into a user folder */
         tb::WtScanner::seedUserFolder(inst->module_dir);   /* first-run copy */
 #endif
-        inst->scanner.scan();                              /* opendir walk   */
+        inst->scanner.scan(inst->module_dir);              /* opendir walk   */
         /* Derive the pack list and the published option lists ONCE, off the
          * single scan — so get_param never has to. */
         tb_publish_selection(inst);

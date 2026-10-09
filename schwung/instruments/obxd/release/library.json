@@ -1,0 +1,11 @@
+{
+  "about": "This plugin's library, fetched from the projects it belongs to at the commit it was built and tested with (every file checked against its git hash). release/fetch-library.py puts it in library/, which the release ships as the plugin folder's obxd/ (its data folder, MODULE_SUBDIR).",
+  "sources": [
+    {
+      "repo": "charlesvestal/schwung-obxd",
+      "commit": "9ad0ad1adb7b057820e6836ab65b66b636567c7f",
+      "path": "src/presets",
+      "to": "presets"
+    }
+  ]
+}

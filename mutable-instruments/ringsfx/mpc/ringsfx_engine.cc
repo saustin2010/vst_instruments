@@ -125,7 +125,13 @@ void Render(void *p, int16_t *out, int frames) {
   }
 }
 
-const mpc_engine_t kEngine = {Create, Destroy, Midi, SetParam, GetParam, Render};
+// The newer wrapper's effect call (engine.h process()): this block's input, then Render() on it.
+void Process(void *p, const int16_t *in_lr, int16_t *out, int frames) {
+  mpc_engine_input(p, in_lr, frames);
+  Render(p, out, frames);
+}
+
+const mpc_engine_t kEngine = {Create, Destroy, Midi, SetParam, GetParam, Render, Process};
 
 }  // namespace
 

@@ -1,0 +1,17 @@
+{
+  "about": "This plugin's library, fetched from the projects it belongs to at the commit it was built and tested with (every file checked against its git hash). release/fetch-library.py puts it in library/, which the release ships as the plugin folder's tablor/ (its data folder, MODULE_SUBDIR).",
+  "sources": [
+    {
+      "repo": "athousanddetails/schwung-tablor",
+      "commit": "d51887187f7a03f7b32cc4a74f5c60c5532e65fa",
+      "path": "src/wavetables",
+      "to": "wavetables"
+    },
+    {
+      "repo": "athousanddetails/schwung-tablor",
+      "commit": "d51887187f7a03f7b32cc4a74f5c60c5532e65fa",
+      "path": "src/presets/factory.tbl",
+      "to": "presets/factory.tbl"
+    }
+  ]
+}

@@ -39,5 +39,6 @@
   "params": "params.json",
   "presets": "presets.json",
   "layout": "layout.conf",
-  "art": "html"
+  "art": "html",
+  "defines": {"QLINK_TRAVEL": 1, "SET_IF_CHANGED": 1}
 }

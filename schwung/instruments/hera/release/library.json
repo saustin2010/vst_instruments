@@ -1,0 +1,6 @@
+{
+  "about": "Hera's presets, fetched from the project they belong to at the commit this plugin was built and tested with (every file checked against its git hash). release/fetch-library.py puts them in library/, which the release ships as the plugin folder's hera/ (its data folder, MODULE_SUBDIR).",
+  "sources": [
+    {"repo": "charlesvestal/schwung-hera", "commit": "255be0655d882bb983d3ade276ba40a123093ed6", "path": "src/presets", "to": "presets", "license": "GPL-3.0"}
+  ]
+}

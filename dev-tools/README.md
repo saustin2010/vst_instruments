@@ -27,6 +27,7 @@ python3 steve/tools/stitch/check_skin.py hera       # bindings, Q-Links, touch b
 | `fuzz/` | Stress-tests a port offline under ASan/UBSan the way a user hammers it (two threads, state save/restore, re-inserts). |
 | `probe/` | Builds a port's engine for Linux and pokes it (get/set/notes) to learn its data folders and units. |
 | `presets/` | `levels.sh <plugin dir> [low high]`: plays every preset in a plugin's PRESET menu through the real plugin (x86, after `tools/build.sh`) and prints how loud each is (loudest 400 ms, peak, RMS), to even them out. Used for Mutable Vibe and MPC Plaits (their `mpc/make_presets.py` keep the trims). Runs from the repo, no workspace needed. |
+| `catalogue/` | For plugins moving to their own repos (docs/catalogue-migration.md): `prepare.py <plugin>` writes a plugin folder's repo files (licence, release workflow, library, README sections) from its table of ids and licences; `check.sh <plugin>` builds a plugin with the release tools (`framework/setup-release.sh`), runs the host test and checks its screen is the one in `deploy/` (`skin_same.py`, by content). Runs from the repo, no workspace needed. |
 | `screengrab/` | Screenshots and CPU readings from an MPC over SSH (read-only). |
 | `fake-mpc/` | A pretend MPC in a container, to test `install.sh` / `uninstall.sh` without a device. |
 | `package/` | The script that assembled this repo from the working folder. |

@@ -1,0 +1,39 @@
+# Build a DRAFT release (tag v<version>) with mpc-vst-plugins' shared workflow: Actions -> "Release (draft)" -> Run
+# workflow. Then install that draft's zip on a device, smoke-test it and publish the draft (mpc-vst-plugins
+# docs/RELEASING.md). dry_run builds the zip and skin previews as run artifacts only.
+# The tools come from saustin2010/mpc-vst-plugins (sd88me's repo plus changes offered to it) until they're merged there:
+# then point uses: and tools_ref at sd88me/mpc-vst-plugins and drop tools_repo.
+# This plugin is developed in saustin2010/vst_instruments (schwung/instruments/obxd) and published here.
+name: Release (draft)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version, e.g. 1.0.1
+        required: true
+      dry_run:
+        description: Build only (zip + skin previews as run artifacts), no draft release
+        type: boolean
+        default: false
+
+jobs:
+  vst:
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@f210a56b269deb622ce4d62f437ee3ac8567ceaf
+    permissions:
+      contents: write
+    with:
+      tag: v${{ inputs.version }}
+      version: ${{ inputs.version }}
+      tools_repo: saustin2010/mpc-vst-plugins
+      tools_ref: f210a56b269deb622ce4d62f437ee3ac8567ceaf
+      vst_dir: .
+      # its library into library/, shipped as the plugin folder's obxd/ (MODULE_SUBDIR)
+      build: python3 release/fetch-library.py library && bash "$MPC_VST/tools/build_port.sh" vst.json
+      host_test: 'rm -rf build/obxd && cp -R library build/obxd && "$MPC_VST/tools/test_port.sh" vst.json'
+      extra: library:obxd
+      user_data: obxd/presets
+      plugin_id: obxd
+      license: GPL-3.0-only
+      about: "Oberheim OB-X: reales' OB-Xd with its 128 factory presets."
+      dry_run: ${{ inputs.dry_run }}

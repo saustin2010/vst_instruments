@@ -4,7 +4,8 @@ Presets, kits, wavetables, patches and demo files, one folder per plugin. **Git 
 this README**: the libraries belong to the projects they come from, so instead of copying them into this repo's
 history, `tools/fetch-presets.py` downloads them from those projects, at the exact commits the plugins were built and
 tested with, and checks every file against its git hash. `./install.sh` runs it for you when a plugin's folder is
-missing.
+missing. A plugin with its own repo keeps that pin in its folder (`release/library.json`, which its
+`release/fetch-library.py` and its release build read too); `tools/fetch-presets.py` reads it from there.
 
 ```
 python3 tools/fetch-presets.py              # all of them (about 25 MB)

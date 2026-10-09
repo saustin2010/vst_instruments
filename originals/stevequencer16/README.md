@@ -1,6 +1,6 @@
 # Stevequencer 16
 
-**MIDI step sequencer** · 16 steps on a 4x4 grid and eight modulation lanes that can move any parameter of the instrument, on any page. · maker in MPC: Steve A · written for this repo
+**MIDI step sequencer** · 16 steps on a 4x4 grid and eight modulation lanes that can move any parameter of the instrument, on any page. · maker in MPC: Steve A · written for this repo · licence: MIT ([`LICENSE`](LICENSE))
 
 <img src="screenshots/page_0.png" width="760" alt="Stevequencer 16 on the MPC touchscreen">
 

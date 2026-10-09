@@ -28,11 +28,7 @@ struct WtEntry {
 
 class WtScanner {
 public:
-#ifdef MPC_PORT   /* MPC port: user wavetables live next to the plugin, not in the Move's user library */
-    static constexpr const char *kUserDir = "/sdcard/vst/tablor/wavetables";   /* the shipped packs; add yours in a subfolder */
-#else
     static constexpr const char *kUserDir = "/data/UserData/UserLibrary/Wavetables";
-#endif
 
     /* One-time: copy the module's factory packs into the USER folder, so the
      * user sees and manages everything in one place (Move Manager /
@@ -52,13 +48,19 @@ public:
         if (f) { ::fputs("v1\n", f); ::fclose(f); }
     }
 
-    void scan()
+    void scan(const std::string &moduleDir = std::string())
     {
         entries.clear();
         entries.push_back({ "Init", "", 0 });
 
+#ifdef MPC_PORT   /* MPC port: the wavetables live next to the plugin, in <module>/wavetables (the shipped packs; add
+                     yours in a subfolder), not in the Move's user library */
+        scanDir(moduleDir + "/wavetables", "", 0);
+#else
+        (void) moduleDir;
         ::mkdir(kUserDir, 0755);
         scanDir(kUserDir, "", 0);
+#endif
 
         /* keep Init first, sort the rest by name */
         std::sort(entries.begin() + 1, entries.end(),

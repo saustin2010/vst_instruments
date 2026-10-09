@@ -9,7 +9,7 @@ A West Coast voice in the Serge / Buchla tradition: two oscillators (frequency, 
 ## On the MPC
 
 - In the plugin browser: **[SYN] Denis** by **Filliformes** (Synth)
-- Files: `/sdcard/vst/denis.so`, screen in `/sdcard/Synths/Filliformes - VST - [SYN] Denis/`
+- Files: the release installs one folder, `/sdcard/Synths/Filliformes - VST - [SYN] Denis/`, holding `denis.so`, its screen. The vst_instruments installer puts `denis.so` in `/sdcard/vst/` instead.
 - 61 parameters (all automatable) on 4 pages
 
 ## Playing it
@@ -46,11 +46,19 @@ Q-Link columns: **1** S&H>PITCH1, S&H>TIMBRE, S&H>PITCH2, S&H>HARM  ·  **2** S&
 
 ## Install
 
-From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `SYN-Denis-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-denis/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
 ./install.sh <mpc-address> denis
 ```
+
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
 
 ## Where it comes from
 
@@ -58,7 +66,7 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Vendored at commit c440d8ada537074a7b3dfa9611a0a027ef5f52c2 2026-09-15
 - Schwung module "Denis" v0.1.2 by Vincent Fillion
 - Licence: MIT ([`LICENSE`](LICENSE))
-- MPC port and screen: this repo, built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
+- MPC port and screen: [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/denis`), built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
 
 ## Changes for the MPC
 
@@ -72,7 +80,9 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | Path | What |
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
-| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (its presets/kits are in the repo's `presets/` folder, not here) |
+| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
 | `params.base.json` | the engine's own parameter list it was derived from |
@@ -86,4 +96,24 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | `src/` | the engine's source, vendored from upstream |
 | `UPSTREAM` | where the source came from, and at which commit |
 
-To rebuild from source see [BUILDING.md](../../../BUILDING.md); to change the screen, [RESKINNING.md](../../../RESKINNING.md).
+## Building
+
+With Docker (32-bit ARM emulation for the build), Python 3 and the tools from
+[saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins)
+plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`, and [FRAMEWORK.md](FRAMEWORK.md) says which changes this plugin uses and why):
+
+```
+git clone -b steve-features https://github.com/saustin2010/mpc-vst-plugins
+MPC_VST=$PWD/mpc-vst-plugins
+bash "$MPC_VST/tools/build_port.sh" vst.json        # build/: denis.so, the screen, the plugin-list entry
+bash "$MPC_VST/tools/test_port.sh" vst.json         # the offline host test (ASan/UBSan): must print PASSED
+```
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`, "Release (draft)") as a draft, installed and checked
+on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/vst_instruments/blob/main/BUILDING.md), and to change the screen, [RESKINNING.md](https://github.com/saustin2010/vst_instruments/blob/main/RESKINNING.md).
+
+## Development
+
+This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/denis`), next to the other plugins
+and the tools that made its screen, and published to [mpc-vst-denis](https://github.com/saustin2010/mpc-vst-denis) for its
+releases. Issues and pull requests are welcome in either.

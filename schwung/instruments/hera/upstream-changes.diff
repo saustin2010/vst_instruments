@@ -1,0 +1,34 @@
+# Local changes to the upstream source in src/ (or mpc/), as unified diffs against the files as they
+# were vendored (charlesvestal/schwung-hera 255be06, module v0.1.7). Each is described in README.md under
+# "Changes for the MPC".
+--- a/src/dsp/hera_plugin.cpp
++++ b/src/dsp/hera_plugin.cpp
+@@ -940,6 +940,13 @@
+             if (inst->octave_transpose > 3) inst->octave_transpose = 3;
+         }
+ 
++        /* (mpc port: the state saves "volume" but the original never read it back) */
++        if (json_get_number(val, "volume", &fval) == 0) {
++            inst->volume = fval;
++            if (inst->volume < 0.0f) inst->volume = 0.0f;
++            if (inst->volume > 1.0f) inst->volume = 1.0f;
++        }
++
+         /* Restore all shadow params */
+         for (int i = 0; i < (int)PARAM_DEF_COUNT(g_shadow_params); i++) {
+             if (json_get_number(val, g_shadow_params[i].key, &fval) == 0) {
+@@ -999,6 +1006,14 @@
+     if (strcmp(key, "preset_name") == 0) {
+         return snprintf(buf, buf_len, "%s", inst->preset_name);
+     }
++#ifdef MPC_PORT
++    /* "preset:<n>": preset n's name without loading it, for MPC's PRESET menu (the wrapper's VST programs) */
++    if (strncmp(key, "preset:", 7) == 0) {
++        int n = atoi(key + 7);
++        if (n < 0 || n >= inst->preset_count) return -1;
++        return snprintf(buf, buf_len, "%s", inst->presets[n].name);
++    }
++#endif
+     if (strcmp(key, "name") == 0) {
+         return snprintf(buf, buf_len, "Hera");
+     }

@@ -11,6 +11,39 @@ framework/setup.sh        # clones it into framework/mpc-vst-plugins/ at that co
 
 You only need this to build from source ([BUILDING.md](../BUILDING.md)). Installing the ready-made plugins doesn't.
 
+## The release tools: `saustin2010/mpc-vst-plugins`, branch `steve-features`
+
+The plugins that have their own repos (docs/catalogue-migration.md) are released with sd88me's **current** tools plus 14
+changes, kept as commits on the branch `steve-features` of the fork
+[saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (made 2026-10-08, on his
+main at #229). `framework/setup-release.sh` fetches them at the pinned commit; `dev-tools/catalogue/check.sh` builds with
+them. Each plugin's `FRAMEWORK.md` lists the ones it uses, what they do there and what to change once sd88me has them
+(written by `dev-tools/catalogue/prepare.py`). Each commit is meant to be offered to him as a pull request.
+
+| Commit | Change | Why | Used by |
+|---|---|---|---|
+| [`b1c39bc`](https://github.com/saustin2010/mpc-vst-plugins/commit/b1c39bc) | A hand-made `params.json` beside a Schwung `module` in `vst.json` | Without it sd88me's tools take the params file alone and don't link the Schwung adapter: the build fails. | 18 of the Schwung instruments (those with their own `params.json`) |
+| [`50f459d`](https://github.com/saustin2010/mpc-vst-plugins/commit/50f459d) | The host test runs in Docker on macOS; `TEST_DOCKER_ARGS` | Apple's AddressSanitizer hangs on macOS 26 before the test starts. | building on a Mac |
+| [`81f473b`](https://github.com/saustin2010/mpc-vst-plugins/commit/81f473b) | `focus_ring=1`: the touched control highlighted | His default draws no focus ring since 26 September; our screens were checked with it. | all 30 |
+| [`01da4b3`](https://github.com/saustin2010/mpc-vst-plugins/commit/01da4b3) | `qlink_box=slot`: Q-Link column outlines by whole slots | His outlines are tighter (knob rings) and count buttons; ours were checked on the Live II. | all 30 |
+| [`81a2edd`](https://github.com/saustin2010/mpc-vst-plugins/commit/81a2edd) | `when=<param>:<i>/<N>`: a picture per band of a continuous parameter | Envelope displays drawn per sustain level; without it the build stops. | 8: Aphex, Braids, Denis, Hera, MonkSynth, Moog, Noisemaker, Hank |
+| [`6c87b6d`](https://github.com/saustin2010/mpc-vst-plugins/commit/6c87b6d) | `tools_repo` input of the release workflow | Lets a plugin repo build with the fork's tools. | every plugin repo |
+| [`8a6ed80`](https://github.com/saustin2010/mpc-vst-plugins/commit/8a6ed80) | Option `values` / `send`; labels matched before numbers; no read past an option list | Engines that parse their own words or values; the overflow crashed Aphex under ASan in his wrapper. | values/send: Eucalypso, MIDI Player, Moog, Super Arp; the fixes: all |
+| [`2da5066`](https://github.com/saustin2010/mpc-vst-plugins/commit/2da5066) | `mpc_engine_transport()`: tempo, song position and play state each buffer | Without it the sequencers pass offline but never play in time on the MPC. | 6: Eucalypso, Grids, Groove Bank, MIDI Player, Pixel Walkers, Super Arp |
+| [`6303f4e`](https://github.com/saustin2010/mpc-vst-plugins/commit/6303f4e) | Host test: a wheel click on a long whole-number range moves 1/100 of it | The test expected one step per click on a 0-5000 ms range. | the host test |
+| [`ea27eda`](https://github.com/saustin2010/mpc-vst-plugins/commit/ea27eda) | `"programs"` `count`, `name_at`, `name` | MPC's PRESET menu without empty slots, and with names. | 12: Braids, Chordism, Hera, MonkSynth, Mono Voice, Moog, Mr Drums, Noisemaker, NuSaw, OB-Xd, Hank, Tablor |
+| [`55e60a0`](https://github.com/saustin2010/mpc-vst-plugins/commit/55e60a0) | `"clamped": true` params | Values the engine holds to what it has loaded; the host test skips them. | Groove Bank, MIDI Player |
+| [`9595071`](https://github.com/saustin2010/mpc-vst-plugins/commit/9595071) | The release `install.sh` matches the plugin's path as text (`grep -F`) | Our `[SYN]`-style names made it refuse to install (found on the Live II). | all 30 |
+| [`10d8f5f`](https://github.com/saustin2010/mpc-vst-plugins/commit/10d8f5f) | `QLINK_TRAVEL` and `SET_IF_CHANGED`, opt-in | Q-Link ticks add up like a detented knob, as our wrapper does; his stepped an option per tick and switches flipped on the Live II. | all 30 |
+| [`f210a56`](https://github.com/saustin2010/mpc-vst-plugins/commit/f210a56) | Host test with `QLINK_TRAVEL` | Placeholder params and restore tolerance. | the host test |
+
+Most are opt-in: they change nothing unless a plugin's own files ask for them (a layout line, a `params.json` or `vst.json`
+key, a `defines` entry, the transport hook), so sd88me's own ports build as before. The rest are fixes: the option-list read
+past its end, the installer's path match, the host test (macOS, long ranges, travel) and the release workflow's `tools_repo`. `tools/build.sh` still uses the older base and patch below until all 40 build on these.
+To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `setup-release.sh`, run
+`python3 dev-tools/catalogue/prepare.py --ready` (it rewrites each plugin's `release.yml` and `FRAMEWORK.md`), then
+`check.sh` the plugins.
+
 ## What the patch changes
 
 | Area | Change | Why |

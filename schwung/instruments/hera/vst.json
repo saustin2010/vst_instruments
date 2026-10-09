@@ -2,7 +2,7 @@
   "name": "[SYN] Hera",
   "vendor": "jpcima",
   "uid": "Hera",
-  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count"},
+  "programs": {"param": "preset", "name": "preset_name", "count": "preset_count", "name_at": "preset"},
   "so": "hera.so",
   "module": "src/module.json",
   "build": {
@@ -18,7 +18,8 @@
     "cflags": [
       "-Isrc/dsp",
       "-Isrc/dsp/Engine",
-      "-std=gnu++14", "-fwrapv"
+      "-std=gnu++14", "-fwrapv",
+      "-DMPC_PORT"
     ],
     "libs": [
       "-lm"
@@ -28,6 +29,8 @@
   "layout": "layout.conf",
   "art": "html",
   "defines": {
-    "MODULE_DIR": "\"/sdcard/vst/hera\""
+    "QLINK_TRAVEL": 1, "SET_IF_CHANGED": 1,
+    "MODULE_DIR": "\"/sdcard/vst/hera\"",
+    "MODULE_SUBDIR": "\"hera\""
   }
 }

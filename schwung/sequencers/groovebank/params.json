@@ -2,7 +2,7 @@
  "name": "Groove Bank",
  "params": [
   {
-   "key": "pattern",
+   "key": "pattern", "clamped": true,
    "name": "GROOVE",
    "min": 0,
    "max": 599,
@@ -12,7 +12,7 @@
    "type": "stepper"
   },
   {
-   "key": "variant",
+   "key": "variant", "clamped": true,
    "name": "VARIANT",
    "min": 0,
    "max": 5,

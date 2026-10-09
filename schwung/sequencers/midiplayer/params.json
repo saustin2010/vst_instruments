@@ -11,7 +11,7 @@
    "default": 1
   },
   {
-   "key": "file_index",
+   "key": "file_index", "clamped": true,
    "name": "FILE",
    "min": 0,
    "max": 127,
@@ -42,7 +42,7 @@
    "type": "readout"
   },
   {
-   "key": "track",
+   "key": "track", "clamped": true,
    "name": "TRACK",
    "options": [
     "ALL",

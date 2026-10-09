@@ -9,7 +9,7 @@ A Juno-60 emulation: one DCO per voice with saw, pulse (PWM from the LFO or enve
 ## On the MPC
 
 - In the plugin browser: **[SYN] Hera** by **jpcima** (Synth)
-- Files: `/sdcard/vst/hera.so`, presets/data in `/sdcard/vst/hera/` (from this repo's `presets/hera/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/jpcima - VST - [SYN] Hera/`
+- Files: the release installs one folder, `/sdcard/Synths/jpcima - VST - [SYN] Hera/`, holding `hera.so`, its screen and its presets (`hera/`). The vst_instruments installer puts `hera.so` in `/sdcard/vst/` and the presets in `/sdcard/vst/hera/` instead; the plugin finds them either way (its data folder is `hera/` next to the `.so`).
 - 32 parameters (all automatable) on 2 pages
 
 ## Playing it
@@ -34,17 +34,25 @@ Q-Link columns: **1** RANGE, DCO LFO, PWM DEPTH, PWM MODE  ·  **2** PULSE, SAW,
 
 ## Install
 
-From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `SYN-Hera-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-hera/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
 ./install.sh <mpc-address> hera
 ```
 
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
+
 ## Where it comes from
 
 - Schwung module "Hera" v0.1.7 by jpcima (port: charlesvestal)
-- Licence: GPL-3.0, as declared in the module's `src/module.json` (text: [licenses/](../../../licenses/))
-- MPC port and screen: this repo, built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
+- Licence: GPL-3.0, as declared in the module's `src/module.json` (text: [LICENSE](LICENSE))
+- MPC port and screen: [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/hera`), built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
 
 ## Changes for the MPC
 
@@ -55,13 +63,25 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - **VOLUME restored (2026-10-03)**: the engine saved VOLUME in its state but never read it back, so a project reopened at the default level. `src/dsp/hera_plugin.cpp` now reads it.
 - Presets in MPC's PRESET menu (2026-10-03): its 56 presets are VST programs (vst.json `programs`), so the PRESET
   dropdown in the plugin header, also on the arrangement screen, lists and loads them.
+- **Data folder next to the plugin (2026-10-08)**: `MODULE_SUBDIR` `hera`, so the presets are found in `hera/` beside
+  `hera.so` wherever it's installed (the release's plugin folder, or `/sdcard/vst/` with the collection's installer);
+  `MODULE_DIR` stays as the fallback.
+- **Preset names without loading them (2026-10-08)**: the engine answers `preset:<n>` with preset n's name (`MPC_PORT` in
+  `src/dsp/hera_plugin.cpp`), which is how the current mpc-vst-plugins names the PRESET menu's entries.
+- Both changes to `src/dsp/hera_plugin.cpp` (this and VOLUME) are in `upstream-changes.diff`, against charlesvestal/schwung-hera
+  `255be06` (module v0.1.7).
 
 ## Files
 
 | Path | What |
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
-| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (its presets/kits are in the repo's `presets/` folder, not here) |
+| `LICENSE` | the licence (GPL-3.0) |
+| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
+| `tested.json` | the devices each release was checked on (the catalogue shows it) |
+| `release/` | `library.json` (where its presets come from, pinned) and `fetch-library.py` (fetches them) |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
 | `params.base.json` | the engine's own parameter list it was derived from |
@@ -72,5 +92,27 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | `images/` | artwork: backgrounds, knobs, displays |
 | `design/` | the Google Stitch design this screen was converted from (`stitch.html`, as Stitch wrote it) |
 | `src/` | the engine's source, vendored from upstream |
+| `upstream-changes.diff` | every local change to the upstream source |
 
-To rebuild from source see [BUILDING.md](../../../BUILDING.md); to change the screen, [RESKINNING.md](../../../RESKINNING.md).
+## Building
+
+With Docker (32-bit ARM emulation for the build), Python 3 and the tools from
+[saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins)
+plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`, and [FRAMEWORK.md](FRAMEWORK.md) says which changes this plugin uses and why):
+
+```
+git clone -b steve-features https://github.com/saustin2010/mpc-vst-plugins
+MPC_VST=$PWD/mpc-vst-plugins
+python3 release/fetch-library.py library        # its presets, from their project at a pinned commit
+bash "$MPC_VST/tools/build_port.sh" vst.json        # build/: hera.so, the screen, the plugin-list entry
+bash "$MPC_VST/tools/test_port.sh" vst.json         # the offline host test (ASan/UBSan): must print PASSED
+```
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`, "Release (draft)") as a draft, installed and checked
+on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/vst_instruments/blob/main/BUILDING.md), and to change the screen, [RESKINNING.md](https://github.com/saustin2010/vst_instruments/blob/main/RESKINNING.md).
+
+## Development
+
+This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/hera`), next to the other plugins
+and the tools that made its screen, and published to [mpc-vst-hera](https://github.com/saustin2010/mpc-vst-hera) for its
+releases. Issues and pull requests are welcome in either.

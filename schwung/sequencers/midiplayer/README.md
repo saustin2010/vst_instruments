@@ -9,12 +9,12 @@ Drop .mid files into /sdcard/vst/midiplayer/MIDI on the MPC and MIDI Player play
 ## On the MPC
 
 - In the plugin browser: **[SEQ] MIDI Player** by **Charles Vestal** (Sequencer)
-- Files: `/sdcard/vst/midiplayer.so`, presets/data in `/sdcard/vst/midiplayer/` (from this repo's `presets/midiplayer/`, which `tools/fetch-presets.py` fills; install.sh does that for you), screen in `/sdcard/Synths/Charles Vestal - VST - [SEQ] MIDI Player/`
+- Files: the release installs one folder, `/sdcard/Synths/Charles Vestal - VST - [SEQ] MIDI Player/`, holding `midiplayer.so`, its screen and its files (`midiplayer/`). The vst_instruments installer puts `midiplayer.so` in `/sdcard/vst/` and its data in `/sdcard/vst/midiplayer/` instead; the plugin finds them either way (its data folder is `midiplayer/` next to the `.so`).
 - 6 parameters (all automatable) on 1 page
 
 ## Playing it
 
-The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../../docs/sequencers.md).
+The walk-through, with what to check when nothing plays: [docs/sequencers.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/sequencers.md).
 
 MPC OS ignores a plugin's own MIDI output, so MIDI Player opens its own MIDI port (MPC lists it as **[SEQ] MIDI Player MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
@@ -37,11 +37,20 @@ Q-Link columns: **1** TRACK, LOOP  ·  **2** FILE
 
 ## Install
 
-From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `SEQ-MIDI-Player-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-midiplayer/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+Your own files in `midiplayer/MIDI/` are kept when you update or uninstall.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
 ./install.sh <mpc-address> midiplayer
 ```
+
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
 
 ## Where it comes from
 
@@ -49,7 +58,7 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - Vendored at commit a655383f224c58d506d7a2b14b10977523afe71e 2026-09-12
 - Schwung module "MIDI Player" v0.1.4 by Charles Vestal
 - Licence: MIT ([`LICENSE`](LICENSE))
-- MPC port and screen: this repo, built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
+- MPC port and screen: [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/sequencers/midiplayer`), built on [sd88me's mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) (wrapper, Schwung adapter, skin tools).
 
 ## Changes for the MPC
 
@@ -62,7 +71,10 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | Path | What |
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
-| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (its presets/kits are in the repo's `presets/` folder, not here) |
+| `release/` | `make-library.py` (makes its starter files) |
+| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
 | `params.base.json` | the engine's own parameter list it was derived from |
@@ -75,4 +87,25 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 | `mpc/` | MPC-side glue: the engine wrapper or MIDI/audio adapter, and headers |
 | `UPSTREAM` | where the source came from, and at which commit |
 
-To rebuild from source see [BUILDING.md](../../../BUILDING.md); to change the screen, [RESKINNING.md](../../../RESKINNING.md).
+## Building
+
+With Docker (32-bit ARM emulation for the build), Python 3 and the tools from
+[saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins)
+plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`, and [FRAMEWORK.md](FRAMEWORK.md) says which changes this plugin uses and why):
+
+```
+git clone -b steve-features https://github.com/saustin2010/mpc-vst-plugins
+MPC_VST=$PWD/mpc-vst-plugins
+python3 release/make-library.py library         # its starter files, made by a script here
+bash "$MPC_VST/tools/build_port.sh" vst.json        # build/: midiplayer.so, the screen, the plugin-list entry
+bash "$MPC_VST/tools/test_port.sh" vst.json         # the offline host test (ASan/UBSan): must print PASSED
+```
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`, "Release (draft)") as a draft, installed and checked
+on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/vst_instruments/blob/main/BUILDING.md), and to change the screen, [RESKINNING.md](https://github.com/saustin2010/vst_instruments/blob/main/RESKINNING.md).
+
+## Development
+
+This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/sequencers/midiplayer`), next to the other plugins
+and the tools that made its screen, and published to [mpc-vst-midiplayer](https://github.com/saustin2010/mpc-vst-midiplayer) for its
+releases. Issues and pull requests are welcome in either.

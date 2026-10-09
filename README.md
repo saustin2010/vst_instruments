@@ -90,6 +90,11 @@ cd vst_instruments
 
 The first install of a plugin restarts MPC once (it asks first; `MPC.settings` is backed up). **[INSTALL.md](INSTALL.md)** walks through every step: getting SSH access, what the installer changes, adding a plugin to a track, routing the sequencers, updating, uninstalling, installing by hand and troubleshooting. Presets, kits and wavetables are fetched from their original projects into `presets/` and installed with each plugin; [docs/presets-and-libraries.md](docs/presets-and-libraries.md) lists them, where they come from and how to add your own.
 
+**One plugin at a time, as a release zip:** 21 of the plugins are in
+[sd88me's plugin catalogue](https://sd88me.github.io/mpc-vst-plugins/), each from its own repo with its own releases
+(`saustin2010/mpc-vst-<plugin>`, for example [mpc-vst-303](https://github.com/saustin2010/mpc-vst-303)); more follow.
+This repo stays where they're developed; the plan and where each plugin stands: [docs/catalogue-migration.md](docs/catalogue-migration.md).
+
 ## Status (2026-10-05)
 
 - All 40 build and pass the offline test (all rebuilt 2026-10-05): an x86 build under AddressSanitizer/UBSan that checks every parameter, presets, saving and restoring, Q-Link behaviour, notes to audio, and a stress test that hammers the plugin from two threads as MPC does.
@@ -120,10 +125,10 @@ originals/              2 written for this repo (Stevequencer, Stevequencer 16)
 mpc-ports/              2 written for MPC by other authors (Mutable Vibe, MPC Plaits), built here
   <plugin>/            README.md, screenshots/, deploy/ (ready to install), source, screen design
 presets/               the plugins' presets, kits, wavetables (not in git: tools/fetch-presets.py)
-install.sh, uninstall.sh, tools/   the installer (and tools/build.sh to build from source)
-framework/             our changes to sd88me's mpc-vst-plugins, as a patch, and setup.sh
+install.sh, uninstall.sh, tools/   the installer (and tools/build.sh to build from source, tools/publish.sh to publish a plugin to its own repo)
+framework/             our changes to sd88me's mpc-vst-plugins, as a patch, and setup.sh (setup-release.sh: the tools the plugins' own repos release with)
 dev-tools/             the tools the ports and screens were made with
-docs/                  extra guides (presets and libraries, parameter numbers, root SSH on a stock MPC) and images
+docs/                  extra guides (presets and libraries, parameter numbers, root SSH on a stock MPC, the catalogue migration plan) and images
 licenses/              licence texts the plugins refer to
 ```
 
