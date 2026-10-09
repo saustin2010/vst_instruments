@@ -90,6 +90,10 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - Presets in MPC's PRESET menu (2026-10-03): its presets are VST programs, listed live from the engine (vst.json
   `programs` with `count` and `name_at`; the engine answers a preset's name by number, marked MPC port), so it lists the bank that's loaded and follows a BANK switch.
+- **Memory leaks fixed (2026-10-10).** Upstream never freed each voice's Moog 24 dB filter (with its noise source)
+  or the Envelope Editor's points: about 1 KB lost per instance. The release workflow's host test runs with
+  LeakSanitizer on and refused it. Local patches under `#ifdef MPC_PORT` in `src/dsp/Engine/FilterHandler.h`,
+  `FilterMoog24.h` and `src/dsp/EnvelopeEditor/EnvelopeEditor.h`; the originals are in `upstream-changes.diff`.
 
 ## Files
 

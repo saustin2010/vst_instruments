@@ -53,6 +53,13 @@ public:
 		oscNoise = new OscNoise(sampleRate);
     }
 
+#ifdef MPC_PORT
+    ~FilterMoog24()   // MPC_PORT: upstream has no destructor, so oscNoise leaked
+    {
+        delete oscNoise;
+    }
+#endif
+
     void Process(float *input, float cutoffIn, float resonance, bool isHighPass, bool calcCeff)
     {
         bool hpMode = isHighPass;

@@ -84,6 +84,10 @@ public:
     {
         stopTimer();
         this->splineDataBuffer.clear();
+#ifdef MPC_PORT
+        // MPC_PORT: the editor owns its points (setPoints hands them over); upstream only cleared the array
+        for (int i = 0; i < this->points.size(); i++) delete this->points[i];
+#endif
         this->points.clear();
     }
 
