@@ -21,6 +21,9 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   - [x] The Stevequencers (2026-10-10): release tools `7afa72e` (`"live"` params for the step light), their own screen
     (`deploy/`, byte-identical in the zips); both released v1.0.0 and added to #255 (now 11).
   - [ ] sd88me's merge of #255.
+  - [ ] Percolator (2026-10-10): ready (`prepare.py`, `check.sh` PASSED, ships its own screen like the Stevequencers,
+    since sd88me's builder sizes its readouts differently); repo, release and catalogue entry next. The Pērkons kit
+    packs are not shipped (no licence to pass them on); its README links Erica's downloads.
   - [ ] Device test of the 30 release zips (all but 303 and Hera), then each repo's `tested.json`.
 - [ ] Idea, not now (owner, 2026-10-08: "static is fine"): Hera's top wave display could show one still picture per preset,
   drawn from the engine (dev-tools/stitch/waveforms.py, switched with `when=preset:<i>/56`), instead of one for all.
@@ -47,6 +50,10 @@ parameter index, so existing projects keep working.
 
 ## New plugins
 
+- [ ] **Percolator** ([originals/percolator](originals/percolator/), 2026-10-10): a four-voice drum synth laid out like
+  the Erica Synths Pērkons HD-01, DSP written from scratch, reads the Pērkons' `.KIT` packs. Five pages (two voices
+  each, MASTER, LFO depths), a colour per voice, envelope displays that follow DECAY / PITCH / ATTACK. Still to do on
+  the device: the new screen (knob filmstrips, lit switches, displays), then Design QA.
 - [ ] **Stevequencer** ([originals/stevequencer](originals/stevequencer/)): a 16-step, four-page (64-step) melodic
   sequencer edited from the Q-Links (pitch, length, on/off, velocity, chance, ratchet per step). Browser prototype
   2026-10-04 (`design/prototype.html`); built and installed on the Live II the same day (engine, 418 parameters, 6

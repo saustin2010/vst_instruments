@@ -1,0 +1,10 @@
+/* Percolator's look for the browser-rendered skin artwork (loaded after tools/html_art/default.css): a black panel
+ * with white printing, white knob pointers and red lights. */
+:root { --title-size: 18px; --label-size: 14px; --seg-size: 14px; --sheen: 0.05; --radius: 4px; }
+.frame-border { stroke: #3a3d43; }
+.frame-title { fill: #f2efe8; letter-spacing: 0.14em; }
+.knob-face { fill: #17181b; }
+.knob-pointer { stroke: #f2efe8; }
+.knob-arc { stroke: var(--accent); }
+.knob-track { stroke: #34373d; }
+.text { fill: #b4afa5; letter-spacing: 0.1em; }
