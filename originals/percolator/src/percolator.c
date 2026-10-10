@@ -8,6 +8,30 @@
 #include <stdlib.h>
 #include <string.h>
 #include "percolator.h"
+
+/* PERC_TRACE (a device test build only: "cflags" -DPERC_TRACE): every parameter set, state restore, MIDI message,
+ * create and destroy, timestamped, into /tmp/percolator-trace.log, to see what MPC sends (2026-10-10: STOP). */
+#ifdef PERC_TRACE
+#include <stdarg.h>
+#include <time.h>
+static void trace(const char *fmt, ...) {
+    static FILE *f;
+    if (!f) f = fopen("/tmp/percolator-trace.log", "a");
+    if (!f) return;
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    fprintf(f, "%ld.%03ld ", (long)ts.tv_sec, ts.tv_nsec / 1000000);
+    va_list ap;
+    va_start(ap, fmt);
+    vfprintf(f, fmt, ap);
+    va_end(ap);
+    fputc('\n', f);
+    fflush(f);
+}
+#define TRACE(...) trace(__VA_ARGS__)
+#else
+#define TRACE(...) ((void)0)
+#endif
 #if defined(__x86_64__) || defined(__i386__)
 #include <xmmintrin.h>
 #endif
@@ -139,10 +163,25 @@ static void load_kit(perc_t *P, int n) {
     P->pv[P_KIT] = (float)n;
 }
 
+/* A kit set waits for the next block, MIDI event, other parameter or state save. MPC's plugin host (JUCE) sets
+ * parameter 0 (KIT) to the other end of its range and straight back whenever it gets ready to play (on insert and on
+ * every STOP: "a dodgy hack to force some plugins to initialise", for plugins without an editor); loading at once made
+ * that load the last kit and then this one again over every knob moved since (Live II trace, 2026-10-10). Waiting, the
+ * pair ends on the kit already loaded and nothing happens; a real change (PRESET menu, PREV / NEXT, KIT) loads within
+ * one block. */
+static void apply_kit(perc_t *P) {
+    if (P->kit_pending < 0) return;
+    int n = P->kit_pending;
+    P->kit_pending = -1;
+    if (n != (int)P->pv[P_KIT]) load_kit(P, n);
+}
+
 /* ---- MIDI --------------------------------------------------------------------------------------------------- */
 
 static void e_midi(void *inst, const uint8_t *m, int len) {
     perc_t *P = inst;
+    apply_kit(P);
+    if (len > 0 && m[0] < 0xF0) TRACE("midi %02x %02x %02x (%d)", m[0], len > 1 ? m[1] : 0, len > 2 ? m[2] : 0, len);
     if (len < 2) return;
     int st = m[0] & 0xF0, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
     if (st == 0x90 && d2 > 0) {
@@ -191,6 +230,7 @@ static inline float hermite(const float *b, float pos) {
 
 static void e_render(void *inst, int16_t *out, int frames) {
     perc_t *P = inst;
+    apply_kit(P);
     fpstate_t fp = ftz_on();
     float target = bbd_seconds(P) * SR, rate = bbd_rate(P) * INV_SR;
     float dep = P->pv[P_FX_DEPTH] / 100.0f;
@@ -296,13 +336,21 @@ static int get_state(const perc_t *P, char *buf, int len) {
 
 static void e_set_param(void *inst, const char *key, const char *val) {
     perc_t *P = inst;
-    if (!strcmp(key, "state")) { set_state(P, val); return; }
+    TRACE("set %s = %.48s%s (%d chars)", key, val, strlen(val) > 48 ? "..." : "", (int)strlen(val));
+    if (!strcmp(key, "state")) {
+        P->kit_pending = -1;   /* a restore says which kit it is, and every knob */
+        set_state(P, val);
+        return;
+    }
     int i = find_key(key);
     if (i < 0) return;
-    if (i == P_KIT) {
+    if (i == P_KIT) {   /* loaded at the next block (apply_kit); setting the kit already loaded changes nothing */
         int n = atoi(val);
-        load_kit(P, n < 0 ? 0 : n >= P->nkits ? P->nkits - 1 : n);
-    } else set_value(P, i, val);
+        P->kit_pending = n < 0 ? 0 : n >= P->nkits ? P->nkits - 1 : n;
+    } else {
+        apply_kit(P);   /* a kit first, then this on top of it, in the order they came */
+        set_value(P, i, val);
+    }
 }
 
 static int fmt_hz(char *buf, int len, float hz) {
@@ -331,11 +379,21 @@ static int p_display(const perc_t *P, int v, int which, char *buf, int len) {
 
 static int e_get_param(void *inst, const char *key, char *buf, int len) {
     perc_t *P = inst;
-    if (!strcmp(key, "state")) return get_state(P, buf, len);
+    if (!strcmp(key, "state")) {
+        apply_kit(P);
+        return get_state(P, buf, len);
+    }
     if (!strcmp(key, "kit_count")) return snprintf(buf, len, "%d", P->nkits);
+    int cur_kit = P->kit_pending >= 0 ? P->kit_pending : (int)P->pv[P_KIT];   /* as set, loaded or not */
+    if (!strcmp(key, "kit")) return snprintf(buf, len, "%d", cur_kit);
     if (!strcmp(key, "kit_name") || !strncmp(key, "kit_name_at:", 12)) {
-        int n = key[8] ? atoi(key + 12) : (int)P->pv[P_KIT];
+        int n = key[8] ? atoi(key + 12) : cur_kit;
         return n >= 0 && n < P->nkits ? snprintf(buf, len, "%s", P->kits[n].name) : 0;
+    }
+    if (key[0] == 'v' && key[1] >= '1' && key[1] <= '4' && !strcmp(key + 2, "_mode_name")) {   /* the readout under MODE */
+        char k2[24];
+        snprintf(k2, sizeof k2, "v%c_mode_display", key[1]);
+        return e_get_param(inst, k2, buf, len);
     }
     int i = find_key(key);
     if (i >= 0) {
@@ -396,6 +454,7 @@ static void *e_create(const char *dir) {
     snprintf(P->dir, sizeof P->dir, "%s", dir ? dir : "");
     for (int i = 0; i < NP; i++) P->pv[i] = PDEF[i].def;
     P->bank = -1;
+    P->kit_pending = -1;
     P->lfo_rng = 0x2545f491u;
     for (int v = 0; v < NV; v++) {
         P->v[v].rng = 0x9e3779b9u + 7919u * (unsigned)v;
@@ -404,11 +463,13 @@ static void *e_create(const char *dir) {
     }
     kits_load(P);
     P->dl_t = bbd_seconds(P) * SR;
+    TRACE("create %p (%d kits, dir %s)", (void *)P, P->nkits, P->dir);
     return P;
 }
 
 static void e_destroy(void *inst) {
     perc_t *P = inst;
+    TRACE("destroy %p", inst);
     if (!P) return;
     kits_free(P);
     free(P->dl);

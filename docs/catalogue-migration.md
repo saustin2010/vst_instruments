@@ -272,27 +272,27 @@ have created too many repositories, too quickly"), however far apart they're spa
 | Plugin | Repo | Catalogue id | Licence | Ships | Status |
 |---|---|---|---|---|---|
 | 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **in the catalogue**: v1.0.0, PR #231 merged 2026-10-08 |
-| Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **in the catalogue**: v1.0.0, PR #230 merged 2026-10-08 |
+| Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 PR #230 merged 2026-10-08 |
 | Aphex | mpc-vst-aphex | `aphex` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); envelope displays 28 frames (above) |
-| Braids | mpc-vst-braids | `braids` | MIT | 10 presets | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Chordism | mpc-vst-chordism | `chordism` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Braids | mpc-vst-braids | `braids` | MIT | 10 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
+| Chordism | mpc-vst-chordism | `chordism` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Denis | mpc-vst-denis | `denis` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Elements | mpc-vst-elements | `elements` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Moog | mpc-vst-moog | `raffosynth` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Noisemaker | mpc-vst-noisemaker | `noisemaker` | GPL-2.0-only | keeps your banks | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
-| NuSaw | mpc-vst-nusaw | `nusaw` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| NuSaw | mpc-vst-nusaw | `nusaw` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | OB-Xd | mpc-vst-obxd | `obxd` | GPL-3.0-only | factory bank; keeps your banks | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Wurl | mpc-vst-wurl | `wurl` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Rings | mpc-vst-rings | `rings` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Rings FX | mpc-vst-ringsfx | `rings-fx` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Rings | mpc-vst-rings | `rings` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
+| Rings FX | mpc-vst-ringsfx | `rings-fx` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Warps | mpc-vst-warps | `warps` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Grids | mpc-vst-grids | `grids` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Groove Bank | mpc-vst-groovebank | `groove-bank` | MIT | 14 grooves | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Groove Bank | mpc-vst-groovebank | `groove-bank` | MIT | 14 grooves | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | MIDI Player | mpc-vst-midiplayer | `midi-player` | MIT | demo file (made here); keeps your files | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Pixel Walkers | mpc-vst-pixelwalkers | `pixel-walkers` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Rampage | mpc-vst-rampage | `rampage` | GPL-3.0-or-later | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
@@ -304,7 +304,7 @@ have created too many repositories, too quickly"), however far apart they're spa
 | Hush One, Libpo32 | | | none upstream | | **not published**: no licence, and the authors can't be asked (2026-10-08) |
 | Stevequencer | mpc-vst-stevequencer | `stevequencer` | MIT (2026-10-08) | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); tools `7afa72e` (`"live"` params), ships its own screen (below) |
 | Stevequencer 16 | mpc-vst-stevequencer16 | `stevequencer-16` | MIT (2026-10-08) | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); as Stevequencer |
-| Percolator | mpc-vst-percolator | `percolator` | MIT (2026-10-10) | none shipped: users add the Pērkons kit packs (`user_data: percolator`) | **released** v1.0.1 2026-10-10, proposed in #255; screen checked on the Live II with this repo's build (the zip not yet); ships its own screen; written for this repo |
+| Percolator | mpc-vst-percolator | `percolator` | MIT (2026-10-10) | none shipped: users add the Pērkons kit packs (`user_data: percolator`) | **released** v1.2.0 2026-10-10 (one voice per page, STOP keeps the knobs, MODE on its Q-Link), proposed in #255; screen checked on the Live II with this repo's build (the zip not yet); ships its own screen; written for this repo |
 
 The Stevequencers and Percolator ship the screen built here (`deploy/Synths`, from this repo's framework) instead of one from sd88me's
 skin builder: his builder draws their `banks=` pages and their readouts (`vs=`, `ink=accent`, `box=no`) differently (Percolator:

@@ -4,6 +4,13 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
 
 ## Catalogue ([docs/catalogue-migration.md](docs/catalogue-migration.md))
 
+- [x] **MPC's STOP toggle of parameter 0** (2026-10-10, PR #16): on insert and on every STOP MPC's host (JUCE) sets
+  parameter 0 to the far end and straight back; plugins with a preset there lost every edit on STOP (Hera confirmed
+  by the owner). Fixed in the wrapper (held until the next block) in both tools (fork `7f0653c`); every host test now
+  replays it (all 41 PASSED). Re-released v1.0.1: Fizzik, Hera, NuSaw, Braids, Groove Bank, Mr Hyde, Rings, Rings FX,
+  Chordism, Mono Voice (Percolator in 1.2.0).
+  - [ ] Install all on the Live II (`./install.sh <mpc> all`, no restart) and check STOP on Hera.
+  - [ ] Offer `7f0653c` to sd88me (ask the owner first).
 - [ ] **One repo per plugin for sd88me's catalogue** (planned 2026-10-08): this repo stays the master, each released
   plugin is split into `saustin2010/mpc-vst-<plugin>` (`tools/publish.sh`). The 6 plugins already in the catalogue are
   offered as skins instead.
@@ -21,7 +28,7 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   - [x] The Stevequencers (2026-10-10): release tools `7afa72e` (`"live"` params for the step light), their own screen
     (`deploy/`, byte-identical in the zips); both released v1.0.0 and added to #255 (now 11).
   - [ ] sd88me's merge of #255.
-  - [x] Percolator (2026-10-10): `saustin2010/mpc-vst-percolator` released v1.0.0 and v1.0.1 (its own screen like the
+  - [x] Percolator (2026-10-10): `saustin2010/mpc-vst-percolator` released v1.0.0 to v1.2.0 (its own screen like the
     Stevequencers, since sd88me's builder sizes its readouts differently) and added to #255 (now 12). The Pērkons kit
     packs are not shipped (no licence to pass them on); its README links Erica's downloads.
   - [ ] Device test of the 31 release zips (all but 303 and Hera), then each repo's `tested.json`.
@@ -51,8 +58,8 @@ parameter index, so existing projects keep working.
 ## New plugins
 
 - [ ] **Percolator** ([originals/percolator](originals/percolator/), 2026-10-10): a four-voice drum synth laid out like
-  the Erica Synths Pērkons HD-01, DSP written from scratch, reads the Pērkons' `.KIT` packs. Five pages (two voices
-  each, MASTER, LFO depths), a colour per voice, envelope displays that follow DECAY / PITCH / ATTACK. Checked on the
+  the Erica Synths Pērkons HD-01, DSP written from scratch, reads the Pērkons' `.KIT` packs. Seven pages (a voice
+  each, MASTER, two of LFO depths), a colour per voice, envelope displays that follow DECAY / PITCH / ATTACK. Checked on the
   Live II 2026-10-10 (all five pages, Q-Links, the displays following their knobs, the packs): Design QA ✅.
 - [ ] **Stevequencer** ([originals/stevequencer](originals/stevequencer/)): a 16-step, four-page (64-step) melodic
   sequencer edited from the Q-Links (pitch, length, on/off, velocity, chance, ratchet per step). Browser prototype

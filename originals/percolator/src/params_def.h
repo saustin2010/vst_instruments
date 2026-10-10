@@ -96,6 +96,10 @@ static const pdef_t PDEF[] = {
     {"v4_m_drive", 1, 9, 0.0f},
     {"v4_m_fx", 1, 9, 0.0f},
     {"v4_m_level", 1, 9, 0.0f},
+    {"v1_mode_name", 3, 0, 0.0f},
+    {"v2_mode_name", 3, 0, 0.0f},
+    {"v3_mode_name", 3, 0, 0.0f},
+    {"v4_mode_name", 3, 0, 0.0f},
 };
 enum {
     P_KIT = 0,
@@ -191,7 +195,11 @@ enum {
     P_V4_M_DRIVE = 90,
     P_V4_M_FX = 91,
     P_V4_M_LEVEL = 92,
-    NP = 93
+    P_V1_MODE_NAME = 93,
+    P_V2_MODE_NAME = 94,
+    P_V3_MODE_NAME = 95,
+    P_V4_MODE_NAME = 96,
+    NP = 97
 };
 /* per-voice block: v%d_tune is P_V1_TUNE + 11 * (v - 1) */
 #define VSTRIDE 11

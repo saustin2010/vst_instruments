@@ -327,6 +327,10 @@ FORK_TOOLING = [
      "A data-wheel click moves 1/100 of a long range (0-5000 ms), as it should; the test expected one step."),
     ("f210a56", "Host test with `QLINK_TRAVEL`",
      "Skips the travel check on a placeholder parameter, and allows half a step when a saved state is restored."),
+    ("7f0653c", "Parameter 0 held until the next block",
+     "On insert and on every STOP, MPC's host sets parameter 0 to the far end of its range and straight back. Where "
+     "that is a preset it was loaded twice and every knob moved since went back to it (Live II, 10 October 2026); the "
+     "wrapper now drops a pair that ends where it started, and the host test replays the toggle."),
 ]
 
 

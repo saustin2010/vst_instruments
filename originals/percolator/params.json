@@ -116,7 +116,11 @@
     "3"
    ],
    "default": "1",
-   "dynamic_display": true
+   "send": [
+    "0",
+    "1",
+    "2"
+   ]
   },
   {
    "key": "v1_vcf",
@@ -210,7 +214,11 @@
     "3"
    ],
    "default": "1",
-   "dynamic_display": true
+   "send": [
+    "0",
+    "1",
+    "2"
+   ]
   },
   {
    "key": "v2_vcf",
@@ -304,7 +312,11 @@
     "3"
    ],
    "default": "1",
-   "dynamic_display": true
+   "send": [
+    "0",
+    "1",
+    "2"
+   ]
   },
   {
    "key": "v3_vcf",
@@ -398,7 +410,11 @@
     "3"
    ],
    "default": "1",
-   "dynamic_display": true
+   "send": [
+    "0",
+    "1",
+    "2"
+   ]
   },
   {
    "key": "v4_vcf",
@@ -1032,6 +1048,38 @@
     "80%"
    ],
    "default": "OFF"
+  },
+  {
+   "key": "v1_mode_name",
+   "name": "V1 MODE NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "v2_mode_name",
+   "name": "V2 MODE NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "v3_mode_name",
+   "name": "V3 MODE NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "v4_mode_name",
+   "name": "V4 MODE NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
   }
  ]
 }
