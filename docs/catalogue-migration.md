@@ -61,7 +61,8 @@ page, [docs/CATALOG_SPEC.md](https://github.com/sd88me/mpc-vst-plugins/blob/main
 |---|---|---|
 | **Already in the catalogue** (6) | MPC Plaits (poloq's), Mutable Vibe (nachtaktiv303's), Helm (Lewinator56's), Maze Lite (sd88me's own Maze Sequencer), Plaits (poloq's MPC Plaits has all 24 models, polyphonic), Marbles (FullPace's Glass Spheres) | Don't release. Offer the screens as skins (below) |
 | **Near neighbours** (4) | Eucalypso (Euclidier is also Euclidean, but from a different source), Mono Voice (Monomodule is the real Monomachine engine but build-yourself only), Rings and Rings FX (Mutable Vibe includes six Rings resonator models) | Different plugins, so release them unless you'd rather not |
-| **Waiting on a licence** (4) | Hush One, Libpo32 (no licence upstream, and the authors can't be asked: not published), Stevequencer, Stevequencer 16 (MIT, chosen 2026-10-08) | Hush One and Libpo32 stay here only; the Stevequencers wait for their device checks |
+| **No licence** (2) | Hush One, Libpo32 (no licence upstream, and the authors can't be asked) | Stay here only, not published |
+| **Written for this repo** (2) | Stevequencer, Stevequencer 16 (MIT, chosen 2026-10-08) | Released 2026-10-10 (below) |
 | **New to the catalogue** (26) | Instruments: 303, Aphex, Braids, Chordism, Denis, Elements, Fizzik, Hank, Hera, MonkSynth, Moog, Mr Drums, Mr Hyde, Noisemaker, NuSaw, OB-Xd, Tablor, Wurl. Sequencers: Grids, Groove Bank, MIDI Player, Pixel Walkers, Rampage, Super Arp. Effects: Verglas, Warps | Release |
 
 No catalogue entry shares a uid, `.so` name or skin folder name with the 30 candidates (checked 2026-10-08 against
@@ -163,11 +164,15 @@ is meant to go to sd88me as a PR. `tools/build.sh` keeps using the old base and 
       per-event stepping flipped two-option switches when other Q-Links were turned. `"defines": {"QLINK_TRAVEL": 1,
       "SET_IF_CHANGED": 1}` (on in all 30) brings back this repo's behaviour: ticks add up like a detented knob, and a set
       to the value the engine holds is skipped. Release tools now `f210a56` (the pilots' drafts: `10d8f5f`, same wrapper).
-- [ ] Offer the 14 commits to sd88me as PRs (each plugin's `FRAMEWORK.md` and `framework/README.md` explain them) (ask the owner first), and move the pins to his repo as they're merged.
+- [x] For the Stevequencers (2026-10-10, at `7afa72e`): `"live"` params in `vst.json`, display params the engine moves
+      by itself (the playing step), reported to MPC after every block so the step light follows playback; and the host
+      test reads a preset's option value as what the option sends (its `values` entry or `send` word), not its index.
+      Only the two Stevequencers are released at `7afa72e`; the other 28 keep `f210a56` in their `release.yml` until
+      their next release.
+- [ ] Offer the 16 commits to sd88me as PRs (each plugin's `FRAMEWORK.md` and `framework/README.md` explain them) (ask the owner first), and move the pins to his repo as they're merged.
 - [ ] Not ported yet: `"category"` in the plugin list (13 plugins: his entries are Synth or Effect, so our sequencers
       and drum machines are Synth in a release's entry; harmless, since MPC ignores the category and the kind tags do
-      the sorting), `"live"` parameters (the two Stevequencers, held anyway), and the
-      host test's extra checks from our patch (restore, slow Q-Link, effect and program checks).
+      the sorting), and the host test's extra checks from our patch (restore, slow Q-Link, effect and program checks).
 - [ ] When all 40 build on the new base: replace `mpc-vst-plugins.patch` and `setup.sh`'s pin, and update
       `framework/README.md` and BUILDING.md.
 
@@ -257,49 +262,58 @@ The pilots (303, Hera) are the worked examples: copy from their folders.
 
 ## Phase 3: the rest
 
-Status 2026-10-08. "Ready" means the folder has its repo files (`dev-tools/catalogue/prepare.py`) and
-`dev-tools/catalogue/check.sh` says PASSED and "screen: same" on the release tools (`f210a56`). They waited
-for the pilot to be in the catalogue (2026-10-08); each goes up with `tools/publish.sh <plugin> --create`. GitHub stops an account creating repos after about ten in quick succession ("You have created too many
-repositories, too quickly"): space them a couple of minutes apart.
+Status 2026-10-10: 21 in the catalogue (the pilot's two and #236's 19), 11 released and proposed in #255, 2 not
+published. A plugin was ready when its folder had its repo files (`dev-tools/catalogue/prepare.py`) and
+`dev-tools/catalogue/check.sh` said PASSED and "screen: same" on the release tools (`f210a56`; the Stevequencers:
+`7afa72e` and "screen: ships deploy/"). They waited for the pilot to be in the catalogue (2026-10-08); each went up
+with `tools/publish.sh <plugin> --create`. GitHub stops an account creating repos after about ten in a window ("You
+have created too many repositories, too quickly"), however far apart they're spaced: the last 8 went up as one batch the next day.
 
 | Plugin | Repo | Catalogue id | Licence | Ships | Status |
 |---|---|---|---|---|---|
 | 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **in the catalogue**: v1.0.0, PR #231 merged 2026-10-08 |
 | Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **in the catalogue**: v1.0.0, PR #230 merged 2026-10-08 |
-| Aphex | mpc-vst-aphex | `aphex` | MIT | | **repo published** 2026-10-08, no release yet; envelope displays 28 frames (above) |
-| Braids | mpc-vst-braids | `braids` | MIT | 10 presets | **repo published** 2026-10-08, no release yet |
-| Chordism | mpc-vst-chordism | `chordism` | MIT | | **repo published** 2026-10-08, no release yet |
-| Denis | mpc-vst-denis | `denis` | MIT | | **repo published** 2026-10-08, no release yet |
-| Elements | mpc-vst-elements | `elements` | MIT | | **repo published** 2026-10-08, no release yet |
-| Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | **repo published** 2026-10-08, no release yet |
-| MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | **repo published** 2026-10-08, no release yet |
-| Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | **repo published** 2026-10-08, no release yet (near neighbour: your call) |
-| Moog | mpc-vst-moog | `raffosynth` | MIT | | **repo published** 2026-10-08, no release yet |
-| Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | **repo published** 2026-10-08, no release yet |
-| Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | ready |
-| Noisemaker | mpc-vst-noisemaker | `noisemaker` | GPL-2.0-only | keeps your banks | ready |
-| NuSaw | mpc-vst-nusaw | `nusaw` | MIT | | ready |
-| OB-Xd | mpc-vst-obxd | `obxd` | GPL-3.0-only | factory bank; keeps your banks | ready |
-| Wurl | mpc-vst-wurl | `wurl` | GPL-3.0-only | | ready |
-| Rings | mpc-vst-rings | `rings` | MIT | | ready (near neighbour: your call) |
-| Rings FX | mpc-vst-ringsfx | `rings-fx` | MIT | | ready (near neighbour: your call) |
-| Warps | mpc-vst-warps | `warps` | MIT | | ready |
-| Grids | mpc-vst-grids | `grids` | GPL-3.0-only | | ready |
-| Groove Bank | mpc-vst-groovebank | `groove-bank` | MIT | 14 grooves | ready |
-| MIDI Player | mpc-vst-midiplayer | `midi-player` | MIT | demo file (made here); keeps your files | ready |
-| Pixel Walkers | mpc-vst-pixelwalkers | `pixel-walkers` | MIT | | ready |
-| Rampage | mpc-vst-rampage | `rampage` | GPL-3.0-or-later | | ready |
-| Super Arp | mpc-vst-superarp | `super-arp` | MIT | | ready |
-| Eucalypso | mpc-vst-eucalypso | `eucalypso` | MIT | | ready (near neighbour: your call) |
-| Verglas | mpc-vst-verglas | `verglas` | MIT | | ready |
-| Hank | mpc-vst-hank | `hank` | MIT | | ready: upstream declares MIT in its README and module.json but has no file, so `LICENSE` is the MIT text naming the author (2026-10-08) |
-| Tablor | mpc-vst-tablor | `tablor` | BSD-3-Clause | 115 wavetables, 9 presets; keeps your tables | ready: ships both wavetable packs, as Tablor's repo does (Neu KatalYst: "use them in all your synths"; owner's choice 2026-10-08) |
+| Aphex | mpc-vst-aphex | `aphex` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); envelope displays 28 frames (above) |
+| Braids | mpc-vst-braids | `braids` | MIT | 10 presets | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Chordism | mpc-vst-chordism | `chordism` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Denis | mpc-vst-denis | `denis` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Elements | mpc-vst-elements | `elements` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Moog | mpc-vst-moog | `raffosynth` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Noisemaker | mpc-vst-noisemaker | `noisemaker` | GPL-2.0-only | keeps your banks | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| NuSaw | mpc-vst-nusaw | `nusaw` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| OB-Xd | mpc-vst-obxd | `obxd` | GPL-3.0-only | factory bank; keeps your banks | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Wurl | mpc-vst-wurl | `wurl` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Rings | mpc-vst-rings | `rings` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Rings FX | mpc-vst-ringsfx | `rings-fx` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Warps | mpc-vst-warps | `warps` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Grids | mpc-vst-grids | `grids` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Groove Bank | mpc-vst-groovebank | `groove-bank` | MIT | 14 grooves | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| MIDI Player | mpc-vst-midiplayer | `midi-player` | MIT | demo file (made here); keeps your files | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| Pixel Walkers | mpc-vst-pixelwalkers | `pixel-walkers` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| Rampage | mpc-vst-rampage | `rampage` | GPL-3.0-or-later | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| Super Arp | mpc-vst-superarp | `super-arp` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| Eucalypso | mpc-vst-eucalypso | `eucalypso` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| Verglas | mpc-vst-verglas | `verglas` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| Hank | mpc-vst-hank | `hank` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); upstream declares MIT in its README and module.json but has no file, so `LICENSE` is the MIT text naming the author (2026-10-08) |
+| Tablor | mpc-vst-tablor | `tablor` | BSD-3-Clause | 115 wavetables, 9 presets; keeps your tables | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); ships both wavetable packs, as Tablor's repo does (Neu KatalYst: "use them in all your synths"; owner's choice 2026-10-08) |
 | Hush One, Libpo32 | | | none upstream | | **not published**: no licence, and the authors can't be asked (2026-10-08) |
-| Stevequencer, Stevequencer 16 | | | MIT (2026-10-08) | | **held**: device checks, and `"live"` parameters on the release tools |
+| Stevequencer | mpc-vst-stevequencer | `stevequencer` | MIT (2026-10-08) | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); tools `7afa72e` (`"live"` params), ships its own screen (below) |
+| Stevequencer 16 | mpc-vst-stevequencer16 | `stevequencer-16` | MIT (2026-10-08) | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); as Stevequencer |
 
-- [ ] Publish the ready ones after the pilot's review: `tools/publish.sh <plugin> --create`, the workflow's dry run,
-      a draft each, device tests.
-- [ ] The held ones, as above.
+The Stevequencers ship the screen built here (`deploy/Synths`, from this repo's framework) instead of one from sd88me's
+skin builder: his builder draws their `banks=` pages and their readouts (`vs=`, `ink=accent`, `box=no`) differently, so
+the two can't be made to match with layout lines. `prepare.py` lists them in `OWN_SKIN`: their `release.yml` copies
+`deploy/Synths` into the release, their `FRAMEWORK.md` says so, and `check.sh` prints "screen: ships deploy/" in
+place of "screen: same". Both release zips' skins are byte-identical to `deploy/` (2026-10-10).
+
+- [x] Publish the ready ones: `tools/publish.sh <plugin> --create`, a draft release each, `catalog_check --catalog` on
+      every zip, then published (2026-10-09 and 2026-10-10). Device tests of the release zips are still to do.
+- [x] The held ones (2026-10-10): the Stevequencers, after `"live"` params were added to the release tools.
 - [ ] Skins for the plugins already listed: the offers above.
 
 ## The device and this repo's installer
@@ -328,9 +342,11 @@ Still open:
    repos created in one batch; Noisemaker's leaks fixed (`FilterHandler`'s Moog filter and its noise source, the
    Envelope Editor's points), and `dev-tools/catalogue/check.sh` now runs with leak detection on, as the release
    workflow does. All 9 released v1.0.0 (zips OK in `catalog_check --catalog` and `catalog_build.py`) and proposed in
-   [sd88me/mpc-vst-plugins#255](https://github.com/sd88me/mpc-vst-plugins/pull/255), offline only like #236.
+   [sd88me/mpc-vst-plugins#255](https://github.com/sd88me/mpc-vst-plugins/pull/255), offline only like #236. Later
+   on 2026-10-10: the two Stevequencers released v1.0.0 (tools `7afa72e`, their own screen) and added to #255, now 11
+   plugins; `catalog_build.py` on all 11 with sd88me's current main (Gen2 support added): 0 problems.
 3. The near neighbours (Eucalypso, Mono Voice, Rings, Rings FX): release or hold.
-4. Offering the 14 framework commits to sd88me as PRs.
+4. Offering the 16 framework commits to sd88me as PRs.
 5. The project board: `gh auth refresh -s project` lets Claude create it.
 6. Licences (answered 2026-10-08, the authors can't be contacted): Hank ships with the MIT text its author declares;
    Tablor ships both wavetable packs; Hush One and Libpo32 aren't published; the Stevequencers are MIT.
