@@ -738,7 +738,7 @@ index 7a91d54..2fbf682 100644
      shutil.rmtree(os.path.join(build, "skin"), ignore_errors=True)   # no stale images from older builds
      art = os.environ.get("SHADOW_ART") or (os.path.join(TOOLS, "html_art.py") if cfg.get("art") == "html"
 diff --git a/tools/host_test.c b/tools/host_test.c
-index 0435619..a9cca39 100644
+index 0435619..6b73478 100644
 --- a/tools/host_test.c
 +++ b/tools/host_test.c
 @@ -4,6 +4,7 @@
@@ -846,7 +846,7 @@ index 0435619..a9cca39 100644
  
  int main(void) {
      AEffect *a = VSTPluginMain(host), *b = VSTPluginMain(host);
-@@ -44,8 +126,22 @@ int main(void) {
+@@ -44,8 +126,23 @@ int main(void) {
      int cont = -1, en = -1, pop = -1;
      for (int i = 0; i < NPARAMS; i++) {
          const param_t *p = &PARAMS[i];
@@ -854,8 +854,9 @@ index 0435619..a9cca39 100644
 -        if (en < 0 && p->nopts > 2 && !p->momentary && p->popup_of < 0) en = i;
 +        if (cont < 0 && !p->nopts && !p->momentary && !p->string_display && p->step_target < 0 && p->max > p->min) {
 +            /* one the engine answers (a retired slot, kept for its VST index, isn't) */
-+            b->setP(b, i, 0.8f); float hi = b->getP(b, i);
-+            b->setP(b, i, 0.2f); float lo = b->getP(b, i);
++            char t[64];   /* its display first: that applies a held parameter 0 (setParameter), so this is the engine's value */
++            b->setP(b, i, 0.8f); b->d(b, 7, i, 0, t, 0); float hi = b->getP(b, i);
++            b->setP(b, i, 0.2f); b->d(b, 7, i, 0, t, 0); float lo = b->getP(b, i);
 +            b->setP(b, i, p->def);
 +            if (hi > 0.5f && lo < 0.5f) cont = i;
 +        }
@@ -871,7 +872,7 @@ index 0435619..a9cca39 100644
          if (pop < 0 && p->popup_of >= 0) pop = i;
      }
      if (cont >= 0) {
-@@ -53,13 +149,22 @@ int main(void) {
+@@ -53,13 +150,22 @@ int main(void) {
          a->setP(a, cont, 0.25f); a->d(a, 7, cont, 0, d, 0);
          CHECK(fabsf(a->getP(a, cont) - 0.25f) <= tol, "set %s 0.25 -> get %.3f (\"%s\")", PARAMS[cont].key, a->getP(a, cont), d);
          CHECK(fabsf(b->getP(b, cont) - 0.25f) > 1e-4f || PARAMS[cont].def == 0.25f, "instance b unaffected");
@@ -896,7 +897,7 @@ index 0435619..a9cca39 100644
      }
      if (pop >= 0) {
          int t = PARAMS[pop].popup_of, n = PARAMS[t].nopts;
-@@ -76,6 +181,19 @@ int main(void) {
+@@ -76,6 +182,19 @@ int main(void) {
      for (int k = 0; k < 40; k++) { a->pr(a, 0, o, 128); for (int i = 0; i < 128; i++) e += L[i] * L[i] + R[i] * R[i]; }
      double rms = sqrt(e / (40 * 256));
      printf("%s note 60 -> rms %.4f\n", rms > 1e-5 ? "ok  " : "warn", rms);   /* an effect or a silent patch may be legitimately 0 */
@@ -916,7 +917,7 @@ index 0435619..a9cca39 100644
  
      {   /* instance b never got a note: the legacy process() must add silence, leaving 1.0 */
          float L1[128], R1[128], *o1[2] = {L1, R1}; int kept = 1;
-@@ -87,11 +205,82 @@ int main(void) {
+@@ -87,11 +206,82 @@ int main(void) {
      void *ch = 0; intptr_t n = a->d(a, 23, 0, 0, &ch, 0);
      if (n > 0) {
          b->d(b, 24, 0, n, ch, 0);
