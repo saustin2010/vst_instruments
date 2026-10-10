@@ -1,0 +1,31 @@
+# The framework changes this plugin uses
+
+This plugin is built with [saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/7afa72e35570be24b96b130f520e0cc871db38e1) at `7afa72e` (the commit in `.github/workflows/release.yml`): sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) with changes added on top, each meant to be offered to him. This page lists the ones this plugin relies on, what each does here and what happens without it. The full list, for every plugin: [framework/README.md](https://github.com/saustin2010/vst_instruments/blob/main/framework/README.md) in vst_instruments.
+
+## What this plugin needs
+
+| Change | What it does here | Without it |
+|---|---|---|
+| `"programs"` `count` / `name_at` / `name` in `vst.json` [`ea27eda`](https://github.com/saustin2010/mpc-vst-plugins/commit/ea27eda) | MPC's PRESET menu lists exactly the engine's presets (its own count), named without loading each one (`name_at`), or by reading them once at creation (`name`). | The PRESET menu lists empty slots up to the parameter's range, or numbered names. |
+| `"clamped": true` in `params.json` [`55e60a0`](https://github.com/saustin2010/mpc-vst-plugins/commit/55e60a0) | Marks a parameter the engine holds to what it has loaded (a file, pattern or track number); the host test doesn't expect it to read back as set. | The plugin is the same; the host test fails (and so the release build). |
+| `QLINK_TRAVEL` and `SET_IF_CHANGED` in `vst.json` `defines` [`10d8f5f`](https://github.com/saustin2010/mpc-vst-plugins/commit/10d8f5f) | Q-Link and data-wheel ticks add up like a detented knob, and a switch moves after half an option's width of turn; a set to the value the engine already holds is skipped. This is how the plugin was checked on the device. | Every tick steps an option: on a Live II, turning one Q-Link flipped other switches (8 October 2026). |
+
+## The screen ships as built here
+
+The release builds the plugin with these tools but ships the skin in `deploy/Synths/`, built by vst_instruments' own tools (`tools/build.sh`) and checked on the device: sd88me's skin builder lays out this plugin's per-sub-page controls (`banks=`) and readouts differently. Rebuild `deploy/` with `tools/build.sh` in vst_instruments after changing `layout.conf` or `mpc/gen.py`, before a release.
+
+## Every plugin here also relies on
+
+| Change | Why |
+|---|---|
+| The release's `install.sh` matches the plugin's path as text [`9595071`](https://github.com/saustin2010/mpc-vst-plugins/commit/9595071) | The plugin's name has a kind tag in brackets (`[SYN]`, `[SEQ]` ...), which sd88me's installer read as a pattern: it refused to install, leaving `MPC.settings` unchanged. |
+| `tools_repo` in the release workflow [`6c87b6d`](https://github.com/saustin2010/mpc-vst-plugins/commit/6c87b6d) | Lets `.github/workflows/release.yml` build with the fork's tools instead of sd88me's. |
+| The host test runs in Docker on macOS [`50f459d`](https://github.com/saustin2010/mpc-vst-plugins/commit/50f459d) | Apple's AddressSanitizer hangs on macOS 26 before the test starts. |
+| Host test: long whole-number ranges [`6303f4e`](https://github.com/saustin2010/mpc-vst-plugins/commit/6303f4e) | A data-wheel click moves 1/100 of a long range (0-5000 ms), as it should; the test expected one step. |
+| Host test with `QLINK_TRAVEL` [`f210a56`](https://github.com/saustin2010/mpc-vst-plugins/commit/f210a56) | Skips the travel check on a placeholder parameter, and allows half a step when a saved state is restored. |
+
+## When sd88me's mpc-vst-plugins has them
+
+1. In `.github/workflows/release.yml`, point `uses:` at `sd88me/mpc-vst-plugins/.github/workflows/vst-release.yml@<his commit>`, set `tools_ref` to the same commit and delete the `tools_repo` line.
+2. Nothing else changes: the layout lines, `defines`, `params.json` and `vst.json` stay as they are.
+3. If he leaves one out or names it differently, keep building from the fork until that's settled; the table above says what changes for this plugin without it.

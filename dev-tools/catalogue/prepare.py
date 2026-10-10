@@ -60,10 +60,11 @@ PLUGINS = {
     "tablor": ("tablor", "BSD-3-Clause", None, ["tablor/wavetables"]),
     "stevequencer": ("stevequencer", "MIT", None, []),   # the owner's own, MIT chosen 2026-10-08
     "stevequencer16": ("stevequencer-16", "MIT", None, []),
+    "percolator": ("percolator", "MIT", None, ["percolator"]),   # the owner's own (2026-10-10); users add kit packs
 }
 # releases that ship this repo's own skin (deploy/Synths, built by framework/setup.sh's tools) instead of rebuilding it
 # with sd88me's: his skin builder lays out their per-sub-page controls (banks=) and readouts differently
-OWN_SKIN = {"stevequencer", "stevequencer16"}
+OWN_SKIN = {"stevequencer", "stevequencer16", "percolator"}   # percolator: its readouts (vs=, ink=)
 PILOTS = {"303", "hera"}   # done by hand and published first: --ready leaves them alone
 # libraries this repo makes with its own scripts (tools/fetch-presets.py MADE): the script, and where its output goes
 MADE = {
@@ -177,7 +178,7 @@ jobs:
       about: %(about)s
       dry_run: ${{ inputs.dry_run }}
 """ % dict(rel=rel, ref=ref, note=note, build=build, test=test, extra=extra, ud=ud, pid=pid, spdx=spdx,
-           about=json.dumps(about))
+           about=json.dumps(about, ensure_ascii=False))
 
 
 def readme(rel, D, cfg, sub, made, lic_new, user_data):

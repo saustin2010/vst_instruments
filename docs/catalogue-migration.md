@@ -304,9 +304,11 @@ have created too many repositories, too quickly"), however far apart they're spa
 | Hush One, Libpo32 | | | none upstream | | **not published**: no licence, and the authors can't be asked (2026-10-08) |
 | Stevequencer | mpc-vst-stevequencer | `stevequencer` | MIT (2026-10-08) | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); tools `7afa72e` (`"live"` params), ships its own screen (below) |
 | Stevequencer 16 | mpc-vst-stevequencer16 | `stevequencer-16` | MIT (2026-10-08) | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); as Stevequencer |
+| Percolator | mpc-vst-percolator | `percolator` | MIT (2026-10-10) | none shipped: users add the Pērkons kit packs (`user_data: percolator`) | **ready** 2026-10-10 (`check.sh` PASSED, ships its own screen); written for this repo |
 
-The Stevequencers ship the screen built here (`deploy/Synths`, from this repo's framework) instead of one from sd88me's
-skin builder: his builder draws their `banks=` pages and their readouts (`vs=`, `ink=accent`, `box=no`) differently, so
+The Stevequencers and Percolator ship the screen built here (`deploy/Synths`, from this repo's framework) instead of one from sd88me's
+skin builder: his builder draws their `banks=` pages and their readouts (`vs=`, `ink=accent`, `box=no`) differently (Percolator:
+its readouts' size and colour), so
 the two can't be made to match with layout lines. `prepare.py` lists them in `OWN_SKIN`: their `release.yml` copies
 `deploy/Synths` into the release, their `FRAMEWORK.md` says so, and `check.sh` prints "screen: ships deploy/" in
 place of "screen: same". Both release zips' skins are byte-identical to `deploy/` (2026-10-10).
