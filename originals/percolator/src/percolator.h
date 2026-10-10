@@ -106,6 +106,7 @@ typedef struct perc {
     bank_t banks[MAX_BANKS];
     int nbanks;
     int bank;              /* bank of the loaded kit (its samples), -1 = built in */
+    int kit_pending;       /* a kit set but not loaded yet (-1: none): loaded at the next block (see e_set_param) */
     char dir[512];
 } perc_t;
 

@@ -50,7 +50,12 @@ def params():
                 extra["dynamic_display"] = True
             knob("v%d_%s" % (v, k), "V%d %s" % (v, n), INIT[v][k], **extra)
         opts("v%d_algo" % v, "V%d ALGO" % v, ALGOS[v], INIT[v]["algo"])
-        opts("v%d_mode" % v, "V%d MODE" % v, ["1", "2", "3"], INIT[v]["mode"], dynamic_display=True)
+        # MODE's value text stays "1" / "2" / "3": with the mode's name as its text (dynamic_display) MPC couldn't match
+        # it to the switch's options and set it back to the first one (Q-Link turns bounced, Live II 2026-10-10); the
+        # name is its own readout parameter, v<n>_mode_name, at the end
+        # "send": the engine's own words for the options (their index). Without it the wrapper read the engine's "1"
+        # (the second option) as the label "1" (the first) and a Q-Link turn kept starting over (Live II trace)
+        opts("v%d_mode" % v, "V%d MODE" % v, ["1", "2", "3"], INIT[v]["mode"], send=["0", "1", "2"])
         opts("v%d_vcf" % v, "V%d VCF" % v, ["HP", "BP", "LP"], INIT[v]["vcf"])
     knob("fx_time", "BBD TIME", 45, dynamic_display=True)
     knob("fx_feedback", "FEEDBACK", 35)
@@ -68,6 +73,9 @@ def params():
     for v in range(1, 5):
         for k, n in KNOBS:
             opts("v%d_m_%s" % (v, k), "V%d MOD %s" % (v, n), DEPTHS, 0)
+    # appended 2026-10-10 (1.2.0): the selected mode's name per voice, for the readout under MODE
+    for v in range(1, 5):
+        P.append(dict(key="v%d_mode_name" % v, name="V%d MODE NAME" % v, min=0, max=0, display="string", type="readout"))
     return P
 
 
@@ -265,7 +273,7 @@ def layout():
             html += h_ctext(SX + SW // 2, y - 50, lab, "#aba7c4", 13)
             enum("enum_h", SX + SW // 2, y, "v%d_%s" % (v, k), v, 112, 46)
         # the mode's name for the selected algorithm (CLEAN, PUNCH, 3 CLAPS ...) under MODE
-        L.append("readout cx=%d cy=%d w=300 h=26 vs=18 ink=ink box=no key=v%d_mode" % (SX + SW // 2, SWY[1] + 44, v))
+        L.append("readout cx=%d cy=%d w=300 h=26 vs=18 ink=ink box=no key=v%d_mode_name" % (SX + SW // 2, SWY[1] + 44, v))
         # the display: PITCH | AMP (voices 1-2), AMP (3), ATTACK | DECAY (4)
         cols = {1: [(280, "PITCH"), (560, "AMP")], 2: [(280, "PITCH"), (560, "AMP")], 3: [(840, "AMP")],
                 4: [(280, "ATTACK"), (560, "DECAY")]}[v]
