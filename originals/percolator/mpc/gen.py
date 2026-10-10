@@ -181,6 +181,12 @@ def h_text(x, y, s, c="#aba7c4", size=12, spacing=.16, weight=700):
             % (x, y - 86, size, weight, spacing, c, s))
 
 
+def h_ctext(cx, y, s, c="#aba7c4", size=12):
+    """A caption centred on cx (its top at y)."""
+    return ('<div class="t" style="left:%dpx;top:%dpx;width:200px;text-align:center;font-size:%dpx;font-weight:600;'
+            'letter-spacing:.14em;color:%s">%s</div>' % (cx - 100, y - 86, size, c, s))
+
+
 def h_plate(x, y, w, h, c):
     return ('<div class="a" style="left:%dpx;top:%dpx;width:%dpx;height:%dpx;border-radius:12px;'
             'background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));border:1px solid %s"></div>'
@@ -320,10 +326,13 @@ def layout():
                 x = px + DX + 20 + i * 196
                 html += h_text(x, 220, lab, rgba(COL[v], .8), 11, .18)
                 L.append("readout cx=%d cy=%d w=180 h=30 vs=22 ink=ink box=no key=%s" % (x + 86, 268, k))
+            # each menu's caption centred above it in the artwork (a popup's own label sits at its top-left corner,
+            # under MPC's Q-Link badge when that row's Q-Links are active)
             for y, ks in zip(KY, ROWS):
                 for i, k in enumerate(ks):
-                    L.append('popup cx=%d cy=%d w=124 h=46 label="%s" key=v%d_m_%s'
-                             % (px + 78 + 156 * i, y + 26, dict(KNOBS)[k], v, k))
+                    cx = px + 78 + 156 * i
+                    html += h_ctext(cx, y - 12, dict(KNOBS)[k])
+                    L.append('popup cx=%d cy=%d w=124 h=46 label="" key=v%d_m_%s' % (cx, y + 26, v, k))
         art["bgs"].append({"name": "bg_mod%d%d" % pair, "html": html})
         L.append('qlinks "MOD %d+%d" = ' % pair + ",".join("v%d_m_%s" % (v, k) for v in pair for ks in ROWS for k in ks))
         L.append("")
