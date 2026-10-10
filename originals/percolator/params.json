@@ -1,0 +1,1037 @@
+{
+ "name": "Percolator",
+ "params": [
+  {
+   "key": "kit",
+   "name": "KIT",
+   "type": "stepper",
+   "min": 0,
+   "max": 511,
+   "step": 1,
+   "default": 0,
+   "display": "int",
+   "clamped": true
+  },
+  {
+   "key": "kit_prev",
+   "name": "PREV KIT",
+   "momentary": true,
+   "step_of": "kit",
+   "step_delta": -1
+  },
+  {
+   "key": "kit_next",
+   "name": "NEXT KIT",
+   "momentary": true,
+   "step_of": "kit",
+   "step_delta": 1
+  },
+  {
+   "key": "kit_name",
+   "name": "KIT NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "v1_tune",
+   "name": "V1 TUNE",
+   "min": 0,
+   "max": 100,
+   "default": 38,
+   "dynamic_display": true
+  },
+  {
+   "key": "v1_decay",
+   "name": "V1 DECAY",
+   "min": 0,
+   "max": 100,
+   "default": 22,
+   "dynamic_display": true
+  },
+  {
+   "key": "v1_p1",
+   "name": "V1 PARAM 1",
+   "min": 0,
+   "max": 100,
+   "default": 18,
+   "dynamic_name": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "v1_p2",
+   "name": "V1 PARAM 2",
+   "min": 0,
+   "max": 100,
+   "default": 34,
+   "dynamic_name": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "v1_cutoff",
+   "name": "V1 CUTOFF",
+   "min": 0,
+   "max": 100,
+   "default": 60,
+   "dynamic_display": true
+  },
+  {
+   "key": "v1_drive",
+   "name": "V1 DRIVE",
+   "min": 0,
+   "max": 100,
+   "default": 18
+  },
+  {
+   "key": "v1_fx",
+   "name": "V1 FX SEND",
+   "min": 0,
+   "max": 100,
+   "default": 0
+  },
+  {
+   "key": "v1_level",
+   "name": "V1 LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 85
+  },
+  {
+   "key": "v1_algo",
+   "name": "V1 ALGO",
+   "options": [
+    "FOLD",
+    "WAVE",
+    "RES BD"
+   ],
+   "default": "FOLD"
+  },
+  {
+   "key": "v1_mode",
+   "name": "V1 MODE",
+   "options": [
+    "1",
+    "2",
+    "3"
+   ],
+   "default": "1",
+   "dynamic_display": true
+  },
+  {
+   "key": "v1_vcf",
+   "name": "V1 VCF",
+   "options": [
+    "HP",
+    "BP",
+    "LP"
+   ],
+   "default": "LP"
+  },
+  {
+   "key": "v2_tune",
+   "name": "V2 TUNE",
+   "min": 0,
+   "max": 100,
+   "default": 48,
+   "dynamic_display": true
+  },
+  {
+   "key": "v2_decay",
+   "name": "V2 DECAY",
+   "min": 0,
+   "max": 100,
+   "default": 20,
+   "dynamic_display": true
+  },
+  {
+   "key": "v2_p1",
+   "name": "V2 PARAM 1",
+   "min": 0,
+   "max": 100,
+   "default": 35,
+   "dynamic_name": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "v2_p2",
+   "name": "V2 PARAM 2",
+   "min": 0,
+   "max": 100,
+   "default": 25,
+   "dynamic_name": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "v2_cutoff",
+   "name": "V2 CUTOFF",
+   "min": 0,
+   "max": 100,
+   "default": 75,
+   "dynamic_display": true
+  },
+  {
+   "key": "v2_drive",
+   "name": "V2 DRIVE",
+   "min": 0,
+   "max": 100,
+   "default": 10
+  },
+  {
+   "key": "v2_fx",
+   "name": "V2 FX SEND",
+   "min": 0,
+   "max": 100,
+   "default": 12
+  },
+  {
+   "key": "v2_level",
+   "name": "V2 LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 70
+  },
+  {
+   "key": "v2_algo",
+   "name": "V2 ALGO",
+   "options": [
+    "FOLD",
+    "WAVE",
+    "FM"
+   ],
+   "default": "FM"
+  },
+  {
+   "key": "v2_mode",
+   "name": "V2 MODE",
+   "options": [
+    "1",
+    "2",
+    "3"
+   ],
+   "default": "1",
+   "dynamic_display": true
+  },
+  {
+   "key": "v2_vcf",
+   "name": "V2 VCF",
+   "options": [
+    "HP",
+    "BP",
+    "LP"
+   ],
+   "default": "LP"
+  },
+  {
+   "key": "v3_tune",
+   "name": "V3 TUNE",
+   "min": 0,
+   "max": 100,
+   "default": 45,
+   "dynamic_display": true
+  },
+  {
+   "key": "v3_decay",
+   "name": "V3 DECAY",
+   "min": 0,
+   "max": 100,
+   "default": 18,
+   "dynamic_display": true
+  },
+  {
+   "key": "v3_p1",
+   "name": "V3 PARAM 1",
+   "min": 0,
+   "max": 100,
+   "default": 55,
+   "dynamic_name": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "v3_p2",
+   "name": "V3 PARAM 2",
+   "min": 0,
+   "max": 100,
+   "default": 35,
+   "dynamic_name": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "v3_cutoff",
+   "name": "V3 CUTOFF",
+   "min": 0,
+   "max": 100,
+   "default": 80,
+   "dynamic_display": true
+  },
+  {
+   "key": "v3_drive",
+   "name": "V3 DRIVE",
+   "min": 0,
+   "max": 100,
+   "default": 15
+  },
+  {
+   "key": "v3_fx",
+   "name": "V3 FX SEND",
+   "min": 0,
+   "max": 100,
+   "default": 10
+  },
+  {
+   "key": "v3_level",
+   "name": "V3 LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 75
+  },
+  {
+   "key": "v3_algo",
+   "name": "V3 ALGO",
+   "options": [
+    "SNARE",
+    "SLAP",
+    "TOM"
+   ],
+   "default": "SNARE"
+  },
+  {
+   "key": "v3_mode",
+   "name": "V3 MODE",
+   "options": [
+    "1",
+    "2",
+    "3"
+   ],
+   "default": "1",
+   "dynamic_display": true
+  },
+  {
+   "key": "v3_vcf",
+   "name": "V3 VCF",
+   "options": [
+    "HP",
+    "BP",
+    "LP"
+   ],
+   "default": "LP"
+  },
+  {
+   "key": "v4_tune",
+   "name": "V4 TUNE",
+   "min": 0,
+   "max": 100,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "v4_decay",
+   "name": "V4 DECAY",
+   "min": 0,
+   "max": 100,
+   "default": 6,
+   "dynamic_display": true
+  },
+  {
+   "key": "v4_p1",
+   "name": "V4 PARAM 1",
+   "min": 0,
+   "max": 100,
+   "default": 10,
+   "dynamic_name": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "v4_p2",
+   "name": "V4 PARAM 2",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "dynamic_name": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "v4_cutoff",
+   "name": "V4 CUTOFF",
+   "min": 0,
+   "max": 100,
+   "default": 45,
+   "dynamic_display": true
+  },
+  {
+   "key": "v4_drive",
+   "name": "V4 DRIVE",
+   "min": 0,
+   "max": 100,
+   "default": 0
+  },
+  {
+   "key": "v4_fx",
+   "name": "V4 FX SEND",
+   "min": 0,
+   "max": 100,
+   "default": 0
+  },
+  {
+   "key": "v4_level",
+   "name": "V4 LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 60
+  },
+  {
+   "key": "v4_algo",
+   "name": "V4 ALGO",
+   "options": [
+    "NOISE",
+    "METAL",
+    "SAMPLE"
+   ],
+   "default": "NOISE"
+  },
+  {
+   "key": "v4_mode",
+   "name": "V4 MODE",
+   "options": [
+    "1",
+    "2",
+    "3"
+   ],
+   "default": "1",
+   "dynamic_display": true
+  },
+  {
+   "key": "v4_vcf",
+   "name": "V4 VCF",
+   "options": [
+    "HP",
+    "BP",
+    "LP"
+   ],
+   "default": "HP"
+  },
+  {
+   "key": "fx_time",
+   "name": "BBD TIME",
+   "min": 0,
+   "max": 100,
+   "default": 45,
+   "dynamic_display": true
+  },
+  {
+   "key": "fx_feedback",
+   "name": "FEEDBACK",
+   "min": 0,
+   "max": 100,
+   "default": 35
+  },
+  {
+   "key": "fx_rate",
+   "name": "BBD LFO RATE",
+   "min": 0,
+   "max": 100,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "fx_depth",
+   "name": "BBD MOD DEPTH",
+   "min": 0,
+   "max": 100,
+   "default": 10
+  },
+  {
+   "key": "fx_range",
+   "name": "BBD RANGE",
+   "options": [
+    "SHORT",
+    "LONG"
+   ],
+   "default": "LONG"
+  },
+  {
+   "key": "fx_colour",
+   "name": "BBD COLOUR",
+   "options": [
+    "DARK",
+    "BRIGHT"
+   ],
+   "default": "DARK"
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0,
+   "max": 100,
+   "default": 71
+  },
+  {
+   "key": "comp_thresh",
+   "name": "COMP THRESH",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "comp_amt",
+   "name": "COMP AMOUNT",
+   "min": 0,
+   "max": 100,
+   "default": 0
+  },
+  {
+   "key": "lfo_speed",
+   "name": "LFO SPEED",
+   "min": 0,
+   "max": 100,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "lfo_wave",
+   "name": "LFO WAVE",
+   "options": [
+    "SINE",
+    "TRI",
+    "RAMP",
+    "SAW",
+    "SQUARE",
+    "S&H",
+    "DRIFT"
+   ],
+   "default": "SINE"
+  },
+  {
+   "key": "lfo_level",
+   "name": "MOD LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 100
+  },
+  {
+   "key": "keys",
+   "name": "KEYS",
+   "options": [
+    "OFF",
+    "V1",
+    "V2",
+    "V3",
+    "V4"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_m_tune",
+   "name": "V1 MOD TUNE",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_m_decay",
+   "name": "V1 MOD DECAY",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_m_p1",
+   "name": "V1 MOD PARAM 1",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_m_p2",
+   "name": "V1 MOD PARAM 2",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_m_cutoff",
+   "name": "V1 MOD CUTOFF",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_m_drive",
+   "name": "V1 MOD DRIVE",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_m_fx",
+   "name": "V1 MOD FX SEND",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_m_level",
+   "name": "V1 MOD LEVEL",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_m_tune",
+   "name": "V2 MOD TUNE",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_m_decay",
+   "name": "V2 MOD DECAY",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_m_p1",
+   "name": "V2 MOD PARAM 1",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_m_p2",
+   "name": "V2 MOD PARAM 2",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_m_cutoff",
+   "name": "V2 MOD CUTOFF",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_m_drive",
+   "name": "V2 MOD DRIVE",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_m_fx",
+   "name": "V2 MOD FX SEND",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_m_level",
+   "name": "V2 MOD LEVEL",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_m_tune",
+   "name": "V3 MOD TUNE",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_m_decay",
+   "name": "V3 MOD DECAY",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_m_p1",
+   "name": "V3 MOD PARAM 1",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_m_p2",
+   "name": "V3 MOD PARAM 2",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_m_cutoff",
+   "name": "V3 MOD CUTOFF",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_m_drive",
+   "name": "V3 MOD DRIVE",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_m_fx",
+   "name": "V3 MOD FX SEND",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_m_level",
+   "name": "V3 MOD LEVEL",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_m_tune",
+   "name": "V4 MOD TUNE",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_m_decay",
+   "name": "V4 MOD DECAY",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_m_p1",
+   "name": "V4 MOD PARAM 1",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_m_p2",
+   "name": "V4 MOD PARAM 2",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_m_cutoff",
+   "name": "V4 MOD CUTOFF",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_m_drive",
+   "name": "V4 MOD DRIVE",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_m_fx",
+   "name": "V4 MOD FX SEND",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_m_level",
+   "name": "V4 MOD LEVEL",
+   "options": [
+    "OFF",
+    "10%",
+    "20%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "70%",
+    "80%"
+   ],
+   "default": "OFF"
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 # MPC VST Instruments
 
-**40 plugins for Akai MPC OS standalone devices**: 24 synths, 2 drum machines, 11 MIDI sequencers and generators, and 3 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for the Stevequencers, a browser prototype and a generator) and converted into MPC's skin format; the two made for MPC by other authors keep their own.
+**41 plugins for Akai MPC OS standalone devices**: 24 synths, 3 drum machines, 11 MIDI sequencers and generators, and 3 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for the Stevequencers, a browser prototype and a generator; for Percolator, a generator) and converted into MPC's skin format; the two made for MPC by other authors keep their own.
 
 <img src="docs/images/gallery.png" alt="The first page of every plugin, as the MPC draws it">
 
@@ -46,12 +46,13 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 | <a href="schwung/instruments/tablor/"><img src="schwung/instruments/tablor/screenshots/page_0.png" width="220" alt="Tablor"></a> | **[Tablor](schwung/instruments/tablor/)**<br><sub>Synth · athousanddetails · BSD-3-Clause</sub> | A two-oscillator wavetable synth that ships with its wavetables; 9 factory presets. | ✅ |
 | <a href="schwung/instruments/wurl/"><img src="schwung/instruments/wurl/screenshots/page_0.png" width="220" alt="Wurl"></a> | **[Wurl](schwung/instruments/wurl/)**<br><sub>Synth · Filliformes · GPL-3.0</sub> | A physically modelled Wurlitzer 200A electric piano. | ✅ |
 
-### Drum machines (2)
+### Drum machines (3)
 
 | | Plugin | What it is | Design QA |
 |---|---|---|:---:|
 | <a href="schwung/instruments/libpo32/"><img src="schwung/instruments/libpo32/screenshots/page_0.png" width="220" alt="Libpo32"></a> | **[Libpo32](schwung/instruments/libpo32/)**<br><sub>Drum synth · mestela · not stated upstream</sub> | PO-32-style drum synth: 16 synthesised drum sounds on pads 36-51. | ✅ |
 | <a href="schwung/instruments/mrdrums/"><img src="schwung/instruments/mrdrums/screenshots/page_0.png" width="220" alt="Mr Drums"></a> | **[Mr Drums](schwung/instruments/mrdrums/)**<br><sub>Drum sampler · Move Everything · MIT</sub> | A 16-pad drum sampler: kits of samples on pads 36-51. | ✅ |
+| <a href="originals/percolator/"><img src="originals/percolator/screenshots/page_0.png" width="220" alt="Percolator"></a> | **[Percolator](originals/percolator/)**<br><sub>Drum synth · Steve A · written for this repo</sub> | Four voices laid out like the Erica Synths Pērkons HD-01: three algorithms and three modes each, a BBD delay, an LFO to every knob, envelope displays; plays the Pērkons' free kit packs. | ✅ |
 
 ### MIDI sequencers and generators (11)
 
@@ -91,7 +92,7 @@ cd vst_instruments
 The first install of a plugin restarts MPC once (it asks first; `MPC.settings` is backed up). **[INSTALL.md](INSTALL.md)** walks through every step: getting SSH access, what the installer changes, adding a plugin to a track, routing the sequencers, updating, uninstalling, installing by hand and troubleshooting. Presets, kits and wavetables are fetched from their original projects into `presets/` and installed with each plugin; [docs/presets-and-libraries.md](docs/presets-and-libraries.md) lists them, where they come from and how to add your own.
 
 **One plugin at a time, as a release zip:** 21 of the plugins are in
-[sd88me's plugin catalogue](https://sd88me.github.io/mpc-vst-plugins/) and 11 more are proposed (both Stevequencers among them), each from its own repo with its own releases
+[sd88me's plugin catalogue](https://sd88me.github.io/mpc-vst-plugins/) and 12 more are proposed (both Stevequencers and Percolator among them), each from its own repo with its own releases
 (`saustin2010/mpc-vst-<plugin>`, for example [mpc-vst-303](https://github.com/saustin2010/mpc-vst-303)). The other 8 stay here: 6 have a version in the catalogue already, and 2 have no licence.
 This repo stays where they're developed; the plan and where each plugin stands: [docs/catalogue-migration.md](docs/catalogue-migration.md).
 
@@ -109,6 +110,7 @@ This repo stays where they're developed; the plan and where each plugin stands: 
 - MIDI CC 20-35 move every plugin's first-page Q-Links (column 1 = CC 20-23, top to bottom, and so on), with no MIDI learn: a sequencer's per-step CCs or a controller drive the instrument through the track's MIDI input (2026-10-04; working on the Live II 2026-10-05). For any parameter on any page, NRPN: see Stevequencer 16 below.
 - New: **[Mutable Vibe](mpc-ports/mutablevibe/)** (nachtaktiv303) and **[MPC Plaits](mpc-ports/mpcplaits/)** (poloq), two instruments their authors wrote for MPC OS on sd88me's framework, built here from their source with this repo's copy of it (2026-10-05): offline test passed, Q-Links one column per panel on every page (their screens are otherwise the authors'). Installed and working on the Live II (2026-10-05). Presets made for both, levels evened out offline (24 and 31; Mutable Vibe gained a VOLUME control for it).
 - New: **[Stevequencer 16](originals/stevequencer16/)** (2026-10-05; offline tests passed, installed on the Live II, first device test next): 16 steps and eight modulation lanes that can move any parameter of the instrument, on any page (NRPN, which every plugin here now takes as its parameter number: [docs/parameter-numbers.md](docs/parameter-numbers.md)), with slides across steps, LFOs, per-lane rate and length, and lanes that follow each other (modulation groups). Stevequencer's MOD lanes are confirmed working on the Live II (2026-10-05): MPC passes a track's MIDI CCs through to the instrument.
+- New: **[Percolator](originals/percolator/)** (2026-10-10), a four-voice drum synth written for this repo, laid out like the Erica Synths Pērkons HD-01 (pads 1-4 of bank A play the voices). It reads the Pērkons' kit packs as they unzip; Erica gives them away but they aren't shipped here (its README has the links). Built and offline test passed; its first version measured on the Live II (`bench.sh`: PASS, playing 1.9 %); its screen checked there (Design QA ✅). Released v1.0.1 from its own repo and proposed to sd88me's catalogue (#255).
 - Developed on a Live II. Other Gen1 devices run the same MPC software and should behave the same; Gen2 devices (e.g. Live III) are reported to be more locked down. Reports welcome.
 
 What's next is in [ROADMAP.md](ROADMAP.md). Found a problem? Open an issue with the plugin, your MPC model and firmware, and what you did.

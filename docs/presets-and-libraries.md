@@ -29,7 +29,9 @@ Aphex 41, Denis 30, Fizzik 31, Wurl 10, MonkSynth 12 singers, Mono Voice 12 patc
 and 40 rhythms. Made for this port, where upstream has none (`presets.json`, the wrapper's own presets): 303 13,
 Elements 12, Rings 14, Plaits 24, Mr Hyde 19, Rings FX 12, Verglas 12, Warps 12, Mutable Vibe 24, MPC Plaits 31
 (2026-10-05, levels measured with `dev-tools/presets/levels.sh`). Patterns written for this repo's own
-sequencers: Stevequencer 20, Stevequencer 16 14 (most with modulation lanes). The other sequencers / generators
+sequencers: Stevequencer 20, Stevequencer 16 14 (most with modulation lanes). Percolator has 8 kits built in; it also
+plays Erica Synths' four free Pērkons kit packs (169 kits), which aren't shipped (they come without a licence to pass
+them on): its [README](../originals/percolator/README.md#pērkons-kit-packs) has the download links. The other sequencers / generators
 have none.
 
 ## Adding your own
@@ -41,6 +43,7 @@ have none.
 | Tablor | `/sdcard/vst/tablor/wavetables/<folder>/` | `.wav`, or FLAC wavetables named by frame size like the shipped packs (`.wt2048`) | in each oscillator's table selector |
 | OB-Xd | `/sdcard/vst/obxd/presets/` | `.fxb` banks (OB-Xd / discoDSP, up to 128 programs each, 32 banks). An OB-Xd 1.x LV2 bank (`presets.ttl`): `python3 tools/obxd-lv2-to-fxb.py <presets.ttl or its archive> "presets/obxd/presets/<Bank name>.fxb"` | in BANK (under PATCH), by file name; PATCH browses it |
 | Noisemaker | `/sdcard/vst/noisemaker/presets/<bank name>/` | TAL-NoiseMaker `.noisemakerpreset` files, subfolders included (a pack's BASS/LEAD/PAD... folders); up to 512 per bank, 64 banks | in BANK (under PATCH), by folder name; PATCH browses its first 256, by file name |
+| Percolator | `/sdcard/vst/percolator/<pack folder>/` | Pērkons `.KIT` kit packs, copied as they unzip (`BANKS/NN/KITS/`, `NN/KITS/` or `KITS/`), with their `SAMPLES/1-3.wav`; optional `names.txt` (`NN Name`) | after the built-in kits in KIT and the PRESET menu (`Pack 2 05`, ...); read when the plugin is inserted |
 | Hush One | `/sdcard/vst/hush1/presets/` (any subfolders) | TAL-BassLine-101 `.bassline` / `.vstpreset`, up to 512 | in PATCH after the 11 built-in presets, sorted and named by file name; read when the plugin is inserted |
 
 Copy them over SSH/SFTP (e.g. `scp -r "My Kit" root@<mpc>:/sdcard/vst/mrdrums/kits/`), then re-insert the plugin.

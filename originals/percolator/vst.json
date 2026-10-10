@@ -1,0 +1,30 @@
+{
+  "name": "[DRUM] Percolator",
+  "vendor": "Steve A",
+  "uid": "Prc4",
+  "category": "Drum Machine",
+  "so": "percolator.so",
+  "programs": {"param": "kit", "name": "kit_name", "count": "kit_count", "name_at": "kit_name_at"},
+  "build": {
+    "sources": [
+      "src/percolator.c",
+      "src/voices.c",
+      "src/kits.c"
+    ],
+    "cflags": [
+      "-Isrc"
+    ],
+    "libs": [
+      "-lm",
+      "-lpthread"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "QLINK_TRAVEL": 1, "SET_IF_CHANGED": 1,
+    "MODULE_DIR": "\"/sdcard/vst/percolator\"",
+    "MODULE_SUBDIR": "\"percolator\""
+  }
+}
