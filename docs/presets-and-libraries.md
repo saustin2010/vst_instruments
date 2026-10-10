@@ -45,6 +45,8 @@ have none.
 
 Copy them over SSH/SFTP (e.g. `scp -r "My Kit" root@<mpc>:/sdcard/vst/mrdrums/kits/`), then re-insert the plugin.
 Use only samples and presets you have the right to use.
+Free banks to start with: for Noisemaker, the 442 presets in nine banks that oldcastle shared on LinuxMusicians
+(where to get them, who made each bank and how to copy them: [its README](../schwung/instruments/noisemaker/README.md#more-presets)).
 
 Or keep them in this repo's `presets/<plugin>/` (same layout, not tracked by git) and let `./install.sh` copy them:
 put an archive you unpacked in `presets/<plugin>/not-installed/` so it isn't copied too. Careful:
