@@ -92,7 +92,7 @@ cd vst_instruments
 The first install of a plugin restarts MPC once (it asks first; `MPC.settings` is backed up). **[INSTALL.md](INSTALL.md)** walks through every step: getting SSH access, what the installer changes, adding a plugin to a track, routing the sequencers, updating, uninstalling, installing by hand and troubleshooting. Presets, kits and wavetables are fetched from their original projects into `presets/` and installed with each plugin; [docs/presets-and-libraries.md](docs/presets-and-libraries.md) lists them, where they come from and how to add your own.
 
 **One plugin at a time, as a release zip:** 21 of the plugins are in
-[sd88me's plugin catalogue](https://sd88me.github.io/mpc-vst-plugins/) and 11 more are proposed (both Stevequencers among them), each from its own repo with its own releases
+[sd88me's plugin catalogue](https://sd88me.github.io/mpc-vst-plugins/) and 12 more are proposed (both Stevequencers and Percolator among them), each from its own repo with its own releases
 (`saustin2010/mpc-vst-<plugin>`, for example [mpc-vst-303](https://github.com/saustin2010/mpc-vst-303)). The other 8 stay here: 6 have a version in the catalogue already, and 2 have no licence.
 This repo stays where they're developed; the plan and where each plugin stands: [docs/catalogue-migration.md](docs/catalogue-migration.md).
 

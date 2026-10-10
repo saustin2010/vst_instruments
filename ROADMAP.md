@@ -21,10 +21,10 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   - [x] The Stevequencers (2026-10-10): release tools `7afa72e` (`"live"` params for the step light), their own screen
     (`deploy/`, byte-identical in the zips); both released v1.0.0 and added to #255 (now 11).
   - [ ] sd88me's merge of #255.
-  - [ ] Percolator (2026-10-10): ready (`prepare.py`, `check.sh` PASSED, ships its own screen like the Stevequencers,
-    since sd88me's builder sizes its readouts differently); repo, release and catalogue entry next. The Pērkons kit
+  - [x] Percolator (2026-10-10): `saustin2010/mpc-vst-percolator` released v1.0.0 (its own screen like the
+    Stevequencers, since sd88me's builder sizes its readouts differently) and added to #255 (now 12). The Pērkons kit
     packs are not shipped (no licence to pass them on); its README links Erica's downloads.
-  - [ ] Device test of the 30 release zips (all but 303 and Hera), then each repo's `tested.json`.
+  - [ ] Device test of the 31 release zips (all but 303 and Hera), then each repo's `tested.json`.
 - [ ] Idea, not now (owner, 2026-10-08: "static is fine"): Hera's top wave display could show one still picture per preset,
   drawn from the engine (dev-tools/stitch/waveforms.py, switched with `when=preset:<i>/56`), instead of one for all.
 
