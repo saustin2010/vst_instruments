@@ -20,7 +20,7 @@ which mode, where each knob is, the LFO, the delay), but it won't sound exactly 
 - Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/`, holding `percolator.so`, its screen. The vst_instruments installer puts `percolator.so` in `/sdcard/vst/` instead.
 - Data folder: `percolator/` next to `percolator.so` (with the vst_instruments installer, `/sdcard/vst/percolator/`):
   where the kit packs go
-- 93 parameters (all automatable) on 5 pages, one Q-Link page each
+- 93 parameters (all automatable) on 7 pages, one Q-Link page each
 - 8 kits built in, in MPC's PRESET menu; Erica Synths' four free Pērkons kit packs add 169 more ([below](#pērkons-kit-packs))
 
 ## Playing it
@@ -57,33 +57,33 @@ needs two settings (Voice 4 / Algo 3 PARAM 2 = start, slicing on); here it follo
 ## Pages
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted (the Init kit).
-Five tabs, each with one Q-Link page (no sub-pages to swipe between). Each voice has its own colour: 1 orange,
+Seven tabs, each with one Q-Link page (no sub-pages to swipe between). Each voice has its own colour: 1 orange,
 2 magenta, 3 cyan, 4 lime.
 
-### 1-2. V1+V2, V3+V4
+### 1-4. V1, V2, V3, V4
 
-<img src="screenshots/page_0.png" width="760" alt="Percolator, voices 1 and 2">
-<img src="screenshots/page_1.png" width="760" alt="Percolator, voices 3 and 4">
+<img src="screenshots/page_0.png" width="760" alt="Percolator, voice 1">
+<img src="screenshots/page_3.png" width="760" alt="Percolator, voice 4">
 
-Two voices per page. At the top of each panel, the **envelope display** redraws as you turn its knobs: AMP follows
-DECAY (a flat line at the top = DRONE), PITCH (voices 1-2) follows PARAM 2's pitch envelope, voice 4's ATTACK follows
-its PARAM 2. Next to it ALGO, MODE and VCF; the mode's name is in the title bar. Then two rows of four knobs, each row
-one Q-Link column: TUNE, DECAY, PARAM 1, PARAM 2 / CUTOFF, DRIVE, FX SEND, LEVEL, voice 1's rows on Q-Link columns
-1-2, voice 2's on 3-4 (voices 3 and 4 the same on their page).
+One voice per page, each Q-Link column on its own panel: **Q-Link column 1** = ALGO, MODE, VCF (the switches, big
+enough to tap, and the mode's name under MODE), **column 2** = TUNE, DECAY, PARAM 1, PARAM 2, **column 3** = CUTOFF,
+DRIVE, FX SEND, LEVEL; column 4 is free. Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
+follows DECAY (a flat line at the top = DRONE), PITCH (voices 1-2) follows PARAM 2's pitch envelope, voice 4's ATTACK
+follows its PARAM 2.
 
-### 3. MASTER
+### 5. MASTER
 
-<img src="screenshots/page_2.png" width="760" alt="Percolator, kit, delay, master and modulation">
+<img src="screenshots/page_4.png" width="760" alt="Percolator, kit, delay, master and modulation">
 
-**KIT**: every kit, built-in and loaded, also in MPC's PRESET menu. **BBD DELAY**: time (SHORT 8-200 ms, LONG 60 ms-1.2
+**KIT**: every kit, built-in and loaded, also in MPC's PRESET menu. Choosing the kit that is already loaded changes nothing (MPC sets the current one again on STOP, which must not undo your edits): to go back to a kit as saved, pick another and then it. **BBD DELAY**: time (SHORT 8-200 ms, LONG 60 ms-1.2
 s; moving it bends the pitch as a BBD clock would), feedback (it can run away), its own LFO rate and depth, and
 COLOUR (dark or bright repeats). **MASTER**: volume, the compressor's threshold and amount, KEYS. **MODULATION**: the
 LFO's speed (0.05-30 Hz), MOD LEVEL and wave (sine, triangle, ramp, saw, square, S&H, drift). Q-Link columns: BBD,
 MASTER, MODULATION, then KIT.
 
-### 4-5. MOD 1+2, MOD 3+4
+### 6-7. MOD 1+2, MOD 3+4
 
-<img src="screenshots/page_3.png" width="760" alt="Percolator, LFO depth per knob, voices 1 and 2">
+<img src="screenshots/page_5.png" width="760" alt="Percolator, LFO depth per knob, voices 1 and 2">
 
 How far the LFO moves each knob of each voice: OFF or 10 %-80 % (the hardware's MODULATION DESTINATION / DEPTH
 buttons), laid out where the knobs are on the voice pages, with the LFO's wave, speed and MOD LEVEL shown live above
@@ -204,8 +204,10 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   [mpc-vst-percolator](https://github.com/saustin2010/mpc-vst-percolator), proposed to
   [sd88me's catalogue](https://sd88me.github.io/mpc-vst-plugins/) (sd88me/mpc-vst-plugins#255). The release zips'
   screens are byte-identical to `deploy/`.
-- On the Live II (2026-10-10, this repo's build): all five pages, the Q-Links, the envelope displays following their
-  knobs, and the four kit packs: "all good". The release zip itself is still to be tried there (then `tested.json`).
+- On the Live II (2026-10-10, this repo's build): all pages, the Q-Links, the envelope displays following their
+  knobs, and the four kit packs: "all good". Then (owner): the switches were clunky to tap and off the Q-Links, and
+  pressing STOP reset the knobs. 1.1.0: one voice per page with its switches on Q-Link column 1, and setting the kit
+  that is already loaded no longer reloads it (checked offline: a moved knob survives the same kit set again).
 
 ## Files
 

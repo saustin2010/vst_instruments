@@ -300,8 +300,11 @@ static void e_set_param(void *inst, const char *key, const char *val) {
     int i = find_key(key);
     if (i < 0) return;
     if (i == P_KIT) {
+        /* only a different kit loads: MPC sets the current program again (on STOP, for one) and that must not wipe
+         * the knobs the user has moved since (owner, Live II 2026-10-10). Pick another kit and back to reload one. */
         int n = atoi(val);
-        load_kit(P, n < 0 ? 0 : n >= P->nkits ? P->nkits - 1 : n);
+        n = n < 0 ? 0 : n >= P->nkits ? P->nkits - 1 : n;
+        if (n != (int)P->pv[P_KIT]) load_kit(P, n);
     } else set_value(P, i, val);
 }
 

@@ -95,9 +95,9 @@ def write_header(P):
 
 
 # ---- the screen ----------------------------------------------------------------------------------------------
-# Plugin area: x 0..1280, y 86..714 (the artwork's y = layout y - 86). Five tabs, one Q-Link page each (no sub-pages
-# to swipe between): V1+V2, V3+V4, MASTER, MOD 1+2, MOD 3+4. A voice panel: its envelope display and switches, then
-# two rows of four knobs; each row is one Q-Link column (Moog's layout is the model), outlined by a row plate.
+# Plugin area: x 0..1280, y 86..714 (the artwork's y = layout y - 86). Seven tabs, one Q-Link page each (no sub-pages
+# to swipe between): V1, V2, V3, V4, MASTER, MOD 1+2, MOD 3+4. A voice page: its switches (Q-Link column 1), its
+# envelope display, two rows of four knobs (columns 2 and 3); each Q-Link column has its own plate.
 # The artwork (mpc/skin.py, in the art container) is drawn from build/skin.json, written here with the layout.
 THEME = """theme_bg=0b0a10
 theme_panel=15141c
@@ -235,7 +235,7 @@ def layout():
         L.append('%s cx=%d cy=%d label="%s" key=%s sw=%d sh=%d img=%s img_on=%s'
                  % (kind, cx, cy, label, key, sw, sh, seg(None, sw, sh), seg(col, sw, sh)))
 
-    for col, r in ((1, 36), (2, 36), (3, 36), (4, 36), ("bbd", 40), ("mst", 40), ("mod", 40)):
+    for col, r in ((1, 40), (2, 40), (3, 40), (4, 40), ("bbd", 40), ("mst", 40), ("mod", 40)):
         art["knobs"].append({"name": "knob_%s" % col, "r": r, "color": COL[col]})
 
     def knob(key, x, y, col, r, label=None):
@@ -249,37 +249,43 @@ def layout():
             h += h_plate(px + 12, y - 58, PW - 24, 156, c)
         return h
 
-    # voice tabs
-    for pair in ((1, 2), (3, 4)):
-        L.append("[tab V%d+V%d]" % pair)
-        L.append("art file=images/skin/bg_v%d%d.png x=0 y=86 w=1280 h=628" % pair)
-        html = ""
-        for px, v in zip(PX, pair):
-            c = COL[v]
-            html += voice_panel(px, v, "VOICE %d" % v, "PAD %d" % v)
-            # the display: PITCH | AMP (voices 1-2), AMP (3), ATTACK | DECAY (4)
-            cols = {1: [(108, "PITCH"), (216, "AMP")], 2: [(108, "PITCH"), (216, "AMP")], 3: [(324, "AMP")],
-                    4: [(108, "ATTACK"), (216, "DECAY")]}[v]
-            html += h_display(px + DX, DY, DW, DH, c, cols)
-            mx, my, mh = px + DX + 10, DY + 20, DH - 28
-            keys = {1: ["p2", "decay"], 2: ["p2", "decay"], 3: ["decay"], 4: ["p2", "decay"]}[v]
-            for (cw, lab), k in zip(cols, keys):
-                kind = {"PITCH": "pitch", "ATTACK": "attack"}.get(lab, "decay")
-                name = "env_v%d_%s" % (v, kind)
-                art["displays"].append({"name": name, "kind": kind, "w": cw, "h": mh, "color": c, "attack": v != 4})
-                L.append("meter cx=%d cy=%d w=%d h=%d key=v%d_%s strip=images/skin/%s.png frames=32"
-                         % (mx + cw // 2, my + mh // 2, cw, mh, v, k, name))
-                mx += cw
-            # ALGO / MODE / VCF, lit in the voice's colour; the mode's name in the title bar
-            for y, (k, lab) in zip(SY, (("algo", "ALGO"), ("mode", "MODE"), ("vcf", "VCF"))):
-                html += h_text(px + 380, y - 7, lab)
-                enum("enum_h", px + 520, y, "v%d_%s" % (v, k), v, 60, 30)
-            L.append("readout cx=%d cy=%d w=200 h=24 vs=18 ink=ink box=no key=v%d_mode" % (px + 520, PY + 27, v))
-            for y, ks in zip(KY, ROWS):
-                for i, k in enumerate(ks):
-                    knob("v%d_%s" % (v, k), px + 78 + 156 * i, y, v, 36, caption(v, k))
-        art["bgs"].append({"name": "bg_v%d%d" % pair, "html": html})
-        L.append('qlinks "V%d+V%d" = ' % pair + ",".join("v%d_%s" % (v, k) for v in pair for ks in ROWS for k in ks))
+    # voice tabs: one voice each. Q-Link column 1 = its switches (ALGO, MODE, VCF), column 2 = TUNE DECAY PARAM 1
+    # PARAM 2, column 3 = CUTOFF DRIVE FX SEND LEVEL (owner, 2026-10-10: "the buttons ... on qlink 1 and the other
+    # controls on 2 and 3"); each column has its own plate. The display spans the knob rows.
+    SX, SW = 16, 372                 # the switch panel
+    RX, RW = 404, 860                # the display and the knob rows
+    SWY = (222, 412, 602)            # ALGO / MODE / VCF
+    for v in range(1, 5):
+        c = COL[v]
+        L.append("[tab V%d]" % v)
+        L.append("art file=images/skin/bg_v%d.png x=0 y=86 w=1280 h=628" % v)
+        html = h_panel(8, PY, 1264, PH, c, "VOICE %d" % v, "PAD %d" % v)
+        html += h_plate(SX, 142, SW, 528, c)
+        for y, (k, lab) in zip(SWY, (("algo", "ALGO"), ("mode", "MODE"), ("vcf", "VCF"))):
+            html += h_ctext(SX + SW // 2, y - 50, lab, "#aba7c4", 13)
+            enum("enum_h", SX + SW // 2, y, "v%d_%s" % (v, k), v, 112, 46)
+        # the mode's name for the selected algorithm (CLEAN, PUNCH, 3 CLAPS ...) under MODE
+        L.append("readout cx=%d cy=%d w=300 h=26 vs=18 ink=ink box=no key=v%d_mode" % (SX + SW // 2, SWY[1] + 44, v))
+        # the display: PITCH | AMP (voices 1-2), AMP (3), ATTACK | DECAY (4)
+        cols = {1: [(280, "PITCH"), (560, "AMP")], 2: [(280, "PITCH"), (560, "AMP")], 3: [(840, "AMP")],
+                4: [(280, "ATTACK"), (560, "DECAY")]}[v]
+        html += h_display(RX, 142, RW, 150, c, cols)
+        mx, my, mh = RX + 10, 162, 122
+        keys = {1: ["p2", "decay"], 2: ["p2", "decay"], 3: ["decay"], 4: ["p2", "decay"]}[v]
+        for (cw, lab), k in zip(cols, keys):
+            kind = {"PITCH": "pitch", "ATTACK": "attack"}.get(lab, "decay")
+            name = "env_v%d_%s" % (v, kind)
+            art["displays"].append({"name": name, "kind": kind, "w": cw, "h": mh, "color": c, "attack": v != 4})
+            L.append("meter cx=%d cy=%d w=%d h=%d key=v%d_%s strip=images/skin/%s.png frames=32"
+                     % (mx + cw // 2, my + mh // 2, cw, mh, v, k, name))
+            mx += cw
+        for y, ks in zip(KY, ROWS):
+            html += h_plate(RX, y - 58, RW, 156, c)
+            for i, k in enumerate(ks):
+                knob("v%d_%s" % (v, k), RX + 107 + 215 * i, y, v, 40, caption(v, k))
+        art["bgs"].append({"name": "bg_v%d" % v, "html": html})
+        L.append('qlinks "V%d" = ' % v + ",".join(["v%d_%s" % (v, k) for k in ("algo", "mode", "vcf")] + ["-"] +
+                                               ["v%d_%s" % (v, k) for ks in ROWS for k in ks]))
         L.append("")
 
     # MASTER page: the kit browser, then a panel per Q-Link column: BBD delay, master (with KEYS), modulation
