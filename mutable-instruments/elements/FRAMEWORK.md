@@ -1,6 +1,6 @@
 # The framework changes this plugin uses
 
-This plugin is built with [saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/f210a56b269deb622ce4d62f437ee3ac8567ceaf) at `f210a56` (the commit in `.github/workflows/release.yml`): sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) with changes added on top, each meant to be offered to him. This page lists the ones this plugin relies on, what each does here and what happens without it. The full list, for every plugin: [framework/README.md](https://github.com/saustin2010/vst_instruments/blob/main/framework/README.md) in vst_instruments.
+This plugin is built with [saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/7f0653cfbf6f3c2a4a1d0549f4fd9fb3e14d8c27) at `7f0653c` (the commit in `.github/workflows/release.yml`): sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins) with changes added on top, each meant to be offered to him. This page lists the ones this plugin relies on, what each does here and what happens without it. The full list, for every plugin: [framework/README.md](https://github.com/saustin2010/vst_instruments/blob/main/framework/README.md) in vst_instruments.
 
 ## What this plugin needs
 
@@ -28,6 +28,7 @@ They make the tools draw the screen as it was checked on the device:
 | The host test runs in Docker on macOS [`50f459d`](https://github.com/saustin2010/mpc-vst-plugins/commit/50f459d) | Apple's AddressSanitizer hangs on macOS 26 before the test starts. |
 | Host test: long whole-number ranges [`6303f4e`](https://github.com/saustin2010/mpc-vst-plugins/commit/6303f4e) | A data-wheel click moves 1/100 of a long range (0-5000 ms), as it should; the test expected one step. |
 | Host test with `QLINK_TRAVEL` [`f210a56`](https://github.com/saustin2010/mpc-vst-plugins/commit/f210a56) | Skips the travel check on a placeholder parameter, and allows half a step when a saved state is restored. |
+| Parameter 0 held until the next block [`7f0653c`](https://github.com/saustin2010/mpc-vst-plugins/commit/7f0653c) | On insert and on every STOP, MPC's host sets parameter 0 to the far end of its range and straight back. Where that is a preset it was loaded twice and every knob moved since went back to it (Live II, 10 October 2026); the wrapper now drops a pair that ends where it started, and the host test replays the toggle. |
 
 ## When sd88me's mpc-vst-plugins has them
 
