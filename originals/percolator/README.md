@@ -200,10 +200,12 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   `check_skin.py`: OK. Every algorithm and mode measured offline (level, DC, clicks).
 - On an MPC Live II (as "Perculator", the first screen): `bench.sh` idle 1.1 %, playing 1.9 %, Q-Link sweep p99 4.0 %,
   worst block 4.3 %: PASS.
-- Released v1.0.0 (2026-10-10) from [mpc-vst-percolator](https://github.com/saustin2010/mpc-vst-percolator) and
-  proposed to [sd88me's catalogue](https://sd88me.github.io/mpc-vst-plugins/) (sd88me/mpc-vst-plugins#255),
-  checked offline (the release zip's screen is byte-identical to `deploy/`).
-- To check on the device with this screen: the per-voice knob filmstrips, lit switches and envelope displays.
+- Released v1.0.0 and v1.0.1 (2026-10-10; 1.0.1: the MOD pages' captions clear of MPC's Q-Link badge) from
+  [mpc-vst-percolator](https://github.com/saustin2010/mpc-vst-percolator), proposed to
+  [sd88me's catalogue](https://sd88me.github.io/mpc-vst-plugins/) (sd88me/mpc-vst-plugins#255). The release zips'
+  screens are byte-identical to `deploy/`.
+- On the Live II (2026-10-10, this repo's build): all five pages, the Q-Links, the envelope displays following their
+  knobs, and the four kit packs: "all good". The release zip itself is still to be tried there (then `tested.json`).
 
 ## Files
 
