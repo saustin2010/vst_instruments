@@ -200,14 +200,16 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   `check_skin.py`: OK. Every algorithm and mode measured offline (level, DC, clicks).
 - On an MPC Live II (as "Perculator", the first screen): `bench.sh` idle 1.1 %, playing 1.9 %, Q-Link sweep p99 4.0 %,
   worst block 4.3 %: PASS.
-- Released v1.0.0 to v1.1.0 (2026-10-10; 1.0.1: the MOD pages' captions clear of MPC's Q-Link badge) from
+- Released v1.0.0 to v1.2.0 (2026-10-10; 1.0.1: the MOD pages' captions clear of MPC's Q-Link badge; 1.2.0: below) from
   [mpc-vst-percolator](https://github.com/saustin2010/mpc-vst-percolator), proposed to
   [sd88me's catalogue](https://sd88me.github.io/mpc-vst-plugins/) (sd88me/mpc-vst-plugins#255). The release zips'
   screens are byte-identical to `deploy/`.
 - On the Live II (2026-10-10, this repo's build): all pages, the Q-Links, the envelope displays following their
   knobs, and the four kit packs: "all good". Then (owner): the switches were clunky to tap and off the Q-Links, and
-  pressing STOP reset the knobs. 1.1.0: one voice per page with its switches on Q-Link column 1, and setting the kit
-  that is already loaded no longer reloads it (checked offline: a moved knob survives the same kit set again).
+  pressing STOP reset the knobs. 1.1.0: one voice per page with its switches on Q-Link column 1. A device trace then
+  showed why STOP reset them: on every STOP (and on insert) MPC's host sets parameter 0, KIT, to its top and straight
+  back, and each set loaded a kit. 1.2.0: a kit set waits for the next block, so that pair loads nothing; and MODE
+  steps on its Q-Link (its 1/2/3 labels had clashed with the value the engine reports). Both confirmed on the Live II.
 
 ## Files
 
