@@ -73,6 +73,46 @@ Your own files in `noisemaker/presets/` are kept when you update or uninstall.
 
 Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
 
+## More presets
+
+Any folder of TAL-NoiseMaker presets (`.noisemakerpreset` files) works. A good start is the free collection of 442 that
+oldcastle shared on LinuxMusicians, in nine banks: [FREE TAL-NoiseMaker presets give away](https://linuxmusicians.com/viewtopic.php?t=26583)
+(22 December 2023; the download link is in the first post). oldcastle gathered free banks from around the web and gave
+every preset a type prefix (BS bass, LD lead, PD pad, KB keys, FX and so on). The banks, and who made them where known:
+
+| Bank | Presets | Made by |
+|---|---|---|
+| NoiseMachine | 114 | AZZZ ([KVR](https://www.kvraudio.com/product/4559/downloads), 2013) |
+| Noise4U | 91 | Peter den Herder ([KVR](https://www.kvraudio.com/product/4559/downloads), 2011) |
+| Richard Semper | 78 | Richard Semper, for KVR's One-Synth Challenge ([KVR](https://www.kvraudio.com/product/4559/downloads), 2016) |
+| Abc | 61 | |
+| Onset | 45 | |
+| Dub & Bass | 17 | awol9000 ([KVR](https://www.kvraudio.com/product/4559/downloads), 2011) |
+| SoundWare | 16 | probably EDMSoundware's free pack |
+| Cool WAV | 10 | Cool WAV ("Noise Complaints Volume 1") |
+| Xtras | 10 | various |
+
+To add them, unzip the download and copy its bank folders into Noisemaker's `presets` folder on the MPC. Each folder
+becomes a bank (its BASS, LEAD, PAD... subfolders included), listed by **BANK** next time you open it, with no restart.
+The folder is `/sdcard/Synths/TAL - VST - [SYN] Noisemaker/noisemaker/presets/` for the release, and
+`/sdcard/vst/noisemaker/presets/` for the vst_instruments install (or put the bank folders in its
+`presets/noisemaker/presets/` and run `./install.sh`, which copies them). Over SSH, from the folder you unzipped into:
+
+```
+scp -r TAL-NoiseMaker root@<mpc-address>:/sdcard/
+ssh root@<mpc-address>
+```
+
+then on the MPC (for the vst_instruments install, `P=/sdcard/vst/noisemaker/presets`):
+
+```
+P="/sdcard/Synths/TAL - VST - [SYN] Noisemaker/noisemaker/presets"
+mkdir -p "$P" && cp -R /sdcard/TAL-NoiseMaker/* "$P/" && rm -rf /sdcard/TAL-NoiseMaker
+```
+
+These banks aren't shipped with the plugin: they're their authors' work, shared as downloads, so get them from the
+links above.
+
 ## Where it comes from
 
 - Schwung module "Noisemaker" v0.2.2 by legsmechanical (engine: Patrick Kunz / TAL)
