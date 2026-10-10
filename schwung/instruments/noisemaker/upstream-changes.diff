@@ -511,3 +511,44 @@
      if (strcmp(key, "preset_name") == 0) {
          char nm[NM_MAX_RELPATH];
          nm_preset_name(inst, inst->cur_preset, nm, sizeof(nm));
+--- a/src/dsp/Engine/FilterHandler.h
++++ b/src/dsp/Engine/FilterHandler.h
+@@ -110,6 +110,9 @@
+         delete filterStateVariableHp12db;
+         delete filterStateVariableBp12db;
+ 		delete[] upsampledValues;
++#ifdef MPC_PORT
++		delete filterMoog24;   // MPC_PORT: was never freed (LeakSanitizer)
++#endif
+ 	}
+ 
+ 	void setFiltertype(float value)
+--- a/src/dsp/Engine/FilterMoog24.h
++++ b/src/dsp/Engine/FilterMoog24.h
+@@ -53,6 +53,13 @@
+ 		oscNoise = new OscNoise(sampleRate);
+     }
+ 
++#ifdef MPC_PORT
++    ~FilterMoog24()   // MPC_PORT: upstream has no destructor, so oscNoise leaked
++    {
++        delete oscNoise;
++    }
++#endif
++
+     void Process(float *input, float cutoffIn, float resonance, bool isHighPass, bool calcCeff)
+     {
+         bool hpMode = isHighPass;
+--- a/src/dsp/EnvelopeEditor/EnvelopeEditor.h
++++ b/src/dsp/EnvelopeEditor/EnvelopeEditor.h
+@@ -84,6 +84,10 @@
+     {
+         stopTimer();
+         this->splineDataBuffer.clear();
++#ifdef MPC_PORT
++        // MPC_PORT: the editor owns its points (setPoints hands them over); upstream only cleared the array
++        for (int i = 0; i < this->points.size(); i++) delete this->points[i];
++#endif
+         this->points.clear();
+     }
+ 

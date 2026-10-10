@@ -12,13 +12,13 @@ steps, run as an **LFO**, run at its own **rate and length** against the notes, 
 of values can move several parameters together (a modulation group). It makes no sound itself: its notes and lane
 values go out of its own MIDI port to whatever track you point at it.
 
-It's a separate plugin from **[Stevequencer](../stevequencer/)** (64 steps, two CC lanes), which stays as it is for
+It's a separate plugin from **[Stevequencer](https://github.com/saustin2010/vst_instruments/tree/main/originals/stevequencer)** (64 steps, two CC lanes), which stays as it is for
 projects that use it.
 
 ## On the MPC
 
 - In the plugin browser: **[SEQ] Stevequencer 16** by **Steve A** (Sequencer)
-- Files: `/sdcard/vst/stevequencer16.so`, screen in `/sdcard/Synths/Steve A - VST - [SEQ] Stevequencer 16/`
+- Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [SEQ] Stevequencer 16/`, holding `stevequencer16.so`, its screen. The vst_instruments installer puts `stevequencer16.so` in `/sdcard/vst/` instead.
 - 330 parameters (all automatable) on 4 pages: STEPS, MOD, LANES, SETUP
 - 14 patterns in MPC's PRESET menu, most with lanes: Init, Acid Slide, Bass Sweep Group, LFO Pulse, Random Steps,
   Half-Time Mod, Group of Three, Accent Return, Bass Line, Arp Climb, Blues Shuffle, Ratchet Stabs, Pendulum Arp, Drunk
@@ -28,7 +28,7 @@ projects that use it.
 
 ## Playing it
 
-Set up as for Stevequencer ([docs/sequencers.md](../../docs/sequencers.md)): put Stevequencer 16 and an instrument on
+Set up as for Stevequencer ([docs/sequencers.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/sequencers.md)): put Stevequencer 16 and an instrument on
 two tracks; **Menu → Preferences → MIDI**: **Track** on for **[SEQ] Stevequencer 16 MIDI Out**; on the instrument's
 track, **MIDI Input Port** = that port and **Monitor** = **In**; press play. It follows MPC's tempo, locked to its bars.
 
@@ -100,7 +100,7 @@ Slides and LFOs move eight times a step, sending only when the value changes.
 ### Which parameter? (PARAM)
 
 Set **DEST** to **PARAM** and **NUMBER** to the parameter's **P** number, from
-**[docs/parameter-numbers.md](../../docs/parameter-numbers.md)**, which lists every instrument in this repo by page
+**[docs/parameter-numbers.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/parameter-numbers.md)**, which lists every instrument in this repo by page
 (Hera: P3 VCF FREQ, P4 RESONANCE, P6-P9 the ADSR...). The numbers follow MPC's own parameter list for the plugin and
 never change. Any parameter on any page works, with no MIDI learn: the lane sends NRPN P-1 (CC 99/98 with the number,
 CC 6 with the value), which every plugin here takes as that parameter. Akai's own instruments don't follow these.
@@ -110,14 +110,19 @@ Q-Links (CC 20-23 = column 1, top to bottom, and so on).
 
 ## Install
 
-From the top of this repo (see [INSTALL.md](../../INSTALL.md)):
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `SEQ-Stevequencer-16-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-stevequencer16/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
 ./install.sh <mpc-address> stevequencer16
 ```
 
-The instruments it drives need the build from 2026-10-05 or later (NRPN): reinstall them too (`./install.sh
-<mpc-address> instruments`).
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
 
 ## How it's made
 

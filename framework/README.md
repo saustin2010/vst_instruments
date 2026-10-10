@@ -13,7 +13,7 @@ You only need this to build from source ([BUILDING.md](../BUILDING.md)). Install
 
 ## The release tools: `saustin2010/mpc-vst-plugins`, branch `steve-features`
 
-The plugins that have their own repos (docs/catalogue-migration.md) are released with sd88me's **current** tools plus 14
+The plugins that have their own repos (docs/catalogue-migration.md) are released with sd88me's **current** tools plus 16
 changes, kept as commits on the branch `steve-features` of the fork
 [saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (made 2026-10-08, on his
 main at #229). `framework/setup-release.sh` fetches them at the pinned commit; `dev-tools/catalogue/check.sh` builds with
@@ -36,10 +36,14 @@ them. Each plugin's `FRAMEWORK.md` lists the ones it uses, what they do there an
 | [`9595071`](https://github.com/saustin2010/mpc-vst-plugins/commit/9595071) | The release `install.sh` matches the plugin's path as text (`grep -F`) | Our `[SYN]`-style names made it refuse to install (found on the Live II). | all 30 |
 | [`10d8f5f`](https://github.com/saustin2010/mpc-vst-plugins/commit/10d8f5f) | `QLINK_TRAVEL` and `SET_IF_CHANGED`, opt-in | Q-Link ticks add up like a detented knob, as our wrapper does; his stepped an option per tick and switches flipped on the Live II. | all 30 |
 | [`f210a56`](https://github.com/saustin2010/mpc-vst-plugins/commit/f210a56) | Host test with `QLINK_TRAVEL` | Placeholder params and restore tolerance. | the host test |
+| [`94e85dd`](https://github.com/saustin2010/mpc-vst-plugins/commit/94e85dd) | Host test: a preset's option value is what the option sends | An option list like `-`, `0` ... `127` with values -1 ... 127 made the test expect the wrong option. | the host test (both Stevequencers) |
+| [`7afa72e`](https://github.com/saustin2010/mpc-vst-plugins/commit/7afa72e) | `"live"` params in `vst.json`: display params the engine moves by itself, reported to MPC after every block | The step light follows playback; without it, it stays where it was when the page was drawn. | 2: Stevequencer, Stevequencer 16 |
 
 Most are opt-in: they change nothing unless a plugin's own files ask for them (a layout line, a `params.json` or `vst.json`
 key, a `defines` entry, the transport hook), so sd88me's own ports build as before. The rest are fixes: the option-list read
 past its end, the installer's path match, the host test (macOS, long ranges, travel) and the release workflow's `tools_repo`. `tools/build.sh` still uses the older base and patch below until all 40 build on these.
+The pin is `7afa72e` since 2026-10-10 (the Stevequencers); the 30 plugins released before that keep theirs in
+`release.yml` (28 at `f210a56`, 303 and Hera at `10d8f5f`) until their next release.
 To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `setup-release.sh`, run
 `python3 dev-tools/catalogue/prepare.py --ready` (it rewrites each plugin's `release.yml` and `FRAMEWORK.md`), then
 `check.sh` the plugins.

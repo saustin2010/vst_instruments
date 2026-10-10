@@ -29,7 +29,8 @@ for name in "$@"; do
   fi
   def() { python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('defines',{}).get(sys.argv[2],'').strip('\"'))" "$D/vst.json" "$1"; }
   P=$REPO/presets/$n MD=$(def MODULE_DIR) SUB=$(def MODULE_SUBDIR)
-  export TEST_DOCKER_ARGS="-e ASAN_OPTIONS=detect_leaks=0"
+  # leak detection on, as in the release workflow's host test (a leak fails the release run; tools/build.sh has it off)
+  export TEST_DOCKER_ARGS="-e ASAN_OPTIONS=detect_leaks=1"
   if [ -d "$P" ]; then
     [ -n "$MD" ] && TEST_DOCKER_ARGS="$TEST_DOCKER_ARGS -v $P:$MD:ro"
     [ -n "$SUB" ] && { rm -rf "${D:?}/build/$SUB"; cp -R "$P" "$D/build/$SUB"; }
@@ -39,6 +40,8 @@ for name in "$@"; do
   else
     echo "TEST FAILED (build/check-test.log)"; grep -E '^FAIL' "$D/build/check-test.log" | head -5 || true; status=1; continue
   fi
+  # a release that ships this repo's deploy/ skin (prepare.py OWN_SKIN) has nothing of his to compare
+  if grep -q 'cp -R deploy/Synths' "$D/.github/workflows/release.yml" 2>/dev/null; then echo "screen: ships deploy/"; continue; fi
   # skin_same.py compares pictures by their pixels with Pillow: the html-art image has it (built by build_port.sh)
   if docker run --rm -u "$(id -u):$(id -g)" -v "$REPO":"$REPO" -w "$REPO" mpc-vst-html-art \
        python3 dev-tools/catalogue/skin_same.py "$D" > "$D/build/check-skin.log" 2>&1; then

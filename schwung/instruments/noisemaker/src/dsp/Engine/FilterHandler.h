@@ -110,6 +110,9 @@ public:
         delete filterStateVariableHp12db;
         delete filterStateVariableBp12db;
 		delete[] upsampledValues;
+#ifdef MPC_PORT
+		delete filterMoog24;   // MPC_PORT: was never freed (LeakSanitizer)
+#endif
 	}
 
 	void setFiltertype(float value)
