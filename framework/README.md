@@ -13,7 +13,7 @@ You only need this to build from source ([BUILDING.md](../BUILDING.md)). Install
 
 ## The release tools: `saustin2010/mpc-vst-plugins`, branch `steve-features`
 
-The plugins that have their own repos (docs/catalogue-migration.md) are released with sd88me's **current** tools plus 16
+The plugins that have their own repos (docs/catalogue-migration.md) are released with sd88me's **current** tools plus 17
 changes, kept as commits on the branch `steve-features` of the fork
 [saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (made 2026-10-08, on his
 main at #229). `framework/setup-release.sh` fetches them at the pinned commit; `dev-tools/catalogue/check.sh` builds with
@@ -38,12 +38,13 @@ them. Each plugin's `FRAMEWORK.md` lists the ones it uses, what they do there an
 | [`f210a56`](https://github.com/saustin2010/mpc-vst-plugins/commit/f210a56) | Host test with `QLINK_TRAVEL` | Placeholder params and restore tolerance. | the host test |
 | [`94e85dd`](https://github.com/saustin2010/mpc-vst-plugins/commit/94e85dd) | Host test: a preset's option value is what the option sends | An option list like `-`, `0` ... `127` with values -1 ... 127 made the test expect the wrong option. | the host test (both Stevequencers) |
 | [`7afa72e`](https://github.com/saustin2010/mpc-vst-plugins/commit/7afa72e) | `"live"` params in `vst.json`: display params the engine moves by itself, reported to MPC after every block | The step light follows playback; without it, it stays where it was when the page was drawn. | 2: Stevequencer, Stevequencer 16 |
+| [`7f0653c`](https://github.com/saustin2010/mpc-vst-plugins/commit/7f0653c) | A host set of parameter 0 waits for the next block; a pair that ends where it started is dropped; the host test replays it | On insert and on every STOP, MPC's host (JUCE) sets parameter 0 to the far end and straight back: where that is a preset, every knob moved since went back to it (Live II trace, 2026-10-10). | all: the 7 with a preset or kit there (Fizzik, Helm, Hera, Hush One, NuSaw, Libpo32, Percolator) lost edits on STOP |
 
 Most are opt-in: they change nothing unless a plugin's own files ask for them (a layout line, a `params.json` or `vst.json`
 key, a `defines` entry, the transport hook), so sd88me's own ports build as before. The rest are fixes: the option-list read
 past its end, the installer's path match, the host test (macOS, long ranges, travel) and the release workflow's `tools_repo`. `tools/build.sh` still uses the older base and patch below until all 40 build on these.
-The pin is `7afa72e` since 2026-10-10 (the Stevequencers); the 30 plugins released before that keep theirs in
-`release.yml` (28 at `f210a56`, 303 and Hera at `10d8f5f`) until their next release.
+The pin is `7f0653c` since 2026-10-10 (parameter 0 held until the next block: MPC's STOP toggle); every plugin's
+`release.yml` names it, and each one's next release builds with it.
 To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `setup-release.sh`, run
 `python3 dev-tools/catalogue/prepare.py --ready` (it rewrites each plugin's `release.yml` and `FRAMEWORK.md`), then
 `check.sh` the plugins.
@@ -54,7 +55,8 @@ To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `
 |---|---|---|
 | `adapters/schwung/module_params.py` | Reads the newer `module.json` layout (`capabilities.ui_hierarchy`) as well as `chain_params` | Most current Schwung modules only have the newer layout |
 | `tools/gen_vst.py`, `tools/params.py`, `tools/studio.py` | Layout before `params.h`; `module` + hand-made `params` together; unique auto-layout tab names; option `values`/`send`; `"effect": true`; `"programs"` (with an optional live `count` and `name_at`); `"category"` (e.g. `"Sequencer"`); per-parameter `dynamic_name` / `dynamic_display` (from newer upstream) | Needed by individual ports (see each plugin's README) |
-| `wrapper/vst2_wrap.c`, `wrapper/engine.h` | One engine call at a time per instance (the screen and audio threads never run engine code together); Q-Link turns accumulate on stepped values; option labels matched before numbers; the host's tempo/transport passed to engines that want it (sequencers); audio input for effects; VST programs from a preset parameter (MPC's PRESET menu), with a live count and names for lists that change; names and value text from the engine (`dynamic_name` / `dynamic_display`, as newer upstream); `HAS_TRANSPORT` (play/stop to the engine, from poloq's fork); MIDI CC 20-35 move the first page's Q-Links and NRPN n sets parameter n on any page (sequencer lanes, no MIDI learn) | Crashes, Q-Link feel, sequencers, effects and presets found while porting; Mutable Vibe and MPC Plaits |
+| `wrapper/vst2_wrap.c`, `wrapper/engine.h` | One engine call at a time per instance (the screen and audio threads never run engine code together); Q-Link turns accumulate on stepped values; option labels matched before numbers; the host's tempo/transport passed to engines that want it (sequencers); audio input for effects; VST programs from a preset parameter (MPC's PRESET menu), with a live count and names for lists that change; names and value text from the engine (`dynamic_name` / `dynamic_display`, as newer upstream); `HAS_TRANSPORT` (play/stop to the engine, from poloq's fork); MIDI CC 20-35 move the first page's Q-Links and NRPN n sets parameter n on any page (sequencer lanes, no MIDI learn); a host set of parameter 0 held until the next block (MPC's STOP toggle, 2026-10-10) | Crashes, Q-Link feel, sequencers, effects and presets found while porting; Mutable Vibe and MPC Plaits; presets reloading on STOP |
+| `tools/host_test.c` | Restore, slow Q-Link, effect and program checks; MPC's parameter-0 toggle on STOP replayed with every knob moved (`param0_toggle_check`) | Bugs found on the device, caught offline from then on |
 | `wrapper/scope.h` (new) | An opt-in live waveform display (not used by any plugin: animation costs MPC's screen thread too much) | Kept for reference |
 | `tools/shadow_skin.py` | Display meters laid out as Akai's own skins; one Q-Link outline per column; switch/slider sizing; `when=` bands of a continuous parameter; `bw=` touch-box width | Skins converted from the Stitch designs |
 | `tools/host_test.c`, `tools/test_port.sh` | A restore check (set(get()) must change nothing, ranges in the engine's own units), slow Q-Link checks, effect and program checks; macOS runs the test in a Linux container | Caught silent and broken ports before they reached a device |

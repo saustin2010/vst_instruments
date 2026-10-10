@@ -19,14 +19,14 @@ on:
 
 jobs:
   vst:
-    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@10d8f5f06d01af1507b92b8525d49a08f1943334
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@7f0653cfbf6f3c2a4a1d0549f4fd9fb3e14d8c27
     permissions:
       contents: write
     with:
       tag: v${{ inputs.version }}
       version: ${{ inputs.version }}
       tools_repo: saustin2010/mpc-vst-plugins
-      tools_ref: 10d8f5f06d01af1507b92b8525d49a08f1943334
+      tools_ref: 7f0653cfbf6f3c2a4a1d0549f4fd9fb3e14d8c27
       vst_dir: .
       build: bash "$MPC_VST/tools/build_port.sh" vst.json
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'

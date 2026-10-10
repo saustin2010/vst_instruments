@@ -19,14 +19,14 @@ on:
 
 jobs:
   vst:
-    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@f210a56b269deb622ce4d62f437ee3ac8567ceaf
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@7f0653cfbf6f3c2a4a1d0549f4fd9fb3e14d8c27
     permissions:
       contents: write
     with:
       tag: v${{ inputs.version }}
       version: ${{ inputs.version }}
       tools_repo: saustin2010/mpc-vst-plugins
-      tools_ref: f210a56b269deb622ce4d62f437ee3ac8567ceaf
+      tools_ref: 7f0653cfbf6f3c2a4a1d0549f4fd9fb3e14d8c27
       vst_dir: .
       # its library into library/, shipped as the plugin folder's groovebank/ (MODULE_SUBDIR)
       build: python3 release/fetch-library.py library && bash "$MPC_VST/tools/build_port.sh" vst.json
