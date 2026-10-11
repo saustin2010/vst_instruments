@@ -16,6 +16,8 @@
 #define MAX_BANKS 48
 #define NSLOT 3         /* sample slots (voice 4, algorithm 3) */
 #define MAX_CUES 64
+#define TAP_N 4096      /* voice tap ring, frames per voice (32 blocks of 128) */
+#define TAP_HOLD 1024   /* the main instance's output delay line, frames */
 
 enum { K_TUNE, K_DECAY, K_P1, K_P2, K_CUTOFF, K_DRIVE, K_FX, K_LEVEL };
 
@@ -110,6 +112,13 @@ typedef struct perc {
     int bank;              /* bank of the loaded kit (its samples), -1 = built in */
     int kit_pending;       /* a kit set but not loaded yet (-1: none): loaded at the next block (see e_set_param) */
     char dir[512];
+    /* voice taps (percolator.c) */
+    uint32_t id;           /* this instance, process-wide, from 1 */
+    int tap_sync;          /* a tap: following the main instance's rings */
+    uint32_t tap_gen, tap_t, tap_lag, tap_w;   /* the owner it follows, its own frame count, the lag it reads at,
+                                                  the main one's frame count at its last block */
+    float hold[TAP_HOLD];  /* the main instance's output, a block late while a voice is tapped */
+    uint32_t hold_w;
 } perc_t;
 
 #define DL_N 65536

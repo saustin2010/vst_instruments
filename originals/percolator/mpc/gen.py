@@ -81,6 +81,8 @@ def params():
     # appended 2026-10-12 (2.0.0): how much of each voice goes through the compressor (wet/dry); 100 = all of it, as before
     for v in range(1, 5):
         knob("v%d_comp" % v, "V%d COMP SEND" % v, 100)
+    # appended 2026-10-12 (2.0.0): a voice on a track of its own (another Percolator on that track, set to TAP V<n>)
+    opts("output", "OUTPUT", ["MAIN", "TAP V1", "TAP V2", "TAP V3", "TAP V4"], 0)
     return P
 
 

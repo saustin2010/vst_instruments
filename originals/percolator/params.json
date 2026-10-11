@@ -1119,6 +1119,18 @@
    "min": 0,
    "max": 100,
    "default": 100
+  },
+  {
+   "key": "output",
+   "name": "OUTPUT",
+   "options": [
+    "MAIN",
+    "TAP V1",
+    "TAP V2",
+    "TAP V3",
+    "TAP V4"
+   ],
+   "default": "MAIN"
   }
  ]
 }

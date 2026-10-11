@@ -184,7 +184,7 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
     perc_t *P = inst;
     apply_kit(P);
     if (len > 0 && m[0] < 0xF0) TRACE("midi %02x %02x %02x (%d)", m[0], len > 1 ? m[1] : 0, len > 2 ? m[2] : 0, len);
-    if (len < 2) return;
+    if (len < 2 || P->pv[P_OUTPUT] >= 1) return;   /* a tap plays the main instance's voice, not its own */
     int st = m[0] & 0xF0, ch = m[0] & 0x0F, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
     if (st == 0x90 && d2 > 0) {
         int vi = -1, pitched = 1, mode = (int)P->pv[P_MIDI_MODE], first = mode == 2 ? 1 : 0;   /* MULTI 1-4 / 2-5 */
@@ -231,6 +231,49 @@ static inline float hermite(const float *b, float pos) {
     return ((c3 * f + c2) * f + c1) * f + x0;
 }
 
+/* ---- voice taps -------------------------------------------------------------------------------------------- *
+ * MPC plays only a plugin's first stereo pair (sd88me's multi-out test on a Force, 2026-09-30), so a voice gets a
+ * track of its own another way: a second Percolator on that track with OUTPUT = TAP V<n> plays voice n of the main one
+ * (the first instance with OUTPUT = MAIN), which leaves that voice out of its own mix and compressor (its FX SEND still
+ * feeds the main delay). Every instance lives in one process with one copy of these statics, and their blocks run on
+ * MPC's worker threads at the same time, in no fixed order. So the main one writes each voice into a ring here and
+ * publishes how far it has written; a tap reads a block behind that, which it can always find written whichever of
+ * the two ran first in a period (two behind if it only ever saw the main one run second), and the main one holds its
+ * own output back a block while a voice is tapped, so the voices stay together. A tap that stops (removed, switched
+ * back to MAIN) hands its voice back after 16 blocks. */
+static struct {
+    uint32_t owner;                    /* the main instance writing the rings (its id), 0 = none */
+    uint32_t gen;                      /* changes whenever the owner does: taps sync again */
+    uint32_t wpos;                     /* frames written to the rings */
+    uint32_t seen[NV], seen_gen[NV];   /* each voice's tap: the last wpos it saw, under which gen */
+    float ring[NV][TAP_N];
+} tapbus;
+static uint32_t next_id = 1;
+
+#define LOAD(x) __atomic_load_n(&(x), __ATOMIC_ACQUIRE)
+#define STORE(x, v) __atomic_store_n(&(x), (v), __ATOMIC_RELEASE)
+
+static int tap_claim(perc_t *P) {   /* this instance writes the rings: it already does, or nobody did */
+    uint32_t o = LOAD(tapbus.owner), none = 0;
+    if (o == P->id) return 1;
+    if (o || !__atomic_compare_exchange_n(&tapbus.owner, &none, P->id, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) return 0;
+    __atomic_add_fetch(&tapbus.gen, 1, __ATOMIC_ACQ_REL);
+    return 1;
+}
+
+static void tap_release(perc_t *P) {
+    uint32_t me = P->id;
+    if (LOAD(tapbus.owner) == me && __atomic_compare_exchange_n(&tapbus.owner, &me, 0, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
+        __atomic_add_fetch(&tapbus.gen, 1, __ATOMIC_ACQ_REL);
+}
+
+static inline int16_t out_sample(float x) {   /* a soft ceiling instead of a hard clip */
+    float ax = fabsf(x);
+    if (ax > 0.9f) x = copysignf(0.9f + 0.1f * sat((ax - 0.9f) * 10.0f), x);
+    int s = (int)lrintf(x * 32767.0f);
+    return (int16_t)(s > 32767 ? 32767 : s < -32768 ? -32768 : s);
+}
+
 /* The compressor works on the COMP SEND bus: each voice sends part of itself there (V<n> COMP SEND, wet/dry) and the
  * rest goes past it, as do the delay's echoes. Threshold 0 to -36 dB (THRESH), ratio 1:1 to 10:1 (AMOUNT), and its
  * reduction made back against a -3 dB peak: turned up, it only ever makes the bus louder (measured on the built-in kits:
@@ -257,10 +300,67 @@ static inline float comp_run(float *env, const comp_t *c, float x) {
     return *env > c->thr ? x * powf(*env / c->thr, c->expo) * c->makeup : x * c->makeup;
 }
 
+/* A tap: voice vi of the main instance, through this instance's own compressor and VOLUME */
+static void tap_render(perc_t *P, int vi, int16_t *out, int frames) {
+    tap_release(P);
+    for (int v = 0; v < NV; v++) {   /* its own voices stay quiet */
+        P->v[v].active = 0;
+        P->v[v].room.tail = 0;
+    }
+    uint32_t g = LOAD(tapbus.gen), w = LOAD(tapbus.wpos), n = (uint32_t)frames;
+    if (!LOAD(tapbus.owner) || frames > TAP_N / 4) {
+        P->tap_sync = 0;
+        memset(out, 0, sizeof(int16_t) * 2 * frames);
+        return;
+    }
+    STORE(tapbus.seen[vi], w);
+    STORE(tapbus.seen_gen[vi], g);
+    uint32_t lag = w - P->tap_t;   /* how far the main one is ahead of this tap's own count */
+    int moved = w != P->tap_w;     /* the main one has written since this tap's last block */
+    P->tap_w = w;
+    if (!P->tap_sync || g != P->tap_gen) {
+        P->tap_sync = 1;
+        P->tap_gen = g;
+        P->tap_lag = lag;
+    } else if ((int32_t)(lag - P->tap_lag) > 0) P->tap_lag = lag;   /* it ran first this time: a block less late */
+    uint32_t start = P->tap_t + P->tap_lag - 2 * n;
+    if ((int32_t)(w - (start + n)) < 0 || w - start > TAP_N - 2 * n) {   /* not written yet, or gone */
+        if (!moved) {   /* the main one has stopped (removed, not playing): quiet, not its last block again */
+            P->tap_t += n;
+            memset(out, 0, sizeof(int16_t) * 2 * frames);
+            return;
+        }
+        P->tap_lag = lag;   /* it started again behind where it was: follow it from here */
+        start = w - 2 * n;
+    }
+    P->tap_t += n;
+    comp_t cmp;
+    comp_setup(P, &cmp);
+    float vol = P->pv[P_VOLUME] / 100.0f;
+    vol = 2.0f * vol * vol;
+    for (int i = 0; i < frames; i++) {
+        float x = tapbus.ring[vi][(start + i) & (TAP_N - 1)] * 0.55f;
+        if (cmp.on) x = comp_run(&P->comp_env, &cmp, x);
+        out[2 * i] = out[2 * i + 1] = out_sample(x * vol);
+    }
+}
+
 static void e_render(void *inst, int16_t *out, int frames) {
     perc_t *P = inst;
     apply_kit(P);
+    int tap = (int)P->pv[P_OUTPUT];
+    if (tap) {
+        tap_render(P, tap - 1, out, frames);
+        return;
+    }
     fpstate_t fp = ftz_on();
+    /* the voice taps: this one writes the rings if it is the main one, and leaves out the voices a tap plays */
+    int own = tap_claim(P), tapped[NV] = {0}, hold = 0;
+    uint32_t w0 = own ? LOAD(tapbus.wpos) : 0, g = LOAD(tapbus.gen);
+    for (int v = 0; v < NV && own; v++) {
+        tapped[v] = LOAD(tapbus.seen_gen[v]) == g && w0 - LOAD(tapbus.seen[v]) < 16u * 128u;
+        hold |= tapped[v];
+    }
     float target = bbd_seconds(P) * SR, rate = bbd_rate(P) * INV_SR;
     float dep = P->pv[P_FX_DEPTH] / 100.0f;
     float depth = dep * dep * fminf(0.012f, 0.5f * bbd_seconds(P)) * SR;
@@ -280,10 +380,13 @@ static void e_render(void *inst, int16_t *out, int frames) {
             float y[SUB] = {0}, cs = P->pv[VCOMP(v)] / 100.0f;
             vparams(P, v, &vp);
             voice_block(P, v, &vp, y, send, n);
-            for (int i = 0; i < n; i++) {
-                mix[i] += y[i] * (1.0f - cs);
-                cbus[i] += y[i] * cs;
-            }
+            if (own)
+                for (int i = 0; i < n; i++) tapbus.ring[v][(w0 + off + i) & (TAP_N - 1)] = y[i];
+            if (!tapped[v])
+                for (int i = 0; i < n; i++) {
+                    mix[i] += y[i] * (1.0f - cs);
+                    cbus[i] += y[i] * cs;
+                }
         }
         for (int i = 0; i < n; i++) {
             /* BBD-style delay: band-limited in and in the loop, soft-clipped feedback, LFO on the time, and a
@@ -304,15 +407,13 @@ static void e_render(void *inst, int16_t *out, int frames) {
             float c = cbus[i] * 0.55f;
             if (cmp.on) c = comp_run(&P->comp_env, &cmp, c);
             float x = (mix[i] * 0.55f + wet * 0.55f + c) * vol;
-            /* a soft ceiling instead of a hard clip */
-            float ax = fabsf(x);
-            if (ax > 0.9f) x = copysignf(0.9f + 0.1f * sat((ax - 0.9f) * 10.0f), x);
-            int s = (int)lrintf(x * 32767.0f);
-            if (s > 32767) s = 32767;
-            if (s < -32768) s = -32768;
-            out[2 * (off + i)] = out[2 * (off + i) + 1] = (int16_t)s;
+            P->hold[P->hold_w & (TAP_HOLD - 1)] = x;
+            if (hold) x = P->hold[(P->hold_w - (uint32_t)frames) & (TAP_HOLD - 1)];   /* a block late, with the taps */
+            P->hold_w++;
+            out[2 * (off + i)] = out[2 * (off + i) + 1] = out_sample(x);
         }
     }
+    if (own) STORE(tapbus.wpos, w0 + (uint32_t)frames);
     ftz_off(fp);
 }
 
@@ -482,6 +583,7 @@ static void *e_create(const char *dir) {
     P->bank = -1;
     P->kit_pending = -1;
     P->lfo_rng = 0x2545f491u;
+    P->id = __atomic_fetch_add(&next_id, 1, __ATOMIC_RELAXED);
     for (int v = 0; v < NV; v++) {
         P->v[v].rng = 0x9e3779b9u + 7919u * (unsigned)v;
         P->v[v].note = -1;
@@ -497,6 +599,7 @@ static void e_destroy(void *inst) {
     perc_t *P = inst;
     TRACE("destroy %p", inst);
     if (!P) return;
+    tap_release(P);
     kits_free(P);
     free(P->dl);
     free(P);
