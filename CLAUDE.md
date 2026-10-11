@@ -12,7 +12,9 @@ owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai upda
 1. `README.md` (catalogue, status), `INSTALL.md` (users), `BUILDING.md`, `RESKINNING.md`.
 2. `ROADMAP.md`: the open items. Update it as things get done, with the date.
 3. `docs/presets-and-libraries.md`: what every plugin loads from files, what ships, what's missing.
-4. The framework's `docs/NOTES.md` (after `framework/setup.sh`: `framework/mpc-vst-plugins/docs/NOTES.md`): every
+4. `TESTS.md`: how the plugins are checked for background work and idle CPU (`dev-tools/procwatch/`, simulator first,
+   then `device.sh` on the MPC), what was found and the repairs still open. Re-run it after engine or wrapper changes.
+5. The framework's `docs/NOTES.md` (after `framework/setup.sh`: `framework/mpc-vst-plugins/docs/NOTES.md`): every
    fact verified on hardware. Read the relevant section before changing the wrapper, skins or MIDI/effects behaviour.
 
 ## Layout
@@ -33,7 +35,7 @@ owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai upda
 - `framework/`: our changes to sd88me's mpc-vst-plugins as `mpc-vst-plugins.patch` against `39660f2`, and `setup.sh`
   (clones it into the git-ignored `framework/mpc-vst-plugins/` and applies the patch).
 - `dev-tools/`: the Stitch pipeline (`stitch/`), the older spec generator (`skin-redesign/`), adapters' sources
-  (`midifx/`, `audiofx/`, `mi/`, `rack/`, `midiout/`), `fuzz/`, `probe/`, `screengrab/`, `fake-mpc/`, `package/`.
+  (`midifx/`, `audiofx/`, `mi/`, `rack/`, `midiout/`), `fuzz/`, `probe/`, `screengrab/`, `fake-mpc/`, `procwatch/` (TESTS.md), `package/`.
   They run inside a workspace: `dev-tools/workspace.sh` links this repo into `framework/mpc-vst-plugins/steve/`.
 
 ## Workflow for a change to a plugin
