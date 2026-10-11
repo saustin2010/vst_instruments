@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdint.h>
 
-#define NOTE0 20   /* voice 1's note, as src/percolator.h */
+#define NOTE0 36   /* voice 1's note, as src/percolator.h */
 
 typedef struct {
     void *(*create)(const char *data_dir);

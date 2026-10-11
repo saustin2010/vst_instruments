@@ -8,7 +8,8 @@
 #include "params_def.h"
 
 #define NV 4            /* voices */
-#define NOTE0 20        /* voice 1's note: 20-23 (G#-1-B-1) are pads 1-4 of bank A on an MPC plugin track */
+#define NOTE0 36        /* voice 1's note: 36-39 (C1-D#1), the usual drum notes (Force, TR-MPC; pads 1-4 of bank B on an
+                           MPC plugin track) */
 #define NK 8            /* knobs per voice */
 #define SUB 32          /* modulation and coefficient updates every SUB frames */
 #define MAX_KITS 512
@@ -61,6 +62,7 @@ typedef struct {
 
 typedef struct {
     int active, gate, note, drone;
+    int ch, pitched;       /* the trigger's MIDI channel (0-15); played pitched (KEYS, MULTI): pitch bend reaches it */
     int ns;                /* frames since the trigger */
     float vel;             /* target amplitude from velocity */
     float amp;             /* smoothed level x velocity */
@@ -90,7 +92,7 @@ typedef struct {
 typedef struct perc {
     float pv[NP];          /* knobs 0..100, options as an index, kit number */
     voice_t v[NV];
-    float bend;            /* KEYS pitch bend, semitones */
+    float bend[16];        /* pitch bend per MIDI channel, semitones (voices played pitched) */
     /* LFO */
     float lfo_ph, lfo_out, lfo_a, lfo_b;
     uint32_t lfo_rng;

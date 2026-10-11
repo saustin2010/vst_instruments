@@ -1,8 +1,9 @@
 /* Percolator engine: parameters, MIDI, kits, the LFO and the master section (BBD delay, compressor, volume).
  *
- * MIDI: notes 20-23 (G#-1-B-1, MPC pads 1-4 of bank A) play voices 1-4. With KEYS on a voice, every other note plays that voice
- * pitched (C3 = as tuned) and pitch bend bends it +-2 semitones. A voice whose DECAY is at the top drones while its
- * note is held. CC 120 / 123 stop everything. */
+ * MIDI: notes 36-39 (C1-D#1) play voices 1-4. With KEYS on a voice, every other note plays that voice pitched (C3 = as
+ * tuned) and pitch bend bends it +-2 semitones. MIDI MODE MULTI 1-4 / 2-5 (the Perkons' multi-channel mode): channels
+ * 1-4 / 2-5 play voices 1-4 pitched, each with its own pitch bend; other channels play as above. A voice whose DECAY is
+ * at the top drones while its note is held. CC 120 / 123 stop everything. */
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -183,24 +184,25 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
     apply_kit(P);
     if (len > 0 && m[0] < 0xF0) TRACE("midi %02x %02x %02x (%d)", m[0], len > 1 ? m[1] : 0, len > 2 ? m[2] : 0, len);
     if (len < 2) return;
-    int st = m[0] & 0xF0, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
+    int st = m[0] & 0xF0, ch = m[0] & 0x0F, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
     if (st == 0x90 && d2 > 0) {
-        int vi = -1;
-        float semi = 0;
-        if (d1 >= NOTE0 && d1 < NOTE0 + NV) vi = d1 - NOTE0;
-        else if (P->pv[P_KEYS] >= 1) {
-            vi = (int)P->pv[P_KEYS] - 1;
-            semi = (float)(d1 - 60);
-        }
+        int vi = -1, pitched = 1, mode = (int)P->pv[P_MIDI_MODE], first = mode == 2 ? 1 : 0;   /* MULTI 1-4 / 2-5 */
+        if (mode && ch >= first && ch < first + NV) vi = ch - first;   /* MULTI: a voice per channel, every note pitched */
+        else if (d1 >= NOTE0 && d1 < NOTE0 + NV) {
+            vi = d1 - NOTE0;
+            pitched = 0;
+        } else if (P->pv[P_KEYS] >= 1) vi = (int)P->pv[P_KEYS] - 1;
         if (vi < 0) return;
         vparam_t vp;
         vparams(P, vi, &vp);
-        voice_trigger(P, vi, &vp, (float)d2, d1, semi);
+        voice_trigger(P, vi, &vp, (float)d2, d1, pitched ? (float)(d1 - 60) : 0.0f);
+        P->v[vi].ch = ch;
+        P->v[vi].pitched = pitched;
     } else if (st == 0x80 || st == 0x90) {
         for (int v = 0; v < NV; v++)
-            if (P->v[v].note == d1) voice_release(P, v);
+            if (P->v[v].note == d1 && P->v[v].ch == ch) voice_release(P, v);
     } else if (st == 0xE0) {
-        P->bend = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
+        P->bend[ch] = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
     } else if (st == 0xB0 && (d1 == 120 || d1 == 123)) {
         for (int v = 0; v < NV; v++) {
             voice_release(P, v);

@@ -76,6 +76,8 @@ def params():
     # appended 2026-10-10 (1.2.0): the selected mode's name per voice, for the readout under MODE
     for v in range(1, 5):
         P.append(dict(key="v%d_mode_name" % v, name="V%d MODE NAME" % v, min=0, max=0, display="string", type="readout"))
+    # appended 2026-10-12 (2.0.0): the Perkons' multi-channel MIDI (a voice per channel, played pitched)
+    opts("midi_mode", "MIDI MODE", ["SINGLE", "MULTI 1-4", "MULTI 2-5"], 0)
     return P
 
 

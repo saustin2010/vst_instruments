@@ -1080,6 +1080,16 @@
    "max": 0,
    "display": "string",
    "type": "readout"
+  },
+  {
+   "key": "midi_mode",
+   "name": "MIDI MODE",
+   "options": [
+    "SINGLE",
+    "MULTI 1-4",
+    "MULTI 2-5"
+   ],
+   "default": "SINGLE"
   }
  ]
 }
