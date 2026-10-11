@@ -4,7 +4,7 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
 
 ## Catalogue ([docs/catalogue-migration.md](docs/catalogue-migration.md))
 
-- [ ] **Moog's EMPHASIS and CUTOFF** (2026-10-12, branch `moog-filter`): EMPHASIS hardly changed the sound (the
+- [x] **Moog's EMPHASIS and CUTOFF** (2026-10-12, PR #19): EMPHASIS hardly changed the sound (the
   ladder's feedback topped out at a quarter of what it needs to resonate: +2 dB at full) and CUTOFF fully open stopped
   at 2.3 kHz. Fixed under `MPC_PORT` (EMPHASIS up to 0.9 of self-oscillation, matched cutoff tuning); the 14 presets
   got new values that keep their sound (within about 1 dB offline). Offline test PASSED. The owner compared offline
@@ -12,7 +12,9 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   ladder input, bass kept: fat and squelchy).
   - [x] Install on the Live II and listen (2026-10-12): installed (no restart, verified by hash); the owner played it
     and accepted it for now ("it'll do for now"). More squelch may come later (see the README's FILTER notes).
-  - [ ] Re-release `saustin2010/mpc-vst-moog` (v1.1.0, `tools/publish.sh moog`) once it sounds right.
+  - [x] Re-released `saustin2010/mpc-vst-moog` v1.1.0 (2026-10-12): check.sh PASSED and "screen: same" with the
+    release tools (`7f0653c`), published, release built by Actions, catalog_check OK; the catalogue picks it up on its
+    nightly read. The release zip itself wasn't installed on the device (the repo build was).
 - [x] **MPC's STOP toggle of parameter 0** (2026-10-10, PR #16): on insert and on every STOP MPC's host (JUCE) sets
   parameter 0 to the far end and straight back; plugins with a preset there lost every edit on STOP (Hera confirmed
   by the owner). Fixed in the wrapper (held until the next block) in both tools (fork `7f0653c`); every host test now
