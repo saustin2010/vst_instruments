@@ -65,6 +65,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 ## Changes for the MPC
 
 - Presets work: the engine has 14 built in that were never exposed; now a PATCH browser.
+- `src/dsp/moog_engine.c`, `src/dsp/moog_plugin.cpp` (`-DMPC_PORT`, 2026-10-12): EMPHASIS works and CUTOFF opens the filter all the way. The ladder needs a feedback of about 4 to resonate, but EMPHASIS (0 to 1) went in as is: at full it gave a +2 dB bump. It now goes up to 0.9 of the feedback that makes the filter self-oscillate (a peak of +20 dB or more at full, never whistling on its own). The cutoff tuning put the filter's poles at a fifth of the intended frequency (fully open it stopped at 2.3 kHz); matched tuning puts them, and the resonance, where CUTOFF says (20 Hz to 20 kHz). The 14 presets have new CUTOFF and EMPHASIS values that put their filter where it was, so they sound as before (within about 1 dB, measured offline); projects saved with the earlier build open brighter and more resonant. Diff: `upstream-changes.diff`.
 - Oscillator waveforms are labelled switches (TRIANGLE/SAW/SQUARE/PULSE) and the ranges are footage switches (32'/16'/8'/4'/2', sending the engine's -2..2); three pages (MAIN, OSCILLATORS, MODULATION).
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 
@@ -86,6 +87,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 | `images/` | artwork: backgrounds, knobs, displays |
 | `design/` | the Google Stitch design this screen was converted from (`stitch.html`, as Stitch wrote it) |
 | `src/` | the engine's source, vendored from upstream |
+| `upstream-changes.diff` | every local change to the upstream source |
 
 ## Building
 

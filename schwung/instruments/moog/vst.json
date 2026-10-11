@@ -12,7 +12,8 @@
     ],
     "cflags": [
       "-Isrc/dsp",
-      "-std=gnu++14"
+      "-std=gnu++14",
+      "-DMPC_PORT"
     ],
     "libs": [
       "-lm"

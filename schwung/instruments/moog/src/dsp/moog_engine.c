@@ -92,6 +92,26 @@ static float generate_osc(moog_wave_t wave, double counter, double period) {
     }
 }
 
+#ifdef MPC_PORT
+/* MPC port (2026-10-12): the ladder's feedback (musicdsp "Moog VCF, variation 2") needs about 4 to resonate, but
+ * EMPHASIS (0..1) went in as is: at full the peak was +2 dB. EMPHASIS now scales up to 0.9 of the feedback that
+ * makes this ladder self-oscillate (measured offline at f = 0, 0.05, ... 0.95: about +20 dB of peak at full, never
+ * oscillating on its own). */
+#define LADDER_FB_STEP 0.05f
+static const float k_ladder_fb_max[] = {
+    3.60f, 3.74f, 3.91f, 4.08f, 4.28f, 4.49f, 4.73f, 4.99f, 5.27f, 5.58f,
+    5.90f, 6.24f, 6.55f, 6.82f, 6.98f, 6.97f, 6.72f, 5.58f, 3.71f, 2.48f
+};
+#define LADDER_FB_COUNT (int)(sizeof(k_ladder_fb_max) / sizeof(k_ladder_fb_max[0]))
+
+static inline float ladder_fb_max(float f) {
+    float x = f / LADDER_FB_STEP;
+    if (x >= (float)(LADDER_FB_COUNT - 1)) return k_ladder_fb_max[LADDER_FB_COUNT - 1];
+    int i = (int)x;
+    return k_ladder_fb_max[i] + (k_ladder_fb_max[i + 1] - k_ladder_fb_max[i]) * (x - (float)i);
+}
+#endif
+
 /* ===================================================================
  * Moog ladder filter
  * Based on equalizer.c from RaffoSynth, enhanced with proper
@@ -525,12 +545,21 @@ void moog_engine_render(moog_engine_t *engine, float *output, int frames) {
             float cutoff_hz = 20.0f * powf(1000.0f, cutoff_normalized);
 
             /* Inline single-sample Moog ladder filter */
+#ifdef MPC_PORT
+            /* MPC port (2026-10-12): f = 1.16 * cutoff / sr put the poles at a fifth of cutoff_hz (the -3 dB point
+             * at a twelfth: 2.3 kHz with CUTOFF full). Matched one-pole tuning puts them, and the resonance, at
+             * cutoff_hz. */
+            float f = 1.0f - expf(-2.0f * (float)M_PI * cutoff_hz / sr);
+            if (f > 0.95f) f = 0.95f;
+            float fb = engine->filter_resonance * ladder_fb_max(f);
+#else
             float fc = cutoff_hz / sr;
             if (fc > 0.49f) fc = 0.49f;
             if (fc < 0.001f) fc = 0.001f;
 
             float f = fc * 1.16f;
             float fb = engine->filter_resonance * (1.0f - 0.15f * f * f);
+#endif
 
             float input = sample - engine->filter_prev[4] * fb;
             input *= 0.35013f * f * f * f * f;

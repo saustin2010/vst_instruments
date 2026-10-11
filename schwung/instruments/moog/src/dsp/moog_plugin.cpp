@@ -533,6 +533,31 @@ static void* v2_create_instance(const char *module_dir, const char *json_default
     for (int i = 0; i < FACTORY_PRESET_COUNT; i++) {
         memcpy(&inst->presets[i], &g_factory_presets[i], sizeof(MoogPreset));
     }
+#ifdef MPC_PORT
+    /* MPC port (2026-10-12): CUTOFF and EMPHASIS now reach the filter's whole range (moog_engine.c). These values
+     * put each factory preset's filter where the old mapping had it at the preset's sustain point (cutoff plus
+     * contour times filter sustain), so the presets sound as before and EMPHASIS has room above them. */
+    static const float k_mpc_filter[][2] = {  /* cutoff, emphasis */
+        {0.465f, 0.050f},  /* 0 Init */
+        {0.679f, 0.181f},  /* 1 Soloist */
+        {0.679f, 0.181f},  /* 2 Duet */
+        {0.679f, 0.003f},  /* 3 Trio */
+        {0.679f, 0.003f},  /* 4 Quartet */
+        {0.285f, 0.141f},  /* 5 SonataFlair */
+        {0.285f, 0.141f},  /* 6 SonataFlairSub */
+        {0.390f, 0.262f},  /* 7 AngrySweep */
+        {0.468f, 0.244f},  /* 8 SquarePulse */
+        {0.483f, 0.249f},  /* 9 Whisper */
+        {0.502f, 0.196f},  /* 10 CookedPasta */
+        {0.502f, 0.196f},  /* 11 CookedPasta2 */
+        {0.106f, 0.138f},  /* 12 Classic Bass */
+        {0.006f, 0.000f},  /* 13 Sub Bass */
+    };
+    for (int i = 0; i < FACTORY_PRESET_COUNT && i < (int)(sizeof(k_mpc_filter) / sizeof(k_mpc_filter[0])); i++) {
+        inst->presets[i].params[P_FILTER_CUTOFF]    = k_mpc_filter[i][0];
+        inst->presets[i].params[P_FILTER_RESONANCE] = k_mpc_filter[i][1];
+    }
+#endif
 
     /* Apply first preset */
     apply_preset(inst, 0);
