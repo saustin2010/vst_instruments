@@ -65,7 +65,7 @@ def params():
     opts("fx_colour", "BBD COLOUR", ["DARK", "BRIGHT"], 0)
     knob("volume", "VOLUME", 71)
     knob("comp_thresh", "COMP THRESH", 0, dynamic_display=True)
-    knob("comp_amt", "COMP AMOUNT", 0)
+    knob("comp_amt", "COMP AMOUNT", 0, dynamic_display=True)
     knob("lfo_speed", "LFO SPEED", 40, dynamic_display=True)
     opts("lfo_wave", "LFO WAVE", WAVES, 0)
     knob("lfo_level", "MOD LEVEL", 100)
@@ -78,6 +78,9 @@ def params():
         P.append(dict(key="v%d_mode_name" % v, name="V%d MODE NAME" % v, min=0, max=0, display="string", type="readout"))
     # appended 2026-10-12 (2.0.0): the Perkons' multi-channel MIDI (a voice per channel, played pitched)
     opts("midi_mode", "MIDI MODE", ["SINGLE", "MULTI 1-4", "MULTI 2-5"], 0)
+    # appended 2026-10-12 (2.0.0): how much of each voice goes through the compressor (wet/dry); 100 = all of it, as before
+    for v in range(1, 5):
+        knob("v%d_comp" % v, "V%d COMP SEND" % v, 100)
     return P
 
 

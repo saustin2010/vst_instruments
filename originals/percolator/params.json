@@ -494,7 +494,8 @@
    "name": "COMP AMOUNT",
    "min": 0,
    "max": 100,
-   "default": 0
+   "default": 0,
+   "dynamic_display": true
   },
   {
    "key": "lfo_speed",
@@ -1090,6 +1091,34 @@
     "MULTI 2-5"
    ],
    "default": "SINGLE"
+  },
+  {
+   "key": "v1_comp",
+   "name": "V1 COMP SEND",
+   "min": 0,
+   "max": 100,
+   "default": 100
+  },
+  {
+   "key": "v2_comp",
+   "name": "V2 COMP SEND",
+   "min": 0,
+   "max": 100,
+   "default": 100
+  },
+  {
+   "key": "v3_comp",
+   "name": "V3 COMP SEND",
+   "min": 0,
+   "max": 100,
+   "default": 100
+  },
+  {
+   "key": "v4_comp",
+   "name": "V4 COMP SEND",
+   "min": 0,
+   "max": 100,
+   "default": 100
   }
  ]
 }

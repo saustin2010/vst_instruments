@@ -101,6 +101,10 @@ static const pdef_t PDEF[] = {
     {"v3_mode_name", 3, 0, 0.0f},
     {"v4_mode_name", 3, 0, 0.0f},
     {"midi_mode", 1, 3, 0.0f},
+    {"v1_comp", 0, 0, 100.0f},
+    {"v2_comp", 0, 0, 100.0f},
+    {"v3_comp", 0, 0, 100.0f},
+    {"v4_comp", 0, 0, 100.0f},
 };
 enum {
     P_KIT = 0,
@@ -201,7 +205,11 @@ enum {
     P_V3_MODE_NAME = 95,
     P_V4_MODE_NAME = 96,
     P_MIDI_MODE = 97,
-    NP = 98
+    P_V1_COMP = 98,
+    P_V2_COMP = 99,
+    P_V3_COMP = 100,
+    P_V4_COMP = 101,
+    NP = 102
 };
 /* per-voice block: v%d_tune is P_V1_TUNE + 11 * (v - 1) */
 #define VSTRIDE 11

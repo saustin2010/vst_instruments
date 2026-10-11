@@ -53,6 +53,7 @@ const mpc_engine_t *mpc_engine(void);
 #define VMODE(v) VK(v, 9)
 #define VVCF(v) VK(v, 10)
 #define VDEPTH(v, k) (P_V1_M_TUNE + MSTRIDE * (v) + (k))
+#define VCOMP(v) (P_V1_COMP + (v))
 
 static int find_key(const char *key) {
     for (int i = 0; i < NP; i++)
@@ -230,6 +231,32 @@ static inline float hermite(const float *b, float pos) {
     return ((c3 * f + c2) * f + c1) * f + x0;
 }
 
+/* The compressor works on the COMP SEND bus: each voice sends part of itself there (V<n> COMP SEND, wet/dry) and the
+ * rest goes past it, as do the delay's echoes. Threshold 0 to -36 dB (THRESH), ratio 1:1 to 10:1 (AMOUNT), and its
+ * reduction made back against a -3 dB peak: turned up, it only ever makes the bus louder (measured on the built-in kits:
+ * +0.3 to +11 dB) and a peak stays under -3 dB. The detector catches a peak at once (a drum's first sample would
+ * otherwise get the whole make-up gain and clip) and lets go over 120 ms. AMOUNT at 0 is off: the bus passes
+ * untouched, the same as no compressor. */
+typedef struct {
+    int on;
+    float thr, expo, makeup, rel;
+} comp_t;
+
+static void comp_setup(const perc_t *P, comp_t *c) {
+    float amt = P->pv[P_COMP_AMT] / 100.0f, thr_db = -36.0f * P->pv[P_COMP_THRESH] / 100.0f, ratio = 1.0f + 9.0f * amt;
+    c->on = amt > 0.0001f;
+    c->thr = powf(10.0f, thr_db / 20.0f);
+    c->expo = 1.0f / ratio - 1.0f;
+    c->makeup = powf(10.0f, fmaxf(-3.0f - thr_db, 0.0f) * (1.0f - 1.0f / ratio) / 20.0f);
+    c->rel = op_coef(1.3f);
+}
+
+static inline float comp_run(float *env, const comp_t *c, float x) {
+    float a = fabsf(x);
+    *env = a > *env ? a : *env + c->rel * (a - *env);
+    return *env > c->thr ? x * powf(*env / c->thr, c->expo) * c->makeup : x * c->makeup;
+}
+
 static void e_render(void *inst, int16_t *out, int frames) {
     perc_t *P = inst;
     apply_kit(P);
@@ -240,20 +267,23 @@ static void e_render(void *inst, int16_t *out, int frames) {
     float fb = 1.08f * P->pv[P_FX_FEEDBACK] / 100.0f;
     float ca = op_coef(P->pv[P_FX_COLOUR] >= 1 ? 7000.0f : 2200.0f), ch = op_coef(40.0f);
     float sm = 1.0f - expf(-1.0f / (0.12f * SR));
-    float amt = P->pv[P_COMP_AMT] / 100.0f, thr_db = -36.0f * P->pv[P_COMP_THRESH] / 100.0f;
-    float ratio = 1.0f + 9.0f * amt, thr = powf(10.0f, thr_db / 20.0f);
-    float makeup = powf(10.0f, -thr_db * (1.0f - 1.0f / ratio) * 0.5f / 20.0f);
-    float catk = op_coef(80.0f), crel = op_coef(1.3f);
+    comp_t cmp;
+    comp_setup(P, &cmp);
     float vol = P->pv[P_VOLUME] / 100.0f;
     vol = 2.0f * vol * vol;
     for (int off = 0; off < frames; off += SUB) {
         int n = frames - off < SUB ? frames - off : SUB;
-        float mix[SUB] = {0}, send[SUB] = {0};
+        float mix[SUB] = {0}, cbus[SUB] = {0}, send[SUB] = {0};
         lfo_step(P, n);
         for (int v = 0; v < NV; v++) {
             vparam_t vp;
+            float y[SUB] = {0}, cs = P->pv[VCOMP(v)] / 100.0f;
             vparams(P, v, &vp);
-            voice_block(P, v, &vp, mix, send, n);
+            voice_block(P, v, &vp, y, send, n);
+            for (int i = 0; i < n; i++) {
+                mix[i] += y[i] * (1.0f - cs);
+                cbus[i] += y[i] * cs;
+            }
         }
         for (int i = 0; i < n; i++) {
             /* BBD-style delay: band-limited in and in the loop, soft-clipped feedback, LFO on the time, and a
@@ -271,16 +301,9 @@ static void e_render(void *inst, int16_t *out, int frames) {
             P->dl_in2 += ca * (P->dl_in1 - P->dl_in2);
             P->dl[P->dl_w] = sat(P->dl_in2 + fb * wet);
             P->dl_w = (P->dl_w + 1) & (DL_N - 1);
-            float x = mix[i] * 0.55f + wet * 0.55f;
-            /* compressor: peak follower, ratio up to 10:1, half the reduction made back */
-            if (amt > 0.001f) {
-                float a = fabsf(x);
-                P->comp_env += (a > P->comp_env ? catk : crel) * (a - P->comp_env);
-                float g = 1.0f;
-                if (P->comp_env > thr) g = powf(P->comp_env / thr, 1.0f / ratio - 1.0f);
-                x *= g * makeup;
-            }
-            x *= vol;
+            float c = cbus[i] * 0.55f;
+            if (cmp.on) c = comp_run(&P->comp_env, &cmp, c);
+            float x = (mix[i] * 0.55f + wet * 0.55f + c) * vol;
             /* a soft ceiling instead of a hard clip */
             float ax = fabsf(x);
             if (ax > 0.9f) x = copysignf(0.9f + 0.1f * sat((ax - 0.9f) * 10.0f), x);
@@ -440,6 +463,7 @@ static int e_get_param(void *inst, const char *key, char *buf, int len) {
     case P_FX_TIME: return fmt_s(buf, len, bbd_seconds(P));
     case P_FX_RATE: return snprintf(buf, len, "%.2f Hz", bbd_rate(P));
     case P_COMP_THRESH: return x > 0.005f ? snprintf(buf, len, "%.0f dB", -36.0f * x) : snprintf(buf, len, "0 dB");
+    case P_COMP_AMT: return x > 0.000001f ? snprintf(buf, len, "%.1f:1", 1.0f + 9.0f * x) : snprintf(buf, len, "OFF");
     case P_LFO_SPEED: return snprintf(buf, len, "%.2f Hz", lfo_rate(x));
     }
     return 0;
