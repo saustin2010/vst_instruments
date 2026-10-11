@@ -77,7 +77,7 @@ parameter index, so existing projects keep working.
   Live II 2026-10-10 (all five pages, Q-Links, the displays following their knobs, the packs): Design QA ✅.
   - [ ] 2.0.0 (owner's requests, 2026-10-12; branch `percolator-changes`, done offline): voices on notes 36-39 (were
     20-23); MIDI MODE MULTI 1-4 / 2-5 (a voice per channel, pitched); COMP SEND per voice, the compressor bypassed at
-    AMOUNT 0 and only ever louder above it; voice taps (OUTPUT = TAP V1-V4 on a second instance: MPC plays only a
+    AMOUNT 0 and only ever louder above it, COMP LEVEL (its own output), a MIX panel per voice; voice taps (OUTPUT = TAP V1-V4 on a second instance: MPC plays only a
     plugin's first stereo pair). Left: on the device, the pads on notes 36-39, whether MULTI's channels reach the
     plugin, a tap on a second track, the compressor by ear (the owner heard it mute at AMOUNT 0, not reproduced
     offline); then release 2.0.0 and update #255.

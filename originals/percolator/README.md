@@ -20,7 +20,7 @@ which mode, where each knob is, the LFO, the delay), but it won't sound exactly 
 - Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/`, holding `percolator.so`, its screen. The vst_instruments installer puts `percolator.so` in `/sdcard/vst/` instead.
 - Data folder: `percolator/` next to `percolator.so` (with the vst_instruments installer, `/sdcard/vst/percolator/`):
   where the kit packs go
-- 103 parameters (all automatable) on 7 pages, one Q-Link page each
+- 104 parameters (all automatable) on 7 pages, one Q-Link page each
 - 8 kits built in, in MPC's PRESET menu; Erica Synths' four free Pērkons kit packs add 169 more ([below](#pērkons-kit-packs))
 
 ## Playing it
@@ -62,13 +62,16 @@ delay's echoes always go past it. 100 (all of it, as before 2.0.0) by default. O
 sets the threshold (0 to -36 dB) and **COMP AMOUNT** the ratio (1:1 to 10:1). AMOUNT at 0 reads **OFF**: the
 compressor is bypassed and the kit sounds exactly as without it. Turned up it makes up the level it takes, so it only
 ever makes the voices louder: on the eight built-in kits, from +0.3 dB (a little THRESH) to +11 dB (all the way),
-with the peaks under -3 dB. It catches a peak at once and lets go over about 120 ms.
+with the peaks under -3 dB. It catches a peak at once and lets go over about 120 ms. **COMP LEVEL** sets how much
+comes out of it (-inf to +6 dB; 71 = as it is): it turns down only what goes through the compressor, while
+**VOLUME** turns down the whole kit. COMP LEVEL does nothing while AMOUNT is OFF, so it can't silence the kit then.
+Each voice's own volume is its **LEVEL**, in the MIX panel beside its COMP SEND.
 
 ## Separate outputs (voice taps)
 
 MPC plays only a plugin's first stereo pair (sd88me's test on a Force), so a plugin can't send voices to outputs of
 their own. Instead, a voice can get **a track of its own**: insert a second Percolator on another track and set its
-**OUTPUT** (MASTER page) to **TAP V1**-**TAP V4**. It then plays that voice of the main Percolator (the first one
+**OUTPUT** (MASTER page, by the kit) to **TAP V1**-**TAP V4**. It then plays that voice of the main Percolator (the first one
 with OUTPUT = MAIN), and the main one leaves the voice out of its own mix and compressor. The tap's track has its own
 mixer channel, inserts and outputs. On a tap, only VOLUME and the compressor (which then works on that voice alone)
 do anything; the voice's own knobs, its FX SEND to the main one's delay and the kit stay on the main Percolator, and
@@ -99,8 +102,8 @@ Seven tabs, each with one Q-Link page (no sub-pages to swipe between). Each voic
 <img src="screenshots/page_3.png" width="760" alt="Percolator, voice 4">
 
 One voice per page, each Q-Link column on its own panel: **Q-Link column 1** = ALGO, MODE, VCF (the switches, big
-enough to tap, and the mode's name under MODE) and COMP SEND, **column 2** = TUNE, DECAY, PARAM 1, PARAM 2, **column 3** = CUTOFF,
-DRIVE, FX SEND, LEVEL; column 4 is free. Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
+enough to tap, and the mode's name under MODE), **column 2** = TUNE, DECAY, PARAM 1, PARAM 2, **column 3** = CUTOFF,
+DRIVE, **column 4** = MIX, under the switches: LEVEL (the voice's volume), FX SEND, COMP SEND. Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
 follows DECAY (a flat line at the top = DRONE), PITCH (voices 1-2) follows PARAM 2's pitch envelope, voice 4's ATTACK
 follows its PARAM 2.
 
@@ -108,18 +111,18 @@ follows its PARAM 2.
 
 <img src="screenshots/page_4.png" width="760" alt="Percolator, kit, delay, master and modulation">
 
-**KIT**: every kit, built-in and loaded, also in MPC's PRESET menu, with KEYS and MIDI MODE beside it. Choosing the kit that is already loaded changes nothing (MPC sets the current one again on STOP, which must not undo your edits): to go back to a kit as saved, pick another and then it. **BBD DELAY**: time (SHORT 8-200 ms, LONG 60 ms-1.2
+**KIT**: every kit, built-in and loaded, also in MPC's PRESET menu, with KEYS, MIDI MODE and OUTPUT beside it. Choosing the kit that is already loaded changes nothing (MPC sets the current one again on STOP, which must not undo your edits): to go back to a kit as saved, pick another and then it. **BBD DELAY**: time (SHORT 8-200 ms, LONG 60 ms-1.2
 s; moving it bends the pitch as a BBD clock would), feedback (it can run away), its own LFO rate and depth, and
-COLOUR (dark or bright repeats). **MASTER**: VOLUME, OUTPUT (MAIN or a voice tap), the compressor's threshold and
-amount. **MODULATION**: the LFO's speed (0.05-30 Hz), MOD LEVEL and wave (sine, triangle, ramp, saw, square, S&H,
-drift). Q-Link columns: BBD, MASTER, MODULATION, then KIT, KEYS and MIDI MODE.
+COLOUR (dark or bright repeats). **MASTER**: VOLUME (the whole kit), then the COMPRESSOR: THRESH, AMOUNT, LEVEL.
+**MODULATION**: the LFO's speed (0.05-30 Hz), MOD LEVEL and wave (sine, triangle, ramp, saw, square, S&H, drift).
+Q-Link columns: BBD, MASTER, MODULATION, then KIT, KEYS, MIDI MODE and OUTPUT.
 
 ### 6-7. MOD 1+2, MOD 3+4
 
 <img src="screenshots/page_5.png" width="760" alt="Percolator, LFO depth per knob, voices 1 and 2">
 
 How far the LFO moves each knob of each voice: OFF or 10 %-80 % (the hardware's MODULATION DESTINATION / DEPTH
-buttons), laid out where the knobs are on the voice pages, with the LFO's wave, speed and MOD LEVEL shown live above
+buttons), in the voice pages' order (TUNE DECAY PARAM 1 PARAM 2 / CUTOFF DRIVE FX SEND LEVEL), with the LFO's wave, speed and MOD LEVEL shown live above
 (MOD LEVEL scales them all).
 
 ## Kits
@@ -245,7 +248,8 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   steps on its Q-Link (its 1/2/3 labels had clashed with the value the engine reports). Both confirmed on the Live II.
 - 2.0.0, not yet released or on a device (2026-10-12): voices on notes 36-39 (they were 20-23); MIDI MODE MULTI 1-4 /
   2-5; COMP SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it (it was half made up, so
-  a high THRESH made the kit up to 6.6 dB quieter); voice taps (OUTPUT). Offline: build and host test PASSED,
+  a high THRESH made the kit up to 6.6 dB quieter), and COMP LEVEL, its own output; each voice's LEVEL, FX SEND and
+  COMP SEND in a MIX panel (Q-Link column 4); voice taps (OUTPUT). Offline: build and host test PASSED,
   `check_skin.py` OK; AMOUNT 0 is the old engine to 1 LSB over 1.4M frames; every THRESH x AMOUNT louder than off on
   the built-in kits; the MIDI mapping (13 cases); taps in one process in either order, random order and on two threads
   with jitter (every tap block is the voice alone; main + tap = the kit untapped). To check on the device: the notes on
