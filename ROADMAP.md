@@ -106,6 +106,14 @@ parameter index, so existing projects keep working.
   Rampage sends a CC almost every block on a fast LFO (~290 a second per output): the wrapper only tells MPC ~40 times a
   second, but a rate limit in Rampage itself would be kinder.
 
+## Background work and idle CPU ([TESTS.md](TESTS.md))
+
+- [ ] The ten repairs found in the simulator (2026-10-09), in TESTS.md's order: 303 never sleeps after its first note,
+  Helm sets `HOME` for all of MPC, a "sleep when silent" switch in the wrapper for 14 plugins, Mono Voice, Rampage,
+  the Noisemaker and Helm leaks, Marbles, Tablor's loader cores, one transport read per block. Each one is checked
+  offline with `dev-tools/procwatch/`, then on the MPC with `dev-tools/procwatch/device.sh`. TESTS.md's status table
+  tracks them.
+
 ## On a device (nothing below has been tried on hardware yet)
 
 - [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Names

@@ -134,7 +134,7 @@ docs/                  extra guides (presets and libraries, parameter numbers, r
 licenses/              licence texts the plugins refer to
 ```
 
-Each plugin's `deploy/` folder is the finished build, so installing needs only this repo; the presets come from their original projects (the installer fetches them). To build from source see [BUILDING.md](BUILDING.md); to change a screen, [RESKINNING.md](RESKINNING.md).
+Each plugin's `deploy/` folder is the finished build, so installing needs only this repo; the presets come from their original projects (the installer fetches them). To build from source see [BUILDING.md](BUILDING.md); to change a screen, [RESKINNING.md](RESKINNING.md); for what the plugins do behind the scenes and what they cost while silent (and the fixes still to make), [TESTS.md](TESTS.md).
 
 ## Licences
 
