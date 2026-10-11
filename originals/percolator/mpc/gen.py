@@ -269,18 +269,23 @@ def layout():
     # controls on 2 and 3"); each column has its own plate. The display spans the knob rows.
     SX, SW = 16, 372                 # the switch panel
     RX, RW = 404, 860                # the display and the knob rows
-    SWY = (222, 412, 602)            # ALGO / MODE / VCF
+    SWY = (204, 314, 446)            # ALGO / MODE / VCF; COMP SEND under them, level with the second knob row
+    NOTE = ["C1", "C#1", "D1", "D#1"]  # each voice's note (src/percolator.h NOTE0)
     for v in range(1, 5):
         c = COL[v]
         L.append("[tab V%d]" % v)
         L.append("art file=images/skin/bg_v%d.png x=0 y=86 w=1280 h=628" % v)
-        html = h_panel(8, PY, 1264, PH, c, "VOICE %d" % v, "PAD %d" % v)
+        html = h_panel(8, PY, 1264, PH, c, "VOICE %d" % v, "NOTE %d &middot; %s" % (35 + v, NOTE[v - 1]))
         html += h_plate(SX, 142, SW, 528, c)
         for y, (k, lab) in zip(SWY, (("algo", "ALGO"), ("mode", "MODE"), ("vcf", "VCF"))):
             html += h_ctext(SX + SW // 2, y - 50, lab, "#aba7c4", 13)
             enum("enum_h", SX + SW // 2, y, "v%d_%s" % (v, k), v, 112, 46)
         # the mode's name for the selected algorithm (CLEAN, PUNCH, 3 CLAPS ...) under MODE
         L.append("readout cx=%d cy=%d w=300 h=26 vs=18 ink=ink box=no key=v%d_mode_name" % (SX + SW // 2, SWY[1] + 44, v))
+        # how much of the voice goes through the compressor: Q-Link column 1's fourth, under a rule
+        html += ('<div class="a" style="left:%dpx;top:%dpx;width:%dpx;height:0;border-top:1px solid %s"></div>'
+                 % (SX + 24, 494 - 86, SW - 48, rgba(c, .22)))
+        knob("v%d_comp" % v, SX + SW // 2, KY[1], v, 40)
         # the display: PITCH | AMP (voices 1-2), AMP (3), ATTACK | DECAY (4)
         cols = {1: [(280, "PITCH"), (560, "AMP")], 2: [(280, "PITCH"), (560, "AMP")], 3: [(840, "AMP")],
                 4: [(280, "ATTACK"), (560, "DECAY")]}[v]
@@ -299,21 +304,26 @@ def layout():
             for i, k in enumerate(ks):
                 knob("v%d_%s" % (v, k), RX + 107 + 215 * i, y, v, 40, caption(v, k))
         art["bgs"].append({"name": "bg_v%d" % v, "html": html})
-        L.append('qlinks "V%d" = ' % v + ",".join(["v%d_%s" % (v, k) for k in ("algo", "mode", "vcf")] + ["-"] +
+        L.append('qlinks "V%d" = ' % v + ",".join(["v%d_%s" % (v, k) for k in ("algo", "mode", "vcf", "comp")] +
                                                ["v%d_%s" % (v, k) for ks in ROWS for k in ks]))
         L.append("")
 
-    # MASTER page: the kit browser, then a panel per Q-Link column: BBD delay, master (with KEYS), modulation
+    # MASTER page: the kit browser with how it's played (KEYS, MIDI MODE), then a panel per Q-Link column: BBD delay,
+    # master (VOLUME, OUTPUT, the compressor), modulation
     L.append("[tab MASTER]")
     L.append("art file=images/skin/bg_master.png x=0 y=86 w=1280 h=628")
     html = h_panel(8, 94, 1264, 152, COL["kit"], "KIT")
     html += h_panel(8, 256, 494, 450, COL["bbd"], "BBD DELAY")
     html += h_panel(512, 256, 376, 450, COL["mst"], "MASTER")
     html += h_panel(898, 256, 374, 450, COL["mod"], "MODULATION")
+    html += h_ctext(1000, 136, "KEYS", "#aba7c4", 13)
+    html += h_ctext(1170, 136, "MIDI MODE", "#aba7c4", 13)
     art["bgs"].append({"name": "bg_master", "html": html})
-    L.append('stepper cx=520 cy=180 w=760 h=78 label="" key=kit get=kit_name style=dotmatrix')
-    L.append('button cx=1010 cy=180 w=120 h=60 label="PREV" key=kit_prev')
-    L.append('button cx=1150 cy=180 w=120 h=60 label="NEXT" key=kit_next')
+    L.append('stepper cx=380 cy=180 w=520 h=78 label="" key=kit get=kit_name style=dotmatrix')
+    L.append('button cx=710 cy=180 w=100 h=60 label="PREV" key=kit_prev')
+    L.append('button cx=830 cy=180 w=100 h=60 label="NEXT" key=kit_next')
+    L.append('popup cx=1000 cy=186 w=150 h=48 label="" key=keys')
+    L.append('popup cx=1170 cy=186 w=170 h=48 label="" key=midi_mode')
     knob("fx_time", 90, 362, "bbd", 40)
     knob("fx_feedback", 90, 562, "bbd", 40)
     knob("fx_rate", 250, 362, "bbd", 40)
@@ -323,12 +333,12 @@ def layout():
     knob("volume", 600, 362, "mst", 40)
     knob("comp_thresh", 600, 562, "mst", 40)
     knob("comp_amt", 790, 562, "mst", 40)
-    enum("enum_v", 790, 427, "keys", "mst", 100, 26, "KEYS")
+    enum("enum_v", 790, 427, "output", "mst", 100, 26, "OUTPUT")
     knob("lfo_speed", 990, 362, "mod", 40)
     knob("lfo_level", 990, 562, "mod", 40)
     L.append('popup cx=1170 cy=374 w=160 h=48 label="WAVE" key=lfo_wave')
-    L.append('qlinks "MASTER" = fx_time,fx_feedback,fx_rate,fx_depth,volume,comp_thresh,comp_amt,keys,'
-             'lfo_speed,lfo_level,lfo_wave,-,kit')
+    L.append('qlinks "MASTER" = fx_time,fx_feedback,fx_rate,fx_depth,volume,output,comp_thresh,comp_amt,'
+             'lfo_speed,lfo_level,lfo_wave,-,kit,keys,midi_mode')
     L.append("")
 
     # MOD pages: the LFO depth of each voice knob (the hardware's MODULATION DESTINATION / DEPTH), each where its knob
