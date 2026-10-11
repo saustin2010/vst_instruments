@@ -75,6 +75,12 @@ parameter index, so existing projects keep working.
   the Erica Synths Pērkons HD-01, DSP written from scratch, reads the Pērkons' `.KIT` packs. Seven pages (a voice
   each, MASTER, two of LFO depths), a colour per voice, envelope displays that follow DECAY / PITCH / ATTACK. Checked on the
   Live II 2026-10-10 (all five pages, Q-Links, the displays following their knobs, the packs): Design QA ✅.
+  - [ ] 2.0.0 (owner's requests, 2026-10-12; branch `percolator-changes`, done offline): voices on notes 36-39 (were
+    20-23); MIDI MODE MULTI 1-4 / 2-5 (a voice per channel, pitched); COMP SEND per voice, the compressor bypassed at
+    AMOUNT 0 and only ever louder above it; voice taps (OUTPUT = TAP V1-V4 on a second instance: MPC plays only a
+    plugin's first stereo pair). Left: on the device, the pads on notes 36-39, whether MULTI's channels reach the
+    plugin, a tap on a second track, the compressor by ear (the owner heard it mute at AMOUNT 0, not reproduced
+    offline); then release 2.0.0 and update #255.
 - [ ] **Stevequencer** ([originals/stevequencer](originals/stevequencer/)): a 16-step, four-page (64-step) melodic
   sequencer edited from the Q-Links (pitch, length, on/off, velocity, chance, ratchet per step). Browser prototype
   2026-10-04 (`design/prototype.html`); built and installed on the Live II the same day (engine, 418 parameters, 6
