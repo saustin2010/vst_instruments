@@ -140,6 +140,11 @@ typedef struct {
     float velocity;               /* Current note velocity */
     float velocity_sensitivity;   /* Velocity sensitivity (0.0 - 1.0) */
 
+#ifdef MPC_PORT
+    /* MPC port (2026-10-12): FILTER switch, 0 = CLEAN, 1 = DRIVE (see moog_engine_render) */
+    int filter_drive;
+#endif
+
 } moog_engine_t;
 
 /* Initialize engine with defaults */

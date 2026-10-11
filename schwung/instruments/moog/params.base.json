@@ -230,6 +230,13 @@
    "name": "Vel Sens",
    "min": 0.0,
    "max": 1.0
+  },
+  {
+   "key": "filter_mode",
+   "name": "Filter Mode",
+   "min": 0.0,
+   "max": 1.0,
+   "display": "int"
   }
  ]
 }

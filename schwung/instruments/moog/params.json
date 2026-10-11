@@ -321,6 +321,15 @@
    "max": 0,
    "display": "string",
    "type": "readout"
+  },
+  {
+   "key": "filter_mode",
+   "name": "FILTER",
+   "options": [
+    "CLEAN",
+    "DRIVE"
+   ],
+   "default": 0
   }
  ]
 }
