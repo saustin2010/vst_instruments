@@ -10,7 +10,10 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   replays it (all 41 PASSED). Re-released v1.0.1: Fizzik, Hera, NuSaw, Braids, Groove Bank, Mr Hyde, Rings, Rings FX,
   Chordism, Mono Voice (Percolator in 1.2.0).
   - [ ] Install all on the Live II (`./install.sh <mpc> all`, no restart) and check STOP on Hera.
-  - [ ] Offer `7f0653c` to sd88me (ask the owner first).
+  - [x] Offered to sd88me: sd88me/mpc-vst-plugins#279 (2026-10-11), the fix on his current main. It also applies a
+    held parameter 0 when the host reads it (his step tests sweep an int parameter 0), and the check's text buffers
+    follow `PARAM_TEXT_MAX` (his Maschine port shows 96-character text). His `poc/steptest` and `ports/maschine`
+    PASSED in a Linux container.
 - [ ] **One repo per plugin for sd88me's catalogue** (planned 2026-10-08): this repo stays the master, each released
   plugin is split into `saustin2010/mpc-vst-<plugin>` (`tools/publish.sh`). The 6 plugins already in the catalogue are
   offered as skins instead.
