@@ -278,19 +278,24 @@ static inline int16_t out_sample(float x) {   /* a soft ceiling instead of a har
  * rest goes past it, as do the delay's echoes. Threshold 0 to -36 dB (THRESH), ratio 1:1 to 10:1 (AMOUNT), and its
  * reduction made back against a -3 dB peak: turned up, it only ever makes the bus louder (measured on the built-in kits:
  * +0.3 to +11 dB) and a peak stays under -3 dB. The detector catches a peak at once (a drum's first sample would
- * otherwise get the whole make-up gain and clip) and lets go over 120 ms. AMOUNT at 0 is off: the bus passes
- * untouched, the same as no compressor. */
+ * otherwise get the whole make-up gain and clip) and lets go over 120 ms. COMP LEVEL sets what comes out of it (71 =
+ * as it is). AMOUNT at 0 is off: the bus passes untouched, COMP LEVEL too, the same as no compressor. */
 typedef struct {
     int on;
-    float thr, expo, makeup, rel;
+    float thr, expo, makeup, rel;   /* makeup includes COMP LEVEL */
 } comp_t;
+
+static float level_gain(float knob) {   /* VOLUME and COMP LEVEL: 0..100 -> silent .. +6 dB, 71 = 0 dB */
+    float x = knob / 100.0f;
+    return 2.0f * x * x;
+}
 
 static void comp_setup(const perc_t *P, comp_t *c) {
     float amt = P->pv[P_COMP_AMT] / 100.0f, thr_db = -36.0f * P->pv[P_COMP_THRESH] / 100.0f, ratio = 1.0f + 9.0f * amt;
     c->on = amt > 0.0001f;
     c->thr = powf(10.0f, thr_db / 20.0f);
     c->expo = 1.0f / ratio - 1.0f;
-    c->makeup = powf(10.0f, fmaxf(-3.0f - thr_db, 0.0f) * (1.0f - 1.0f / ratio) / 20.0f);
+    c->makeup = powf(10.0f, fmaxf(-3.0f - thr_db, 0.0f) * (1.0f - 1.0f / ratio) / 20.0f) * level_gain(P->pv[P_COMP_LEVEL]);
     c->rel = op_coef(1.3f);
 }
 
@@ -336,8 +341,7 @@ static void tap_render(perc_t *P, int vi, int16_t *out, int frames) {
     P->tap_t += n;
     comp_t cmp;
     comp_setup(P, &cmp);
-    float vol = P->pv[P_VOLUME] / 100.0f;
-    vol = 2.0f * vol * vol;
+    float vol = level_gain(P->pv[P_VOLUME]);
     for (int i = 0; i < frames; i++) {
         float x = tapbus.ring[vi][(start + i) & (TAP_N - 1)] * 0.55f;
         if (cmp.on) x = comp_run(&P->comp_env, &cmp, x);
@@ -369,8 +373,7 @@ static void e_render(void *inst, int16_t *out, int frames) {
     float sm = 1.0f - expf(-1.0f / (0.12f * SR));
     comp_t cmp;
     comp_setup(P, &cmp);
-    float vol = P->pv[P_VOLUME] / 100.0f;
-    vol = 2.0f * vol * vol;
+    float vol = level_gain(P->pv[P_VOLUME]);
     for (int off = 0; off < frames; off += SUB) {
         int n = frames - off < SUB ? frames - off : SUB;
         float mix[SUB] = {0}, cbus[SUB] = {0}, send[SUB] = {0};
@@ -565,6 +568,7 @@ static int e_get_param(void *inst, const char *key, char *buf, int len) {
     case P_FX_RATE: return snprintf(buf, len, "%.2f Hz", bbd_rate(P));
     case P_COMP_THRESH: return x > 0.005f ? snprintf(buf, len, "%.0f dB", -36.0f * x) : snprintf(buf, len, "0 dB");
     case P_COMP_AMT: return x > 0.000001f ? snprintf(buf, len, "%.1f:1", 1.0f + 9.0f * x) : snprintf(buf, len, "OFF");
+    case P_COMP_LEVEL: return x > 0.001f ? snprintf(buf, len, "%+.1f dB", 20.0f * log10f(level_gain(P->pv[i]))) : snprintf(buf, len, "-inf dB");
     case P_LFO_SPEED: return snprintf(buf, len, "%.2f Hz", lfo_rate(x));
     }
     return 0;

@@ -106,6 +106,7 @@ static const pdef_t PDEF[] = {
     {"v3_comp", 0, 0, 100.0f},
     {"v4_comp", 0, 0, 100.0f},
     {"output", 1, 5, 0.0f},
+    {"comp_level", 0, 0, 71.0f},
 };
 enum {
     P_KIT = 0,
@@ -211,7 +212,8 @@ enum {
     P_V3_COMP = 100,
     P_V4_COMP = 101,
     P_OUTPUT = 102,
-    NP = 103
+    P_COMP_LEVEL = 103,
+    NP = 104
 };
 /* per-voice block: v%d_tune is P_V1_TUNE + 11 * (v - 1) */
 #define VSTRIDE 11

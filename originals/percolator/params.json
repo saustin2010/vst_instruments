@@ -1131,6 +1131,14 @@
     "TAP V4"
    ],
    "default": "MAIN"
+  },
+  {
+   "key": "comp_level",
+   "name": "COMP LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 71,
+   "dynamic_display": true
   }
  ]
 }
