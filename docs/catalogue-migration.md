@@ -281,7 +281,7 @@ have created too many repositories, too quickly"), however far apart they're spa
 | Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
-| Moog | mpc-vst-moog | `raffosynth` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Moog | mpc-vst-moog | `raffosynth` | MIT | 14 presets | **in the catalogue**: v1.1.0 (2026-10-12: EMPHASIS and CUTOFF fixed, FILTER CLEAN/DRIVE switch; the repo build played on the Live II), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Noisemaker | mpc-vst-noisemaker | `noisemaker` | GPL-2.0-only | keeps your banks | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
