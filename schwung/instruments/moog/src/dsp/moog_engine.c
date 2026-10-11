@@ -552,6 +552,15 @@ void moog_engine_render(moog_engine_t *engine, float *output, int frames) {
             float f = 1.0f - expf(-2.0f * (float)M_PI * cutoff_hz / sr);
             if (f > 0.95f) f = 0.95f;
             float fb = engine->filter_resonance * ladder_fb_max(f);
+            float input;
+            if (engine->filter_drive) {
+                /* FILTER DRIVE: the signal is raised by what the feedback takes from the bass (DC gain stays 1 at
+                 * any EMPHASIS), and the ladder's input goes through a soft clip, as a transistor ladder
+                 * saturates: loud resonance compresses into a squelch instead of a clean whistle. */
+                input = tanhf(sample * (1.0f + fb) - engine->filter_prev[4] * fb);
+            } else {
+                input = sample - engine->filter_prev[4] * fb;   /* FILTER CLEAN: the linear ladder */
+            }
 #else
             float fc = cutoff_hz / sr;
             if (fc > 0.49f) fc = 0.49f;
@@ -559,9 +568,9 @@ void moog_engine_render(moog_engine_t *engine, float *output, int frames) {
 
             float f = fc * 1.16f;
             float fb = engine->filter_resonance * (1.0f - 0.15f * f * f);
-#endif
 
             float input = sample - engine->filter_prev[4] * fb;
+#endif
             input *= 0.35013f * f * f * f * f;
 
             engine->filter_prev[1] = input + 0.3f * engine->filter_prev[0] + (1.0f - f) * engine->filter_prev[1];

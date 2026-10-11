@@ -19,5 +19,10 @@ Q-Link columns before → after ("-" = an empty slot):
 Moog's screen doesn't reproduce exactly from a rerun of convert.py, so the change is made in `layout.conf` by hand
 (see its header) and also written in convert.py MAPS `qlinks`.
 
+## 2026-10-12: FILTER switch
+A CLEAN | DRIVE switch (`enum_h`, parameter 41) under EMPHASIS and CONTOUR on MAIN, in the empty strip below the
+knobs' values. Not on a Q-Link: column 1 (the filter panel) is full, and column 4 (PATCH) is in another panel, so
+its outline would span both. check_skin OK. To check on the device: the switch's touch area and look.
+
 ## Checked
 Offline test PASSED; check_skin OK; no Q-Link outlines overlap on any page now (qlink_overlay.py).

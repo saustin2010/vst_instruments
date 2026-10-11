@@ -29,7 +29,7 @@
  /* ===================================================================
   * Moog ladder filter
   * Based on equalizer.c from RaffoSynth, enhanced with proper
-@@ -525,12 +545,21 @@ void moog_engine_render(moog_engine_t *engine, float *output, int frames) {
+@@ -525,6 +545,23 @@ void moog_engine_render(moog_engine_t *engine, float *output, int frames) {
              float cutoff_hz = 20.0f * powf(1000.0f, cutoff_normalized);
  
              /* Inline single-sample Moog ladder filter */
@@ -40,20 +40,88 @@
 +            float f = 1.0f - expf(-2.0f * (float)M_PI * cutoff_hz / sr);
 +            if (f > 0.95f) f = 0.95f;
 +            float fb = engine->filter_resonance * ladder_fb_max(f);
++            float input;
++            if (engine->filter_drive) {
++                /* FILTER DRIVE: the signal is raised by what the feedback takes from the bass (DC gain stays 1 at
++                 * any EMPHASIS), and the ladder's input goes through a soft clip, as a transistor ladder
++                 * saturates: loud resonance compresses into a squelch instead of a clean whistle. */
++                input = tanhf(sample * (1.0f + fb) - engine->filter_prev[4] * fb);
++            } else {
++                input = sample - engine->filter_prev[4] * fb;   /* FILTER CLEAN: the linear ladder */
++            }
 +#else
              float fc = cutoff_hz / sr;
              if (fc > 0.49f) fc = 0.49f;
              if (fc < 0.001f) fc = 0.001f;
- 
-             float f = fc * 1.16f;
+@@ -533,6 +570,7 @@ void moog_engine_render(moog_engine_t *engine, float *output, int frames) {
              float fb = engine->filter_resonance * (1.0f - 0.15f * f * f);
-+#endif
  
              float input = sample - engine->filter_prev[4] * fb;
++#endif
              input *= 0.35013f * f * f * f * f;
+ 
+             engine->filter_prev[1] = input + 0.3f * engine->filter_prev[0] + (1.0f - f) * engine->filter_prev[1];
+--- a/src/dsp/moog_engine.h
++++ b/src/dsp/moog_engine.h
+@@ -140,6 +140,11 @@ typedef struct {
+     float velocity;               /* Current note velocity */
+     float velocity_sensitivity;   /* Velocity sensitivity (0.0 - 1.0) */
+ 
++#ifdef MPC_PORT
++    /* MPC port (2026-10-12): FILTER switch, 0 = CLEAN, 1 = DRIVE (see moog_engine_render) */
++    int filter_drive;
++#endif
++
+ } moog_engine_t;
+ 
+ /* Initialize engine with defaults */
 --- a/src/dsp/moog_plugin.cpp
 +++ b/src/dsp/moog_plugin.cpp
-@@ -533,6 +533,31 @@ static void* v2_create_instance(const char *module_dir, const char *json_default
+@@ -116,6 +116,9 @@ enum {
+     P_MOD_PITCH,
+     P_BEND_RANGE,
+     P_VEL_SENS,
++#ifdef MPC_PORT
++    P_FILTER_MODE,      /* MPC port (2026-10-12): FILTER switch, 0 = CLEAN, 1 = DRIVE */
++#endif
+     P_COUNT
+ };
+ 
+@@ -178,6 +181,9 @@ static const param_def_t g_shadow_params[] = {
+     {"mod_pitch",     "Mod>Pitch",     PARAM_TYPE_FLOAT, P_MOD_PITCH,     0.0f, 1.0f},
+     {"bend_range",    "Bend Range",    PARAM_TYPE_FLOAT, P_BEND_RANGE,    0.0f, 1.0f},
+     {"vel_sens",      "Vel Sens",      PARAM_TYPE_FLOAT, P_VEL_SENS,      0.0f, 1.0f},
++#ifdef MPC_PORT
++    {"filter_mode",   "Filter Mode",   PARAM_TYPE_INT,   P_FILTER_MODE,   0.0f, 1.0f},
++#endif
+ };
+ 
+ /* =====================================================================
+@@ -484,13 +490,23 @@ static void apply_params_to_engine(moog_instance_t *inst) {
+     e->mod_to_pitch      = inst->params[P_MOD_PITCH];
+     e->bend_range        = inst->params[P_BEND_RANGE];
+     e->velocity_sensitivity = inst->params[P_VEL_SENS];
++#ifdef MPC_PORT
++    e->filter_drive      = (int)inst->params[P_FILTER_MODE];
++#endif
+ }
+ 
+ static void apply_preset(moog_instance_t *inst, int preset_idx) {
+     if (preset_idx < 0 || preset_idx >= inst->preset_count) return;
+ 
+     MoogPreset *p = &inst->presets[preset_idx];
++#ifdef MPC_PORT
++    /* MPC port (2026-10-12): the FILTER switch is the player's choice, not the preset's: it stays as it is */
++    float filter_mode = inst->params[P_FILTER_MODE];
+     memcpy(inst->params, p->params, sizeof(float) * P_COUNT);
++    inst->params[P_FILTER_MODE] = filter_mode;
++#else
++    memcpy(inst->params, p->params, sizeof(float) * P_COUNT);
++#endif
+     snprintf(inst->preset_name, sizeof(inst->preset_name), "%s", p->name);
+     inst->current_preset = preset_idx;
+ 
+@@ -533,6 +549,31 @@ static void* v2_create_instance(const char *module_dir, const char *json_default
      for (int i = 0; i < FACTORY_PRESET_COUNT; i++) {
          memcpy(&inst->presets[i], &g_factory_presets[i], sizeof(MoogPreset));
      }

@@ -116,6 +116,9 @@ enum {
     P_MOD_PITCH,
     P_BEND_RANGE,
     P_VEL_SENS,
+#ifdef MPC_PORT
+    P_FILTER_MODE,      /* MPC port (2026-10-12): FILTER switch, 0 = CLEAN, 1 = DRIVE */
+#endif
     P_COUNT
 };
 
@@ -178,6 +181,9 @@ static const param_def_t g_shadow_params[] = {
     {"mod_pitch",     "Mod>Pitch",     PARAM_TYPE_FLOAT, P_MOD_PITCH,     0.0f, 1.0f},
     {"bend_range",    "Bend Range",    PARAM_TYPE_FLOAT, P_BEND_RANGE,    0.0f, 1.0f},
     {"vel_sens",      "Vel Sens",      PARAM_TYPE_FLOAT, P_VEL_SENS,      0.0f, 1.0f},
+#ifdef MPC_PORT
+    {"filter_mode",   "Filter Mode",   PARAM_TYPE_INT,   P_FILTER_MODE,   0.0f, 1.0f},
+#endif
 };
 
 /* =====================================================================
@@ -484,13 +490,23 @@ static void apply_params_to_engine(moog_instance_t *inst) {
     e->mod_to_pitch      = inst->params[P_MOD_PITCH];
     e->bend_range        = inst->params[P_BEND_RANGE];
     e->velocity_sensitivity = inst->params[P_VEL_SENS];
+#ifdef MPC_PORT
+    e->filter_drive      = (int)inst->params[P_FILTER_MODE];
+#endif
 }
 
 static void apply_preset(moog_instance_t *inst, int preset_idx) {
     if (preset_idx < 0 || preset_idx >= inst->preset_count) return;
 
     MoogPreset *p = &inst->presets[preset_idx];
+#ifdef MPC_PORT
+    /* MPC port (2026-10-12): the FILTER switch is the player's choice, not the preset's: it stays as it is */
+    float filter_mode = inst->params[P_FILTER_MODE];
     memcpy(inst->params, p->params, sizeof(float) * P_COUNT);
+    inst->params[P_FILTER_MODE] = filter_mode;
+#else
+    memcpy(inst->params, p->params, sizeof(float) * P_COUNT);
+#endif
     snprintf(inst->preset_name, sizeof(inst->preset_name), "%s", p->name);
     inst->current_preset = preset_idx;
 
