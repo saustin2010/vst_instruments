@@ -10,8 +10,8 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   got new values that keep their sound (within about 1 dB offline). Offline test PASSED. The owner compared offline
   renders and wanted two sounds, so MAIN has a FILTER switch (parameter 41): CLEAN (the above) or DRIVE (soft-clipped
   ladder input, bass kept: fat and squelchy).
-  - [ ] Install on the Live II and listen: EMPHASIS on a held note, a CUTOFF sweep, CLEAN vs DRIVE, a few presets;
-    the switch's touch area.
+  - [x] Install on the Live II and listen (2026-10-12): installed (no restart, verified by hash); the owner played it
+    and accepted it for now ("it'll do for now"). More squelch may come later (see the README's FILTER notes).
   - [ ] Re-release `saustin2010/mpc-vst-moog` (v1.1.0, `tools/publish.sh moog`) once it sounds right.
 - [x] **MPC's STOP toggle of parameter 0** (2026-10-10, PR #16): on insert and on every STOP MPC's host (JUCE) sets
   parameter 0 to the far end and straight back; plugins with a preset there lost every edit on STOP (Hera confirmed
