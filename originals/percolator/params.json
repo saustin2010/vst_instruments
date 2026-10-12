@@ -1281,9 +1281,10 @@
    "step_delta": 1
   },
   {
-   "key": "v1_ch",
-   "name": "V1 CHANNEL",
+   "key": "v1_kch",
+   "name": "V1 KEYS CH",
    "options": [
+    "OFF",
     "ALL",
     "1",
     "2",
@@ -1302,7 +1303,7 @@
     "15",
     "16"
    ],
-   "default": "ALL",
+   "default": "2",
    "send": [
     "0",
     "1",
@@ -1320,17 +1321,9 @@
     "13",
     "14",
     "15",
-    "16"
+    "16",
+    "17"
    ]
-  },
-  {
-   "key": "v1_keys",
-   "name": "V1 KEYS",
-   "options": [
-    "OFF",
-    "ON"
-   ],
-   "default": "OFF"
   },
   {
    "key": "v1_out",
@@ -1495,9 +1488,10 @@
    "step_delta": 1
   },
   {
-   "key": "v2_ch",
-   "name": "V2 CHANNEL",
+   "key": "v2_kch",
+   "name": "V2 KEYS CH",
    "options": [
+    "OFF",
     "ALL",
     "1",
     "2",
@@ -1516,7 +1510,7 @@
     "15",
     "16"
    ],
-   "default": "ALL",
+   "default": "3",
    "send": [
     "0",
     "1",
@@ -1534,17 +1528,9 @@
     "13",
     "14",
     "15",
-    "16"
+    "16",
+    "17"
    ]
-  },
-  {
-   "key": "v2_keys",
-   "name": "V2 KEYS",
-   "options": [
-    "OFF",
-    "ON"
-   ],
-   "default": "OFF"
   },
   {
    "key": "v2_out",
@@ -1709,9 +1695,10 @@
    "step_delta": 1
   },
   {
-   "key": "v3_ch",
-   "name": "V3 CHANNEL",
+   "key": "v3_kch",
+   "name": "V3 KEYS CH",
    "options": [
+    "OFF",
     "ALL",
     "1",
     "2",
@@ -1730,7 +1717,7 @@
     "15",
     "16"
    ],
-   "default": "ALL",
+   "default": "4",
    "send": [
     "0",
     "1",
@@ -1748,17 +1735,9 @@
     "13",
     "14",
     "15",
-    "16"
+    "16",
+    "17"
    ]
-  },
-  {
-   "key": "v3_keys",
-   "name": "V3 KEYS",
-   "options": [
-    "OFF",
-    "ON"
-   ],
-   "default": "OFF"
   },
   {
    "key": "v3_out",
@@ -1923,9 +1902,10 @@
    "step_delta": 1
   },
   {
-   "key": "v4_ch",
-   "name": "V4 CHANNEL",
+   "key": "v4_kch",
+   "name": "V4 KEYS CH",
    "options": [
+    "OFF",
     "ALL",
     "1",
     "2",
@@ -1944,7 +1924,7 @@
     "15",
     "16"
    ],
-   "default": "ALL",
+   "default": "5",
    "send": [
     "0",
     "1",
@@ -1962,17 +1942,9 @@
     "13",
     "14",
     "15",
-    "16"
+    "16",
+    "17"
    ]
-  },
-  {
-   "key": "v4_keys",
-   "name": "V4 KEYS",
-   "options": [
-    "OFF",
-    "ON"
-   ],
-   "default": "OFF"
   },
   {
    "key": "v4_out",

@@ -1,8 +1,8 @@
 /* Percolator engine: parameters, MIDI, kits, the LFO and the master section (BBD delay, compressor, volume).
  *
- * MIDI: each voice has a NOTE (36-39, C1-D#1, to start with), a CHANNEL (ALL or 1-16) and KEYS (see e_midi): with
- * KEYS on, notes play it pitched (C3 = as tuned) and pitch bend on its channel bends it +-2 semitones. Several voices
- * on one note play together. A voice whose DECAY is at the top drones while its note is held. CC 120 / 123 stop
+ * MIDI: each voice has a NOTE (36-39, C1-D#1, to start with) that plays it as tuned, and a KEYS CH (channels 2-5 to start
+ * with; OFF; ALL) on which every note plays it pitched (C3 = as tuned) and pitch bend bends it +-2 semitones (see
+ * e_midi). Several voices on one note play together. A voice whose DECAY is at the top drones while its note is held. CC 120 / 123 stop
  * everything. */
 #include <math.h>
 #include <stdio.h>
@@ -54,7 +54,7 @@ const mpc_engine_t *mpc_engine(void);
 #define VVCF(v) VK(v, 10)
 #define VDEPTH(v, k) (P_V1_M_TUNE + MSTRIDE * (v) + (k))
 #define VCOMP(v) (P_V1_COMP + (v))
-#define VIO(v, p) ((p) + (P_V2_NOTE - P_V1_NOTE) * (v))   /* a voice's NOTE / CH / KEYS / OUT: VIO(v, P_V1_CH) */
+#define VIO(v, p) ((p) + (P_V2_NOTE - P_V1_NOTE) * (v))   /* a voice's NOTE / KEYS CH / OUT: VIO(v, P_V1_KCH) */
 
 static int find_key(const char *key) {
     for (int i = 0; i < NP; i++)
@@ -188,17 +188,14 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
     if (len < 2 || P->pv[P_OUTPUT] >= 1) return;   /* a tap plays the main instance's OUT, not its own voices */
     int st = m[0] & 0xF0, ch = m[0] & 0x0F, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
     if (st == 0x90 && d2 > 0) {
-        /* who plays it: a voice with KEYS on and its own channel takes every note on that channel, pitched (the
-         * Perkons' MULTI); otherwise each voice whose NOTE it is (on ALL or this channel), as it's tuned; otherwise
-         * voices with KEYS on and ALL, pitched (the old KEYS: every other note) */
+        /* who plays it: a voice whose KEYS CH this is takes every note on it, pitched (the Perkons' MULTI); otherwise
+         * each voice whose NOTE it is, as it's tuned; otherwise voices with KEYS CH = ALL, pitched (the old KEYS) */
         int hit = 0;
         for (int pass = 0; pass < 3 && !hit; pass++)
             for (int v = 0; v < NV; v++) {
-                int vch = (int)P->pv[VIO(v, P_V1_CH)], keys = P->pv[VIO(v, P_V1_KEYS)] >= 1;
+                int kch = (int)P->pv[VIO(v, P_V1_KCH)];   /* 0 OFF, 1 ALL, 2-17 = channels 1-16 */
+                if (pass == 0 ? kch != ch + 2 : pass == 1 ? (int)P->pv[VIO(v, P_V1_NOTE)] != d1 : kch != 1) continue;
                 int pitched = pass != 1;
-                if (pass == 0 ? !(keys && vch == ch + 1)
-                    : pass == 1 ? !((vch == 0 || vch == ch + 1) && (int)P->pv[VIO(v, P_V1_NOTE)] == d1)
-                    : !(keys && vch == 0)) continue;
                 vparam_t vp;
                 vparams(P, v, &vp);
                 voice_trigger(P, v, &vp, (float)d2, d1, pitched ? (float)(d1 - 60) : 0.0f);
@@ -238,41 +235,24 @@ static inline float hermite(const float *b, float pos) {
     return ((c3 * f + c2) * f + c1) * f + x0;
 }
 
-/* ---- voice taps -------------------------------------------------------------------------------------------- *
- * MPC plays only a plugin's first stereo pair (sd88me's multi-out test on a Force, 2026-09-30), so voices get a track
- * of their own another way: a second Percolator on that track with TRACK PLAYS = OUT <n> plays the voices the main one
- * (the first with MAIN KIT) sends to OUT n (V<v> OUT; voice n to OUT n to start with), and the main one leaves them out
- * of its own mix and compressor while that OUT has a tap (their FX SEND still feeds the main delay). Every instance
- * lives in one process with one copy of these statics, and their blocks run on MPC's worker threads at the same time,
- * in no fixed order. So the main one writes each OUT into a ring here and publishes how far it has written; a tap
- * reads a block behind that, which it can always find written whichever of the two ran first in a period (two behind
- * if it only ever saw the main one run second), and the main one holds its own output back a block while an OUT is
- * tapped, so the voices stay together. A tap that stops (removed, set back to MAIN KIT) hands its voices back after
- * 16 blocks. */
-static struct {
-    uint32_t owner;                    /* the main instance writing the rings (its id), 0 = none */
-    uint32_t gen;                      /* changes whenever the owner does: taps sync again */
-    uint32_t wpos;                     /* frames written to the rings */
-    uint32_t seen[NV], seen_gen[NV];   /* each OUT's tap: the last wpos it saw, under which gen */
-    float ring[NV][TAP_N];             /* OUT 1-4: the voices sent there */
-} tapbus;
+/* ---- OUT 1-4 (tapbus.h: how they work) ------------------------------------------------------------------------ */
 static uint32_t next_id = 1;
 
-#define LOAD(x) __atomic_load_n(&(x), __ATOMIC_ACQUIRE)
-#define STORE(x, v) __atomic_store_n(&(x), (v), __ATOMIC_RELEASE)
-
-static int tap_claim(perc_t *P) {   /* this instance writes the rings: it already does, or nobody did */
-    uint32_t o = LOAD(tapbus.owner), none = 0;
+static int tap_claim(perc_t *P) {   /* this instance writes OUT 1-4: it already does, or nobody did */
+    tapbus_t *b = P->bus;
+    if (!b) return 0;
+    uint32_t o = TB_LOAD(b->owner), none = 0;
     if (o == P->id) return 1;
-    if (o || !__atomic_compare_exchange_n(&tapbus.owner, &none, P->id, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) return 0;
-    __atomic_add_fetch(&tapbus.gen, 1, __ATOMIC_ACQ_REL);
+    if (o || !__atomic_compare_exchange_n(&b->owner, &none, P->id, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) return 0;
+    __atomic_add_fetch(&b->gen, 1, __ATOMIC_ACQ_REL);
     return 1;
 }
 
 static void tap_release(perc_t *P) {
+    tapbus_t *b = P->bus;
     uint32_t me = P->id;
-    if (LOAD(tapbus.owner) == me && __atomic_compare_exchange_n(&tapbus.owner, &me, 0, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
-        __atomic_add_fetch(&tapbus.gen, 1, __ATOMIC_ACQ_REL);
+    if (b && TB_LOAD(b->owner) == me && __atomic_compare_exchange_n(&b->owner, &me, 0, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
+        __atomic_add_fetch(&b->gen, 1, __ATOMIC_ACQ_REL);
 }
 
 static inline int16_t out_sample(float x) {   /* a soft ceiling instead of a hard clip */
@@ -313,45 +293,23 @@ static inline float comp_run(float *env, const comp_t *c, float x) {
     return *env > c->thr ? x * powf(*env / c->thr, c->expo) * c->makeup : x * c->makeup;
 }
 
-/* A tap: OUT vi + 1 of the main instance, through this instance's own compressor and VOLUME */
-static void tap_render(perc_t *P, int vi, int16_t *out, int frames) {
+/* TRACK PLAYS = OUT n: the main Percolator's OUT n, through this instance's own compressor and VOLUME */
+static void tap_render(perc_t *P, int o, int16_t *out, int frames) {
     tap_release(P);
     for (int v = 0; v < NV; v++) {   /* its own voices stay quiet */
         P->v[v].active = 0;
         P->v[v].room.tail = 0;
     }
-    uint32_t g = LOAD(tapbus.gen), w = LOAD(tapbus.wpos), n = (uint32_t)frames;
-    if (!LOAD(tapbus.owner) || frames > TAP_N / 4) {
-        P->tap_sync = 0;
+    float y[TAP_N / 4];
+    if (!tapbus_read(P->bus, &P->tr, o, y, frames)) {
         memset(out, 0, sizeof(int16_t) * 2 * frames);
         return;
     }
-    STORE(tapbus.seen[vi], w);
-    STORE(tapbus.seen_gen[vi], g);
-    uint32_t lag = w - P->tap_t;   /* how far the main one is ahead of this tap's own count */
-    int moved = w != P->tap_w;     /* the main one has written since this tap's last block */
-    P->tap_w = w;
-    if (!P->tap_sync || g != P->tap_gen) {
-        P->tap_sync = 1;
-        P->tap_gen = g;
-        P->tap_lag = lag;
-    } else if ((int32_t)(lag - P->tap_lag) > 0) P->tap_lag = lag;   /* it ran first this time: a block less late */
-    uint32_t start = P->tap_t + P->tap_lag - 2 * n;
-    if ((int32_t)(w - (start + n)) < 0 || w - start > TAP_N - 2 * n) {   /* not written yet, or gone */
-        if (!moved) {   /* the main one has stopped (removed, not playing): quiet, not its last block again */
-            P->tap_t += n;
-            memset(out, 0, sizeof(int16_t) * 2 * frames);
-            return;
-        }
-        P->tap_lag = lag;   /* it started again behind where it was: follow it from here */
-        start = w - 2 * n;
-    }
-    P->tap_t += n;
     comp_t cmp;
     comp_setup(P, &cmp);
     float vol = level_gain(P->pv[P_VOLUME]);
     for (int i = 0; i < frames; i++) {
-        float x = tapbus.ring[vi][(start + i) & (TAP_N - 1)] * 0.55f;
+        float x = y[i] * 0.55f;
         if (cmp.on) x = comp_run(&P->comp_env, &cmp, x);
         out[2 * i] = out[2 * i + 1] = out_sample(x * vol);
     }
@@ -366,14 +324,19 @@ static void e_render(void *inst, int16_t *out, int frames) {
         return;
     }
     fpstate_t fp = ftz_on();
-    /* the taps: this one writes OUT 1-4's rings if it is the main one, and leaves out the voices a tap plays */
-    int own = tap_claim(P), tapped[NV] = {0}, vout[NV], hold = 0;
-    uint32_t w0 = own ? LOAD(tapbus.wpos) : 0, g = LOAD(tapbus.gen);
-    for (int o = 0; o < NV && own; o++) {
-        tapped[o] = LOAD(tapbus.seen_gen[o]) == g && w0 - LOAD(tapbus.seen[o]) < 16u * 128u;
+    /* OUT 1-4: this one writes them if it is the main one, and leaves out the voices something else plays */
+    tapbus_t *bus = P->bus;
+    int own = tap_claim(P), tapped[TAP_OUTS] = {0}, vout[NV], hold = 0;
+    uint32_t w0 = own ? TB_LOAD(bus->wpos) : 0, g = own ? TB_LOAD(bus->gen) : 0, mask[TAP_OUTS] = {0};
+    for (int o = 0; o < TAP_OUTS && own; o++) {
+        tapped[o] = TB_LOAD(bus->seen_gen[o]) == g && w0 - TB_LOAD(bus->seen[o]) < TAP_ALIVE;
         hold |= tapped[o];
     }
-    for (int v = 0; v < NV; v++) vout[v] = (int)P->pv[VIO(v, P_V1_OUT)] - 1;   /* -1: MAIN */
+    for (int v = 0; v < NV; v++) {
+        vout[v] = (int)P->pv[VIO(v, P_V1_OUT)] - 1;   /* -1: MAIN */
+        if (vout[v] >= 0) mask[vout[v]] |= 1u << v;
+    }
+    for (int o = 0; o < TAP_OUTS && own; o++) TB_STORE(bus->voices[o], mask[o]);
     float target = bbd_seconds(P) * SR, rate = bbd_rate(P) * INV_SR;
     float dep = P->pv[P_FX_DEPTH] / 100.0f;
     float depth = dep * dep * fminf(0.012f, 0.5f * bbd_seconds(P)) * SR;
@@ -387,15 +350,15 @@ static void e_render(void *inst, int16_t *out, int frames) {
         int n = frames - off < SUB ? frames - off : SUB;
         float mix[SUB] = {0}, cbus[SUB] = {0}, send[SUB] = {0};
         lfo_step(P, n);
-        for (int o = 0; o < NV && own; o++)
-            for (int i = 0; i < n; i++) tapbus.ring[o][(w0 + off + i) & (TAP_N - 1)] = 0;
+        for (int o = 0; o < TAP_OUTS && own; o++)
+            for (int i = 0; i < n; i++) bus->ring[o][(w0 + off + i) & (TAP_N - 1)] = 0;
         for (int v = 0; v < NV; v++) {
             vparam_t vp;
             float y[SUB] = {0}, cs = P->pv[VCOMP(v)] / 100.0f;
             vparams(P, v, &vp);
             voice_block(P, v, &vp, y, send, n);
             if (own && vout[v] >= 0)
-                for (int i = 0; i < n; i++) tapbus.ring[vout[v]][(w0 + off + i) & (TAP_N - 1)] += y[i];
+                for (int i = 0; i < n; i++) bus->ring[vout[v]][(w0 + off + i) & (TAP_N - 1)] += y[i];
             if (vout[v] < 0 || !tapped[vout[v]])
                 for (int i = 0; i < n; i++) {
                     mix[i] += y[i] * (1.0f - cs);
@@ -427,7 +390,7 @@ static void e_render(void *inst, int16_t *out, int frames) {
             out[2 * (off + i)] = out[2 * (off + i) + 1] = out_sample(x);
         }
     }
-    if (own) STORE(tapbus.wpos, w0 + (uint32_t)frames);
+    if (own) TB_STORE(bus->wpos, w0 + (uint32_t)frames);
     ftz_off(fp);
 }
 
@@ -435,9 +398,9 @@ static void e_render(void *inst, int16_t *out, int frames) {
 
 static void set_value(perc_t *P, int i, const char *val) {
     const pdef_t *d = &PDEF[i];
-    if (i == P_KEYS) {   /* the one KEYS switch up to 1.2.0 (a project saved then): turns on that voice's KEYS */
+    if (i == P_KEYS) {   /* the one KEYS switch up to 1.2.0 (a project saved then): that voice's KEYS CH = ALL */
         int k = atoi(val);
-        if (k >= 1 && k <= NV) P->pv[VIO(k - 1, P_V1_KEYS)] = 1;
+        if (k >= 1 && k <= NV) P->pv[VIO(k - 1, P_V1_KCH)] = 1;
         P->pv[P_KEYS] = 0;
         return;
     }
@@ -605,6 +568,7 @@ static void *e_create(const char *dir) {
     P->kit_pending = -1;
     P->lfo_rng = 0x2545f491u;
     P->id = __atomic_fetch_add(&next_id, 1, __ATOMIC_RELAXED);
+    P->bus = tapbus_open();
     for (int v = 0; v < NV; v++) {
         P->v[v].rng = 0x9e3779b9u + 7919u * (unsigned)v;
         P->v[v].note = -1;
@@ -621,6 +585,7 @@ static void e_destroy(void *inst) {
     TRACE("destroy %p", inst);
     if (!P) return;
     tap_release(P);
+    tapbus_close(P->bus);
     kits_free(P);
     free(P->dl);
     free(P);

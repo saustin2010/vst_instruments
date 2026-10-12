@@ -86,8 +86,8 @@ def params():
     opts("output", "TRACK PLAYS", ["MAIN KIT", "OUT 1", "OUT 2", "OUT 3", "OUT 4"], 0)
     # the compressor's own output level (VOLUME is the whole kit's); 71 = as it comes out
     knob("comp_level", "COMP LEVEL", 71, dynamic_display=True)
-    # each voice's MIDI and output (the MIDI & OUT page): the note that triggers it, the channel it hears, KEYS (every
-    # note on its channel plays it pitched; replaces the one KEYS switch and the Perkons' MULTI mode), its OUT
+    # each voice's MIDI and output (the MIDI & OUT page): the note that triggers it, its KEYS channel (every note on it
+    # plays the voice pitched: the Perkons' MULTI; ALL = every note that isn't a voice's NOTE, the old KEYS), its OUT
     for v in range(1, 5):
         P.append(dict(key="v%d_note" % v, name="V%d NOTE" % v, options=NOTE_NAMES, default=NOTE_NAMES[35 + v],
                       type="stepper"))
@@ -95,10 +95,10 @@ def params():
                       step_delta=-1))
         P.append(dict(key="v%d_note_next" % v, name="V%d NOTE UP" % v, momentary=True, step_of="v%d_note" % v,
                       step_delta=1))
-        # "send": the labels 1-16 would otherwise be read as option numbers (see MODE above)
-        opts("v%d_ch" % v, "V%d CHANNEL" % v, ["ALL"] + [str(c) for c in range(1, 17)], 0,
-             send=[str(c) for c in range(17)])
-        opts("v%d_keys" % v, "V%d KEYS" % v, ["OFF", "ON"], 0)
+        # channels 2-5 for voices 1-4 to start with (owner, 2026-10-12: "a channel per voice, always on"); "send": the
+        # labels 1-16 would otherwise be read as option numbers (see MODE above)
+        opts("v%d_kch" % v, "V%d KEYS CH" % v, ["OFF", "ALL"] + [str(c) for c in range(1, 17)], v + 2,
+             send=[str(c) for c in range(18)])
         opts("v%d_out" % v, "V%d OUT" % v, ["MAIN", "OUT 1", "OUT 2", "OUT 3", "OUT 4"], v)
     return P
 
@@ -373,21 +373,21 @@ def layout():
                    "#aba7c4", 12, .12, 600)
     html += h_text(28, 162, "OUT 1-4: A SECOND PERCOLATOR ON ANOTHER TRACK, PLAYING THE VOICES SENT TO THAT OUT",
                    "#aba7c4", 12, .12, 600)
-    html += h_text(28, 184, "KEYS ON: NOTES PLAY THE VOICE PITCHED (C3 = AS TUNED); WITH A CHANNEL OF ITS OWN, EVERY NOTE THERE",
+    html += h_text(28, 184, "KEYS CH: EVERY NOTE ON THAT MIDI CHANNEL PLAYS THE VOICE PITCHED (C3 = AS TUNED); NOTE: PLAYS IT AS TUNED",
                    "#6a6782", 12, .12, 600)
     L.append('popup cx=1140 cy=150 w=220 h=52 label="" key=output')
     for i, v in enumerate(range(1, 5)):
         x, c = 8 + 318 * i, COL[v]
         cx = x + 154
         html += h_panel(x, 216, 308, 490, c, "VOICE %d" % v)
-        for y, lab in ((286, "NOTE"), (386, "CHANNEL"), (486, "KEYS"), (586, "OUT")):
+        for y, lab in ((290, "NOTE"), (420, "KEYS CH"), (550, "OUT")):
             html += h_ctext(cx, y, lab, "#aba7c4", 13)
-        L.append('stepper cx=%d cy=%d w=250 h=56 label="" key=v%d_note style=dotmatrix' % (cx, 334, v))
-        L.append('popup cx=%d cy=%d w=200 h=48 label="" key=v%d_ch' % (cx, 430, v))
-        enum("enum_h", cx, 530, "v%d_keys" % v, v, 100, 46)
-        L.append('popup cx=%d cy=%d w=200 h=48 label="" key=v%d_out' % (cx, 630, v))
+        L.append('stepper cx=%d cy=%d w=250 h=56 label="" key=v%d_note style=dotmatrix' % (cx, 340, v))
+        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_kch' % (cx, 468, v))
+        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_out' % (cx, 598, v))
     art["bgs"].append({"name": "bg_io", "html": html})
-    L.append('qlinks "MIDI & OUT" = ' + ",".join("v%d_%s" % (v, k) for v in range(1, 5) for k in ("note", "ch", "keys", "out")))
+    L.append('qlinks "MIDI & OUT" = ' + ",".join("v%d_%s" % (v, k) if k != "-" else "-"
+                                                 for v in range(1, 5) for k in ("note", "kch", "out", "-")))
     L.append("")
 
     # MOD pages: the LFO depth of each voice knob (the hardware's MODULATION DESTINATION / DEPTH), each where its knob
