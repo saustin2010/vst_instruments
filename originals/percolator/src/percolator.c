@@ -204,8 +204,10 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
                 hit = 1;
             }
     } else if (st == 0x80 || st == 0x90) {
+        /* by note alone: MPC hands a plugin every note-on on channel 1 but its note-off on the channel it came on
+         * (Live II trace, 2026-10-12: a MIDI track on channel 3 sent 90 41 7f ... 82 41 40) */
         for (int v = 0; v < NV; v++)
-            if (P->v[v].note == d1 && P->v[v].ch == ch) voice_release(P, v);
+            if (P->v[v].note == d1) voice_release(P, v);
     } else if (st == 0xE0) {
         P->bend[ch] = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
     } else if (st == 0xB0 && (d1 == 120 || d1 == 123)) {
