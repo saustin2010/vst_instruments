@@ -112,7 +112,7 @@ MPC plays only a plugin's first stereo pair (sd88me's test on a Force), so a plu
 their own. Instead, voices can get **a track of their own**: each voice's **OUT** (MIDI & OUT page) sends it to
 **MAIN** or to **OUT 1-4** (to start with, voice 1 to OUT 1 and so on), and something on another track plays an OUT:
 
-- **[FX] Percolator OUT** ([its README](../percolatorout/)), an insert effect: put it in any track's insert slot, an
+- **[FX] Percolator OUT** ([its README](percolatorout/), in this folder: it ships in Percolator's release), an insert effect: put it in any track's insert slot, an
   **audio track** will do, and pick the OUT. It doesn't take an instrument plugin's place and costs next to nothing.
 - Or a second Percolator with **TRACK PLAYS** (top of the MIDI & OUT page) = **OUT 1-4**, which also puts its own
   VOLUME and compressor on that OUT (only those do anything there; it ignores MIDI).

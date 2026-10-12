@@ -18,7 +18,7 @@
  * one writes an OUT only while something reads it (a reader plays silence until its first block is written), and a
  * reader that stops (removed, switched off) hands its voices back after 16 blocks.
  *
- * This header is in both plugins (originals/percolator/src and originals/percolatorout/src): keep the two the same.
+ * This header is in both plugins (originals/percolator/src and originals/percolator/percolatorout/src): keep the two the same.
  * TAPBUS_VERSION is part of the file name and the header, so two different layouts never read each other. */
 #pragma once
 #include <dirent.h>

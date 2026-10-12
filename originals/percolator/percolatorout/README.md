@@ -1,6 +1,6 @@
 # Percolator OUT
 
-**Audio effect** · Plays one of [Percolator](../percolator/)'s OUT 1-4 on its own MPC track, so a voice gets that
+**Audio effect** · Plays one of [Percolator](../)'s OUT 1-4 on its own MPC track, so a voice gets that
 track's fader, inserts and outputs. · maker in MPC: Steve A · written for this repo · licence: MIT ([`LICENSE`](LICENSE))
 
 <img src="screenshots/page_0.png" width="760" alt="Percolator OUT">
@@ -70,17 +70,18 @@ different layouts never read each other.
 |---|---|
 | `src/percolator_out.c` | the effect |
 | `src/tapbus.h` | the OUT 1-4 bus (the same as Percolator's) |
-| `mpc/gen.py` | writes `params.json`, `layout.conf` and the artwork's spec (drawn by `../percolator/mpc/skin.py`) |
+| `mpc/gen.py` | writes `params.json`, `layout.conf` and the artwork's spec (drawn by Percolator's `../mpc/skin.py`) |
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
 | `images/skin/`, `percolatorout.css` | the artwork (generated) |
 | `screenshots/` | the page as MPC draws it |
 
 ## Building
 
-From the repo root: `tools/build.sh percolatorout` (see [BUILDING.md](../../BUILDING.md)). To change the screen,
+From the repo root: `tools/build.sh percolatorout` (see [BUILDING.md](../../../BUILDING.md)). It lives in Percolator's
+folder because it ships in Percolator's release (two zips, as TR-MPC ships its Tap FX). To change the screen,
 also from the repo root (the art container needs the whole repo for the fonts):
 
 ```
-python3 originals/percolatorout/mpc/gen.py
-docker run --rm -v "$PWD:$PWD" -w "$PWD/originals/percolatorout" mpc-vst-html-art python3 ../percolator/mpc/skin.py build/skin.json
+python3 originals/percolator/percolatorout/mpc/gen.py
+docker run --rm -v "$PWD:$PWD" -w "$PWD/originals/percolator/percolatorout" mpc-vst-html-art python3 ../mpc/skin.py build/skin.json
 ```

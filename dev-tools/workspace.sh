@@ -14,7 +14,7 @@ mkdir -p "$W/schwung-ports" "$W/stitch_layouts/stitch_png"
 grep -qx 'steve/' "$FW/.git/info/exclude" 2>/dev/null || echo 'steve/' >> "$FW/.git/info/exclude"
 ln -sfn "$REPO/dev-tools" "$W/tools"
 n=0
-for v in "$REPO"/{schwung/*,mutable-instruments,vcv-rack,originals,mpc-ports}/*/vst.json; do
+for v in "$REPO"/{schwung/*,mutable-instruments,vcv-rack,originals,mpc-ports}/*/vst.json "$REPO"/originals/*/*/vst.json; do   # a plugin shipped inside another's folder (Percolator OUT)
   [ -f "$v" ] || continue
   d=$(dirname "$v"); p=$(basename "$d")
   ln -sfn "$d" "$W/schwung-ports/$p"
