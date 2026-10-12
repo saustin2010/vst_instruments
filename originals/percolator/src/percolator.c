@@ -2,8 +2,10 @@
  *
  * MIDI: each voice has a NOTE (36-39, C1-D#1, to start with) that plays it as tuned, and a KEYS CH (channels 2-5 to start
  * with; OFF; ALL) on which every note plays it pitched (C3 = as tuned) and pitch bend bends it +-2 semitones (see
- * e_midi). Several voices on one note play together. A voice whose DECAY is at the top drones while its note is held. CC 120 / 123 stop
- * everything. */
+ * e_midi), and the mod wheel moves the control its MOD WHEEL names. Several voices on one note play together. A voice
+ * whose DECAY is at the top drones while its note is held. CC 70-113 set the voices' controls as on the Pērkons
+ * (perkons_cc); CC 120 / 123 stop everything. Notes on their own channels come through Percolator MIDI In (midiin.h):
+ * MPC hands the plugin's track every note-on on channel 1. */
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -229,6 +231,13 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
         P->bend[ch] = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
     } else if (st == 0xB0 && d1 >= 70 && d1 <= 113) {
         perkons_cc(P, d1, d2);
+    } else if (st == 0xB0 && d1 == 1) {
+        /* the mod wheel, on a voice's KEYS CH (any channel for ALL): it sets the control the voice's MOD WHEEL names,
+         * as that control's Pērkons CC would, so a voice's MIDI track moves it by name, no CC number to pick */
+        for (int v = 0; v < NV; v++) {
+            int kch = (int)P->pv[VIO(v, P_V1_KCH)], t = (int)P->pv[P_V1_WHEEL + v];
+            if (t > 0 && (kch == ch + 2 || kch == 1)) perkons_cc(P, 70 + VSTRIDE * v + t - 1, d2);
+        }
     } else if (st == 0xB0 && (d1 == 120 || d1 == 123)) {
         for (int v = 0; v < NV; v++) {
             voice_release(P, v);

@@ -1957,6 +1957,82 @@
     "OUT 4"
    ],
    "default": "OUT 4"
+  },
+  {
+   "key": "v1_wheel",
+   "name": "V1 MOD WHEEL",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_wheel",
+   "name": "V2 MOD WHEEL",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_wheel",
+   "name": "V3 MOD WHEEL",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_wheel",
+   "name": "V4 MOD WHEEL",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
   }
  ]
 }

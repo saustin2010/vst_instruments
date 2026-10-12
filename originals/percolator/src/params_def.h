@@ -126,6 +126,10 @@ static const pdef_t PDEF[] = {
     {"v4_note_next", 3, 0, 0.0f},
     {"v4_kch", 1, 18, 6.0f},
     {"v4_out", 1, 5, 4.0f},
+    {"v1_wheel", 1, 12, 0.0f},
+    {"v2_wheel", 1, 12, 0.0f},
+    {"v3_wheel", 1, 12, 0.0f},
+    {"v4_wheel", 1, 12, 0.0f},
 };
 enum {
     P_KIT = 0,
@@ -251,7 +255,11 @@ enum {
     P_V4_NOTE_NEXT = 120,
     P_V4_KCH = 121,
     P_V4_OUT = 122,
-    NP = 123
+    P_V1_WHEEL = 123,
+    P_V2_WHEEL = 124,
+    P_V3_WHEEL = 125,
+    P_V4_WHEEL = 126,
+    NP = 127
 };
 /* per-voice block: v%d_tune is P_V1_TUNE + 11 * (v - 1) */
 #define VSTRIDE 11

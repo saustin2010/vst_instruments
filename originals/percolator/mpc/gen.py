@@ -16,6 +16,7 @@ KNOBS = [("tune", "TUNE"), ("decay", "DECAY"), ("p1", "PARAM 1"), ("p2", "PARAM 
 ALGOS = {1: ["FOLD", "WAVE", "RES BD"], 2: ["FOLD", "WAVE", "FM"], 3: ["SNARE", "SLAP", "TOM"],
          4: ["NOISE", "METAL", "SAMPLE"]}
 DEPTHS = ["OFF"] + ["%d%%" % (10 * i) for i in range(1, 9)]
+WHEEL = ["OFF"] + [n for _, n in KNOBS] + ["ALGO", "MODE", "VCF"]   # MOD WHEEL's targets: a voice's 11 controls
 NOTE_NAMES = ["%s%d" % (("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")[n % 12], n // 12 - 2)
               for n in range(128)]   # MPC's names: 60 = C3, 36 = C1
 WAVES = ["SINE", "TRI", "RAMP", "SAW", "SQUARE", "S&H", "DRIFT"]
@@ -102,6 +103,10 @@ def params():
         opts("v%d_kch" % v, "V%d KEYS CH" % v, ["OFF", "ALL"] + [str(c) for c in range(1, 17)], v + 2,
              send=[str(c) for c in range(18)])
         opts("v%d_out" % v, "V%d OUT" % v, ["MAIN", "OUT 1", "OUT 2", "OUT 3", "OUT 4"], v)
+    # what the mod wheel (CC 1) on a voice's KEYS CH moves, picked by name (owner, 2026-10-12: "select the parameter to
+    # modulate from the midi channel sending data without nominating specific cc values"); as its Pērkons CC would
+    for v in range(1, 5):
+        opts("v%d_wheel" % v, "V%d MOD WHEEL" % v, WHEEL, 0)
     return P
 
 
@@ -367,7 +372,7 @@ def layout():
     L.append("")
 
     # MIDI & OUT page (owner, 2026-10-12: "they need their own page", "each voice independently for midi notes and
-    # outputs"): what this instance plays, then a panel per voice = a Q-Link column: NOTE, CHANNEL, KEYS, OUT
+    # outputs"): what this instance plays, then a panel per voice = a Q-Link column: NOTE, KEYS CH, MOD WHEEL, OUT
     L.append("[tab MIDI & OUT]")
     L.append("art file=images/skin/bg_io.png x=0 y=86 w=1280 h=628")
     html = h_panel(8, 94, 1264, 112, COL["mst"], "THIS TRACK PLAYS")
@@ -375,21 +380,22 @@ def layout():
                    "#aba7c4", 12, .12, 600)
     html += h_text(28, 162, "OUT 1-4: ON ANOTHER TRACK, [FX] PERCOLATOR OUT (AN INSERT; AN AUDIO TRACK WILL DO) PLAYS THE VOICES SENT THERE",
                    "#aba7c4", 12, .12, 600)
-    html += h_text(28, 184, "KEYS CH: A MIDI TRACK SENT TO THE PORT PERCOLATOR MIDI IN, ON THAT CHANNEL, PLAYS THE VOICE PITCHED (C3 = AS TUNED)",
+    html += h_text(28, 184, "KEYS CH: NOTES ON IT AT PERCOLATOR MIDI IN PLAY THE VOICE PITCHED (C3 = AS TUNED); ITS MOD WHEEL MOVES THE MOD WHEEL CHOICE",
                    "#6a6782", 12, .12, 600)
     L.append('popup cx=1140 cy=150 w=220 h=52 label="" key=output')
     for i, v in enumerate(range(1, 5)):
         x, c = 8 + 318 * i, COL[v]
         cx = x + 154
         html += h_panel(x, 216, 308, 490, c, "VOICE %d" % v)
-        for y, lab in ((290, "NOTE"), (420, "KEYS CH"), (550, "OUT")):
+        for y, lab in ((280, "NOTE"), (386, "KEYS CH"), (492, "MOD WHEEL"), (598, "OUT")):
             html += h_ctext(cx, y, lab, "#aba7c4", 13)
-        L.append('stepper cx=%d cy=%d w=250 h=56 label="" key=v%d_note style=dotmatrix' % (cx, 340, v))
-        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_kch' % (cx, 468, v))
-        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_out' % (cx, 598, v))
+        L.append('stepper cx=%d cy=%d w=250 h=56 label="" key=v%d_note style=dotmatrix' % (cx, 326, v))
+        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_kch' % (cx, 430, v))
+        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_wheel' % (cx, 536, v))
+        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_out' % (cx, 642, v))
     art["bgs"].append({"name": "bg_io", "html": html})
     L.append('qlinks "MIDI & OUT" = ' + ",".join("v%d_%s" % (v, k) if k != "-" else "-"
-                                                 for v in range(1, 5) for k in ("note", "kch", "out", "-")))
+                                                 for v in range(1, 5) for k in ("note", "kch", "wheel", "out")))
     L.append("")
 
     # MOD pages: the LFO depth of each voice knob (the hardware's MODULATION DESTINATION / DEPTH), each where its knob
