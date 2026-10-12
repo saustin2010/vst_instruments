@@ -130,6 +130,18 @@ static const pdef_t PDEF[] = {
     {"v2_wheel", 1, 12, 0.0f},
     {"v3_wheel", 1, 12, 0.0f},
     {"v4_wheel", 1, 12, 0.0f},
+    {"v1_gp1", 1, 12, 0.0f},
+    {"v1_gp2", 1, 12, 0.0f},
+    {"v1_gp3", 1, 12, 0.0f},
+    {"v2_gp1", 1, 12, 0.0f},
+    {"v2_gp2", 1, 12, 0.0f},
+    {"v2_gp3", 1, 12, 0.0f},
+    {"v3_gp1", 1, 12, 0.0f},
+    {"v3_gp2", 1, 12, 0.0f},
+    {"v3_gp3", 1, 12, 0.0f},
+    {"v4_gp1", 1, 12, 0.0f},
+    {"v4_gp2", 1, 12, 0.0f},
+    {"v4_gp3", 1, 12, 0.0f},
 };
 enum {
     P_KIT = 0,
@@ -259,7 +271,19 @@ enum {
     P_V2_WHEEL = 124,
     P_V3_WHEEL = 125,
     P_V4_WHEEL = 126,
-    NP = 127
+    P_V1_GP1 = 127,
+    P_V1_GP2 = 128,
+    P_V1_GP3 = 129,
+    P_V2_GP1 = 130,
+    P_V2_GP2 = 131,
+    P_V2_GP3 = 132,
+    P_V3_GP1 = 133,
+    P_V3_GP2 = 134,
+    P_V3_GP3 = 135,
+    P_V4_GP1 = 136,
+    P_V4_GP2 = 137,
+    P_V4_GP3 = 138,
+    NP = 139
 };
 /* per-voice block: v%d_tune is P_V1_TUNE + 11 * (v - 1) */
 #define VSTRIDE 11

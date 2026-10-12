@@ -20,7 +20,7 @@ which mode, where each knob is, the LFO, the delay), but it won't sound exactly 
 - Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/`, holding `percolator.so`, its screen. The vst_instruments installer puts `percolator.so` in `/sdcard/vst/` instead.
 - Data folder: `percolator/` next to `percolator.so` (with the vst_instruments installer, `/sdcard/vst/percolator/`):
   where the kit packs go
-- 127 parameters (all automatable) on 8 pages, one Q-Link page each
+- 139 parameters (all automatable) on 9 pages, one Q-Link page each
 - 8 kits built in, in MPC's PRESET menu; Erica Synths' four free Pērkons kit packs add 169 more ([below](#pērkons-kit-packs))
 
 ## Playing it
@@ -44,11 +44,12 @@ Each voice's MIDI is set on the **MIDI & OUT** page:
   **MIDI OUTPUT CH** = 3. A track per voice, or one track whose notes carry their channels. The pads and the notes on
   Percolator's own track still play the kit (they arrive on channel 1). Don't also route that MIDI track into
   Percolator's track, or each note plays twice.
-- **MOD WHEEL**: the control the mod wheel (CC 1) moves, picked by name: OFF (to start with), or any of the
-  voice's eleven (TUNE ... LEVEL, ALGO, MODE, VCF). The wheel counts on the voice's KEYS CH (any channel for ALL), so
-  the MIDI track that plays a voice through Percolator MIDI In automates its **mod wheel** and the voice's MOD WHEEL
-  says what moves: no CC number to look up. It sets the control as that control's Pērkons CC would (below); the
-  screen follows. One control per voice at a time; voices on one channel each move their own.
+- **MIDI MOD lanes** (their own page): four per voice, **MOD WHEEL** (CC 1) and **GEN PURPOSE 1, 2, 3** (CC 16-18),
+  as MPC names them in a MIDI track's lane menu ("MIDI: 1: ...", "MIDI: 16: Gen Purpose 1"). Each picks by name the
+  control it moves: OFF (to start with) or any of the voice's eleven (TUNE ... LEVEL, ALGO, MODE, VCF). A lane counts
+  on the voice's KEYS CH (any channel for ALL), so the MIDI track that plays a voice through Percolator MIDI In draws
+  up to four lanes, say DECAY, CUTOFF, DRIVE and ALGO, without a CC number to look up. Each sets its control as that
+  control's Pērkons CC would (below); the screen follows. Voices on one channel each move their own.
 - **MIDI CCs, as on the Pērkons HD-01** (its chart, [midi.guide](https://midi.guide/d/erica-synths/perkons-hd-01/)):
   each voice's eleven controls, its knobs and its three switches, on any channel (the number says which voice). The
   screen and the Q-Links follow. Through **Percolator MIDI In**, so the MIDI track that plays a voice can carry that
@@ -170,8 +171,15 @@ buttons), in the voice pages' order (TUNE DECAY PARAM 1 PARAM 2 / CUTOFF DRIVE F
 <img src="screenshots/page_7.png" width="760" alt="Percolator, each voice's MIDI and output">
 
 What this track plays (TRACK PLAYS: MAIN KIT, or OUT 1-4 of the main Percolator, [above](#separate-outputs-out-1-4)),
-then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link), KEYS CH, MOD WHEEL and OUT
+then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link), KEYS CH and OUT
 ([Playing it](#playing-it)).
+
+### 9. MIDI MOD
+
+<img src="screenshots/page_8.png" width="760" alt="Percolator, the MIDI MOD lanes">
+
+Four lanes per voice, each a Q-Link column: what MOD WHEEL (CC 1) and GEN PURPOSE 1-3 (CC 16-18) move on that voice's
+KEYS CH ([Playing it](#playing-it)).
 
 ## Kits
 
@@ -315,8 +323,10 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   CC, TUNE's middle, the switch thirds, any channel, save and restore (25 checks); through the wrapper under
   ASan/UBSan, MPC is told each change (a new optional engine hook, `mpc_engine_changed`, in this repo's framework
   patch), throttled for a stream, and asked to re-read names when a switch moves (9 checks). On the Live II (owner):
-  DECAY by its CC works. Then (owner: pick the parameter by name, not a CC number): MOD WHEEL per voice, offline 12
-  checks (off to start with, each target, thirds, ALL on any channel, OFF ignores it, two voices on one channel).
+  DECAY by its CC works. Then (owner: pick the parameter by name, not a CC number): MOD WHEEL per voice, working on
+  the Live II; then ("more than one parameter at once"): the MIDI MOD page, Gen Purpose 1-3 as three more lanes per
+  voice. Offline 17 checks (off to start with, each target, thirds, ALL on any channel, OFF ignores it, two voices on
+  one channel, four lanes at once, CC 19 ignored).
 
 ## Files
 
@@ -328,7 +338,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
 | `vst.json` | build settings: name, maker, sources, the kit list in the PRESET menu |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order; append-only once released) |
-| `layout.conf` | the screen: eight pages, Q-Links (generated) |
+| `layout.conf` | the screen: nine pages, Q-Links (generated) |
 | `percolator.css` | the artwork stylesheet |
 | `images/skin/` | artwork: page backgrounds, knob filmstrips, switch segments, envelope displays (generated) |
 | `src/`, `mpc/` | the engine, the generators, the offline renderer |

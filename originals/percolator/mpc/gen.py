@@ -16,7 +16,9 @@ KNOBS = [("tune", "TUNE"), ("decay", "DECAY"), ("p1", "PARAM 1"), ("p2", "PARAM 
 ALGOS = {1: ["FOLD", "WAVE", "RES BD"], 2: ["FOLD", "WAVE", "FM"], 3: ["SNARE", "SLAP", "TOM"],
          4: ["NOISE", "METAL", "SAMPLE"]}
 DEPTHS = ["OFF"] + ["%d%%" % (10 * i) for i in range(1, 9)]
-WHEEL = ["OFF"] + [n for _, n in KNOBS] + ["ALGO", "MODE", "VCF"]   # MOD WHEEL's targets: a voice's 11 controls
+WHEEL = ["OFF"] + [n for _, n in KNOBS] + ["ALGO", "MODE", "VCF"]   # a lane's targets: a voice's 11 controls
+LANES = (("wheel", "MOD WHEEL", 1), ("gp1", "GEN PURPOSE 1", 16), ("gp2", "GEN PURPOSE 2", 17),
+         ("gp3", "GEN PURPOSE 3", 18))   # MIDI MOD: each lane's key, MPC's name for its CC, the CC
 NOTE_NAMES = ["%s%d" % (("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")[n % 12], n // 12 - 2)
               for n in range(128)]   # MPC's names: 60 = C3, 36 = C1
 WAVES = ["SINE", "TRI", "RAMP", "SAW", "SQUARE", "S&H", "DRIFT"]
@@ -107,6 +109,11 @@ def params():
     # modulate from the midi channel sending data without nominating specific cc values"); as its Pērkons CC would
     for v in range(1, 5):
         opts("v%d_wheel" % v, "V%d MOD WHEEL" % v, WHEEL, 0)
+    # three more lanes per voice, as the mod wheel: Gen Purpose 1-3 (CC 16-18), as MPC names them in a MIDI track's lane
+    # menu (owner, 2026-10-12: "modulate more than one parameter at once"; separate lanes)
+    for v in range(1, 5):
+        for g in (1, 2, 3):
+            opts("v%d_gp%d" % (v, g), "V%d GEN PURP %d" % (v, g), WHEEL, 0)
     return P
 
 
@@ -372,7 +379,7 @@ def layout():
     L.append("")
 
     # MIDI & OUT page (owner, 2026-10-12: "they need their own page", "each voice independently for midi notes and
-    # outputs"): what this instance plays, then a panel per voice = a Q-Link column: NOTE, KEYS CH, MOD WHEEL, OUT
+    # outputs"): what this instance plays, then a panel per voice = a Q-Link column: NOTE, KEYS CH, OUT
     L.append("[tab MIDI & OUT]")
     L.append("art file=images/skin/bg_io.png x=0 y=86 w=1280 h=628")
     html = h_panel(8, 94, 1264, 112, COL["mst"], "THIS TRACK PLAYS")
@@ -380,22 +387,45 @@ def layout():
                    "#aba7c4", 12, .12, 600)
     html += h_text(28, 162, "OUT 1-4: ON ANOTHER TRACK, [FX] PERCOLATOR OUT (AN INSERT; AN AUDIO TRACK WILL DO) PLAYS THE VOICES SENT THERE",
                    "#aba7c4", 12, .12, 600)
-    html += h_text(28, 184, "KEYS CH: NOTES ON IT AT PERCOLATOR MIDI IN PLAY THE VOICE PITCHED (C3 = AS TUNED); ITS MOD WHEEL MOVES THE MOD WHEEL CHOICE",
+    html += h_text(28, 184, "KEYS CH: A MIDI TRACK SENT TO THE PORT PERCOLATOR MIDI IN, ON THAT CHANNEL, PLAYS THE VOICE PITCHED (C3 = AS TUNED)",
                    "#6a6782", 12, .12, 600)
     L.append('popup cx=1140 cy=150 w=220 h=52 label="" key=output')
     for i, v in enumerate(range(1, 5)):
         x, c = 8 + 318 * i, COL[v]
         cx = x + 154
         html += h_panel(x, 216, 308, 490, c, "VOICE %d" % v)
-        for y, lab in ((280, "NOTE"), (386, "KEYS CH"), (492, "MOD WHEEL"), (598, "OUT")):
+        for y, lab in ((290, "NOTE"), (420, "KEYS CH"), (550, "OUT")):
             html += h_ctext(cx, y, lab, "#aba7c4", 13)
-        L.append('stepper cx=%d cy=%d w=250 h=56 label="" key=v%d_note style=dotmatrix' % (cx, 326, v))
-        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_kch' % (cx, 430, v))
-        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_wheel' % (cx, 536, v))
-        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_out' % (cx, 642, v))
+        L.append('stepper cx=%d cy=%d w=250 h=56 label="" key=v%d_note style=dotmatrix' % (cx, 340, v))
+        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_kch' % (cx, 468, v))
+        L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_out' % (cx, 598, v))
     art["bgs"].append({"name": "bg_io", "html": html})
     L.append('qlinks "MIDI & OUT" = ' + ",".join("v%d_%s" % (v, k) if k != "-" else "-"
-                                                 for v in range(1, 5) for k in ("note", "kch", "wheel", "out")))
+                                                 for v in range(1, 5) for k in ("note", "kch", "out", "-")))
+    L.append("")
+
+    # MIDI MOD page (owner, 2026-10-12: pick by name what a voice's MIDI track moves, several at once): four lanes per
+    # voice, each a CC that MPC names in a MIDI track's lane menu, each moving the control picked here; a Q-Link column
+    # per voice
+    L.append("[tab MIDI MOD]")
+    L.append("art file=images/skin/bg_mm.png x=0 y=86 w=1280 h=628")
+    html = h_panel(8, 94, 1264, 112, COL["mst"], "MIDI MOD")
+    html += h_text(28, 140, "ON A VOICE'S KEYS CH, AT PERCOLATOR MIDI IN, EACH LANE MOVES THE CONTROL PICKED BELOW: DRAW THEM ON THE VOICE'S MIDI TRACK",
+                   "#aba7c4", 12, .12, 600)
+    html += h_text(28, 162, "IN THE TRACK'S LANE MENU: MIDI: 1: MOD WHEEL, MIDI: 16-18: GEN PURPOSE 1-3. KEYS CH ALL: THE LANES ON ANY CHANNEL",
+                   "#aba7c4", 12, .12, 600)
+    html += h_text(28, 184, "EACH SETS ITS CONTROL AS THE PERKONS' OWN CC FOR IT WOULD (CC 70-113, WHICH WORK TOO): 0-127 THE WHOLE TRAVEL, A SWITCH IN THIRDS",
+                   "#6a6782", 12, .12, 600)
+    for i, v in enumerate(range(1, 5)):
+        x, c = 8 + 318 * i, COL[v]
+        cx = x + 154
+        html += h_panel(x, 216, 308, 490, c, "VOICE %d" % v)
+        for j, (k, lab, n) in enumerate(LANES):
+            y = 280 + 106 * j
+            html += h_ctext(cx, y, "%s &middot; CC %d" % (lab, n), "#aba7c4", 13)
+            L.append('popup cx=%d cy=%d w=200 h=52 label="" key=v%d_%s' % (cx, y + 46, v, k))
+    art["bgs"].append({"name": "bg_mm", "html": html})
+    L.append('qlinks "MIDI MOD" = ' + ",".join("v%d_%s" % (v, k) for v in range(1, 5) for k, _, _ in LANES))
     L.append("")
 
     # MOD pages: the LFO depth of each voice knob (the hardware's MODULATION DESTINATION / DEPTH), each where its knob
@@ -426,9 +456,10 @@ def layout():
         L.append("")
     # Q-Links fixed to the track: a column per voice
     L.append("qlinks_track = " + ",".join("v%d_%s" % (v, k) for v in range(1, 5) for k in ("tune", "decay", "p1", "cutoff")))
-    # the pages in the order MPC shows them (owner, 2026-10-12): MASTER, the voices, the MODs, MIDI & OUT. The first
+    # the pages in the order MPC shows them (owner, 2026-10-12): MASTER, the voices, the MODs, MIDI & OUT (then MIDI
+    # MOD, its lanes). The first
     # page's Q-Links are also MIDI CC 20-35 (the wrapper).
-    order = ["MASTER", "V1", "V2", "V3", "V4", "MOD 1+2", "MOD 3+4", "MIDI & OUT"]
+    order = ["MASTER", "V1", "V2", "V3", "V4", "MOD 1+2", "MOD 3+4", "MIDI & OUT", "MIDI MOD"]
     starts = [i for i, ln in enumerate(L) if ln.startswith("[tab ")]
     tail = next(i for i, ln in enumerate(L) if ln.startswith("qlinks_track"))
     pages = {L[a][5:-1]: L[a:b] for a, b in zip(starts, starts[1:] + [tail])}

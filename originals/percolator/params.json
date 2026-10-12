@@ -2033,6 +2033,234 @@
     "VCF"
    ],
    "default": "OFF"
+  },
+  {
+   "key": "v1_gp1",
+   "name": "V1 GEN PURP 1",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_gp2",
+   "name": "V1 GEN PURP 2",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v1_gp3",
+   "name": "V1 GEN PURP 3",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_gp1",
+   "name": "V2 GEN PURP 1",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_gp2",
+   "name": "V2 GEN PURP 2",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v2_gp3",
+   "name": "V2 GEN PURP 3",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_gp1",
+   "name": "V3 GEN PURP 1",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_gp2",
+   "name": "V3 GEN PURP 2",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v3_gp3",
+   "name": "V3 GEN PURP 3",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_gp1",
+   "name": "V4 GEN PURP 1",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_gp2",
+   "name": "V4 GEN PURP 2",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "v4_gp3",
+   "name": "V4 GEN PURP 3",
+   "options": [
+    "OFF",
+    "TUNE",
+    "DECAY",
+    "PARAM 1",
+    "PARAM 2",
+    "CUTOFF",
+    "DRIVE",
+    "FX SEND",
+    "LEVEL",
+    "ALGO",
+    "MODE",
+    "VCF"
+   ],
+   "default": "OFF"
   }
  ]
 }
