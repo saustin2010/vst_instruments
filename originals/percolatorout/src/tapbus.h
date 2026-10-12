@@ -14,8 +14,9 @@
  * The plugins' blocks run on MPC's worker threads at the same time, in no fixed order. The main one writes each OUT
  * into a ring and publishes how far it has written; a reader takes the block before that, which it can always find
  * written whichever of the two ran first in a period (two blocks back if it only ever saw the main one run second),
- * and the main one holds its own output back a block while an OUT is played, so the voices stay together. A reader
- * that stops (removed, switched off) hands its voices back after 16 blocks.
+ * and the main one holds its own output back a block while an OUT is played, so the voices stay together. The main
+ * one writes an OUT only while something reads it (a reader plays silence until its first block is written), and a
+ * reader that stops (removed, switched off) hands its voices back after 16 blocks.
  *
  * This header is in both plugins (originals/percolator/src and originals/percolator-out/src): keep the two the same.
  * TAPBUS_VERSION is part of the file name and the header, so two different layouts never read each other. */
@@ -51,6 +52,7 @@ typedef struct {
 typedef struct {
     int sync;
     uint32_t gen, t, lag, w;   /* the owner it follows, its own frame count, the lag it reads at, wpos last time */
+    uint32_t from;             /* the first frame written for it (the main one writes an OUT only while it's read) */
 } tapread_t;
 
 #define TAPBUS_MAGIC 0x31435250u   /* "PRC1" */
@@ -121,11 +123,13 @@ static __attribute__((unused)) int tapbus_read(tapbus_t *b, tapread_t *r, int ou
     TB_STORE(b->seen_gen[out], g);
     uint32_t lag = w - r->t;   /* how far the main one is ahead of this reader's own count */
     int moved = w != r->w;     /* the main one has written since this reader's last block */
+    uint32_t away = w - r->w;  /* frames since this reader last looked: long enough, and the main one stopped writing */
     r->w = w;
-    if (!r->sync || g != r->gen) {
+    if (!r->sync || g != r->gen || away > TAP_ALIVE / 2) {
+        if (!r->sync || g != r->gen) r->lag = lag;
         r->sync = 1;
         r->gen = g;
-        r->lag = lag;
+        r->from = w;   /* the main one writes for it from here (it sees this look at its next block) */
     } else if ((int32_t)(lag - r->lag) > 0) r->lag = lag;   /* it ran first this time: a block less late */
     uint32_t start = r->t + r->lag - 2 * n;
     if ((int32_t)(w - (start + n)) < 0 || w - start > TAP_N - 2 * n) {   /* not written yet, or gone */
@@ -137,6 +141,11 @@ static __attribute__((unused)) int tapbus_read(tapbus_t *b, tapread_t *r, int ou
         start = w - 2 * n;
     }
     r->t += n;
-    for (int i = 0; i < frames; i++) dst[i] = b->ring[out][(start + i) & (TAP_N - 1)];
-    return 1;
+    int any = 0;
+    for (int i = 0; i < frames; i++) {
+        int ok = (int32_t)(start + i - r->from) >= 0;
+        dst[i] = ok ? b->ring[out][(start + i) & (TAP_N - 1)] : 0.0f;
+        any |= ok;
+    }
+    return any;
 }

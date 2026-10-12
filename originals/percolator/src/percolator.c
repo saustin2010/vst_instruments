@@ -350,14 +350,17 @@ static void e_render(void *inst, int16_t *out, int frames) {
         int n = frames - off < SUB ? frames - off : SUB;
         float mix[SUB] = {0}, cbus[SUB] = {0}, send[SUB] = {0};
         lfo_step(P, n);
-        for (int o = 0; o < TAP_OUTS && own; o++)
-            for (int i = 0; i < n; i++) bus->ring[o][(w0 + off + i) & (TAP_N - 1)] = 0;
+        for (int o = 0; o < TAP_OUTS; o++)   /* an OUT is written only while something reads it */
+            if (tapped[o])
+                for (int i = 0; i < n; i++) bus->ring[o][(w0 + off + i) & (TAP_N - 1)] = 0;
         for (int v = 0; v < NV; v++) {
             vparam_t vp;
             float y[SUB] = {0}, cs = P->pv[VCOMP(v)] / 100.0f;
+            int live = P->v[v].active || P->v[v].room.tail > 0;   /* silent: nothing to mix */
             vparams(P, v, &vp);
             voice_block(P, v, &vp, y, send, n);
-            if (own && vout[v] >= 0)
+            if (!live) continue;
+            if (vout[v] >= 0 && tapped[vout[v]])
                 for (int i = 0; i < n; i++) bus->ring[vout[v]][(w0 + off + i) & (TAP_N - 1)] += y[i];
             if (vout[v] < 0 || !tapped[vout[v]])
                 for (int i = 0; i < n; i++) {

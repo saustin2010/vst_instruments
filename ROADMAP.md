@@ -82,6 +82,9 @@ parameter index, so existing projects keep working.
     voice. KEYS CH per voice (channels 2-5 play voices 1-4 pitched) replaced CHANNEL + KEYS. Left: the owner's device
     checks (notes, KEYS CH, an OUT on another track, the compressor by ear; they heard it mute at AMOUNT 0, not
     reproduced offline); then release 2.0.0 and update its catalogue entry (screenshot: page_1, the voice page).
+  - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
+    sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
+    would save most of it.
 - [ ] **Percolator OUT** ([originals/percolatorout](originals/percolatorout/), 2026-10-12): an insert effect that plays
   one of Percolator's OUT 1-4 on its own track (owner: an audio track instead of a second plugin). Offline tests
   passed. Left: install (new: one MPC restart), check on an audio track (does it run its insert with no recording
