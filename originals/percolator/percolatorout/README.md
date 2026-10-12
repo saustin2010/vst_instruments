@@ -41,6 +41,9 @@ OUT, the voices sent there stay in Percolator's mix, so nothing goes quiet by ac
 - Files: `/sdcard/vst/percolatorout.so` and its screen in `/sdcard/Synths/Steve A - VST - [FX] Percolator OUT/`
 - 3 parameters: OUT, THRU and STATUS (a readout); one page, OUT and THRU on Q-Link column 1
 - Needs Percolator 2.0.0 or later in the same project
+- Install: `FX-Percolator-OUT-<version>-mpc-armv7.zip` from [Percolator's releases](https://github.com/saustin2010/mpc-vst-percolator/releases)
+  (tag `percolator-out-v<version>`), installed like Percolator's zip; or `./install.sh <mpc-address> percolatorout` from
+  vst_instruments
 
 ## How it works
 
@@ -62,8 +65,9 @@ different layouts never read each other.
   goes quiet and says so.
 - On the Live II (2026-10-12): installed (one MPC restart), and on an audio track with nothing recorded it plays its
   OUT, in time with the kit (owner: "ok all works"). Its 2.0.0 release zip (Percolator's release, tag
-  `percolator-out-v2.0.0`) installed on the Live II and checked by the owner (2026-10-12): "all working". It is
-  published once sd88me's catalogue has its entry.
+  `percolator-out-v2.0.0`) installed on the Live II and checked by the owner (2026-10-12): "all working". Published
+  2026-10-12, once sd88me had merged its catalogue entry (sd88me/mpc-vst-plugins#398): it is in his catalogue as
+  `percolator-out`.
 
 ## Files
 

@@ -305,7 +305,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   showed why STOP reset them: on every STOP (and on insert) MPC's host sets parameter 0, KIT, to its top and straight
   back, and each set loaded a kit. 1.2.0: a kit set waits for the next block, so that pair loads nothing; and MODE
   steps on its Q-Link (its 1/2/3 labels had clashed with the value the engine reports). Both confirmed on the Live II.
-- 2.0.0, released 2026-10-12 (with [FX] Percolator OUT, its own zip in the same release): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
+- 2.0.0, released 2026-10-12 (with [FX] Percolator OUT, its own zip and release, tag `percolator-out-v2.0.0`): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
   at 20-23), KEYS CH (channels 2-5 play voices 1-4 pitched: the Pērkons' MULTI, through Percolator MIDI In) and OUT (MAIN, OUT 1-4, played on
   another track by [FX] Percolator OUT or a second Percolator); COMP SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it (it was half made up, so
   a high THRESH made the kit up to 6.6 dB quieter), and COMP LEVEL, its own output; each voice's LEVEL, FX SEND and
