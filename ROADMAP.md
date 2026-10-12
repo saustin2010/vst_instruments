@@ -75,6 +75,30 @@ parameter index, so existing projects keep working.
   the Erica Synths Pērkons HD-01, DSP written from scratch, reads the Pērkons' `.KIT` packs. Seven pages (a voice
   each, MASTER, two of LFO depths), a colour per voice, envelope displays that follow DECAY / PITCH / ATTACK. Checked on the
   Live II 2026-10-10 (all five pages, Q-Links, the displays following their knobs, the packs): Design QA ✅.
+  - [ ] 2.0.0 (owner's requests, 2026-10-12; branch `percolator-changes`, installed on the Live II for testing): a MIDI
+    & OUT page with each voice's NOTE (36-39 to start with; were fixed at 20-23), CHANNEL, KEYS and OUT (MAIN, OUT
+    1-4: a second Percolator on another track plays an OUT, since MPC plays only a plugin's first stereo pair); COMP
+    SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it, COMP LEVEL; a MIX panel per
+    voice. On the Live II (2026-10-12) the owner's checks passed (notes, an OUT on an audio track, the compressor, the
+    timing) except a MIDI channel per voice: MPC hands a plugin's track every note-on on channel 1 (traced). Zones
+    instead were turned down; Percolator now opens its own MIDI input port, Percolator MIDI In, which a MIDI track
+    sends to on its channel: working on the Live II (2026-10-12). The Pērkons' CCs 70-113 (each voice's knobs and
+    switches; owner: "as close to the real machine as possible"): DECAY works on the Live II. MIDI MOD lanes per
+    voice (mod wheel, Gen Purpose 1-3, each moving a control picked by name): working on the Live II (2026-10-12).
+    Release (2026-10-12): Percolator OUT ships in Percolator's release (owner); both 2.0.0 drafts built by Actions on
+    tools `eaef502` (steve-features + mpc_engine_changed), both zips OK in `catalog_check --catalog`, screens identical
+    to `deploy/`. Both zips installed on the Live II and checked by the owner: "all working"; v2.0.0 published with
+    `tested.json` (2026-10-12). The catalogue PR (asset_pattern, percolator-out, author):
+    sd88me/mpc-vst-plugins#398; eaef502 offered to sd88me as sd88me/mpc-vst-plugins#399 (with a test engine and docs).
+    Left: publish percolator-out-v2.0.0 once #398 is merged; whether MPC's own automation on Percolator's track lists
+    its parameters by name.
+  - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
+    sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
+    would save most of it.
+- [ ] **Percolator OUT** ([originals/percolator/percolatorout](originals/percolator/percolatorout/), 2026-10-12): an insert effect that plays
+  one of Percolator's OUT 1-4 on its own track (owner: an audio track instead of a second plugin). Offline tests
+  passed; installed and working on an audio track on the Live II (2026-10-12). Left: a release with Percolator 2.0.0
+  (its own repo, or Percolator's, as TR-MPC ships its Tap FX).
 - [ ] **Stevequencer** ([originals/stevequencer](originals/stevequencer/)): a 16-step, four-page (64-step) melodic
   sequencer edited from the Q-Links (pitch, length, on/off, velocity, chance, ratchet per step). Browser prototype
   2026-10-04 (`design/prototype.html`); built and installed on the Live II the same day (engine, 418 parameters, 6

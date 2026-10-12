@@ -1,8 +1,11 @@
 /* Percolator engine: parameters, MIDI, kits, the LFO and the master section (BBD delay, compressor, volume).
  *
- * MIDI: notes 20-23 (G#-1-B-1, MPC pads 1-4 of bank A) play voices 1-4. With KEYS on a voice, every other note plays that voice
- * pitched (C3 = as tuned) and pitch bend bends it +-2 semitones. A voice whose DECAY is at the top drones while its
- * note is held. CC 120 / 123 stop everything. */
+ * MIDI: each voice has a NOTE (36-39, C1-D#1, to start with) that plays it as tuned, and a KEYS CH (channels 2-5 to start
+ * with; OFF; ALL) on which every note plays it pitched (C3 = as tuned) and pitch bend bends it +-2 semitones (see
+ * e_midi), and the MIDI MOD lanes (the mod wheel, Gen Purpose 1-3) move the controls they name. Several voices on one note play together. A voice
+ * whose DECAY is at the top drones while its note is held. CC 70-113 set the voices' controls as on the Pērkons
+ * (perkons_cc); CC 120 / 123 stop everything. Notes on their own channels come through Percolator MIDI In (midiin.h):
+ * MPC hands the plugin's track every note-on on channel 1. */
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,12 +49,15 @@ typedef struct {
     void (*render)(void *inst, int16_t *out_lr, int frames);
 } mpc_engine_t;
 const mpc_engine_t *mpc_engine(void);
+int mpc_engine_changed(void *inst, char *key, int len);   /* optional (engine.h): what a MIDI CC changed */
 
 #define VK(v, k) (P_V1_TUNE + VSTRIDE * (v) + (k))
 #define VALGO(v) VK(v, 8)
 #define VMODE(v) VK(v, 9)
 #define VVCF(v) VK(v, 10)
 #define VDEPTH(v, k) (P_V1_M_TUNE + MSTRIDE * (v) + (k))
+#define VCOMP(v) (P_V1_COMP + (v))
+#define VIO(v, p) ((p) + (P_V2_NOTE - P_V1_NOTE) * (v))   /* a voice's NOTE / KEYS CH / OUT: VIO(v, P_V1_KCH) */
 
 static int find_key(const char *key) {
     for (int i = 0; i < NP; i++)
@@ -178,29 +184,62 @@ static void apply_kit(perc_t *P) {
 
 /* ---- MIDI --------------------------------------------------------------------------------------------------- */
 
+static void set_value(perc_t *P, int i, const char *val);
+
+/* The Pērkons HD-01's CCs (its MIDI implementation chart, as midi.guide lists it): 11 per voice from CC 70 (voice 1),
+ * 81, 92 and 103, in the order of its controls, which is ours too: TUNE (64 = the middle), DECAY, PARAM 1, PARAM 2,
+ * CUTOFF, DRIVE, FX SEND, LEVEL, then the ALGO, MODE and VCF switches (thirds of 0-127: 0-42, 43-85, 86-127). On any
+ * channel: the number says which voice. MPC's screen follows through mpc_engine_changed below. */
+static void perkons_cc(perc_t *P, int cc, int val) {
+    int v = (cc - 70) / 11, k = (cc - 70) % 11, i = VK(v, 0) + k;
+    char s[16];
+    if (PDEF[i].kind == 1) snprintf(s, sizeof s, "%d", val * PDEF[i].nopts / 128);
+    else if (k == K_TUNE) snprintf(s, sizeof s, "%.2f", val <= 64 ? val * 50.0f / 64.0f : 50.0f + (val - 64) * 50.0f / 63.0f);
+    else snprintf(s, sizeof s, "%.2f", val * 100.0f / 127.0f);
+    set_value(P, i, s);
+    P->changed[i / 32] |= 1u << (i % 32);
+}
+
 static void e_midi(void *inst, const uint8_t *m, int len) {
     perc_t *P = inst;
     apply_kit(P);
     if (len > 0 && m[0] < 0xF0) TRACE("midi %02x %02x %02x (%d)", m[0], len > 1 ? m[1] : 0, len > 2 ? m[2] : 0, len);
-    if (len < 2) return;
-    int st = m[0] & 0xF0, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
+    if (len < 2 || P->pv[P_OUTPUT] >= 1) return;   /* a tap plays the main instance's OUT, not its own voices */
+    int st = m[0] & 0xF0, ch = m[0] & 0x0F, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
     if (st == 0x90 && d2 > 0) {
-        int vi = -1;
-        float semi = 0;
-        if (d1 >= NOTE0 && d1 < NOTE0 + NV) vi = d1 - NOTE0;
-        else if (P->pv[P_KEYS] >= 1) {
-            vi = (int)P->pv[P_KEYS] - 1;
-            semi = (float)(d1 - 60);
-        }
-        if (vi < 0) return;
-        vparam_t vp;
-        vparams(P, vi, &vp);
-        voice_trigger(P, vi, &vp, (float)d2, d1, semi);
+        /* who plays it: a voice whose KEYS CH this is takes every note on it, pitched (the Perkons' MULTI); otherwise
+         * each voice whose NOTE it is, as it's tuned; otherwise voices with KEYS CH = ALL, pitched (the old KEYS) */
+        int hit = 0;
+        for (int pass = 0; pass < 3 && !hit; pass++)
+            for (int v = 0; v < NV; v++) {
+                int kch = (int)P->pv[VIO(v, P_V1_KCH)];   /* 0 OFF, 1 ALL, 2-17 = channels 1-16 */
+                if (pass == 0 ? kch != ch + 2 : pass == 1 ? (int)P->pv[VIO(v, P_V1_NOTE)] != d1 : kch != 1) continue;
+                int pitched = pass != 1;
+                vparam_t vp;
+                vparams(P, v, &vp);
+                voice_trigger(P, v, &vp, (float)d2, d1, pitched ? (float)(d1 - 60) : 0.0f);
+                P->v[v].ch = ch;
+                P->v[v].pitched = pitched;
+                hit = 1;
+            }
     } else if (st == 0x80 || st == 0x90) {
+        /* by note alone: MPC hands a plugin every note-on on channel 1 but its note-off on the channel it came on
+         * (Live II trace, 2026-10-12: a MIDI track on channel 3 sent 90 41 7f ... 82 41 40) */
         for (int v = 0; v < NV; v++)
             if (P->v[v].note == d1) voice_release(P, v);
     } else if (st == 0xE0) {
-        P->bend = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
+        P->bend[ch] = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
+    } else if (st == 0xB0 && d1 >= 70 && d1 <= 113) {
+        perkons_cc(P, d1, d2);
+    } else if (st == 0xB0 && (d1 == 1 || (d1 >= 16 && d1 <= 18))) {
+        /* the MIDI MOD lanes: the mod wheel and Gen Purpose 1-3 (CC 16-18), as MPC names them in a MIDI track's lane
+         * menu. On a voice's KEYS CH (any channel for ALL) each sets the control that voice's lane names, as that
+         * control's Pērkons CC would, so a voice's MIDI track moves its controls by name, several at once */
+        for (int v = 0; v < NV; v++) {
+            int kch = (int)P->pv[VIO(v, P_V1_KCH)];
+            int t = (int)P->pv[d1 == 1 ? P_V1_WHEEL + v : P_V1_GP1 + 3 * v + d1 - 16];
+            if (t > 0 && (kch == ch + 2 || kch == 1)) perkons_cc(P, 70 + VSTRIDE * v + t - 1, d2);
+        }
     } else if (st == 0xB0 && (d1 == 120 || d1 == 123)) {
         for (int v = 0; v < NV; v++) {
             voice_release(P, v);
@@ -228,30 +267,140 @@ static inline float hermite(const float *b, float pos) {
     return ((c3 * f + c2) * f + c1) * f + x0;
 }
 
+/* ---- OUT 1-4 (tapbus.h: how they work) ------------------------------------------------------------------------ */
+static uint32_t next_id = 1;
+
+static int tap_claim(perc_t *P) {   /* this instance writes OUT 1-4: it already does, or nobody did */
+    tapbus_t *b = P->bus;
+    if (!b) return 0;
+    uint32_t o = TB_LOAD(b->owner), none = 0;
+    if (o == P->id) return 1;
+    if (o || !__atomic_compare_exchange_n(&b->owner, &none, P->id, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) return 0;
+    __atomic_add_fetch(&b->gen, 1, __ATOMIC_ACQ_REL);
+    return 1;
+}
+
+static void tap_release(perc_t *P) {
+    tapbus_t *b = P->bus;
+    uint32_t me = P->id;
+    if (b && TB_LOAD(b->owner) == me && __atomic_compare_exchange_n(&b->owner, &me, 0, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE))
+        __atomic_add_fetch(&b->gen, 1, __ATOMIC_ACQ_REL);
+}
+
+static inline int16_t out_sample(float x) {   /* a soft ceiling instead of a hard clip */
+    float ax = fabsf(x);
+    if (ax > 0.9f) x = copysignf(0.9f + 0.1f * sat((ax - 0.9f) * 10.0f), x);
+    int s = (int)lrintf(x * 32767.0f);
+    return (int16_t)(s > 32767 ? 32767 : s < -32768 ? -32768 : s);
+}
+
+/* The compressor works on the COMP SEND bus: each voice sends part of itself there (V<n> COMP SEND, wet/dry) and the
+ * rest goes past it, as do the delay's echoes. Threshold 0 to -36 dB (THRESH), ratio 1:1 to 10:1 (AMOUNT), and its
+ * reduction made back against a -3 dB peak: turned up, it only ever makes the bus louder (measured on the built-in kits:
+ * +0.3 to +11 dB) and a peak stays under -3 dB. The detector catches a peak at once (a drum's first sample would
+ * otherwise get the whole make-up gain and clip) and lets go over 120 ms. COMP LEVEL sets what comes out of it (71 =
+ * as it is). AMOUNT at 0 is off: the bus passes untouched, COMP LEVEL too, the same as no compressor. */
+typedef struct {
+    int on;
+    float thr, expo, makeup, rel;   /* makeup includes COMP LEVEL */
+} comp_t;
+
+static float level_gain(float knob) {   /* VOLUME and COMP LEVEL: 0..100 -> silent .. +6 dB, 71 = 0 dB */
+    float x = knob / 100.0f;
+    return 2.0f * x * x;
+}
+
+static void comp_setup(const perc_t *P, comp_t *c) {
+    float amt = P->pv[P_COMP_AMT] / 100.0f, thr_db = -36.0f * P->pv[P_COMP_THRESH] / 100.0f, ratio = 1.0f + 9.0f * amt;
+    c->on = amt > 0.0001f;
+    c->thr = powf(10.0f, thr_db / 20.0f);
+    c->expo = 1.0f / ratio - 1.0f;
+    c->makeup = powf(10.0f, fmaxf(-3.0f - thr_db, 0.0f) * (1.0f - 1.0f / ratio) / 20.0f) * level_gain(P->pv[P_COMP_LEVEL]);
+    c->rel = op_coef(1.3f);
+}
+
+static inline float comp_run(float *env, const comp_t *c, float x) {
+    float a = fabsf(x);
+    *env = a > *env ? a : *env + c->rel * (a - *env);
+    return *env > c->thr ? x * powf(*env / c->thr, c->expo) * c->makeup : x * c->makeup;
+}
+
+/* TRACK PLAYS = OUT n: the main Percolator's OUT n, through this instance's own compressor and VOLUME */
+static void tap_render(perc_t *P, int o, int16_t *out, int frames) {
+    tap_release(P);
+    for (int v = 0; v < NV; v++) {   /* its own voices stay quiet */
+        P->v[v].active = 0;
+        P->v[v].room.tail = 0;
+    }
+    float y[TAP_N / 4];
+    if (!tapbus_read(P->bus, &P->tr, o, y, frames)) {
+        memset(out, 0, sizeof(int16_t) * 2 * frames);
+        return;
+    }
+    comp_t cmp;
+    comp_setup(P, &cmp);
+    float vol = level_gain(P->pv[P_VOLUME]);
+    for (int i = 0; i < frames; i++) {
+        float x = y[i] * 0.55f;
+        if (cmp.on) x = comp_run(&P->comp_env, &cmp, x);
+        out[2 * i] = out[2 * i + 1] = out_sample(x * vol);
+    }
+}
+
 static void e_render(void *inst, int16_t *out, int frames) {
     perc_t *P = inst;
     apply_kit(P);
+    uint8_t m[3];   /* what MIDI tracks sent to Percolator MIDI In since the last block, channels and all */
+    for (int k = 0, n; k < 256 && (n = mi_read(&P->midi_in, m)) > 0; k++) e_midi(P, m, n);
+    int tap = (int)P->pv[P_OUTPUT];
+    if (tap) {
+        tap_render(P, tap - 1, out, frames);
+        return;
+    }
     fpstate_t fp = ftz_on();
+    /* OUT 1-4: this one writes them if it is the main one, and leaves out the voices something else plays */
+    tapbus_t *bus = P->bus;
+    int own = tap_claim(P), tapped[TAP_OUTS] = {0}, vout[NV], hold = 0;
+    uint32_t w0 = own ? TB_LOAD(bus->wpos) : 0, g = own ? TB_LOAD(bus->gen) : 0, mask[TAP_OUTS] = {0};
+    for (int o = 0; o < TAP_OUTS && own; o++) {
+        tapped[o] = TB_LOAD(bus->seen_gen[o]) == g && w0 - TB_LOAD(bus->seen[o]) < TAP_ALIVE;
+        hold |= tapped[o];
+    }
+    for (int v = 0; v < NV; v++) {
+        vout[v] = (int)P->pv[VIO(v, P_V1_OUT)] - 1;   /* -1: MAIN */
+        if (vout[v] >= 0) mask[vout[v]] |= 1u << v;
+    }
+    for (int o = 0; o < TAP_OUTS && own; o++) TB_STORE(bus->voices[o], mask[o]);
     float target = bbd_seconds(P) * SR, rate = bbd_rate(P) * INV_SR;
     float dep = P->pv[P_FX_DEPTH] / 100.0f;
     float depth = dep * dep * fminf(0.012f, 0.5f * bbd_seconds(P)) * SR;
     float fb = 1.08f * P->pv[P_FX_FEEDBACK] / 100.0f;
     float ca = op_coef(P->pv[P_FX_COLOUR] >= 1 ? 7000.0f : 2200.0f), ch = op_coef(40.0f);
     float sm = 1.0f - expf(-1.0f / (0.12f * SR));
-    float amt = P->pv[P_COMP_AMT] / 100.0f, thr_db = -36.0f * P->pv[P_COMP_THRESH] / 100.0f;
-    float ratio = 1.0f + 9.0f * amt, thr = powf(10.0f, thr_db / 20.0f);
-    float makeup = powf(10.0f, -thr_db * (1.0f - 1.0f / ratio) * 0.5f / 20.0f);
-    float catk = op_coef(80.0f), crel = op_coef(1.3f);
-    float vol = P->pv[P_VOLUME] / 100.0f;
-    vol = 2.0f * vol * vol;
+    comp_t cmp;
+    comp_setup(P, &cmp);
+    float vol = level_gain(P->pv[P_VOLUME]);
     for (int off = 0; off < frames; off += SUB) {
         int n = frames - off < SUB ? frames - off : SUB;
-        float mix[SUB] = {0}, send[SUB] = {0};
+        float mix[SUB] = {0}, cbus[SUB] = {0}, send[SUB] = {0};
         lfo_step(P, n);
+        for (int o = 0; o < TAP_OUTS; o++)   /* an OUT is written only while something reads it */
+            if (tapped[o])
+                for (int i = 0; i < n; i++) bus->ring[o][(w0 + off + i) & (TAP_N - 1)] = 0;
         for (int v = 0; v < NV; v++) {
             vparam_t vp;
+            float y[SUB] = {0}, cs = P->pv[VCOMP(v)] / 100.0f;
+            int live = P->v[v].active || P->v[v].room.tail > 0;   /* silent: nothing to mix */
             vparams(P, v, &vp);
-            voice_block(P, v, &vp, mix, send, n);
+            voice_block(P, v, &vp, y, send, n);
+            if (!live) continue;
+            if (vout[v] >= 0 && tapped[vout[v]])
+                for (int i = 0; i < n; i++) bus->ring[vout[v]][(w0 + off + i) & (TAP_N - 1)] += y[i];
+            if (vout[v] < 0 || !tapped[vout[v]])
+                for (int i = 0; i < n; i++) {
+                    mix[i] += y[i] * (1.0f - cs);
+                    cbus[i] += y[i] * cs;
+                }
         }
         for (int i = 0; i < n; i++) {
             /* BBD-style delay: band-limited in and in the loop, soft-clipped feedback, LFO on the time, and a
@@ -269,25 +418,16 @@ static void e_render(void *inst, int16_t *out, int frames) {
             P->dl_in2 += ca * (P->dl_in1 - P->dl_in2);
             P->dl[P->dl_w] = sat(P->dl_in2 + fb * wet);
             P->dl_w = (P->dl_w + 1) & (DL_N - 1);
-            float x = mix[i] * 0.55f + wet * 0.55f;
-            /* compressor: peak follower, ratio up to 10:1, half the reduction made back */
-            if (amt > 0.001f) {
-                float a = fabsf(x);
-                P->comp_env += (a > P->comp_env ? catk : crel) * (a - P->comp_env);
-                float g = 1.0f;
-                if (P->comp_env > thr) g = powf(P->comp_env / thr, 1.0f / ratio - 1.0f);
-                x *= g * makeup;
-            }
-            x *= vol;
-            /* a soft ceiling instead of a hard clip */
-            float ax = fabsf(x);
-            if (ax > 0.9f) x = copysignf(0.9f + 0.1f * sat((ax - 0.9f) * 10.0f), x);
-            int s = (int)lrintf(x * 32767.0f);
-            if (s > 32767) s = 32767;
-            if (s < -32768) s = -32768;
-            out[2 * (off + i)] = out[2 * (off + i) + 1] = (int16_t)s;
+            float c = cbus[i] * 0.55f;
+            if (cmp.on) c = comp_run(&P->comp_env, &cmp, c);
+            float x = (mix[i] * 0.55f + wet * 0.55f + c) * vol;
+            P->hold[P->hold_w & (TAP_HOLD - 1)] = x;
+            if (hold) x = P->hold[(P->hold_w - (uint32_t)frames) & (TAP_HOLD - 1)];   /* a block late, with the taps */
+            P->hold_w++;
+            out[2 * (off + i)] = out[2 * (off + i) + 1] = out_sample(x);
         }
     }
+    if (own) TB_STORE(bus->wpos, w0 + (uint32_t)frames);
     ftz_off(fp);
 }
 
@@ -295,6 +435,12 @@ static void e_render(void *inst, int16_t *out, int frames) {
 
 static void set_value(perc_t *P, int i, const char *val) {
     const pdef_t *d = &PDEF[i];
+    if (i == P_KEYS) {   /* the one KEYS switch up to 1.2.0 (a project saved then): that voice's KEYS CH = ALL */
+        int k = atoi(val);
+        if (k >= 1 && k <= NV) P->pv[VIO(k - 1, P_V1_KCH)] = 1;
+        P->pv[P_KEYS] = 0;
+        return;
+    }
     if (d->kind == 0) P->pv[i] = clampf((float)atof(val), 0.0f, 100.0f);
     else if (d->kind == 1) {
         int x = atoi(val);
@@ -438,6 +584,8 @@ static int e_get_param(void *inst, const char *key, char *buf, int len) {
     case P_FX_TIME: return fmt_s(buf, len, bbd_seconds(P));
     case P_FX_RATE: return snprintf(buf, len, "%.2f Hz", bbd_rate(P));
     case P_COMP_THRESH: return x > 0.005f ? snprintf(buf, len, "%.0f dB", -36.0f * x) : snprintf(buf, len, "0 dB");
+    case P_COMP_AMT: return x > 0.000001f ? snprintf(buf, len, "%.1f:1", 1.0f + 9.0f * x) : snprintf(buf, len, "OFF");
+    case P_COMP_LEVEL: return x > 0.001f ? snprintf(buf, len, "%+.1f dB", 20.0f * log10f(level_gain(P->pv[i]))) : snprintf(buf, len, "-inf dB");
     case P_LFO_SPEED: return snprintf(buf, len, "%.2f Hz", lfo_rate(x));
     }
     return 0;
@@ -456,6 +604,9 @@ static void *e_create(const char *dir) {
     P->bank = -1;
     P->kit_pending = -1;
     P->lfo_rng = 0x2545f491u;
+    P->id = __atomic_fetch_add(&next_id, 1, __ATOMIC_RELAXED);
+    P->bus = tapbus_open();
+    mi_open(&P->midi_in, "Percolator");
     for (int v = 0; v < NV; v++) {
         P->v[v].rng = 0x9e3779b9u + 7919u * (unsigned)v;
         P->v[v].note = -1;
@@ -471,6 +622,9 @@ static void e_destroy(void *inst) {
     perc_t *P = inst;
     TRACE("destroy %p", inst);
     if (!P) return;
+    tap_release(P);
+    tapbus_close(P->bus);
+    mi_close(&P->midi_in);
     kits_free(P);
     free(P->dl);
     free(P);
@@ -478,3 +632,17 @@ static void e_destroy(void *inst) {
 
 static const mpc_engine_t ENGINE = {e_create, e_destroy, e_midi, e_set_param, e_get_param, e_render};
 const mpc_engine_t *mpc_engine(void) { return &ENGINE; }
+
+/* After each block the wrapper asks which parameters changed here (the Pērkons CCs, perkons_cc), one at a time, and
+ * tells MPC, so the screen and the Q-Links follow. A wrapper without the hook never asks: the values still change. */
+_Static_assert(NP <= 32 * (int)(sizeof ((perc_t *)0)->changed / sizeof(uint32_t)), "perc_t.changed: a bit per parameter");
+int mpc_engine_changed(void *inst, char *key, int len) {
+    perc_t *P = inst;
+    for (int w = 0; w < (int)(sizeof P->changed / sizeof P->changed[0]); w++)
+        if (P->changed[w]) {
+            int b = __builtin_ctz(P->changed[w]);
+            P->changed[w] &= P->changed[w] - 1;
+            return snprintf(key, len, "%s", PDEF[32 * w + b].key) > 0;
+        }
+    return 0;
+}

@@ -61,10 +61,15 @@ PLUGINS = {
     "stevequencer": ("stevequencer", "MIT", None, []),   # the owner's own, MIT chosen 2026-10-08
     "stevequencer16": ("stevequencer-16", "MIT", None, []),
     "percolator": ("percolator", "MIT", None, ["percolator"]),   # the owner's own (2026-10-10); users add kit packs
+    "percolatorout": ("percolator-out", "MIT", None, []),   # ships in Percolator's release (COMPANIONS)
 }
+# plugins with no repo of their own: they live in another plugin's folder and ship in its release, as a second zip with
+# its own draft and catalogue entry (TR-MPC's Tap FX: ports/trkit/tapfx), from a second job in that release.yml.
+# companion: (the plugin it ships with, the manifest's "requires" line)
+COMPANIONS = {"percolatorout": ("percolator", "Percolator 2.0.0 or later in the same project")}
 # releases that ship this repo's own skin (deploy/Synths, built by framework/setup.sh's tools) instead of rebuilding it
 # with sd88me's: his skin builder lays out their per-sub-page controls (banks=) and readouts differently
-OWN_SKIN = {"stevequencer", "stevequencer16", "percolator"}   # percolator: its readouts (vs=, ink=)
+OWN_SKIN = {"stevequencer", "stevequencer16", "percolator", "percolatorout"}   # percolator: its readouts (vs=, ink=)
 PILOTS = {"303", "hera"}   # done by hand and published first: --ready leaves them alone
 # libraries this repo makes with its own scripts (tools/fetch-presets.py MADE): the script, and where its output goes
 MADE = {
@@ -178,6 +183,40 @@ jobs:
       about: %(about)s
       dry_run: ${{ inputs.dry_run }}
 """ % dict(rel=rel, ref=ref, note=note, build=build, test=test, extra=extra, ud=ud, pid=pid, spdx=spdx,
+           about=json.dumps(about, ensure_ascii=False)) + "".join(
+        companion_job(c, ref) for c, (parent, _) in sorted(COMPANIONS.items()) if parent == os.path.basename(rel))
+
+
+def companion_job(name, ref):
+    """A second job in the parent's release.yml: the companion's own zip and draft (tag <id>-v<version>)."""
+    pid, spdx, _, user_data = PLUGINS[name]
+    d = os.path.relpath(os.path.join(REPO, folder_of(name)), os.path.join(REPO, folder_of(COMPANIONS[name][0])))
+    about = about_of(open(os.path.join(REPO, folder_of(name), "README.md")).read())
+    build = 'bash "$MPC_VST/tools/build_port.sh" %s/vst.json' % d
+    if name in OWN_SKIN:
+        build += " && rm -rf %(d)s/build/skin && mkdir -p %(d)s/build/skin && cp -R %(d)s/deploy/Synths/* %(d)s/build/skin/" % dict(d=d)
+    ud = "      user_data: %s\n" % " ".join(user_data) if user_data else ""
+    return """
+  %(job)s:
+    # %(name)s (%(d)s/) ships in this release as its own zip, with its own draft
+    # (tag %(pid)s-v<version>) and catalogue entry, as TR-MPC ships its Tap FX
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@%(ref)s
+    permissions:
+      contents: write
+    with:
+      tag: %(pid)s-v${{ inputs.version }}
+      version: ${{ inputs.version }}
+      tools_repo: saustin2010/mpc-vst-plugins
+      tools_ref: %(ref)s
+      vst_dir: %(d)s
+      build: %(build)s
+      host_test: '"$MPC_VST/tools/test_port.sh" %(d)s/vst.json'
+%(ud)s      plugin_id: %(pid)s
+      license: %(spdx)s
+      requires: %(req)s
+      about: %(about)s
+      dry_run: ${{ inputs.dry_run }}
+""" % dict(job=name, name=name, d=d, pid=pid, ref=ref, build=build, ud=ud, spdx=spdx, req=COMPANIONS[name][1],
            about=json.dumps(about, ensure_ascii=False))
 
 
@@ -309,6 +348,10 @@ FORK_CHANGES = [
      "The step light: after every block the wrapper tells MPC when the engine has moved the playing step, so the "
      "skin follows playback.",
      "The step light stays where it was when the page was drawn."),
+    ("eaef502", "engine_changed", "`mpc_engine_changed()`",
+     "The engine tells the wrapper which controls it changed itself (the Pērkons CCs and MIDI MOD lanes it reads on "
+     "its own MIDI port), so MPC's screen and Q-Links follow them.",
+     "The CCs and lanes still move the sound, but the screen and the Q-Links keep showing the old values."),
     ("10d8f5f", "travel", "`QLINK_TRAVEL` and `SET_IF_CHANGED` in `vst.json` `defines`",
      "Q-Link and data-wheel ticks add up like a detented knob, and a switch moves after half an option's width of "
      "turn; a set to the value the engine already holds is skipped. This is how the plugin was checked on the device.",
@@ -362,9 +405,13 @@ def fork_uses(D, cfg, params, layout):
     for sub in ("src", "mpc"):
         for root, _, files in os.walk(os.path.join(D, sub)):
             for f in files:
-                if f.endswith((".c", ".cc", ".cpp")) and "mpc_engine_transport(" in open(
-                        os.path.join(root, f), errors="replace").read():
+                if not f.endswith((".c", ".cc", ".cpp")):
+                    continue
+                text = open(os.path.join(root, f), errors="replace").read()
+                if "mpc_engine_transport(" in text:
                     used.add("transport")
+                if "mpc_engine_changed(" in text:
+                    used.add("engine_changed")
     return used
 
 
@@ -440,6 +487,9 @@ def framework_doc(name):
 def prepare(name):
     if name not in PLUGINS:
         raise SystemExit("%s: not in PLUGINS (dev-tools/catalogue/prepare.py)" % name)
+    if name in COMPANIONS:
+        print("%-14s ships in %s's release: prepare.py %s writes its job" % (name, COMPANIONS[name][0], COMPANIONS[name][0]))
+        return None
     pid, spdx, lic_src, user_data = PLUGINS[name]
     rel = folder_of(name)
     D = os.path.join(REPO, rel)

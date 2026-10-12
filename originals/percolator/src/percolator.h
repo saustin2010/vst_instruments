@@ -6,15 +6,17 @@
 #include <stdint.h>
 #include "dsp.h"
 #include "params_def.h"
+#include "tapbus.h"
+#include "midiin.h"
 
 #define NV 4            /* voices */
-#define NOTE0 20        /* voice 1's note: 20-23 (G#-1-B-1) are pads 1-4 of bank A on an MPC plugin track */
 #define NK 8            /* knobs per voice */
 #define SUB 32          /* modulation and coefficient updates every SUB frames */
 #define MAX_KITS 512
 #define MAX_BANKS 48
 #define NSLOT 3         /* sample slots (voice 4, algorithm 3) */
 #define MAX_CUES 64
+#define TAP_HOLD 1024   /* the main instance's output delay line, frames */
 
 enum { K_TUNE, K_DECAY, K_P1, K_P2, K_CUTOFF, K_DRIVE, K_FX, K_LEVEL };
 
@@ -61,6 +63,7 @@ typedef struct {
 
 typedef struct {
     int active, gate, note, drone;
+    int ch, pitched;       /* the trigger's MIDI channel (0-15); played pitched (KEYS, MULTI): pitch bend reaches it */
     int ns;                /* frames since the trigger */
     float vel;             /* target amplitude from velocity */
     float amp;             /* smoothed level x velocity */
@@ -90,7 +93,7 @@ typedef struct {
 typedef struct perc {
     float pv[NP];          /* knobs 0..100, options as an index, kit number */
     voice_t v[NV];
-    float bend;            /* KEYS pitch bend, semitones */
+    float bend[16];        /* pitch bend per MIDI channel, semitones (voices played pitched) */
     /* LFO */
     float lfo_ph, lfo_out, lfo_a, lfo_b;
     uint32_t lfo_rng;
@@ -108,6 +111,14 @@ typedef struct perc {
     int bank;              /* bank of the loaded kit (its samples), -1 = built in */
     int kit_pending;       /* a kit set but not loaded yet (-1: none): loaded at the next block (see e_set_param) */
     char dir[512];
+    /* OUT 1-4 (tapbus.h) */
+    uint32_t id;           /* this instance, process-wide, from 1 */
+    tapbus_t *bus;         /* NULL: OUT 1-4 unavailable */
+    tapread_t tr;          /* playing an OUT (TRACK PLAYS = OUT n) */
+    float hold[TAP_HOLD];  /* the main instance's output, a block late while a voice is tapped */
+    uint32_t hold_w;
+    mi_port_t midi_in;     /* "Percolator MIDI In": notes on their own channels, for KEYS CH (midiin.h) */
+    uint32_t changed[5];   /* parameters a MIDI CC set, for MPC's screen (mpc_engine_changed), a bit each */
 } perc_t;
 
 #define DL_N 65536

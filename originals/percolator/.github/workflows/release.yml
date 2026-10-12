@@ -19,14 +19,14 @@ on:
 
 jobs:
   vst:
-    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@7f0653cfbf6f3c2a4a1d0549f4fd9fb3e14d8c27
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@eaef502c0a537605b73a0e2a78dfcbe66e45cf6c
     permissions:
       contents: write
     with:
       tag: v${{ inputs.version }}
       version: ${{ inputs.version }}
       tools_repo: saustin2010/mpc-vst-plugins
-      tools_ref: 7f0653cfbf6f3c2a4a1d0549f4fd9fb3e14d8c27
+      tools_ref: eaef502c0a537605b73a0e2a78dfcbe66e45cf6c
       vst_dir: .
       build: bash "$MPC_VST/tools/build_port.sh" vst.json && rm -rf build/skin && mkdir -p build/skin && cp -R deploy/Synths/* build/skin/
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
@@ -34,4 +34,24 @@ jobs:
       plugin_id: percolator
       license: MIT
       about: "Four-voice percussion synth laid out like the Erica Synths Pērkons HD-01, with envelope displays; it plays the Pērkons' free kit packs."
+      dry_run: ${{ inputs.dry_run }}
+
+  percolatorout:
+    # percolatorout (percolatorout/) ships in this release as its own zip, with its own draft
+    # (tag percolator-out-v<version>) and catalogue entry, as TR-MPC ships its Tap FX
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@eaef502c0a537605b73a0e2a78dfcbe66e45cf6c
+    permissions:
+      contents: write
+    with:
+      tag: percolator-out-v${{ inputs.version }}
+      version: ${{ inputs.version }}
+      tools_repo: saustin2010/mpc-vst-plugins
+      tools_ref: eaef502c0a537605b73a0e2a78dfcbe66e45cf6c
+      vst_dir: percolatorout
+      build: bash "$MPC_VST/tools/build_port.sh" percolatorout/vst.json && rm -rf percolatorout/build/skin && mkdir -p percolatorout/build/skin && cp -R percolatorout/deploy/Synths/* percolatorout/build/skin/
+      host_test: '"$MPC_VST/tools/test_port.sh" percolatorout/vst.json'
+      plugin_id: percolator-out
+      license: MIT
+      requires: Percolator 2.0.0 or later in the same project
+      about: "Plays one of Percolator's OUT 1-4 on its own MPC track (an audio track will do), so a voice gets that track's fader, inserts and outputs."
       dry_run: ${{ inputs.dry_run }}

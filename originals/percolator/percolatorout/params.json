@@ -1,0 +1,33 @@
+{
+ "name": "Percolator OUT",
+ "params": [
+  {
+   "key": "out",
+   "name": "OUT",
+   "options": [
+    "OUT 1",
+    "OUT 2",
+    "OUT 3",
+    "OUT 4"
+   ],
+   "default": "OUT 1"
+  },
+  {
+   "key": "thru",
+   "name": "THRU",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "status",
+   "name": "STATUS",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

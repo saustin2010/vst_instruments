@@ -1,0 +1,25 @@
+{
+  "name": "[FX] Percolator OUT",
+  "vendor": "Steve A",
+  "uid": "PrcO",
+  "category": "Effect",
+  "so": "percolatorout.so",
+  "effect": true,
+  "build": {
+    "sources": [
+      "src/percolator_out.c"
+    ],
+    "cflags": [
+      "-Isrc"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "QLINK_TRAVEL": 1, "SET_IF_CHANGED": 1
+  }
+}
