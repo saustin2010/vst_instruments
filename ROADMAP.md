@@ -34,7 +34,7 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   replays it (all 41 PASSED). Re-released v1.0.1: Fizzik, Hera, NuSaw, Braids, Groove Bank, Mr Hyde, Rings, Rings FX,
   Chordism, Mono Voice (Percolator in 1.2.0).
   - [ ] Install all on the Live II (`./install.sh <mpc> all`, no restart) and check STOP on Hera.
-  - [x] Offered to sd88me: sd88me/mpc-vst-plugins#279 (2026-10-11), the fix on his current main. It also applies a
+  - [x] Offered to sd88me: sd88me/mpc-vst-plugins#279 (2026-10-11, merged), the fix on his current main. It also applies a
     held parameter 0 when the host reads it (his step tests sweep an int parameter 0), and the check's text buffers
     follow `PARAM_TEXT_MAX` (his Maschine port shows 96-character text). His `poc/steptest` and `ports/maschine`
     PASSED in a Linux container.
@@ -101,10 +101,11 @@ parameter index, so existing projects keep working.
     Release (2026-10-12): Percolator OUT ships in Percolator's release (owner); both 2.0.0 drafts built by Actions on
     tools `eaef502` (steve-features + mpc_engine_changed), both zips OK in `catalog_check --catalog`, screens identical
     to `deploy/`. Both zips installed on the Live II and checked by the owner: "all working"; v2.0.0 published with
-    `tested.json` (2026-10-12). The catalogue PR (asset_pattern, percolator-out, author):
-    sd88me/mpc-vst-plugins#398; eaef502 offered to sd88me as sd88me/mpc-vst-plugins#399 (with a test engine and docs).
-    Left: publish percolator-out-v2.0.0 once #398 is merged; whether MPC's own automation on Percolator's track lists
-    its parameters by name.
+    `tested.json` (2026-10-12). The catalogue entries (asset_pattern, percolator-out, author): sd88me/mpc-vst-plugins#398,
+    merged 2026-10-12, then percolator-out-v2.0.0 published (not Latest: v2.0.0 stays the repo's Latest); his
+    `catalog_build.py` on both entries: 0 problems, each 2.0.0 its own zip and tested. eaef502 (`mpc_engine_changed`)
+    merged upstream as sd88me/mpc-vst-plugins#399 (2026-10-12, with a test engine and docs).
+    Left: whether MPC's own automation on Percolator's track lists its parameters by name.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it.

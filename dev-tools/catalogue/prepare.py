@@ -246,13 +246,21 @@ def readme(rel, D, cfg, sub, made, lic_new, user_data):
     s = re.sub(r"^- Files: .*$", lambda m: files_line, s, count=1, flags=re.M)
     # install
     zipname = re.sub(r"[^A-Za-z0-9]+", "-", cfg["name"]).strip("-")
+    companions = ""   # each ships in this release as a zip of its own, under its own tag
+    for c, (parent, _) in sorted(COMPANIONS.items()):
+        if parent == name:
+            cname = json.load(open(os.path.join(REPO, folder_of(c), "vst.json")))["name"]
+            companions += ("\n\n**%s** ([its README](%s/)) has a zip of its own, `%s-<version>-mpc-armv7.zip`,\nin its "
+                           "own release on the same page (tag `%s-v<version>`); install it the same way."
+                           % (cname, os.path.relpath(folder_of(c), rel), re.sub(r"[^A-Za-z0-9]+", "-", cname).strip("-"),
+                              PLUGINS[c][0]))
     install = """## Install
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
 **From the release:** download `%(zip)s-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/%(repo)s/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
-`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.%(ud)s
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.%(ud)s%(comp)s
 
 **With the rest of the collection:** from [vst_instruments](%(vi)s) ([INSTALL.md](%(vi)s/blob/main/INSTALL.md)):
 
@@ -261,7 +269,7 @@ copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The 
 ```
 
 Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
-""" % dict(zip=zipname, repo=repo, vi=VI, name=name,
+""" % dict(zip=zipname, repo=repo, vi=VI, name=name, comp=companions,
            ud=("\nYour own files in %s are kept when you update or uninstall." % ", ".join("`%s/`" % u for u in user_data))
            if user_data else "")
     i = s.index("## Install\n")

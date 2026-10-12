@@ -188,8 +188,8 @@ KEYS CH ([Playing it](#playing-it)).
 ### Pērkons kit packs
 
 Erica Synths gives away four kit packs for the Pērkons, 169 kits in all. They aren't shipped with Percolator (they're
-Erica's and their authors', and come without a licence to pass them on), but it reads them as they are: download,
-unzip, copy the folder in.
+Erica's and their authors', and come without a licence to pass them on), but it reads them as they unzip: download the
+zips, copy them to the MPC and unzip them there (below).
 
 | Pack | Kits | Download (Erica Synths) |
 |---|---|---|
@@ -201,23 +201,90 @@ unzip, copy the folder in.
 The links are the Downloads on Erica's [Pērkons HD-01 page](https://www.ericasynths.lv/perkons-hd-01-black-2520/)
 (checked 2026-10-10); if one moves, the page has them.
 
-**To add them:**
+**To add them** (over SSH as root, the access you installed Percolator with; these steps were tested with the four
+zips and the `unzip` the MPC has, BusyBox 1.36):
 
-1. Download the zips and unzip them on your computer. Each gives one folder (`Perkons Kit Pack 01`,
-   `PERKONS KIT PACK 2`, ...). Leave its insides as they are; the `__MACOSX` folder and `.jpg`/`.png` files can go.
-2. Copy those folders into Percolator's data folder on the MPC:
-   - installed from this plugin's release: `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/percolator/`
-   - installed with vst_instruments' `install.sh`: `/sdcard/vst/percolator/`
+1. Download the zips. Don't unzip them on your computer: unzipped on the MPC, each pack lands in the shape Percolator
+   reads (Windows' "Extract All" adds a folder level that hides the kits).
+2. Copy them to the MPC, from the folder they're in:
+   ```
+   ssh root@<mpc-address> mkdir -p /tmp/perkons
+   scp Perkons_Kit_Pack_01_GuSQDTL1.zip PERKONS_KIT_PACK_2_kfMSLW4.zip PERKONS_KIT_PACK_3.zip PERKONS_KIT_PACK_4.zip root@<mpc-address>:/tmp/perkons/
+   ```
+3. Unzip them into Percolator's data folder, the folder `percolator` next to `percolator.so`. Log in
+   (`ssh root@<mpc-address>`), then:
+   ```
+   D="/sdcard/Synths/Steve A - VST - [DRUM] Percolator/percolator"
+   mkdir -p "$D" && cd "$D"
+   for z in /tmp/perkons/*.zip; do unzip -o -q "$z" -x "__MACOSX/*"; done
+   ls
+   rm -r /tmp/perkons
+   ```
+   That `D` is for Percolator installed from its release (or sd88me's catalogue). Installed with vst_instruments'
+   `install.sh`, it's `D=/sdcard/vst/percolator`. `find /sdcard/Synths /sdcard/vst -maxdepth 2 -name percolator.so`
+   shows which. The release installer doesn't make the folder; `mkdir -p` does. `ls` lists one folder per pack:
+   `Perkons Kit Pack 01`, `PERKONS KIT PACK 2`, `PERKONS KIT PACK 3`, `PERKONS_KIT_PACK_4`.
+4. Remove Percolator from its track and insert it again, or reload the project: it reads the kits when it's created.
+   They're in MPC's PRESET menu and on the MASTER page's KIT, after the 8 built-in ones: **Pack 1 00** to
+   **Pack 4 47**. MPC can stay running throughout; nothing here needs a restart.
 
-   For example over SSH (as root, as for installing), from the folder you unzipped into; the first line makes the
-   folder if it isn't there yet:
-   ```
-   ssh root@<mpc-address> 'mkdir -p "/sdcard/vst/percolator"'
-   scp -r "PERKONS KIT PACK 2" root@<mpc-address>:"/sdcard/vst/percolator/"
-   ```
-   (for the release, the path in quotes is `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/percolator`)
-3. Remove Percolator from its track and insert it again (it reads the kits when it's inserted). The kits are in
-   MPC's PRESET menu and on the MASTER page's KIT, after the built-in ones, as **Pack 1 01**, **Pack 2 05** and so on.
+**If only the 8 built-in kits show up:**
+- **A folder too many.** Each pack must be directly in the data folder (`percolator/PERKONS KIT PACK 2/BANKS/...`),
+  not inside a folder named after the zip (`percolator/PERKONS_KIT_PACK_2_kfMSLW4/PERKONS KIT PACK 2/...`), which is
+  what unzipping on Windows makes. Move the pack's folder up a level.
+- **A zip in the data folder.** Percolator doesn't open zips: unzip it there (step 3) and delete the zip.
+- **The wrong data folder.** From the release, it's inside `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/`;
+  `/sdcard/vst/percolator/` is read only by a Percolator installed with vst_instruments' `install.sh`.
+- **Percolator not re-inserted** since the kits were added.
+- Not a problem: Pack 2's folder also holds `Perkons_Kit_Pack_02.zip`, the same kits again. No need to unzip it.
+
+<details>
+<summary><b>With Claude Code:</b> a prompt that does all of this</summary>
+
+Paste it into Claude Code on the computer that has the zips and SSH access to the MPC, with the first two lines
+filled in. It asks before moving or deleting anything already in the data folder, and never stops or restarts MPC.
+
+```
+Install Erica Synths' Pērkons kit packs for the Percolator VST plugin on my MPC.
+
+My MPC: <its address>, logged in as root over SSH (the access I used to install Percolator).
+The kit pack zips are in: <folder on this computer>. Download any that are missing:
+  Pack 1: https://www.ericasynths.lv/service/file/download/product_id/1167/file_id/525/
+  Pack 2: https://www.ericasynths.lv/service/file/download/product_id/1167/file_id/584/
+  Pack 3: https://www.ericasynths.lv/service/file/download/product_id/1167/file_id/616/
+  Pack 4: https://www.ericasynths.lv/service/file/download/product_id/1167/file_id/660/
+
+How Percolator reads kits:
+- Only from its data folder: a folder named `percolator` next to `percolator.so`. Find percolator.so with
+  `find /sdcard/Synths /sdcard/vst -maxdepth 2 -name percolator.so`. From its release zip it is in
+  `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/`, so the data folder is
+  `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/percolator/`; from vst_instruments' install.sh the data folder is
+  `/sdcard/vst/percolator/`. If percolator.so is in both places, stop and ask me. Create the data folder if it's missing.
+- Each pack must sit exactly one level down, as the zip's own top folder, e.g.
+  `<data folder>/PERKONS KIT PACK 2/BANKS/02/KITS/*.KIT` and `<data folder>/PERKONS KIT PACK 2/SAMPLES/1.wav`.
+  With an extra folder level (Windows "Extract All" adds one named after the zip), or a .zip left in the folder,
+  Percolator finds nothing. Don't unzip the `Perkons_Kit_Pack_02.zip` inside Pack 2: it repeats the same kits.
+- It reads kits only when it is inserted on a track or a project loads.
+
+Steps:
+1. Check that `ssh root@<its address>` works without a password prompt; if it doesn't, stop and tell me.
+2. Show me what is already in the data folder. If anything is left from an earlier attempt (a .zip, a pack inside
+   an extra folder), tell me and ask before moving or deleting it. Never delete anything else.
+3. For each zip: scp it to /tmp/perkons/ on the MPC, unzip it there with the MPC's own `unzip` into a new empty
+   folder, delete the `__MACOSX` folder, and move the pack's top folder into the data folder (skip a pack that is
+   already there). Quote every path: it has spaces and [brackets]. If the MPC has no `unzip`, extract on this
+   computer instead and copy the pack's top folder, not a folder around it.
+4. Delete /tmp/perkons/ on the MPC.
+5. Check: count the .KIT files under each pack folder (Pack 1: 32, Pack 2: 32, Pack 3: 59, Pack 4: 46, 169 in all),
+   check that Packs 2 and 4 have SAMPLES/1.wav, 2.wav and 3.wav, and show me the data folder two levels deep.
+
+Don't stop or restart MPC, and don't touch MPC.settings or anything outside the data folder and /tmp/perkons.
+MPC can stay running. When it's done, tell me to remove Percolator from its track and insert it again (or reload
+the project): the kits appear in MPC's PRESET menu and on Percolator's MASTER page (KIT), after the 8 built-in
+kits, named "Pack 1 00" to "Pack 4 47".
+```
+
+</details>
 
 Updating or uninstalling the release keeps what you added in `percolator/`.
 
@@ -253,6 +320,9 @@ Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on a
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 Your own files in `percolator/` are kept when you update or uninstall.
+
+**[FX] Percolator OUT** ([its README](percolatorout/)) has a zip of its own, `FX-Percolator-OUT-<version>-mpc-armv7.zip`,
+in its own release on the same page (tag `percolator-out-v<version>`); install it the same way.
 
 **With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
@@ -302,7 +372,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   showed why STOP reset them: on every STOP (and on insert) MPC's host sets parameter 0, KIT, to its top and straight
   back, and each set loaded a kit. 1.2.0: a kit set waits for the next block, so that pair loads nothing; and MODE
   steps on its Q-Link (its 1/2/3 labels had clashed with the value the engine reports). Both confirmed on the Live II.
-- 2.0.0, released 2026-10-12 (with [FX] Percolator OUT, its own zip in the same release): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
+- 2.0.0, released 2026-10-12 (with [FX] Percolator OUT, its own zip and release, tag `percolator-out-v2.0.0`): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
   at 20-23), KEYS CH (channels 2-5 play voices 1-4 pitched: the Pērkons' MULTI, through Percolator MIDI In) and OUT (MAIN, OUT 1-4, played on
   another track by [FX] Percolator OUT or a second Percolator); COMP SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it (it was half made up, so
   a high THRESH made the kit up to 6.6 dB quieter), and COMP LEVEL, its own output; each voice's LEVEL, FX SEND and
