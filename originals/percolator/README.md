@@ -205,7 +205,7 @@ The links are the Downloads on Erica's [Pērkons HD-01 page](https://www.ericasy
 zips and the `unzip` the MPC has, BusyBox 1.36):
 
 1. Download the zips. Don't unzip them on your computer: unzipped on the MPC, each pack lands in the shape Percolator
-   reads (Windows' "Extract All" adds a folder level that hides the kits).
+   reads (Windows' "Extract All" adds a folder level, which Percolator 2.0.0 doesn't look into).
 2. Copy them to the MPC, from the folder they're in:
    ```
    ssh root@<mpc-address> mkdir -p /tmp/perkons
@@ -229,9 +229,10 @@ zips and the `unzip` the MPC has, BusyBox 1.36):
    **Pack 4 47**. MPC can stay running throughout; nothing here needs a restart.
 
 **If only the 8 built-in kits show up:**
-- **A folder too many.** Each pack must be directly in the data folder (`percolator/PERKONS KIT PACK 2/BANKS/...`),
-  not inside a folder named after the zip (`percolator/PERKONS_KIT_PACK_2_kfMSLW4/PERKONS KIT PACK 2/...`), which is
-  what unzipping on Windows makes. Move the pack's folder up a level.
+- **A folder too many.** Each pack belongs directly in the data folder (`percolator/PERKONS KIT PACK 2/BANKS/...`).
+  Up to 2.0.0, Percolator doesn't find one inside a folder named after the zip
+  (`percolator/PERKONS_KIT_PACK_2_kfMSLW4/PERKONS KIT PACK 2/...`, what unzipping on Windows makes): move the pack's
+  folder up a level, or update to 2.0.1, which looks one folder down. Two folders down is never read.
 - **A zip in the data folder.** Percolator doesn't open zips: unzip it there (step 3) and delete the zip.
 - **The wrong data folder.** From the release, it's inside `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/`;
   `/sdcard/vst/percolator/` is read only by a Percolator installed with vst_instruments' `install.sh`.
@@ -262,8 +263,8 @@ How Percolator reads kits:
   `/sdcard/vst/percolator/`. If percolator.so is in both places, stop and ask me. Create the data folder if it's missing.
 - Each pack must sit exactly one level down, as the zip's own top folder, e.g.
   `<data folder>/PERKONS KIT PACK 2/BANKS/02/KITS/*.KIT` and `<data folder>/PERKONS KIT PACK 2/SAMPLES/1.wav`.
-  With an extra folder level (Windows "Extract All" adds one named after the zip), or a .zip left in the folder,
-  Percolator finds nothing. Don't unzip the `Perkons_Kit_Pack_02.zip` inside Pack 2: it repeats the same kits.
+  A .zip left in the folder is never read; with an extra folder level (Windows "Extract All" adds one named after
+  the zip), Percolator up to 2.0.0 finds nothing (2.0.1 looks one folder down). Don't unzip the `Perkons_Kit_Pack_02.zip` inside Pack 2: it repeats the same kits.
 - It reads kits only when it is inserted on a track or a project loads.
 
 Steps:
@@ -305,6 +306,7 @@ Notes on the packs:
 <pack>/SAMPLES/1.wav 2.wav 3.wav   that pack's samples for voice 4 (16-bit WAV; cue points = slices)
 <bank>/KITS/*.KIT            a bank of your own, listed as "<bank> NN" (its samples in <bank>/SAMPLES)
 BANKS/NN/KITS/*.KIT          a whole Pērkons SD card copied into the data folder
+<folder>/<pack or bank>/...  any of the above one folder down, when <folder> has no kits itself (2.0.1 and later)
 ```
 
 What a kit file holds (protobuf, worked out from the packs; see `src/kits.c`): per voice the eight knobs (16 bits),
@@ -355,7 +357,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   table) and the [HD-01 manual](https://www.manualslib.com/manual/2588218/Erica-Synths-Perkons-Hd-01.html). The kit
   format was worked out from the packs themselves.
 
-## Status (2026-10-12)
+## Status (2026-10-13)
 
 - Build and offline host test PASSED (ARM `.so`, the x86 test under ASan/UBSan with the four packs mounted: two
   instances, every parameter, Q-Links, pop-ups, CC and NRPN, chunk restore, 177 kits named in the PRESET menu);
@@ -401,6 +403,13 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   `mpc_engine_changed`) installed with their own installers on the Live II and checked by the owner (2026-10-12: the
   project, kit packs, pads, pages, Percolator MIDI In, a MIDI MOD lane with the screen following, Percolator OUT on an
   audio track, STOP, save and reload): "all working". Published as v2.0.0; `tested.json` records it.
+- 2.0.1 (2026-10-13): kit packs are found one folder down too, inside a folder of their own: Windows' "Extract All"
+  puts each zip's pack folder in one named after the zip, which 2.0.0 didn't look into, so users who unzipped there
+  got only the built-in kits. Nothing else changed. Offline, with Erica's four zips: unzipped as Windows does, or
+  all four in one folder, the 169 kits are listed exactly as from a correct install (same names, same order, same
+  samples); a correct install, and one with a bank of your own, lists exactly what 2.0.0 lists, so projects keep
+  their kits; two folders down is still not read. Build and host test PASSED, the loader clean under ASan/UBSan,
+  `check.sh` PASSED.
 
 ## Files
 
