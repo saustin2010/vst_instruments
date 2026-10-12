@@ -274,31 +274,31 @@ have created too many repositories, too quickly"), however far apart they're spa
 | 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **in the catalogue**: v1.0.0, PR #231 merged 2026-10-08 |
 | Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 PR #230 merged 2026-10-08 |
 | Aphex | mpc-vst-aphex | `aphex` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); envelope displays 28 frames (above) |
-| Braids | mpc-vst-braids | `braids` | MIT | 10 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
+| Macro Osc (formerly Braids) | mpc-vst-macro-osc | `braids` | MIT | 10 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Macro Osc** (repo mpc-vst-macro-osc), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
 | Chordism | mpc-vst-chordism | `chordism` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Denis | mpc-vst-denis | `denis` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Elements | mpc-vst-elements | `elements` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Modal Voice (formerly Elements) | mpc-vst-modal-voice | `elements` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Modal Voice** (repo mpc-vst-modal-voice), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
 | Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
-| Moog | mpc-vst-moog | `raffosynth` | MIT | 14 presets | **in the catalogue**: v1.1.0 (2026-10-12: EMPHASIS and CUTOFF fixed, FILTER CLEAN/DRIVE switch; the repo build played on the Live II), v1.0.0 #236 merged 2026-10-09 (offline only) |
+| RaffoSynth (formerly Moog) | mpc-vst-raffosynth | `raffosynth` | MIT | 14 presets | **in the catalogue**: v1.1.0 (2026-10-12: EMPHASIS and CUTOFF fixed, FILTER CLEAN/DRIVE switch; the repo build played on the Live II), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **RaffoSynth** (repo mpc-vst-raffosynth), v1.2.0 to come ([below](#other-companies-names-2026-10-12)) |
 | Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Noisemaker | mpc-vst-noisemaker | `noisemaker` | GPL-2.0-only | keeps your banks | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | NuSaw | mpc-vst-nusaw | `nusaw` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | OB-Xd | mpc-vst-obxd | `obxd` | GPL-3.0-only | factory bank; keeps your banks | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Wurl | mpc-vst-wurl | `wurl` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Rings | mpc-vst-rings | `rings` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
-| Rings FX | mpc-vst-ringsfx | `rings-fx` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
-| Warps | mpc-vst-warps | `warps` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Grids | mpc-vst-grids | `grids` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
+| Resonator (formerly Rings) | mpc-vst-resonator | `rings` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Resonator** (repo mpc-vst-resonator), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
+| Resonator FX (formerly Rings FX) | mpc-vst-resonator-fx | `rings-fx` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Resonator FX** (repo mpc-vst-resonator-fx), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
+| Meta Mod (formerly Warps) | mpc-vst-meta-mod | `warps` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Meta Mod** (repo mpc-vst-meta-mod), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
+| Drum Map (formerly Grids) | mpc-vst-drum-map | `grids` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Drum Map** (repo mpc-vst-drum-map), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
 | Groove Bank | mpc-vst-groovebank | `groove-bank` | MIT | 14 grooves | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | MIDI Player | mpc-vst-midiplayer | `midi-player` | MIT | demo file (made here); keeps your files | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Pixel Walkers | mpc-vst-pixelwalkers | `pixel-walkers` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Rampage | mpc-vst-rampage | `rampage` | GPL-3.0-or-later | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Super Arp | mpc-vst-superarp | `super-arp` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Eucalypso | mpc-vst-eucalypso | `eucalypso` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
-| Verglas | mpc-vst-verglas | `verglas` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| Verglas | mpc-vst-verglas | `verglas` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); 2026-10-12: maker becomes Émilie Gillet, v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
 | Hank | mpc-vst-hank | `hank` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); upstream declares MIT in its README and module.json but has no file, so `LICENSE` is the MIT text naming the author (2026-10-08) |
 | Tablor | mpc-vst-tablor | `tablor` | BSD-3-Clause | 115 wavetables, 9 presets; keeps your tables | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); ships both wavetable packs, as Tablor's repo does (Neu KatalYst: "use them in all your synths"; owner's choice 2026-10-08) |
 | Hush One, Libpo32 | | | none upstream | | **not published**: no licence, and the authors can't be asked (2026-10-08) |
@@ -318,6 +318,48 @@ place of "screen: same". Both release zips' skins are byte-identical to `deploy/
       every zip, then published (2026-10-09 and 2026-10-10). Device tests of the release zips are still to do.
 - [x] The held ones (2026-10-10): the Stevequencers, after `"live"` params were added to the release tools.
 - [ ] Skins for the plugins already listed: the offers above.
+
+## Other companies' names (2026-10-12)
+
+sd88me added a rule to the catalogue on 2026-10-12 (`catalog/README.md`, "Skins and branding"): a listed plugin's
+name, skin and screenshot carry no other company's name or logo; the summary and tags may say what it models ("Minimoog-style")
+as long as they don't suggest the original maker made it. He delisted LXRXXL for its screen and renamed our "Moog" to
+RaffoSynth in its entry. Mutable Instruments goes further in its own repo: the name "Mutable Instruments" "should not be used
+on any of the derivative works", and it advises against keeping the module names. So:
+
+| Was | Now | Maker in MPC | Repo | Kept |
+|---|---|---|---|---|
+| Moog | RaffoSynth | Raffo | mpc-vst-raffosynth | uid `Moog`, `moog.so`, id `raffosynth` |
+| Braids | Macro Osc | Émilie Gillet | mpc-vst-macro-osc | uid, `.so`, id `braids` |
+| Plaits | Macro Osc 2 | Émilie Gillet | (not released) | uid, `.so` |
+| Elements | Modal Voice | Émilie Gillet | mpc-vst-modal-voice | uid, `.so`, id `elements` |
+| Rings | Resonator | Émilie Gillet | mpc-vst-resonator | uid, `.so`, id `rings` |
+| Rings FX | Resonator FX | Émilie Gillet | mpc-vst-resonator-fx | uid, `.so`, id `rings-fx` |
+| Warps | Meta Mod | Émilie Gillet | mpc-vst-meta-mod | uid, `.so`, id `warps` |
+| Grids | Drum Map | Émilie Gillet | mpc-vst-drum-map | uid, `.so`, id `grids` |
+| Marbles | Random Sampler | Émilie Gillet | (not released) | uid, `.so` |
+| Verglas | Verglas | Émilie Gillet (was Mutable Instruments) | mpc-vst-verglas | everything but the maker |
+
+The folders keep their names (`tools/publish.sh` splits a folder's history; a renamed folder would no longer
+fast-forward onto its repo), so `dev-tools/catalogue/repo-names.tsv` maps a folder to its new repo. Parameters are
+unchanged, so projects and Q-Link assignments keep their values. Also: the screens' backgrounds (rendered from the Stitch
+mockups) lost the brand text they had (Mutable Instruments, Akai, Roland, Moog, Wurlitzer, Befaco...), and three option
+labels changed: Fizzik's PROPHET / OBERHEIM voicings are CLEAN 4P / WARM 4P, Noisemaker's Moog / Moog2 filters are
+Ladder / Ladder 2, Aphex's REV.1 KORG-35 is REV.1 SALLEN-KEY (values are saved as numbers, so saved sounds keep them).
+OB-Xd, 303 and Rampage (maker Befaco) keep their names for now: sd88me left them, and he'll be asked.
+
+What a user sees: a new name and maker in MPC's browser, and a new folder in `/sdcard/Synths` for a release install (the
+`.so` moves with it; the old folder can be deleted after the update). A saved project names the plugin and its `.so`
+path; whether MPC finds the plugin again by its uid after a rename or a move is being checked on the Live II (below).
+Drum Map and Random Sampler open their MIDI port under the new name: turn Track on for it again in Preferences > MIDI.
+
+- [x] Repo: names, makers, screens, READMEs, catalogue entries, release workflows' `about`, `repo-names.tsv` (2026-10-12)
+- [ ] Device: install the renamed builds on the Live II (one MPC restart); check the maker "Émilie Gillet" (non-ASCII)
+      shows and every screen loads; open a project that uses Moog ("0001 Yeild") and one with a plugin whose `.so` moved
+      (the same project's Percolator, now a release install) to see whether MPC finds them
+- [ ] GitHub: rename the seven repos, publish, release (RaffoSynth 1.2.0, the others 1.1.0), `check.sh` PASSED
+- [ ] Tell sd88me: the new repo names and screenshot links for his entries (he offered to update them), and ask about
+      OB-Xd, 303 and Rampage
 
 ## The device and this repo's installer
 

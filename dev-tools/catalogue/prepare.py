@@ -220,11 +220,20 @@ def companion_job(name, ref):
            about=json.dumps(about, ensure_ascii=False))
 
 
+def repo_name(name):
+    """The plugin's repo name after mpc-vst-: its folder name, or its new name if it was renamed (repo-names.tsv)."""
+    for line in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "repo-names.tsv")):
+        f = line.split()
+        if len(f) == 2 and not line.startswith("#") and f[0] == name:
+            return f[1]
+    return name
+
+
 def readme(rel, D, cfg, sub, made, lic_new, user_data):
     p = os.path.join(D, "README.md")
     s = open(p).read()
     name = os.path.basename(rel)
-    repo = "mpc-vst-" + name
+    repo = "mpc-vst-" + repo_name(name)
     skins = os.listdir(os.path.join(D, "deploy", "Synths"))
     skin = skins[0] if len(skins) == 1 else "%s - VST - %s" % (cfg["vendor"], cfg["name"])
     so = cfg["so"]
