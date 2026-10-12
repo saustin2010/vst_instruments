@@ -6,7 +6,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 
-p = Port("warps", "Warps", ["META", "MODULATOR"])
+p = Port("warps", "Meta Mod", ["CROSS", "MODULATOR"])
 p.names({"mode": "MODE", "algorithm": "ALGORITHM", "timbre": "TIMBRE", "carrier": "CARRIER", "note": "NOTE",
          "fine": "FINE", "level_1": "CARRIER LVL", "level_2": "MOD LEVEL", "shift": "SHIFT", "output": "OUTPUT",
          "mix": "MIX", "volume": "VOLUME"})

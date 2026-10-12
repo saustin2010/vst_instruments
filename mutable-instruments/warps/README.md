@@ -1,17 +1,19 @@
-# Warps
+# Meta Mod
 
-**Audio effect** · Mutable Instruments Warps: a meta-modulator (ring mod, fold, vocoder...) as an audio effect, with 12 presets. · maker in MPC: Mutable Instruments · licence: MIT
+**Audio effect** · Meta Mod: a meta-modulator (ring mod, fold, vocoder...) as an audio effect, with 12 presets, from Émilie Gillet's open-source Warps. · maker in MPC: Émilie Gillet · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Warps on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Meta Mod on the MPC touchscreen">
 
-Warps crosses two signals: its internal carrier oscillator (sine, triangle or saw at NOTE) and the track's audio, or, with EXTERNAL, the input's left and right channels. ALGORITHM morphs through crossfading, folding, analog and digital ring modulation, XOR, comparison, spectral morphing and a vocoder; TIMBRE adds the character of each. MODE's second entry is the module's hidden frequency shifter. MIX blends the dry sound back.
+Formerly **Warps**, renamed on 2026-10-12: Mutable Instruments asks that its name and its module names not be used on derivative works, so the plugin has a name of its own and Émilie Gillet, who wrote the code, as its maker. Its sound is Émilie Gillet's open-source Warps code (Mutable Instruments).
+
+Meta Mod crosses two signals: its internal carrier oscillator (sine, triangle or saw at NOTE) and the track's audio, or, with EXTERNAL, the input's left and right channels. ALGORITHM morphs through crossfading, folding, analog and digital ring modulation, XOR, comparison, spectral morphing and a vocoder; TIMBRE adds the character of each. MODE's second entry is the module's hidden frequency shifter. MIX blends the dry sound back.
 
 Upstream has no presets, so the port brings 12 (Init, Ring Mod, Parallel Ring, Digital Ring, Cross Fold, XOR Crush, Comparator Grit, Robot Vocoder, Pulse Vocoder, Shift Up, Shift Down, Stereo Shift), in MPC's PRESET menu, each setting every control, with levels evened out (measured with a test signal through it).
 
 ## On the MPC
 
-- In the plugin browser: **[FX] Warps** by **Mutable Instruments** (Audio effect)
-- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [FX] Warps/`, holding `warps.so`, its screen. The vst_instruments installer puts `warps.so` in `/sdcard/vst/` instead.
+- In the plugin browser: **[FX] Meta Mod** by **Émilie Gillet** (Audio effect)
+- Files: the release installs one folder, `/sdcard/Synths/Émilie Gillet - VST - [FX] Meta Mod/`, holding `warps.so`, its screen. The vst_instruments installer puts `warps.so` in `/sdcard/vst/` instead.
 - 12 parameters (all automatable) on 1 page
 
 ## Playing it
@@ -24,9 +26,9 @@ An audio effect: insert it in a track's or program's insert effects (it reports 
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. WARPS
+### 1. META MOD
 
-<img src="screenshots/page_0.png" width="760" alt="Warps, page WARPS">
+<img src="screenshots/page_0.png" width="760" alt="Meta Mod, page META MOD">
 
 Q-Link columns: **1** MODE, ALGORITHM, TIMBRE, SHIFT  ·  **2** CARRIER, NOTE, FINE, CARRIER LVL  ·  **3** MOD LEVEL  ·  **4** OUTPUT, MIX, VOLUME
 
@@ -34,7 +36,7 @@ Q-Link columns: **1** MODE, ALGORITHM, TIMBRE, SHIFT  ·  **2** CARRIER, NOTE, F
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
-**From the release:** download `FX-Warps-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-warps/releases),
+**From the release:** download `FX-Meta-Mod-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-meta-mod/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 
@@ -99,5 +101,5 @@ on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/
 ## Development
 
 This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`mutable-instruments/warps`), next to the other plugins
-and the tools that made its screen, and published to [mpc-vst-warps](https://github.com/saustin2010/mpc-vst-warps) for its
+and the tools that made its screen, and published to [mpc-vst-meta-mod](https://github.com/saustin2010/mpc-vst-meta-mod) for its
 releases. Issues and pull requests are welcome in either.

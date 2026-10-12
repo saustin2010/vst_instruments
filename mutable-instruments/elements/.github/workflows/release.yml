@@ -32,5 +32,5 @@ jobs:
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
       plugin_id: elements
       license: MIT
-      about: "Mutable Instruments Elements: a modal synthesis voice you bow, blow and strike, with 12 presets."
+      about: "Modal Voice: a modal synthesis voice you bow, blow and strike, with 12 presets, from Émilie Gillet's open-source Elements."
       dry_run: ${{ inputs.dry_run }}

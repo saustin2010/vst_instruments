@@ -4,7 +4,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 
-p = Port("ringsfx", "Rings FX", ["RESONATOR", "AUDIO EFFECT"])
+p = Port("ringsfx", "Resonator FX", ["PHYSICAL MODELS", "AUDIO EFFECT"])
 p.names({"model": "MODEL", "polyphony": "POLYPHONY", "structure": "STRUCTURE", "brightness": "BRIGHTNESS",
          "damping": "DAMPING", "position": "POSITION", "note": "NOTE", "fine": "FINE", "input_gain": "INPUT",
          "mix": "MIX", "width": "WIDTH", "volume": "VOLUME"})

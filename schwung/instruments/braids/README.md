@@ -1,15 +1,17 @@
-# Braids
+# Macro Osc
 
-**Synth** · Mutable Instruments Braids: a macro oscillator with 47 synthesis models. · maker in MPC: Mutable Instruments · licence: MIT
+**Synth** · Macro Osc: a macro oscillator with 47 synthesis models, from Émilie Gillet's open-source Braids. · maker in MPC: Émilie Gillet · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Braids on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Macro Osc on the MPC touchscreen">
 
-Emilie Gillet's Braids "macro oscillator" as a playable synth voice. One knob picks the model (classic analog waveforms, vowel/formant synthesis, FM, wavetables, physical models of plucked strings and drums, granular clouds, noise...) and TIMBRE and COLOR shape it. Around the oscillator this port adds a filter, an amp envelope, a filter envelope and modulation, so it plays like a complete synth. Ten preset files ship with it.
+Formerly **Braids**, renamed on 2026-10-12: Mutable Instruments asks that its name and its module names not be used on derivative works, so the plugin has a name of its own and Émilie Gillet, who wrote the code, as its maker. Its sound is Émilie Gillet's open-source Braids code (Mutable Instruments).
+
+Émilie Gillet's Braids "macro oscillator" as a playable synth voice. One knob picks the model (classic analog waveforms, vowel/formant synthesis, FM, wavetables, physical models of plucked strings and drums, granular clouds, noise...) and TIMBRE and COLOR shape it. Around the oscillator this port adds a filter, an amp envelope, a filter envelope and modulation, so it plays like a complete synth. Ten preset files ship with it.
 
 ## On the MPC
 
-- In the plugin browser: **[SYN] Braids** by **Mutable Instruments** (Synth)
-- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [SYN] Braids/`, holding `braids.so`, its screen and its library (`braids/`). The vst_instruments installer puts `braids.so` in `/sdcard/vst/` and its data in `/sdcard/vst/braids/` instead; the plugin finds them either way (its data folder is `braids/` next to the `.so`).
+- In the plugin browser: **[SYN] Macro Osc** by **Émilie Gillet** (Synth)
+- Files: the release installs one folder, `/sdcard/Synths/Émilie Gillet - VST - [SYN] Macro Osc/`, holding `braids.so`, its screen and its library (`braids/`). The vst_instruments installer puts `braids.so` in `/sdcard/vst/` and its data in `/sdcard/vst/braids/` instead; the plugin finds them either way (its data folder is `braids/` next to the `.so`).
 - 21 parameters (all automatable) on 2 pages
 
 ## Playing it
@@ -20,15 +22,15 @@ Add it to a **plugin track** and play it from the pads, a keyboard or a MIDI cli
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. BRAIDS
+### 1. MACRO OSC
 
-<img src="screenshots/page_0.png" width="760" alt="Braids, page BRAIDS">
+<img src="screenshots/page_0.png" width="760" alt="Macro Osc, page MACRO OSC">
 
 Q-Link columns: **1** ALGORITHM, TIMBRE, COLOR  ·  **2** CUTOFF, RESONANCE, FILTER ENV, FM  ·  **3** OCTAVE, VOLUME  ·  **4** PATCH
 
 ### 2. ENVELOPES
 
-<img src="screenshots/page_1.png" width="760" alt="Braids, page ENVELOPES">
+<img src="screenshots/page_1.png" width="760" alt="Macro Osc, page ENVELOPES">
 
 Q-Link columns: **1** AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE  ·  **2** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE
 
@@ -36,7 +38,7 @@ Q-Link columns: **1** AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE  ·  **2**
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
-**From the release:** download `SYN-Braids-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-braids/releases),
+**From the release:** download `SYN-Macro-Osc-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-macro-osc/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 
@@ -103,5 +105,5 @@ on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/
 ## Development
 
 This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/braids`), next to the other plugins
-and the tools that made its screen, and published to [mpc-vst-braids](https://github.com/saustin2010/mpc-vst-braids) for its
+and the tools that made its screen, and published to [mpc-vst-macro-osc](https://github.com/saustin2010/mpc-vst-macro-osc) for its
 releases. Issues and pull requests are welcome in either.

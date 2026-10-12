@@ -1,43 +1,45 @@
-# Grids
+# Drum Map
 
-**MIDI sequencer** · Mutable Instruments Grids: a topographic drum sequencer that plays a drum track from MPC's clock. · maker in MPC: Mutable Instruments · licence: GPL-3.0
+**MIDI sequencer** · Drum Map: a topographic drum sequencer that plays a drum track from MPC's clock, from Émilie Gillet's open-source Grids. · maker in MPC: Émilie Gillet · licence: GPL-3.0
 
-<img src="screenshots/page_0.png" width="760" alt="Grids on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Drum Map on the MPC touchscreen">
 
-Grids holds a map of drum patterns learned from real grooves. MAP X and MAP Y pick a spot on the map, the three FILL knobs set how busy the kick, snare and hi-hat parts are, and CHAOS perturbs the pattern so it breathes. Switch to EUCLIDEAN mode and the fills and three LENGTHs make Euclidean rhythms instead. It needs no notes: press play and it sends kick/snare/hat notes (with accents) out of its own MIDI port to a drum program, locked to MPC's tempo and bar. Ported from Mutable's original AVR code, rewritten so each instance has its own state.
+Formerly **Grids**, renamed on 2026-10-12: Mutable Instruments asks that its name and its module names not be used on derivative works, so the plugin has a name of its own and Émilie Gillet, who wrote the code, as its maker. Its patterns are Émilie Gillet's open-source Grids code (Mutable Instruments). Its MIDI port is now **[SEQ] Drum Map MIDI Out**: if you used Grids, turn **Track** on for the new port in Preferences > MIDI and pick it again as your drum track's MIDI input.
+
+Drum Map holds a map of drum patterns learned from real grooves. MAP X and MAP Y pick a spot on the map, the three FILL knobs set how busy the kick, snare and hi-hat parts are, and CHAOS perturbs the pattern so it breathes. Switch to EUCLIDEAN mode and the fills and three LENGTHs make Euclidean rhythms instead. It needs no notes: press play and it sends kick/snare/hat notes (with accents) out of its own MIDI port to a drum program, locked to MPC's tempo and bar. Ported from Mutable's original AVR code, rewritten so each instance has its own state.
 
 ## On the MPC
 
-- In the plugin browser: **[SEQ] Grids** by **Mutable Instruments** (Sequencer)
-- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [SEQ] Grids/`, holding `grids.so`, its screen. The vst_instruments installer puts `grids.so` in `/sdcard/vst/` instead.
+- In the plugin browser: **[SEQ] Drum Map** by **Émilie Gillet** (Sequencer)
+- Files: the release installs one folder, `/sdcard/Synths/Émilie Gillet - VST - [SEQ] Drum Map/`, holding `grids.so`, its screen. The vst_instruments installer puts `grids.so` in `/sdcard/vst/` instead.
 - 18 parameters (all automatable) on 2 pages
 
 ## Playing it
 
 The walk-through, with what to check when nothing plays: [docs/sequencers.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/sequencers.md).
 
-MPC OS ignores a plugin's own MIDI output, so Grids opens its own MIDI port (MPC lists it as **[SEQ] Grids MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
+MPC OS ignores a plugin's own MIDI output, so Drum Map opens its own MIDI port (MPC lists it as **[SEQ] Drum Map MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
-1. Put Grids on a plugin track. It needs no notes: it plays when MPC's transport runs.
-2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Grids MIDI Out**.
-3. On the track(s) that should play, set **MIDI Input Port** to that port and **Monitor** to **In** (not Auto, which only listens while that track is selected). Not on Grids' own track, or it hears itself.
+1. Put Drum Map on a plugin track. It needs no notes: it plays when MPC's transport runs.
+2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Drum Map MIDI Out**.
+3. On the track(s) that should play, set **MIDI Input Port** to that port and **Monitor** to **In** (not Auto, which only listens while that track is selected). Not on Drum Map's own track, or it hears itself.
 4. Press play: it follows MPC's tempo and transport (MIDI clock from the plugin host).
 
-Grids makes no sound of its own.
+Drum Map makes no sound of its own.
 
 ## Pages
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. GRIDS
+### 1. DRUM MAP
 
-<img src="screenshots/page_0.png" width="760" alt="Grids, page GRIDS">
+<img src="screenshots/page_0.png" width="760" alt="Drum Map, page DRUM MAP">
 
 Q-Link columns: **1** MAP X, MAP Y, CHAOS  ·  **2** BD FILL, SD FILL, HH FILL  ·  **3** MODE, SWING  ·  **4** BD LEN, SD LEN, HH LEN
 
 ### 2. NOTES
 
-<img src="screenshots/page_1.png" width="760" alt="Grids, page NOTES">
+<img src="screenshots/page_1.png" width="760" alt="Drum Map, page NOTES">
 
 Q-Link columns: **1** BD NOTE, SD NOTE, HH NOTE  ·  **2** ACCENT VEL, NORMAL VEL  ·  **3** CHANNEL, RESOLUTION
 
@@ -45,7 +47,7 @@ Q-Link columns: **1** BD NOTE, SD NOTE, HH NOTE  ·  **2** ACCENT VEL, NORMAL VE
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
-**From the release:** download `SEQ-Grids-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-grids/releases),
+**From the release:** download `SEQ-Drum-Map-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-drum-map/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 
@@ -113,5 +115,5 @@ on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/
 ## Development
 
 This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`mutable-instruments/grids`), next to the other plugins
-and the tools that made its screen, and published to [mpc-vst-grids](https://github.com/saustin2010/mpc-vst-grids) for its
+and the tools that made its screen, and published to [mpc-vst-drum-map](https://github.com/saustin2010/mpc-vst-drum-map) for its
 releases. Issues and pull requests are welcome in either.

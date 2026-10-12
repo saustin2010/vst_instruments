@@ -1,15 +1,17 @@
-# Elements
+# Modal Voice
 
-**Synth** · Mutable Instruments Elements: a modal synthesis voice you bow, blow and strike, with 12 presets. · maker in MPC: Mutable Instruments · licence: MIT
+**Synth** · Modal Voice: a modal synthesis voice you bow, blow and strike, with 12 presets, from Émilie Gillet's open-source Elements. · maker in MPC: Émilie Gillet · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Elements on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Modal Voice on the MPC touchscreen">
 
-Elements models an acoustic instrument in two halves. The exciter bows, blows (with a flow of noise through a tube) or strikes (mallets, plectrums, particles); the resonator is a bank of modes that rings like a string, a plate, a bar or a bell, with GEOMETRY, BRIGHTNESS, DAMPING and POSITION shaping it, followed by a stereo reverb space. This port runs Mutable's own Elements DSP: MIDI notes become the module's gate, pitch and strike strength (velocity), and LEGATO lets a held note glide without re-striking. MODEL's fourth entry is the module's hidden "Ominous" voice. Page 1 is laid out like the module's panel.
+Formerly **Elements**, renamed on 2026-10-12: Mutable Instruments asks that its name and its module names not be used on derivative works, so the plugin has a name of its own and Émilie Gillet, who wrote the code, as its maker. Its sound is Émilie Gillet's open-source Elements code (Mutable Instruments).
+
+Modal Voice models an acoustic instrument in two halves. The exciter bows, blows (with a flow of noise through a tube) or strikes (mallets, plectrums, particles); the resonator is a bank of modes that rings like a string, a plate, a bar or a bell, with GEOMETRY, BRIGHTNESS, DAMPING and POSITION shaping it, followed by a stereo reverb space. This port runs Mutable's own Elements DSP: MIDI notes become the module's gate, pitch and strike strength (velocity), and LEGATO lets a held note glide without re-striking. MODEL's fourth entry is the module's hidden "Ominous" voice. Page 1 is laid out like the module's panel.
 
 ## On the MPC
 
-- In the plugin browser: **[SYN] Elements** by **Mutable Instruments** (Synth)
-- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [SYN] Elements/`, holding `elements.so`, its screen. The vst_instruments installer puts `elements.so` in `/sdcard/vst/` instead.
+- In the plugin browser: **[SYN] Modal Voice** by **Émilie Gillet** (Synth)
+- Files: the release installs one folder, `/sdcard/Synths/Émilie Gillet - VST - [SYN] Modal Voice/`, holding `elements.so`, its screen. The vst_instruments installer puts `elements.so` in `/sdcard/vst/` instead.
 - 22 parameters (all automatable) on 2 pages
 
 ## Playing it
@@ -20,9 +22,9 @@ Add it to a **plugin track** and play it from the pads, a keyboard or a MIDI cli
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. ELEMENTS
+### 1. MODAL VOICE
 
-<img src="screenshots/page_0.png" width="760" alt="Elements, page ELEMENTS">
+<img src="screenshots/page_0.png" width="760" alt="Modal Voice, page MODAL VOICE">
 
 Q-Link columns (bank 1): **1** BOW, BOW TIMBRE  ·  **2** BLOW, FLOW, BLOW TIMBRE  ·  **3** STRIKE, MALLET, STRK TIMBRE  ·  **4** GEOMETRY, BRIGHTNESS, DAMPING, POSITION
 
@@ -30,7 +32,7 @@ Q-Link columns (bank 2): **1** CONTOUR  ·  **2** MODEL  ·  **3** SPACE
 
 ### 2. PLAY
 
-<img src="screenshots/page_1.png" width="760" alt="Elements, page PLAY">
+<img src="screenshots/page_1.png" width="760" alt="Modal Voice, page PLAY">
 
 Q-Link columns: **1** OCTAVE, FINE, BEND RANGE  ·  **2** LEGATO, VELOCITY, SIGNATURE  ·  **3** VOLUME
 
@@ -38,7 +40,7 @@ Q-Link columns: **1** OCTAVE, FINE, BEND RANGE  ·  **2** LEGATO, VELOCITY, SIGN
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
-**From the release:** download `SYN-Elements-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-elements/releases),
+**From the release:** download `SYN-Modal-Voice-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-modal-voice/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 
@@ -104,5 +106,5 @@ on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/
 ## Development
 
 This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`mutable-instruments/elements`), next to the other plugins
-and the tools that made its screen, and published to [mpc-vst-elements](https://github.com/saustin2010/mpc-vst-elements) for its
+and the tools that made its screen, and published to [mpc-vst-modal-voice](https://github.com/saustin2010/mpc-vst-modal-voice) for its
 releases. Issues and pull requests are welcome in either.

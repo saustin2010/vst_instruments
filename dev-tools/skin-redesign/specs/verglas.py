@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 from _seq import tidy
 
-p = tidy(Port("verglas", "Verglas", ["CLOUDS", "GRANULAR FX"]))
+p = tidy(Port("verglas", "Verglas", ["TEXTURE", "GRANULAR FX"]))
 p.set("pitch", display="int")
 p.names({"position": "POSITION", "size": "SIZE", "pitch": "PITCH", "density": "DENSITY", "texture": "TEXTURE",
          "feedback": "FEEDBACK", "reverb": "REVERB", "dry_wet": "DRY/WET", "mode": "MODE", "freeze": "FREEZE",

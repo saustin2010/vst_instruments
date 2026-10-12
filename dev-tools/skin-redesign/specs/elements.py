@@ -6,7 +6,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 
-p = Port("elements", "Elements", ["MODAL", "SYNTHESIS"])
+p = Port("elements", "Modal Voice", ["MODAL", "SYNTHESIS"])
 p.names({"contour": "CONTOUR", "bow": "BOW", "bow_timbre": "BOW TIMBRE", "blow": "BLOW", "flow": "FLOW",
          "blow_timbre": "BLOW TIMBRE", "strike": "STRIKE", "mallet": "MALLET", "strike_timbre": "STRK TIMBRE",
          "model": "MODEL", "geometry": "GEOMETRY", "brightness": "BRIGHTNESS", "damping": "DAMPING",

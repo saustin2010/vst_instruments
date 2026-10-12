@@ -32,5 +32,5 @@ jobs:
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
       plugin_id: rings-fx
       license: MIT
-      about: "Rings as an audio effect: the track's sound excites the resonator, with 12 presets."
+      about: "Resonator FX: Resonator as an audio effect, the track's sound excites the resonator, with 12 presets."
       dry_run: ${{ inputs.dry_run }}

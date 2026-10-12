@@ -1,17 +1,19 @@
-# Rings
+# Resonator
 
-**Synth** · Mutable Instruments Rings: a resonator, strummed by the notes you play, with 14 presets. · maker in MPC: Mutable Instruments · licence: MIT
+**Synth** · Resonator: a resonator strummed by the notes you play, with 14 presets, from Émilie Gillet's open-source Rings. · maker in MPC: Émilie Gillet · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Rings on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Resonator on the MPC touchscreen">
 
-Rings is a resonator with seven models (a modal resonator, sympathetic strings, a string, an FM voice, sympathetic chords, a string with reverb, and the module's hidden "Disastrous Peace" string synth), shaped by STRUCTURE, BRIGHTNESS, DAMPING and POSITION, with one, two or four voices ringing at once. Here every note strums it with Rings' internal exciter (velocity sets how hard) and the voices rotate as on the module. The string synth's effect (formant, chorus, reverb, ensemble) is SYNTH FX. Runs Mutable's own DSP.
+Formerly **Rings**, renamed on 2026-10-12: Mutable Instruments asks that its name and its module names not be used on derivative works, so the plugin has a name of its own and Émilie Gillet, who wrote the code, as its maker. Its sound is Émilie Gillet's open-source Rings code (Mutable Instruments).
+
+Resonator has seven models (a modal resonator, sympathetic strings, a string, an FM voice, sympathetic chords, a string with reverb, and the module's hidden "Disastrous Peace" string synth), shaped by STRUCTURE, BRIGHTNESS, DAMPING and POSITION, with one, two or four voices ringing at once. Here every note strums it with Rings' internal exciter (velocity sets how hard) and the voices rotate as on the module. The string synth's effect (formant, chorus, reverb, ensemble) is SYNTH FX. Runs Mutable's own DSP.
 
 The module has no presets, so the port brings 14 (Init plus Glass Marimba, Tubular Bell, Wood Block, Sympathetic Sitar, Chord Harp, Nylon String, Steel String, Dulcimer, FM Tines, FM Gong, Verb String, Synth Strings and Choir Pad), in MPC's PRESET menu; each sets every control, with levels evened out.
 
 ## On the MPC
 
-- In the plugin browser: **[SYN] Rings** by **Mutable Instruments** (Synth)
-- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [SYN] Rings/`, holding `rings.so`, its screen. The vst_instruments installer puts `rings.so` in `/sdcard/vst/` instead.
+- In the plugin browser: **[SYN] Resonator** by **Émilie Gillet** (Synth)
+- Files: the release installs one folder, `/sdcard/Synths/Émilie Gillet - VST - [SYN] Resonator/`, holding `rings.so`, its screen. The vst_instruments installer puts `rings.so` in `/sdcard/vst/` instead.
 - 12 parameters (all automatable) on 1 page
 
 ## Playing it
@@ -22,9 +24,9 @@ Add it to a **plugin track** and play it from the pads, a keyboard or a MIDI cli
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. RINGS
+### 1. RESONATOR
 
-<img src="screenshots/page_0.png" width="760" alt="Rings, page RINGS">
+<img src="screenshots/page_0.png" width="760" alt="Resonator, page RESONATOR">
 
 Q-Link columns: **1** MODEL, POLYPHONY  ·  **2** STRUCTURE, BRIGHTNESS, DAMPING, POSITION  ·  **3** VELOCITY, OCTAVE, BEND RANGE, SYNTH FX  ·  **4** WIDTH, VOLUME
 
@@ -32,7 +34,7 @@ Q-Link columns: **1** MODEL, POLYPHONY  ·  **2** STRUCTURE, BRIGHTNESS, DAMPING
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
-**From the release:** download `SYN-Rings-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-rings/releases),
+**From the release:** download `SYN-Resonator-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-resonator/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 
@@ -98,5 +100,5 @@ on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/
 ## Development
 
 This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`mutable-instruments/rings`), next to the other plugins
-and the tools that made its screen, and published to [mpc-vst-rings](https://github.com/saustin2010/mpc-vst-rings) for its
+and the tools that made its screen, and published to [mpc-vst-resonator](https://github.com/saustin2010/mpc-vst-resonator) for its
 releases. Issues and pull requests are welcome in either.
