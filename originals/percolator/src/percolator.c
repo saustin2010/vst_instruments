@@ -1,9 +1,9 @@
 /* Percolator engine: parameters, MIDI, kits, the LFO and the master section (BBD delay, compressor, volume).
  *
- * MIDI: notes 36-39 (C1-D#1) play voices 1-4. With KEYS on a voice, every other note plays that voice pitched (C3 = as
- * tuned) and pitch bend bends it +-2 semitones. MIDI MODE MULTI 1-4 / 2-5 (the Perkons' multi-channel mode): channels
- * 1-4 / 2-5 play voices 1-4 pitched, each with its own pitch bend; other channels play as above. A voice whose DECAY is
- * at the top drones while its note is held. CC 120 / 123 stop everything. */
+ * MIDI: each voice has a NOTE (36-39, C1-D#1, to start with), a CHANNEL (ALL or 1-16) and KEYS (see e_midi): with
+ * KEYS on, notes play it pitched (C3 = as tuned) and pitch bend on its channel bends it +-2 semitones. Several voices
+ * on one note play together. A voice whose DECAY is at the top drones while its note is held. CC 120 / 123 stop
+ * everything. */
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,6 +54,7 @@ const mpc_engine_t *mpc_engine(void);
 #define VVCF(v) VK(v, 10)
 #define VDEPTH(v, k) (P_V1_M_TUNE + MSTRIDE * (v) + (k))
 #define VCOMP(v) (P_V1_COMP + (v))
+#define VIO(v, p) ((p) + (P_V2_NOTE - P_V1_NOTE) * (v))   /* a voice's NOTE / CH / KEYS / OUT: VIO(v, P_V1_CH) */
 
 static int find_key(const char *key) {
     for (int i = 0; i < NP; i++)
@@ -184,21 +185,27 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
     perc_t *P = inst;
     apply_kit(P);
     if (len > 0 && m[0] < 0xF0) TRACE("midi %02x %02x %02x (%d)", m[0], len > 1 ? m[1] : 0, len > 2 ? m[2] : 0, len);
-    if (len < 2 || P->pv[P_OUTPUT] >= 1) return;   /* a tap plays the main instance's voice, not its own */
+    if (len < 2 || P->pv[P_OUTPUT] >= 1) return;   /* a tap plays the main instance's OUT, not its own voices */
     int st = m[0] & 0xF0, ch = m[0] & 0x0F, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
     if (st == 0x90 && d2 > 0) {
-        int vi = -1, pitched = 1, mode = (int)P->pv[P_MIDI_MODE], first = mode == 2 ? 1 : 0;   /* MULTI 1-4 / 2-5 */
-        if (mode && ch >= first && ch < first + NV) vi = ch - first;   /* MULTI: a voice per channel, every note pitched */
-        else if (d1 >= NOTE0 && d1 < NOTE0 + NV) {
-            vi = d1 - NOTE0;
-            pitched = 0;
-        } else if (P->pv[P_KEYS] >= 1) vi = (int)P->pv[P_KEYS] - 1;
-        if (vi < 0) return;
-        vparam_t vp;
-        vparams(P, vi, &vp);
-        voice_trigger(P, vi, &vp, (float)d2, d1, pitched ? (float)(d1 - 60) : 0.0f);
-        P->v[vi].ch = ch;
-        P->v[vi].pitched = pitched;
+        /* who plays it: a voice with KEYS on and its own channel takes every note on that channel, pitched (the
+         * Perkons' MULTI); otherwise each voice whose NOTE it is (on ALL or this channel), as it's tuned; otherwise
+         * voices with KEYS on and ALL, pitched (the old KEYS: every other note) */
+        int hit = 0;
+        for (int pass = 0; pass < 3 && !hit; pass++)
+            for (int v = 0; v < NV; v++) {
+                int vch = (int)P->pv[VIO(v, P_V1_CH)], keys = P->pv[VIO(v, P_V1_KEYS)] >= 1;
+                int pitched = pass != 1;
+                if (pass == 0 ? !(keys && vch == ch + 1)
+                    : pass == 1 ? !((vch == 0 || vch == ch + 1) && (int)P->pv[VIO(v, P_V1_NOTE)] == d1)
+                    : !(keys && vch == 0)) continue;
+                vparam_t vp;
+                vparams(P, v, &vp);
+                voice_trigger(P, v, &vp, (float)d2, d1, pitched ? (float)(d1 - 60) : 0.0f);
+                P->v[v].ch = ch;
+                P->v[v].pitched = pitched;
+                hit = 1;
+            }
     } else if (st == 0x80 || st == 0x90) {
         for (int v = 0; v < NV; v++)
             if (P->v[v].note == d1 && P->v[v].ch == ch) voice_release(P, v);
@@ -232,21 +239,22 @@ static inline float hermite(const float *b, float pos) {
 }
 
 /* ---- voice taps -------------------------------------------------------------------------------------------- *
- * MPC plays only a plugin's first stereo pair (sd88me's multi-out test on a Force, 2026-09-30), so a voice gets a
- * track of its own another way: a second Percolator on that track with OUTPUT = TAP V<n> plays voice n of the main one
- * (the first instance with OUTPUT = MAIN), which leaves that voice out of its own mix and compressor (its FX SEND still
- * feeds the main delay). Every instance lives in one process with one copy of these statics, and their blocks run on
- * MPC's worker threads at the same time, in no fixed order. So the main one writes each voice into a ring here and
- * publishes how far it has written; a tap reads a block behind that, which it can always find written whichever of
- * the two ran first in a period (two behind if it only ever saw the main one run second), and the main one holds its
- * own output back a block while a voice is tapped, so the voices stay together. A tap that stops (removed, switched
- * back to MAIN) hands its voice back after 16 blocks. */
+ * MPC plays only a plugin's first stereo pair (sd88me's multi-out test on a Force, 2026-09-30), so voices get a track
+ * of their own another way: a second Percolator on that track with TRACK PLAYS = OUT <n> plays the voices the main one
+ * (the first with MAIN KIT) sends to OUT n (V<v> OUT; voice n to OUT n to start with), and the main one leaves them out
+ * of its own mix and compressor while that OUT has a tap (their FX SEND still feeds the main delay). Every instance
+ * lives in one process with one copy of these statics, and their blocks run on MPC's worker threads at the same time,
+ * in no fixed order. So the main one writes each OUT into a ring here and publishes how far it has written; a tap
+ * reads a block behind that, which it can always find written whichever of the two ran first in a period (two behind
+ * if it only ever saw the main one run second), and the main one holds its own output back a block while an OUT is
+ * tapped, so the voices stay together. A tap that stops (removed, set back to MAIN KIT) hands its voices back after
+ * 16 blocks. */
 static struct {
     uint32_t owner;                    /* the main instance writing the rings (its id), 0 = none */
     uint32_t gen;                      /* changes whenever the owner does: taps sync again */
     uint32_t wpos;                     /* frames written to the rings */
-    uint32_t seen[NV], seen_gen[NV];   /* each voice's tap: the last wpos it saw, under which gen */
-    float ring[NV][TAP_N];
+    uint32_t seen[NV], seen_gen[NV];   /* each OUT's tap: the last wpos it saw, under which gen */
+    float ring[NV][TAP_N];             /* OUT 1-4: the voices sent there */
 } tapbus;
 static uint32_t next_id = 1;
 
@@ -305,7 +313,7 @@ static inline float comp_run(float *env, const comp_t *c, float x) {
     return *env > c->thr ? x * powf(*env / c->thr, c->expo) * c->makeup : x * c->makeup;
 }
 
-/* A tap: voice vi of the main instance, through this instance's own compressor and VOLUME */
+/* A tap: OUT vi + 1 of the main instance, through this instance's own compressor and VOLUME */
 static void tap_render(perc_t *P, int vi, int16_t *out, int frames) {
     tap_release(P);
     for (int v = 0; v < NV; v++) {   /* its own voices stay quiet */
@@ -358,13 +366,14 @@ static void e_render(void *inst, int16_t *out, int frames) {
         return;
     }
     fpstate_t fp = ftz_on();
-    /* the voice taps: this one writes the rings if it is the main one, and leaves out the voices a tap plays */
-    int own = tap_claim(P), tapped[NV] = {0}, hold = 0;
+    /* the taps: this one writes OUT 1-4's rings if it is the main one, and leaves out the voices a tap plays */
+    int own = tap_claim(P), tapped[NV] = {0}, vout[NV], hold = 0;
     uint32_t w0 = own ? LOAD(tapbus.wpos) : 0, g = LOAD(tapbus.gen);
-    for (int v = 0; v < NV && own; v++) {
-        tapped[v] = LOAD(tapbus.seen_gen[v]) == g && w0 - LOAD(tapbus.seen[v]) < 16u * 128u;
-        hold |= tapped[v];
+    for (int o = 0; o < NV && own; o++) {
+        tapped[o] = LOAD(tapbus.seen_gen[o]) == g && w0 - LOAD(tapbus.seen[o]) < 16u * 128u;
+        hold |= tapped[o];
     }
+    for (int v = 0; v < NV; v++) vout[v] = (int)P->pv[VIO(v, P_V1_OUT)] - 1;   /* -1: MAIN */
     float target = bbd_seconds(P) * SR, rate = bbd_rate(P) * INV_SR;
     float dep = P->pv[P_FX_DEPTH] / 100.0f;
     float depth = dep * dep * fminf(0.012f, 0.5f * bbd_seconds(P)) * SR;
@@ -378,14 +387,16 @@ static void e_render(void *inst, int16_t *out, int frames) {
         int n = frames - off < SUB ? frames - off : SUB;
         float mix[SUB] = {0}, cbus[SUB] = {0}, send[SUB] = {0};
         lfo_step(P, n);
+        for (int o = 0; o < NV && own; o++)
+            for (int i = 0; i < n; i++) tapbus.ring[o][(w0 + off + i) & (TAP_N - 1)] = 0;
         for (int v = 0; v < NV; v++) {
             vparam_t vp;
             float y[SUB] = {0}, cs = P->pv[VCOMP(v)] / 100.0f;
             vparams(P, v, &vp);
             voice_block(P, v, &vp, y, send, n);
-            if (own)
-                for (int i = 0; i < n; i++) tapbus.ring[v][(w0 + off + i) & (TAP_N - 1)] = y[i];
-            if (!tapped[v])
+            if (own && vout[v] >= 0)
+                for (int i = 0; i < n; i++) tapbus.ring[vout[v]][(w0 + off + i) & (TAP_N - 1)] += y[i];
+            if (vout[v] < 0 || !tapped[vout[v]])
                 for (int i = 0; i < n; i++) {
                     mix[i] += y[i] * (1.0f - cs);
                     cbus[i] += y[i] * cs;
@@ -424,6 +435,12 @@ static void e_render(void *inst, int16_t *out, int frames) {
 
 static void set_value(perc_t *P, int i, const char *val) {
     const pdef_t *d = &PDEF[i];
+    if (i == P_KEYS) {   /* the one KEYS switch up to 1.2.0 (a project saved then): turns on that voice's KEYS */
+        int k = atoi(val);
+        if (k >= 1 && k <= NV) P->pv[VIO(k - 1, P_V1_KEYS)] = 1;
+        P->pv[P_KEYS] = 0;
+        return;
+    }
     if (d->kind == 0) P->pv[i] = clampf((float)atof(val), 0.0f, 100.0f);
     else if (d->kind == 1) {
         int x = atoi(val);

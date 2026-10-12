@@ -16,6 +16,8 @@ KNOBS = [("tune", "TUNE"), ("decay", "DECAY"), ("p1", "PARAM 1"), ("p2", "PARAM 
 ALGOS = {1: ["FOLD", "WAVE", "RES BD"], 2: ["FOLD", "WAVE", "FM"], 3: ["SNARE", "SLAP", "TOM"],
          4: ["NOISE", "METAL", "SAMPLE"]}
 DEPTHS = ["OFF"] + ["%d%%" % (10 * i) for i in range(1, 9)]
+NOTE_NAMES = ["%s%d" % (("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")[n % 12], n // 12 - 2)
+              for n in range(128)]   # MPC's names: 60 = C3, 36 = C1
 WAVES = ["SINE", "TRI", "RAMP", "SAW", "SQUARE", "S&H", "DRIFT"]
 
 # the Init kit (also the engine's defaults): 0..100 for knobs, option index for switches
@@ -69,22 +71,35 @@ def params():
     knob("lfo_speed", "LFO SPEED", 40, dynamic_display=True)
     opts("lfo_wave", "LFO WAVE", WAVES, 0)
     knob("lfo_level", "MOD LEVEL", 100)
-    opts("keys", "KEYS", ["OFF", "V1", "V2", "V3", "V4"], 0)
+    opts("keys", "KEYS", ["OFF", "V1", "V2", "V3", "V4"], 0)   # up to 1.2.0; since 2.0.0 it turns on that voice's KEYS
     for v in range(1, 5):
         for k, n in KNOBS:
             opts("v%d_m_%s" % (v, k), "V%d MOD %s" % (v, n), DEPTHS, 0)
     # appended 2026-10-10 (1.2.0): the selected mode's name per voice, for the readout under MODE
     for v in range(1, 5):
         P.append(dict(key="v%d_mode_name" % v, name="V%d MODE NAME" % v, min=0, max=0, display="string", type="readout"))
-    # appended 2026-10-12 (2.0.0): the Perkons' multi-channel MIDI (a voice per channel, played pitched)
-    opts("midi_mode", "MIDI MODE", ["SINGLE", "MULTI 1-4", "MULTI 2-5"], 0)
-    # appended 2026-10-12 (2.0.0): how much of each voice goes through the compressor (wet/dry); 100 = all of it, as before
+    # 2.0.0 (2026-10-12; not released before, so these were free to change until then): append-only from here on.
+    # How much of each voice goes through the compressor (wet/dry); 100 = all of it, as before
     for v in range(1, 5):
         knob("v%d_comp" % v, "V%d COMP SEND" % v, 100)
-    # appended 2026-10-12 (2.0.0): a voice on a track of its own (another Percolator on that track, set to TAP V<n>)
-    opts("output", "OUTPUT", ["MAIN", "TAP V1", "TAP V2", "TAP V3", "TAP V4"], 0)
-    # appended 2026-10-12 (2.0.0): the compressor's own output level (VOLUME is the whole kit's); 71 = as it comes out
+    # what this instance plays: the kit, or (on another track) the voices the main one sends to OUT 1-4
+    opts("output", "TRACK PLAYS", ["MAIN KIT", "OUT 1", "OUT 2", "OUT 3", "OUT 4"], 0)
+    # the compressor's own output level (VOLUME is the whole kit's); 71 = as it comes out
     knob("comp_level", "COMP LEVEL", 71, dynamic_display=True)
+    # each voice's MIDI and output (the MIDI & OUT page): the note that triggers it, the channel it hears, KEYS (every
+    # note on its channel plays it pitched; replaces the one KEYS switch and the Perkons' MULTI mode), its OUT
+    for v in range(1, 5):
+        P.append(dict(key="v%d_note" % v, name="V%d NOTE" % v, options=NOTE_NAMES, default=NOTE_NAMES[35 + v],
+                      type="stepper"))
+        P.append(dict(key="v%d_note_prev" % v, name="V%d NOTE DOWN" % v, momentary=True, step_of="v%d_note" % v,
+                      step_delta=-1))
+        P.append(dict(key="v%d_note_next" % v, name="V%d NOTE UP" % v, momentary=True, step_of="v%d_note" % v,
+                      step_delta=1))
+        # "send": the labels 1-16 would otherwise be read as option numbers (see MODE above)
+        opts("v%d_ch" % v, "V%d CHANNEL" % v, ["ALL"] + [str(c) for c in range(1, 17)], 0,
+             send=[str(c) for c in range(17)])
+        opts("v%d_keys" % v, "V%d KEYS" % v, ["OFF", "ON"], 0)
+        opts("v%d_out" % v, "V%d OUT" % v, ["MAIN", "OUT 1", "OUT 2", "OUT 3", "OUT 4"], v)
     return P
 
 
@@ -276,12 +291,12 @@ def layout():
     MY = 484                         # the MIX plate's top; its knobs level with the second knob row
     VROWS = (("tune", "decay", "p1", "p2"), ("cutoff", "drive"))
     MIX = ("level", "fx", "comp")
-    NOTE = ["C1", "C#1", "D1", "D#1"]  # each voice's note (src/percolator.h NOTE0)
     for v in range(1, 5):
         c = COL[v]
         L.append("[tab V%d]" % v)
         L.append("art file=images/skin/bg_v%d.png x=0 y=86 w=1280 h=628" % v)
-        html = h_panel(8, PY, 1264, PH, c, "VOICE %d" % v, "NOTE %d &middot; %s" % (35 + v, NOTE[v - 1]))
+        html = h_panel(8, PY, 1264, PH, c, "VOICE %d" % v, "NOTE")
+        L.append("readout cx=%d cy=%d w=70 h=26 vs=22 ink=dim box=no key=v%d_note" % (250, 121, v))   # its NOTE, live
         html += h_plate(SX, 142, SW, MY - 10 - 142, c)
         html += h_plate(SX, MY, SW, 670 - MY, c)
         html += h_text(SX + 16, MY + 10, "MIX", rgba(c, .8), 11, .18)
@@ -317,27 +332,22 @@ def layout():
                                                 for col in Q for k in col + ["-"] * (4 - len(col))))
         L.append("")
 
-    # MASTER page: the kit browser with how this instance plays (KEYS, MIDI MODE, OUTPUT), then a panel per Q-Link
-    # column: BBD delay, master (VOLUME and the compressor: THRESH, AMOUNT, LEVEL), modulation
+    # MASTER page: the kit browser, then a panel per Q-Link column: BBD delay, master (VOLUME and the compressor:
+    # THRESH, AMOUNT, LEVEL), modulation
     L.append("[tab MASTER]")
     L.append("art file=images/skin/bg_master.png x=0 y=86 w=1280 h=628")
     html = h_panel(8, 94, 1264, 152, COL["kit"], "KIT")
     html += h_panel(8, 256, 494, 450, COL["bbd"], "BBD DELAY")
     html += h_panel(512, 256, 376, 450, COL["mst"], "MASTER")
     html += h_panel(898, 256, 374, 450, COL["mod"], "MODULATION")
-    for cx, lab in ((790, "KEYS"), (965, "MIDI MODE"), (1155, "OUTPUT")):
-        html += h_ctext(cx, 136, lab, "#aba7c4", 13)
     # the compressor's knobs under a caption of their own, apart from VOLUME (the whole kit's)
     html += h_ctext(700, 466, "COMPRESSOR", rgba(COL["mst"], .9), 13)
     html += ('<div class="a" style="left:%dpx;top:%dpx;width:%dpx;height:0;border-top:1px solid %s"></div>'
              % (532, 456 - 86, 336, rgba(COL["mst"], .3)))
     art["bgs"].append({"name": "bg_master", "html": html})
-    L.append('stepper cx=300 cy=180 w=400 h=78 label="" key=kit get=kit_name style=dotmatrix')
-    L.append('button cx=555 cy=180 w=90 h=60 label="PREV" key=kit_prev')
-    L.append('button cx=655 cy=180 w=90 h=60 label="NEXT" key=kit_next')
-    L.append('popup cx=790 cy=186 w=150 h=48 label="" key=keys')
-    L.append('popup cx=965 cy=186 w=166 h=48 label="" key=midi_mode')
-    L.append('popup cx=1155 cy=186 w=190 h=48 label="" key=output')
+    L.append('stepper cx=520 cy=180 w=760 h=78 label="" key=kit get=kit_name style=dotmatrix')
+    L.append('button cx=1010 cy=180 w=120 h=60 label="PREV" key=kit_prev')
+    L.append('button cx=1150 cy=180 w=120 h=60 label="NEXT" key=kit_next')
     knob("fx_time", 90, 362, "bbd", 40)
     knob("fx_feedback", 90, 562, "bbd", 40)
     knob("fx_rate", 250, 362, "bbd", 40)
@@ -351,7 +361,33 @@ def layout():
     knob("lfo_level", 990, 562, "mod", 40)
     L.append('popup cx=1170 cy=374 w=160 h=48 label="WAVE" key=lfo_wave')
     L.append('qlinks "MASTER" = fx_time,fx_feedback,fx_rate,fx_depth,volume,comp_thresh,comp_amt,comp_level,'
-             'lfo_speed,lfo_level,lfo_wave,-,kit,keys,midi_mode,output')
+             'lfo_speed,lfo_level,lfo_wave,-,kit')
+    L.append("")
+
+    # MIDI & OUT page (owner, 2026-10-12: "they need their own page", "each voice independently for midi notes and
+    # outputs"): what this instance plays, then a panel per voice = a Q-Link column: NOTE, CHANNEL, KEYS, OUT
+    L.append("[tab MIDI & OUT]")
+    L.append("art file=images/skin/bg_io.png x=0 y=86 w=1280 h=628")
+    html = h_panel(8, 94, 1264, 112, COL["mst"], "THIS TRACK PLAYS")
+    html += h_text(28, 140, "MAIN KIT: THE FOUR VOICES, EACH TO ITS OUT BELOW (IN THIS MIX UNLESS A TAP PLAYS THAT OUT)",
+                   "#aba7c4", 12, .12, 600)
+    html += h_text(28, 162, "OUT 1-4: A SECOND PERCOLATOR ON ANOTHER TRACK, PLAYING THE VOICES SENT TO THAT OUT",
+                   "#aba7c4", 12, .12, 600)
+    html += h_text(28, 184, "KEYS ON: NOTES PLAY THE VOICE PITCHED (C3 = AS TUNED); WITH A CHANNEL OF ITS OWN, EVERY NOTE THERE",
+                   "#6a6782", 12, .12, 600)
+    L.append('popup cx=1140 cy=150 w=220 h=52 label="" key=output')
+    for i, v in enumerate(range(1, 5)):
+        x, c = 8 + 318 * i, COL[v]
+        cx = x + 154
+        html += h_panel(x, 216, 308, 490, c, "VOICE %d" % v)
+        for y, lab in ((286, "NOTE"), (386, "CHANNEL"), (486, "KEYS"), (586, "OUT")):
+            html += h_ctext(cx, y, lab, "#aba7c4", 13)
+        L.append('stepper cx=%d cy=%d w=250 h=56 label="" key=v%d_note style=dotmatrix' % (cx, 334, v))
+        L.append('popup cx=%d cy=%d w=200 h=48 label="" key=v%d_ch' % (cx, 430, v))
+        enum("enum_h", cx, 530, "v%d_keys" % v, v, 100, 46)
+        L.append('popup cx=%d cy=%d w=200 h=48 label="" key=v%d_out' % (cx, 630, v))
+    art["bgs"].append({"name": "bg_io", "html": html})
+    L.append('qlinks "MIDI & OUT" = ' + ",".join("v%d_%s" % (v, k) for v in range(1, 5) for k in ("note", "ch", "keys", "out")))
     L.append("")
 
     # MOD pages: the LFO depth of each voice knob (the hardware's MODULATION DESTINATION / DEPTH), each where its knob

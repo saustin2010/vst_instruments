@@ -8,8 +8,6 @@
 #include "params_def.h"
 
 #define NV 4            /* voices */
-#define NOTE0 36        /* voice 1's note: 36-39 (C1-D#1), the usual drum notes (Force, TR-MPC; pads 1-4 of bank B on an
-                           MPC plugin track) */
 #define NK 8            /* knobs per voice */
 #define SUB 32          /* modulation and coefficient updates every SUB frames */
 #define MAX_KITS 512
