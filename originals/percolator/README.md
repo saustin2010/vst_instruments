@@ -20,7 +20,7 @@ which mode, where each knob is, the LFO, the delay), but it won't sound exactly 
 - Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/`, holding `percolator.so`, its screen. The vst_instruments installer puts `percolator.so` in `/sdcard/vst/` instead.
 - Data folder: `percolator/` next to `percolator.so` (with the vst_instruments installer, `/sdcard/vst/percolator/`):
   where the kit packs go
-- 127 parameters (all automatable) on 8 pages, one Q-Link page each
+- 123 parameters (all automatable) on 8 pages, one Q-Link page each
 - 8 kits built in, in MPC's PRESET menu; Erica Synths' four free Pērkons kit packs add 169 more ([below](#pērkons-kit-packs))
 
 ## Playing it
@@ -31,12 +31,13 @@ Each voice's MIDI is set on the **MIDI & OUT** page:
   (a Force's drum pads, TR-MPC); on an MPC plugin track those are pads 1-4 of **bank B**. Give two voices the same
   note and they play together. (Up to 1.2.0 the notes were fixed at 20-23, bank A: a sequence recorded on those needs
   moving, or set the NOTEs to G#-1, A-1, A#-1, B-1.)
-- **CHANNEL**: ALL (the default) or 1-16, the MIDI channel the voice listens on.
-- **KEYS**: on, notes play the voice pitched (C3 = as tuned) and pitch bend on that channel bends it ±2 semitones. With
-  CHANNEL on ALL it takes every note that isn't a voice's NOTE (as KEYS did up to 1.2.0; a project saved then turns
-  this on for its KEYS voice). With a channel of its own it takes every note on that channel: the Pērkons' MULTI
-  mode is each voice on its own channel with KEYS on. Whether MPC hands a plugin its notes on their own channel is
-  still to be checked on a device.
+- **KEYS CH**: the MIDI channel on which every note plays the voice **pitched** (C3 = as tuned), with that channel's
+  pitch bend (±2 semitones). To start with **channels 2-5 for voices 1-4**, so a MIDI track or keyboard on channel 3
+  plays voice 2 melodically while the pads (channel 1) trigger the kit: the Pērkons' MULTI mode, always on. Two voices
+  on one KEYS CH play together. **OFF**: never pitched. **ALL**: every note that isn't a voice's NOTE, on any channel
+  (the KEYS switch up to 1.2.0; a project saved then gets ALL on its KEYS voice). On its KEYS CH a voice takes every
+  note, its own NOTE too; on other channels its NOTE plays it as tuned. Whether MPC hands a plugin its notes on their
+  own channel is still to be checked on a device.
 - Velocity sets the level.
 - **DECAY at the top = DRONE**: the voice sounds for as long as its note is held, then fades in 0.35 s (on the
   hardware a drone never stops; here the note length decides).
@@ -59,6 +60,11 @@ the panel's title bar.
 After the engine, every voice has the same end: the filter (HP / BP / LP, 20 Hz-20 kHz, no resonance control, like
 the hardware's), the overdrive, then LEVEL, the FX SEND to the delay and the COMP SEND to the compressor.
 
+**Voice 4's samples.** Without a pack, the three slots hold a closed hat, an open hat and a ride, synthesised at
+start-up. A pack that comes with `SAMPLES/1.wav 2.wav 3.wav` (Pērkons pack 2 and 4) replaces them for its own kits.
+Then PARAM 2 picks the start point or, when the WAV has cue points (pack 4's breaks), the slice. On the Pērkons this
+needs two settings (Voice 4 / Algo 3 PARAM 2 = start, slicing on); here it follows from the pack having samples.
+
 ## The compressor
 
 Each voice's **COMP SEND** sets how much of it goes through the compressor (wet) and how much goes past it (dry); the
@@ -75,27 +81,26 @@ Each voice's own volume is its **LEVEL**, in the MIX panel beside its COMP SEND.
 
 MPC plays only a plugin's first stereo pair (sd88me's test on a Force), so a plugin can't send voices to outputs of
 their own. Instead, voices can get **a track of their own**: each voice's **OUT** (MIDI & OUT page) sends it to
-**MAIN** or to **OUT 1-4** (to start with, voice 1 to OUT 1 and so on). Insert a second Percolator on another track
-and set its **TRACK PLAYS** (top of the MIDI & OUT page) to **OUT 1-4**: it plays the voices the main Percolator (the
-first one on MAIN KIT) sends to that OUT, and the main one leaves them out of its own mix and compressor. That track
-has its own mixer channel, inserts and outputs.
+**MAIN** or to **OUT 1-4** (to start with, voice 1 to OUT 1 and so on), and something on another track plays an OUT:
 
-- Until a second Percolator plays an OUT, the voices sent there stay in the main mix, so nothing goes quiet by
-  accident. A voice on **MAIN** never leaves it.
+- **[FX] Percolator OUT** ([its README](../percolatorout/)), an insert effect: put it in any track's insert slot, an
+  **audio track** will do, and pick the OUT. It doesn't take an instrument plugin's place and costs next to nothing.
+- Or a second Percolator with **TRACK PLAYS** (top of the MIDI & OUT page) = **OUT 1-4**, which also puts its own
+  VOLUME and compressor on that OUT (only those do anything there; it ignores MIDI).
+
+Either way, those voices play on that track, with its fader, inserts and outputs, and leave this Percolator's own mix
+and compressor; their FX SEND still feeds its delay.
+
+- Until something plays an OUT, the voices sent there stay in the main mix, so nothing goes quiet by accident. A voice
+  on **MAIN** never leaves it.
 - Several voices can share an OUT (say both hats on OUT 4): their track plays them together.
-- On the second Percolator only VOLUME and the compressor (which then works on that OUT alone) do anything; the
-  voices' knobs, their FX SEND to the main one's delay and the kit stay on the main Percolator, and it ignores MIDI.
-- One that's removed or set back to MAIN KIT hands its voices back to the main mix within 16 blocks (46 ms).
+- Removed or switched away, an OUT's voices come back to the main mix within 16 blocks (46 ms).
 - An OUT plays a block (2.9 ms) after the main one would have; while an OUT is played, the main one holds its own
   output back by the same block so they stay together. (If MPC always ran that track before the main one's, it would
   settle two blocks late, one behind the rest; offline both orders and a mix of them work.)
 - With two Percolators on MAIN KIT in a project, OUT 1-4 follow the first one that played.
-
-
-**Voice 4's samples.** Without a pack, the three slots hold a closed hat, an open hat and a ride, synthesised at
-start-up. A pack that comes with `SAMPLES/1.wav 2.wav 3.wav` (Pērkons pack 2 and 4) replaces them for its own kits.
-Then PARAM 2 picks the start point or, when the WAV has cue points (pack 4's breaks), the slice. On the Pērkons this
-needs two settings (Voice 4 / Algo 3 PARAM 2 = start, slicing on); here it follows from the pack having samples.
+- How it works: OUT 1-4 live in a small shared-memory region every Percolator and Percolator OUT maps when it's
+  created (`src/tapbus.h`).
 
 ## Pages
 
@@ -137,7 +142,7 @@ buttons), in the voice pages' order (TUNE DECAY PARAM 1 PARAM 2 / CUTOFF DRIVE F
 <img src="screenshots/page_7.png" width="760" alt="Percolator, each voice's MIDI and output">
 
 What this track plays (TRACK PLAYS: MAIN KIT, or OUT 1-4 of the main Percolator, [above](#separate-outputs-out-1-4)),
-then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link), CHANNEL, KEYS and OUT
+then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link), KEYS CH and OUT
 ([Playing it](#playing-it)).
 
 ## Kits
@@ -262,11 +267,12 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   back, and each set loaded a kit. 1.2.0: a kit set waits for the next block, so that pair loads nothing; and MODE
   steps on its Q-Link (its 1/2/3 labels had clashed with the value the engine reports). Both confirmed on the Live II.
 - 2.0.0, not yet released (2026-10-12): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
-  at 20-23), CHANNEL, KEYS (pitched; the Pērkons' MULTI with a channel each) and OUT (MAIN, OUT 1-4); COMP SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it (it was half made up, so
+  at 20-23), KEYS CH (channels 2-5 play voices 1-4 pitched: the Pērkons' MULTI) and OUT (MAIN, OUT 1-4, played on
+  another track by [FX] Percolator OUT or a second Percolator); COMP SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it (it was half made up, so
   a high THRESH made the kit up to 6.6 dB quieter), and COMP LEVEL, its own output; each voice's LEVEL, FX SEND and
-  COMP SEND in a MIX panel (Q-Link column 4); a second Percolator on another track plays OUT 1-4 (TRACK PLAYS).
+  COMP SEND in a MIX panel (Q-Link column 4).
   Offline: build and host test PASSED, `check_skin.py` OK; AMOUNT 0 is the old engine to 1 LSB over 1.4M frames; every
-  THRESH x AMOUNT louder than off on the built-in kits; the MIDI routing (20 cases); OUT 1-4 in one process in either
+  THRESH x AMOUNT louder than off on the built-in kits; the MIDI routing (22 cases); OUT 1-4 in one process in either
   order, random order and on two threads with jitter (every block is the voices sent there alone; main + OUT = the
   kit), two voices on one OUT, a voice kept on MAIN. Installed on the Live II for the owner's tests; to check: the
   notes, channels and KEYS, an OUT on a second track, the compressor by ear.

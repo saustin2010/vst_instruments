@@ -79,8 +79,13 @@ parameter index, so existing projects keep working.
     & OUT page with each voice's NOTE (36-39 to start with; were fixed at 20-23), CHANNEL, KEYS and OUT (MAIN, OUT
     1-4: a second Percolator on another track plays an OUT, since MPC plays only a plugin's first stereo pair); COMP
     SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it, COMP LEVEL; a MIX panel per
-    voice. Left: the owner's device checks (notes, channels, an OUT on a second track, the compressor by ear; they
-    heard it mute at AMOUNT 0, not reproduced offline); then release 2.0.0 and update its catalogue entry.
+    voice. KEYS CH per voice (channels 2-5 play voices 1-4 pitched) replaced CHANNEL + KEYS. Left: the owner's device
+    checks (notes, KEYS CH, an OUT on another track, the compressor by ear; they heard it mute at AMOUNT 0, not
+    reproduced offline); then release 2.0.0 and update its catalogue entry (screenshot: page_1, the voice page).
+- [ ] **Percolator OUT** ([originals/percolatorout](originals/percolatorout/), 2026-10-12): an insert effect that plays
+  one of Percolator's OUT 1-4 on its own track (owner: an audio track instead of a second plugin). Offline tests
+  passed. Left: install (new: one MPC restart), check on an audio track (does it run its insert with no recording
+  playing?), then a release with Percolator 2.0.0 (its own repo, or Percolator's, as TR-MPC ships its Tap FX).
 - [ ] **Stevequencer** ([originals/stevequencer](originals/stevequencer/)): a 16-step, four-page (64-step) melodic
   sequencer edited from the Q-Links (pitch, length, on/off, velocity, chance, ratchet per step). Browser prototype
   2026-10-04 (`design/prototype.html`); built and installed on the Live II the same day (engine, 418 parameters, 6
