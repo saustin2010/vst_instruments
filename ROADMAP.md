@@ -79,16 +79,17 @@ parameter index, so existing projects keep working.
     & OUT page with each voice's NOTE (36-39 to start with; were fixed at 20-23), CHANNEL, KEYS and OUT (MAIN, OUT
     1-4: a second Percolator on another track plays an OUT, since MPC plays only a plugin's first stereo pair); COMP
     SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it, COMP LEVEL; a MIX panel per
-    voice. KEYS CH per voice (channels 2-5 play voices 1-4 pitched) replaced CHANNEL + KEYS. Left: the owner's device
-    checks (notes, KEYS CH, an OUT on another track, the compressor by ear; they heard it mute at AMOUNT 0, not
-    reproduced offline); then release 2.0.0 and update its catalogue entry (screenshot: page_1, the voice page).
+    voice. On the Live II (2026-10-12) the owner's checks passed (notes, an OUT on an audio track, the compressor, the
+    timing) except a MIDI channel per voice: MPC hands a plugin every note-on on channel 1 (traced), so KEYS became
+    OFF / ALL / ZONE (an octave per voice, C2-C5 to start with). Left: zones on the device; then release 2.0.0 and
+    update its catalogue entry (screenshot: page_1, the voice page).
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it.
 - [ ] **Percolator OUT** ([originals/percolatorout](originals/percolatorout/), 2026-10-12): an insert effect that plays
   one of Percolator's OUT 1-4 on its own track (owner: an audio track instead of a second plugin). Offline tests
-  passed. Left: install (new: one MPC restart), check on an audio track (does it run its insert with no recording
-  playing?), then a release with Percolator 2.0.0 (its own repo, or Percolator's, as TR-MPC ships its Tap FX).
+  passed; installed and working on an audio track on the Live II (2026-10-12). Left: a release with Percolator 2.0.0
+  (its own repo, or Percolator's, as TR-MPC ships its Tap FX).
 - [ ] **Stevequencer** ([originals/stevequencer](originals/stevequencer/)): a 16-step, four-page (64-step) melodic
   sequencer edited from the Q-Links (pitch, length, on/off, velocity, chance, ratchet per step). Browser prototype
   2026-10-04 (`design/prototype.html`); built and installed on the Live II the same day (engine, 418 parameters, 6

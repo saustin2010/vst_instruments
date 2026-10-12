@@ -61,8 +61,8 @@ different layouts never read each other.
   and as 32-bit ARM Linux code (`/dev/shm`, as on the MPC): the effect plays exactly voice 2, a block late, every
   block, whichever runs first; Percolator plays the rest without it; THRU adds the input; with Percolator removed it
   goes quiet and says so.
-- Not yet on a device. To check: that an audio track runs its insert while it isn't playing a recording, the timing
-  by ear, and the status.
+- On the Live II (2026-10-12): installed (one MPC restart), and on an audio track with nothing recorded it plays its
+  OUT, in time with the kit (owner: "ok all works").
 
 ## Files
 
