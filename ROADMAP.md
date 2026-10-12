@@ -80,9 +80,10 @@ parameter index, so existing projects keep working.
     1-4: a second Percolator on another track plays an OUT, since MPC plays only a plugin's first stereo pair); COMP
     SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it, COMP LEVEL; a MIX panel per
     voice. On the Live II (2026-10-12) the owner's checks passed (notes, an OUT on an audio track, the compressor, the
-    timing) except a MIDI channel per voice: MPC hands a plugin every note-on on channel 1 (traced), so KEYS became
-    OFF / ALL / ZONE (an octave per voice, C2-C5 to start with). Left: zones on the device; then release 2.0.0 and
-    update its catalogue entry (screenshot: page_1, the voice page).
+    timing) except a MIDI channel per voice: MPC hands a plugin's track every note-on on channel 1 (traced). Zones
+    instead were turned down; Percolator now opens its own MIDI input port, Percolator MIDI In, which a MIDI track
+    sends to on its channel. Left: that port on the device (listed as a track's output? channels? timing); then
+    release 2.0.0 and update its catalogue entry (screenshot: page_1, the voice page).
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it.
