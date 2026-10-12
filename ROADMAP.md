@@ -82,8 +82,11 @@ parameter index, so existing projects keep working.
     voice. On the Live II (2026-10-12) the owner's checks passed (notes, an OUT on an audio track, the compressor, the
     timing) except a MIDI channel per voice: MPC hands a plugin's track every note-on on channel 1 (traced). Zones
     instead were turned down; Percolator now opens its own MIDI input port, Percolator MIDI In, which a MIDI track
-    sends to on its channel: working on the Live II (2026-10-12). Left: release 2.0.0 and update its catalogue entry
-    (screenshot: page_1, the voice page).
+    sends to on its channel: working on the Live II (2026-10-12). The Pērkons' CCs 70-113 (each voice's knobs and
+    switches; owner: "as close to the real machine as possible"), offline tests passed, not yet on the device. Left:
+    the CCs on the device; release 2.0.0 and update its catalogue entry (screenshot: page_1, the voice page). The
+    release build needs the framework's new `mpc_engine_changed` hook on `steve-features` (a PR to sd88me too) and a
+    new pin, or the CCs work but MPC's screen doesn't follow them.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it.

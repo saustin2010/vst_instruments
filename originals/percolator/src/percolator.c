@@ -47,6 +47,7 @@ typedef struct {
     void (*render)(void *inst, int16_t *out_lr, int frames);
 } mpc_engine_t;
 const mpc_engine_t *mpc_engine(void);
+int mpc_engine_changed(void *inst, char *key, int len);   /* optional (engine.h): what a MIDI CC changed */
 
 #define VK(v, k) (P_V1_TUNE + VSTRIDE * (v) + (k))
 #define VALGO(v) VK(v, 8)
@@ -181,6 +182,22 @@ static void apply_kit(perc_t *P) {
 
 /* ---- MIDI --------------------------------------------------------------------------------------------------- */
 
+static void set_value(perc_t *P, int i, const char *val);
+
+/* The Pērkons HD-01's CCs (its MIDI implementation chart, as midi.guide lists it): 11 per voice from CC 70 (voice 1),
+ * 81, 92 and 103, in the order of its controls, which is ours too: TUNE (64 = the middle), DECAY, PARAM 1, PARAM 2,
+ * CUTOFF, DRIVE, FX SEND, LEVEL, then the ALGO, MODE and VCF switches (thirds of 0-127: 0-42, 43-85, 86-127). On any
+ * channel: the number says which voice. MPC's screen follows through mpc_engine_changed below. */
+static void perkons_cc(perc_t *P, int cc, int val) {
+    int v = (cc - 70) / 11, k = (cc - 70) % 11, i = VK(v, 0) + k;
+    char s[16];
+    if (PDEF[i].kind == 1) snprintf(s, sizeof s, "%d", val * PDEF[i].nopts / 128);
+    else if (k == K_TUNE) snprintf(s, sizeof s, "%.2f", val <= 64 ? val * 50.0f / 64.0f : 50.0f + (val - 64) * 50.0f / 63.0f);
+    else snprintf(s, sizeof s, "%.2f", val * 100.0f / 127.0f);
+    set_value(P, i, s);
+    P->changed[i / 32] |= 1u << (i % 32);
+}
+
 static void e_midi(void *inst, const uint8_t *m, int len) {
     perc_t *P = inst;
     apply_kit(P);
@@ -210,6 +227,8 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
             if (P->v[v].note == d1) voice_release(P, v);
     } else if (st == 0xE0) {
         P->bend[ch] = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
+    } else if (st == 0xB0 && d1 >= 70 && d1 <= 113) {
+        perkons_cc(P, d1, d2);
     } else if (st == 0xB0 && (d1 == 120 || d1 == 123)) {
         for (int v = 0; v < NV; v++) {
             voice_release(P, v);
@@ -602,3 +621,17 @@ static void e_destroy(void *inst) {
 
 static const mpc_engine_t ENGINE = {e_create, e_destroy, e_midi, e_set_param, e_get_param, e_render};
 const mpc_engine_t *mpc_engine(void) { return &ENGINE; }
+
+/* After each block the wrapper asks which parameters changed here (the Pērkons CCs, perkons_cc), one at a time, and
+ * tells MPC, so the screen and the Q-Links follow. A wrapper without the hook never asks: the values still change. */
+_Static_assert(NP <= 32 * (int)(sizeof ((perc_t *)0)->changed / sizeof(uint32_t)), "perc_t.changed: a bit per parameter");
+int mpc_engine_changed(void *inst, char *key, int len) {
+    perc_t *P = inst;
+    for (int w = 0; w < (int)(sizeof P->changed / sizeof P->changed[0]); w++)
+        if (P->changed[w]) {
+            int b = __builtin_ctz(P->changed[w]);
+            P->changed[w] &= P->changed[w] - 1;
+            return snprintf(key, len, "%s", PDEF[32 * w + b].key) > 0;
+        }
+    return 0;
+}

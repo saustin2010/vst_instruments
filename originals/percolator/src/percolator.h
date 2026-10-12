@@ -118,6 +118,7 @@ typedef struct perc {
     float hold[TAP_HOLD];  /* the main instance's output, a block late while a voice is tapped */
     uint32_t hold_w;
     mi_port_t midi_in;     /* "Percolator MIDI In": notes on their own channels, for KEYS CH (midiin.h) */
+    uint32_t changed[4];   /* parameters a MIDI CC set, for MPC's screen (mpc_engine_changed), a bit each */
 } perc_t;
 
 #define DL_N 65536

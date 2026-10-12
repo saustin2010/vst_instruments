@@ -44,6 +44,23 @@ Each voice's MIDI is set on the **MIDI & OUT** page:
   **MIDI OUTPUT CH** = 3. A track per voice, or one track whose notes carry their channels. The pads and the notes on
   Percolator's own track still play the kit (they arrive on channel 1). Don't also route that MIDI track into
   Percolator's track, or each note plays twice.
+- **MIDI CCs, as on the Pērkons HD-01** (its chart, [midi.guide](https://midi.guide/d/erica-synths/perkons-hd-01/)):
+  each voice's eleven controls, its knobs and its three switches, on any channel (the number says which voice). The
+  screen and the Q-Links follow. Through **Percolator MIDI In**, so the MIDI track that plays a voice can carry that
+  voice's moves in its CC lanes; on Percolator's own track too, except CC 98 and 99 (voice 3's FX SEND and LEVEL),
+  which the framework keeps there as NRPN.
+
+  | | TUNE | DECAY | PARAM 1 | PARAM 2 | CUTOFF | DRIVE | FX SEND | LEVEL | ALGO | MODE | VCF |
+  |---|---|---|---|---|---|---|---|---|---|---|---|
+  | Voice 1 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 |
+  | Voice 2 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 |
+  | Voice 3 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99 | 100 | 101 | 102 |
+  | Voice 4 | 103 | 104 | 105 | 106 | 107 | 108 | 109 | 110 | 111 | 112 | 113 |
+
+  0-127 covers a knob's whole travel; TUNE's 64 is its middle. A switch takes thirds: 0-42 the first position
+  (ALGO 1, MODE 1, VCF HP), 43-85 the second, 86-127 the third. (Which end of the Pērkons' own filter switch is HP
+  isn't in its chart: here the order is the screen's.) The delay and compressor have no CCs, as on the Pērkons; MIDI
+  CC 20-35 move the MASTER page's Q-Links instead (below).
 - Velocity sets the level.
 - **DECAY at the top = DRONE**: the voice sounds for as long as its note is held, then fades in 0.35 s (on the
   hardware a drone never stops; here the note length decides).
@@ -288,7 +305,11 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   octave per voice) were tried and turned down by the owner ("it should be all keys fired from the midi channel"), so
   Percolator now opens its own MIDI input port, Percolator MIDI In, for the channels (`src/midiin.h`; libasound
   dlopen()ed, the build needs only libc, like Stevequencer). On the Live II (owner, 2026-10-12): a MIDI track with
-  MIDI OUTPUT PORT = Percolator MIDI In plays each voice on its channel: "this is working!"
+  MIDI OUTPUT PORT = Percolator MIDI In plays each voice on its channel: "this is working!" Then (owner: buttons by
+  MIDI, "as close to the real machine as possible"): the Pērkons' CCs 70-113. Offline: every voice's first and last
+  CC, TUNE's middle, the switch thirds, any channel, save and restore (25 checks); through the wrapper under
+  ASan/UBSan, MPC is told each change (a new optional engine hook, `mpc_engine_changed`, in this repo's framework
+  patch), throttled for a stream, and asked to re-read names when a switch moves (9 checks). Not yet on the device.
 
 ## Files
 
