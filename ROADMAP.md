@@ -85,9 +85,11 @@ parameter index, so existing projects keep working.
     sends to on its channel: working on the Live II (2026-10-12). The Pērkons' CCs 70-113 (each voice's knobs and
     switches; owner: "as close to the real machine as possible"): DECAY works on the Live II. MIDI MOD lanes per
     voice (mod wheel, Gen Purpose 1-3, each moving a control picked by name): working on the Live II (2026-10-12).
-    Left: the owner's test of OUT 1-4 with this build; whether MPC's own automation on Percolator's track lists its parameters by name; release 2.0.0 and update its catalogue entry (screenshot: page_1, the voice page). The
-    release build needs the framework's new `mpc_engine_changed` hook on `steve-features` (a PR to sd88me too) and a
-    new pin, or the CCs work but MPC's screen doesn't follow them.
+    Release (2026-10-12): Percolator OUT ships in Percolator's release (owner); both 2.0.0 drafts built by Actions on
+    tools `eaef502` (steve-features + mpc_engine_changed), both zips OK in `catalog_check --catalog`, screens identical
+    to `deploy/`. Left: the drafts on the device (or offline only); publish v2.0.0; the catalogue PR (asset_pattern,
+    percolator-out, author); publish percolator-out-v2.0.0 after it's merged; offer eaef502 to sd88me; whether MPC's
+    own automation on Percolator's track lists its parameters by name.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it.
