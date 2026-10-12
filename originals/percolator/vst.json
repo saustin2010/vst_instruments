@@ -16,7 +16,8 @@
     ],
     "libs": [
       "-lm",
-      "-lpthread"
+      "-lpthread",
+      "-ldl"
     ]
   },
   "params": "params.json",

@@ -320,6 +320,8 @@ static void tap_render(perc_t *P, int o, int16_t *out, int frames) {
 static void e_render(void *inst, int16_t *out, int frames) {
     perc_t *P = inst;
     apply_kit(P);
+    uint8_t m[3];   /* what MIDI tracks sent to Percolator MIDI In since the last block, channels and all */
+    for (int k = 0, n; k < 256 && (n = mi_read(&P->midi_in, m)) > 0; k++) e_midi(P, m, n);
     int tap = (int)P->pv[P_OUTPUT];
     if (tap) {
         tap_render(P, tap - 1, out, frames);
@@ -574,6 +576,7 @@ static void *e_create(const char *dir) {
     P->lfo_rng = 0x2545f491u;
     P->id = __atomic_fetch_add(&next_id, 1, __ATOMIC_RELAXED);
     P->bus = tapbus_open();
+    mi_open(&P->midi_in, "Percolator");
     for (int v = 0; v < NV; v++) {
         P->v[v].rng = 0x9e3779b9u + 7919u * (unsigned)v;
         P->v[v].note = -1;
@@ -591,6 +594,7 @@ static void e_destroy(void *inst) {
     if (!P) return;
     tap_release(P);
     tapbus_close(P->bus);
+    mi_close(&P->midi_in);
     kits_free(P);
     free(P->dl);
     free(P);

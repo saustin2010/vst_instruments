@@ -32,12 +32,18 @@ Each voice's MIDI is set on the **MIDI & OUT** page:
   note and they play together. (Up to 1.2.0 the notes were fixed at 20-23, bank A: a sequence recorded on those needs
   moving, or set the NOTEs to G#-1, A-1, A#-1, B-1.)
 - **KEYS CH**: the MIDI channel on which every note plays the voice **pitched** (C3 = as tuned), with that channel's
-  pitch bend (±2 semitones). To start with **channels 2-5 for voices 1-4**, so a MIDI track or keyboard on channel 3
-  plays voice 2 melodically while the pads (channel 1) trigger the kit: the Pērkons' MULTI mode, always on. Two voices
-  on one KEYS CH play together. **OFF**: never pitched. **ALL**: every note that isn't a voice's NOTE, on any channel
-  (the KEYS switch up to 1.2.0; a project saved then gets ALL on its KEYS voice). On its KEYS CH a voice takes every
-  note, its own NOTE too; on other channels its NOTE plays it as tuned. Whether MPC hands a plugin its notes on their
-  own channel is still to be checked on a device.
+  pitch bend (±2 semitones). To start with **channels 2-5 for voices 1-4**: the Pērkons' MULTI mode, always on. Two
+  voices on one KEYS CH play together. **OFF**: never pitched. **ALL**: every note that isn't a voice's NOTE, on any
+  channel (the KEYS switch up to 1.2.0; a project saved then gets ALL on its KEYS voice). On its KEYS CH a voice takes
+  every note, its own NOTE too; on other channels its NOTE plays it as tuned.
+
+  **The channels come in through Percolator's own MIDI port**, as they would to a hardware Pērkons: MPC hands a plugin
+  on its track every note-on on channel 1, whatever channel it was sent on (traced on a Live II), so the track can't
+  carry them. Percolator opens a MIDI input port that MPC lists as **Percolator MIDI In** (a second Percolator:
+  Percolator 2 MIDI In). To play voice 2 from a MIDI track: that track's **MIDI OUTPUT PORT** = Percolator MIDI In,
+  **MIDI OUTPUT CH** = 3. A track per voice, or one track whose notes carry their channels. The pads and the notes on
+  Percolator's own track still play the kit (they arrive on channel 1). Don't also route that MIDI track into
+  Percolator's track, or each note plays twice.
 - Velocity sets the level.
 - **DECAY at the top = DRONE**: the voice sounds for as long as its note is held, then fades in 0.35 s (on the
   hardware a drone never stops; here the note length decides).
@@ -267,15 +273,22 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   back, and each set loaded a kit. 1.2.0: a kit set waits for the next block, so that pair loads nothing; and MODE
   steps on its Q-Link (its 1/2/3 labels had clashed with the value the engine reports). Both confirmed on the Live II.
 - 2.0.0, not yet released (2026-10-12): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
-  at 20-23), KEYS CH (channels 2-5 play voices 1-4 pitched: the Pērkons' MULTI) and OUT (MAIN, OUT 1-4, played on
+  at 20-23), KEYS CH (channels 2-5 play voices 1-4 pitched: the Pērkons' MULTI, through Percolator MIDI In) and OUT (MAIN, OUT 1-4, played on
   another track by [FX] Percolator OUT or a second Percolator); COMP SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it (it was half made up, so
   a high THRESH made the kit up to 6.6 dB quieter), and COMP LEVEL, its own output; each voice's LEVEL, FX SEND and
   COMP SEND in a MIX panel (Q-Link column 4).
   Offline: build and host test PASSED, `check_skin.py` OK; AMOUNT 0 is the old engine to 1 LSB over 1.4M frames; every
-  THRESH x AMOUNT louder than off on the built-in kits; the MIDI routing (22 cases); OUT 1-4 in one process in either
-  order, random order and on two threads with jitter (every block is the voices sent there alone; main + OUT = the
-  kit), two voices on one OUT, a voice kept on MAIN. Installed on the Live II for the owner's tests; to check: the
-  notes, channels and KEYS, an OUT on a second track, the compressor by ear.
+  THRESH x AMOUNT louder than off on the built-in kits; the MIDI routing (22 cases, MPC's note-offs among them); OUT
+  1-4 in one process in either order, random order and on two threads with jitter (every block is the voices sent
+  there alone; main + OUT = the kit), two voices on one OUT, a voice kept on MAIN.
+  On the Live II (owner, 2026-10-12, after the notes, an OUT on an audio track, the compressor and the timing): "ok
+  all works", but not the channels. A trace build showed why: a MIDI track on channel 3, routed into Percolator's
+  track, reached the plugin as note-ons on channel 1 (`90 41 7f`) and note-offs on 3 (`82 41 40`). A note-off now
+  ends its note on any channel (a drone played from a MIDI track had never stopped). Zones (KEYS OFF / ALL / an
+  octave per voice) were tried and turned down by the owner ("it should be all keys fired from the midi channel"), so
+  Percolator now opens its own MIDI input port, Percolator MIDI In, for the channels (`src/midiin.h`; libasound
+  dlopen()ed, the build needs only libc, like Stevequencer). To check on the device: that MPC lists the port as a MIDI
+  track's output and sends on the track's channel, and the timing.
 
 ## Files
 

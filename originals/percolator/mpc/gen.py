@@ -95,8 +95,10 @@ def params():
                       step_delta=-1))
         P.append(dict(key="v%d_note_next" % v, name="V%d NOTE UP" % v, momentary=True, step_of="v%d_note" % v,
                       step_delta=1))
-        # channels 2-5 for voices 1-4 to start with (owner, 2026-10-12: "a channel per voice, always on"); "send": the
-        # labels 1-16 would otherwise be read as option numbers (see MODE above)
+        # channels 2-5 for voices 1-4 to start with (owner, 2026-10-12: "a channel per voice, always on"; zones instead
+        # were tried and turned down). MPC hands the plugin's track every note-on on channel 1, so the channels come
+        # through Percolator's own port, Percolator MIDI In (src/midiin.h). "send": the labels 1-16 would otherwise be
+        # read as option numbers (see MODE above)
         opts("v%d_kch" % v, "V%d KEYS CH" % v, ["OFF", "ALL"] + [str(c) for c in range(1, 17)], v + 2,
              send=[str(c) for c in range(18)])
         opts("v%d_out" % v, "V%d OUT" % v, ["MAIN", "OUT 1", "OUT 2", "OUT 3", "OUT 4"], v)
@@ -373,7 +375,7 @@ def layout():
                    "#aba7c4", 12, .12, 600)
     html += h_text(28, 162, "OUT 1-4: ON ANOTHER TRACK, [FX] PERCOLATOR OUT (AN INSERT; AN AUDIO TRACK WILL DO) PLAYS THE VOICES SENT THERE",
                    "#aba7c4", 12, .12, 600)
-    html += h_text(28, 184, "KEYS CH: EVERY NOTE ON THAT MIDI CHANNEL PLAYS THE VOICE PITCHED (C3 = AS TUNED); NOTE: PLAYS IT AS TUNED",
+    html += h_text(28, 184, "KEYS CH: A MIDI TRACK SENT TO THE PORT PERCOLATOR MIDI IN, ON THAT CHANNEL, PLAYS THE VOICE PITCHED (C3 = AS TUNED)",
                    "#6a6782", 12, .12, 600)
     L.append('popup cx=1140 cy=150 w=220 h=52 label="" key=output')
     for i, v in enumerate(range(1, 5)):

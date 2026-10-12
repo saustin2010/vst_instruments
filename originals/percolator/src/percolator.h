@@ -7,6 +7,7 @@
 #include "dsp.h"
 #include "params_def.h"
 #include "tapbus.h"
+#include "midiin.h"
 
 #define NV 4            /* voices */
 #define NK 8            /* knobs per voice */
@@ -116,6 +117,7 @@ typedef struct perc {
     tapread_t tr;          /* playing an OUT (TRACK PLAYS = OUT n) */
     float hold[TAP_HOLD];  /* the main instance's output, a block late while a voice is tapped */
     uint32_t hold_w;
+    mi_port_t midi_in;     /* "Percolator MIDI In": notes on their own channels, for KEYS CH (midiin.h) */
 } perc_t;
 
 #define DL_N 65536
