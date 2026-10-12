@@ -39,12 +39,13 @@ them. Each plugin's `FRAMEWORK.md` lists the ones it uses, what they do there an
 | [`94e85dd`](https://github.com/saustin2010/mpc-vst-plugins/commit/94e85dd) | Host test: a preset's option value is what the option sends | An option list like `-`, `0` ... `127` with values -1 ... 127 made the test expect the wrong option. | the host test (both Stevequencers) |
 | [`7afa72e`](https://github.com/saustin2010/mpc-vst-plugins/commit/7afa72e) | `"live"` params in `vst.json`: display params the engine moves by itself, reported to MPC after every block | The step light follows playback; without it, it stays where it was when the page was drawn. | 2: Stevequencer, Stevequencer 16 |
 | [`7f0653c`](https://github.com/saustin2010/mpc-vst-plugins/commit/7f0653c) | A host set of parameter 0 waits for the next block; a pair that ends where it started is dropped; the host test replays it | On insert and on every STOP, MPC's host (JUCE) sets parameter 0 to the far end and straight back: where that is a preset, every knob moved since went back to it (Live II trace, 2026-10-10). | all: the 7 with a preset or kit there (Fizzik, Helm, Hera, Hush One, NuSaw, Libpo32, Percolator) lost edits on STOP. Offered to sd88me as [#279](https://github.com/sd88me/mpc-vst-plugins/pull/279) (2026-10-11) |
+| [`eaef502`](https://github.com/saustin2010/mpc-vst-plugins/commit/eaef502) | `mpc_engine_changed()`: an engine reports parameters it changed itself, the wrapper tells MPC as it does a MIDI CC's | MPC's screen and Q-Links follow controls an engine sets from MIDI it reads itself; without it they keep the old values. | 1: Percolator (2.0.0: the Pērkons CCs and MIDI MOD lanes on its own MIDI port). Not yet offered to sd88me |
 
 Most are opt-in: they change nothing unless a plugin's own files ask for them (a layout line, a `params.json` or `vst.json`
 key, a `defines` entry, the transport hook), so sd88me's own ports build as before. The rest are fixes: the option-list read
 past its end, the installer's path match, the host test (macOS, long ranges, travel) and the release workflow's `tools_repo`. `tools/build.sh` still uses the older base and patch below until all 40 build on these.
-The pin is `7f0653c` since 2026-10-10 (parameter 0 held until the next block: MPC's STOP toggle); every plugin's
-`release.yml` names it, and each one's next release builds with it.
+The pin is `eaef502` since 2026-10-12 (`mpc_engine_changed`, for Percolator 2.0.0), which Percolator's `release.yml`
+names; the others still name `7f0653c` (the commit before it on the branch) until their next release runs `prepare.py`.
 To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `setup-release.sh`, run
 `python3 dev-tools/catalogue/prepare.py --ready` (it rewrites each plugin's `release.yml` and `FRAMEWORK.md`), then
 `check.sh` the plugins.

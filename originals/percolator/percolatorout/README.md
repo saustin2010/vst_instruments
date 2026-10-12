@@ -1,7 +1,6 @@
 # Percolator OUT
 
-**Audio effect** · Plays one of [Percolator](../)'s OUT 1-4 on its own MPC track, so a voice gets that
-track's fader, inserts and outputs. · maker in MPC: Steve A · written for this repo · licence: MIT ([`LICENSE`](LICENSE))
+**Audio effect** · Plays one of Percolator's OUT 1-4 on its own MPC track (an audio track will do), so a voice gets that track's fader, inserts and outputs. · maker in MPC: Steve A · written for this repo · licence: MIT ([`LICENSE`](LICENSE)) · ships in [Percolator](../)'s release
 
 <img src="screenshots/page_0.png" width="760" alt="Percolator OUT">
 
