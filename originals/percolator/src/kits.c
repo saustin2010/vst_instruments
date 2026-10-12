@@ -1,11 +1,13 @@
 /* Percolator kits: the built-in ones, and Perkons HD-01 .KIT files from the data folder.
  *
- * Data folder (MODULE_DIR, /sdcard/vst/percolator), read once when the plugin is created:
+ * Data folder (`percolator/` next to the .so, MODULE_SUBDIR; else MODULE_DIR), read once when the plugin is created:
  *   <bank>/KITS/NN.KIT             a bank of kits, named after its folder
  *   <bank>/SAMPLES/1.wav 2.wav 3.wav   that bank's samples for voice 4 / SAMPLE (cue points = slices)
  *   <bank>/names.txt               optional: "NN Name" per line
  *   <folder>/BANKS/NN/KITS/...     a Perkons SD card, or a kit pack as it unzips (its SAMPLES next to BANKS)
  *   <pack>/NN/KITS/...             a kit pack as it unzips (packs 1 and 4: no BANKS folder; SAMPLES at the top)
+ *   <folder>/<pack>/...            a folder holding packs, when <folder> has no kits itself (Windows' "Extract All":
+ *                                  <zip name>/PERKONS KIT PACK 2/BANKS/...); one level only. Since 2.0.1.
  * A pack's banks are named after it: "PERKONS KIT PACK 2" -> "Pack 2" (with the bank's number when it has several).
  *
  * A .KIT file is a length-prefixed protobuf message (worked out from the published kit packs):
@@ -409,6 +411,36 @@ static int has_kits(const char *dir) {
     return d != NULL;
 }
 
+/* one folder: a bank of its own (<dir>/KITS), or a pack as it unzips (<dir>/BANKS/NN/KITS, or <dir>/NN/KITS; its
+ * samples in <dir>/SAMPLES). Returns the kits it added. */
+static int scan_folder(perc_t *P, const char *path, const char *dname) {
+    int before = P->nkits;
+    scan_bank(P, path, dname, NULL);
+    char pn[16], sub[3200], bp[4096];
+    pack_name(dname, pn, sizeof pn);
+    for (int pass = 0; pass < 2; pass++) {
+        if (pass == 0) snprintf(sub, sizeof sub, "%s/BANKS", path);
+        else snprintf(sub, sizeof sub, "%s", path);
+        char **bn;
+        int nb = list_dir(sub, &bn, 1);
+        int nk = 0;
+        for (int j = 0; j < nb; j++) {
+            snprintf(bp, sizeof bp, "%s/%s", sub, bn[j]);
+            nk += has_kits(bp);
+        }
+        for (int j = 0; j < nb; j++) {
+            if (pass == 1 && (!strcmp(bn[j], "BANKS") || !strcmp(bn[j], "SAMPLES") || !strcmp(bn[j], "KITS"))) continue;
+            char name[48];
+            snprintf(bp, sizeof bp, "%s/%s", sub, bn[j]);
+            if (nk > 1) snprintf(name, sizeof name, "%s %.8s", pn, bn[j]);
+            else snprintf(name, sizeof name, "%s", pn);
+            scan_bank(P, bp, name, path);
+        }
+        free_list(bn, nb);
+    }
+    return P->nkits - before;
+}
+
 void kits_load(perc_t *P) {
     P->kits = calloc(MAX_KITS, sizeof(kit_t));
     if (!P->kits) return;
@@ -428,32 +460,20 @@ void kits_load(perc_t *P) {
     char **dirs;
     int nd = list_dir(P->dir, &dirs, 1);
     for (int i = 0; i < nd; i++) {
-        if (!strcmp(dirs[i], "BANKS") || !strcmp(dirs[i], "SAMPLES")) continue;
+        if (!strcmp(dirs[i], "BANKS") || !strcmp(dirs[i], "SAMPLES") || !strcmp(dirs[i], "__MACOSX")) continue;
         snprintf(path, sizeof path, "%s/%s", P->dir, dirs[i]);
-        scan_bank(P, path, dirs[i], NULL);
-        /* a pack as it unzips: <pack>/BANKS/NN/KITS, or <pack>/NN/KITS; its samples in <pack>/SAMPLES */
-        char pn[16];
-        pack_name(dirs[i], pn, sizeof pn);
-        for (int pass = 0; pass < 2; pass++) {
-            if (pass == 0) snprintf(sub, sizeof sub, "%s/BANKS", path);
-            else snprintf(sub, sizeof sub, "%s", path);
-            nb = list_dir(sub, &bn, 1);
-            int nk = 0;
-            char bp[4096];
-            for (int j = 0; j < nb; j++) {
-                snprintf(bp, sizeof bp, "%s/%s", sub, bn[j]);
-                nk += has_kits(bp);
-            }
-            for (int j = 0; j < nb; j++) {
-                if (pass == 1 && (!strcmp(bn[j], "BANKS") || !strcmp(bn[j], "SAMPLES") || !strcmp(bn[j], "KITS"))) continue;
-                char name[48];
-                snprintf(bp, sizeof bp, "%s/%s", sub, bn[j]);
-                if (nk > 1) snprintf(name, sizeof name, "%s %.8s", pn, bn[j]);
-                else snprintf(name, sizeof name, "%s", pn);
-                scan_bank(P, bp, name, path);
-            }
-            free_list(bn, nb);
+        if (scan_folder(P, path, dirs[i])) continue;
+        /* nothing there: one folder deeper, for packs inside a folder of their own (Windows' "Extract All" puts a
+         * zip's pack folder in one named after the zip: <zip name>/PERKONS KIT PACK 2/BANKS/...). Since 2.0.1. */
+        char **in;
+        int ni = list_dir(path, &in, 1);
+        for (int j = 0; j < ni; j++) {
+            if (!strcmp(in[j], "BANKS") || !strcmp(in[j], "SAMPLES") || !strcmp(in[j], "KITS") || !strcmp(in[j], "__MACOSX"))
+                continue;
+            snprintf(sub, sizeof sub, "%s/%s", path, in[j]);
+            scan_folder(P, sub, in[j]);
         }
+        free_list(in, ni);
     }
     free_list(dirs, nd);
 }
