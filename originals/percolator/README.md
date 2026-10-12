@@ -302,7 +302,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   showed why STOP reset them: on every STOP (and on insert) MPC's host sets parameter 0, KIT, to its top and straight
   back, and each set loaded a kit. 1.2.0: a kit set waits for the next block, so that pair loads nothing; and MODE
   steps on its Q-Link (its 1/2/3 labels had clashed with the value the engine reports). Both confirmed on the Live II.
-- 2.0.0, not yet released (2026-10-12): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
+- 2.0.0, released 2026-10-12 (with [FX] Percolator OUT, its own zip in the same release): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
   at 20-23), KEYS CH (channels 2-5 play voices 1-4 pitched: the Pērkons' MULTI, through Percolator MIDI In) and OUT (MAIN, OUT 1-4, played on
   another track by [FX] Percolator OUT or a second Percolator); COMP SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it (it was half made up, so
   a high THRESH made the kit up to 6.6 dB quieter), and COMP LEVEL, its own output; each voice's LEVEL, FX SEND and
@@ -327,6 +327,10 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   the Live II; then ("more than one parameter at once"): the MIDI MOD page, Gen Purpose 1-3 as three more lanes per
   voice. Offline 17 checks (off to start with, each target, thirds, ALL on any channel, OFF ignores it, two voices on
   one channel, four lanes at once, CC 19 ignored). On the Live II (owner): "nice this is working".
+  The release zips (built by Actions on sd88me's tools plus `steve-features`, `eaef502`, which carries
+  `mpc_engine_changed`) installed with their own installers on the Live II and checked by the owner (2026-10-12: the
+  project, kit packs, pads, pages, Percolator MIDI In, a MIDI MOD lane with the screen following, Percolator OUT on an
+  audio track, STOP, save and reload): "all working". Published as v2.0.0; `tested.json` records it.
 
 ## Files
 
@@ -334,6 +338,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
 | `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `tested.json` | the releases checked on a device, for the catalogue's "Tested on" |
 | `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
 | `vst.json` | build settings: name, maker, sources, the kit list in the PRESET menu |

@@ -87,9 +87,10 @@ parameter index, so existing projects keep working.
     voice (mod wheel, Gen Purpose 1-3, each moving a control picked by name): working on the Live II (2026-10-12).
     Release (2026-10-12): Percolator OUT ships in Percolator's release (owner); both 2.0.0 drafts built by Actions on
     tools `eaef502` (steve-features + mpc_engine_changed), both zips OK in `catalog_check --catalog`, screens identical
-    to `deploy/`. Left: the drafts on the device (or offline only); publish v2.0.0; the catalogue PR (asset_pattern,
-    percolator-out, author); publish percolator-out-v2.0.0 after it's merged; offer eaef502 to sd88me; whether MPC's
-    own automation on Percolator's track lists its parameters by name.
+    to `deploy/`. Both zips installed on the Live II and checked by the owner: "all working"; v2.0.0 published with
+    `tested.json` (2026-10-12). Left: the catalogue PR (asset_pattern, percolator-out, author); publish
+    percolator-out-v2.0.0 after it's merged; offer eaef502 to sd88me; whether MPC's own automation on Percolator's
+    track lists its parameters by name.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it.

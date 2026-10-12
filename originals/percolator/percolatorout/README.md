@@ -61,7 +61,9 @@ different layouts never read each other.
   block, whichever runs first; Percolator plays the rest without it; THRU adds the input; with Percolator removed it
   goes quiet and says so.
 - On the Live II (2026-10-12): installed (one MPC restart), and on an audio track with nothing recorded it plays its
-  OUT, in time with the kit (owner: "ok all works").
+  OUT, in time with the kit (owner: "ok all works"). Its 2.0.0 release zip (Percolator's release, tag
+  `percolator-out-v2.0.0`) installed on the Live II and checked by the owner (2026-10-12): "all working". It is
+  published once sd88me's catalogue has its entry.
 
 ## Files
 
