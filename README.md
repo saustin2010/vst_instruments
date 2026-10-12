@@ -52,7 +52,7 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 |---|---|---|:---:|
 | <a href="schwung/instruments/libpo32/"><img src="schwung/instruments/libpo32/screenshots/page_0.png" width="220" alt="Libpo32"></a> | **[Libpo32](schwung/instruments/libpo32/)**<br><sub>Drum synth · mestela · not stated upstream</sub> | PO-32-style drum synth: 16 synthesised drum sounds on pads 36-51. | ✅ |
 | <a href="schwung/instruments/mrdrums/"><img src="schwung/instruments/mrdrums/screenshots/page_0.png" width="220" alt="Mr Drums"></a> | **[Mr Drums](schwung/instruments/mrdrums/)**<br><sub>Drum sampler · Move Everything · MIT</sub> | A 16-pad drum sampler: kits of samples on pads 36-51. | ✅ |
-| <a href="originals/percolator/"><img src="originals/percolator/screenshots/page_0.png" width="220" alt="Percolator"></a> | **[Percolator](originals/percolator/)**<br><sub>Drum synth · Steve A · written for this repo</sub> | Four voices laid out like the Erica Synths Pērkons HD-01: three algorithms and three modes each, a BBD delay, an LFO to every knob, envelope displays; plays the Pērkons' free kit packs. | ✅ |
+| <a href="originals/percolator/"><img src="originals/percolator/screenshots/page_1.png" width="220" alt="Percolator"></a> | **[Percolator](originals/percolator/)**<br><sub>Drum synth · Steve A · written for this repo</sub> | Four voices laid out like the Erica Synths Pērkons HD-01: three algorithms and three modes each, a BBD delay, an LFO to every knob, envelope displays; plays the Pērkons' free kit packs. | ✅ |
 
 ### MIDI sequencers and generators (11)
 

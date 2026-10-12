@@ -418,6 +418,14 @@ def layout():
         L.append("")
     # Q-Links fixed to the track: a column per voice
     L.append("qlinks_track = " + ",".join("v%d_%s" % (v, k) for v in range(1, 5) for k in ("tune", "decay", "p1", "cutoff")))
+    # the pages in the order MPC shows them (owner, 2026-10-12): MASTER, the voices, the MODs, MIDI & OUT. The first
+    # page's Q-Links are also MIDI CC 20-35 (the wrapper).
+    order = ["MASTER", "V1", "V2", "V3", "V4", "MOD 1+2", "MOD 3+4", "MIDI & OUT"]
+    starts = [i for i, ln in enumerate(L) if ln.startswith("[tab ")]
+    tail = next(i for i, ln in enumerate(L) if ln.startswith("qlinks_track"))
+    pages = {L[a][5:-1]: L[a:b] for a, b in zip(starts, starts[1:] + [tail])}
+    assert sorted(pages) == sorted(order), sorted(pages)
+    L = L[:starts[0]] + [ln for name in order for ln in pages[name]] + L[tail:]
     open(os.path.join(ROOT, "layout.conf"), "w").write("\n".join(L) + "\n")
     os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
     json.dump(art, open(os.path.join(ROOT, "build", "skin.json"), "w"), indent=1)

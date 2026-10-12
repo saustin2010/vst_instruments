@@ -2,7 +2,7 @@
 
 **Drum synth** · Four-voice percussion synth laid out like the Erica Synths Pērkons HD-01, with envelope displays; it plays the Pērkons' free kit packs. · maker in MPC: Steve A · written for this repo · licence: MIT ([`LICENSE`](LICENSE))
 
-<img src="screenshots/page_0.png" width="760" alt="Percolator's voices page">
+<img src="screenshots/page_1.png" width="760" alt="Percolator's voices page">
 
 The Pērkons HD-01 is a four-voice hybrid drum machine: a digital engine per voice, then an analogue HP/BP/LP filter
 and an overdrive, a BBD-style delay, a compressor and one LFO that can reach every knob. Percolator copies that
@@ -40,7 +40,7 @@ Each voice's MIDI is set on the **MIDI & OUT** page:
 - Velocity sets the level.
 - **DECAY at the top = DRONE**: the voice sounds for as long as its note is held, then fades in 0.35 s (on the
   hardware a drone never stops; here the note length decides).
-- CC 120 (all sound off) and 123 (all notes off) stop everything. MIDI CC 20-35 move the first page's Q-Links, and
+- CC 120 (all sound off) and 123 (all notes off) stop everything. MIDI CC 20-35 move the first page's (MASTER's) Q-Links, and
   NRPN reaches any parameter (the wrapper's, as in every plugin here).
 
 ## The voices
@@ -100,23 +100,12 @@ needs two settings (Voice 4 / Algo 3 PARAM 2 = start, slicing on); here it follo
 ## Pages
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted (the Init kit).
-Eight tabs, each with one Q-Link page (no sub-pages to swipe between). Each voice has its own colour: 1 orange,
+Eight tabs, in this order, each with one Q-Link page (no sub-pages to swipe between). Each voice has its own colour: 1 orange,
 2 magenta, 3 cyan, 4 lime.
 
-### 1-4. V1, V2, V3, V4
+### 1. MASTER
 
-<img src="screenshots/page_0.png" width="760" alt="Percolator, voice 1">
-<img src="screenshots/page_3.png" width="760" alt="Percolator, voice 4">
-
-One voice per page, each Q-Link column on its own panel: **Q-Link column 1** = ALGO, MODE, VCF (the switches, big
-enough to tap, and the mode's name under MODE), **column 2** = TUNE, DECAY, PARAM 1, PARAM 2, **column 3** = CUTOFF,
-DRIVE, **column 4** = MIX, under the switches: LEVEL (the voice's volume), FX SEND, COMP SEND. Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
-follows DECAY (a flat line at the top = DRONE), PITCH (voices 1-2) follows PARAM 2's pitch envelope, voice 4's ATTACK
-follows its PARAM 2.
-
-### 5. MASTER
-
-<img src="screenshots/page_4.png" width="760" alt="Percolator, kit, delay, master and modulation">
+<img src="screenshots/page_0.png" width="760" alt="Percolator, kit, delay, master and modulation">
 
 **KIT**: every kit, built-in and loaded, also in MPC's PRESET menu. Choosing the kit that is already loaded changes nothing (MPC sets the current one again on STOP, which must not undo your edits): to go back to a kit as saved, pick another and then it. **BBD DELAY**: time (SHORT 8-200 ms, LONG 60 ms-1.2
 s; moving it bends the pitch as a BBD clock would), feedback (it can run away), its own LFO rate and depth, and
@@ -124,21 +113,32 @@ COLOUR (dark or bright repeats). **MASTER**: VOLUME (the whole kit), then the CO
 **MODULATION**: the LFO's speed (0.05-30 Hz), MOD LEVEL and wave (sine, triangle, ramp, saw, square, S&H, drift).
 Q-Link columns: BBD, MASTER, MODULATION, then KIT.
 
-### 6. MIDI & OUT
+### 2-5. V1, V2, V3, V4
 
-<img src="screenshots/page_5.png" width="760" alt="Percolator, each voice's MIDI and output">
+<img src="screenshots/page_1.png" width="760" alt="Percolator, voice 1">
+<img src="screenshots/page_4.png" width="760" alt="Percolator, voice 4">
 
-What this track plays (TRACK PLAYS: MAIN KIT, or OUT 1-4 of the main Percolator, [above](#separate-outputs-out-1-4)),
-then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link), CHANNEL, KEYS and OUT
-([Playing it](#playing-it)).
+One voice per page, each Q-Link column on its own panel: **Q-Link column 1** = ALGO, MODE, VCF (the switches, big
+enough to tap, and the mode's name under MODE), **column 2** = TUNE, DECAY, PARAM 1, PARAM 2, **column 3** = CUTOFF,
+DRIVE, **column 4** = MIX, under the switches: LEVEL (the voice's volume), FX SEND, COMP SEND. Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
+follows DECAY (a flat line at the top = DRONE), PITCH (voices 1-2) follows PARAM 2's pitch envelope, voice 4's ATTACK
+follows its PARAM 2.
 
-### 7-8. MOD 1+2, MOD 3+4
+### 6-7. MOD 1+2, MOD 3+4
 
-<img src="screenshots/page_6.png" width="760" alt="Percolator, LFO depth per knob, voices 1 and 2">
+<img src="screenshots/page_5.png" width="760" alt="Percolator, LFO depth per knob, voices 1 and 2">
 
 How far the LFO moves each knob of each voice: OFF or 10 %-80 % (the hardware's MODULATION DESTINATION / DEPTH
 buttons), in the voice pages' order (TUNE DECAY PARAM 1 PARAM 2 / CUTOFF DRIVE FX SEND LEVEL), with the LFO's wave, speed and MOD LEVEL shown live above
 (MOD LEVEL scales them all).
+
+### 8. MIDI & OUT
+
+<img src="screenshots/page_7.png" width="760" alt="Percolator, each voice's MIDI and output">
+
+What this track plays (TRACK PLAYS: MAIN KIT, or OUT 1-4 of the main Percolator, [above](#separate-outputs-out-1-4)),
+then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link), CHANNEL, KEYS and OUT
+([Playing it](#playing-it)).
 
 ## Kits
 
