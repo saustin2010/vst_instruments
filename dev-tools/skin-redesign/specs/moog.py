@@ -4,7 +4,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 
-p = Port("moog", "Raffo", ["4-OSCILLATOR", "LADDER MONOSYNTH"])
+p = Port("moog", "RaffoSynth", ["4-OSCILLATOR", "LADDER MONOSYNTH"])
 WAVES = ["TRIANGLE", "SAW", "SQUARE", "PULSE"]
 for n in "1234":
     p.set("osc%s_wave" % n, options=WAVES, name="OSC%s WAVE" % n, display=None)

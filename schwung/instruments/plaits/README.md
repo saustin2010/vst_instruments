@@ -1,17 +1,19 @@
-# Plaits
+# Macro Osc 2
 
-**Synth** · Mutable Instruments Plaits: a macro oscillator with 24 models, played like a synth, with 24 presets. · maker in MPC: Mutable Instruments · licence: MIT
+**Synth** · Macro Osc 2: a macro oscillator with 24 models, played like a synth, with 24 presets. · maker in MPC: Émilie Gillet · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Plaits on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Macro Osc 2 on the MPC touchscreen">
 
-Plaits, the successor to Braids: 24 synthesis models. The original sixteen (virtual analog, waveshaping, FM, grains, additive, wavetables, chords, speech, swarms, noise, modal and string physical models, three drums) plus the eight from the later firmware (analog with a filter, phase distortion, three 6-operator FM banks, wave terrain, string machine, chiptune). HARMONICS, TIMBRE and MORPH shape every model, and the built-in low-pass gate gives it plucky, organic decays. For the 6-op FM models, FM PATCH steps through the bank's patches and shows each patch's name.
+Formerly **Plaits**, renamed on 2026-10-12: Mutable Instruments asks that its name and its module names not be used on derivative works, so the plugin has a name of its own and Émilie Gillet, who wrote the code, as its maker. Its sound is Émilie Gillet's open-source Plaits code (Mutable Instruments).
+
+The successor to Macro Osc (Émilie Gillet's Plaits, after her Braids): 24 synthesis models. The original sixteen (virtual analog, waveshaping, FM, grains, additive, wavetables, chords, speech, swarms, noise, modal and string physical models, three drums) plus the eight from the later firmware (analog with a filter, phase distortion, three 6-operator FM banks, wave terrain, string machine, chiptune). HARMONICS, TIMBRE and MORPH shape every model, and the built-in low-pass gate gives it plucky, organic decays. For the 6-op FM models, FM PATCH steps through the bank's patches and shows each patch's name.
 
 Upstream ships no presets for the synth alone, so the port brings 24 (one or two per model: Analog Bass, Phase Lead, E-Piano, Mallets, Tubular Bells, Drawbar Organ, Glass Pad, Wave Terrain, String Machine, Chip Arp, Wavefolder, FM Bell, Grain Cloud, Additive Organ, Wavetable Sweep, Chord Stab, Talking Synth, Swarm Pad, Plucked String, Modal Bell, Kick, Snare, Hi-Hat), in MPC's PRESET menu. A VOLUME control (PLAY page, added 2026-10-04) levels them: Plaits' models differ by about 30 dB.
 
 ## On the MPC
 
-- In the plugin browser: **[SYN] Plaits** by **Mutable Instruments** (Synth)
-- Files: `/sdcard/vst/plaits.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [SYN] Plaits/`
+- In the plugin browser: **[SYN] Macro Osc 2** by **Émilie Gillet** (Synth)
+- Files: `/sdcard/vst/plaits.so`, screen in `/sdcard/Synths/Émilie Gillet - VST - [SYN] Macro Osc 2/`
 - 19 parameters (all automatable) on 2 pages
 
 ## Playing it
@@ -22,15 +24,15 @@ Add it to a **plugin track** and play it from the pads, a keyboard or a MIDI cli
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. PLAITS
+### 1. MACRO OSC 2
 
-<img src="screenshots/page_0.png" width="760" alt="Plaits, page PLAITS">
+<img src="screenshots/page_0.png" width="760" alt="Macro Osc 2, page MACRO OSC 2">
 
 Q-Link columns: **1** MODEL, OCTAVE  ·  **2** HARMONICS, TIMBRE, MORPH  ·  **3** LPG DECAY, LPG COLOUR, ATTACK  ·  **4** FM, TIMBRE MOD, MORPH MOD, AUX MIX
 
 ### 2. PLAY
 
-<img src="screenshots/page_1.png" width="760" alt="Plaits, page PLAY">
+<img src="screenshots/page_1.png" width="760" alt="Macro Osc 2, page PLAY">
 
 Q-Link columns: **1** FM PATCH  ·  **2** LEGATO, VELOCITY, VOLUME
 

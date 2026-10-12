@@ -13,7 +13,7 @@ Checked 2026-10-03 against every engine's source (what it opens at run time) and
 
 | Plugin | Ships | On the MPC | Where it came from |
 |---|---|---|---|
-| Braids | 10 presets | `/sdcard/vst/braids/presets/` | the Schwung Braids module's preset files |
+| Macro Osc | 10 presets | `/sdcard/vst/braids/presets/` | the Schwung Braids module's preset files |
 | Hera | 56 presets | `/sdcard/vst/hera/presets/` | the Schwung Hera module's preset files (jpcima's Hera) |
 | OB-Xd | factory bank, 128 programs (`factory.fxb`) | `/sdcard/vst/obxd/presets/` | the Schwung OB-Xd module (reales' OB-Xd) |
 | Libpo32 | 3 kits: tonic, tape, acid | `/sdcard/vst/libpo32/kits/` | the Schwung Libpo32 module (mestela) |
@@ -24,10 +24,10 @@ Checked 2026-10-03 against every engine's source (what it opens at run time) and
 | Mr Drums | "01_Starter" kit, 8 hits | `/sdcard/vst/mrdrums/kits/01_Starter/` | made for this port (`dev-tools/skin-redesign/make_starter_kit.py`): upstream ships no samples |
 | MIDI Player | 1 demo file | `/sdcard/vst/midiplayer/MIDI/` | made for this port (`dev-tools/midifx/make_demo_mid.py`) |
 
-Built into the plugin itself (nothing to install): Hank 32 presets, Hush One 11, Moog 14, Noisemaker 256, NuSaw 27,
-Aphex 41, Denis 30, Fizzik 31, Wurl 10, MonkSynth 12 singers, Mono Voice 12 patches, Plaits' three 6-op FM banks, Super Arp's 40 patterns
+Built into the plugin itself (nothing to install): Hank 32 presets, Hush One 11, RaffoSynth 14, Noisemaker 256, NuSaw 27,
+Aphex 41, Denis 30, Fizzik 31, Wurl 10, MonkSynth 12 singers, Mono Voice 12 patches, Macro Osc 2's three 6-op FM banks, Super Arp's 40 patterns
 and 40 rhythms. Made for this port, where upstream has none (`presets.json`, the wrapper's own presets): 303 13,
-Elements 12, Rings 14, Plaits 24, Mr Hyde 19, Rings FX 12, Verglas 12, Warps 12, Mutable Vibe 24, MPC Plaits 31
+Modal Voice 12, Resonator 14, Macro Osc 2 24, Mr Hyde 19, Resonator FX 12, Verglas 12, Meta Mod 12, Mutable Vibe 24, MPC Plaits 31
 (2026-10-05, levels measured with `dev-tools/presets/levels.sh`). Patterns written for this repo's own
 sequencers: Stevequencer 20, Stevequencer 16 14 (most with modulation lanes). Percolator has 8 kits built in; it also
 plays Erica Synths' four free Pērkons kit packs (169 kits), which aren't shipped (they come without a licence to pass
@@ -64,7 +64,7 @@ Move-only features with no MPC equivalent (nothing to fix):
 
 - **Mono Voice** user waves for its DigiPRO machine are drawn in Move's web editor and stored at a Move path
   (`/data/UserData/schwung/mono-user-waves-v1.bin`). On the MPC those slots hold the built-in waves.
-- **Braids** (4) and **Plaits** (3) ship Move "chain patches": presets for a whole Move chain (synth + Move effects),
+- **Macro Osc** (4) and **Macro Osc 2** (3) ship Move "chain patches": presets for a whole Move chain (synth + Move effects),
   not for the synth alone. Not shipped.
 - **Eucalypso, Super Arp, Mr Hyde** read their `module.json` only to describe their own controls to Move's UI.
 

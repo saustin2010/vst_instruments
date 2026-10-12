@@ -628,7 +628,11 @@ static float reverb_ch(reverb_ch_t *r, float x, float fb, float damp) {
 static const char *FTYPE_NAMES[N_FTYPE] = { "LP", "HP", "BP", "Notch" };
 static const char *VOICING_NAMES[N_VOICING] = {
     "Clean SVF", "SEM", "MS-20", "Steiner", "Ladder 4P", "Ladder 2P",
+#ifdef MPC_PORT   /* no other company's name on the screen: voicings 7 and 8 named by their character */
+    "Ladder 1P", "Clean 4P", "Warm 4P", "Diode", "Sallen-Key", "Vintage"
+#else
     "Ladder 1P", "Prophet", "Oberheim", "Diode", "Sallen-Key", "Vintage"
+#endif
 };
 
 typedef struct {
@@ -1350,7 +1354,11 @@ static int get_param(void *instance, const char *key, char *buf, int buf_len) {
           "{\"key\":\"cutoff\",\"name\":\"Cutoff\",\"type\":\"float\",\"min\":0,\"max\":1,\"step\":0.01},"
           "{\"key\":\"resonance\",\"name\":\"Resonance\",\"type\":\"float\",\"min\":0,\"max\":1,\"step\":0.01},"
           "{\"key\":\"ftype\",\"name\":\"Filter Type\",\"type\":\"enum\",\"options\":[\"LP\",\"HP\",\"BP\",\"Notch\"]},"
+#ifdef MPC_PORT
+          "{\"key\":\"voicing\",\"name\":\"Voicing\",\"type\":\"enum\",\"options\":[\"Clean SVF\",\"SEM\",\"MS-20\",\"Steiner\",\"Ladder 4P\",\"Ladder 2P\",\"Ladder 1P\",\"Clean 4P\",\"Warm 4P\",\"Diode\",\"Sallen-Key\",\"Vintage\"]},"
+#else
           "{\"key\":\"voicing\",\"name\":\"Voicing\",\"type\":\"enum\",\"options\":[\"Clean SVF\",\"SEM\",\"MS-20\",\"Steiner\",\"Ladder 4P\",\"Ladder 2P\",\"Ladder 1P\",\"Prophet\",\"Oberheim\",\"Diode\",\"Sallen-Key\",\"Vintage\"]},"
+#endif
           "{\"key\":\"eq_tone\",\"name\":\"Tone\",\"type\":\"float\",\"min\":0,\"max\":1,\"step\":0.01},"
           "{\"key\":\"eq_body\",\"name\":\"Body\",\"type\":\"float\",\"min\":0,\"max\":1,\"step\":0.01},"
           "{\"key\":\"cho_mix\",\"name\":\"Chorus\",\"type\":\"float\",\"min\":0,\"max\":1,\"step\":0.01},"

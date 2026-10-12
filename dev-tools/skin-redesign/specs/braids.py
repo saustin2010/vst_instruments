@@ -5,7 +5,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 
-p = Port("braids", "Braids", ["MACRO", "OSCILLATOR"])
+p = Port("braids", "Macro Osc", ["MULTI-MODEL", "OSCILLATOR"])
 p.names({"engine": "ALGORITHM", "timbre": "TIMBRE", "color": "COLOR", "attack": "AMP ATTACK", "decay": "AMP DECAY",
          "sustain": "AMP SUSTAIN", "release": "AMP RELEASE", "cutoff": "CUTOFF", "resonance": "RESONANCE",
          "filt_env": "FILTER ENV", "fm": "FM", "volume": "VOLUME", "octave_transpose": "OCTAVE",

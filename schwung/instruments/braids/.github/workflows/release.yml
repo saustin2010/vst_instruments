@@ -34,5 +34,5 @@ jobs:
       extra: library:braids
       plugin_id: braids
       license: MIT
-      about: "Mutable Instruments Braids: a macro oscillator with 47 synthesis models."
+      about: "Macro Osc: a macro oscillator with 47 synthesis models, from Émilie Gillet's open-source Braids."
       dry_run: ${{ inputs.dry_run }}

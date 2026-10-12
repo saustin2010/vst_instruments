@@ -128,33 +128,6 @@ plugin you have: new parameters are only ever added at the end. *Page* is where 
 
 </details>
 
-<details><summary><b>Braids</b> (18 parameters)</summary>
-
-[schwung/instruments/braids](../schwung/instruments/braids/)
-
-| P | Parameter | Page |
-|---|---|---|
-| P1 | ALGORITHM | BRAIDS |
-| P2 | TIMBRE | BRAIDS |
-| P3 | COLOR | BRAIDS |
-| P4 | AMP ATTACK | ENVELOPES |
-| P5 | AMP DECAY | ENVELOPES |
-| P6 | AMP SUSTAIN | ENVELOPES |
-| P7 | AMP RELEASE | ENVELOPES |
-| P8 | CUTOFF | BRAIDS |
-| P9 | RESONANCE | BRAIDS |
-| P10 | FILTER ENV | BRAIDS |
-| P11 | FM | BRAIDS |
-| P12 | VOLUME | BRAIDS |
-| P13 | OCTAVE | BRAIDS |
-| P14 | FLT ATTACK | ENVELOPES |
-| P15 | FLT DECAY | ENVELOPES |
-| P16 | FLT SUSTAIN | ENVELOPES |
-| P17 | FLT RELEASE | ENVELOPES |
-| P18 | PATCH | BRAIDS |
-
-</details>
-
 <details><summary><b>Chordism</b> (136 parameters)</summary>
 
 [schwung/instruments/chordism](../schwung/instruments/chordism/)
@@ -367,37 +340,6 @@ plugin you have: new parameters are only ever added at the end. *Page* is where 
 | P59 | NOISE>FTYPE | S&H NOISE |
 | P60 | NOISE>CUTOFF | S&H NOISE |
 | P61 | NOISE>LEVEL | S&H NOISE |
-
-</details>
-
-<details><summary><b>Elements</b> (22 parameters)</summary>
-
-[mutable-instruments/elements](../mutable-instruments/elements/)
-
-| P | Parameter | Page |
-|---|---|---|
-| P1 | CONTOUR | ELEMENTS |
-| P2 | BOW | ELEMENTS |
-| P3 | BOW TIMBRE | ELEMENTS |
-| P4 | BLOW | ELEMENTS |
-| P5 | FLOW | ELEMENTS |
-| P6 | BLOW TIMBRE | ELEMENTS |
-| P7 | STRIKE | ELEMENTS |
-| P8 | MALLET | ELEMENTS |
-| P9 | STRK TIMBRE | ELEMENTS |
-| P10 | MODEL | ELEMENTS |
-| P11 | GEOMETRY | ELEMENTS |
-| P12 | BRIGHTNESS | ELEMENTS |
-| P13 | DAMPING | ELEMENTS |
-| P14 | POSITION | ELEMENTS |
-| P15 | SPACE | ELEMENTS |
-| P16 | OCTAVE | PLAY |
-| P17 | FINE | PLAY |
-| P18 | SIGNATURE | PLAY |
-| P19 | LEGATO | PLAY |
-| P20 | BEND RANGE | PLAY |
-| P21 | VELOCITY | PLAY |
-| P22 | VOLUME | PLAY |
 
 </details>
 
@@ -991,6 +933,89 @@ plugin you have: new parameters are only ever added at the end. *Page* is where 
 
 </details>
 
+<details><summary><b>Macro Osc</b> (18 parameters)</summary>
+
+[schwung/instruments/braids](../schwung/instruments/braids/)
+
+| P | Parameter | Page |
+|---|---|---|
+| P1 | ALGORITHM | MACRO OSC |
+| P2 | TIMBRE | MACRO OSC |
+| P3 | COLOR | MACRO OSC |
+| P4 | AMP ATTACK | ENVELOPES |
+| P5 | AMP DECAY | ENVELOPES |
+| P6 | AMP SUSTAIN | ENVELOPES |
+| P7 | AMP RELEASE | ENVELOPES |
+| P8 | CUTOFF | MACRO OSC |
+| P9 | RESONANCE | MACRO OSC |
+| P10 | FILTER ENV | MACRO OSC |
+| P11 | FM | MACRO OSC |
+| P12 | VOLUME | MACRO OSC |
+| P13 | OCTAVE | MACRO OSC |
+| P14 | FLT ATTACK | ENVELOPES |
+| P15 | FLT DECAY | ENVELOPES |
+| P16 | FLT SUSTAIN | ENVELOPES |
+| P17 | FLT RELEASE | ENVELOPES |
+| P18 | PATCH | MACRO OSC |
+
+</details>
+
+<details><summary><b>Macro Osc 2</b> (16 parameters)</summary>
+
+[schwung/instruments/plaits](../schwung/instruments/plaits/)
+
+| P | Parameter | Page |
+|---|---|---|
+| P1 | MODEL | MACRO OSC 2 |
+| P2 | FM PATCH | PLAY |
+| P3 | HARMONICS | MACRO OSC 2 |
+| P4 | TIMBRE | MACRO OSC 2 |
+| P5 | MORPH | MACRO OSC 2 |
+| P6 | LPG DECAY | MACRO OSC 2 |
+| P7 | LPG COLOUR | MACRO OSC 2 |
+| P8 | FM | MACRO OSC 2 |
+| P9 | AUX MIX | MACRO OSC 2 |
+| P10 | ATTACK | MACRO OSC 2 |
+| P11 | TIMBRE MOD | MACRO OSC 2 |
+| P12 | MORPH MOD | MACRO OSC 2 |
+| P13 | LEGATO | PLAY |
+| P14 | VELOCITY | PLAY |
+| P15 | OCTAVE | MACRO OSC 2 |
+| P19 | VOLUME | PLAY |
+
+</details>
+
+<details><summary><b>Modal Voice</b> (22 parameters)</summary>
+
+[mutable-instruments/elements](../mutable-instruments/elements/)
+
+| P | Parameter | Page |
+|---|---|---|
+| P1 | CONTOUR | MODAL VOICE |
+| P2 | BOW | MODAL VOICE |
+| P3 | BOW TIMBRE | MODAL VOICE |
+| P4 | BLOW | MODAL VOICE |
+| P5 | FLOW | MODAL VOICE |
+| P6 | BLOW TIMBRE | MODAL VOICE |
+| P7 | STRIKE | MODAL VOICE |
+| P8 | MALLET | MODAL VOICE |
+| P9 | STRK TIMBRE | MODAL VOICE |
+| P10 | MODEL | MODAL VOICE |
+| P11 | GEOMETRY | MODAL VOICE |
+| P12 | BRIGHTNESS | MODAL VOICE |
+| P13 | DAMPING | MODAL VOICE |
+| P14 | POSITION | MODAL VOICE |
+| P15 | SPACE | MODAL VOICE |
+| P16 | OCTAVE | PLAY |
+| P17 | FINE | PLAY |
+| P18 | SIGNATURE | PLAY |
+| P19 | LEGATO | PLAY |
+| P20 | BEND RANGE | PLAY |
+| P21 | VELOCITY | PLAY |
+| P22 | VOLUME | PLAY |
+
+</details>
+
 <details><summary><b>MonkSynth</b> (22 parameters)</summary>
 
 [schwung/instruments/monksynth](../schwung/instruments/monksynth/)
@@ -1142,53 +1167,6 @@ plugin you have: new parameters are only ever added at the end. *Page* is where 
 | P112 | LFO3 VEL AMT | LFO 3 |
 | P113 | LFO KEY TR 3 | LFO 3 |
 | P120 | PATCH | MACHINE |
-
-</details>
-
-<details><summary><b>Moog</b> (38 parameters)</summary>
-
-[schwung/instruments/moog](../schwung/instruments/moog/)
-
-| P | Parameter | Page |
-|---|---|---|
-| P1 | OSC1 WAVE | MAIN |
-| P2 | OSC1 LEVEL | OSCILLATORS |
-| P3 | OSC1 RANGE | OSCILLATORS |
-| P4 | OSC2 WAVE | OSCILLATORS |
-| P5 | OSC2 LEVEL | OSCILLATORS |
-| P6 | OSC2 RANGE | OSCILLATORS |
-| P7 | OSC2 DETUNE | OSCILLATORS |
-| P8 | OSC3 WAVE | OSCILLATORS |
-| P9 | OSC3 LEVEL | OSCILLATORS |
-| P10 | OSC3 RANGE | OSCILLATORS |
-| P11 | OSC3 DETUNE | OSCILLATORS |
-| P12 | OSC4 WAVE | OSCILLATORS |
-| P13 | OSC4 LEVEL | OSCILLATORS |
-| P14 | OSC4 RANGE | OSCILLATORS |
-| P15 | OSC4 DETUNE | OSCILLATORS |
-| P16 | NOISE | OSCILLATORS |
-| P17 | CUTOFF | MAIN |
-| P18 | EMPHASIS | MAIN |
-| P19 | CONTOUR | MAIN |
-| P20 | KEY TRACK | MAIN |
-| P21 | AMP ATTACK | MAIN |
-| P22 | AMP DECAY | MAIN |
-| P23 | AMP SUSTAIN | MAIN |
-| P24 | AMP RELEASE | MAIN |
-| P25 | FLT ATTACK | MAIN |
-| P26 | FLT DECAY | MAIN |
-| P27 | FLT SUSTAIN | MAIN |
-| P28 | FLT RELEASE | MAIN |
-| P29 | GLIDE | MODULATION |
-| P30 | VOLUME | MODULATION |
-| P31 | LFO RATE | MODULATION |
-| P32 | LFO PITCH | MODULATION |
-| P33 | LFO FILTER | MODULATION |
-| P34 | WHEEL FILTER | MODULATION |
-| P35 | WHEEL PITCH | MODULATION |
-| P36 | BEND RANGE | MODULATION |
-| P37 | VELOCITY | MODULATION |
-| P38 | PATCH | MAIN |
 
 </details>
 
@@ -1766,49 +1744,72 @@ plugin you have: new parameters are only ever added at the end. *Page* is where 
 
 </details>
 
-<details><summary><b>Plaits</b> (16 parameters)</summary>
+<details><summary><b>RaffoSynth</b> (39 parameters)</summary>
 
-[schwung/instruments/plaits](../schwung/instruments/plaits/)
+[schwung/instruments/moog](../schwung/instruments/moog/)
 
 | P | Parameter | Page |
 |---|---|---|
-| P1 | MODEL | PLAITS |
-| P2 | FM PATCH | PLAY |
-| P3 | HARMONICS | PLAITS |
-| P4 | TIMBRE | PLAITS |
-| P5 | MORPH | PLAITS |
-| P6 | LPG DECAY | PLAITS |
-| P7 | LPG COLOUR | PLAITS |
-| P8 | FM | PLAITS |
-| P9 | AUX MIX | PLAITS |
-| P10 | ATTACK | PLAITS |
-| P11 | TIMBRE MOD | PLAITS |
-| P12 | MORPH MOD | PLAITS |
-| P13 | LEGATO | PLAY |
-| P14 | VELOCITY | PLAY |
-| P15 | OCTAVE | PLAITS |
-| P19 | VOLUME | PLAY |
+| P1 | OSC1 WAVE | MAIN |
+| P2 | OSC1 LEVEL | OSCILLATORS |
+| P3 | OSC1 RANGE | OSCILLATORS |
+| P4 | OSC2 WAVE | OSCILLATORS |
+| P5 | OSC2 LEVEL | OSCILLATORS |
+| P6 | OSC2 RANGE | OSCILLATORS |
+| P7 | OSC2 DETUNE | OSCILLATORS |
+| P8 | OSC3 WAVE | OSCILLATORS |
+| P9 | OSC3 LEVEL | OSCILLATORS |
+| P10 | OSC3 RANGE | OSCILLATORS |
+| P11 | OSC3 DETUNE | OSCILLATORS |
+| P12 | OSC4 WAVE | OSCILLATORS |
+| P13 | OSC4 LEVEL | OSCILLATORS |
+| P14 | OSC4 RANGE | OSCILLATORS |
+| P15 | OSC4 DETUNE | OSCILLATORS |
+| P16 | NOISE | OSCILLATORS |
+| P17 | CUTOFF | MAIN |
+| P18 | EMPHASIS | MAIN |
+| P19 | CONTOUR | MAIN |
+| P20 | KEY TRACK | MAIN |
+| P21 | AMP ATTACK | MAIN |
+| P22 | AMP DECAY | MAIN |
+| P23 | AMP SUSTAIN | MAIN |
+| P24 | AMP RELEASE | MAIN |
+| P25 | FLT ATTACK | MAIN |
+| P26 | FLT DECAY | MAIN |
+| P27 | FLT SUSTAIN | MAIN |
+| P28 | FLT RELEASE | MAIN |
+| P29 | GLIDE | MODULATION |
+| P30 | VOLUME | MODULATION |
+| P31 | LFO RATE | MODULATION |
+| P32 | LFO PITCH | MODULATION |
+| P33 | LFO FILTER | MODULATION |
+| P34 | WHEEL FILTER | MODULATION |
+| P35 | WHEEL PITCH | MODULATION |
+| P36 | BEND RANGE | MODULATION |
+| P37 | VELOCITY | MODULATION |
+| P38 | PATCH | MAIN |
+| P42 | FILTER | MAIN |
 
 </details>
 
-<details><summary><b>Rings</b> (12 parameters)</summary>
+<details><summary><b>Resonator</b> (12 parameters)</summary>
 
 [mutable-instruments/rings](../mutable-instruments/rings/)
 
 | P | Parameter | Page |
 |---|---|---|
-| P1 | MODEL | RINGS |
-| P2 | POLYPHONY | RINGS |
-| P3 | STRUCTURE | RINGS |
-| P4 | BRIGHTNESS | RINGS |
-| P5 | DAMPING | RINGS |
-| P6 | POSITION | RINGS |
-| P7 | SYNTH FX | RINGS |
-| P8 | OCTAVE | RINGS |
-| P9 | BEND RANGE | RINGS |
-| P10 | VELOCITY | RINGS |
-| P11 | WIDTH | RINGS |
-| P12 | VOLUME | RINGS |
+| P1 | MODEL | RESONATOR |
+| P2 | POLYPHONY | RESONATOR |
+| P3 | STRUCTURE | RESONATOR |
+| P4 | BRIGHTNESS | RESONATOR |
+| P5 | DAMPING | RESONATOR |
+| P6 | POSITION | RESONATOR |
+| P7 | SYNTH FX | RESONATOR |
+| P8 | OCTAVE | RESONATOR |
+| P9 | BEND RANGE | RESONATOR |
+| P10 | VELOCITY | RESONATOR |
+| P11 | WIDTH | RESONATOR |
+| P12 | VOLUME | RESONATOR |
 
 </details>
 

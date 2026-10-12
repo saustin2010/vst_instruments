@@ -11,7 +11,8 @@
     ],
     "cflags": [
       "-Isrc/dsp",
-      "-ffast-math"
+      "-ffast-math",
+      "-DMPC_PORT"
     ],
     "libs": [
       "-lm"

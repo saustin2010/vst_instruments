@@ -32,5 +32,5 @@ jobs:
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
       plugin_id: verglas
       license: MIT
-      about: "Mutable Instruments Clouds: a granular texture processor as an audio effect, with 12 presets."
+      about: "Verglas: a granular texture processor as an audio effect, with 12 presets, from Émilie Gillet's open-source Clouds."
       dry_run: ${{ inputs.dry_run }}

@@ -1,8 +1,10 @@
 # Verglas
 
-**Audio effect** · Mutable Instruments Clouds: a granular texture processor as an audio effect, with 12 presets. · maker in MPC: Mutable Instruments · licence: MIT
+**Audio effect** · Verglas: a granular texture processor as an audio effect, with 12 presets, from Émilie Gillet's open-source Clouds. · maker in MPC: Émilie Gillet · licence: MIT
 
 <img src="screenshots/page_0.png" width="760" alt="Verglas on the MPC touchscreen">
+
+Its maker in MPC was **Mutable Instruments** until 2026-10-12: Mutable Instruments asks that its name not be used on derivative works, so MPC now names Émilie Gillet, who wrote the code. Its sound is her open-source Clouds code.
 
 Clouds (here Verglas) records the track's audio into a buffer and plays it back as grains: POSITION, SIZE, PITCH, DENSITY and TEXTURE shape the cloud, FREEZE holds the buffer, and MODE switches between granular, stretch, looper and spectral processing. DRY/WET, SPREAD, FEEDBACK and REVERB blend it, a lo-fi QUALITY switch colours it, and the TONE page adds high- and low-pass filters, a low boost and a limiter. Ambient washes, frozen pads and glitchy textures from any sound.
 
@@ -10,8 +12,8 @@ Upstream has no presets, so the port brings 12 (Init, Grain Cloud, Shimmer, Octa
 
 ## On the MPC
 
-- In the plugin browser: **[FX] Verglas** by **Mutable Instruments** (Audio effect)
-- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [FX] Verglas/`, holding `verglas.so`, its screen. The vst_instruments installer puts `verglas.so` in `/sdcard/vst/` instead.
+- In the plugin browser: **[FX] Verglas** by **Émilie Gillet** (Audio effect)
+- Files: the release installs one folder, `/sdcard/Synths/Émilie Gillet - VST - [FX] Verglas/`, holding `verglas.so`, its screen. The vst_instruments installer puts `verglas.so` in `/sdcard/vst/` instead.
 - 20 parameters (all automatable) on 2 pages
 
 ## Playing it

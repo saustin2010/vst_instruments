@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 from _seq import info
 
-p = Port("grids", "Grids", ["TOPOGRAPHIC", "DRUM SEQUENCER"])
+p = Port("grids", "Drum Map", ["TOPOGRAPHIC", "DRUM SEQUENCER"])
 p.names({"mode": "MODE", "map_x": "MAP X", "map_y": "MAP Y", "chaos": "CHAOS", "bd_fill": "BD FILL",
          "sd_fill": "SD FILL", "hh_fill": "HH FILL", "len_bd": "BD LENGTH", "len_sd": "SD LENGTH",
          "len_hh": "HH LENGTH", "resolution": "RESOLUTION", "swing": "SWING", "bd_note": "BD NOTE",

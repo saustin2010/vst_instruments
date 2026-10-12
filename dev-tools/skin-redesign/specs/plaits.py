@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 from _seq import tidy
 
-p = Port("plaits", "Plaits", ["MACRO", "OSCILLATOR"])
+p = Port("plaits", "Macro Osc 2", ["MULTI-ENGINE", "OSCILLATOR"])
 p.rename("fm_preset", "fm_preset_index")
 p.preset_browser(key="fm_preset_index", name_key="fm_preset", count=32, name="FM PATCH")
 tidy(p, text_options=True)

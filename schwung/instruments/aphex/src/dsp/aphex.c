@@ -70,7 +70,11 @@ static const char *SYNC_NAMES[2]      = {"Off","On"};
 static const char *FILT_MODE_NAMES[4] = {"HP+LP","LP only","HP only","Notch"};
 /* Filter circuit revision: REV.1 = early-MS-20/MS-10 KORG-35 (creamy fuzz),
  * REV.2 = late-MS-20 LM13600 OTA (cleaner howl). */
+#ifdef MPC_PORT   /* no other company's name on the screen: REV.1 named by its circuit (a Sallen-Key with diodes) */
+static const char *FILT_REV_NAMES[2] = {"REV.1 SALLEN-KEY","REV.2 OTA"};
+#else
 static const char *FILT_REV_NAMES[2] = {"REV.1 KORG-35","REV.2 OTA"};
+#endif
 /* VCO SCALE switches (organ footage). 8' is the reference (0 semitone offset).
  * Each step = one octave (12 st), NOT one semitone. */
 static const char *V1_SCALE_NAMES[4] = {"32'","16'","8'","4'"};  /* offset (idx-2)*12 */

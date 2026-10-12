@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 from _seq import info
 
-p = Port("marbles", "Marbles", ["RANDOM", "SAMPLER"])
+p = Port("marbles", "Random Sampler", ["RANDOM GATES", "AND NOTES"])
 p.names({"t_model": "T MODEL", "clock_div": "CLOCK DIV", "t_bias": "T BIAS", "jitter": "JITTER", "gate_len": "GATE LEN",
          "deja_vu": "DEJA VU", "length": "LENGTH", "t_deja_vu": "T DEJA VU", "spread": "SPREAD", "x_bias": "X BIAS",
          "steps": "STEPS", "scale": "SCALE", "x_deja_vu": "X DEJA VU", "rate_base": "RATE BASE", "t_range": "T RANGE",

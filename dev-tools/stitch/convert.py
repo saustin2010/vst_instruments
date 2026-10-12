@@ -636,7 +636,7 @@ MAPS = {
             "art": '<section class="panel-bezel rounded-md absolute flex flex-col items-center justify-center" style="left:{x}px; '
                    'top:{y}px; width:{w}px; height:{h}px;"><div class="font-headline-sm font-bold text-[#93ee5a] tracking-[0.3em]" '
                    'style="font-size: 56px; text-shadow: 0 0 18px rgba(147,238,90,.35);">MR HYDE</div><div class="font-label-sm '
-                   'text-label-sm text-[#d4c4b0] mt-3 tracking-widest">PLAITS ENGINE // MODULATION MATRIX</div></section>',
+                   'text-label-sm text-[#d4c4b0] mt-3 tracking-widest">MACRO ENGINE // MODULATION MATRIX</div></section>',
         },
         "augment": [
             {"sel": ".knob-arc", "all": True, "remove": True},
@@ -644,7 +644,7 @@ MAPS = {
             {"sel": "div:has(> .filter-mode-btn)", "attr": {"data-param": "filter_mode"}},
             {"sel": "#model-select", "attr": {"data-param": "model"}},
             # design QA 2026-10-03: MAIN in four panels, a Q-Link column each (it had five, and the 14 controls ran
-            # across them): PLAITS ENGINE (the scope on the left, MODEL, FM AMOUNT, AUX MIX) | OSCILLATOR (PITCH,
+            # across them): MACRO ENGINE (the scope on the left, MODEL, FM AMOUNT, AUX MIX) | OSCILLATOR (PITCH,
             # HARMONICS, TIMBRE, MORPH) / FILTER | LPG / OUTPUT (the MASTER OUT knobs join the LPG's)
             {"sel": "main > section:has(#model-select)", "attr": {"id": "aug-engine", "style": "grid-column: span 6 / span 6; order: 1"}},
             {"sel": "main > section:has([data-id=fm_amount])", "attr": {"id": "aug-osc", "style": "grid-column: span 6 / span 6; order: 2"}},
@@ -658,7 +658,7 @@ MAPS = {
             {"sel": "#aug-master .knob-control", "all": True, "move": "#aug-out div.grid-cols-2"},
             {"sel": "#aug-out div.grid-cols-2", "attr": {"class": "grid grid-cols-4 gap-2 my-auto"}},
             {"sel": "#aug-master", "remove": True},
-            {"sel": "#aug-engine h2", "text": "PLAITS ENGINE"},
+            {"sel": "#aug-engine h2", "text": "MACRO ENGINE"},
             {"sel": "#aug-osc h2", "text": "OSCILLATOR"},
             {"sel": "#aug-out h2", "text": "LPG / OUTPUT"},
         ],
@@ -1362,7 +1362,7 @@ MAPS = {
                     '<span class="text-label-sm font-readout-numeric text-primary">0</span></div></div>',
         },
         "augment": [
-            {"sel": "body", "retext": [["Notes transmit triggers to external Akai MPC Drum Programs or Synthesizers.", "Notes go out of the Grids MIDI port: set a drum track's MIDI input to it."], ["Routed automatically to internal MPC pads and rear MIDI Out 1.", "Its own MIDI port (Preferences > MIDI: Track on), clocked by MPC."]]},   # no maker badges / wrong routing text in the art (2026-10-03)
+            {"sel": "body", "retext": [["Notes transmit triggers to external Akai MPC Drum Programs or Synthesizers.", "Notes go out of the Drum Map MIDI port: set a drum track's MIDI input to it."], ["Routed automatically to internal MPC pads and rear MIDI Out 1.", "Its own MIDI port (Preferences > MIDI: Track on), clocked by MPC."]]},   # no maker badges / wrong routing text in the art (2026-10-03)
             {"sel": "div:has(> #mode-drums)", "attr": {"data-param": "mode"}},
             {"sel": "div:has(> #sw-off)", "attr": {"data-param": "swing"}},
             {"sel": "#page-notes div.grid:has(> button)", "attr": {"data-param": "resolution", "class": "grid grid-cols-2 gap-2 mt-1"}},
@@ -1841,6 +1841,49 @@ def grid_page(tab, cfg, byk):
             '</div>' % "".join(out))
 
 
+# Other companies' names out of the screens' art (2026-10-12: sd88me's catalogue rule, "no other company's name or logo
+# in a listed plugin's name, skin or screenshot", and Mutable Instruments' terms). Text replaced in the rendered design
+# after the design's own augment steps (so its own retext rules still see the text they were written for); the mockups
+# stay as Stitch wrote them. The Mutable ports' names follow their new plugin names.
+_AKAI = [["AKAI MPC LIVE II", "MPC LIVE II"], ["AKAI MPC Live II", "MPC Live II"], ["Akai MPC Live II", "MPC Live II"]]
+BRAND_RETEXT = {
+    "elements": [["Q-LINKS [ELEMENTS]", "Q-LINKS [MODAL VOICE]"], ["ELEMENTS // MODAL RESYNTHESIS VOICE", "MODAL VOICE // MODAL RESYNTHESIS"],
+                 ["1: ELEMENTS", "1: MODAL VOICE"], ["// MUTABLE ENGINE", "// MODAL ENGINE"]] + _AKAI,
+    "grids": [["MUTABLE MIDI FX", "MIDI FX"], ["MUTABLE DSP", "OPEN-SOURCE DSP"], ["GRIDS", "DRUM MAP"], ["Grids", "Drum Map"]] + _AKAI,
+    "marbles": [["MARBLES", "RANDOM SAMPLER"], ["BRAIDS", "MACRO"]],
+    "rings": [["RINGS // MUTABLE INSTRUMENTS RESONATOR", "RESONATOR // PHYSICAL MODELS"], ["MUTABLE INSTRUMENTS", "OPEN-SOURCE DSP"],
+              ["R I N G S", "RESONATOR"], ["[RINGS]", "[RESONATOR]"], ["RINGS //", "RESONATOR //"]],   # not "RINGS": STRINGS
+    "ringsfx": [["MUTABLE INSTRUMENTS DSP // AUDIO EFFECT", "OPEN-SOURCE DSP // AUDIO EFFECT"], ["MUTABLE INSTRUMENTS", "OPEN-SOURCE DSP"],
+                ["RINGS FX // RESONATOR EFFECT", "RESONATOR FX // AUDIO EFFECT"], ["RINGS FX", "RESONATOR FX"]],
+    "warps": [["MUTABLE INSTRUMENTS", "OPEN-SOURCE DSP"], ["WARPS", "META MOD"]],
+    "verglas": [["MUTABLE INSTRUMENTS CLOUDS ENGINE", "GRANULAR TEXTURE ENGINE"], ["CLOUDS // VERGLAS", "VERGLAS // GRANULAR"],
+                ["CLOUDS DSP", "GRANULAR DSP"], ["MUTABLE", "OPEN SOURCE"], ["CLOUDS", "GRANULAR"]],
+    "braids": [["MUTABLE INSTRUMENTS \u00b7 BRAIDS", "MACRO OSC"], ["// MUTABLE ENGINE", "// MACRO ENGINE"],
+               ["BRAIDS MACRO OSCILLATOR", "MACRO OSCILLATOR"], ["MUTABLE INSTRUMENTS", "OPEN-SOURCE DSP"], ["BRAIDS.CSS", "MACRO-OSC.CSS"],
+               ["BRAIDS", "MACRO OSC"]] + _AKAI,
+    "plaits": [["PLAITS // MACRO OSCILLATOR", "MACRO OSC 2 // MULTI-ENGINE"], ["MUTABLE INSTRUMENTS DSP", "OPEN-SOURCE DSP"],
+               ["PLAITS", "MACRO OSC 2"]],
+    "mrhyde": [["PLAITS MACRO OSC", "MACRO OSC"], ["PLAITS ENGINE", "MACRO ENGINE"]],
+    "303": _AKAI,
+    "aphex": [["KORG-35", "SALLEN-KEY"]] + _AKAI,
+    "denis": [["WEST COAST SERGE", "WEST COAST"], ["BUCHLA 259 STYLE", "WEST COAST STYLE"]] + _AKAI,
+    "helm": [["ELEKTRON / RETRO", "RETRO"], ["AKAI MPC OS", "MPC OS"]] + _AKAI + [["AKAI", "MPC"]],
+    "monovoice": [["ELEKTRON / RETRO", "RETRO"], ["AKAI MPC OS", "MPC OS"]] + _AKAI + [["AKAI", "MPC"]],
+    "hera": [["[JUNO-60]", "[6-VOICE POLY]"], ["JUNO-60 FILTER", "4-POLE FILTER"], ["JUNO", "POLY"], ["AKAI LIVE II", "LIVE II"]],
+    "hush1": [["HUSH ONE // SH-101", "HUSH ONE // MONOSYNTH"], ["SH-101 ANALOG CURVES", "ANALOG CURVES"], ["SH-101", "MONO"]] + _AKAI,
+    "noisemaker": [["JUPITER", "POLY"]] + _AKAI,
+    "moog": [["// 4-OSC MOOG SYNTHESIZER", "// 4-OSC LADDER SYNTHESIZER"], ["AUDITION MOOG", "AUDITION"], ["MOOG LADDER VCF", "LADDER VCF"],
+             ["MOOG MODEL D TOPOLOGY", "4-POLE TOPOLOGY"]] + _AKAI,
+    "obxd": _AKAI,
+    "wurl": [["Wurlitzer", "Wurl"], ["WURLITZER", "WURL"], ["AKAI PROFESSIONAL STANDALONE ENGINE", "STANDALONE ENGINE"]] + _AKAI,
+    "midiplayer": [["[RHODES CHORDS]", "[E-PIANO CHORDS]"]] + _AKAI,
+    "rampage": [["BEFACO.ORG", "DUAL SLEW"], ["BEFACO", "RAMPAGE"]],
+    "libpo32": [["POCKET OPERATOR 32", "POCKET DRUMS"]] + _AKAI,
+    "chordism": _AKAI, "eucalypso": _AKAI, "fizzik": _AKAI, "groovebank": _AKAI, "hank": _AKAI, "monksynth": _AKAI,
+    "pixelwalkers": _AKAI,
+}
+
+
 def convert(port):
     cfg = dict(MAPS[port])
     D = os.path.join(STEVE, "schwung-ports", port)
@@ -1851,6 +1894,8 @@ def convert(port):
     cfg["augment"] = [dict(op, **({"html": expand(op["html"], cfg, byk0)} if "html" in op else {}),
                            **({"each": [expand(h, cfg, byk0) for h in op["each"]]} if "each" in op else {}))
                       for op in cfg.get("augment", [])]
+    if port in BRAND_RETEXT:   # last, after the design's own steps
+        cfg["augment"].append({"sel": "body", "retext": BRAND_RETEXT[port]})
     added = cfg.pop("_added", set())
     if cfg.get("grid"):   # pages the design didn't draw
         cfg["grid_pages"] = [{"name": t["name"], "html": grid_page(t, cfg, byk0)} for t in grid_tabs(D)

@@ -4,6 +4,19 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
 
 ## Catalogue ([docs/catalogue-migration.md](docs/catalogue-migration.md))
 
+- [ ] **Other companies' names out** (2026-10-12; sd88me's new catalogue rule and Mutable Instruments' own terms; plan
+  and status in [docs/catalogue-migration.md](docs/catalogue-migration.md#other-companies-names-2026-10-12)). Moog is
+  RaffoSynth; the Mutable Instruments ports are Macro Osc (Braids), Macro Osc 2 (Plaits), Modal Voice (Elements),
+  Resonator (Rings), Resonator FX, Meta Mod (Warps), Drum Map (Grids), Random Sampler (Marbles), with Émilie Gillet as
+  their maker (Verglas keeps its name); the screens' backgrounds lost their brand text; Fizzik's, Noisemaker's and
+  Aphex's option labels lost theirs. IDs, `.so` names and parameters unchanged.
+  - [x] Repo (branch `branding`): builds PASSED, check_skin OK, screenshots, READMEs, catalogue entries (2026-10-12)
+  - [x] Live II (2026-10-12): installed (one MPC restart); the browser shows the new names and the maker "Émilie Gillet"
+    correctly (MPC writes it as `&#201;` in MPC.settings); the old screen folders are gone
+  - [x] Live II (2026-10-12): an old project still finds them ("0001 Yeild": saved with [SYN] Moog, it opens with
+    RaffoSynth and its sound; its Percolator, saved at a `/sdcard/vst/percolator.so` that no longer exists, loads from
+    the release folder). MPC matches a saved plugin by its uid, not its name or path.
+  - [ ] Rename the seven repos, publish, release; tell sd88me (and ask about OB-Xd, 303, Rampage)
 - [x] **Moog's EMPHASIS and CUTOFF** (2026-10-12, PR #19): EMPHASIS hardly changed the sound (the
   ladder's feedback topped out at a quarter of what it needs to resonate: +2 dB at full) and CUTOFF fully open stopped
   at 2.3 kHz. Fixed under `MPC_PORT` (EMPHASIS up to 0.9 of self-oscillation, matched cutoff tuning); the 14 presets

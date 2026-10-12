@@ -32,5 +32,5 @@ jobs:
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
       plugin_id: grids
       license: GPL-3.0-only
-      about: "Mutable Instruments Grids: a topographic drum sequencer that plays a drum track from MPC's clock."
+      about: "Drum Map: a topographic drum sequencer that plays a drum track from MPC's clock, from Émilie Gillet's open-source Grids."
       dry_run: ${{ inputs.dry_run }}

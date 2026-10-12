@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Publish one plugin folder to its own repo, github.com/saustin2010/mpc-vst-<plugin>, where its releases are made and
+# Publish one plugin folder to its own repo, github.com/saustin2010/mpc-vst-<plugin> (a renamed plugin's repo name is in
+# dev-tools/catalogue/repo-names.tsv), where its releases are made and
 # which the catalogue lists (docs/catalogue-migration.md). This repo stays the master:
 #   tools/publish.sh <plugin> [--create] [--dry-run]
 #     --create    make the GitHub repo first if it doesn't exist (public; description from the release workflow's "about")
@@ -8,7 +9,7 @@
 # main. The same history always splits to the same commits, so a publish is a fast-forward. It publishes what is
 # committed on the current branch, so the folder must have no uncommitted changes, and it refuses when the plugin repo
 # has commits this repo lacks: a pull request merged there comes back first with
-#   git subtree pull --prefix=<plugin folder> https://github.com/saustin2010/mpc-vst-<plugin> main
+#   git subtree pull --prefix=<plugin folder> https://github.com/saustin2010/mpc-vst-<repo> main
 # The folder must be catalogue-ready: LICENSE and .github/workflows/release.yml (see the migration doc's checklist).
 # MPC_PUBLISH_OWNER overrides the account. Needs git (with subtree) and, for --create, gh.
 set -euo pipefail
@@ -16,7 +17,7 @@ REPO=$(cd "$(dirname "$0")/.." && pwd)
 cd "$REPO"
 . tools/common.sh
 
-[ $# -ge 1 ] || { sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 1; }
+[ $# -ge 1 ] || { sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'; exit 1; }
 name=$1; shift
 create=0 dry=0
 for a in "$@"; do
@@ -30,7 +31,8 @@ rel=$(lookup "$name")
 [ "$(echo "$rel" | wc -l)" -eq 1 ] || { echo "$name: more than one plugin"; exit 1; }
 plugin=$(basename "$rel")
 owner=${MPC_PUBLISH_OWNER:-saustin2010}
-target=$owner/mpc-vst-$plugin
+repo=$(awk -v p="$plugin" '$1 == p {print $2}' dev-tools/catalogue/repo-names.tsv)   # a renamed plugin's repo
+target=$owner/mpc-vst-${repo:-$plugin}
 url=https://github.com/$target
 
 for f in LICENSE .github/workflows/release.yml README.md; do

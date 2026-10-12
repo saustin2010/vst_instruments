@@ -32,5 +32,5 @@ jobs:
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
       plugin_id: warps
       license: MIT
-      about: "Mutable Instruments Warps: a meta-modulator (ring mod, fold, vocoder...) as an audio effect, with 12 presets."
+      about: "Meta Mod: a meta-modulator (ring mod, fold, vocoder...) as an audio effect, with 12 presets, from Émilie Gillet's open-source Warps."
       dry_run: ${{ inputs.dry_run }}

@@ -878,9 +878,9 @@
    "key": "filter_rev",
    "name": "Filter Rev",
    "type": "enum",
-   "default": "REV.1 KORG-35",
+   "default": "REV.1 SALLEN-KEY",
    "options": [
-    "REV.1 KORG-35",
+    "REV.1 SALLEN-KEY",
     "REV.2 OTA"
    ],
    "description": "Early MS-20/MS-10 KORG-35 (creamy fuzz break-up) vs late MS-20 LM13600 OTA (cleaner howl)"

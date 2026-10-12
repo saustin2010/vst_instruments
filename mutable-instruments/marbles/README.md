@@ -1,43 +1,45 @@
-# Marbles
+# Random Sampler
 
-**MIDI sequencer** · Mutable Instruments Marbles: a random sampler that plays up to three tracks. · maker in MPC: Mutable Instruments · licence: MIT
+**MIDI sequencer** · Random Sampler: a random sampler that plays up to three tracks. · maker in MPC: Émilie Gillet · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Marbles on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Random Sampler on the MPC touchscreen">
 
-Marbles generates random rhythms and melodies you can steer. The T section makes three related gate streams (T1, T2, T3) with controllable rate, bias and jitter; the X section makes random voltages quantised to a scale, with SPREAD, BIAS and STEPS shaping their distribution. DEJA VU makes both loop: turn it up and the randomness repeats. This port runs Mutable's own T and X generators clocked from MPC's tempo, and plays T1/T2/T3 as notes of pitch X1/X2/X3 on MIDI channels 1, 2 and 3 (or all on 1), out of its own MIDI port. SETUP holds what the module keeps in its menus (scales, ranges, clock ratio).
+Formerly **Marbles**, renamed on 2026-10-12: Mutable Instruments asks that its name and its module names not be used on derivative works, so the plugin has a name of its own and Émilie Gillet, who wrote the code, as its maker. Its sound is Émilie Gillet's open-source Marbles code (Mutable Instruments). Its MIDI port is now **[SEQ] Random Sampler MIDI Out**: turn **Track** on for it in Preferences > MIDI and pick it again as the MIDI input of the tracks it plays.
+
+Random Sampler generates random rhythms and melodies you can steer. The T section makes three related gate streams (T1, T2, T3) with controllable rate, bias and jitter; the X section makes random voltages quantised to a scale, with SPREAD, BIAS and STEPS shaping their distribution. DEJA VU makes both loop: turn it up and the randomness repeats. This port runs Mutable's own T and X generators clocked from MPC's tempo, and plays T1/T2/T3 as notes of pitch X1/X2/X3 on MIDI channels 1, 2 and 3 (or all on 1), out of its own MIDI port. SETUP holds what the module keeps in its menus (scales, ranges, clock ratio).
 
 ## On the MPC
 
-- In the plugin browser: **[SEQ] Marbles** by **Mutable Instruments** (Sequencer)
-- Files: `/sdcard/vst/marbles.so`, screen in `/sdcard/Synths/Mutable Instruments - VST - [SEQ] Marbles/`
+- In the plugin browser: **[SEQ] Random Sampler** by **Émilie Gillet** (Sequencer)
+- Files: `/sdcard/vst/marbles.so`, screen in `/sdcard/Synths/Émilie Gillet - VST - [SEQ] Random Sampler/`
 - 24 parameters (all automatable) on 2 pages
 
 ## Playing it
 
 The walk-through, with what to check when nothing plays: [docs/sequencers.md](../../docs/sequencers.md).
 
-MPC OS ignores a plugin's own MIDI output, so Marbles opens its own MIDI port (MPC lists it as **[SEQ] Marbles MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
+MPC OS ignores a plugin's own MIDI output, so Random Sampler opens its own MIDI port (MPC lists it as **[SEQ] Random Sampler MIDI Out**), the way a USB MIDI device would appear. MPC picks the port up without a restart:
 
-1. Put Marbles on a plugin track. It needs no notes: it plays when MPC's transport runs.
-2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Marbles MIDI Out**.
-3. On the track(s) that should play, set **MIDI Input Port** to that port and **Monitor** to **In** (not Auto, which only listens while that track is selected). Not on Marbles' own track, or it hears itself.
+1. Put Random Sampler on a plugin track. It needs no notes: it plays when MPC's transport runs.
+2. **Menu → Preferences → MIDI**: switch **Track** on for **[SEQ] Random Sampler MIDI Out**.
+3. On the track(s) that should play, set **MIDI Input Port** to that port and **Monitor** to **In** (not Auto, which only listens while that track is selected). Not on Random Sampler's own track, or it hears itself.
 4. Press play: it follows MPC's tempo and transport (MIDI clock from the plugin host).
 
-Marbles makes no sound of its own.
+Random Sampler makes no sound of its own.
 
 ## Pages
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. MARBLES
+### 1. RANDOM SAMPLER
 
-<img src="screenshots/page_0.png" width="760" alt="Marbles, page MARBLES">
+<img src="screenshots/page_0.png" width="760" alt="Random Sampler, page RANDOM SAMPLER">
 
 Q-Link columns: **1** T MODEL, CLOCK DIV, T BIAS, JITTER  ·  **2** DEJA VU, LENGTH, T DEJA VU, X DEJA VU  ·  **3** SCALE, SPREAD, X BIAS, STEPS  ·  **4** CHANNELS, GATE LEN
 
 ### 2. SETUP
 
-<img src="screenshots/page_1.png" width="760" alt="Marbles, page SETUP">
+<img src="screenshots/page_1.png" width="760" alt="Random Sampler, page SETUP">
 
 Q-Link columns: **1** RATE BASE, T RANGE, GATE RAND  ·  **2** X RANGE, X MODE  ·  **3** BASE NOTE, VELOCITY
 

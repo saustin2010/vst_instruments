@@ -1,15 +1,17 @@
-# Moog
+# RaffoSynth
 
 **Synth** · RaffoSynth: a Minimoog-style mono synth with four oscillators and a ladder filter. · maker in MPC: Raffo · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Moog on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="RaffoSynth on the MPC touchscreen">
+
+Formerly **Moog**, renamed RaffoSynth on 2026-10-12 so its name isn't another company's (the name of the synth it comes from; sd88me's catalogue lists it as RaffoSynth). Its sound and presets are unchanged.
 
 RaffoSynth, a Minimoog-inspired monosynth: four oscillators (waveform and footage switches, 32' to 2', detune), noise, the 24 dB resonant ladder filter with its contour and a CLEAN / DRIVE switch, a loudness contour, an LFO, mod wheel routing and glide. Fat basses and leads. 14 presets, also listed in MPC's own PRESET menu in the plugin header. The oscilloscope on the MAIN page shows oscillator 1's waveform, and the two envelope displays follow their knobs.
 
 ## On the MPC
 
-- In the plugin browser: **[SYN] Moog** by **Raffo** (Synth)
-- Files: the release installs one folder, `/sdcard/Synths/Raffo - VST - [SYN] Moog/`, holding `moog.so`, its screen. The vst_instruments installer puts `moog.so` in `/sdcard/vst/` instead.
+- In the plugin browser: **[SYN] RaffoSynth** by **Raffo** (Synth)
+- Files: the release installs one folder, `/sdcard/Synths/Raffo - VST - [SYN] RaffoSynth/`, holding `moog.so`, its screen. The vst_instruments installer puts `moog.so` in `/sdcard/vst/` instead.
 - 42 parameters (all automatable) on 3 pages
 
 ## Playing it
@@ -24,7 +26,7 @@ Screenshots are rendered from the built skin with the engine's real values right
 
 ### 1. MAIN
 
-<img src="screenshots/page_0.png" width="760" alt="Moog, page MAIN">
+<img src="screenshots/page_0.png" width="760" alt="RaffoSynth, page MAIN">
 
 Q-Link columns: **1** CUTOFF, EMPHASIS, CONTOUR, KEY TRACK  ·  **2** FLT ATTACK, FLT DECAY, FLT SUSTAIN, FLT RELEASE  ·  **3** AMP ATTACK, AMP DECAY, AMP SUSTAIN, AMP RELEASE  ·  **4** PATCH
 
@@ -32,13 +34,13 @@ Under the filter knobs, the **FILTER** switch (touch only: the filter's Q-Link c
 
 ### 2. OSCILLATORS
 
-<img src="screenshots/page_1.png" width="760" alt="Moog, page OSCILLATORS">
+<img src="screenshots/page_1.png" width="760" alt="RaffoSynth, page OSCILLATORS">
 
 Q-Link columns: **1** NOISE, OSC1 WAVE, OSC1 RANGE, OSC1 LEVEL  ·  **2** OSC2 WAVE, OSC2 RANGE, OSC2 DETUNE, OSC2 LEVEL  ·  **3** OSC3 WAVE, OSC3 RANGE, OSC3 DETUNE, OSC3 LEVEL  ·  **4** OSC4 WAVE, OSC4 RANGE, OSC4 DETUNE, OSC4 LEVEL
 
 ### 3. MODULATION
 
-<img src="screenshots/page_2.png" width="760" alt="Moog, page MODULATION">
+<img src="screenshots/page_2.png" width="760" alt="RaffoSynth, page MODULATION">
 
 Q-Link columns: **1** LFO RATE, LFO PITCH, LFO FILTER  ·  **2** WHEEL FILTER, WHEEL PITCH  ·  **3** GLIDE, BEND RANGE, VELOCITY  ·  **4** VOLUME
 
@@ -46,7 +48,7 @@ Q-Link columns: **1** LFO RATE, LFO PITCH, LFO FILTER  ·  **2** WHEEL FILTER, W
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
-**From the release:** download `SYN-Moog-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-moog/releases),
+**From the release:** download `SYN-RaffoSynth-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-raffosynth/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 
@@ -111,5 +113,5 @@ on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/
 ## Development
 
 This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`schwung/instruments/moog`), next to the other plugins
-and the tools that made its screen, and published to [mpc-vst-moog](https://github.com/saustin2010/mpc-vst-moog) for its
+and the tools that made its screen, and published to [mpc-vst-raffosynth](https://github.com/saustin2010/mpc-vst-raffosynth) for its
 releases. Issues and pull requests are welcome in either.

@@ -70,7 +70,10 @@ owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai upda
   back with `git subtree pull`, see the script). Its releases build with `framework/setup-release.sh`'s tools;
   `dev-tools/catalogue/prepare.py <plugin>` writes its repo files and `dev-tools/catalogue/check.sh <plugin>` must
   say PASSED and "screen: same" before a release. Don't edit the tools while a check runs (bash reads scripts as it goes).
-- No maker badges in screen art (no Akai/Roland/Oberheim logos implying origin); naming what a plugin emulates is fine.
+- No other company's name or logo in a plugin's name, maker, screen art or screenshot (sd88me's catalogue rule and
+  Mutable Instruments' terms, 2026-10-12: Moog is RaffoSynth, the Mutable ports have names of their own and Émilie
+  Gillet as maker). Saying what a plugin models in its summary or README ("Minimoog-style", "from Émilie Gillet's
+  Rings") is fine. A Stitch mockup's text becomes the screen's background: keep brand names out of it too.
 - sd88me's framework files stay in his repo: change them through `framework/mpc-vst-plugins.patch`
   (`git diff` in the framework clone, plus new files), never by copying them here. The release tools are his current
   `main` plus commits on `steve-features` of `saustin2010/mpc-vst-plugins` (each offered to him as a PR); a change

@@ -1,8 +1,10 @@
-# Rings FX
+# Resonator FX
 
-**Audio effect** · Rings as an audio effect: the track's sound excites the resonator, with 12 presets. · maker in MPC: Mutable Instruments · licence: MIT
+**Audio effect** · Resonator FX: Resonator as an audio effect, the track's sound excites the resonator, with 12 presets. · maker in MPC: Émilie Gillet · licence: MIT
 
-<img src="screenshots/page_0.png" width="760" alt="Rings FX on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Resonator FX on the MPC touchscreen">
+
+Formerly **Rings FX**, renamed on 2026-10-12: Mutable Instruments asks that its name and its module names not be used on derivative works, so the plugin has a name of its own and Émilie Gillet, who wrote the code, as its maker. Its sound is Émilie Gillet's open-source Rings code (Mutable Instruments).
 
 The same Rings resonator as an insert effect: the track's audio becomes the exciter and Rings' own onset detector strums it, tuned to NOTE. Drums turn into tuned metallic hits, voices and loops grow sympathetic string halos. INPUT gain and a dry/wet MIX sit alongside the module's controls.
 
@@ -10,8 +12,8 @@ Upstream has no presets, so the port brings 12 (Init, Resonant Body, Metal Plate
 
 ## On the MPC
 
-- In the plugin browser: **[FX] Rings FX** by **Mutable Instruments** (Audio effect)
-- Files: the release installs one folder, `/sdcard/Synths/Mutable Instruments - VST - [FX] Rings FX/`, holding `ringsfx.so`, its screen. The vst_instruments installer puts `ringsfx.so` in `/sdcard/vst/` instead.
+- In the plugin browser: **[FX] Resonator FX** by **Émilie Gillet** (Audio effect)
+- Files: the release installs one folder, `/sdcard/Synths/Émilie Gillet - VST - [FX] Resonator FX/`, holding `ringsfx.so`, its screen. The vst_instruments installer puts `ringsfx.so` in `/sdcard/vst/` instead.
 - 12 parameters (all automatable) on 1 page
 
 ## Playing it
@@ -24,9 +26,9 @@ An audio effect: insert it in a track's or program's insert effects (it reports 
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. RINGS FX
+### 1. RESONATOR FX
 
-<img src="screenshots/page_0.png" width="760" alt="Rings FX, page RINGS FX">
+<img src="screenshots/page_0.png" width="760" alt="Resonator FX, page RESONATOR FX">
 
 Q-Link columns: **1** MODEL, POLYPHONY  ·  **2** STRUCTURE, BRIGHTNESS, DAMPING, POSITION  ·  **3** NOTE, FINE  ·  **4** INPUT, MIX, WIDTH, VOLUME
 
@@ -34,7 +36,7 @@ Q-Link columns: **1** MODEL, POLYPHONY  ·  **2** STRUCTURE, BRIGHTNESS, DAMPING
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
-**From the release:** download `FX-Rings-FX-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-ringsfx/releases),
+**From the release:** download `FX-Resonator-FX-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-resonator-fx/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 
@@ -100,5 +102,5 @@ on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/
 ## Development
 
 This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`mutable-instruments/ringsfx`), next to the other plugins
-and the tools that made its screen, and published to [mpc-vst-ringsfx](https://github.com/saustin2010/mpc-vst-ringsfx) for its
+and the tools that made its screen, and published to [mpc-vst-resonator-fx](https://github.com/saustin2010/mpc-vst-resonator-fx) for its
 releases. Issues and pull requests are welcome in either.

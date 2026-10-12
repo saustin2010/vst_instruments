@@ -32,5 +32,5 @@ jobs:
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
       plugin_id: rings
       license: MIT
-      about: "Mutable Instruments Rings: a resonator, strummed by the notes you play, with 14 presets."
+      about: "Resonator: a resonator strummed by the notes you play, with 14 presets, from Émilie Gillet's open-source Rings."
       dry_run: ${{ inputs.dry_run }}
