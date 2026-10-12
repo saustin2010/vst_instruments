@@ -80,6 +80,9 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - Presets in MPC's PRESET menu (2026-10-03): its 31 presets are VST programs (vst.json `programs`), so the PRESET
   dropdown in the plugin header, also on the arrangement screen, lists and loads them.
+- No other company's name on the screen (2026-10-12): VOICING's PROPHET and OBERHEIM are **CLEAN 4P** and **WARM 4P**
+  (the two 4-pole voicings by their character, the cleaner and the more driven one). The sound is unchanged, and saved
+  sounds keep their voicing (it's saved as a number). `src/dsp/fizzik.c` (`-DMPC_PORT`); diff: `upstream-changes.diff`.
 
 ## Files
 

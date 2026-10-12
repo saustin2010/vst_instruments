@@ -134,6 +134,9 @@ links above.
   or the Envelope Editor's points: about 1 KB lost per instance. The release workflow's host test runs with
   LeakSanitizer on and refused it. Local patches under `#ifdef MPC_PORT` in `src/dsp/Engine/FilterHandler.h`,
   `FilterMoog24.h` and `src/dsp/EnvelopeEditor/EnvelopeEditor.h`; the originals are in `upstream-changes.diff`.
+- No other company's name on the screen (2026-10-12): FILTER TYPE's Moog and Moog2 are **Ladder** and **Ladder 2**
+  (TAL's two 24 dB ladder filters). The sound is unchanged, and saved sounds keep their filter (it's saved as a number).
+  `src/dsp/noisemaker_plugin.cpp` (`-DMPC_PORT`); diff: `upstream-changes.diff`.
 
 ## Files
 

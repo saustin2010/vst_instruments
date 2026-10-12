@@ -495,7 +495,19 @@
 \ No newline at end of file
 --- a/src/dsp/noisemaker_plugin.cpp
 +++ b/src/dsp/noisemaker_plugin.cpp
-@@ -1517,6 +1517,15 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
+@@ -245,7 +245,11 @@
+ 
+   /* ---- Filter ---- */
+   { "filter_type",   "Filter Type",   FILTERTYPE,    K_ENUM,   0,0, 12,
++#ifdef MPC_PORT   /* no other company's name on the screen: TAL's two ladder filters by what they are */
++        {"LP24","LP18","LP12","LP6","HP24","BP24","Notch","SV-LP","SV-HP","SV-BP","Ladder","Ladder 2"} },
++#else
+         {"LP24","LP18","LP12","LP6","HP24","BP24","Notch","SV-LP","SV-HP","SV-BP","Moog","Moog2"} },
++#endif
+   { "cutoff",        "Cutoff",        CUTOFF,        K_PCT,    0,0, 0,{0} },
+   { "resonance",     "Resonance",     RESONANCE,     K_PCT,    0,0, 0,{0} },
+   { "keyfollow",     "Key Follow",    KEYFOLLOW,     K_PCT,    0,0, 0,{0} },
+@@ -1517,6 +1521,15 @@
          return snprintf(buf, buf_len, "Noisemaker");
      if (strcmp(key, "state") == 0)
          return build_state(inst, buf, buf_len);

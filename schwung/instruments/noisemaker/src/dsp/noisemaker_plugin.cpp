@@ -245,7 +245,11 @@ static const param_def_t PARAMS[] = {
 
   /* ---- Filter ---- */
   { "filter_type",   "Filter Type",   FILTERTYPE,    K_ENUM,   0,0, 12,
+#ifdef MPC_PORT   /* no other company's name on the screen: TAL's two ladder filters by what they are */
+        {"LP24","LP18","LP12","LP6","HP24","BP24","Notch","SV-LP","SV-HP","SV-BP","Ladder","Ladder 2"} },
+#else
         {"LP24","LP18","LP12","LP6","HP24","BP24","Notch","SV-LP","SV-HP","SV-BP","Moog","Moog2"} },
+#endif
   { "cutoff",        "Cutoff",        CUTOFF,        K_PCT,    0,0, 0,{0} },
   { "resonance",     "Resonance",     RESONANCE,     K_PCT,    0,0, 0,{0} },
   { "keyfollow",     "Key Follow",    KEYFOLLOW,     K_PCT,    0,0, 0,{0} },

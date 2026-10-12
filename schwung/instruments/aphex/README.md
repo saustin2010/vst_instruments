@@ -97,6 +97,9 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   in their own PATCH ACTIONS box and off the Q-Links; each VCO's selectors above its knobs, VCO2's SYNC / FM with its
   selectors; the envelope curve on the left of ENVELOPES; MODERN loses a heading over a switch that had no
   parameter. All made in the design (convert.py MAPS), so a rerun of the conversion keeps them.
+- No other company's name on the screen (2026-10-12): FILTER REV's REV.1 KORG-35 is **REV.1 SALLEN-KEY** (the early
+  circuit is a Sallen-Key filter with diodes). The sound is unchanged, and saved sounds keep their filter (it's saved as
+  a number). `src/dsp/aphex.c` (`-DMPC_PORT`, this plugin's first local change); diff: `upstream-changes.diff`.
 
 ## Files
 
@@ -115,6 +118,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 | `images/` | artwork: backgrounds, knobs, displays |
 | `design/` | the Google Stitch design this screen was converted from (`stitch.html`, as Stitch wrote it) |
 | `src/` | the engine's source, vendored from upstream |
+| `upstream-changes.diff` | every local change to the upstream source |
 | `UPSTREAM` | where the source came from, and at which commit |
 
 ## Building
