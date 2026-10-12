@@ -89,8 +89,9 @@ parameter index, so existing projects keep working.
     tools `eaef502` (steve-features + mpc_engine_changed), both zips OK in `catalog_check --catalog`, screens identical
     to `deploy/`. Both zips installed on the Live II and checked by the owner: "all working"; v2.0.0 published with
     `tested.json` (2026-10-12). The catalogue PR (asset_pattern, percolator-out, author):
-    sd88me/mpc-vst-plugins#398. Left: publish percolator-out-v2.0.0 once #398 is merged; offer eaef502 to sd88me; whether MPC's own automation on Percolator's
-    track lists its parameters by name.
+    sd88me/mpc-vst-plugins#398; eaef502 offered to sd88me as sd88me/mpc-vst-plugins#399 (with a test engine and docs).
+    Left: publish percolator-out-v2.0.0 once #398 is merged; whether MPC's own automation on Percolator's track lists
+    its parameters by name.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it.
