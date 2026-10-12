@@ -16,7 +16,10 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   - [x] Live II (2026-10-12): an old project still finds them ("0001 Yeild": saved with [SYN] Moog, it opens with
     RaffoSynth and its sound; its Percolator, saved at a `/sdcard/vst/percolator.so` that no longer exists, loads from
     the release folder). MPC matches a saved plugin by its uid, not its name or path.
-  - [ ] Rename the seven repos, publish, release; tell sd88me (and ask about OB-Xd, 303, Rampage)
+  - [x] GitHub (2026-10-13): seven repos renamed, all eight published and released (RaffoSynth 1.2.0, its zip played
+    on the Live II; the others 1.1.0, offline checks)
+  - [ ] sd88me's review of [#404](https://github.com/sd88me/mpc-vst-plugins/pull/404) (opened 2026-10-13): the eight
+    entries' new names and repos; it also asks him about OB-Xd, 303 and Rampage
 - [x] **Moog's EMPHASIS and CUTOFF** (2026-10-12, PR #19): EMPHASIS hardly changed the sound (the
   ladder's feedback topped out at a quarter of what it needs to resonate: +2 dB at full) and CUTOFF fully open stopped
   at 2.3 kHz. Fixed under `MPC_PORT` (EMPHASIS up to 0.9 of self-oscillation, matched cutoff tuning); the 14 presets
