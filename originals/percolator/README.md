@@ -254,6 +254,9 @@ copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The 
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 Your own files in `percolator/` are kept when you update or uninstall.
 
+**[FX] Percolator OUT** ([its README](percolatorout/)) has a zip of its own, `FX-Percolator-OUT-<version>-mpc-armv7.zip`,
+in its own release on the same page (tag `percolator-out-v<version>`); install it the same way.
+
 **With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
 
 ```
