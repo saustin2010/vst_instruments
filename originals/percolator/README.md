@@ -31,19 +31,13 @@ Each voice's MIDI is set on the **MIDI & OUT** page:
   (a Force's drum pads, TR-MPC); on an MPC plugin track those are pads 1-4 of **bank B**. Give two voices the same
   note and they play together. (Up to 1.2.0 the notes were fixed at 20-23, bank A: a sequence recorded on those needs
   moving, or set the NOTEs to G#-1, A-1, A#-1, B-1.)
-- **KEYS** (OFF / ALL / ZONE) and **ZONE**: which other notes play the voice **pitched**, with pitch bend (±2
-  semitones, any channel).
-  - **ZONE** (to start with): the twelve notes of the voice's ZONE, an octave; its C plays the voice as tuned, B 11
-    semitones up. To start with **C2, C3, C4 and C5 for voices 1-4** (notes 48-95, above the pads' notes), so one
-    keyboard plays all four, an octave each, while the pads trigger the kit. For a part per voice from MIDI tracks,
-    give each voice's track the TRANSPOSE that puts it in that voice's zone. Two voices on one zone play together.
-  - **ALL**: every note that no NOTE or zone takes, C3 as tuned (the KEYS switch up to 1.2.0: a project saved then
-    gets ALL on its KEYS voice and OFF on the rest, so it plays as it did).
-  - **OFF**: only its NOTE.
-
-  A NOTE comes first: a note that is one voice's NOTE plays that voice as tuned, even inside another's zone.
-  The MIDI channel can't pick a voice (it did in a 2.0.0 test build, as the Pērkons' MULTI mode does): MPC hands a
-  plugin every note-on on channel 1, whatever channel it was sent on (Live II, 2026-10-12, traced).
+- **KEYS CH**: the MIDI channel on which every note plays the voice **pitched** (C3 = as tuned), with that channel's
+  pitch bend (±2 semitones). To start with **channels 2-5 for voices 1-4**, so a MIDI track or keyboard on channel 3
+  plays voice 2 melodically while the pads (channel 1) trigger the kit: the Pērkons' MULTI mode, always on. Two voices
+  on one KEYS CH play together. **OFF**: never pitched. **ALL**: every note that isn't a voice's NOTE, on any channel
+  (the KEYS switch up to 1.2.0; a project saved then gets ALL on its KEYS voice). On its KEYS CH a voice takes every
+  note, its own NOTE too; on other channels its NOTE plays it as tuned. Whether MPC hands a plugin its notes on their
+  own channel is still to be checked on a device.
 - Velocity sets the level.
 - **DECAY at the top = DRONE**: the voice sounds for as long as its note is held, then fades in 0.35 s (on the
   hardware a drone never stops; here the note length decides).
@@ -148,7 +142,7 @@ buttons), in the voice pages' order (TUNE DECAY PARAM 1 PARAM 2 / CUTOFF DRIVE F
 <img src="screenshots/page_7.png" width="760" alt="Percolator, each voice's MIDI and output">
 
 What this track plays (TRACK PLAYS: MAIN KIT, or OUT 1-4 of the main Percolator, [above](#separate-outputs-out-1-4)),
-then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link), KEYS, ZONE and OUT
+then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link), KEYS CH and OUT
 ([Playing it](#playing-it)).
 
 ## Kits
@@ -273,20 +267,15 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   back, and each set loaded a kit. 1.2.0: a kit set waits for the next block, so that pair loads nothing; and MODE
   steps on its Q-Link (its 1/2/3 labels had clashed with the value the engine reports). Both confirmed on the Live II.
 - 2.0.0, not yet released (2026-10-12): a MIDI & OUT page: each voice's NOTE (36-39 to start with; they were fixed
-  at 20-23), KEYS (OFF / ALL / ZONE: an octave per voice, C2-C5 to start with, plays it pitched) and OUT (MAIN, OUT 1-4, played on
+  at 20-23), KEYS CH (channels 2-5 play voices 1-4 pitched: the Pērkons' MULTI) and OUT (MAIN, OUT 1-4, played on
   another track by [FX] Percolator OUT or a second Percolator); COMP SEND per voice, the compressor bypassed at AMOUNT 0 and only ever louder above it (it was half made up, so
   a high THRESH made the kit up to 6.6 dB quieter), and COMP LEVEL, its own output; each voice's LEVEL, FX SEND and
   COMP SEND in a MIX panel (Q-Link column 4).
   Offline: build and host test PASSED, `check_skin.py` OK; AMOUNT 0 is the old engine to 1 LSB over 1.4M frames; every
-  THRESH x AMOUNT louder than off on the built-in kits; the MIDI routing (29 cases: pads, each zone's ends, a NOTE
-  inside a zone, ALL, OFF, shared zones, a 1.2.0 project, save and restore, bend, MPC's note-offs); OUT 1-4 in one
-  process in either order, random order and on two threads with jitter (every block is the voices sent there alone;
-  main + OUT = the kit), two voices on one OUT, a voice kept on MAIN.
-  On the Live II (owner, 2026-10-12, after the notes, an OUT on an audio track, the compressor and the timing): "ok
-  all works", but not the separate channels (KEYS CH, a MIDI channel per voice, then). A trace build showed why: a
-  MIDI track on channel 3 reached the plugin as note-ons on channel 1 (`90 41 7f`) and note-offs on 3 (`82 41 40`).
-  So KEYS became OFF / ALL / ZONE (owner's choice), and a note-off now ends its note on any channel (a drone played
-  from a MIDI track had never stopped). Zones not yet tried on the device.
+  THRESH x AMOUNT louder than off on the built-in kits; the MIDI routing (22 cases); OUT 1-4 in one process in either
+  order, random order and on two threads with jitter (every block is the voices sent there alone; main + OUT = the
+  kit), two voices on one OUT, a voice kept on MAIN. Installed on the Live II for the owner's tests; to check: the
+  notes, channels and KEYS, an OUT on a second track, the compressor by ear.
 
 ## Files
 

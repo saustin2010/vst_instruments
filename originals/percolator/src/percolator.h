@@ -62,7 +62,7 @@ typedef struct {
 
 typedef struct {
     int active, gate, note, drone;
-    int pitched;           /* played pitched (KEYS ZONE or ALL): pitch bend reaches it */
+    int ch, pitched;       /* the trigger's MIDI channel (0-15); played pitched (KEYS, MULTI): pitch bend reaches it */
     int ns;                /* frames since the trigger */
     float vel;             /* target amplitude from velocity */
     float amp;             /* smoothed level x velocity */
@@ -92,7 +92,7 @@ typedef struct {
 typedef struct perc {
     float pv[NP];          /* knobs 0..100, options as an index, kit number */
     voice_t v[NV];
-    float bend;            /* pitch bend, semitones, on any channel (voices played pitched) */
+    float bend[16];        /* pitch bend per MIDI channel, semitones (voices played pitched) */
     /* LFO */
     float lfo_ph, lfo_out, lfo_a, lfo_b;
     uint32_t lfo_rng;
