@@ -369,9 +369,9 @@ def layout():
     L.append("[tab MIDI & OUT]")
     L.append("art file=images/skin/bg_io.png x=0 y=86 w=1280 h=628")
     html = h_panel(8, 94, 1264, 112, COL["mst"], "THIS TRACK PLAYS")
-    html += h_text(28, 140, "MAIN KIT: THE FOUR VOICES, EACH TO ITS OUT BELOW (IN THIS MIX UNLESS A TAP PLAYS THAT OUT)",
+    html += h_text(28, 140, "MAIN KIT: THE FOUR VOICES, EACH TO ITS OUT BELOW (IN THIS MIX UNTIL SOMETHING PLAYS THAT OUT)",
                    "#aba7c4", 12, .12, 600)
-    html += h_text(28, 162, "OUT 1-4: A SECOND PERCOLATOR ON ANOTHER TRACK, PLAYING THE VOICES SENT TO THAT OUT",
+    html += h_text(28, 162, "OUT 1-4: ON ANOTHER TRACK, [FX] PERCOLATOR OUT (AN INSERT; AN AUDIO TRACK WILL DO) PLAYS THE VOICES SENT THERE",
                    "#aba7c4", 12, .12, 600)
     html += h_text(28, 184, "KEYS CH: EVERY NOTE ON THAT MIDI CHANNEL PLAYS THE VOICE PITCHED (C3 = AS TUNED); NOTE: PLAYS IT AS TUNED",
                    "#6a6782", 12, .12, 600)

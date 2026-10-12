@@ -36,7 +36,7 @@
 #define TAP_OUTS 4
 #define TAP_N 4096   /* frames per OUT ring (32 blocks of 128) */
 #define TAP_ALIVE (16u * 128u)   /* frames a reader's last look counts for */
-#define TAP_GAIN 0.554f          /* a voice into a reader's output: Percolator's mix gain x VOLUME at 71 */
+#define TAP_GAIN (0.55f * 2.0f * 0.71f * 0.71f)   /* a voice into a reader's output: Percolator's mix gain x VOLUME at 71 */
 
 typedef struct {
     uint32_t magic, version, size;
