@@ -17,6 +17,7 @@ typedef struct {
     void (*set_param)(void *inst, const char *key, const char *val);
     int (*get_param)(void *inst, const char *key, char *buf, int buf_len);
     void (*render)(void *inst, int16_t *out_lr, int frames);
+    void (*process)(void *inst, const int16_t *in_lr, int16_t *out_lr, int frames);   /* the release tools' effect call */
 } mpc_engine_t;
 const mpc_engine_t *mpc_engine(void);
 void mpc_engine_input(void *inst, const int16_t *in_lr, int frames);
@@ -147,5 +148,12 @@ static void e_render(void *inst, int16_t *out, int frames) {
     F->in_frames = 0;
 }
 
-static const mpc_engine_t ENGINE = {e_create, e_destroy, e_midi, e_set_param, e_get_param, e_render};
+/* sd88me's newer wrapper (the release build) hands an effect its block through process(): this block's input, then
+ * render on it. This repo's wrapper calls mpc_engine_input and render instead and never reads this field. */
+static void e_process(void *inst, const int16_t *in_lr, int16_t *out, int frames) {
+    mpc_engine_input(inst, in_lr, frames);
+    e_render(inst, out, frames);
+}
+
+static const mpc_engine_t ENGINE = {e_create, e_destroy, e_midi, e_set_param, e_get_param, e_render, e_process};
 const mpc_engine_t *mpc_engine(void) { return &ENGINE; }
