@@ -274,31 +274,31 @@ have created too many repositories, too quickly"), however far apart they're spa
 | 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **in the catalogue**: v1.0.0, PR #231 merged 2026-10-08 |
 | Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 PR #230 merged 2026-10-08 |
 | Aphex | mpc-vst-aphex | `aphex` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); envelope displays 28 frames (above) |
-| Macro Osc (formerly Braids) | mpc-vst-macro-osc | `braids` | MIT | 10 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Macro Osc** (repo mpc-vst-macro-osc), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
+| Macro Osc (formerly Braids) | mpc-vst-macro-osc | `braids` | MIT | 10 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Macro Osc** (repo mpc-vst-macro-osc), **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
 | Chordism | mpc-vst-chordism | `chordism` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Denis | mpc-vst-denis | `denis` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Modal Voice (formerly Elements) | mpc-vst-modal-voice | `elements` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Modal Voice** (repo mpc-vst-modal-voice), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
+| Modal Voice (formerly Elements) | mpc-vst-modal-voice | `elements` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Modal Voice** (repo mpc-vst-modal-voice), **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
 | Fizzik | mpc-vst-fizzik | `fizzik` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | MonkSynth | mpc-vst-monksynth | `monksynth` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Mono Voice | mpc-vst-monovoice | `mono-voice` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
-| RaffoSynth (formerly Moog) | mpc-vst-raffosynth | `raffosynth` | MIT | 14 presets | **in the catalogue**: v1.1.0 (2026-10-12: EMPHASIS and CUTOFF fixed, FILTER CLEAN/DRIVE switch; the repo build played on the Live II), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **RaffoSynth** (repo mpc-vst-raffosynth), v1.2.0 to come ([below](#other-companies-names-2026-10-12)) |
+| RaffoSynth (formerly Moog) | mpc-vst-raffosynth | `raffosynth` | MIT | 14 presets | **in the catalogue**: v1.1.0 (2026-10-12: EMPHASIS and CUTOFF fixed, FILTER CLEAN/DRIVE switch; the repo build played on the Live II), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **RaffoSynth** (repo mpc-vst-raffosynth), **v1.2.0 released 2026-10-13** (its release zip played on the Live II) ([below](#other-companies-names-2026-10-12)) |
 | Mr Drums | mpc-vst-mrdrums | `mr-drums` | MIT | starter kit (made here); keeps your kits | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Mr Hyde | mpc-vst-mrhyde | `mr-hyde` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | Noisemaker | mpc-vst-noisemaker | `noisemaker` | GPL-2.0-only | keeps your banks | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | NuSaw | mpc-vst-nusaw | `nusaw` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | OB-Xd | mpc-vst-obxd | `obxd` | GPL-3.0-only | factory bank; keeps your banks | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
 | Wurl | mpc-vst-wurl | `wurl` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only) |
-| Resonator (formerly Rings) | mpc-vst-resonator | `rings` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Resonator** (repo mpc-vst-resonator), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
-| Resonator FX (formerly Rings FX) | mpc-vst-resonator-fx | `rings-fx` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Resonator FX** (repo mpc-vst-resonator-fx), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
-| Meta Mod (formerly Warps) | mpc-vst-meta-mod | `warps` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Meta Mod** (repo mpc-vst-meta-mod), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
-| Drum Map (formerly Grids) | mpc-vst-drum-map | `grids` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Drum Map** (repo mpc-vst-drum-map), v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
+| Resonator (formerly Rings) | mpc-vst-resonator | `rings` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Resonator** (repo mpc-vst-resonator), **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
+| Resonator FX (formerly Rings FX) | mpc-vst-resonator-fx | `rings-fx` | MIT | | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Resonator FX** (repo mpc-vst-resonator-fx), **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
+| Meta Mod (formerly Warps) | mpc-vst-meta-mod | `warps` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Meta Mod** (repo mpc-vst-meta-mod), **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
+| Drum Map (formerly Grids) | mpc-vst-drum-map | `grids` | GPL-3.0-only | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Drum Map** (repo mpc-vst-drum-map), **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
 | Groove Bank | mpc-vst-groovebank | `groove-bank` | MIT | 14 grooves | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | MIDI Player | mpc-vst-midiplayer | `midi-player` | MIT | demo file (made here); keeps your files | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Pixel Walkers | mpc-vst-pixelwalkers | `pixel-walkers` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Rampage | mpc-vst-rampage | `rampage` | GPL-3.0-or-later | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Super Arp | mpc-vst-superarp | `super-arp` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Eucalypso | mpc-vst-eucalypso | `eucalypso` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
-| Verglas | mpc-vst-verglas | `verglas` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); 2026-10-12: maker becomes Émilie Gillet, v1.1.0 to come ([below](#other-companies-names-2026-10-12)) |
+| Verglas | mpc-vst-verglas | `verglas` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); 2026-10-12: maker becomes Émilie Gillet, **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
 | Hank | mpc-vst-hank | `hank` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); upstream declares MIT in its README and module.json but has no file, so `LICENSE` is the MIT text naming the author (2026-10-08) |
 | Tablor | mpc-vst-tablor | `tablor` | BSD-3-Clause | 115 wavetables, 9 presets; keeps your tables | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); ships both wavetable packs, as Tablor's repo does (Neu KatalYst: "use them in all your synths"; owner's choice 2026-10-08) |
 | Hush One, Libpo32 | | | none upstream | | **not published**: no licence, and the authors can't be asked (2026-10-08) |
@@ -361,9 +361,16 @@ Drum Map and Random Sampler open their MIDI port under the new name: turn Track 
       with RaffoSynth and its sound; its Percolator, saved at `/sdcard/vst/percolator.so` (gone since the release install
       moved it to `/sdcard/Synths/...`), loads too. MPC matches a saved plugin by its uid, not its name or `.so` path, so
       a release install's new folder is fine and the old one can be deleted.
-- [ ] GitHub: rename the seven repos, publish, release (RaffoSynth 1.2.0, the others 1.1.0), `check.sh` PASSED
-- [ ] Tell sd88me: the new repo names and screenshot links for his entries (he offered to update them), and ask about
-      OB-Xd, 303 and Rampage
+- [x] GitHub (2026-10-13): the seven repos renamed (the old addresses redirect) with new descriptions, all eight
+      published; `check.sh` PASSED with "screen: same" for all eight; releases built by GitHub Actions, every zip OK in
+      `catalog_check --catalog` with its new repo; RaffoSynth 1.2.0's zip installed on the Live II (the `.so` matches the
+      zip, `/sdcard/vst/moog.so` removed, one plugin-list entry) and played (`tested.json`); RaffoSynth 1.2.0 and the
+      other seven 1.1.0 released
+- [ ] sd88me's catalogue: [#404](https://github.com/sd88me/mpc-vst-plugins/pull/404) (opened 2026-10-13) gives the
+      eight entries their new name, repo, summary and screenshot (and keeps the `"role": "midi"` he added to Grids), and
+      asks about OB-Xd, 303 and Rampage. Until it is merged his nightly build skips the new versions (their zips name the
+      new repos); after it, the older versions drop out instead (their zips name the old repos; all `superseded`, so no
+      issues), so each plugin lists just its new version (Verglas keeps 1.0.0).
 
 ## The device and this repo's installer
 
