@@ -15,7 +15,7 @@ This guide takes you from a stock MPC to playing these plugins. The short versio
 - **A computer** on the same network: macOS or Linux with `bash`, `ssh`, `tar` and `git` (all standard). On Windows,
   use WSL.
 - **Space**: all 40 plugins take about 170 MB on the MPC's internal drive (`/sdcard`), their libraries included. The biggest are the ones
-  that ship presets, wavetables or samples (Tablor, Aphex, Braids, Moog).
+  that ship presets, wavetables or samples (Tablor, Aphex, Macro Osc, RaffoSynth).
 - **Save your project.** Adding plugins MPC hasn't seen before restarts MPC once.
 
 ## 1. Get root SSH access
@@ -78,7 +78,7 @@ What it does, in order:
 
      | Plugin | Data folder |
      |---|---|
-     | Braids | `/sdcard/vst/braids/` |
+     | Macro Osc | `/sdcard/vst/braids/` |
      | Groove Bank | `/sdcard/vst/groovebank/` |
      | Helm | `/sdcard/vst/helm/` |
      | Hera | `/sdcard/vst/hera/` |
@@ -142,11 +142,11 @@ controller of yours already sends CCs in that range to a track, they now move th
 
 ### Sequencers and other MIDI generators
 
-Eucalypso, Grids, Groove Bank, Marbles, Maze Lite, MIDI Player, Pixel Walkers, Rampage, Super Arp make no sound of their own: they play other tracks. MPC ignores a plugin's MIDI output, so each one opens
+Drum Map, Eucalypso, Groove Bank, Maze Lite, MIDI Player, Pixel Walkers, Rampage, Random Sampler, Super Arp make no sound of their own: they play other tracks. MPC ignores a plugin's MIDI output, so each one opens
 its own MIDI port, the way a USB MIDI device would appear (MPC picks it up without a restart). MPC lists it as
 **[SEQ] <name> MIDI Out**, e.g. **[SEQ] Super Arp MIDI Out**:
 
-1. Put the sequencer on a plugin track. Grids, Marbles, Maze Lite and MIDI Player play as soon as the transport runs
+1. Put the sequencer on a plugin track. Drum Map, Random Sampler, Maze Lite and MIDI Player play as soon as the transport runs
    (a note into Maze Lite sets its key); the others turn the notes you play or hold on their track into patterns.
 2. **Menu → Preferences → MIDI**: switch **Track** on for the sequencer's port.
 3. On each track that should play, set its **MIDI Input Port** to that port (channel All) and its **Monitor** to
@@ -160,7 +160,7 @@ when nothing plays. The routing is confirmed on a stock Live II (2026-10-04) and
 
 ### Audio effects
 
-Rings FX, Verglas, Warps are audio effects: insert them where MPC offers plugin effects. Whether MPC OS lists third-party VST effects in
+Meta Mod, Resonator FX, Verglas are audio effects: insert them where MPC offers plugin effects. Whether MPC OS lists third-party VST effects in
 its insert-effect browser is **not yet confirmed** on a device; please report what you see.
 
 ## Updating
