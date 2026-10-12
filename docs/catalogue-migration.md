@@ -354,9 +354,10 @@ path; whether MPC finds the plugin again by its uid after a rename or a move is 
 Drum Map and Random Sampler open their MIDI port under the new name: turn Track on for it again in Preferences > MIDI.
 
 - [x] Repo: names, makers, screens, READMEs, catalogue entries, release workflows' `about`, `repo-names.tsv` (2026-10-12)
-- [ ] Device: install the renamed builds on the Live II (one MPC restart); check the maker "Émilie Gillet" (non-ASCII)
-      shows and every screen loads; open a project that uses Moog ("0001 Yeild") and one with a plugin whose `.so` moved
-      (the same project's Percolator, now a release install) to see whether MPC finds them
+- [x] Device (2026-10-12): the renamed builds installed on the Live II (one MPC restart); the browser shows the new names
+      and "Émilie Gillet" correctly (MPC stores it as `&#201;milie Gillet` in MPC.settings); old screen folders removed
+- [ ] Device: open a project that uses Moog ("0001 Yeild") and so a plugin whose `.so` moved (the same project's
+      Percolator, now a release install) to see whether MPC finds them
 - [ ] GitHub: rename the seven repos, publish, release (RaffoSynth 1.2.0, the others 1.1.0), `check.sh` PASSED
 - [ ] Tell sd88me: the new repo names and screenshot links for his entries (he offered to update them), and ask about
       OB-Xd, 303 and Rampage

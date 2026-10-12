@@ -11,7 +11,9 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   their maker (Verglas keeps its name); the screens' backgrounds lost their brand text; Fizzik's, Noisemaker's and
   Aphex's option labels lost theirs. IDs, `.so` names and parameters unchanged.
   - [x] Repo (branch `branding`): builds PASSED, check_skin OK, screenshots, READMEs, catalogue entries (2026-10-12)
-  - [ ] Live II: install (one MPC restart), maker "Émilie Gillet" shows, screens load, old projects still find them
+  - [x] Live II (2026-10-12): installed (one MPC restart); the browser shows the new names and the maker "Émilie Gillet"
+    correctly (MPC writes it as `&#201;` in MPC.settings); the old screen folders are gone
+  - [ ] Live II: an old project ("0001 Yeild": Moog by name, and a Percolator whose `.so` moved) still finds them
   - [ ] Rename the seven repos, publish, release; tell sd88me (and ask about OB-Xd, 303, Rampage)
 - [x] **Moog's EMPHASIS and CUTOFF** (2026-10-12, PR #19): EMPHASIS hardly changed the sound (the
   ladder's feedback topped out at a quarter of what it needs to resonate: +2 dB at full) and CUTOFF fully open stopped
