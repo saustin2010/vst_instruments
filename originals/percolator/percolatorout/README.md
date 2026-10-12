@@ -68,6 +68,7 @@ different layouts never read each other.
   `percolator-out-v2.0.0`) installed on the Live II and checked by the owner (2026-10-12): "all working". Published
   2026-10-12, once sd88me had merged its catalogue entry (sd88me/mpc-vst-plugins#398): it is in his catalogue as
   `percolator-out`.
+- 2.0.1 (2026-10-13), released with Percolator 2.0.1: no change, its plugin file is byte-for-byte 2.0.0's.
 
 ## Files
 

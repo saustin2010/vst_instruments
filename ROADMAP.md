@@ -93,11 +93,12 @@ parameter index, so existing projects keep working.
     `catalog_build.py` on both entries: 0 problems, each 2.0.0 its own zip and tested. eaef502 (`mpc_engine_changed`)
     merged upstream as sd88me/mpc-vst-plugins#399 (2026-10-12, with a test engine and docs).
     Left: whether MPC's own automation on Percolator's track lists its parameters by name.
-  - [ ] 2.0.1 (2026-10-13): kit packs one folder down are found too (Windows' "Extract All" layout; users had
+  - [x] 2.0.1 (2026-10-13): kit packs one folder down are found too (Windows' "Extract All" layout; users had
     trouble installing the zips). Offline: correct installs list exactly what 2.0.0 lists, the Windows layout all 169
     kits; build, host test, ASan/UBSan and `check.sh` PASSED. Drafts v2.0.1 and percolator-out-v2.0.1 built by Actions (2026-10-13, from
     050603a), both OK in `catalog_check --catalog`; Percolator OUT's `.so` is byte-identical to 2.0.0's (the one
-    checked on the Live II). Left: the device test of Percolator's draft zip (restarts MPC), publish both, `tested.json`.
+    checked on the Live II). On the Live II: the zip installed (one restart), Pack 3 in the Windows layout listed
+    through Pack 3 62 (owner: "fine"); both published 2026-10-13 (v2.0.1 Latest), `tested.json` 2.0.1.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it.

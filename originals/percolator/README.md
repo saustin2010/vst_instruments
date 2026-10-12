@@ -403,13 +403,15 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   `mpc_engine_changed`) installed with their own installers on the Live II and checked by the owner (2026-10-12: the
   project, kit packs, pads, pages, Percolator MIDI In, a MIDI MOD lane with the screen following, Percolator OUT on an
   audio track, STOP, save and reload): "all working". Published as v2.0.0; `tested.json` records it.
-- 2.0.1 (2026-10-13): kit packs are found one folder down too, inside a folder of their own: Windows' "Extract All"
+- 2.0.1, released 2026-10-13 (with [FX] Percolator OUT 2.0.1, the same plugin file as its 2.0.0): kit packs are found one folder down too, inside a folder of their own: Windows' "Extract All"
   puts each zip's pack folder in one named after the zip, which 2.0.0 didn't look into, so users who unzipped there
   got only the built-in kits. Nothing else changed. Offline, with Erica's four zips: unzipped as Windows does, or
   all four in one folder, the 169 kits are listed exactly as from a correct install (same names, same order, same
   samples); a correct install, and one with a bank of your own, lists exactly what 2.0.0 lists, so projects keep
   their kits; two folders down is still not read. Build and host test PASSED, the loader clean under ASan/UBSan,
-  `check.sh` PASSED.
+  `check.sh` PASSED. On the Live II (2026-10-13): its release zip installed, and Pack 3 unzipped as Windows does
+  (inside `PERKONS_KIT_PACK_3/`) listed after the kits already there, through Pack 3 62, its last (the pack skips
+  25-27 and 51) (owner: "fine"). `tested.json` records it.
 
 ## Files
 
