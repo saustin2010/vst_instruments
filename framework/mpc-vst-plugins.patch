@@ -1545,10 +1545,10 @@ index 83da9db..d29ff8c 100755
 +    -e SOURCES -e CFLAGS -e PORT -e LIBS -e SAN -e MV -e ADAPTER_SRC -e OUT gcc:12 bash -c "$build"'"$OUT"'   # $build ends in a newline and runs under set -e
  fi
 diff --git a/wrapper/engine.h b/wrapper/engine.h
-index d3a8942..44739ae 100644
+index d3a8942..35217ba 100644
 --- a/wrapper/engine.h
 +++ b/wrapper/engine.h
-@@ -15,3 +15,13 @@ typedef struct {
+@@ -15,3 +15,19 @@ typedef struct {
  } mpc_engine_t;
  
  const mpc_engine_t *mpc_engine(void);
@@ -1562,6 +1562,12 @@ index d3a8942..44739ae 100644
 +/* Optional, for audio effects (vst.json "effect": true): the wrapper hands over the next block's input (interleaved
 + * int16 stereo, `frames` = 128) just before calling render for it. Weak, like the transport hook. */
 +void mpc_engine_input(void *inst, const int16_t *in_lr, int frames) __attribute__((weak));
++
++/* Optional: an engine that changes its own parameters (MIDI it reads on a port of its own, say) reports them here,
++ * one key per call, into `key`; it returns 0 once none are left. The wrapper asks after each block, engine locked,
++ * and tells MPC as it does for a mapped CC (throttled per control), so the screen and the Q-Links follow; a changed
++ * option list also refreshes names and readouts. Weak, like the transport hook. */
++int mpc_engine_changed(void *inst, char *key, int len) __attribute__((weak));
 diff --git a/wrapper/scope.h b/wrapper/scope.h
 new file mode 100644
 index 0000000..f93b940
@@ -1620,7 +1626,7 @@ index 0000000..f93b940
 +
 +#endif
 diff --git a/wrapper/vst2_wrap.c b/wrapper/vst2_wrap.c
-index 720ce46..1b9a250 100644
+index 720ce46..664c635 100644
 --- a/wrapper/vst2_wrap.c
 +++ b/wrapper/vst2_wrap.c
 @@ -15,10 +15,61 @@
@@ -2119,7 +2125,7 @@ index 720ce46..1b9a250 100644
 +        engine_lock(w);
 +        g_api->set_param(w->dsp, "transport", playing ? "1" : "0");
 +        engine_unlock(w);
-     }
++    }
 +    w->tp_playing = playing;
 +    if (ppq_ok) w->tp_ppq = ti->ppqPos;
 +}
@@ -2155,7 +2161,7 @@ index 720ce46..1b9a250 100644
 +            if (k == w->scope_g - 1) cur = d;
 +        }
 +        g = (cur >= 0 && cur <= best + best / 8) ? w->scope_g : kb + 1;   /* keep the shape shown if nearly as close */
-+    }
+     }
 +    if (g == w->scope_g) return;
 +    int ob = w->scope_g / PLUG_SCOPE_PER_BANK, of = w->scope_g % PLUG_SCOPE_PER_BANK;
 +    w->scope_g = g;
@@ -2221,13 +2227,29 @@ index 720ce46..1b9a250 100644
      /* A trigger param (e.g. Generate) fired: tell the host it is back to 0 so
       * buttons bound to it drop their highlight. Done here, not inside
       * setParameter, so the host is not re-entered from its own call. */
-@@ -211,11 +625,29 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
+@@ -211,11 +625,45 @@ static void run_block(AEffect *e, float **out, int32_t n, int accumulate) {
          w->need_update_display = 0;
          w->master(&w->fx, audioMasterUpdateDisplay, 0, 0, 0, 0.0f);
      }
 -    render_frames(w, out, n, accumulate);
 +    render_frames(w, in, out, n, accumulate);
 +    scope_tick(w, out, n);
++    /* parameters the engine changed itself (engine.h): reported like a mapped CC below; a switch's change can rename
++     * other controls (dynamic names), so it also asks MPC to re-read names, at the next block */
++    if (mpc_engine_changed) {
++        char key[64];
++        engine_lock(w);
++        for (int k = 0; k < NPARAMS && mpc_engine_changed(w->dsp, key, sizeof key) > 0; k++)
++            for (int i = 0; i < NPARAMS; i++)
++                if (!strcmp(PARAMS[i].key, key)) {
++                    w->shadow[i] = -1;
++                    w->midi_val[i] = get_norm_locked(w, i);
++                    w->midi_dirty[i] = 1;
++                    if (PARAMS[i].nopts > 1) w->need_update_display = 1;
++                    break;
++                }
++        engine_unlock(w);
++    }
 +    /* "live" params the engine moved during these blocks (a sequencer's playing step): tell MPC, outside the engine
 +     * lock, so what's bound to them on the screen follows. Without this MPC never re-reads a value nobody touched
 +     * (docs/NOTES.md, 2026-09-25). */
@@ -2254,7 +2276,7 @@ index 720ce46..1b9a250 100644
  
  static void copy_str(void *dst, const char *src, size_t max) {
      strncpy(dst, src, max - 1);
-@@ -227,11 +659,40 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -227,11 +675,40 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      (void)o;
      switch (op) {
      case effOpen: return 1;
@@ -2296,7 +2318,7 @@ index 720ce46..1b9a250 100644
      case effGetEffectName:
      case effGetProductString: copy_str(p, PLUG_NAME, 32); return 1;
      case effGetVendorString: copy_str(p, PLUG_VENDOR, 32); return 1;
-@@ -239,7 +700,19 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -239,7 +716,19 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      case effGetVstVersion: return 2400;
      case effCanBeAutomated: return idx >= 0 && idx < NPARAMS;
      case effGetParamName:
@@ -2317,7 +2339,7 @@ index 720ce46..1b9a250 100644
          return 1;
      case effGetParamLabel:
          if (idx >= 0 && idx < NPARAMS) copy_str(p, PARAMS[idx].unit, 8);
-@@ -247,31 +720,47 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -247,31 +736,47 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
      case effGetParamDisplay: {
          char buf[64];
          if (idx < 0 || idx >= NPARAMS) return 0;
@@ -2367,7 +2389,7 @@ index 720ce46..1b9a250 100644
          if (len <= 0) return 0;
          *(void **)p = w->chunk;
          return (intptr_t)strlen(w->chunk) + 1;
-@@ -280,7 +769,11 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
+@@ -280,7 +785,11 @@ static intptr_t dispatcher(AEffect *e, int32_t op, int32_t idx, intptr_t v, void
          if (v <= 0 || (size_t)v > sizeof w->chunk) return 0;
          memcpy(w->chunk, p, v);
          w->chunk[v - 1] = 0;
@@ -2379,7 +2401,7 @@ index 720ce46..1b9a250 100644
          return 1;
      }
      default: return 0;
-@@ -292,10 +785,21 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+@@ -292,10 +801,21 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
      if (!g_api) return NULL;
      wrap_t *w = calloc(1, sizeof *w);
      if (!w) return NULL;
@@ -2402,7 +2424,7 @@ index 720ce46..1b9a250 100644
      AEffect *e = &w->fx;
      e->magic = 0x56737450; /* 'VstP' */
      e->dispatcher = dispatcher;
-@@ -304,9 +808,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
+@@ -304,9 +824,10 @@ __attribute__((visibility("default"))) AEffect *VSTPluginMain(audioMasterCallbac
      e->getParameter = getParameter;
      e->processReplacing = processReplacing;
      e->numParams = NPARAMS;
