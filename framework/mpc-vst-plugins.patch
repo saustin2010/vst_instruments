@@ -116,7 +116,7 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..8d9502c 100644
+index 6e0f9d4..bc07c68 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
 @@ -46,7 +46,8 @@ from the Force and may differ on MPC Live/One/X/Key (e.g. `Force Documents` vs `
@@ -129,7 +129,7 @@ index 6e0f9d4..8d9502c 100644
     (direct, unscheduled send).
  
  Resolved (details in the sections below): option params render as image-button radio groups or `popup`s,
-@@ -596,7 +597,380 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +597,384 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -410,7 +410,11 @@ index 6e0f9d4..8d9502c 100644
 +  probably: not traced to a cause). So a plugin can't tell
 +  channels apart by the note-on (Percolator's per-voice MIDI channels didn't work through its track; it opens its
 +  own ALSA input port for them instead, which a MIDI track sends to as its output port), and a plugin that ends a
-+  note only on a note-off of the same channel never ends it: match note-offs by note alone. The wrapper passes the status byte through unchanged.
++  note only on a note-off of the same channel never ends it: match note-offs by note alone.
++  **A plugin's own ALSA input port works as a MIDI track's output, channels intact (Live II, 2026-10-12).** A writable
++  port (client "Percolator", port "MIDI In", opened at create, read without blocking in the render callback) appears
++  in a MIDI track's MIDI OUTPUT PORT list as "Percolator MIDI In" once the plugin is on a track (no restart), and the
++  track's notes arrive on its MIDI OUTPUT CH. The wrapper passes the status byte through unchanged.
 +- **A Q-Link column per panel: `-` leaves a slot empty (2026-10-03).** Columns are fixed groups of four slots, so a
 +  page laid out 3-2-4-3 (or a two-knob panel) can still give each panel its own column, with its outline round that
 +  panel only: `qlinks "MAIN" = wave,tune,-,-,cutoff,reso,env,decay,...`. The empty slot does nothing on the knob.

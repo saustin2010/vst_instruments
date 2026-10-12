@@ -287,8 +287,8 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   ends its note on any channel (a drone played from a MIDI track had never stopped). Zones (KEYS OFF / ALL / an
   octave per voice) were tried and turned down by the owner ("it should be all keys fired from the midi channel"), so
   Percolator now opens its own MIDI input port, Percolator MIDI In, for the channels (`src/midiin.h`; libasound
-  dlopen()ed, the build needs only libc, like Stevequencer). To check on the device: that MPC lists the port as a MIDI
-  track's output and sends on the track's channel, and the timing.
+  dlopen()ed, the build needs only libc, like Stevequencer). On the Live II (owner, 2026-10-12): a MIDI track with
+  MIDI OUTPUT PORT = Percolator MIDI In plays each voice on its channel: "this is working!"
 
 ## Files
 
