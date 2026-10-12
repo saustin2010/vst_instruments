@@ -326,7 +326,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   DECAY by its CC works. Then (owner: pick the parameter by name, not a CC number): MOD WHEEL per voice, working on
   the Live II; then ("more than one parameter at once"): the MIDI MOD page, Gen Purpose 1-3 as three more lanes per
   voice. Offline 17 checks (off to start with, each target, thirds, ALL on any channel, OFF ignores it, two voices on
-  one channel, four lanes at once, CC 19 ignored).
+  one channel, four lanes at once, CC 19 ignored). On the Live II (owner): "nice this is working".
 
 ## Files
 

@@ -84,8 +84,8 @@ parameter index, so existing projects keep working.
     instead were turned down; Percolator now opens its own MIDI input port, Percolator MIDI In, which a MIDI track
     sends to on its channel: working on the Live II (2026-10-12). The Pērkons' CCs 70-113 (each voice's knobs and
     switches; owner: "as close to the real machine as possible"): DECAY works on the Live II. MIDI MOD lanes per
-    voice (mod wheel, Gen Purpose 1-3, each moving a control picked by name): the mod wheel works on the Live II.
-    Left: the switches' CCs and Gen Purpose lanes on the device; whether MPC's own automation on Percolator's track lists its parameters by name; release 2.0.0 and update its catalogue entry (screenshot: page_1, the voice page). The
+    voice (mod wheel, Gen Purpose 1-3, each moving a control picked by name): working on the Live II (2026-10-12).
+    Left: the owner's test of OUT 1-4 with this build; whether MPC's own automation on Percolator's track lists its parameters by name; release 2.0.0 and update its catalogue entry (screenshot: page_1, the voice page). The
     release build needs the framework's new `mpc_engine_changed` hook on `steve-features` (a PR to sd88me too) and a
     new pin, or the CCs work but MPC's screen doesn't follow them.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
