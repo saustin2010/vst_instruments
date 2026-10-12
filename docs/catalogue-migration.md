@@ -350,14 +350,17 @@ OB-Xd, 303 and Rampage (maker Befaco) keep their names for now: sd88me left them
 
 What a user sees: a new name and maker in MPC's browser, and a new folder in `/sdcard/Synths` for a release install (the
 `.so` moves with it; the old folder can be deleted after the update). A saved project names the plugin and its `.so`
-path; whether MPC finds the plugin again by its uid after a rename or a move is being checked on the Live II (below).
+path, but MPC finds the plugin by its uid after a rename or a move (checked on the Live II, below), so projects keep
+working.
 Drum Map and Random Sampler open their MIDI port under the new name: turn Track on for it again in Preferences > MIDI.
 
 - [x] Repo: names, makers, screens, READMEs, catalogue entries, release workflows' `about`, `repo-names.tsv` (2026-10-12)
 - [x] Device (2026-10-12): the renamed builds installed on the Live II (one MPC restart); the browser shows the new names
       and "Émilie Gillet" correctly (MPC stores it as `&#201;milie Gillet` in MPC.settings); old screen folders removed
-- [ ] Device: open a project that uses Moog ("0001 Yeild") and so a plugin whose `.so` moved (the same project's
-      Percolator, now a release install) to see whether MPC finds them
+- [x] Device (2026-10-12): old projects find them. "0001 Yeild", saved with [SYN] Moog at `/sdcard/vst/moog.so`, opens
+      with RaffoSynth and its sound; its Percolator, saved at `/sdcard/vst/percolator.so` (gone since the release install
+      moved it to `/sdcard/Synths/...`), loads too. MPC matches a saved plugin by its uid, not its name or `.so` path, so
+      a release install's new folder is fine and the old one can be deleted.
 - [ ] GitHub: rename the seven repos, publish, release (RaffoSynth 1.2.0, the others 1.1.0), `check.sh` PASSED
 - [ ] Tell sd88me: the new repo names and screenshot links for his entries (he offered to update them), and ask about
       OB-Xd, 303 and Rampage
