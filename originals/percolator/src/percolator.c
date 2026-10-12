@@ -1,7 +1,8 @@
 /* Percolator engine: parameters, MIDI, kits, the LFO and the master section (BBD delay, compressor, volume).
  *
- * MIDI: each voice has a NOTE (36-39, C1-D#1, to start with) that plays it as tuned, and a KEYS CH (channels 2-5 to start
- * with; OFF; ALL) on which every note plays it pitched (C3 = as tuned) and pitch bend bends it +-2 semitones (see
+ * MIDI: each voice has a NOTE (36-39, C1-D#1, to start with) that plays it as tuned, and KEYS: ZONE (to start with:
+ * the twelve notes of its octave zone play it pitched, the zone's C as tuned; zones C2-C5 for voices 1-4), ALL (every
+ * note nothing else takes, pitched, C3 as tuned) or OFF. Pitch bend bends the pitched ones +-2 semitones (see
  * e_midi). Several voices on one note play together. A voice whose DECAY is at the top drones while its note is held. CC 120 / 123 stop
  * everything. */
 #include <math.h>
@@ -54,7 +55,8 @@ const mpc_engine_t *mpc_engine(void);
 #define VVCF(v) VK(v, 10)
 #define VDEPTH(v, k) (P_V1_M_TUNE + MSTRIDE * (v) + (k))
 #define VCOMP(v) (P_V1_COMP + (v))
-#define VIO(v, p) ((p) + (P_V2_NOTE - P_V1_NOTE) * (v))   /* a voice's NOTE / KEYS CH / OUT: VIO(v, P_V1_KCH) */
+#define VIO(v, p) ((p) + (P_V2_NOTE - P_V1_NOTE) * (v))   /* a voice's NOTE / KEYS / OUT: VIO(v, P_V1_KEYS) */
+#define ZONE_C0 24   /* KEYS ZONE n is notes 24 + 12n (Cn) to 35 + 12n (Bn) */
 
 static int find_key(const char *key) {
     for (int i = 0; i < NP; i++)
@@ -186,21 +188,23 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
     apply_kit(P);
     if (len > 0 && m[0] < 0xF0) TRACE("midi %02x %02x %02x (%d)", m[0], len > 1 ? m[1] : 0, len > 2 ? m[2] : 0, len);
     if (len < 2 || P->pv[P_OUTPUT] >= 1) return;   /* a tap plays the main instance's OUT, not its own voices */
-    int st = m[0] & 0xF0, ch = m[0] & 0x0F, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
+    int st = m[0] & 0xF0, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
     if (st == 0x90 && d2 > 0) {
-        /* who plays it: a voice whose KEYS CH this is takes every note on it, pitched (the Perkons' MULTI); otherwise
-         * each voice whose NOTE it is, as it's tuned; otherwise voices with KEYS CH = ALL, pitched (the old KEYS) */
+        /* who plays it: each voice whose NOTE it is, as tuned; otherwise each voice on KEYS ZONE whose zone it's in,
+         * pitched from the zone's C; otherwise the voices on KEYS ALL, pitched from C3 (the old KEYS). Never by
+         * channel: MPC hands a plugin every note-on on channel 1 (Live II trace, 2026-10-12) */
         int hit = 0;
         for (int pass = 0; pass < 3 && !hit; pass++)
             for (int v = 0; v < NV; v++) {
-                int kch = (int)P->pv[VIO(v, P_V1_KCH)];   /* 0 OFF, 1 ALL, 2-17 = channels 1-16 */
-                if (pass == 0 ? kch != ch + 2 : pass == 1 ? (int)P->pv[VIO(v, P_V1_NOTE)] != d1 : kch != 1) continue;
-                int pitched = pass != 1;
+                int keys = (int)P->pv[VIO(v, P_V1_KEYS)];   /* 0 OFF, 1 ALL, 2 ZONE */
+                int c = ZONE_C0 + 12 * (int)P->pv[P_V1_ZONE + v];
+                if (pass == 0 ? (int)P->pv[VIO(v, P_V1_NOTE)] != d1
+                              : pass == 1 ? keys != 2 || d1 < c || d1 > c + 11 : keys != 1)
+                    continue;
                 vparam_t vp;
                 vparams(P, v, &vp);
-                voice_trigger(P, v, &vp, (float)d2, d1, pitched ? (float)(d1 - 60) : 0.0f);
-                P->v[v].ch = ch;
-                P->v[v].pitched = pitched;
+                voice_trigger(P, v, &vp, (float)d2, d1, pass == 0 ? 0.0f : (float)(d1 - (pass == 1 ? c : 60)));
+                P->v[v].pitched = pass != 0;
                 hit = 1;
             }
     } else if (st == 0x80 || st == 0x90) {
@@ -209,7 +213,7 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
         for (int v = 0; v < NV; v++)
             if (P->v[v].note == d1) voice_release(P, v);
     } else if (st == 0xE0) {
-        P->bend[ch] = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
+        P->bend = (float)((d2 << 7 | d1) - 8192) / 8192.0f * 2.0f;
     } else if (st == 0xB0 && (d1 == 120 || d1 == 123)) {
         for (int v = 0; v < NV; v++) {
             voice_release(P, v);
@@ -403,9 +407,10 @@ static void e_render(void *inst, int16_t *out, int frames) {
 
 static void set_value(perc_t *P, int i, const char *val) {
     const pdef_t *d = &PDEF[i];
-    if (i == P_KEYS) {   /* the one KEYS switch up to 1.2.0 (a project saved then): that voice's KEYS CH = ALL */
+    if (i == P_KEYS) {   /* the one KEYS switch up to 1.2.0: that voice on ALL, the rest OFF, as it played then. A
+                          * state lists it before the voices' own KEYS, so a project saved since sets those after it */
         int k = atoi(val);
-        if (k >= 1 && k <= NV) P->pv[VIO(k - 1, P_V1_KCH)] = 1;
+        for (int v = 0; v < NV; v++) P->pv[VIO(v, P_V1_KEYS)] = v == k - 1 ? 1 : 0;
         P->pv[P_KEYS] = 0;
         return;
     }

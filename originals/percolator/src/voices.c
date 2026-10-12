@@ -612,7 +612,7 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
         if (v->ns + i >= hold) v->env *= mul;
         e[i] = v->env * v->atk;
     }
-    float semi = v->semi + (v->pitched ? P->bend[v->ch] : 0);
+    float semi = v->semi + (v->pitched ? P->bend : 0);
     ctx_t c = {P, v, vp, vi, 0, 1, 1, semi, e, o, n};
     if (vi < 3) c.f0 = voice_freq(vi, k[K_TUNE]) * fexp2(semi / 12.0f);
     else c.rt = metal_ratio(k[K_TUNE]) * fexp2(semi / 12.0f);
