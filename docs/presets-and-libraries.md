@@ -29,7 +29,8 @@ Aphex 41, Denis 30, Fizzik 31, Wurl 10, MonkSynth 12 singers, Mono Voice 12 patc
 and 40 rhythms. Made for this port, where upstream has none (`presets.json`, the wrapper's own presets): 303 13,
 Modal Voice 12, Resonator 14, Macro Osc 2 24, Mr Hyde 19, Resonator FX 12, Verglas 12, Meta Mod 12, Mutable Vibe 24, MPC Plaits 31
 (2026-10-05, levels measured with `dev-tools/presets/levels.sh`). Patterns written for this repo's own
-sequencers: Stevequencer 20, Stevequencer 16 14 (most with modulation lanes). Percolator has 8 kits built in; it also
+sequencers: Stevequencer 20, Stevequencer 16 14 (most with modulation lanes). Incipience has 5 kits built in, and 3 more that
+use the AlphaBase's sample set when it's in its data folder (below). Percolator has 8 kits built in; it also
 plays Erica Synths' four free Pērkons kit packs (169 kits), which aren't shipped (they come without a licence to pass
 them on): its [README](../originals/percolator/README.md#pērkons-kit-packs) has the download links. The other sequencers / generators
 have none.
@@ -44,6 +45,7 @@ have none.
 | OB-Xd | `/sdcard/vst/obxd/presets/` | `.fxb` banks (OB-Xd / discoDSP, up to 128 programs each, 32 banks). An OB-Xd 1.x LV2 bank (`presets.ttl`): `python3 tools/obxd-lv2-to-fxb.py <presets.ttl or its archive> "presets/obxd/presets/<Bank name>.fxb"` | in BANK (under PATCH), by file name; PATCH browses it |
 | Noisemaker | `/sdcard/vst/noisemaker/presets/<bank name>/` | TAL-NoiseMaker `.noisemakerpreset` files, subfolders included (a pack's BASS/LEAD/PAD... folders); up to 512 per bank, 64 banks | in BANK (under PATCH), by folder name; PATCH browses its first 256, by file name |
 | Percolator | `/sdcard/vst/percolator/<pack folder>/` (from its release: `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/percolator/<pack folder>/`) | Pērkons `.KIT` kit packs, as they unzip (`BANKS/NN/KITS/`, `NN/KITS/` or `KITS/`), with their `SAMPLES/1-3.wav`; optional `names.txt` (`NN Name`). Steps, mistakes to avoid and a Claude Code prompt: [its README](../originals/percolator/README.md#pērkons-kit-packs) | after the built-in kits in KIT and the PRESET menu (`Pack 2 05`, ...); read when the plugin is inserted |
+| Incipience | `/sdcard/vst/incipience/` | the AlphaBase's sample set as it unzips: `ABWV<nnnn>.raw` (16-bit, 48 kHz, mono, no header), from Jomox's free `AlphaBaseWaves.zip` or `ABmk2Waves.zip` (the same samples; not shipped here); `ABWV0300.raw` is its 64 LFO waves. Your own as `ABWV<nnnn>.wav` (16-bit PCM, any rate) in a free number up to 255 | by number in each sample channel's SAMPLE; with the set there, three more kits in the PRESET menu |
 | Hush One | `/sdcard/vst/hush1/presets/` (any subfolders) | TAL-BassLine-101 `.bassline` / `.vstpreset`, up to 512 | in PATCH after the 11 built-in presets, sorted and named by file name; read when the plugin is inserted |
 
 Copy them over SSH/SFTP (e.g. `scp -r "My Kit" root@<mpc>:/sdcard/vst/mrdrums/kits/`), then re-insert the plugin.

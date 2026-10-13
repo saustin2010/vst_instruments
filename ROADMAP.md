@@ -120,6 +120,10 @@ parameter index, so existing projects keep working.
     SAMPLE stepping one at a time (a box with arrows; range 0-255), PITCH audible without a sample (it tunes the metal
     noise too), more kits (three that use the AlphaBase samples when they're there). Also: metal noise starts
     mid-cycle (it ran in step at first)
+  - [x] procwatch (TESTS.md, 2026-10-13): no flags; one thread (the sample loader), asleep while idle; 1.2 KB of heap
+    per insert (under the 4 KB flag, a loader thread's own; Tablor's is 14.8 KB). Idle cost was 0.83 of playing (the
+    reverb and delay ran on empty): they sleep once nothing goes in and nothing is left; now 0.15 (`ab.sh`)
+  - [ ] Testers (owner, 2026-10-13: a PR to send out for testing; not to sd88me's catalogue yet)
   - [ ] On the Live II: design QA of the new sub-pages (Q-Link outlines on the right-hand panels), `bench.sh`
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
