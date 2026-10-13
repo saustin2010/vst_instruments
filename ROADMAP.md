@@ -18,8 +18,21 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
     the release folder). MPC matches a saved plugin by its uid, not its name or path.
   - [x] GitHub (2026-10-13): seven repos renamed, all eight published and released (RaffoSynth 1.2.0, its zip played
     on the Live II; the others 1.1.0, offline checks)
-  - [ ] sd88me's review of [#404](https://github.com/sd88me/mpc-vst-plugins/pull/404) (opened 2026-10-13): the eight
-    entries' new names and repos; it also asks him about OB-Xd, 303 and Rampage
+  - [x] sd88me's review of [#404](https://github.com/sd88me/mpc-vst-plugins/pull/404) (merged 2026-10-13): the eight
+    entries' new names and repos. His answer on OB-Xd, 303 and Rampage: OB-Xd stays (the open-source project's name),
+    303 becomes Open303, Rampage gets a new name and says it's based on Befaco's Rampage VCV module
+  - [x] Open303 and Dual Slope (2026-10-13, branch `rename-open303-dualslope`): 303 is [SYN] Open303; Rampage is
+    [SEQ] Dual Slope by Andrew Belt (VCV's code), its screen without BARCELONA SYNTH LAB, its tab DUAL SLOPE, its MIDI
+    port [SEQ] Dual Slope MIDI Out. uids, `.so` names, catalogue ids and parameters unchanged. Builds PASSED,
+    check_skin OK, `check.sh` PASSED with "screen: same" (release tools `eaef502`)
+  - [x] GitHub (2026-10-13): repos renamed (mpc-vst-open303, mpc-vst-dual-slope) and published; v1.1.0 drafts built by
+    Actions, both zips OK in `catalog_check --catalog`, `.so` byte-identical to `check.sh`'s builds
+  - [x] Live II (2026-10-13): both zips installed with one MPC restart (`install.sh -y -n` each); one plugin-list entry
+    each under the new names, the `.so` files match the zips, the old screen folders and `/sdcard/vst/rampage.so`
+    gone; the owner played both ("seem ok"). `tested.json` 1.1.0 for both
+  - [x] Published both v1.1.0 releases (Latest), `tested.json` on both repos; his `catalog_build.py` on the two entries:
+    both 1.1.0 tested, the 1.0.0 zips superseded, no issues to open (2026-10-13)
+  - [ ] sd88me's review of [#417](https://github.com/sd88me/mpc-vst-plugins/pull/417) (the two entries, opened 2026-10-13)
 - [x] **Moog's EMPHASIS and CUTOFF** (2026-10-12, PR #19): EMPHASIS hardly changed the sound (the
   ladder's feedback topped out at a quarter of what it needs to resonate: +2 dB at full) and CUTOFF fully open stopped
   at 2.3 kHz. Fixed under `MPC_PORT` (EMPHASIS up to 0.9 of self-oscillation, matched cutoff tuning); the 14 presets

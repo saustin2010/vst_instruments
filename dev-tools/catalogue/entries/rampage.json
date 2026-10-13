@@ -1,12 +1,13 @@
 {
   "id": "rampage",
-  "name": "Rampage",
+  "name": "Dual Slope",
   "author": "saustin2010",
-  "repo": "saustin2010/mpc-vst-rampage",
+  "repo": "saustin2010/mpc-vst-dual-slope",
   "kind": "instrument",
+  "role": "midi",
   "style": "modulation",
   "tags": [
-    "befaco",
+    "vcv",
     "envelope",
     "lfo",
     "slew",
@@ -14,6 +15,6 @@
     "eurorack"
   ],
   "license": "GPL-3.0-or-later",
-  "summary": "Befaco Rampage: a dual slope generator (envelopes, LFOs, slew) whose outputs go out of its own MIDI port as CCs.",
-  "screenshot": "https://raw.githubusercontent.com/saustin2010/mpc-vst-rampage/v1.0.0/screenshots/page_0.png"
+  "summary": "Dual Slope, based on Befaco's Rampage VCV Rack module: two rise-and-fall generators (envelopes, LFOs, slew) whose outputs go out of its own MIDI port as CCs.",
+  "screenshot": "https://raw.githubusercontent.com/saustin2010/mpc-vst-dual-slope/v1.1.0/screenshots/page_0.png"
 }

@@ -1,15 +1,17 @@
-# 303
+# Open303
 
 **Synth** · TB-303 bass line: Open303 with the Devilfish mods, a drive stage and 13 presets. · maker in MPC: Robin Schmidt · licence: GPL-3.0
 
-<img src="screenshots/page_0.png" width="760" alt="303 on the MPC touchscreen">
+<img src="screenshots/page_0.png" width="760" alt="Open303 on the MPC touchscreen">
+
+Formerly **303**, renamed Open303 on 2026-10-13 (sd88me's suggestion: the name of its engine, not a model number of the synth it comes from; its catalogue entry has been `open303` from the start). Its sound and presets are unchanged.
 
 A Roland TB-303 emulation built on Robin Schmidt's Open303 engine, with the "Devilfish" modifications (separate normal and accent decay, filter tracking, slide time, overdriven sub) and a soft/RAT-style drive after the filter. Play it from MPC's pads, keys or a clip: overlapping notes slide, high velocities accent. Monophonic, as the original. Turn CUTOFF, RESONANCE, ENV MOD and DECAY while a pattern runs for the classic acid squelch; the DEVILFISH page holds the extra envelope, filter and slide controls.
 
 ## On the MPC
 
-- In the plugin browser: **[SYN] 303** by **Robin Schmidt** (Synth)
-- Files: the release installs one folder, `/sdcard/Synths/Robin Schmidt - VST - [SYN] 303/`, holding `acid303.so` and its screen. The vst_instruments installer puts `acid303.so` in `/sdcard/vst/` instead.
+- In the plugin browser: **[SYN] Open303** by **Robin Schmidt** (Synth)
+- Files: the release installs one folder, `/sdcard/Synths/Robin Schmidt - VST - [SYN] Open303/`, holding `acid303.so`, its screen. The vst_instruments installer puts `acid303.so` in `/sdcard/vst/` instead.
 - 18 parameters (all automatable) on 2 pages
 
 ## Playing it
@@ -20,15 +22,15 @@ Add it to a **plugin track** and play it from the pads, a keyboard or a MIDI cli
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted. On the MPC each page is a tab under the plugin header. The Q-Links follow the page column by column: on a 4-knob MPC the Q-Link button steps through the columns, and MPC outlines the active one.
 
-### 1. 303 MAIN
+### 1. OPEN303
 
-<img src="screenshots/page_0.png" width="760" alt="303, page 303 MAIN">
+<img src="screenshots/page_0.png" width="760" alt="Open303, page OPEN303">
 
 Q-Link columns: **1** WAVEFORM, TUNING  ·  **2** CUTOFF, RESONANCE, ENV MOD, DECAY  ·  **3** ACCENT, VOLUME  ·  **4** DRIVE MODEL, DRIVE, DRIVE MIX, SHAPER DRIVE
 
 ### 2. DEVILFISH MOD
 
-<img src="screenshots/page_1.png" width="760" alt="303, page DEVILFISH MOD">
+<img src="screenshots/page_1.png" width="760" alt="Open303, page DEVILFISH MOD">
 
 Q-Link columns: **1** DEVILFISH, NORMAL DECAY, ACCENT DECAY, SOFT ATTACK  ·  **2** FEEDBACK HPF, SLIDE TIME
 
@@ -36,7 +38,7 @@ Q-Link columns: **1** DEVILFISH, NORMAL DECAY, ACCENT DECAY, SOFT ATTACK  ·  **
 
 Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
 
-**From the release:** download `SYN-303-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-303/releases),
+**From the release:** download `SYN-Open303-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-open303/releases),
 copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
 `MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
 

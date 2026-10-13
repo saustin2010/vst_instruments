@@ -874,8 +874,8 @@ MAPS = {
         "tab_order": ["PLAITS", "PLAY"],
     },
     "rampage": {
-        # RAMPAGE from the design; MIDI drawn in its style
-        "sweep": 135, "design_labels": True, "tabs": "#no-tabs", "page": "RAMPAGE", "rot": ".knob-bevel",
+        # DUAL SLOPE (was Rampage) from the design; MIDI drawn in its style
+        "sweep": 135, "design_labels": True, "tabs": "#no-tabs", "page": "DUAL SLOPE", "rot": ".knob-bevel",
         "drop": ["header", "footer"],
         "knob": {"item": ".knob-knurl", "unit": "div.flex-col:has(> div > .knob-knurl), div.flex-col:has(> .knob-knurl)",
                  "label": "span", "value": "div.font-readout-numeric"},
@@ -933,7 +933,7 @@ MAPS = {
         },
         "map": {"RISE": ["rise_a", "rise_b"], "FALL": ["fall_a", "fall_b"], "SHAPE": ["shape_a", "shape_b"]},
         "grid": {"tabs": ["MIDI"], "tpl": None},
-        "tab_order": ["RAMPAGE", "MIDI"],
+        "tab_order": ["DUAL SLOPE", "MIDI"],
     },
     "rings": {
         # one page, every control drawn
@@ -1864,7 +1864,7 @@ BRAND_RETEXT = {
     "plaits": [["PLAITS // MACRO OSCILLATOR", "MACRO OSC 2 // MULTI-ENGINE"], ["MUTABLE INSTRUMENTS DSP", "OPEN-SOURCE DSP"],
                ["PLAITS", "MACRO OSC 2"]],
     "mrhyde": [["PLAITS MACRO OSC", "MACRO OSC"], ["PLAITS ENGINE", "MACRO ENGINE"]],
-    "303": _AKAI,
+    "303": [["1: 303 MAIN", "1: OPEN303"]] + _AKAI,
     "aphex": [["KORG-35", "SALLEN-KEY"]] + _AKAI,
     "denis": [["WEST COAST SERGE", "WEST COAST"], ["BUCHLA 259 STYLE", "WEST COAST STYLE"]] + _AKAI,
     "helm": [["ELEKTRON / RETRO", "RETRO"], ["AKAI MPC OS", "MPC OS"]] + _AKAI + [["AKAI", "MPC"]],
@@ -1877,7 +1877,8 @@ BRAND_RETEXT = {
     "obxd": _AKAI,
     "wurl": [["Wurlitzer", "Wurl"], ["WURLITZER", "WURL"], ["AKAI PROFESSIONAL STANDALONE ENGINE", "STANDALONE ENGINE"]] + _AKAI,
     "midiplayer": [["[RHODES CHORDS]", "[E-PIANO CHORDS]"]] + _AKAI,
-    "rampage": [["BEFACO.ORG", "DUAL SLEW"], ["BEFACO", "RAMPAGE"]],
+    "rampage": [["BEFACO.ORG", "DUAL SLEW"], ["BARCELONA SYNTH LAB", "OPEN-SOURCE DSP"], ["BEFACO", "DUAL SLOPE"],
+                ["RAMPAGE", "DUAL SLOPE"], ["Rampage", "Dual Slope"]],
     "libpo32": [["POCKET OPERATOR 32", "POCKET DRUMS"]] + _AKAI,
     "chordism": _AKAI, "eucalypso": _AKAI, "fizzik": _AKAI, "groovebank": _AKAI, "hank": _AKAI, "monksynth": _AKAI,
     "pixelwalkers": _AKAI,
