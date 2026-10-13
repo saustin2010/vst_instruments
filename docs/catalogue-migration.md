@@ -389,7 +389,9 @@ Drum Map and Random Sampler open their MIDI port under the new name: turn Track 
         entry each, `[SYN] Open303` by Robin Schmidt and `[SEQ] Dual Slope` by Andrew Belt (category Synth, as v1.0.0's);
         the `.so` files match the zips; the old-named screen folders removed by hand (the installer leaves them), and
         `/sdcard/vst/rampage.so` by the installer; played by the owner ("seem ok"); `tested.json` 1.1.0
-  - [ ] Publish both v1.1.0 releases; the catalogue PR with both entries
+  - [x] Both v1.1.0 releases published (Latest) and `tested.json` 1.1.0 on both repos (2026-10-13); his `catalog_build.py`
+        on the two entries: both 1.1.0 tested, the 1.0.0 zips superseded (their zips name the old repos), no issues
+  - [ ] sd88me's review of [#417](https://github.com/sd88me/mpc-vst-plugins/pull/417) (opened 2026-10-13): the two entries
 
 ## The device and this repo's installer
 

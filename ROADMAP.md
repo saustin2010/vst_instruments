@@ -30,7 +30,9 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
   - [x] Live II (2026-10-13): both zips installed with one MPC restart (`install.sh -y -n` each); one plugin-list entry
     each under the new names, the `.so` files match the zips, the old screen folders and `/sdcard/vst/rampage.so`
     gone; the owner played both ("seem ok"). `tested.json` 1.1.0 for both
-  - [ ] Publish both v1.1.0 releases; catalogue PR (the two entries)
+  - [x] Published both v1.1.0 releases (Latest), `tested.json` on both repos; his `catalog_build.py` on the two entries:
+    both 1.1.0 tested, the 1.0.0 zips superseded, no issues to open (2026-10-13)
+  - [ ] sd88me's review of [#417](https://github.com/sd88me/mpc-vst-plugins/pull/417) (the two entries, opened 2026-10-13)
 - [x] **Moog's EMPHASIS and CUTOFF** (2026-10-12, PR #19): EMPHASIS hardly changed the sound (the
   ladder's feedback topped out at a quarter of what it needs to resonate: +2 dB at full) and CUTOFF fully open stopped
   at 2.3 kHz. Fixed under `MPC_PORT` (EMPHASIS up to 0.9 of self-oscillation, matched cutoff tuning); the 14 presets
