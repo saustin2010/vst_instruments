@@ -5,7 +5,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 
-p = Port("rampage", "Rampage", ["DUAL SLOPE", "GENERATOR"])
+p = Port("rampage", "Dual Slope", ["DUAL SLOPE", "GENERATOR"])
 for k in ("trig_a", "trig_b"):
     p.set(k, options=["-", "GO"], momentary=True)
 p.names({"range_a": "A RANGE", "shape_a": "A SHAPE", "rise_a": "A RISE", "fall_a": "A FALL", "cycle_a": "A CYCLE",
@@ -20,13 +20,13 @@ p.look({"bg": "c9cbcd", "panel": "e4e5e6", "line": "9a9da1", "ink": "151515", "i
        knob="moog",
        led=dict(on="#ff4a3d", off="#5a1814", cap=("#f2f2f0", "#d6d7d8", "#b9bbbe"), rim="#8d9095", well="#4a4c50"))
 CH = lambda c: [{"key": "range_" + c}, {"key": "rise_" + c, "big": True}, {"key": "fall_" + c, "big": True}, "shape_" + c]
-p.page("RAMPAGE",
+p.page("DUAL SLOPE",
        [("CHANNEL A", 4, CH("a")), ("CHANNEL B", 4, CH("b"))],
        [("A", 2, ["cycle_a", "trig_a"]), ("LOGIC", 1, ["balance"]), ("B", 2, ["cycle_b", "trig_b"]),
         ("AUDIO", 3, ["audio", "volume"])])
 p.page("MIDI",
        [("NOTES IN", 4, ["mode_a", "mode_b", "keytrack_a", "keytrack_b"]),
-        ("@info:MIDI OUT|MODULATES OTHER TRACKS|PORT: RAMPAGE MIDI OUT|PREFS > MIDI: TURN ON 'TRACK' FOR IT"
+        ("@info:MIDI OUT|MODULATES OTHER TRACKS|PORT: DUAL SLOPE MIDI OUT|PREFS > MIDI: TURN ON 'TRACK' FOR IT"
          "|OTHER TRACK: MIDI IN = THAT PORT|THEN MIDI-LEARN ITS CCS (0 = OFF)", 4)],
        [("CC OUT", 5, ["cc_channel", "cc_a", "cc_b", "cc_min", "cc_max"]),
         ("END OF CYCLE", 3, ["eoc_notes", "eoc_note_a", "eoc_note_b"])])
