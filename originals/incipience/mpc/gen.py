@@ -180,7 +180,7 @@ def build():
             if i == j:
                 knob("%s_op%d" % (k, i), "%s OP%d TUNE" % (n, i), op_tune[i])
             else:
-                knob("%s_fm%d%d" % (k, i, j), "%s FM %d>%d" % (n, i, j), fm_def.get((i, j), 0))
+                knob("%s_fm%d%d" % (k, i, j), "%s %d>%d" % (n, i, j), fm_def.get((i, j), 0))
     op_env = {1: (0, 60, 127, 30), 2: (0, 40, 0, 0), 3: (0, 26, 0, 0), 4: (0, 18, 0, 0)}
     for i in range(1, 5):
         a, r, amt, fm = op_env[i]
@@ -198,8 +198,8 @@ def build():
     rev_def = {"mb": 32, "cp": 56, "rm": 32, "cr": 25, "rd": 31}
     for k, n, fam in INSTR:
         knob(k + "_pan", n + " PAN", 64)
-        knob(k + "_rsend", n + " REV SEND", rev_def.get(k, 0))
-        knob(k + "_dsend", n + " DLY SEND", 0)
+        knob(k + "_rsend", n + " REV", rev_def.get(k, 0))
+        knob(k + "_dsend", n + " DLY", 0)
 
     # ---- FX (manual 7.5) ----
     knob("rv_size", "REV ROOM", 77)
@@ -217,11 +217,116 @@ def build():
     # ---- MIDI and the rest: not part of a kit ----
     for i, (k, n, fam) in enumerate(INSTR):
         P.append(dict(key=k + "_note", name=n + " NOTE", options=NOTES, default=NOTES[36 + i], type="stepper"))
+        # the stepper's arrows (as Percolator's NOTEs)
+        P.append(dict(key=k + "_note_prev", name=n + " NOTE DOWN", momentary=True, step_of=k + "_note", step_delta=-1))
+        P.append(dict(key=k + "_note_next", name=n + " NOTE UP", momentary=True, step_of=k + "_note", step_delta=1))
     for k, n, fam in INSTR:
         opts(k + "_mute", n + " MUTE", ONOFF, 0)
     opts("hh_choke", "HH CHOKE", ONOFF, 1)
     knob("volume", "VOLUME", 100)
     return P
+
+
+#: The screen: a tab per instrument (the AlphaBase's instrument keys), then FX and MIX. Each has two Q-Link sub-pages,
+#: A and B, as the hardware's PAGE A/B: four rows of up to four controls, a row a panel and a Q-Link column (the
+#: hardware's display shows one row of its 4 x 4 encoder matrix at a time). A row the same on A and B is one panel
+#: on both. "side": touch-only controls in the right column. Rows: (title, red caption, [keys]); "-" = an empty slot.
+def _smp_rows(k, hh):
+    filt_a = [k + "_cutoff", k + "_hpcut", k + "_res", k + "_rout"] if hh else [k + "_cutoff", k + "_res", k + "_evamt", k + "_rout"]
+    filt_b = [k + "_cutoff", k + "_evamt", k + "_nzvol", k + "_mtnz"] if hh else [k + "_cutoff", k + "_res", k + "_nzvol", k + "_mtnz"]
+    ftitle = "HH FILTER" if hh else "MM FILTER"
+    return {
+        "A": [("SAMPLE", "PLAYBACK", [k + "_pitch", k + "_start", k + "_stop", k + "_sample"]),
+              ("VCA", "ENVELOPE", [k + "_vcatt", k + "_vcdec", k + "_vcsus", k + "_vcrel"]),
+              (ftitle, "SAMPLE + METAL NOISE", filt_a),
+              ("LFO / LEVEL", "TO PITCH", [k + "_lfwav", k + "_lfrat", k + "_lftun", k + "_vol"])],
+        "B": [("SAMPLE", "TUNE + LOOP", [k + "_cents", k + "_loop", k + "_loopon", k + "_rev"]),
+              ("FILTER", "ENVELOPE", [k + "_fiatt", k + "_fidec", k + "_fisus", k + "_firel"]),
+              (ftitle, "NOISE", filt_b),
+              ("LFO", "TO VCA + CUTOFF", [k + "_lfsyn", k + "_lfvca", k + "_lfcut", k + "_acc"])],
+        "side": [k + "_lfclk"],
+    }
+
+
+PAGES = [
+    ("KICK", "kd", "KICK DRUM", {
+        "A": [("OSCILLATOR", "TUNE ENVELOPE", ["kd_tune", "kd_pitch", "kd_decay", "kd_harm"]),
+              ("ATTACK", "PULSE + NOISE", ["kd_attack", "kd_pulse", "kd_noise", "kd_eq"]),
+              ("SHAPE", "METAL NOISE", ["kd_compr", "kd_metnz", "kd_evamt", "kd_gate"]),
+              ("LFO / LEVEL", "TO PITCH", ["kd_lfwav", "kd_lfrat", "kd_lfint", "kd_vol"])],
+        "B": [("OSCILLATOR", "TUNE ENVELOPE", ["kd_tune", "kd_pitch", "kd_decay", "kd_harm"]),
+              ("PITCH ENV", "808 GLIDE", ["kd_ptatk", "kd_ptdec", "kd_noise", "kd_eq"]),
+              ("SHAPE", "METAL NOISE", ["kd_compr", "kd_metnz", "kd_evamt", "kd_gate"]),
+              ("LFO / ACCENT", "TO PITCH", ["kd_lfwav", "kd_lfrat", "kd_lfint", "kd_acc"])],
+        "side": []}),
+    ("MBRANE", "mb", "MBRANE", {
+        "A": [("MEMBRANES", "M1 + M2", ["mb_pitch1", "mb_damp1", "mb_pitch2", "mb_damp2"]),
+              ("COUPLING", "NOISE + DECAY", ["mb_cupl1", "mb_cupl2", "mb_noise", "mb_decay"]),
+              ("NOISE", "METAL NOISE 1", ["mb_nzfil", "mb_mtnz1", "mb_nzshp", "mb_scene"]),
+              ("LFO 1 / LEVEL", "TO M1", ["mb_l1wav", "mb_l1rat", "mb_l1int", "mb_vol"])],
+        "B": [("MEMBRANES", "M1 + M2", ["mb_pitch1", "mb_damp1", "mb_pitch2", "mb_damp2"]),
+              ("PITCH ENV", "M1 + M2", ["mb_p1atk", "mb_p1dec", "mb_p2atk", "mb_p2dec"]),
+              ("ENV / NOISE", "METAL NOISE 2", ["mb_e1amt", "mb_mtnz2", "mb_e2amt", "mb_gate"]),
+              ("LFO 2 / ACCENT", "TO M2", ["mb_l2wav", "mb_l2rat", "mb_l2int", "mb_acc"])],
+        "side": []}),
+    ("CL HAT", "ch", "CLSD HI HAT", _smp_rows("ch", True)),
+    ("OP HAT", "oh", "OPEN HI HAT", _smp_rows("oh", True)),
+    ("CLAP", "cp", "CLAP", _smp_rows("cp", False)),
+    ("RIM", "rm", "RIM SHOT", _smp_rows("rm", False)),
+    ("CRASH", "cr", "CRASH", _smp_rows("cr", False)),
+    ("RIDE", "rd", "RIDE", _smp_rows("rd", False)),
+] + [(n, k, t, {
+        "A": [("SAMPLE", "PLAYBACK", [k + "_pitch", k + "_start", k + "_stop", k + "_sample"]),
+              ("LFO / LEVEL", "TO PITCH", [k + "_lfwav", k + "_lfrat", k + "_lftun", k + "_vol"])],
+        "B": [("SAMPLE", "TUNE + LOOP", [k + "_cents", k + "_loop", k + "_loopon", k + "_rev"]),
+              ("LFO", "TO LEVEL", [k + "_lfsyn", k + "_lfvca", "-", k + "_acc"])],
+        "side": [k + "_lfclk"]}) for n, k, t in (("X1", "x1", "X SAMPLE 1"), ("X2", "x2", "X SAMPLE 2"))] + [
+    ("FM", "fm", "FM SYNTH", {
+        "A": [("OP 1", "TUNE + FM OUT", ["fm_op1", "fm_fm12", "fm_fm13", "fm_fm14"]),
+              ("OP 2", "TUNE + FM OUT", ["fm_fm21", "fm_op2", "fm_fm23", "fm_fm24"]),
+              ("OP 3", "TUNE + FM OUT", ["fm_fm31", "fm_fm32", "fm_op3", "fm_fm34"]),
+              ("OP 4", "TUNE + FM OUT", ["fm_fm41", "fm_fm42", "fm_fm43", "fm_op4"])],
+        "B": [("OP %d ENV" % i, "ATTACK DECAY LEVEL PITCH",
+               ["fm_eg%dat" % i, "fm_eg%drl" % i, "fm_s%damt" % i, "fm_s%dfm" % i]) for i in range(1, 5)],
+        "side": ["fm_voices", "fm_chord", "fm_spatial", "fm_vol", "fm_acc"]}),
+    ("FX", None, "EFFECTS", {
+        "A": [("REVERB", "ROOM + DAMPING", ["rv_size", "rv_lo", "rv_hi", "rv_level"]),
+              ("REV SENDS", "KD MB CH OH", ["kd_rsend", "mb_rsend", "ch_rsend", "oh_rsend"]),
+              ("REV SENDS", "CP RM CR RD", ["cp_rsend", "rm_rsend", "cr_rsend", "rd_rsend"]),
+              ("REV SENDS", "X1 X2 FM + ON", ["x1_rsend", "x2_rsend", "fm_rsend", "rv_on"])],
+        "B": [("DELAY", "TIME + REPEATS", ["dl_time", "dl_fb", "dl_spatial", "dl_level"]),
+              ("DLY SENDS", "KD MB CH OH", ["kd_dsend", "mb_dsend", "ch_dsend", "oh_dsend"]),
+              ("DLY SENDS", "CP RM CR RD", ["cp_dsend", "rm_dsend", "cr_dsend", "rd_dsend"]),
+              ("DLY SENDS", "X1 X2 FM + ON", ["x1_dsend", "x2_dsend", "fm_dsend", "dl_on"])],
+        "side": ["dl_sync"]}),
+    ("MIX", None, "MIX", {
+        "A": [("PAN", "KD MB CH OH", ["kd_pan", "mb_pan", "ch_pan", "oh_pan"]),
+              ("PAN", "CP RM CR RD", ["cp_pan", "rm_pan", "cr_pan", "rd_pan"]),
+              ("PAN", "X1 X2 FM", ["x1_pan", "x2_pan", "fm_pan", "volume"]),
+              ("HATS", "CHOKE", ["hh_choke", "-", "-", "-"])],
+        "B": [("NOTE", "KD MB CH OH", ["kd_note", "mb_note", "ch_note", "oh_note"]),
+              ("NOTE", "CP RM CR RD", ["cp_note", "rm_note", "cr_note", "rd_note"]),
+              ("NOTE", "X1 X2 FM", ["x1_note", "x2_note", "fm_note", "-"]),
+              ("HATS", "CHOKE", ["hh_choke", "-", "-", "-"])],
+        "side": []}),
+]
+
+
+def check_pages(P):
+    """every control on some page, none twice on one sub-page, every key real"""
+    keys = {p["key"] for p in P}
+    seen = set()
+    for tab, k, title, pg in PAGES:
+        for sub in ("A", "B"):
+            on = [x for _, _, row in pg[sub] for x in row if x != "-"]
+            assert len(on) == len(set(on)), (tab, sub, "twice")
+            for x in on + pg["side"]:
+                assert x in keys, (tab, x)
+            seen |= set(on) | set(pg["side"])
+        if k:
+            seen |= {k + "_pan", k + "_rsend", k + "_dsend", k + "_mute"}   # the instrument's MIX box
+    missing = [p["key"] for p in P if p["key"] not in seen and not p["key"].startswith("kit") and not p.get("momentary")]
+    assert not missing, missing
 
 
 def write_header(P):
@@ -260,6 +365,7 @@ def write_header(P):
     for p in P[first:idx["x1_acc"] + 1]:
         L.append("#define X_%s %d" % (p["key"][3:].upper(), idx[p["key"]] - first))
     L.append("#define MIXSTRIDE 3   /* <inst>_pan, _rsend, _dsend from P_KD_PAN */")
+    L.append("#define NOTESTRIDE 3  /* <inst>_note, _note_prev, _note_next from P_KD_NOTE */")
     L.append("#define NCHORD %d" % len(CHORDS))
     open(os.path.join(ROOT, "src", "params_def.h"), "w").write("\n".join(L) + "\n")
 
@@ -268,6 +374,10 @@ if __name__ == "__main__":
     P = build()
     keys = [p["key"] for p in P]
     assert len(keys) == len(set(keys)), "duplicate keys"
+    check_pages(P)
     write_header(P)
+    os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
+    json.dump([{"tab": t, "inst": k, "title": ti, **pg} for t, k, ti, pg in PAGES],
+              open(os.path.join(ROOT, "build", "pages.json"), "w"), indent=1)
     json.dump({"name": "Incipience", "params": P}, open(os.path.join(ROOT, "params.json"), "w"), indent=1)
     print("params.json: %d parameters; src/params_def.h" % len(P))

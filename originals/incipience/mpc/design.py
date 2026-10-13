@@ -1,0 +1,272 @@
+#!/usr/bin/env python3
+"""Incipience: design/stitch.html, every page of the screen, from the Stitch design of one (design/stitch-kick.html,
+"INCIPIENCE Drum Machine Front Panel", Stitch project 6463560389645269614, kept as Stitch wrote it).
+
+The Stitch page is KICK's page A: a 4 x 4 matrix of the AlphaBase-style knobs (a row a panel, a green LED and number
+by each knob), the OLED, the name, a MIX panel and the instrument keys. This writes that page's markup again for each
+tab and sub-page in mpc/gen.py's PAGES (KICK A, KICK B, ... MIX B): the same styles and pieces, the tab's controls,
+its instrument's key lit. steve/tools/stitch/convert.py reads the result like any design (MAPS "incipience"), and
+mpc/merge_ab.py folds each tab's A and B into one tab with two Q-Link sub-pages.
+
+    python3 mpc/gen.py && python3 mpc/design.py      (from originals/incipience)
+"""
+import html
+import json
+import os
+import re
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC = os.path.join(ROOT, "design", "stitch-kick.html")
+OUT = os.path.join(ROOT, "design", "stitch.html")
+
+KEYS = ["KICK DRUM", "MBRANE", "CLSD HI HAT", "OPEN HI HAT", "CLAP", "RIM SHOT", "CRASH", "RIDE", "X SAMPLE 1",
+        "X SAMPLE 2", "FM SYNTH"]
+IDS = {"kd": "KD", "mb": "MB", "ch": "CH", "oh": "OH", "cp": "CP", "rm": "RM", "cr": "CR", "rd": "RD", "x1": "X1",
+       "x2": "X2", "fm": "FM"}
+SUB_NAMES = {"FX": ("REVERB", "DELAY"), "MIX": ("PAN", "NOTE")}   # the Q-Link sub-pages: "<TAB> A" / "<TAB> B" otherwise
+
+# the screen's colours for what MPC draws itself (names, values, switches, steppers), from the design's palette
+THEME = {"bg": "#efede6", "panel": "#efede6", "box": "#e4e1d8", "line": "#141414", "ink": "#141414",
+         "ink-dim": "#3a3a3a", "ink-faint": "#8d8d8d", "accent": "#d32a2a", "accent-hi": "#ff3333",
+         "seg-active": "#141414", "seg-active-tx": "#f4f2ec", "seg-inactive": "#dcd8ce", "btn-bg": "#2c2c2c",
+         "btn-text": "#e5e5e5", "lcd": "#0b0b0b", "display-ink": "#ffffff", "knob-face": "#151515",
+         "knob-ring": "#2a2a2a", "knob-dot": "#ffffff"}
+
+EXTRA_CSS = """
+    /* added for the MPC pages (mpc/design.py) */
+    :root { %s }
+    .ab-page { position: absolute; inset: 0; display: none; }
+    .ab-page.on { display: block; }
+    .ab-opt { width: 46px; height: 22px; font-size: 9px; font-weight: 800; letter-spacing: 0.06em; color: #e5e5e5;
+              background: linear-gradient(180deg, #3d3d3d 0%%, #282828 100%%); border-radius: 3px; border-bottom: 2px solid #151515; }
+    .ab-stepper, .ab-popup { display: flex; align-items: center; justify-content: space-between; padding: 0 8px;
+              background: #0b0b0b; border: 2px solid #222; border-radius: 4px; color: #fff; font-family: 'VT323', monospace;
+              font-size: 18px; letter-spacing: 0.1em; box-shadow: inset 0 2px 6px rgba(0,0,0,0.9); }
+    .ab-diag { position: absolute; border-radius: 8px; background: rgba(20,20,20,0.055); border: 1px solid rgba(20,20,20,0.12); }
+"""
+
+
+def knob(key, label, num, size=58, ptr=-90, led=True):
+    """the design's knob cell (58 px in the matrix, 40 px in the side panels)"""
+    body, ptrc = ("knob-body-58", "knob-pointer-line") if size == 58 else ("knob-body-40", "knob-pointer-line-40")
+    led_html = ('<div style="position: absolute; left: %dpx; top: 12px; display: flex; flex-direction: column; '
+                'align-items: center; gap: 2px;"><div class="hardware-led-green"></div><span style="font-size: 8px; '
+                'font-weight: 800; color: #141414;">%d</span></div>' % (size + 8, num)) if led else ""
+    return ('<div style="position: relative;"><div class="ab-knob" data-param="%s"><div class="%s"><div class="%s" '
+            'style="transform: rotate(%ddeg);"></div></div></div>%s</div><div style="margin-top: %dpx; display: flex; '
+            'flex-direction: column; align-items: center;"><span class="ab-label">%s</span><span class="ab-value">000</span>'
+            '</div>' % (key, body, ptrc, ptr, led_html, 5 if size == 58 else 6, html.escape(label)))
+
+
+def switch(key, label, num=None, w=64):
+    led_html = ('<div style="position: absolute; left: %dpx; top: 12px; display: flex; flex-direction: column; '
+                'align-items: center; gap: 2px;"><div class="hardware-led-green"></div><span style="font-size: 8px; '
+                'font-weight: 800; color: #141414;">%d</span></div>' % (w + 8, num)) if num else ""
+    return ('<div style="position: relative; height: 58px; display: flex; align-items: center;"><button class="ab-toggle '
+            'ab-switch" data-param="%s" type="button" style="width: %dpx;"><span style="display: inline-block; width: 4px; '
+            'height: 4px; border-radius: 50%%; background: #666; margin-right: 2px;"></span>ON</button>%s</div><div '
+            'style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;"><span class="ab-label">%s'
+            '</span><span class="ab-value">OFF</span></div>' % (key, w, led_html, html.escape(label)))
+
+
+def enum_v(key, options, num):
+    opts = "".join('<button class="ab-opt" type="button">%s</button>' % html.escape(o) for o in options)
+    return ('<div style="position: relative;"><div class="ab-enum" data-param="%s" style="display: flex; flex-direction: '
+            'column; gap: 2px;">%s</div><div style="position: absolute; left: 56px; top: 38px; display: flex; '
+            'flex-direction: column; align-items: center; gap: 2px;"><div class="hardware-led-green"></div><span '
+            'style="font-size: 8px; font-weight: 800; color: #141414;">%d</span></div></div>' % (key, opts, num))
+
+
+def stepper(key, label, num=None, w=120):
+    led_html = ('<div style="position: absolute; left: %dpx; top: 8px; display: flex; flex-direction: column; '
+                'align-items: center; gap: 2px;"><div class="hardware-led-green"></div><span style="font-size: 8px; '
+                'font-weight: 800; color: #141414;">%d</span></div>' % (w + 6, num)) if num else ""
+    # the box and arrows stay in the background; a transparent hit area over it is the control MPC places
+    return ('<div style="position: relative; height: 58px; display: flex; align-items: center;"><div class="ab-stepper" '
+            'style="position: relative; width: %dpx; height: 30px;"><span>&#9664;</span><span></span><span>&#9654;</span>'
+            '<div class="ab-hit ab-step-hit" data-param="%s" style="position: absolute; inset: 0;"></div></div>%s</div><div style="margin-top: 5px;"><span class="print-label" style="font-size: 9.5px;">%s</span></div>'
+            % (w, key, led_html, html.escape(label)))
+
+
+def popup(key, label, w=120):
+    return ('<div style="position: relative; height: 40px; display: flex; align-items: center;"><div class="ab-popup" '
+            'style="position: relative; width: %dpx; height: 30px;"><span></span><div class="ab-hit '
+            'ab-pop-hit" data-param="%s" style="position: absolute; inset: 0;"></div></div></div><div style="margin-top: '
+            '6px;"><span class="print-label" style="font-size: 9.5px;">%s</span></div>' % (w, key, html.escape(label)))
+
+
+INST_PREFIX = ("kd_", "mb_", "ch_", "oh_", "cp_", "rm_", "cr_", "rd_", "x1_", "x2_", "fm_")
+
+
+def short(name, inst_name, key=""):
+    """a control's caption in the design: its parameter name without the instrument (MPC writes the full one live);
+       on FX and MIX, where each column is an instrument, the instrument instead"""
+    if not inst_name and key.startswith(INST_PREFIX):
+        return name.rsplit(" ", 1)[0].replace(" REV", "").replace(" DLY", "")
+    n = name
+    for pre in (inst_name + " ", "KICK ", "MBRANE ", "CL HAT ", "OP HAT ", "CLAP ", "RIM ", "CRASH ", "RIDE ", "X1 ",
+                "X2 ", "FM ", "REV ", "DLY "):
+        if n.startswith(pre) and len(n) > len(pre):
+            n = n[len(pre):]
+            break
+    return n
+
+
+def cell(key, P, inst_name, num):
+    p = P[key]
+    if p.get("options") and len(p["options"]) == 2:
+        return switch(key, short(p["name"], inst_name, key), num)
+    if p.get("options") and len(p["options"]) <= 4:
+        return enum_v(key, p["options"], num)
+    if p.get("options") and len(p["options"]) > 12:
+        return stepper(key, short(p["name"], inst_name, key), num)
+    if p.get("options"):
+        return popup(key, short(p["name"], inst_name, key))
+    return knob(key, short(p["name"], inst_name, key), num, ptr=[-90, -15, 40, -110][num % 4])
+
+
+ABBR = {"OSCILLATOR": "OSC", "MEMBRANES": "M1+M2", "COUPLING": "COUPLE", "ENV / NOISE": "NOISE", "LFO / LEVEL": "LFO",
+        "LFO / ACCENT": "LFO", "LFO 1 / LEVEL": "LFO1", "LFO 2 / ACCENT": "LFO2", "PITCH ENV": "P ENV", "HH FILTER": "FILTER",
+        "MM FILTER": "FILTER"}
+OLED_LINE = {("FM", "A"): "FM MATRIX", ("FM", "B"): "OP ENVELOPES", ("FX", "A"): "REVERB + SENDS",
+             ("FX", "B"): "DELAY + SENDS", ("MIX", "A"): "PAN + VOLUME", ("MIX", "B"): "NOTES + CHOKE"}
+
+
+def matrix(rows, P, inst_name, diag=()):
+    out = ['<div style="position: absolute; left: 40px; top: 18px; width: 720px; height: 520px;">']
+    for r, (title, cap, keys) in enumerate(rows):
+        out.append('<div style="position: absolute; left: 0; top: %dpx; width: 720px; height: 124px;">' % (128 * r))
+        out.append('<div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 3px; '
+                   'border-bottom: 1px solid #141414;"><span class="print-label" style="font-size: 11px;">%s</span><span '
+                   'class="red-caption" style="font-size: 10px;">%s</span></div>' % (html.escape(title), html.escape(cap)))
+        out.append('<div style="position: relative; height: 96px; margin-top: 8px;">')
+        for c, key in enumerate(keys):
+            if key == "-":
+                continue
+            if key in diag:   # the FM matrix's diagonal: the operators' own tunings, as on the hardware's panel diagram
+                out.append('<div class="ab-diag" style="left: %dpx; top: -4px; width: 130px; height: 100px;"></div>'
+                           % (6 + 160 * c))
+            out.append('<div style="position: absolute; left: %dpx; top: 0; width: 110px; display: flex; flex-direction: '
+                       'column; align-items: center;">%s</div>' % (16 + 160 * c, cell(key, P, inst_name, 4 * r + c + 1)))
+        out.append('</div></div>')
+    out.append('</div>')
+    return "".join(out)
+
+
+def side_ctl(key, P, inst_name):
+    p = P[key]
+    if p.get("options") and len(p["options"]) == 2:
+        return switch(key, short(p["name"], inst_name), w=56)
+    if p.get("options"):
+        return popup(key, short(p["name"], inst_name), w=110)
+    return knob(key, short(p["name"], inst_name), 0, size=40, ptr=0, led=False)
+
+
+def panel(title, caption, items, top):
+    return ('<div style="margin-top: %dpx; width: 430px;"><div style="display: flex; justify-content: space-between; '
+            'align-items: flex-end; padding-bottom: 3px; border-bottom: 1px solid #141414;"><span class="print-label" '
+            'style="font-size: 11px;">%s</span><span style="font-size: 9px; font-weight: 700; color: #8d8d8d; '
+            'letter-spacing: 0.08em; text-transform: uppercase;">%s</span></div><div style="display: flex; align-items: '
+            'flex-start; justify-content: space-around; margin-top: 14px; padding: 0 6px;">%s</div></div>'
+            % (top, html.escape(title), html.escape(caption),
+               "".join('<div style="display: flex; flex-direction: column; align-items: center;">%s</div>' % i for i in items)))
+
+
+def right_column(tab, inst, title, sub, rows, side, P):
+    ident = IDS.get(inst, {"MIX": "MX"}.get(tab, tab[:2]))
+    sub_name = "PAGE " + sub
+    words = OLED_LINE.get((tab, sub)) or " &nbsp;".join(
+        html.escape(ABBR.get(t, t.split(" ")[0][:6])) for t, _, _ in rows)
+    out = ['<div style="position: absolute; left: 800px; top: 20px; width: 436px; height: 510px;">',
+           '<div class="oled-display" style="width: 430px; height: 120px; padding: 22px 22px; display: flex; '
+           'flex-direction: column; justify-content: space-between;"><div style="display: flex; justify-content: '
+           'space-between; align-items: center;"><div style="font-family: \'VT323\', \'Chakra Petch\', monospace; '
+           'font-size: 32px; letter-spacing: 0.12em; color: #ffffff; line-height: 1;">%s &nbsp;%s</div><svg width="44" '
+           'height="20" viewBox="0 0 50 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M 2 10 C 12 1, 14 1, '
+           '24 10 C 34 19, 36 19, 48 10" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/></svg></div><div '
+           'style="font-family: \'VT323\', \'Chakra Petch\', monospace; font-size: 19px; letter-spacing: 0.16em; color: '
+           '#ffffff; opacity: 0.95; line-height: 1;">%s &nbsp; %s</div></div>' % (ident, html.escape(title),
+                                                                                html.escape(sub_name), words),
+           '<div style="margin-top: 30px; display: flex; align-items: center; gap: 10px;"><div style="width: 14px; height: '
+           '26px; border-radius: 7px; background: #d32a2a; box-shadow: 0 1px 2px rgba(0,0,0,0.3);"></div><div style="'
+           'font-family: \'Inter\', sans-serif; font-size: 27px; font-weight: 900; letter-spacing: 0.28em; color: #141414; '
+           'line-height: 1;">INCIPIENCE</div></div><div style="margin-left: 24px; margin-top: 6px; font-family: \'Inter\', '
+           'sans-serif; font-size: 9.5px; font-weight: 800; letter-spacing: 0.22em; color: #141414;">ELEVEN-VOICE DRUM '
+           'SYNTHESIZER</div>']
+    top = 30
+    if inst:
+        out.append(panel("MIX", title, [side_ctl(inst + "_pan", P, title), side_ctl(inst + "_rsend", P, title),
+                                        side_ctl(inst + "_dsend", P, title), switch(inst + "_mute", "MUTE", w=56)], top))
+        top = 22
+    if side:
+        heading = {"fm": ("FM VOICE", "CHORD + LEVEL"), None: ("DELAY", "CLOCK")}.get(inst, ("LFO", "CLOCK"))
+        out.append(panel(heading[0], heading[1], [side_ctl(k, P, title) for k in side], top))
+    out.append('</div>')
+    return "".join(out)
+
+
+def strip(lit):
+    """the instrument keys along the bottom, the tab's own lit"""
+    def key(i, w):
+        return ('<div style="display: flex; flex-direction: column; align-items: center; width: %dpx;"><div style="display: '
+                'flex; align-items: center; gap: 4px;"><div class="instrument-key"></div><div class="key-led-red%s"></div>'
+                '</div><span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: '
+                '5px; white-space: nowrap;">%s</span></div>' % (w, " lit" if i == lit else "", KEYS[i]))
+
+    def group(ids, gap, cap, widths):
+        return ('<div style="position: relative; display: flex; gap: %dpx; padding-bottom: 12px;">%s<div style="position: '
+                'absolute; left: 8px; right: 8px; bottom: 0; display: flex; flex-direction: column; align-items: center;">'
+                '<div style="width: 100%%; height: 1px; background-color: #141414;"></div><span class="red-caption" '
+                'style="font-size: 7.5px; margin-top: 2px; white-space: nowrap;">%s</span></div></div>'
+                % (gap, "".join(key(i, w) for i, w in zip(ids, widths)), cap))
+    return ('<div style="position: absolute; left: 22px; right: 22px; top: 546px; height: 82px;"><div style="position: '
+            'absolute; left: 0; right: 0; top: 0; height: 8px; background-color: #d32a2a; box-shadow: 0 1px 2px '
+            'rgba(0,0,0,0.2);"></div><div style="position: absolute; left: 20px; right: 20px; top: 12px; display: flex; '
+            'justify-content: space-between; align-items: flex-start;">%s%s%s%s%s%s%s</div></div>'
+            % (key(0, 80), key(1, 75), group([2, 3], 36, "SAMPLE + HH FILTER + VCA", [75, 75]),
+               group([4, 5, 6, 7], 28, "SAMPLE + MM FILTER + VCA", [62, 65, 62, 62]), key(8, 75), key(9, 75), key(10, 75)))
+
+
+def main():
+    src = open(SRC).read()
+    head = src[:src.index("</head>")]
+    head = head.replace("<title>INCIPIENCE Drum Machine Front Panel</title>", "<title>Incipience: every page</title>")
+    head = head.replace("</style>", EXTRA_CSS % " ".join("--theme-%s: %s;" % kv for kv in THEME.items()) + "</style>", 1)
+    body = re.search(r'<div id="mpc-screen">(.*?)<!-- =+\s*LEFT', src, re.S).group(1)   # the cheeks and screws
+    pages = json.load(open(os.path.join(ROOT, "build", "pages.json")))
+    P = {p["key"]: p for p in json.load(open(os.path.join(ROOT, "params.json")))["params"]}
+    names, html_pages = [], []
+    for pg in pages:
+        tab, inst = pg["tab"], pg["inst"]
+        lit = list(IDS).index(inst) if inst in IDS else -1
+        for sub in ("A", "B"):
+            nm = SUB_NAMES[tab]["AB".index(sub)] if tab in SUB_NAMES else "%s %s" % (tab, sub)
+            names.append(nm)
+            diag = {"fm_op1", "fm_op2", "fm_op3", "fm_op4"} if tab == "FM" and sub == "A" else ()
+            html_pages.append('<div class="ab-page%s" data-page="%s">%s%s%s</div>' % (
+                " on" if not html_pages else "", nm, matrix(pg[sub], P, pg["title"] if inst else "", diag),
+                right_column(tab, inst, pg["title"], sub, pg[sub], pg["side"], P), strip(lit)))
+    nav = "".join('<button class="ab-tab" type="button" onclick="abShow(%d)">%s</button>' % (i, n)
+                  for i, n in enumerate(names))
+    doc = (head + "</head>\n<body>\n<!-- generated by mpc/design.py from design/stitch-kick.html: do not edit -->\n"
+           '<div id="ab-nav" style="display: none;">%s</div>\n<div id="mpc-screen">%s%s</div>\n<script>\nfunction '
+           "abShow(i) { document.querySelectorAll('.ab-page').forEach((p, j) => p.classList.toggle('on', i === j)); }\n"
+           "</script>\n</body>\n</html>\n" % (nav, body, "\n".join(html_pages)))
+    open(OUT, "w").write(doc)
+    # what convert.py needs beyond the MAPS entry: each page's Q-Links (a row a column; "-" an empty slot) and the
+    # controls on both of a tab's pages (the shared rows and the side panels)
+    ql, seen, twice = {}, set(), set()
+    for ti, (pg, sub) in enumerate((pg, sub) for pg in pages for sub in ("A", "B")):
+        ql[ti] = [k for _, _, row in pg[sub] for k in (row + ["-"] * (4 - len(row)))]
+        on = {k for _, _, row in pg[sub] for k in row if k != "-"} | set(pg["side"])
+        if pg["inst"]:
+            on |= {pg["inst"] + s for s in ("_pan", "_rsend", "_dsend", "_mute")}
+        twice |= on & seen if sub == "B" else set()
+        seen = on if sub == "A" else set()
+    json.dump({"qlinks": ql, "twice": sorted(twice), "tab_names": names},
+              open(os.path.join(ROOT, "build", "convert.json"), "w"), indent=1)
+    print("design/stitch.html: %d pages; build/convert.json" % len(names))
+
+
+if __name__ == "__main__":
+    main()

@@ -2286,7 +2286,7 @@
   },
   {
    "key": "fm_fm12",
-   "name": "FM FM 1>2",
+   "name": "FM 1>2",
    "min": 0,
    "max": 127,
    "default": 10,
@@ -2294,7 +2294,7 @@
   },
   {
    "key": "fm_fm13",
-   "name": "FM FM 1>3",
+   "name": "FM 1>3",
    "min": 0,
    "max": 127,
    "default": 55,
@@ -2302,7 +2302,7 @@
   },
   {
    "key": "fm_fm14",
-   "name": "FM FM 1>4",
+   "name": "FM 1>4",
    "min": 0,
    "max": 127,
    "default": 29,
@@ -2310,7 +2310,7 @@
   },
   {
    "key": "fm_fm21",
-   "name": "FM FM 2>1",
+   "name": "FM 2>1",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2326,7 +2326,7 @@
   },
   {
    "key": "fm_fm23",
-   "name": "FM FM 2>3",
+   "name": "FM 2>3",
    "min": 0,
    "max": 127,
    "default": 5,
@@ -2334,7 +2334,7 @@
   },
   {
    "key": "fm_fm24",
-   "name": "FM FM 2>4",
+   "name": "FM 2>4",
    "min": 0,
    "max": 127,
    "default": 7,
@@ -2342,7 +2342,7 @@
   },
   {
    "key": "fm_fm31",
-   "name": "FM FM 3>1",
+   "name": "FM 3>1",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2350,7 +2350,7 @@
   },
   {
    "key": "fm_fm32",
-   "name": "FM FM 3>2",
+   "name": "FM 3>2",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2366,7 +2366,7 @@
   },
   {
    "key": "fm_fm34",
-   "name": "FM FM 3>4",
+   "name": "FM 3>4",
    "min": 0,
    "max": 127,
    "default": 7,
@@ -2374,7 +2374,7 @@
   },
   {
    "key": "fm_fm41",
-   "name": "FM FM 4>1",
+   "name": "FM 4>1",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2382,7 +2382,7 @@
   },
   {
    "key": "fm_fm42",
-   "name": "FM FM 4>2",
+   "name": "FM 4>2",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2390,7 +2390,7 @@
   },
   {
    "key": "fm_fm43",
-   "name": "FM FM 4>3",
+   "name": "FM 4>3",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2595,7 +2595,7 @@
   },
   {
    "key": "kd_rsend",
-   "name": "KICK REV SEND",
+   "name": "KICK REV",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2603,7 +2603,7 @@
   },
   {
    "key": "kd_dsend",
-   "name": "KICK DLY SEND",
+   "name": "KICK DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2619,7 +2619,7 @@
   },
   {
    "key": "mb_rsend",
-   "name": "MBRANE REV SEND",
+   "name": "MBRANE REV",
    "min": 0,
    "max": 127,
    "default": 32,
@@ -2627,7 +2627,7 @@
   },
   {
    "key": "mb_dsend",
-   "name": "MBRANE DLY SEND",
+   "name": "MBRANE DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2643,7 +2643,7 @@
   },
   {
    "key": "ch_rsend",
-   "name": "CL HAT REV SEND",
+   "name": "CL HAT REV",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2651,7 +2651,7 @@
   },
   {
    "key": "ch_dsend",
-   "name": "CL HAT DLY SEND",
+   "name": "CL HAT DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2667,7 +2667,7 @@
   },
   {
    "key": "oh_rsend",
-   "name": "OP HAT REV SEND",
+   "name": "OP HAT REV",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2675,7 +2675,7 @@
   },
   {
    "key": "oh_dsend",
-   "name": "OP HAT DLY SEND",
+   "name": "OP HAT DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2691,7 +2691,7 @@
   },
   {
    "key": "cp_rsend",
-   "name": "CLAP REV SEND",
+   "name": "CLAP REV",
    "min": 0,
    "max": 127,
    "default": 56,
@@ -2699,7 +2699,7 @@
   },
   {
    "key": "cp_dsend",
-   "name": "CLAP DLY SEND",
+   "name": "CLAP DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2715,7 +2715,7 @@
   },
   {
    "key": "rm_rsend",
-   "name": "RIM REV SEND",
+   "name": "RIM REV",
    "min": 0,
    "max": 127,
    "default": 32,
@@ -2723,7 +2723,7 @@
   },
   {
    "key": "rm_dsend",
-   "name": "RIM DLY SEND",
+   "name": "RIM DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2739,7 +2739,7 @@
   },
   {
    "key": "cr_rsend",
-   "name": "CRASH REV SEND",
+   "name": "CRASH REV",
    "min": 0,
    "max": 127,
    "default": 25,
@@ -2747,7 +2747,7 @@
   },
   {
    "key": "cr_dsend",
-   "name": "CRASH DLY SEND",
+   "name": "CRASH DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2763,7 +2763,7 @@
   },
   {
    "key": "rd_rsend",
-   "name": "RIDE REV SEND",
+   "name": "RIDE REV",
    "min": 0,
    "max": 127,
    "default": 31,
@@ -2771,7 +2771,7 @@
   },
   {
    "key": "rd_dsend",
-   "name": "RIDE DLY SEND",
+   "name": "RIDE DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2787,7 +2787,7 @@
   },
   {
    "key": "x1_rsend",
-   "name": "X1 REV SEND",
+   "name": "X1 REV",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2795,7 +2795,7 @@
   },
   {
    "key": "x1_dsend",
-   "name": "X1 DLY SEND",
+   "name": "X1 DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2811,7 +2811,7 @@
   },
   {
    "key": "x2_rsend",
-   "name": "X2 REV SEND",
+   "name": "X2 REV",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2819,7 +2819,7 @@
   },
   {
    "key": "x2_dsend",
-   "name": "X2 DLY SEND",
+   "name": "X2 DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2835,7 +2835,7 @@
   },
   {
    "key": "fm_rsend",
-   "name": "FM REV SEND",
+   "name": "FM REV",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -2843,7 +2843,7 @@
   },
   {
    "key": "fm_dsend",
-   "name": "FM DLY SEND",
+   "name": "FM DLY",
    "min": 0,
    "max": 127,
    "default": 0,
@@ -3077,6 +3077,20 @@
    "type": "stepper"
   },
   {
+   "key": "kd_note_prev",
+   "name": "KICK NOTE DOWN",
+   "momentary": true,
+   "step_of": "kd_note",
+   "step_delta": -1
+  },
+  {
+   "key": "kd_note_next",
+   "name": "KICK NOTE UP",
+   "momentary": true,
+   "step_of": "kd_note",
+   "step_delta": 1
+  },
+  {
    "key": "mb_note",
    "name": "MBRANE NOTE",
    "options": [
@@ -3211,6 +3225,20 @@
    ],
    "default": "C#1",
    "type": "stepper"
+  },
+  {
+   "key": "mb_note_prev",
+   "name": "MBRANE NOTE DOWN",
+   "momentary": true,
+   "step_of": "mb_note",
+   "step_delta": -1
+  },
+  {
+   "key": "mb_note_next",
+   "name": "MBRANE NOTE UP",
+   "momentary": true,
+   "step_of": "mb_note",
+   "step_delta": 1
   },
   {
    "key": "ch_note",
@@ -3349,6 +3377,20 @@
    "type": "stepper"
   },
   {
+   "key": "ch_note_prev",
+   "name": "CL HAT NOTE DOWN",
+   "momentary": true,
+   "step_of": "ch_note",
+   "step_delta": -1
+  },
+  {
+   "key": "ch_note_next",
+   "name": "CL HAT NOTE UP",
+   "momentary": true,
+   "step_of": "ch_note",
+   "step_delta": 1
+  },
+  {
    "key": "oh_note",
    "name": "OP HAT NOTE",
    "options": [
@@ -3483,6 +3525,20 @@
    ],
    "default": "D#1",
    "type": "stepper"
+  },
+  {
+   "key": "oh_note_prev",
+   "name": "OP HAT NOTE DOWN",
+   "momentary": true,
+   "step_of": "oh_note",
+   "step_delta": -1
+  },
+  {
+   "key": "oh_note_next",
+   "name": "OP HAT NOTE UP",
+   "momentary": true,
+   "step_of": "oh_note",
+   "step_delta": 1
   },
   {
    "key": "cp_note",
@@ -3621,6 +3677,20 @@
    "type": "stepper"
   },
   {
+   "key": "cp_note_prev",
+   "name": "CLAP NOTE DOWN",
+   "momentary": true,
+   "step_of": "cp_note",
+   "step_delta": -1
+  },
+  {
+   "key": "cp_note_next",
+   "name": "CLAP NOTE UP",
+   "momentary": true,
+   "step_of": "cp_note",
+   "step_delta": 1
+  },
+  {
    "key": "rm_note",
    "name": "RIM NOTE",
    "options": [
@@ -3755,6 +3825,20 @@
    ],
    "default": "F1",
    "type": "stepper"
+  },
+  {
+   "key": "rm_note_prev",
+   "name": "RIM NOTE DOWN",
+   "momentary": true,
+   "step_of": "rm_note",
+   "step_delta": -1
+  },
+  {
+   "key": "rm_note_next",
+   "name": "RIM NOTE UP",
+   "momentary": true,
+   "step_of": "rm_note",
+   "step_delta": 1
   },
   {
    "key": "cr_note",
@@ -3893,6 +3977,20 @@
    "type": "stepper"
   },
   {
+   "key": "cr_note_prev",
+   "name": "CRASH NOTE DOWN",
+   "momentary": true,
+   "step_of": "cr_note",
+   "step_delta": -1
+  },
+  {
+   "key": "cr_note_next",
+   "name": "CRASH NOTE UP",
+   "momentary": true,
+   "step_of": "cr_note",
+   "step_delta": 1
+  },
+  {
    "key": "rd_note",
    "name": "RIDE NOTE",
    "options": [
@@ -4027,6 +4125,20 @@
    ],
    "default": "G1",
    "type": "stepper"
+  },
+  {
+   "key": "rd_note_prev",
+   "name": "RIDE NOTE DOWN",
+   "momentary": true,
+   "step_of": "rd_note",
+   "step_delta": -1
+  },
+  {
+   "key": "rd_note_next",
+   "name": "RIDE NOTE UP",
+   "momentary": true,
+   "step_of": "rd_note",
+   "step_delta": 1
   },
   {
    "key": "x1_note",
@@ -4165,6 +4277,20 @@
    "type": "stepper"
   },
   {
+   "key": "x1_note_prev",
+   "name": "X1 NOTE DOWN",
+   "momentary": true,
+   "step_of": "x1_note",
+   "step_delta": -1
+  },
+  {
+   "key": "x1_note_next",
+   "name": "X1 NOTE UP",
+   "momentary": true,
+   "step_of": "x1_note",
+   "step_delta": 1
+  },
+  {
    "key": "x2_note",
    "name": "X2 NOTE",
    "options": [
@@ -4301,6 +4427,20 @@
    "type": "stepper"
   },
   {
+   "key": "x2_note_prev",
+   "name": "X2 NOTE DOWN",
+   "momentary": true,
+   "step_of": "x2_note",
+   "step_delta": -1
+  },
+  {
+   "key": "x2_note_next",
+   "name": "X2 NOTE UP",
+   "momentary": true,
+   "step_of": "x2_note",
+   "step_delta": 1
+  },
+  {
    "key": "fm_note",
    "name": "FM NOTE",
    "options": [
@@ -4435,6 +4575,20 @@
    ],
    "default": "A#1",
    "type": "stepper"
+  },
+  {
+   "key": "fm_note_prev",
+   "name": "FM NOTE DOWN",
+   "momentary": true,
+   "step_of": "fm_note",
+   "step_delta": -1
+  },
+  {
+   "key": "fm_note_next",
+   "name": "FM NOTE UP",
+   "momentary": true,
+   "step_of": "fm_note",
+   "step_delta": 1
   },
   {
    "key": "kd_mute",

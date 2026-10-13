@@ -170,10 +170,10 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
     int st = m[0] & 0xF0, d1 = m[1] & 0x7F, d2 = len > 2 ? m[2] & 0x7F : 0;
     if (st == 0x90 && d2 > 0) {
         for (int i = 0; i < NI; i++)
-            if ((int)P->pv[P_KD_NOTE + i] == d1) trigger(P, i, (float)d2, d1);
+            if ((int)P->pv[P_KD_NOTE + NOTESTRIDE * i] == d1) trigger(P, i, (float)d2, d1);
     } else if (st == 0x80 || st == 0x90) {
         for (int i = I_CH; i <= I_X2; i++)
-            if ((int)P->pv[P_KD_NOTE + i] == d1) smp_release(P, i - I_CH);
+            if ((int)P->pv[P_KD_NOTE + NOTESTRIDE * i] == d1) smp_release(P, i - I_CH);
     } else if (st == 0xB0 && (d1 == 120 || d1 == 123)) {
         for (int s = 0; s < 8; s++) {
             smp_release(P, s);

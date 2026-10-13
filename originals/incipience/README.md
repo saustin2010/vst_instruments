@@ -4,8 +4,11 @@
 0-127 ranges; plays the AlphaBase's own sample set. · maker in MPC: Steve A · written for this repo · licence: MIT
 ([`LICENSE`](LICENSE))
 
-**Status (2026-10-13): phase 1.** The engine runs offline and renders WAVs; there is no MPC build or screen yet. What's
-next is in [ROADMAP.md](../../ROADMAP.md#new-plugins).
+<img src="screenshots/page_0.png" width="760" alt="Incipience's KICK page">
+
+**Status (2026-10-13): phase 2.** The engine renders offline (phase 1); the MPC build and its screen are done and checked
+offline (`tools/build.sh`: PASSED, `check_skin.py`: OK), not yet on a device. What's next is in
+[ROADMAP.md](../../ROADMAP.md#new-plugins).
 
 ## What it is
 
@@ -27,6 +30,29 @@ manual (what each control is said to do, its block diagrams and ranges), and it 
 The metal noise patterns are this plugin's own; so are the MBrane's nine scenes and LFO waves 16-63 (with the
 AlphaBase's `ABWV0300.raw` in the data folder, its own 64 LFO waves are used).
 
+## The screen
+
+Designed in Google Stitch to look like the AlphaBase Mk II's panel (cream, black knobs with green LEDs, wooden cheeks,
+the OLED, the red band and the instrument keys). A tab per instrument, then FX and MIX; each tab has the hardware's two
+pages as two Q-Link sub-pages (KICK A, KICK B, ...), with the controls of its 4 x 4 encoder matrix in the same places:
+a row of the matrix is a panel and a Q-Link column (the hardware's display shows one row at a time). On the right of
+each instrument: its MIX (pan, reverb and delay sends, mute) and its extras (the Mk II's synced LFO clock; the FM
+synth's voices, chord, spatial and level), by touch.
+
+| | A | B |
+|---|---|---|
+| KICK | <img src="screenshots/page_0.png" width="300"> | <img src="screenshots/page_0_1.png" width="300"> |
+| MBRANE | <img src="screenshots/page_1.png" width="300"> | <img src="screenshots/page_1_1.png" width="300"> |
+| CLAP (the others alike) | <img src="screenshots/page_4.png" width="300"> | <img src="screenshots/page_4_1.png" width="300"> |
+| FM | <img src="screenshots/page_10.png" width="300"> | <img src="screenshots/page_10_1.png" width="300"> |
+| FX | <img src="screenshots/page_11.png" width="300"> | <img src="screenshots/page_11_1.png" width="300"> |
+| MIX | <img src="screenshots/page_12.png" width="300"> | <img src="screenshots/page_12_1.png" width="300"> |
+
+How it's made: the Stitch design is one page, KICK A (`design/stitch-kick.html`, as Stitch wrote it); `mpc/design.py`
+writes every page in its markup (`design/stitch.html`), the repo's `convert.py` turns that into the layout, and
+`mpc/merge_ab.py` folds each tab's two pages into Q-Link sub-pages. `mpc/screen.sh` runs it all, through the build,
+`check_skin.py` and these screenshots.
+
 ## Samples
 
 The sample channels play the AlphaBase's samples by number, as its SAMPLE control does: sample `n` is `ABWV<nnnn>.raw`
@@ -43,4 +69,4 @@ build/render <data folder or ""> build/renders kit           # every kit: each i
 build/render <data folder or ""> build/renders script <file>  # one WAV per line: name;key=value;...;hits=kd@0,ch@0.5
 ```
 
-`python3 mpc/gen.py` writes `params.json` and `src/params_def.h` from one list (376 parameters).
+`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (398 parameters).
