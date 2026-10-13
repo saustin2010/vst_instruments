@@ -44,10 +44,21 @@ float delay_seconds(const inc_t *P) {
     return expmap(t, 0.005f, 1.4f);
 }
 
+/* an effect sleeps once nothing goes in and what comes out has died away (below -120 dB): a silent track then costs
+ * next to nothing (TESTS.md); the first sound sent in wakes it, its buffers as they were */
+static int silent(const float *x, int n) {
+    for (int i = 0; i < n; i++)
+        if (fabsf(x[i]) > 1e-6f) return 0;
+    return 1;
+}
+
 void fx_block(inc_t *P, const float *rin, const float *din, float *L, float *R, int n) {
     fx_t *f = &P->fx;
+    if (!silent(rin, n)) f->rv_sleep = 0;
+    if (!silent(din, n)) f->dl_sleep = 0;
+    float pk = 0.0f;
     /* ---- reverb ---- */
-    if (P->pv[P_RV_ON] >= 0.5f) {
+    if (P->pv[P_RV_ON] >= 0.5f && !f->rv_sleep) {
         float rs = P->pv[P_RV_SIZE];
         float g = rs <= 100.0f ? 0.25f + 0.73f * powf(rs / 100.0f, 0.7f) : 0.98f + 0.035f * (rs - 100.0f) / 27.0f;
         svfc_t lp, hp;
@@ -88,10 +99,13 @@ void fx_block(inc_t *P, const float *rin, const float *din, float *L, float *R, 
             f->w = (f->w + 1) % RV_MAX;
             L[i] += outl * lvl;
             R[i] += outr * lvl;
+            pk = fmaxf(pk, fabsf(outl) + fabsf(outr));
         }
+        if (pk < 1e-6f && silent(rin, n)) f->rv_sleep = 1;
     }
     /* ---- delay ---- */
-    if (P->pv[P_DL_ON] >= 0.5f) {
+    if (P->pv[P_DL_ON] >= 0.5f && !f->dl_sleep) {
+        pk = 0.0f;
         float target = delay_seconds(P) * SR;
         float fb = 1.02f * P->pv[P_DL_FB] / 127.0f;
         float s = P->pv[P_DL_SPATIAL] / 127.0f;
@@ -115,6 +129,9 @@ void fx_block(inc_t *P, const float *rin, const float *din, float *L, float *R, 
             float m = 0.5f * (a + b);
             L[i] += lerpf(m, a, s) * lvl;
             R[i] += lerpf(m, b, s) * lvl;
+            pk = fmaxf(pk, fabsf(a) + fabsf(b));
         }
+        /* asleep only with the whole line quiet: an echo still on its way would otherwise be lost */
+        if (pk < 1e-6f && silent(din, n) && silent(f->dl[0], DL_MAX) && silent(f->dl[1], DL_MAX)) f->dl_sleep = 1;
     }
 }

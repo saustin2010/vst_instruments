@@ -111,6 +111,7 @@ typedef struct {
     int dw;
     float dt;                     /* delay time in frames, smoothed */
     float dlp[2];
+    int rv_sleep, dl_sleep;       /* nothing in, nothing left: skipped until something is sent */
 } fx_t;
 void fx_init(fx_t *f);
 void fx_free(fx_t *f);
