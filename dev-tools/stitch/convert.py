@@ -77,6 +77,19 @@ MONO_COMMON = [{"sel": ".knob-arc", "all": True, "remove": True},   # value arcs
 # per mockup: selectors for its controls (each mockup was generated with its own class names), the knob sweep, which
 # canvas becomes which display, and label -> parameter fixes where the mockup's key or label doesn't name ours
 MAPS = {
+    "incipience": {
+        # designed in Stitch as one page (design/stitch-kick.html, KICK page A); mpc/design.py writes every tab's page A
+        # and B in that markup (design/stitch.html, a hidden button per page), and its build/convert.json gives each
+        # page's Q-Links (a row of the 4 x 4 matrix a column) and the keys on both of a tab's pages. After this,
+        # mpc/merge_ab.py folds each tab's two pages into one tab with Q-Link sub-pages.
+        "sweep": 135, "tabs": ".ab-tab", "center": False, "autodrop": False, "extra": "build/convert.json",
+        "knob": {"item": ".ab-knob", "body": ".knob-body-58, .knob-body-40", "unit": "div:has(> div > .ab-knob)",
+                 "label": ".ab-label", "value": ".ab-value"},
+        "toggle": {"item": ".ab-switch", "unit": "div:has(> div > .ab-switch)", "label": ".ab-label", "hide": [".ab-value"]},
+        "enum": {"item": ".ab-enum", "opt": ".ab-opt"},
+        "stepper": {"item": ".ab-step-hit"},
+        "popup": {"item": ".ab-pop-hit"},
+    },
     "braids": {
         "sweep": 135,
         "knob": {"item": ".knob-disc", "unit": ".knob-widget", "label": ".knob-label", "value": ".knob-val-box"},
@@ -1888,6 +1901,10 @@ BRAND_RETEXT = {
 def convert(port):
     cfg = dict(MAPS[port])
     D = os.path.join(STEVE, "schwung-ports", port)
+    if cfg.get("extra"):   # settings the plugin writes itself (Incipience: mpc/design.py), merged over its MAPS entry
+        ex = json.load(open(os.path.join(D, cfg.pop("extra"))))
+        ex["qlinks"] = {int(k): v for k, v in ex.get("qlinks", {}).items()}
+        cfg.update({k: v for k, v in ex.items() if k in ("qlinks", "twice")})
     out = os.path.join(SL, "build", port)
     html = open(os.path.join(SL, port + ".md")).read()
     cfg.update(file=os.path.join(SL, port + ".md"), tabs=cfg.get("tabs", ".tab-btn"), canvas=cfg.get("canvas", {}))
