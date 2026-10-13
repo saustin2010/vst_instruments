@@ -1,5 +1,5 @@
 # plugin folder -> its own repo, github.com/saustin2010/mpc-vst-<repo>, where the two differ: these plugins were renamed
-# on 2026-10-12 (other companies' names out of plugin names: docs/catalogue-migration.md), their folders kept their
+# on 2026-10-12 and 2026-10-13 (other companies' names out of plugin names: docs/catalogue-migration.md), their folders kept their
 # names so the published history stays one line. Read by tools/publish.sh and dev-tools/catalogue/prepare.py.
 moog	raffosynth
 braids	macro-osc
@@ -8,3 +8,5 @@ grids	drum-map
 rings	resonator
 ringsfx	resonator-fx
 warps	meta-mod
+303	open303
+rampage	dual-slope

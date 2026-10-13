@@ -271,7 +271,7 @@ have created too many repositories, too quickly"), however far apart they're spa
 
 | Plugin | Repo | Catalogue id | Licence | Ships | Status |
 |---|---|---|---|---|---|
-| 303 | mpc-vst-303 | `open303` | GPL-3.0-only | | **in the catalogue**: v1.0.0, PR #231 merged 2026-10-08 |
+| Open303 (formerly 303) | mpc-vst-open303 | `open303` | GPL-3.0-only | | **in the catalogue**: v1.0.0, PR #231 merged 2026-10-08; 2026-10-13: renamed **Open303** (repo mpc-vst-open303), v1.1.0 to come |
 | Hera | mpc-vst-hera | `hera` | GPL-3.0-only | 56 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 PR #230 merged 2026-10-08 |
 | Aphex | mpc-vst-aphex | `aphex` | MIT | | **in the catalogue**: v1.0.0, #236 merged 2026-10-09 (offline only); envelope displays 28 frames (above) |
 | Macro Osc (formerly Braids) | mpc-vst-macro-osc | `braids` | MIT | 10 presets | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only); 2026-10-12: renamed **Macro Osc** (repo mpc-vst-macro-osc), **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
@@ -295,7 +295,7 @@ have created too many repositories, too quickly"), however far apart they're spa
 | Groove Bank | mpc-vst-groovebank | `groove-bank` | MIT | 14 grooves | **in the catalogue**: v1.0.1 (2026-10-10: STOP keeps edits, parameter 0 fix), v1.0.0 #236 merged 2026-10-09 (offline only) |
 | MIDI Player | mpc-vst-midiplayer | `midi-player` | MIT | demo file (made here); keeps your files | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Pixel Walkers | mpc-vst-pixelwalkers | `pixel-walkers` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
-| Rampage | mpc-vst-rampage | `rampage` | GPL-3.0-or-later | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
+| Dual Slope (formerly Rampage) | mpc-vst-dual-slope | `rampage` | GPL-3.0-or-later | | **in the catalogue**: v1.0.0, #255 merged 2026-10-10 (offline only); 2026-10-13: renamed **Dual Slope** (repo mpc-vst-dual-slope, maker Andrew Belt), v1.1.0 to come |
 | Super Arp | mpc-vst-superarp | `super-arp` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Eucalypso | mpc-vst-eucalypso | `eucalypso` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only) |
 | Verglas | mpc-vst-verglas | `verglas` | MIT | | **released** v1.0.0 2026-10-10, proposed in #255 (offline only); 2026-10-12: maker becomes Émilie Gillet, **v1.1.0 released 2026-10-13** (offline: check.sh, catalog_check) ([below](#other-companies-names-2026-10-12)) |
@@ -339,6 +339,8 @@ on any of the derivative works", and it advises against keeping the module names
 | Grids | Drum Map | Émilie Gillet | mpc-vst-drum-map | uid, `.so`, id `grids` |
 | Marbles | Random Sampler | Émilie Gillet | (not released) | uid, `.so` |
 | Verglas | Verglas | Émilie Gillet (was Mutable Instruments) | mpc-vst-verglas | everything but the maker |
+| 303 | Open303 (2026-10-13) | Robin Schmidt | mpc-vst-open303 | uid `A303`, `acid303.so`, id `open303` |
+| Rampage | Dual Slope (2026-10-13) | Andrew Belt (was Befaco) | mpc-vst-dual-slope | uid `BfRp`, `rampage.so`, id `rampage` |
 
 The folders keep their names (`tools/publish.sh` splits a folder's history; a renamed folder would no longer
 fast-forward onto its repo), so `dev-tools/catalogue/repo-names.tsv` maps a folder to its new repo. Parameters are
@@ -346,7 +348,13 @@ unchanged, so projects and Q-Link assignments keep their values. Also: the scree
 mockups) lost the brand text they had (Mutable Instruments, Akai, Roland, Moog, Wurlitzer, Befaco...), and three option
 labels changed: Fizzik's PROPHET / OBERHEIM voicings are CLEAN 4P / WARM 4P, Noisemaker's Moog / Moog2 filters are
 Ladder / Ladder 2, Aphex's REV.1 KORG-35 is REV.1 SALLEN-KEY (values are saved as numbers, so saved sounds keep them).
-OB-Xd, 303 and Rampage (maker Befaco) keep their names for now: sd88me left them, and he'll be asked.
+OB-Xd, 303 and Rampage were left for sd88me to decide; his answer on #404 (2026-10-12): 303 should be Open303 (its
+engine's name); OB-Xd is fine (the name of the open-source project, not Oberheim's OB-X); Rampage "need[s] to say based on
+the Befaco Rampage VCV module" and had better be renamed, since it is still Befaco's product and only its code is open.
+So (2026-10-13) 303 is **Open303**, and Rampage is **Dual Slope** with Andrew Belt of VCV as its maker (the code is
+VCV's, © VCV and contributors), its summary saying it is based on Befaco's Rampage VCV Rack module; its screen's
+BARCELONA SYNTH LAB (Befaco's home) is OPEN-SOURCE DSP, its tab DUAL SLOPE. Dual Slope opens its MIDI port as
+**[SEQ] Dual Slope MIDI Out**: turn Track on for it again in Preferences > MIDI.
 
 What a user sees: a new name and maker in MPC's browser, and a new folder in `/sdcard/Synths` for a release install (the
 `.so` moves with it; the old folder can be deleted after the update). A saved project names the plugin and its `.so`
@@ -366,11 +374,17 @@ Drum Map and Random Sampler open their MIDI port under the new name: turn Track 
       `catalog_check --catalog` with its new repo; RaffoSynth 1.2.0's zip installed on the Live II (the `.so` matches the
       zip, `/sdcard/vst/moog.so` removed, one plugin-list entry) and played (`tested.json`); RaffoSynth 1.2.0 and the
       other seven 1.1.0 released
-- [ ] sd88me's catalogue: [#404](https://github.com/sd88me/mpc-vst-plugins/pull/404) (opened 2026-10-13) gives the
+- [x] sd88me's catalogue: [#404](https://github.com/sd88me/mpc-vst-plugins/pull/404) (opened and merged 2026-10-13) gives the
       eight entries their new name, repo, summary and screenshot (and keeps the `"role": "midi"` he added to Grids), and
       asks about OB-Xd, 303 and Rampage. Until it is merged his nightly build skips the new versions (their zips name the
       new repos); after it, the older versions drop out instead (their zips name the old repos; all `superseded`, so no
       issues), so each plugin lists just its new version (Verglas keeps 1.0.0).
+- Open303 and Dual Slope (2026-10-13, sd88me's answer on #404):
+  - [x] Repo: names, maker, Dual Slope's tab and background text, READMEs, catalogue entries, release workflows (re-pinned
+        to the release tools `eaef502`), `repo-names.tsv`; builds PASSED, check_skin OK, screenshots refreshed
+  - [ ] GitHub: the owner renames mpc-vst-303 to mpc-vst-open303 and mpc-vst-rampage to mpc-vst-dual-slope, then
+        `tools/publish.sh 303` / `rampage`; releases v1.1.0 built by Actions; a catalogue PR with both entries
+  - [ ] Device: install (one MPC restart); the browser shows the new names; Dual Slope's MIDI port under its new name
 
 ## The device and this repo's installer
 
