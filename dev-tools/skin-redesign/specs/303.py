@@ -3,7 +3,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from skin_gen import Port
 
-p = Port("303", "303", ["BASS LINE", "+ DEVILFISH MOD"])
+p = Port("303", "Open303", ["BASS LINE", "+ DEVILFISH MOD"])
 p.names({"cutoff": "CUTOFF", "resonance": "RESONANCE", "env_mod": "ENV MOD", "decay": "DECAY", "accent": "ACCENT",
          "volume": "VOLUME", "waveform": "WAVEFORM", "tuning": "TUNING", "devil_mod_switch": "DEVILFISH",
          "normal_decay": "NORMAL DECAY", "accent_decay": "ACCENT DECAY", "feedback_hpf": "FEEDBACK HPF",

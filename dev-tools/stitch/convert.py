@@ -1864,7 +1864,7 @@ BRAND_RETEXT = {
     "plaits": [["PLAITS // MACRO OSCILLATOR", "MACRO OSC 2 // MULTI-ENGINE"], ["MUTABLE INSTRUMENTS DSP", "OPEN-SOURCE DSP"],
                ["PLAITS", "MACRO OSC 2"]],
     "mrhyde": [["PLAITS MACRO OSC", "MACRO OSC"], ["PLAITS ENGINE", "MACRO ENGINE"]],
-    "303": _AKAI,
+    "303": [["1: 303 MAIN", "1: OPEN303"]] + _AKAI,
     "aphex": [["KORG-35", "SALLEN-KEY"]] + _AKAI,
     "denis": [["WEST COAST SERGE", "WEST COAST"], ["BUCHLA 259 STYLE", "WEST COAST STYLE"]] + _AKAI,
     "helm": [["ELEKTRON / RETRO", "RETRO"], ["AKAI MPC OS", "MPC OS"]] + _AKAI + [["AKAI", "MPC"]],
