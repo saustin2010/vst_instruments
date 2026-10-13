@@ -18,8 +18,15 @@ Open items as of 2026-10-05, most useful first. Tick them off here (with the dat
     the release folder). MPC matches a saved plugin by its uid, not its name or path.
   - [x] GitHub (2026-10-13): seven repos renamed, all eight published and released (RaffoSynth 1.2.0, its zip played
     on the Live II; the others 1.1.0, offline checks)
-  - [ ] sd88me's review of [#404](https://github.com/sd88me/mpc-vst-plugins/pull/404) (opened 2026-10-13): the eight
-    entries' new names and repos; it also asks him about OB-Xd, 303 and Rampage
+  - [x] sd88me's review of [#404](https://github.com/sd88me/mpc-vst-plugins/pull/404) (merged 2026-10-13): the eight
+    entries' new names and repos. His answer on OB-Xd, 303 and Rampage: OB-Xd stays (the open-source project's name),
+    303 becomes Open303, Rampage gets a new name and says it's based on Befaco's Rampage VCV module
+  - [x] Open303 and Dual Slope (2026-10-13, branch `rename-open303-dualslope`): 303 is [SYN] Open303; Rampage is
+    [SEQ] Dual Slope by Andrew Belt (VCV's code), its screen without BARCELONA SYNTH LAB, its tab DUAL SLOPE, its MIDI
+    port [SEQ] Dual Slope MIDI Out. uids, `.so` names, catalogue ids and parameters unchanged. Builds PASSED,
+    check_skin OK, `check.sh` PASSED with "screen: same" (release tools `eaef502`)
+  - [ ] GitHub: rename the two repos (mpc-vst-open303, mpc-vst-dual-slope), publish, release v1.1.0, catalogue PR
+  - [ ] Live II: install both (one MPC restart), the browser's names, Dual Slope's MIDI port
 - [x] **Moog's EMPHASIS and CUTOFF** (2026-10-12, PR #19): EMPHASIS hardly changed the sound (the
   ladder's feedback topped out at a quarter of what it needs to resonate: +2 dB at full) and CUTOFF fully open stopped
   at 2.3 kHz. Fixed under `MPC_PORT` (EMPHASIS up to 0.9 of self-oscillation, matched cutoff tuning); the 14 presets

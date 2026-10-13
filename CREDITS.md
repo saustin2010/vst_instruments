@@ -13,11 +13,11 @@ These plugins are other people's instruments, ported to MPC OS. Thank you to all
 
 | Plugin | Original work | Source ported | Licence |
 |---|---|---|---|
-| [303](schwung/instruments/303/) | Robin Schmidt / midilab / davemollen / Charles Vestal | Schwung module "303" v0.3.3 | GPL-3.0 |
 | [Aphex](schwung/instruments/aphex/) | Filliformes | https://github.com/filliformes/aphex-move | MIT |
 | [Chordism](schwung/instruments/chordism/) | Charles Vestal | https://github.com/charlesvestal/schwung-chordism | MIT |
 | [Denis](schwung/instruments/denis/) | Vincent Fillion | https://github.com/filliformes/denis-move | MIT |
 | [Drum Map](mutable-instruments/grids/) (formerly Grids) | Mutable Instruments | https://github.com/pichenettes/eurorack (grids/) | GPL-3.0 |
+| [Dual Slope](vcv-rack/rampage/) (formerly Rampage) | VCV: Andrew Belt and contributors (Befaco's Rampage module) | https://github.com/VCVRack/Befaco (src/Rampage.cpp, src/plugin.hpp) | GPL-3.0 |
 | [Eucalypso](schwung/sequencers/eucalypso/) | Handcrafted Media | https://github.com/handcraftedcc/move-everything-eucalypso | MIT |
 | [Fizzik](schwung/instruments/fizzik/) | Filliformes | https://github.com/filliformes/fizzik-move | MIT |
 | [Groove Bank](schwung/sequencers/groovebank/) | mission-minnow | https://github.com/mission-minnow/groovebank | MIT |
@@ -41,9 +41,9 @@ These plugins are other people's instruments, ported to MPC OS. Thank you to all
 | [Noisemaker](schwung/instruments/noisemaker/) | legsmechanical (engine: Patrick Kunz / TAL) | Schwung module "Noisemaker" v0.2.2 | GPL-2.0 |
 | [NuSaw](schwung/instruments/nusaw/) | Charles Vestal | https://github.com/charlesvestal/schwung-nusaw | MIT |
 | [OB-Xd](schwung/instruments/obxd/) | reales (port: charlesvestal) | Schwung module "OB-Xd" v0.4.9 | GPL-3.0 |
+| [Open303](schwung/instruments/303/) (formerly 303) | Robin Schmidt / midilab / davemollen / Charles Vestal | Schwung module "303" v0.3.3 | GPL-3.0 |
 | [Pixel Walkers](schwung/sequencers/pixelwalkers/) | Matt Estela | https://github.com/mestela/schwung-pixel-walkers | MIT |
 | [RaffoSynth](schwung/instruments/moog/) (formerly Moog) | Nicolas Roulet, Julian Palladino (port: charlesvestal) | Schwung module "RaffoSynth" v0.2.5 | MIT |
-| [Rampage](vcv-rack/rampage/) | Befaco | https://github.com/VCVRack/Befaco (src/Rampage.cpp, src/plugin.hpp) | GPL-3.0 |
 | [Random Sampler](mutable-instruments/marbles/) (formerly Marbles) | Emilie Gillet | https://github.com/pichenettes/eurorack (marbles/) | MIT |
 | [Resonator](mutable-instruments/rings/) (formerly Rings) | Emilie Gillet | https://github.com/pichenettes/eurorack (rings/) | MIT |
 | [Resonator FX](mutable-instruments/ringsfx/) (formerly Rings FX) | Emilie Gillet | https://github.com/pichenettes/eurorack (rings/) | MIT |

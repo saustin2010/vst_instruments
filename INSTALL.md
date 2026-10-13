@@ -137,12 +137,12 @@ arrangement screen too. For OB-Xd and Noisemaker it lists the bank that's loaded
 
 **MIDI CC 20-35 move a plugin's first-page Q-Links** (2026-10-04): CC 20-23 = the first Q-Link column, top to bottom,
 24-27 the second, 28-31 the third, 32-35 the fourth. Anything that sends CCs to the plugin's track does it: a
-sequencer's per-step modulation (Stevequencer's MOD lanes, Rampage), or a controller. No MIDI learn is needed. If a
+sequencer's per-step modulation (Stevequencer's MOD lanes, Dual Slope), or a controller. No MIDI learn is needed. If a
 controller of yours already sends CCs in that range to a track, they now move these controls too.
 
 ### Sequencers and other MIDI generators
 
-Drum Map, Eucalypso, Groove Bank, Maze Lite, MIDI Player, Pixel Walkers, Rampage, Random Sampler, Super Arp make no sound of their own: they play other tracks. MPC ignores a plugin's MIDI output, so each one opens
+Drum Map, Dual Slope, Eucalypso, Groove Bank, Maze Lite, MIDI Player, Pixel Walkers, Random Sampler, Super Arp make no sound of their own: they play other tracks. MPC ignores a plugin's MIDI output, so each one opens
 its own MIDI port, the way a USB MIDI device would appear (MPC picks it up without a restart). MPC lists it as
 **[SEQ] <name> MIDI Out**, e.g. **[SEQ] Super Arp MIDI Out**:
 
@@ -154,7 +154,7 @@ its own MIDI port, the way a USB MIDI device would appear (MPC picks it up witho
    on the sequencer's own track, or it hears itself.
 4. Press play. They follow MPC's tempo and transport.
 
-Rampage works the same way but sends control changes: MIDI-learn a parameter on the target track to its CC.
+Dual Slope works the same way but sends control changes: MIDI-learn a parameter on the target track to its CC.
 **[docs/sequencers.md](docs/sequencers.md)** has the whole walk-through, what makes each one play, and what to check
 when nothing plays. The routing is confirmed on a stock Live II (2026-10-04) and on a Force.
 

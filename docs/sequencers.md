@@ -44,7 +44,7 @@ A sequencer that sends drum notes should play a drum track.
 ## Moving the instrument's controls
 
 A sequencer can also send control changes (CC) along with its notes: Stevequencer's MOD lanes send a value per step,
-Rampage sends its envelopes and LFOs. This repo's instruments take **CC 20-35** as their first page's Q-Links, in Q-Link
+Dual Slope sends its envelopes and LFOs. This repo's instruments take **CC 20-35** as their first page's Q-Links, in Q-Link
 order (CC 20-23 = column 1, top to bottom, 24-27 = column 2, 28-31 = column 3, 32-35 = column 4), so CC 20 moves the
 first knob. It needs nothing more than the routing above: the CCs arrive on the same MIDI input as the notes (working
 on the Live II, 2026-10-05). Akai's own instruments don't follow these CCs.
