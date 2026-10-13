@@ -115,7 +115,12 @@ parameter index, so existing projects keep working.
     `tools/build.sh` PASSED, `check_skin.py` OK, screenshots in the README (`mpc/screen.sh` redoes it all)
   - [x] Installed on the Live II (2026-10-13, owner's go): registered (one MPC restart, MPC.settings backed up), the .so
     verified by hash, Jomox's sample set in `/sdcard/vst/incipience/` (the owner's `AlphaBaseWaves.zip`)
-  - [ ] On the Live II: design QA (tabs, A / B sub-pages, Q-Link outlines, touch), the owner's listening, `bench.sh`
+  - [x] The owner's first look on the Live II (2026-10-13): "looks and sounds great". Asked for, and done the same day:
+    Q-Links on each instrument's pan / sends (a third sub-page, KICK MIX ...), FM VOICE its own Q-Link sub-page,
+    SAMPLE stepping one at a time (a box with arrows; range 0-255), PITCH audible without a sample (it tunes the metal
+    noise too), more kits (three that use the AlphaBase samples when they're there). Also: metal noise starts
+    mid-cycle (it ran in step at first)
+  - [ ] On the Live II: design QA of the new sub-pages (Q-Link outlines on the right-hand panels), `bench.sh`
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
     63 factory kits load; Incipience MIDI In (an AlphaBase's channels 1-11, its CC chart); an OUT insert, as

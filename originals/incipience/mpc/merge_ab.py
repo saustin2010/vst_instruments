@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Incipience: folds convert.py's 26 pages (KICK A, KICK B, ... PAN, NOTE) into 13 tabs, each with two Q-Link
-sub-pages, as the AlphaBase's PAGE A/B: a control the same on both pages (a shared row, the MIX panel) is there once;
-one on a single page gets banks= (shadow_skin.py: only on that sub-page), and so does each page's background.
+"""Incipience: folds convert.py's pages (KICK A, KICK B, KICK MIX, ... PAN, NOTE) into 13 tabs, each with its pages as
+Q-Link sub-pages: the AlphaBase's PAGE A/B, and on an instrument a third whose Q-Links turn its MIX panel and extras
+(FM: FM VOICE). A control the same on every page of a tab (a shared row, the MIX panel) is there once; one on some
+pages gets banks= (shadow_skin.py: only on those sub-pages), and so does each page's background.
 
     python3 steve/tools/stitch/convert.py incipience      (in the workspace, see RESKINNING.md)
     python3 mpc/merge_ab.py                               (from originals/incipience)
@@ -35,11 +36,12 @@ def parse(text):
 def main():
     text = open(LAYOUT).read()
     head, tabs = parse(text)
-    if len(tabs) != 26:
-        raise SystemExit("layout.conf has %d tabs, not convert.py's 26 (already merged?)" % len(tabs))
+    pages = json.load(open(os.path.join(ROOT, "build", "pages.json")))
+    want = sum(len(pg["subs"]) for pg in pages)
+    if len(tabs) != want:
+        raise SystemExit("layout.conf has %d tabs, not convert.py's %d (already merged?)" % (len(tabs), want))
     os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
     shutil.copy(LAYOUT, os.path.join(ROOT, "build", "layout.pages.conf"))
-    pages = json.load(open(os.path.join(ROOT, "build", "pages.json")))
     out = [l for l in head if l.strip() and not l.startswith("#")]
     out = ["# Incipience for MPC: designed in Stitch (design/stitch-kick.html), every page in its markup by mpc/design.py,",
            "# converted by steve/tools/stitch/convert.py and folded into tabs with A/B Q-Link sub-pages by mpc/merge_ab.py.",
@@ -49,19 +51,23 @@ def main():
         # (convert.py sizes a name from its key's length, which shrinks REV / DLY)
         t["lines"] = [l + " vs=17" if l.startswith("knob ") and " r=29 " in l and " vs=" not in l else l for l in t["lines"]]
         t["lines"] = [re.sub(r" ns=\d+", " ns=15", l) if l.startswith("knob ") and " r=20 " in l else l for l in t["lines"]]
-    for i, pg in enumerate(pages):
-        a, b = tabs[2 * i], tabs[2 * i + 1]
+    at = 0
+    for pg in pages:
+        group = tabs[at:at + len(pg["subs"])]
+        at += len(group)
         ctl = lambda t: [l for l in t["lines"] if not l.startswith(("art ", "qlinks "))]
-        qa = [l for l in a["lines"] if l.startswith("qlinks ")]
-        qb = [l for l in b["lines"] if l.startswith("qlinks ")]
-        la, lb = ctl(a), ctl(b)
-        both = [l for l in la if l in lb]
-        body = ['art %s banks="%s"' % (l[4:], a["name"]) for l in a["lines"] if l.startswith("art ")]
-        body += ['art %s banks="%s"' % (l[4:], b["name"]) for l in b["lines"] if l.startswith("art ")]
-        body += both
-        body += ['%s banks="%s"' % (l, a["name"]) for l in la if l not in both]
-        body += ['%s banks="%s"' % (l, b["name"]) for l in lb if l not in both]
-        out += ["", "[tab %s]" % pg["tab"]] + body + qa + qb
+        body, rest, order = [], {}, []
+        for t in group:
+            body.append('art %s banks="%s"' % (next(l for l in t["lines"] if l.startswith("art "))[4:], t["name"]))
+            for l in ctl(t):
+                if l not in rest:
+                    rest[l] = []
+                    order.append(l)
+                rest[l].append(t["name"])
+        for l in order:   # on every page: as it is; on some: only there
+            body.append(l if len(rest[l]) == len(group) else '%s banks="%s"' % (l, "|".join(rest[l])))
+        body += [l for t in group for l in t["lines"] if l.startswith("qlinks ")]
+        out += ["", "[tab %s]" % pg["tab"]] + body
     open(LAYOUT, "w").write("\n".join(out) + "\n")
     print("layout.conf: %d tabs, each with sub-pages (was build/layout.pages.conf)" % len(pages))
 

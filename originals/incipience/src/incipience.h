@@ -28,11 +28,13 @@ typedef struct {
 typedef struct {
     uint32_t ph[6], lfsr, lbit, rng;
     uint64_t cph;
+    float rate;           /* 1 = as made; the sample channels' PITCH */
 } metal_t;
 typedef struct { float ph, out; } lfo_t;
 extern float inc_lfotab[LFO_WAVES][LFO_LEN + 1];
 extern int inc_lfo_from_file;
 void inc_tables_init(const char *dir);
+void metal_init(metal_t *m, uint32_t seed);
 float metal_run(metal_t *m, int n, int len_override);
 float lfo_hz(float rate, int synced, float bpm);
 float lfo_run(lfo_t *l, int wave, float hz, int n);

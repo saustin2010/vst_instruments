@@ -23,7 +23,6 @@ KEYS = ["KICK DRUM", "MBRANE", "CLSD HI HAT", "OPEN HI HAT", "CLAP", "RIM SHOT",
         "X SAMPLE 2", "FM SYNTH"]
 IDS = {"kd": "KD", "mb": "MB", "ch": "CH", "oh": "OH", "cp": "CP", "rm": "RM", "cr": "CR", "rd": "RD", "x1": "X1",
        "x2": "X2", "fm": "FM"}
-SUB_NAMES = {"FX": ("REVERB", "DELAY"), "MIX": ("PAN", "NOTE")}   # the Q-Link sub-pages: "<TAB> A" / "<TAB> B" otherwise
 
 # the screen's colours for what MPC draws itself (names, values, switches, steppers), from the design's palette
 THEME = {"bg": "#efede6", "panel": "#efede6", "box": "#e4e1d8", "line": "#141414", "ink": "#141414",
@@ -114,6 +113,8 @@ def short(name, inst_name, key=""):
 
 def cell(key, P, inst_name, num):
     p = P[key]
+    if key.endswith("_sample"):   # a box with arrows: one sample a tap (the knob ran through 500 too fast)
+        return stepper(key, short(p["name"], inst_name, key), num)
     if p.get("options") and len(p["options"]) == 2:
         return switch(key, short(p["name"], inst_name, key), num)
     if p.get("options") and len(p["options"]) <= 4:
@@ -128,7 +129,7 @@ def cell(key, P, inst_name, num):
 ABBR = {"OSCILLATOR": "OSC", "MEMBRANES": "M1+M2", "COUPLING": "COUPLE", "ENV / NOISE": "NOISE", "LFO / LEVEL": "LFO",
         "LFO / ACCENT": "LFO", "LFO 1 / LEVEL": "LFO1", "LFO 2 / ACCENT": "LFO2", "PITCH ENV": "P ENV", "HH FILTER": "FILTER",
         "MM FILTER": "FILTER"}
-OLED_LINE = {("FM", "A"): "FM MATRIX", ("FM", "B"): "OP ENVELOPES", ("FX", "A"): "REVERB + SENDS",
+OLED_LINE = {("FM", "A"): "FM MATRIX", ("FM", "B"): "OP ENVELOPES", ("FM", "C"): "VOICES CHORD MIX", ("FX", "A"): "REVERB + SENDS",
              ("FX", "B"): "DELAY + SENDS", ("MIX", "A"): "PAN + VOLUME", ("MIX", "B"): "NOTES + CHOKE"}
 
 
@@ -174,7 +175,7 @@ def panel(title, caption, items, top):
 
 def right_column(tab, inst, title, sub, rows, side, P):
     ident = IDS.get(inst, {"MIX": "MX"}.get(tab, tab[:2]))
-    sub_name = "PAGE " + sub
+    sub_name = "PAGE " + sub if sub in "AB" else ("VOICE" if inst == "fm" else "MIX")
     words = OLED_LINE.get((tab, sub)) or " &nbsp;".join(
         html.escape(ABBR.get(t, t.split(" ")[0][:6])) for t, _, _ in rows)
     out = ['<div style="position: absolute; left: 800px; top: 20px; width: 436px; height: 510px;">',
@@ -193,14 +194,16 @@ def right_column(tab, inst, title, sub, rows, side, P):
            'line-height: 1;">INCIPIENCE</div></div><div style="margin-left: 24px; margin-top: 6px; font-family: \'Inter\', '
            'sans-serif; font-size: 9.5px; font-weight: 800; letter-spacing: 0.22em; color: #141414;">ELEVEN-VOICE DRUM '
            'SYNTHESIZER</div>']
-    top = 30
+    panels = []
     if inst:
-        out.append(panel("MIX", title, [side_ctl(inst + "_pan", P, title), side_ctl(inst + "_rsend", P, title),
-                                        side_ctl(inst + "_dsend", P, title), switch(inst + "_mute", "MUTE", w=56)], top))
-        top = 22
+        panels.append(("MIX", title, [side_ctl(inst + "_pan", P, title), side_ctl(inst + "_rsend", P, title),
+                                      side_ctl(inst + "_dsend", P, title), switch(inst + "_mute", "MUTE", w=56)]))
     if side:
         heading = {"fm": ("FM VOICE", "CHORD + LEVEL"), None: ("DELAY", "CLOCK")}.get(inst, ("LFO", "CLOCK"))
-        out.append(panel(heading[0], heading[1], [side_ctl(k, P, title) for k in side], top))
+        extra = (heading[0], heading[1], [side_ctl(k, P, title) for k in side])
+        panels.insert(0 if inst == "fm" else len(panels), extra)   # FM VOICE first: its Q-Links come first
+    for i, (t, c, items) in enumerate(panels):
+        out.append(panel(t, c, items, 30 if i == 0 else 22))
     out.append('</div>')
     return "".join(out)
 
@@ -239,13 +242,13 @@ def main():
     for pg in pages:
         tab, inst = pg["tab"], pg["inst"]
         lit = list(IDS).index(inst) if inst in IDS else -1
-        for sub in ("A", "B"):
-            nm = SUB_NAMES[tab]["AB".index(sub)] if tab in SUB_NAMES else "%s %s" % (tab, sub)
+        for sub, nm in zip("ABC", pg["subs"]):
             names.append(nm)
-            diag = {"fm_op1", "fm_op2", "fm_op3", "fm_op4"} if tab == "FM" and sub == "A" else ()
+            rows = pg["B" if sub == "B" else "A"]   # C: page A's matrix, the Q-Links on the right
+            diag = {"fm_op1", "fm_op2", "fm_op3", "fm_op4"} if tab == "FM" and sub != "B" else ()
             html_pages.append('<div class="ab-page%s" data-page="%s">%s%s%s</div>' % (
-                " on" if not html_pages else "", nm, matrix(pg[sub], P, pg["title"] if inst else "", diag),
-                right_column(tab, inst, pg["title"], sub, pg[sub], pg["side"], P), strip(lit)))
+                " on" if not html_pages else "", nm, matrix(rows, P, pg["title"] if inst else "", diag),
+                right_column(tab, inst, pg["title"], sub, rows, pg["side"], P), strip(lit)))
     nav = "".join('<button class="ab-tab" type="button" onclick="abShow(%d)">%s</button>' % (i, n)
                   for i, n in enumerate(names))
     doc = (head + "</head>\n<body>\n<!-- generated by mpc/design.py from design/stitch-kick.html: do not edit -->\n"
@@ -255,14 +258,18 @@ def main():
     open(OUT, "w").write(doc)
     # what convert.py needs beyond the MAPS entry: each page's Q-Links (a row a column; "-" an empty slot) and the
     # controls on both of a tab's pages (the shared rows and the side panels)
-    ql, seen, twice = {}, set(), set()
-    for ti, (pg, sub) in enumerate((pg, sub) for pg in pages for sub in ("A", "B")):
-        ql[ti] = [k for _, _, row in pg[sub] for k in (row + ["-"] * (4 - len(row)))]
-        on = {k for _, _, row in pg[sub] for k in row if k != "-"} | set(pg["side"])
-        if pg["inst"]:
-            on |= {pg["inst"] + s for s in ("_pan", "_rsend", "_dsend", "_mute")}
-        twice |= on & seen if sub == "B" else set()
-        seen = on if sub == "A" else set()
+    ql, twice, ti = {}, set(), 0
+    for pg in pages:
+        seen = set()
+        for sub in "ABC"[:len(pg["subs"])]:
+            rows = pg["B" if sub == "B" else "A"]
+            ql[ti] = pg["qlinks_c"] if sub == "C" else [k for _, _, row in rows for k in (row + ["-"] * (4 - len(row)))]
+            on = {k for _, _, row in rows for k in row if k != "-"} | set(pg["side"])
+            if pg["inst"]:
+                on |= {pg["inst"] + s for s in ("_pan", "_rsend", "_dsend", "_mute")}
+            twice |= on & seen
+            seen |= on
+            ti += 1
     json.dump({"qlinks": ql, "twice": sorted(twice), "tab_names": names},
               open(os.path.join(ROOT, "build", "convert.json"), "w"), indent=1)
     print("design/stitch.html: %d pages; build/convert.json" % len(names))

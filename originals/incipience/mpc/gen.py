@@ -117,7 +117,7 @@ def build():
         knob(k + "_pitch", n + " PITCH", 55)
         knob(k + "_start", n + " START", 0)
         knob(k + "_stop", n + " STOP", 127)
-        step(k + "_sample", n + " SAMPLE", 0, 0, 500)
+        step(k + "_sample", n + " SAMPLE", 0, 0, 255)
         knob(k + "_cents", n + " CENTS", 0)
         knob(k + "_loop", n + " LOOP", 0)
         opts(k + "_loopon", n + " LOOP ON", ONOFF, 0)
@@ -156,7 +156,7 @@ def build():
         knob(k + "_pitch", n + " PITCH", 55)
         knob(k + "_start", n + " START", 0)
         knob(k + "_stop", n + " STOP", 127)
-        step(k + "_sample", n + " SAMPLE", 0, 0, 500)
+        step(k + "_sample", n + " SAMPLE", 0, 0, 255)
         knob(k + "_cents", n + " CENTS", 0)
         knob(k + "_loop", n + " LOOP", 0)
         opts(k + "_loopon", n + " LOOP ON", ONOFF, 0)
@@ -224,6 +224,13 @@ def build():
         opts(k + "_mute", n + " MUTE", ONOFF, 0)
     opts("hh_choke", "HH CHOKE", ONOFF, 1)
     knob("volume", "VOLUME", 100)
+    # the SAMPLE steppers' arrows: one sample a tap (owner, 2026-10-13: the knob "scrolls really fast")
+    for k, n, fam in INSTR:
+        if fam in ("hh", "mm", "x"):
+            P.append(dict(key=k + "_sample_prev", name=n + " SAMPLE DOWN", momentary=True, step_of=k + "_sample",
+                          step_delta=-1))
+            P.append(dict(key=k + "_sample_next", name=n + " SAMPLE UP", momentary=True, step_of=k + "_sample",
+                          step_delta=1))
     return P
 
 
@@ -312,6 +319,23 @@ PAGES = [
 ]
 
 
+def mix_qlinks(k, side):
+    """the instrument's third sub-page: its MIX panel (a Q-Link column), then its extras, four to a column"""
+    mix = [k + "_pan", k + "_rsend", k + "_dsend", k + "_mute"]
+    # FM VOICE: the voice controls first (its panel is drawn above MIX; owner: "needs to be its own thing")
+    q = list(side[:4]) + mix + list(side[4:]) if k == "fm" else mix + list(side)
+    return q + ["-"] * (-len(q) % 4)
+
+
+def sub_names(tab, inst):
+    """the Q-Link sub-pages of a tab, as MPC's tab strip names them"""
+    if tab == "FX":
+        return ["REVERB", "DELAY"]
+    if tab == "MIX":
+        return ["PAN", "NOTE"]
+    return [tab + " A", tab + " B", "FM VOICE" if inst == "fm" else tab + " MIX"]
+
+
 def check_pages(P):
     """every control on some page, none twice on one sub-page, every key real"""
     keys = {p["key"] for p in P}
@@ -377,7 +401,8 @@ if __name__ == "__main__":
     check_pages(P)
     write_header(P)
     os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
-    json.dump([{"tab": t, "inst": k, "title": ti, **pg} for t, k, ti, pg in PAGES],
+    json.dump([{"tab": t, "inst": k, "title": ti, "subs": sub_names(t, k),
+                "qlinks_c": mix_qlinks(k, pg["side"]) if k else None, **pg} for t, k, ti, pg in PAGES],
               open(os.path.join(ROOT, "build", "pages.json"), "w"), indent=1)
     json.dump({"name": "Incipience", "params": P}, open(os.path.join(ROOT, "params.json"), "w"), indent=1)
     print("params.json: %d parameters; src/params_def.h" % len(P))

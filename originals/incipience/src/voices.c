@@ -341,6 +341,9 @@ void smp_block(inc_t *P, int s, float *y, int n) {
     if (rout) {
         mt = (int)PV(b + S_MTNZ);
         nzv = mt ? powf(PV(b + S_NZVOL) / 127.0f, 1.5f) : 0.0f;
+        /* PITCH and CENTS tune the channel's metal noise too (not on the AlphaBase, where they move the sample alone):
+         * with no sample a hat or a cymbal is still tunable */
+        v->nz.rate = clampf(smp_ratio(pitch, cents), 0.125f, 8.0f);
         float env = v->fenv.v;   /* the filter envelope moves the cutoff once a block */
         float oct = env * 7.0f * PV(b + S_EVAMT) / 127.0f + lo * 4.0f * powf(PV(b + S_LFCUT) / 127.0f, 1.5f);
         float r = PV(b + S_RES);
@@ -507,12 +510,12 @@ void fm_block(inc_t *P, float *y, float *side, int n) {
 }
 
 void voices_init(inc_t *P) {
-    P->kd.nz.rng = 0x1234567u;
+    metal_init(&P->kd.nz, 0x1234567u);
     P->mb.rng = 0x2345671u;
-    P->mb.m1.rng = 0x3456712u;
-    P->mb.m2.rng = 0x4567123u;
+    metal_init(&P->mb.m1, 0x3456712u);
+    metal_init(&P->mb.m2, 0x4567123u);
     for (int s = 0; s < 8; s++) {
         P->sv[s].rng = 0x5671234u + 77u * (uint32_t)s;
-        P->sv[s].nz.rng = 0x6712345u + 131u * (uint32_t)s;
+        metal_init(&P->sv[s].nz, 0x6712345u + 131u * (uint32_t)s);
     }
 }

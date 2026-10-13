@@ -455,7 +455,7 @@
    "name": "CL HAT SAMPLE",
    "type": "stepper",
    "min": 0,
-   "max": 500,
+   "max": 255,
    "step": 1,
    "default": 0,
    "dynamic_display": true
@@ -722,7 +722,7 @@
    "name": "OP HAT SAMPLE",
    "type": "stepper",
    "min": 0,
-   "max": 500,
+   "max": 255,
    "step": 1,
    "default": 0,
    "dynamic_display": true
@@ -989,7 +989,7 @@
    "name": "CLAP SAMPLE",
    "type": "stepper",
    "min": 0,
-   "max": 500,
+   "max": 255,
    "step": 1,
    "default": 0,
    "dynamic_display": true
@@ -1250,7 +1250,7 @@
    "name": "RIM SAMPLE",
    "type": "stepper",
    "min": 0,
-   "max": 500,
+   "max": 255,
    "step": 1,
    "default": 0,
    "dynamic_display": true
@@ -1511,7 +1511,7 @@
    "name": "CRASH SAMPLE",
    "type": "stepper",
    "min": 0,
-   "max": 500,
+   "max": 255,
    "step": 1,
    "default": 0,
    "dynamic_display": true
@@ -1772,7 +1772,7 @@
    "name": "RIDE SAMPLE",
    "type": "stepper",
    "min": 0,
-   "max": 500,
+   "max": 255,
    "step": 1,
    "default": 0,
    "dynamic_display": true
@@ -2033,7 +2033,7 @@
    "name": "X1 SAMPLE",
    "type": "stepper",
    "min": 0,
-   "max": 500,
+   "max": 255,
    "step": 1,
    "default": 0,
    "dynamic_display": true
@@ -2169,7 +2169,7 @@
    "name": "X2 SAMPLE",
    "type": "stepper",
    "min": 0,
-   "max": 500,
+   "max": 255,
    "step": 1,
    "default": 0,
    "dynamic_display": true
@@ -4705,6 +4705,118 @@
    "max": 127,
    "default": 100,
    "dynamic_display": true
+  },
+  {
+   "key": "ch_sample_prev",
+   "name": "CL HAT SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "ch_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "ch_sample_next",
+   "name": "CL HAT SAMPLE UP",
+   "momentary": true,
+   "step_of": "ch_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "oh_sample_prev",
+   "name": "OP HAT SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "oh_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "oh_sample_next",
+   "name": "OP HAT SAMPLE UP",
+   "momentary": true,
+   "step_of": "oh_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "cp_sample_prev",
+   "name": "CLAP SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "cp_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "cp_sample_next",
+   "name": "CLAP SAMPLE UP",
+   "momentary": true,
+   "step_of": "cp_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "rm_sample_prev",
+   "name": "RIM SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "rm_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "rm_sample_next",
+   "name": "RIM SAMPLE UP",
+   "momentary": true,
+   "step_of": "rm_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "cr_sample_prev",
+   "name": "CRASH SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "cr_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "cr_sample_next",
+   "name": "CRASH SAMPLE UP",
+   "momentary": true,
+   "step_of": "cr_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "rd_sample_prev",
+   "name": "RIDE SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "rd_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "rd_sample_next",
+   "name": "RIDE SAMPLE UP",
+   "momentary": true,
+   "step_of": "rd_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "x1_sample_prev",
+   "name": "X1 SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "x1_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "x1_sample_next",
+   "name": "X1 SAMPLE UP",
+   "momentary": true,
+   "step_of": "x1_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "x2_sample_prev",
+   "name": "X2 SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "x2_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "x2_sample_next",
+   "name": "X2 SAMPLE UP",
+   "momentary": true,
+   "step_of": "x2_sample",
+   "step_delta": 1
   }
  ]
 }

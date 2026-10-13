@@ -33,20 +33,27 @@ AlphaBase's `ABWV0300.raw` in the data folder, its own 64 LFO waves are used).
 ## The screen
 
 Designed in Google Stitch to look like the AlphaBase Mk II's panel (cream, black knobs with green LEDs, wooden cheeks,
-the OLED, the red band and the instrument keys). A tab per instrument, then FX and MIX; each tab has the hardware's two
-pages as two Q-Link sub-pages (KICK A, KICK B, ...), with the controls of its 4 x 4 encoder matrix in the same places:
-a row of the matrix is a panel and a Q-Link column (the hardware's display shows one row at a time). On the right of
-each instrument: its MIX (pan, reverb and delay sends, mute) and its extras (the Mk II's synced LFO clock; the FM
-synth's voices, chord, spatial and level), by touch.
+the OLED, the red band and the instrument keys). A tab per instrument, then FX and MIX. Each instrument has three
+Q-Link sub-pages: the hardware's two pages (KICK A, KICK B), with the controls of its 4 x 4 encoder matrix in the same
+places (a row of the matrix is a panel and a Q-Link column; the hardware's display shows one row at a time), and a
+third (KICK MIX ...) whose Q-Links turn the panels on the right: the instrument's MIX (pan, reverb and delay sends,
+mute) and its extras (the Mk II's synced LFO clock). On FM the third is FM VOICE: voices, chord, spatial and level
+first, then its MIX and accent. FX has REVERB and DELAY (all the sends), MIX has PAN and NOTE.
 
-| | A | B |
-|---|---|---|
-| KICK | <img src="screenshots/page_0.png" width="300"> | <img src="screenshots/page_0_1.png" width="300"> |
-| MBRANE | <img src="screenshots/page_1.png" width="300"> | <img src="screenshots/page_1_1.png" width="300"> |
-| CLAP (the others alike) | <img src="screenshots/page_4.png" width="300"> | <img src="screenshots/page_4_1.png" width="300"> |
-| FM | <img src="screenshots/page_10.png" width="300"> | <img src="screenshots/page_10_1.png" width="300"> |
-| FX | <img src="screenshots/page_11.png" width="300"> | <img src="screenshots/page_11_1.png" width="300"> |
-| MIX | <img src="screenshots/page_12.png" width="300"> | <img src="screenshots/page_12_1.png" width="300"> |
+SAMPLE is a box with arrows: one sample a tap (a Q-Link still turns through them). PITCH and CENTS on the sample
+channels tune their metal noise as well as the sample (on the AlphaBase they move the sample alone), so a hat or a
+cymbal without a sample can be tuned too; a tom from the self-oscillating filter is tuned with CUTOFF.
+
+| | A | B | MIX / VOICE |
+|---|---|---|---|
+| KICK | <img src="screenshots/page_0.png" width="250"> | <img src="screenshots/page_0_1.png" width="250"> | <img src="screenshots/page_0_2.png" width="250"> |
+| MBRANE | <img src="screenshots/page_1.png" width="250"> | <img src="screenshots/page_1_1.png" width="250"> | <img src="screenshots/page_1_2.png" width="250"> |
+| CL HAT | <img src="screenshots/page_2.png" width="250"> | <img src="screenshots/page_2_1.png" width="250"> | <img src="screenshots/page_2_2.png" width="250"> |
+| CLAP (RIM, CRASH, RIDE alike) | <img src="screenshots/page_4.png" width="250"> | <img src="screenshots/page_4_1.png" width="250"> | <img src="screenshots/page_4_2.png" width="250"> |
+| X1 (X2 alike) | <img src="screenshots/page_8.png" width="250"> | <img src="screenshots/page_8_1.png" width="250"> | <img src="screenshots/page_8_2.png" width="250"> |
+| FM | <img src="screenshots/page_10.png" width="250"> | <img src="screenshots/page_10_1.png" width="250"> | <img src="screenshots/page_10_2.png" width="250"> |
+| FX | <img src="screenshots/page_11.png" width="250"> | <img src="screenshots/page_11_1.png" width="250"> | |
+| MIX | <img src="screenshots/page_12.png" width="250"> | <img src="screenshots/page_12_1.png" width="250"> | |
 
 How it's made: the Stitch design is one page, KICK A (`design/stitch-kick.html`, as Stitch wrote it); `mpc/design.py`
 writes every page in its markup (`design/stitch.html`), the repo's `convert.py` turns that into the layout, and
@@ -61,6 +68,13 @@ The sample channels play the AlphaBase's samples by number, as its SAMPLE contro
 the built-in kits still play: they use the kick, the MBrane, metal noise through the filters, the self-oscillating
 filters and the FM synth.
 
+## Kits
+
+In MPC's PRESET menu: **Init**, **Analog Basics**, **Low and Slow** (808-style kick, filter toms), **Hard Drive**
+(909-style) and **Membranes**, which use no samples; with the AlphaBase's sample set in the data folder also **Sampled
+House**, **Sampled Techno** and **Synth Filters** (its synth notes through the resonant filters), the kick and MBrane
+still analog. The AlphaBase's own 63 factory kits (its `ABPR0000.BIN`) need its kit format decoded: not yet.
+
 ## Rendering offline
 
 ```
@@ -69,4 +83,4 @@ build/render <data folder or ""> build/renders kit           # every kit: each i
 build/render <data folder or ""> build/renders script <file>  # one WAV per line: name;key=value;...;hits=kd@0,ch@0.5
 ```
 
-`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (398 parameters).
+`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (414 parameters).

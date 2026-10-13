@@ -162,8 +162,21 @@ void inc_tables_init(const char *dir) {
     if (!inc_lfo_from_file) load_lfo_file(dir);
 }
 
+/* a generator's squares and register start at their own places, as if it had been running (the hardware's patterns
+ * run all the time): started in step, the squares XOR to a constant for their first cycles and the first hit is quiet */
+void metal_init(metal_t *m, uint32_t seed) {
+    memset(m, 0, sizeof *m);
+    uint32_t s = seed;
+    for (int i = 0; i < 6; i++) m->ph[i] = mix32(s += 0x9e3779b9u);
+    m->lfsr = 1u + (mix32(s += 0x9e3779b9u) & 0xFFFFu);
+    m->cph = mix32(s += 0x9e3779b9u);
+    m->rng = mix32(s + 0x9e3779b9u) | 1u;
+    m->rate = 1.0f;
+}
+
 /* one sample of metal noise pattern n (0 off, 1 white, 2-127); len_override > 0 sets the shift register's length
- * (the MBrane's NOISE SHAPE on its metal noise 1) */
+ * (the MBrane's NOISE SHAPE on its metal noise 1); m->rate tunes the squares and the register's clock (the sample
+ * channels' PITCH; 1 = as made) */
 float metal_run(metal_t *m, int n, int len_override) {
     if (n <= 0) return 0.0f;
     if (n == 1) return noise(&m->rng);
@@ -174,7 +187,7 @@ float metal_run(metal_t *m, int n, int len_override) {
     float sum = 0.0f;
     if (mode != MT_LFSR) {
         for (int i = 0; i < p->nsq; i++) {
-            m->ph[i] += p->inc[i];
+            m->ph[i] += m->rate == 1.0f ? p->inc[i] : (uint32_t)(p->inc[i] * m->rate);
             uint32_t b = m->ph[i] >> 31;
             bits ^= b;
             sum += b ? 1.0f : -1.0f;
@@ -185,7 +198,7 @@ float metal_run(metal_t *m, int n, int len_override) {
         if (len < 2) len = 2;
         if (len > 17) len = 17;
         if (!m->lfsr) m->lfsr = 1;
-        m->cph += p->cinc;
+        m->cph += m->rate == 1.0f ? p->cinc : (uint64_t)(p->cinc * m->rate);
         for (uint32_t k = (uint32_t)(m->cph >> 32); k; k--) {
             uint32_t lsb = m->lfsr & 1u;
             m->lfsr >>= 1;
