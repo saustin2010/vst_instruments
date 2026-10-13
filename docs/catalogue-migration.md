@@ -382,9 +382,14 @@ Drum Map and Random Sampler open their MIDI port under the new name: turn Track 
 - Open303 and Dual Slope (2026-10-13, sd88me's answer on #404):
   - [x] Repo: names, maker, Dual Slope's tab and background text, READMEs, catalogue entries, release workflows (re-pinned
         to the release tools `eaef502`), `repo-names.tsv`; builds PASSED, check_skin OK, screenshots refreshed
-  - [ ] GitHub: the owner renames mpc-vst-303 to mpc-vst-open303 and mpc-vst-rampage to mpc-vst-dual-slope, then
-        `tools/publish.sh 303` / `rampage`; releases v1.1.0 built by Actions; a catalogue PR with both entries
-  - [ ] Device: install (one MPC restart); the browser shows the new names; Dual Slope's MIDI port under its new name
+  - [x] GitHub (2026-10-13): mpc-vst-303 renamed mpc-vst-open303 and mpc-vst-rampage mpc-vst-dual-slope (the old
+        addresses redirect), both published; v1.1.0 drafts built by Actions, both zips OK in `catalog_check --catalog`
+        (3 warnings each: the installer scripts are older than his newest template), `.so` byte-identical to `check.sh`'s
+  - [x] Device (2026-10-13): both zips installed on the Live II with one MPC stop/start (`install.sh -y -n` each); one
+        entry each, `[SYN] Open303` by Robin Schmidt and `[SEQ] Dual Slope` by Andrew Belt (category Synth, as v1.0.0's);
+        the `.so` files match the zips; the old-named screen folders removed by hand (the installer leaves them), and
+        `/sdcard/vst/rampage.so` by the installer; played by the owner ("seem ok"); `tested.json` 1.1.0
+  - [ ] Publish both v1.1.0 releases; the catalogue PR with both entries
 
 ## The device and this repo's installer
 

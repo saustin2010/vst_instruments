@@ -79,6 +79,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 | `screenshots/` | the pages as MPC draws them |
 | `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
 | `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
+| `tested.json` | the devices each release was checked on (the catalogue shows it) |
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
