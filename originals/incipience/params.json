@@ -1,0 +1,4822 @@
+{
+ "name": "Incipience",
+ "params": [
+  {
+   "key": "kit",
+   "name": "KIT",
+   "type": "stepper",
+   "min": 0,
+   "max": 511,
+   "step": 1,
+   "default": 0,
+   "display": "int",
+   "clamped": true
+  },
+  {
+   "key": "kit_prev",
+   "name": "PREV KIT",
+   "momentary": true,
+   "step_of": "kit",
+   "step_delta": -1
+  },
+  {
+   "key": "kit_next",
+   "name": "NEXT KIT",
+   "momentary": true,
+   "step_of": "kit",
+   "step_delta": 1
+  },
+  {
+   "key": "kit_name",
+   "name": "KIT NAME",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "kd_tune",
+   "name": "KICK TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 70,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_pitch",
+   "name": "KICK PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_decay",
+   "name": "KICK DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 70,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_harm",
+   "name": "KICK HARMONICS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_attack",
+   "name": "KICK ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 70,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_pulse",
+   "name": "KICK PULSE",
+   "min": 0,
+   "max": 127,
+   "default": 80,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_noise",
+   "name": "KICK NOISE",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_eq",
+   "name": "KICK EQ",
+   "min": 0,
+   "max": 127,
+   "default": 20,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_ptatk",
+   "name": "KICK PITCH ATK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_ptdec",
+   "name": "KICK PITCH DEC",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_compr",
+   "name": "KICK COMPRESS",
+   "min": 0,
+   "max": 127,
+   "default": 20,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_metnz",
+   "name": "KICK METAL NZ",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 1,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_evamt",
+   "name": "KICK PITCH AMT",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_gate",
+   "name": "KICK GATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_lfwav",
+   "name": "KICK LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_lfrat",
+   "name": "KICK LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_lfint",
+   "name": "KICK LFO DEPTH",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_vol",
+   "name": "KICK VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_acc",
+   "name": "KICK ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_pitch1",
+   "name": "MBRANE M1 PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 46,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_damp1",
+   "name": "MBRANE M1 DAMPEN",
+   "min": 0,
+   "max": 127,
+   "default": 58,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_pitch2",
+   "name": "MBRANE M2 PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 62,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_damp2",
+   "name": "MBRANE M2 DAMPEN",
+   "min": 0,
+   "max": 127,
+   "default": 50,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_cupl1",
+   "name": "MBRANE CPL 1>2",
+   "min": 0,
+   "max": 127,
+   "default": 20,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_cupl2",
+   "name": "MBRANE CPL 2>1",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_noise",
+   "name": "MBRANE NOISE",
+   "min": 0,
+   "max": 127,
+   "default": 70,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_decay",
+   "name": "MBRANE DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 50,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_p1atk",
+   "name": "MBRANE P1 ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_p1dec",
+   "name": "MBRANE P1 DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_p2atk",
+   "name": "MBRANE P2 ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_p2dec",
+   "name": "MBRANE P2 DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_nzfil",
+   "name": "MBRANE NOISE FILT",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_mtnz1",
+   "name": "MBRANE METAL NZ 1",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 1,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_nzshp",
+   "name": "MBRANE NOISE SHAPE",
+   "type": "stepper",
+   "min": 0,
+   "max": 12,
+   "step": 1,
+   "default": 6,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_scene",
+   "name": "MBRANE SCENE",
+   "type": "stepper",
+   "min": 0,
+   "max": 9,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_e1amt",
+   "name": "MBRANE P1 AMOUNT",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_mtnz2",
+   "name": "MBRANE METAL NZ 2",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_e2amt",
+   "name": "MBRANE P2 AMOUNT",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_gate",
+   "name": "MBRANE GATE",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_l1wav",
+   "name": "MBRANE LFO1 WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_l1rat",
+   "name": "MBRANE LFO1 RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_l1int",
+   "name": "MBRANE LFO1 DEPTH",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_vol",
+   "name": "MBRANE VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_l2wav",
+   "name": "MBRANE LFO2 WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_l2rat",
+   "name": "MBRANE LFO2 RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_l2int",
+   "name": "MBRANE LFO2 DEPTH",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_acc",
+   "name": "MBRANE ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_pitch",
+   "name": "CL HAT PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_start",
+   "name": "CL HAT START",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_stop",
+   "name": "CL HAT STOP",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_sample",
+   "name": "CL HAT SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_cents",
+   "name": "CL HAT CENTS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_loop",
+   "name": "CL HAT LOOP",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_loopon",
+   "name": "CL HAT LOOP ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "ch_rev",
+   "name": "CL HAT REVERSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "ch_vcatt",
+   "name": "CL HAT VCA ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_vcdec",
+   "name": "CL HAT VCA DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 44,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_vcsus",
+   "name": "CL HAT VCA SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_vcrel",
+   "name": "CL HAT VCA RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 44,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_fiatt",
+   "name": "CL HAT FLT ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_fidec",
+   "name": "CL HAT FLT DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 36,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_fisus",
+   "name": "CL HAT FLT SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_firel",
+   "name": "CL HAT FLT RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 36,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_cutoff",
+   "name": "CL HAT LP CUT",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_res",
+   "name": "CL HAT RESONANCE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_evamt",
+   "name": "CL HAT ENV AMOUNT",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_rout",
+   "name": "CL HAT ROUTING",
+   "options": [
+    "OFF",
+    "HH FILTER"
+   ],
+   "default": "HH FILTER"
+  },
+  {
+   "key": "ch_nzvol",
+   "name": "CL HAT NOISE VOL",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_mtnz",
+   "name": "CL HAT METAL NZ",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 37,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_lfwav",
+   "name": "CL HAT LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_lfrat",
+   "name": "CL HAT LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_lfclk",
+   "name": "CL HAT LFO CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "ch_lftun",
+   "name": "CL HAT LFO TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_vol",
+   "name": "CL HAT VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_lfsyn",
+   "name": "CL HAT LFO RETRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "ch_lfvca",
+   "name": "CL HAT LFO VCA",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_lfcut",
+   "name": "CL HAT LFO CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_acc",
+   "name": "CL HAT ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_hpcut",
+   "name": "CL HAT HP CUT",
+   "min": 0,
+   "max": 127,
+   "default": 70,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_pitch",
+   "name": "OP HAT PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_start",
+   "name": "OP HAT START",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_stop",
+   "name": "OP HAT STOP",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_sample",
+   "name": "OP HAT SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_cents",
+   "name": "OP HAT CENTS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_loop",
+   "name": "OP HAT LOOP",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_loopon",
+   "name": "OP HAT LOOP ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "oh_rev",
+   "name": "OP HAT REVERSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "oh_vcatt",
+   "name": "OP HAT VCA ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_vcdec",
+   "name": "OP HAT VCA DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 70,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_vcsus",
+   "name": "OP HAT VCA SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_vcrel",
+   "name": "OP HAT VCA RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 70,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_fiatt",
+   "name": "OP HAT FLT ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_fidec",
+   "name": "OP HAT FLT DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 60,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_fisus",
+   "name": "OP HAT FLT SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_firel",
+   "name": "OP HAT FLT RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 60,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_cutoff",
+   "name": "OP HAT LP CUT",
+   "min": 0,
+   "max": 127,
+   "default": 118,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_res",
+   "name": "OP HAT RESONANCE",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_evamt",
+   "name": "OP HAT ENV AMOUNT",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_rout",
+   "name": "OP HAT ROUTING",
+   "options": [
+    "OFF",
+    "HH FILTER"
+   ],
+   "default": "HH FILTER"
+  },
+  {
+   "key": "oh_nzvol",
+   "name": "OP HAT NOISE VOL",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_mtnz",
+   "name": "OP HAT METAL NZ",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 37,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_lfwav",
+   "name": "OP HAT LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_lfrat",
+   "name": "OP HAT LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_lfclk",
+   "name": "OP HAT LFO CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "oh_lftun",
+   "name": "OP HAT LFO TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_vol",
+   "name": "OP HAT VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_lfsyn",
+   "name": "OP HAT LFO RETRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "oh_lfvca",
+   "name": "OP HAT LFO VCA",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_lfcut",
+   "name": "OP HAT LFO CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_acc",
+   "name": "OP HAT ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_hpcut",
+   "name": "OP HAT HP CUT",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_pitch",
+   "name": "CLAP PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_start",
+   "name": "CLAP START",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_stop",
+   "name": "CLAP STOP",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_sample",
+   "name": "CLAP SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_cents",
+   "name": "CLAP CENTS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_loop",
+   "name": "CLAP LOOP",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_loopon",
+   "name": "CLAP LOOP ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "cp_rev",
+   "name": "CLAP REVERSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "cp_vcatt",
+   "name": "CLAP VCA ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_vcdec",
+   "name": "CLAP VCA DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 46,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_vcsus",
+   "name": "CLAP VCA SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_vcrel",
+   "name": "CLAP VCA RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 46,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_fiatt",
+   "name": "CLAP FLT ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_fidec",
+   "name": "CLAP FLT DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_fisus",
+   "name": "CLAP FLT SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_firel",
+   "name": "CLAP FLT RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_cutoff",
+   "name": "CLAP CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 80,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_res",
+   "name": "CLAP RESONANCE",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_evamt",
+   "name": "CLAP ENV AMOUNT",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_rout",
+   "name": "CLAP ROUTING",
+   "options": [
+    "OFF",
+    "LP",
+    "HP",
+    "BP"
+   ],
+   "default": "BP"
+  },
+  {
+   "key": "cp_nzvol",
+   "name": "CLAP NOISE VOL",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_mtnz",
+   "name": "CLAP METAL NZ",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 1,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_lfwav",
+   "name": "CLAP LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_lfrat",
+   "name": "CLAP LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_lfclk",
+   "name": "CLAP LFO CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "cp_lftun",
+   "name": "CLAP LFO TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_vol",
+   "name": "CLAP VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_lfsyn",
+   "name": "CLAP LFO RETRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "cp_lfvca",
+   "name": "CLAP LFO VCA",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_lfcut",
+   "name": "CLAP LFO CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_acc",
+   "name": "CLAP ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_pitch",
+   "name": "RIM PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_start",
+   "name": "RIM START",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_stop",
+   "name": "RIM STOP",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_sample",
+   "name": "RIM SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_cents",
+   "name": "RIM CENTS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_loop",
+   "name": "RIM LOOP",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_loopon",
+   "name": "RIM LOOP ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "rm_rev",
+   "name": "RIM REVERSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "rm_vcatt",
+   "name": "RIM VCA ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_vcdec",
+   "name": "RIM VCA DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 22,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_vcsus",
+   "name": "RIM VCA SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_vcrel",
+   "name": "RIM VCA RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 22,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_fiatt",
+   "name": "RIM FLT ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_fidec",
+   "name": "RIM FLT DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 20,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_fisus",
+   "name": "RIM FLT SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_firel",
+   "name": "RIM FLT RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 20,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_cutoff",
+   "name": "RIM CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 96,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_res",
+   "name": "RIM RESONANCE",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_evamt",
+   "name": "RIM ENV AMOUNT",
+   "min": 0,
+   "max": 127,
+   "default": 10,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_rout",
+   "name": "RIM ROUTING",
+   "options": [
+    "OFF",
+    "LP",
+    "HP",
+    "BP"
+   ],
+   "default": "BP"
+  },
+  {
+   "key": "rm_nzvol",
+   "name": "RIM NOISE VOL",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_mtnz",
+   "name": "RIM METAL NZ",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_lfwav",
+   "name": "RIM LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_lfrat",
+   "name": "RIM LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_lfclk",
+   "name": "RIM LFO CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "rm_lftun",
+   "name": "RIM LFO TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_vol",
+   "name": "RIM VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_lfsyn",
+   "name": "RIM LFO RETRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "rm_lfvca",
+   "name": "RIM LFO VCA",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_lfcut",
+   "name": "RIM LFO CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_acc",
+   "name": "RIM ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_pitch",
+   "name": "CRASH PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_start",
+   "name": "CRASH START",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_stop",
+   "name": "CRASH STOP",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_sample",
+   "name": "CRASH SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_cents",
+   "name": "CRASH CENTS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_loop",
+   "name": "CRASH LOOP",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_loopon",
+   "name": "CRASH LOOP ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "cr_rev",
+   "name": "CRASH REVERSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "cr_vcatt",
+   "name": "CRASH VCA ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_vcdec",
+   "name": "CRASH VCA DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 96,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_vcsus",
+   "name": "CRASH VCA SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_vcrel",
+   "name": "CRASH VCA RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 96,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_fiatt",
+   "name": "CRASH FLT ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_fidec",
+   "name": "CRASH FLT DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 90,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_fisus",
+   "name": "CRASH FLT SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_firel",
+   "name": "CRASH FLT RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 90,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_cutoff",
+   "name": "CRASH CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_res",
+   "name": "CRASH RESONANCE",
+   "min": 0,
+   "max": 127,
+   "default": 20,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_evamt",
+   "name": "CRASH ENV AMOUNT",
+   "min": 0,
+   "max": 127,
+   "default": 20,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_rout",
+   "name": "CRASH ROUTING",
+   "options": [
+    "OFF",
+    "LP",
+    "HP",
+    "BP"
+   ],
+   "default": "HP"
+  },
+  {
+   "key": "cr_nzvol",
+   "name": "CRASH NOISE VOL",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_mtnz",
+   "name": "CRASH METAL NZ",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 52,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_lfwav",
+   "name": "CRASH LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_lfrat",
+   "name": "CRASH LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_lfclk",
+   "name": "CRASH LFO CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "cr_lftun",
+   "name": "CRASH LFO TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_vol",
+   "name": "CRASH VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 96,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_lfsyn",
+   "name": "CRASH LFO RETRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "cr_lfvca",
+   "name": "CRASH LFO VCA",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_lfcut",
+   "name": "CRASH LFO CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_acc",
+   "name": "CRASH ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_pitch",
+   "name": "RIDE PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_start",
+   "name": "RIDE START",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_stop",
+   "name": "RIDE STOP",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_sample",
+   "name": "RIDE SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_cents",
+   "name": "RIDE CENTS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_loop",
+   "name": "RIDE LOOP",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_loopon",
+   "name": "RIDE LOOP ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "rd_rev",
+   "name": "RIDE REVERSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "rd_vcatt",
+   "name": "RIDE VCA ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_vcdec",
+   "name": "RIDE VCA DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 88,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_vcsus",
+   "name": "RIDE VCA SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_vcrel",
+   "name": "RIDE VCA RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 88,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_fiatt",
+   "name": "RIDE FLT ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_fidec",
+   "name": "RIDE FLT DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 80,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_fisus",
+   "name": "RIDE FLT SUSTAIN",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_firel",
+   "name": "RIDE FLT RELEASE",
+   "min": 0,
+   "max": 127,
+   "default": 80,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_cutoff",
+   "name": "RIDE CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 104,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_res",
+   "name": "RIDE RESONANCE",
+   "min": 0,
+   "max": 127,
+   "default": 50,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_evamt",
+   "name": "RIDE ENV AMOUNT",
+   "min": 0,
+   "max": 127,
+   "default": 10,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_rout",
+   "name": "RIDE ROUTING",
+   "options": [
+    "OFF",
+    "LP",
+    "HP",
+    "BP"
+   ],
+   "default": "BP"
+  },
+  {
+   "key": "rd_nzvol",
+   "name": "RIDE NOISE VOL",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_mtnz",
+   "name": "RIDE METAL NZ",
+   "type": "stepper",
+   "min": 0,
+   "max": 127,
+   "step": 1,
+   "default": 91,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_lfwav",
+   "name": "RIDE LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_lfrat",
+   "name": "RIDE LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_lfclk",
+   "name": "RIDE LFO CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "rd_lftun",
+   "name": "RIDE LFO TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_vol",
+   "name": "RIDE VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 92,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_lfsyn",
+   "name": "RIDE LFO RETRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "rd_lfvca",
+   "name": "RIDE LFO VCA",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_lfcut",
+   "name": "RIDE LFO CUTOFF",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_acc",
+   "name": "RIDE ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_pitch",
+   "name": "X1 PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_start",
+   "name": "X1 START",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_stop",
+   "name": "X1 STOP",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_sample",
+   "name": "X1 SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_cents",
+   "name": "X1 CENTS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_loop",
+   "name": "X1 LOOP",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_loopon",
+   "name": "X1 LOOP ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "x1_rev",
+   "name": "X1 REVERSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "x1_lfwav",
+   "name": "X1 LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_lfrat",
+   "name": "X1 LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_lfclk",
+   "name": "X1 LFO CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "x1_lftun",
+   "name": "X1 LFO TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_vol",
+   "name": "X1 VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_lfsyn",
+   "name": "X1 LFO RETRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "x1_lfvca",
+   "name": "X1 LFO VCA",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_acc",
+   "name": "X1 ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_pitch",
+   "name": "X2 PITCH",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_start",
+   "name": "X2 START",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_stop",
+   "name": "X2 STOP",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_sample",
+   "name": "X2 SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_cents",
+   "name": "X2 CENTS",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_loop",
+   "name": "X2 LOOP",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_loopon",
+   "name": "X2 LOOP ON",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "x2_rev",
+   "name": "X2 REVERSE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "x2_lfwav",
+   "name": "X2 LFO WAVE",
+   "type": "stepper",
+   "min": 0,
+   "max": 63,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_lfrat",
+   "name": "X2 LFO RATE",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_lfclk",
+   "name": "X2 LFO CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "x2_lftun",
+   "name": "X2 LFO TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_vol",
+   "name": "X2 VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 110,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_lfsyn",
+   "name": "X2 LFO RETRIG",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "x2_lfvca",
+   "name": "X2 LFO VCA",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_acc",
+   "name": "X2 ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_op1",
+   "name": "FM OP1 TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 16,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm12",
+   "name": "FM 1>2",
+   "min": 0,
+   "max": 127,
+   "default": 10,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm13",
+   "name": "FM 1>3",
+   "min": 0,
+   "max": 127,
+   "default": 55,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm14",
+   "name": "FM 1>4",
+   "min": 0,
+   "max": 127,
+   "default": 29,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm21",
+   "name": "FM 2>1",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_op2",
+   "name": "FM OP2 TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 29,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm23",
+   "name": "FM 2>3",
+   "min": 0,
+   "max": 127,
+   "default": 5,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm24",
+   "name": "FM 2>4",
+   "min": 0,
+   "max": 127,
+   "default": 7,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm31",
+   "name": "FM 3>1",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm32",
+   "name": "FM 3>2",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_op3",
+   "name": "FM OP3 TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 68,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm34",
+   "name": "FM 3>4",
+   "min": 0,
+   "max": 127,
+   "default": 7,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm41",
+   "name": "FM 4>1",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm42",
+   "name": "FM 4>2",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_fm43",
+   "name": "FM 4>3",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_op4",
+   "name": "FM OP4 TUNE",
+   "min": 0,
+   "max": 127,
+   "default": 95,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_eg1at",
+   "name": "FM OP1 ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_eg1rl",
+   "name": "FM OP1 DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 60,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_s1amt",
+   "name": "FM OP1 LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_s1fm",
+   "name": "FM OP1 PITCH ENV",
+   "min": 0,
+   "max": 127,
+   "default": 30,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_eg2at",
+   "name": "FM OP2 ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_eg2rl",
+   "name": "FM OP2 DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 40,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_s2amt",
+   "name": "FM OP2 LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_s2fm",
+   "name": "FM OP2 PITCH ENV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_eg3at",
+   "name": "FM OP3 ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_eg3rl",
+   "name": "FM OP3 DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 26,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_s3amt",
+   "name": "FM OP3 LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_s3fm",
+   "name": "FM OP3 PITCH ENV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_eg4at",
+   "name": "FM OP4 ATTACK",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_eg4rl",
+   "name": "FM OP4 DECAY",
+   "min": 0,
+   "max": 127,
+   "default": 18,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_s4amt",
+   "name": "FM OP4 LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_s4fm",
+   "name": "FM OP4 PITCH ENV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_voices",
+   "name": "FM VOICES",
+   "type": "stepper",
+   "min": 1,
+   "max": 6,
+   "step": 1,
+   "default": 4,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_spatial",
+   "name": "FM SPATIAL",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_chord",
+   "name": "FM CHORD",
+   "options": [
+    "ROOT",
+    "OCTAVE",
+    "FIFTH",
+    "OCT+5TH",
+    "MAJOR",
+    "MINOR",
+    "SUS4",
+    "MAJ7",
+    "MIN7",
+    "DOM7",
+    "MIN9",
+    "CLUSTER"
+   ],
+   "default": "ROOT"
+  },
+  {
+   "key": "fm_vol",
+   "name": "FM VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_acc",
+   "name": "FM ACCENT",
+   "min": 0,
+   "max": 127,
+   "default": 127,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_pan",
+   "name": "KICK PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_rsend",
+   "name": "KICK REV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "kd_dsend",
+   "name": "KICK DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_pan",
+   "name": "MBRANE PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_rsend",
+   "name": "MBRANE REV",
+   "min": 0,
+   "max": 127,
+   "default": 32,
+   "dynamic_display": true
+  },
+  {
+   "key": "mb_dsend",
+   "name": "MBRANE DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_pan",
+   "name": "CL HAT PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_rsend",
+   "name": "CL HAT REV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_dsend",
+   "name": "CL HAT DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_pan",
+   "name": "OP HAT PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_rsend",
+   "name": "OP HAT REV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "oh_dsend",
+   "name": "OP HAT DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_pan",
+   "name": "CLAP PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_rsend",
+   "name": "CLAP REV",
+   "min": 0,
+   "max": 127,
+   "default": 56,
+   "dynamic_display": true
+  },
+  {
+   "key": "cp_dsend",
+   "name": "CLAP DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_pan",
+   "name": "RIM PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_rsend",
+   "name": "RIM REV",
+   "min": 0,
+   "max": 127,
+   "default": 32,
+   "dynamic_display": true
+  },
+  {
+   "key": "rm_dsend",
+   "name": "RIM DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_pan",
+   "name": "CRASH PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_rsend",
+   "name": "CRASH REV",
+   "min": 0,
+   "max": 127,
+   "default": 25,
+   "dynamic_display": true
+  },
+  {
+   "key": "cr_dsend",
+   "name": "CRASH DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_pan",
+   "name": "RIDE PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_rsend",
+   "name": "RIDE REV",
+   "min": 0,
+   "max": 127,
+   "default": 31,
+   "dynamic_display": true
+  },
+  {
+   "key": "rd_dsend",
+   "name": "RIDE DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_pan",
+   "name": "X1 PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_rsend",
+   "name": "X1 REV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x1_dsend",
+   "name": "X1 DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_pan",
+   "name": "X2 PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_rsend",
+   "name": "X2 REV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "x2_dsend",
+   "name": "X2 DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_pan",
+   "name": "FM PAN",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_rsend",
+   "name": "FM REV",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "fm_dsend",
+   "name": "FM DLY",
+   "min": 0,
+   "max": 127,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "rv_size",
+   "name": "REV ROOM",
+   "min": 0,
+   "max": 127,
+   "default": 77,
+   "dynamic_display": true
+  },
+  {
+   "key": "rv_lo",
+   "name": "REV LOW PASS",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "rv_hi",
+   "name": "REV HIGH PASS",
+   "min": 0,
+   "max": 127,
+   "default": 5,
+   "dynamic_display": true
+  },
+  {
+   "key": "rv_level",
+   "name": "REV LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 63,
+   "dynamic_display": true
+  },
+  {
+   "key": "rv_on",
+   "name": "REVERB",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "dl_time",
+   "name": "DLY TIME",
+   "min": 0,
+   "max": 127,
+   "default": 64,
+   "dynamic_display": true
+  },
+  {
+   "key": "dl_sync",
+   "name": "DLY CLOCK",
+   "options": [
+    "FREE",
+    "SYNC"
+   ],
+   "default": "FREE"
+  },
+  {
+   "key": "dl_fb",
+   "name": "DLY FEEDBACK",
+   "min": 0,
+   "max": 127,
+   "default": 60,
+   "dynamic_display": true
+  },
+  {
+   "key": "dl_spatial",
+   "name": "DLY SPATIAL",
+   "min": 0,
+   "max": 127,
+   "default": 88,
+   "dynamic_display": true
+  },
+  {
+   "key": "dl_level",
+   "name": "DLY LEVEL",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "dl_on",
+   "name": "DELAY",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "kd_note",
+   "name": "KICK NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "C1",
+   "type": "stepper"
+  },
+  {
+   "key": "kd_note_prev",
+   "name": "KICK NOTE DOWN",
+   "momentary": true,
+   "step_of": "kd_note",
+   "step_delta": -1
+  },
+  {
+   "key": "kd_note_next",
+   "name": "KICK NOTE UP",
+   "momentary": true,
+   "step_of": "kd_note",
+   "step_delta": 1
+  },
+  {
+   "key": "mb_note",
+   "name": "MBRANE NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "C#1",
+   "type": "stepper"
+  },
+  {
+   "key": "mb_note_prev",
+   "name": "MBRANE NOTE DOWN",
+   "momentary": true,
+   "step_of": "mb_note",
+   "step_delta": -1
+  },
+  {
+   "key": "mb_note_next",
+   "name": "MBRANE NOTE UP",
+   "momentary": true,
+   "step_of": "mb_note",
+   "step_delta": 1
+  },
+  {
+   "key": "ch_note",
+   "name": "CL HAT NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "D1",
+   "type": "stepper"
+  },
+  {
+   "key": "ch_note_prev",
+   "name": "CL HAT NOTE DOWN",
+   "momentary": true,
+   "step_of": "ch_note",
+   "step_delta": -1
+  },
+  {
+   "key": "ch_note_next",
+   "name": "CL HAT NOTE UP",
+   "momentary": true,
+   "step_of": "ch_note",
+   "step_delta": 1
+  },
+  {
+   "key": "oh_note",
+   "name": "OP HAT NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "D#1",
+   "type": "stepper"
+  },
+  {
+   "key": "oh_note_prev",
+   "name": "OP HAT NOTE DOWN",
+   "momentary": true,
+   "step_of": "oh_note",
+   "step_delta": -1
+  },
+  {
+   "key": "oh_note_next",
+   "name": "OP HAT NOTE UP",
+   "momentary": true,
+   "step_of": "oh_note",
+   "step_delta": 1
+  },
+  {
+   "key": "cp_note",
+   "name": "CLAP NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "E1",
+   "type": "stepper"
+  },
+  {
+   "key": "cp_note_prev",
+   "name": "CLAP NOTE DOWN",
+   "momentary": true,
+   "step_of": "cp_note",
+   "step_delta": -1
+  },
+  {
+   "key": "cp_note_next",
+   "name": "CLAP NOTE UP",
+   "momentary": true,
+   "step_of": "cp_note",
+   "step_delta": 1
+  },
+  {
+   "key": "rm_note",
+   "name": "RIM NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "F1",
+   "type": "stepper"
+  },
+  {
+   "key": "rm_note_prev",
+   "name": "RIM NOTE DOWN",
+   "momentary": true,
+   "step_of": "rm_note",
+   "step_delta": -1
+  },
+  {
+   "key": "rm_note_next",
+   "name": "RIM NOTE UP",
+   "momentary": true,
+   "step_of": "rm_note",
+   "step_delta": 1
+  },
+  {
+   "key": "cr_note",
+   "name": "CRASH NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "F#1",
+   "type": "stepper"
+  },
+  {
+   "key": "cr_note_prev",
+   "name": "CRASH NOTE DOWN",
+   "momentary": true,
+   "step_of": "cr_note",
+   "step_delta": -1
+  },
+  {
+   "key": "cr_note_next",
+   "name": "CRASH NOTE UP",
+   "momentary": true,
+   "step_of": "cr_note",
+   "step_delta": 1
+  },
+  {
+   "key": "rd_note",
+   "name": "RIDE NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "G1",
+   "type": "stepper"
+  },
+  {
+   "key": "rd_note_prev",
+   "name": "RIDE NOTE DOWN",
+   "momentary": true,
+   "step_of": "rd_note",
+   "step_delta": -1
+  },
+  {
+   "key": "rd_note_next",
+   "name": "RIDE NOTE UP",
+   "momentary": true,
+   "step_of": "rd_note",
+   "step_delta": 1
+  },
+  {
+   "key": "x1_note",
+   "name": "X1 NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "G#1",
+   "type": "stepper"
+  },
+  {
+   "key": "x1_note_prev",
+   "name": "X1 NOTE DOWN",
+   "momentary": true,
+   "step_of": "x1_note",
+   "step_delta": -1
+  },
+  {
+   "key": "x1_note_next",
+   "name": "X1 NOTE UP",
+   "momentary": true,
+   "step_of": "x1_note",
+   "step_delta": 1
+  },
+  {
+   "key": "x2_note",
+   "name": "X2 NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "A1",
+   "type": "stepper"
+  },
+  {
+   "key": "x2_note_prev",
+   "name": "X2 NOTE DOWN",
+   "momentary": true,
+   "step_of": "x2_note",
+   "step_delta": -1
+  },
+  {
+   "key": "x2_note_next",
+   "name": "X2 NOTE UP",
+   "momentary": true,
+   "step_of": "x2_note",
+   "step_delta": 1
+  },
+  {
+   "key": "fm_note",
+   "name": "FM NOTE",
+   "options": [
+    "C-2",
+    "C#-2",
+    "D-2",
+    "D#-2",
+    "E-2",
+    "F-2",
+    "F#-2",
+    "G-2",
+    "G#-2",
+    "A-2",
+    "A#-2",
+    "B-2",
+    "C-1",
+    "C#-1",
+    "D-1",
+    "D#-1",
+    "E-1",
+    "F-1",
+    "F#-1",
+    "G-1",
+    "G#-1",
+    "A-1",
+    "A#-1",
+    "B-1",
+    "C0",
+    "C#0",
+    "D0",
+    "D#0",
+    "E0",
+    "F0",
+    "F#0",
+    "G0",
+    "G#0",
+    "A0",
+    "A#0",
+    "B0",
+    "C1",
+    "C#1",
+    "D1",
+    "D#1",
+    "E1",
+    "F1",
+    "F#1",
+    "G1",
+    "G#1",
+    "A1",
+    "A#1",
+    "B1",
+    "C2",
+    "C#2",
+    "D2",
+    "D#2",
+    "E2",
+    "F2",
+    "F#2",
+    "G2",
+    "G#2",
+    "A2",
+    "A#2",
+    "B2",
+    "C3",
+    "C#3",
+    "D3",
+    "D#3",
+    "E3",
+    "F3",
+    "F#3",
+    "G3",
+    "G#3",
+    "A3",
+    "A#3",
+    "B3",
+    "C4",
+    "C#4",
+    "D4",
+    "D#4",
+    "E4",
+    "F4",
+    "F#4",
+    "G4",
+    "G#4",
+    "A4",
+    "A#4",
+    "B4",
+    "C5",
+    "C#5",
+    "D5",
+    "D#5",
+    "E5",
+    "F5",
+    "F#5",
+    "G5",
+    "G#5",
+    "A5",
+    "A#5",
+    "B5",
+    "C6",
+    "C#6",
+    "D6",
+    "D#6",
+    "E6",
+    "F6",
+    "F#6",
+    "G6",
+    "G#6",
+    "A6",
+    "A#6",
+    "B6",
+    "C7",
+    "C#7",
+    "D7",
+    "D#7",
+    "E7",
+    "F7",
+    "F#7",
+    "G7",
+    "G#7",
+    "A7",
+    "A#7",
+    "B7",
+    "C8",
+    "C#8",
+    "D8",
+    "D#8",
+    "E8",
+    "F8",
+    "F#8",
+    "G8"
+   ],
+   "default": "A#1",
+   "type": "stepper"
+  },
+  {
+   "key": "fm_note_prev",
+   "name": "FM NOTE DOWN",
+   "momentary": true,
+   "step_of": "fm_note",
+   "step_delta": -1
+  },
+  {
+   "key": "fm_note_next",
+   "name": "FM NOTE UP",
+   "momentary": true,
+   "step_of": "fm_note",
+   "step_delta": 1
+  },
+  {
+   "key": "kd_mute",
+   "name": "KICK MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "mb_mute",
+   "name": "MBRANE MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "ch_mute",
+   "name": "CL HAT MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "oh_mute",
+   "name": "OP HAT MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "cp_mute",
+   "name": "CLAP MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "rm_mute",
+   "name": "RIM MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "cr_mute",
+   "name": "CRASH MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "rd_mute",
+   "name": "RIDE MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "x1_mute",
+   "name": "X1 MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "x2_mute",
+   "name": "X2 MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "fm_mute",
+   "name": "FM MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "hh_choke",
+   "name": "HH CHOKE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "volume",
+   "name": "VOLUME",
+   "min": 0,
+   "max": 127,
+   "default": 100,
+   "dynamic_display": true
+  },
+  {
+   "key": "ch_sample_prev",
+   "name": "CL HAT SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "ch_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "ch_sample_next",
+   "name": "CL HAT SAMPLE UP",
+   "momentary": true,
+   "step_of": "ch_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "oh_sample_prev",
+   "name": "OP HAT SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "oh_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "oh_sample_next",
+   "name": "OP HAT SAMPLE UP",
+   "momentary": true,
+   "step_of": "oh_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "cp_sample_prev",
+   "name": "CLAP SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "cp_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "cp_sample_next",
+   "name": "CLAP SAMPLE UP",
+   "momentary": true,
+   "step_of": "cp_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "rm_sample_prev",
+   "name": "RIM SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "rm_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "rm_sample_next",
+   "name": "RIM SAMPLE UP",
+   "momentary": true,
+   "step_of": "rm_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "cr_sample_prev",
+   "name": "CRASH SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "cr_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "cr_sample_next",
+   "name": "CRASH SAMPLE UP",
+   "momentary": true,
+   "step_of": "cr_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "rd_sample_prev",
+   "name": "RIDE SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "rd_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "rd_sample_next",
+   "name": "RIDE SAMPLE UP",
+   "momentary": true,
+   "step_of": "rd_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "x1_sample_prev",
+   "name": "X1 SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "x1_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "x1_sample_next",
+   "name": "X1 SAMPLE UP",
+   "momentary": true,
+   "step_of": "x1_sample",
+   "step_delta": 1
+  },
+  {
+   "key": "x2_sample_prev",
+   "name": "X2 SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "x2_sample",
+   "step_delta": -1
+  },
+  {
+   "key": "x2_sample_next",
+   "name": "X2 SAMPLE UP",
+   "momentary": true,
+   "step_of": "x2_sample",
+   "step_delta": 1
+  }
+ ]
+}

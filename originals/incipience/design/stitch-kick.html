@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INCIPIENCE Drum Machine Front Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Inter:wght@400;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121214;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Fixed hardware container */
+    #mpc-screen {
+      position: relative;
+      width: 1280px;
+      height: 628px;
+      overflow: hidden;
+      background-color: #efede6;
+      /* Subtle brushed texture overlay */
+      background-image: 
+        repeating-linear-gradient(90deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 4px),
+        linear-gradient(180deg, #f4f2ec 0%, #ebe8e0 100%);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    /* Wood end cheeks (22px) with rich grain */
+    .wood-cheek-left {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 22px;
+      z-index: 40;
+      background: linear-gradient(90deg, #6e3212 0%, #a45320 20%, #8a4318 45%, #b8642a 75%, #59270e 100%);
+      box-shadow: inset -2px 0 4px rgba(0,0,0,0.5), 2px 0 5px rgba(0,0,0,0.25);
+      border-right: 1px solid #361706;
+    }
+    .wood-cheek-left::after, .wood-cheek-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(180deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 2px, transparent 2px, transparent 7px),
+                  repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px);
+      mix-blend-mode: overlay;
+    }
+    .wood-cheek-right {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 22px;
+      z-index: 40;
+      background: linear-gradient(90deg, #59270e 0%, #b8642a 25%, #8a4318 55%, #a45320 80%, #6e3212 100%);
+      box-shadow: inset 2px 0 4px rgba(0,0,0,0.5), -2px 0 5px rgba(0,0,0,0.25);
+      border-left: 1px solid #361706;
+    }
+
+    /* Mounting chassis screws */
+    .chassis-screw {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #e0e0e0 0%, #888 60%, #444 100%);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.4);
+      z-index: 45;
+    }
+    .chassis-screw::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 1px;
+      width: 8px;
+      height: 1.5px;
+      background: #2b2b2b;
+      transform: rotate(38deg);
+    }
+
+    /* Typography helpers */
+    .print-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #141414;
+      text-transform: uppercase;
+    }
+    .red-caption {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      color: #d32a2a;
+      text-transform: uppercase;
+    }
+
+    /* Knobs */
+    .ab-knob {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .knob-body-58 {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 45% 45%, #2a2a2a 0%, #151515 70%, #0d0d0d 100%);
+      box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.45),
+        0 2px 4px rgba(0, 0, 0, 0.35),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.2),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.8);
+      position: relative;
+      border: 1px solid #111;
+    }
+
+    /* Knurled ribbed rim */
+    .knob-body-58::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: repeating-conic-gradient(from 0deg, #222 0deg 4deg, #161616 4deg 8deg);
+      opacity: 0.7;
+    }
+
+    .knob-body-58::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #303030 0%, #181818 75%, #101010 100%);
+      box-shadow: inset 0 2px 3px rgba(0,0,0,0.6), 0 1px 1px rgba(255,255,255,0.1);
+    }
+
+    /* Indicator pointer */
+    .knob-pointer-line {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      width: 2.5px;
+      height: 20px;
+      margin-left: -1.25px;
+      background: #ffffff;
+      border-radius: 1px;
+      box-shadow: 0 0 2px rgba(0,0,0,0.7);
+      transform-origin: 50% 21px;
+      z-index: 10;
+    }
+
+    /* Small 40px Knob for MIX */
+    .knob-body-40 {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 45% 45%, #2a2a2a 0%, #151515 70%, #0d0d0d 100%);
+      box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.22);
+      position: relative;
+      border: 1px solid #111;
+    }
+    .knob-body-40::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: repeating-conic-gradient(from 0deg, #222 0deg 6deg, #141414 6deg 12deg);
+      opacity: 0.65;
+    }
+    .knob-body-40::after {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #303030 0%, #181818 75%, #101010 100%);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
+    }
+    .knob-pointer-line-40 {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      width: 2px;
+      height: 14px;
+      margin-left: -1px;
+      background: #ffffff;
+      border-radius: 1px;
+      transform-origin: 50% 14px;
+      z-index: 10;
+    }
+
+    /* Green Hardware LED */
+    .hardware-led-green {
+      width: 6.5px;
+      height: 6.5px;
+      border-radius: 50%;
+      background-color: #2bd46b;
+      box-shadow: 
+        0 0 6px #2bd46b,
+        0 0 10px rgba(43, 212, 107, 0.7),
+        inset 0 1px 1px rgba(255,255,255,0.8);
+      border: 0.8px solid #17833e;
+    }
+
+    /* Red Key LED (off vs on) */
+    .key-led-red {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: #4a1515;
+      border: 0.6px solid #2e0909;
+    }
+    .key-led-red.lit {
+      background-color: #ff3333;
+      box-shadow: 0 0 6px #ff2222, 0 0 10px rgba(255, 30, 30, 0.8);
+      border-color: #b01010;
+    }
+
+    /* OLED Screen */
+    .oled-display {
+      background-color: #0b0b0b;
+      border: 2px solid #222;
+      border-radius: 4px;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.9), 0 1px 2px rgba(255,255,255,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .oled-display::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(180deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 3px);
+      pointer-events: none;
+    }
+
+    /* Instrument Key (34px) */
+    .instrument-key {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(180deg, #707070 0%, #545454 20%, #444444 100%);
+      border-radius: 3px;
+      border-top: 1.5px solid #8e8e8e;
+      border-left: 1px solid #5a5a5a;
+      border-right: 1px solid #333;
+      border-bottom: 2px solid #222;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.45);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.08s ease;
+    }
+    .instrument-key:active {
+      transform: translateY(1.5px);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      border-top-color: #666;
+    }
+
+    /* Mute button */
+    .ab-toggle {
+      width: 50px;
+      height: 30px;
+      background: linear-gradient(180deg, #3d3d3d 0%, #282828 100%);
+      border-radius: 3px;
+      border-top: 1px solid #5a5a5a;
+      border-left: 1px solid #3a3a3a;
+      border-right: 1px solid #202020;
+      border-bottom: 2px solid #151515;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+      color: #e5e5e5;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+    .ab-toggle:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+
+    .ab-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #141414;
+      line-height: 1;
+      text-align: center;
+    }
+    .ab-value {
+      font-size: 9px;
+      font-family: 'Inter', monospace;
+      font-weight: 600;
+      color: #1a1a1a;
+      letter-spacing: 0.02em;
+      margin-top: 2.5px;
+      line-height: 1;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- EXACT CANVAS ROOT ELEMENT: 1280px by 628px, relative, overflow hidden -->
+  <div id="mpc-screen">
+
+    <!-- Wooden End Cheek: Left (22px) -->
+    <div class="wood-cheek-left"></div>
+    <!-- Chassis Screws Left -->
+    <div class="chassis-screw" style="top: 14px; left: 6px;"></div>
+    <div class="chassis-screw" style="bottom: 14px; left: 6px;"></div>
+
+    <!-- Wooden End Cheek: Right (22px) -->
+    <div class="wood-cheek-right"></div>
+    <!-- Chassis Screws Right -->
+    <div class="chassis-screw" style="top: 14px; right: 6px;"></div>
+    <div class="chassis-screw" style="bottom: 14px; right: 6px;"></div>
+
+    <!-- ========================================================
+         LEFT: THE ENCODER MATRIX (x 40 to 760)
+         4 rows of 4 knobs. Knob centres 160px apart horizontally.
+         ======================================================== -->
+    <div style="position: absolute; left: 40px; top: 18px; width: 720px; height: 520px;">
+
+      <!-- ROW 1: OSCILLATOR / TUNE ENVELOPE -->
+      <div style="position: absolute; left: 0; top: 0; width: 720px; height: 124px;">
+        <!-- Row Header & Rules -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 3px; border-bottom: 1px solid #141414;">
+          <span class="print-label" style="font-size: 11px;">OSCILLATOR</span>
+          <span class="red-caption" style="font-size: 10px;">TUNE ENVELOPE</span>
+        </div>
+
+        <!-- 4 Knobs Container -->
+        <div style="position: relative; height: 96px; margin-top: 8px;">
+          <!-- Knob 1: TUNE (kd_tune) -->
+          <div style="position: absolute; left: 16px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_tune">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-90deg);"></div>
+                </div>
+              </div>
+              <!-- Hardware LED + Number -->
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">1</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">TUNE</span>
+              <span class="ab-value">048</span>
+            </div>
+          </div>
+
+          <!-- Knob 2: PITCH (kd_pitch) -->
+          <div style="position: absolute; left: 176px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_pitch">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-15deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">2</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">PITCH</span>
+              <span class="ab-value">064</span>
+            </div>
+          </div>
+
+          <!-- Knob 3: DECAY (kd_decay) -->
+          <div style="position: absolute; left: 336px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_decay">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(40deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">3</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">DECAY</span>
+              <span class="ab-value">082</span>
+            </div>
+          </div>
+
+          <!-- Knob 4: HARMONICS (kd_harm) -->
+          <div style="position: absolute; left: 496px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_harm">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-110deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">4</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">HARMONICS</span>
+              <span class="ab-value">018</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: ATTACK / PULSE + NOISE -->
+      <div style="position: absolute; left: 0; top: 128px; width: 720px; height: 124px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 3px; border-bottom: 1px solid #141414;">
+          <span class="print-label" style="font-size: 11px;">ATTACK</span>
+          <span class="red-caption" style="font-size: 10px;">PULSE + NOISE</span>
+        </div>
+
+        <div style="position: relative; height: 96px; margin-top: 8px;">
+          <!-- Knob 5: ATTACK (kd_attack) -->
+          <div style="position: absolute; left: 16px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_attack">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-135deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">5</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">ATTACK</span>
+              <span class="ab-value">004</span>
+            </div>
+          </div>
+
+          <!-- Knob 6: PULSE (kd_pulse) -->
+          <div style="position: absolute; left: 176px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_pulse">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(20deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">6</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">PULSE</span>
+              <span class="ab-value">075</span>
+            </div>
+          </div>
+
+          <!-- Knob 7: NOISE (kd_noise) -->
+          <div style="position: absolute; left: 336px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_noise">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-70deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">7</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">NOISE</span>
+              <span class="ab-value">032</span>
+            </div>
+          </div>
+
+          <!-- Knob 8: EQ (kd_eq) -->
+          <div style="position: absolute; left: 496px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_eq">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(60deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">8</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">EQ</span>
+              <span class="ab-value">091</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: SHAPE / METAL NOISE -->
+      <div style="position: absolute; left: 0; top: 256px; width: 720px; height: 124px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 3px; border-bottom: 1px solid #141414;">
+          <span class="print-label" style="font-size: 11px;">SHAPE</span>
+          <span class="red-caption" style="font-size: 10px;">METAL NOISE</span>
+        </div>
+
+        <div style="position: relative; height: 96px; margin-top: 8px;">
+          <!-- Knob 9: COMPRESS (kd_compr) -->
+          <div style="position: absolute; left: 16px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_compr">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-10deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">9</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">COMPRESS</span>
+              <span class="ab-value">064</span>
+            </div>
+          </div>
+
+          <!-- Knob 10: METAL NZ (kd_metnz) -->
+          <div style="position: absolute; left: 176px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_metnz">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-105deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">10</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">METAL NZ</span>
+              <span class="ab-value">020</span>
+            </div>
+          </div>
+
+          <!-- Knob 11: PITCH AMT (kd_evamt) -->
+          <div style="position: absolute; left: 336px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_evamt">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(85deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">11</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">PITCH AMT</span>
+              <span class="ab-value">104</span>
+            </div>
+          </div>
+
+          <!-- Knob 12: GATE (kd_gate) -->
+          <div style="position: absolute; left: 496px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_gate">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-30deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">12</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">GATE</span>
+              <span class="ab-value">055</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 4: LFO / LEVEL / TO PITCH -->
+      <div style="position: absolute; left: 0; top: 384px; width: 720px; height: 124px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 3px; border-bottom: 1px solid #141414;">
+          <span class="print-label" style="font-size: 11px;">LFO / LEVEL</span>
+          <span class="red-caption" style="font-size: 10px;">TO PITCH</span>
+        </div>
+
+        <div style="position: relative; height: 96px; margin-top: 8px;">
+          <!-- Knob 13: LFO WAVE (kd_lfwav) -->
+          <div style="position: absolute; left: 16px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_lfwav">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-140deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">13</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">LFO WAVE</span>
+              <span class="ab-value">001</span>
+            </div>
+          </div>
+
+          <!-- Knob 14: LFO RATE (kd_lfrat) -->
+          <div style="position: absolute; left: 176px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_lfrat">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(-15deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">14</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">LFO RATE</span>
+              <span class="ab-value">062</span>
+            </div>
+          </div>
+
+          <!-- Knob 15: LFO DEPTH (kd_lfint) -->
+          <div style="position: absolute; left: 336px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_lfint">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(50deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">15</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">LFO DEPTH</span>
+              <span class="ab-value">088</span>
+            </div>
+          </div>
+
+          <!-- Knob 16: VOLUME (kd_vol) -->
+          <div style="position: absolute; left: 496px; top: 0; width: 110px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative;">
+              <div class="ab-knob" data-param="kd_vol">
+                <div class="knob-body-58">
+                  <div class="knob-pointer-line" style="transform: rotate(115deg);"></div>
+                </div>
+              </div>
+              <div style="position: absolute; left: 66px; top: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <div class="hardware-led-green"></div>
+                <span style="font-size: 8px; font-weight: 800; color: #141414;">16</span>
+              </div>
+            </div>
+            <div style="margin-top: 5px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">VOLUME</span>
+              <span class="ab-value">118</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         RIGHT COLUMN (x 800 to 1236)
+         OLED Window, Product Title, MIX Section
+         ======================================================== -->
+    <div style="position: absolute; left: 800px; top: 20px; width: 436px; height: 510px;">
+
+      <!-- OLED Display Window: 430 x 120 -->
+      <div class="oled-display" style="width: 430px; height: 120px; padding: 18px 22px; display: flex; flex-direction: column; justify-content: space-between;">
+        <!-- Top row: KD KICK DRUM + Sine wave icon -->
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-family: 'VT323', 'Chakra Petch', monospace; font-size: 32px; letter-spacing: 0.12em; color: #ffffff; line-height: 1;">
+            KD &nbsp;KICK DRUM
+          </div>
+          <!-- Sine wave vector icon -->
+          <svg width="44" height="20" viewBox="0 0 50 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 2 10 C 12 1, 14 1, 24 10 C 34 19, 36 19, 48 10" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- Line 2: PAGE A OSC ATTACK SHAPE LFO -->
+        <div style="font-family: 'VT323', 'Chakra Petch', monospace; font-size: 19px; letter-spacing: 0.16em; color: #ffffff; opacity: 0.95; line-height: 1;">
+          PAGE A &nbsp; OSC &nbsp;ATTACK &nbsp;SHAPE &nbsp;LFO
+        </div>
+
+        <!-- Line 3 / Status metadata: subtle vintage OLED indicators -->
+        <div style="display: flex; justify-content: space-between; align-items: center; font-family: 'VT323', monospace; font-size: 14px; letter-spacing: 0.15em; color: #3be27b;">
+          <span>• ANALOG ENGAGED</span>
+          <span style="color: #ffffff; opacity: 0.85;">TRIG: INT 132 BPM &nbsp;PAT: 01/A</span>
+        </div>
+      </div>
+
+      <!-- INCIPIENCE Branding -->
+      <div style="margin-top: 36px; display: flex; align-items: center; gap: 10px;">
+        <!-- Red Pill Emblem -->
+        <div style="width: 14px; height: 26px; border-radius: 7px; background: #d32a2a; box-shadow: 0 1px 2px rgba(0,0,0,0.3);"></div>
+        <div>
+          <div style="font-family: 'Inter', sans-serif; font-size: 27px; font-weight: 900; letter-spacing: 0.28em; color: #141414; line-height: 1;">
+            INCIPIENCE
+          </div>
+        </div>
+      </div>
+      <div style="margin-left: 24px; margin-top: 6px; font-family: 'Inter', sans-serif; font-size: 9.5px; font-weight: 800; letter-spacing: 0.22em; color: #141414;">
+        ELEVEN-VOICE DRUM SYNTHESIZER
+      </div>
+
+      <!-- MIX Panel -->
+      <div style="margin-top: 36px; width: 430px;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 3px; border-bottom: 1px solid #141414;">
+          <span class="print-label" style="font-size: 11px;">MIX</span>
+          <span style="font-size: 9px; font-weight: 700; color: #8d8d8d; letter-spacing: 0.08em; text-transform: uppercase;">MASTER OUT BUS</span>
+        </div>
+
+        <!-- Knobs & Mute row -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding: 0 12px;">
+          
+          <!-- PAN (kd_pan) -->
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="ab-knob" data-param="kd_pan">
+              <div class="knob-body-40">
+                <div class="knob-pointer-line-40" style="transform: rotate(0deg);"></div>
+              </div>
+            </div>
+            <div style="margin-top: 6px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">PAN</span>
+              <span class="ab-value">CTR</span>
+            </div>
+          </div>
+
+          <!-- REV SEND (kd_rsend) -->
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="ab-knob" data-param="kd_rsend">
+              <div class="knob-body-40">
+                <div class="knob-pointer-line-40" style="transform: rotate(-35deg);"></div>
+              </div>
+            </div>
+            <div style="margin-top: 6px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">REV SEND</span>
+              <span class="ab-value">042</span>
+            </div>
+          </div>
+
+          <!-- DLY SEND (kd_dsend) -->
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="ab-knob" data-param="kd_dsend">
+              <div class="knob-body-40">
+                <div class="knob-pointer-line-40" style="transform: rotate(-85deg);"></div>
+              </div>
+            </div>
+            <div style="margin-top: 6px; display: flex; flex-direction: column; align-items: center;">
+              <span class="ab-label">DLY SEND</span>
+              <span class="ab-value">018</span>
+            </div>
+          </div>
+
+          <!-- MUTE Button (kd_mute) -->
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <button class="ab-toggle" data-param="kd_mute" type="button">
+              <span style="display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: #666; margin-right: 2px;"></span>
+              MUTE
+            </button>
+            <div style="margin-top: 8px; display: flex; flex-direction: column; align-items: center;">
+              <span style="font-size: 8px; font-weight: 700; color: #8d8d8d; letter-spacing: 0.05em;">CH ACTIVE</span>
+              <span class="ab-value" style="margin-top: 2px;">OFF</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         BOTTOM STRIP (y 560 to 628)
+         Bold red band (8px), 11 instrument keys (34px), LEDs,
+         labels, and grouped routing captions.
+         ======================================================== -->
+    <div style="position: absolute; left: 22px; right: 22px; top: 546px; height: 82px;">
+
+      <!-- Bold Red Horizontal Band (8px) running across just above keys -->
+      <div style="position: absolute; left: 0; right: 0; top: 0; height: 8px; background-color: #d32a2a; box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></div>
+
+      <!-- Keys Container -->
+      <div style="position: absolute; left: 20px; right: 20px; top: 12px; display: flex; justify-content: space-between; align-items: flex-start;">
+
+        <!-- 1. KICK DRUM (Lit LED) -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 80px;">
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <div class="instrument-key" title="Kick Drum"></div>
+            <div class="key-led-red lit" title="Active voice"></div>
+          </div>
+          <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">KICK DRUM</span>
+        </div>
+
+        <!-- 2. MBRANE -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 75px;">
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <div class="instrument-key" title="Membrane"></div>
+            <div class="key-led-red"></div>
+          </div>
+          <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">MBRANE</span>
+        </div>
+
+        <!-- Group A: CLSD HI HAT & OPEN HI HAT (with rule & caption "SAMPLE + HH FILTER + VCA") -->
+        <div style="position: relative; display: flex; gap: 36px; padding-bottom: 12px;">
+          <!-- 3. CLSD HI HAT -->
+          <div style="display: flex; flex-direction: column; align-items: center; width: 75px;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div class="instrument-key" title="Closed Hi Hat"></div>
+              <div class="key-led-red"></div>
+            </div>
+            <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">CLSD HI HAT</span>
+          </div>
+
+          <!-- 4. OPEN HI HAT -->
+          <div style="display: flex; flex-direction: column; align-items: center; width: 75px;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div class="instrument-key" title="Open Hi Hat"></div>
+              <div class="key-led-red"></div>
+            </div>
+            <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">OPEN HI HAT</span>
+          </div>
+
+          <!-- Thin black rule + red caption -->
+          <div style="position: absolute; left: 8px; right: 8px; bottom: 0; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 100%; height: 1px; background-color: #141414;"></div>
+            <span class="red-caption" style="font-size: 7.5px; margin-top: 2px; white-space: nowrap;">SAMPLE + HH FILTER + VCA</span>
+          </div>
+        </div>
+
+        <!-- Group B: CLAP to RIDE (with rule & caption "SAMPLE + MM FILTER + VCA") -->
+        <div style="position: relative; display: flex; gap: 28px; padding-bottom: 12px;">
+          <!-- 5. CLAP -->
+          <div style="display: flex; flex-direction: column; align-items: center; width: 62px;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div class="instrument-key" title="Clap"></div>
+              <div class="key-led-red"></div>
+            </div>
+            <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">CLAP</span>
+          </div>
+
+          <!-- 6. RIM SHOT -->
+          <div style="display: flex; flex-direction: column; align-items: center; width: 65px;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div class="instrument-key" title="Rim Shot"></div>
+              <div class="key-led-red"></div>
+            </div>
+            <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">RIM SHOT</span>
+          </div>
+
+          <!-- 7. CRASH -->
+          <div style="display: flex; flex-direction: column; align-items: center; width: 62px;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div class="instrument-key" title="Crash"></div>
+              <div class="key-led-red"></div>
+            </div>
+            <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">CRASH</span>
+          </div>
+
+          <!-- 8. RIDE -->
+          <div style="display: flex; flex-direction: column; align-items: center; width: 62px;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div class="instrument-key" title="Ride"></div>
+              <div class="key-led-red"></div>
+            </div>
+            <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">RIDE</span>
+          </div>
+
+          <!-- Thin black rule + red caption -->
+          <div style="position: absolute; left: 8px; right: 8px; bottom: 0; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 100%; height: 1px; background-color: #141414;"></div>
+            <span class="red-caption" style="font-size: 7.5px; margin-top: 2px; white-space: nowrap;">SAMPLE + MM FILTER + VCA</span>
+          </div>
+        </div>
+
+        <!-- 9. X SAMPLE 1 -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 75px;">
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <div class="instrument-key" title="X Sample 1"></div>
+            <div class="key-led-red"></div>
+          </div>
+          <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">X SAMPLE 1</span>
+        </div>
+
+        <!-- 10. X SAMPLE 2 -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 75px;">
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <div class="instrument-key" title="X Sample 2"></div>
+            <div class="key-led-red"></div>
+          </div>
+          <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">X SAMPLE 2</span>
+        </div>
+
+        <!-- 11. FM SYNTH -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 75px;">
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <div class="instrument-key" title="FM Synth"></div>
+            <div class="key-led-red"></div>
+          </div>
+          <span style="font-size: 8.5px; font-weight: 800; color: #141414; letter-spacing: 0.04em; margin-top: 5px; white-space: nowrap;">FM SYNTH</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Optional tactile interaction for touchscreen & mouse dragging on knobs
+    document.querySelectorAll('.ab-knob').forEach(knob => {
+      let isDragging = false;
+      let startY = 0;
+      let currentRotation = 0;
+
+      const pointer = knob.querySelector('.knob-pointer-line, .knob-pointer-line-40');
+      const valDisplay = knob.closest('div[style*="flex-direction: column"]')?.querySelector('.ab-value');
+
+      // Read initial rotation from inline style
+      if (pointer && pointer.style.transform) {
+        const match = pointer.style.transform.match(/rotate\(([-0-9.]+)deg\)/);
+        if (match) currentRotation = parseFloat(match[1]);
+      }
+
+      const onMouseDown = (e) => {
+        isDragging = true;
+        startY = e.clientY || (e.touches && e.touches[0].clientY);
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+        window.addEventListener('touchmove', onMouseMove, { passive: false });
+        window.addEventListener('touchend', onMouseUp);
+      };
+
+      const onMouseMove = (e) => {
+        if (!isDragging) return;
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        const deltaY = startY - clientY;
+        startY = clientY;
+
+        currentRotation = Math.max(-145, Math.min(145, currentRotation + deltaY * 2));
+        if (pointer) {
+          pointer.style.transform = `rotate(${currentRotation}deg)`;
+        }
+
+        if (valDisplay && valDisplay.textContent !== 'CTR') {
+          // Normalize -145..145 to 0..127
+          const normVal = Math.round(((currentRotation + 145) / 290) * 127);
+          valDisplay.textContent = String(normVal).padStart(3, '0');
+        }
+      };
+
+      const onMouseUp = () => {
+        isDragging = false;
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        window.removeEventListener('touchmove', onMouseMove);
+        window.removeEventListener('touchend', onMouseUp);
+      };
+
+      knob.addEventListener('mousedown', onMouseDown);
+      knob.addEventListener('touchstart', onMouseDown, { passive: true });
+    });
+
+    // Toggle mute state
+    const muteBtn = document.querySelector('.ab-toggle[data-param="kd_mute"]');
+    if (muteBtn) {
+      let muted = false;
+      muteBtn.addEventListener('click', () => {
+        muted = !muted;
+        const dot = muteBtn.querySelector('span');
+        const readout = muteBtn.parentElement.querySelector('.ab-value');
+        if (muted) {
+          dot.style.background = '#d32a2a';
+          dot.style.boxShadow = '0 0 5px #d32a2a';
+          muteBtn.style.color = '#ff6b6b';
+          if (readout) readout.textContent = 'ON';
+        } else {
+          dot.style.background = '#666';
+          dot.style.boxShadow = 'none';
+          muteBtn.style.color = '#e5e5e5';
+          if (readout) readout.textContent = 'OFF';
+        }
+      });
+    }
+
+    // Instrument key selection switching
+    const keys = document.querySelectorAll('.instrument-key');
+    keys.forEach(k => {
+      k.addEventListener('click', () => {
+        document.querySelectorAll('.key-led-red').forEach(led => led.classList.remove('lit'));
+        const led = k.parentElement.querySelector('.key-led-red');
+        if (led) led.classList.add('lit');
+
+        // Update OLED title to clicked voice
+        const label = k.closest('div[style*="flex-direction: column"]').querySelector('span');
+        const oledTitle = document.querySelector('.oled-display div:first-child > div');
+        if (label && oledTitle) {
+          const text = label.textContent.trim();
+          oledTitle.innerHTML = `${text.substring(0, 2).toUpperCase()} &nbsp;${text}`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

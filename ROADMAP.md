@@ -100,6 +100,36 @@ parameter index, so existing projects keep working.
 
 ## New plugins
 
+- [ ] **Incipience** ([originals/incipience](originals/incipience/), started 2026-10-13, branch `incipience`): an
+  eleven-instrument drum synth laid out like the Jomox AlphaBase Mk II (kick, MBrane, two hats, clap, rim, crash, ride
+  with the hardware's sample + metal noise + analog filter chain, X1 / X2 sample players, a four-operator FM synth,
+  reverb and delay sends), with the Mk II's controls and 0-127 ranges (376 parameters, from `mpc/gen.py`). DSP written
+  from the manual; it reads the AlphaBase's own sample set (`ABWV*.raw`, Jomox's free download) from its data folder.
+  No sequencer (the owner: voices and control matter, not the sequencer).
+  - [x] Phase 1 (2026-10-13): the engine offline, four built-in kits (no samples needed), WAV renders for the owner to
+    judge by ear (`mpc/render.c`); native CPU about 3.7x Percolator's in the heaviest case (estimate: ~7 % on the Live II)
+  - [ ] The owner listens to the renders (the owner had an AlphaBase): what's off, voice by voice
+  - [x] Phase 2, offline (2026-10-13): the screen designed in Stitch with the AlphaBase Mk II's look (owner: "design on
+    stitch but keep the alphabase vibe"; project "Incipience — MPC drum synth skin"): 13 tabs (11 instruments, FX,
+    MIX), each with A / B Q-Link sub-pages laid out as the hardware's 4 x 4 encoder matrix, a row a Q-Link column.
+    `tools/build.sh` PASSED, `check_skin.py` OK, screenshots in the README (`mpc/screen.sh` redoes it all)
+  - [x] Installed on the Live II (2026-10-13, owner's go): registered (one MPC restart, MPC.settings backed up), the .so
+    verified by hash, Jomox's sample set in `/sdcard/vst/incipience/` (the owner's `AlphaBaseWaves.zip`)
+  - [x] The owner's first look on the Live II (2026-10-13): "looks and sounds great". Asked for, and done the same day:
+    Q-Links on each instrument's pan / sends (a third sub-page, KICK MIX ...), FM VOICE its own Q-Link sub-page,
+    SAMPLE stepping one at a time (a box with arrows; range 0-255), PITCH audible without a sample (it tunes the metal
+    noise too), more kits (three that use the AlphaBase samples when they're there). Also: metal noise starts
+    mid-cycle (it ran in step at first)
+  - [x] procwatch (TESTS.md, 2026-10-13): no flags; one thread (the sample loader), asleep while idle; 1.2 KB of heap
+    per insert (under the 4 KB flag, a loader thread's own; Tablor's is 14.8 KB). Idle cost was 0.83 of playing (the
+    reverb and delay ran on empty): they sleep once nothing goes in and nothing is left; now 0.15 (`ab.sh`)
+  - [ ] Testers (owner, 2026-10-13: a PR to send out for testing; not to sd88me's catalogue yet)
+  - [ ] On the Live II: design QA of the new sub-pages (Q-Link outlines on the right-hand panels), `bench.sh`
+  - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
+    12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
+    63 factory kits load; Incipience MIDI In (an AlphaBase's channels 1-11, its CC chart); an OUT insert, as
+    Percolator OUT
+
 - [ ] **Percolator** ([originals/percolator](originals/percolator/), 2026-10-10): a four-voice drum synth laid out like
   the Erica Synths Pērkons HD-01, DSP written from scratch, reads the Pērkons' `.KIT` packs. Seven pages (a voice
   each, MASTER, two of LFO depths), a colour per voice, envelope displays that follow DECAY / PITCH / ATTACK. Checked on the

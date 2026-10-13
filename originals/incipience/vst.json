@@ -1,0 +1,34 @@
+{
+  "name": "[DRUM] Incipience",
+  "vendor": "Steve A",
+  "uid": "Incp",
+  "category": "Drum Machine",
+  "so": "incipience.so",
+  "programs": {"param": "kit", "name": "kit_name", "count": "kit_count", "name_at": "kit_name_at"},
+  "build": {
+    "sources": [
+      "src/incipience.c",
+      "src/voices.c",
+      "src/fx.c",
+      "src/tables.c",
+      "src/samples.c",
+      "src/kits.c"
+    ],
+    "cflags": [
+      "-Isrc"
+    ],
+    "libs": [
+      "-lm",
+      "-lpthread",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "QLINK_TRAVEL": 1, "SET_IF_CHANGED": 1,
+    "MODULE_DIR": "\"/sdcard/vst/incipience\"",
+    "MODULE_SUBDIR": "\"incipience\""
+  }
+}
