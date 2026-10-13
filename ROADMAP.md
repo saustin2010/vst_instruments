@@ -113,8 +113,9 @@ parameter index, so existing projects keep working.
     stitch but keep the alphabase vibe"; project "Incipience — MPC drum synth skin"): 13 tabs (11 instruments, FX,
     MIX), each with A / B Q-Link sub-pages laid out as the hardware's 4 x 4 encoder matrix, a row a Q-Link column.
     `tools/build.sh` PASSED, `check_skin.py` OK, screenshots in the README (`mpc/screen.sh` redoes it all)
-  - [ ] Phase 2 on the Live II: install (registers a new plugin: one MPC restart), design QA (tabs, sub-pages, Q-Link
-    outlines, touch), `bench.sh`
+  - [x] Installed on the Live II (2026-10-13, owner's go): registered (one MPC restart, MPC.settings backed up), the .so
+    verified by hash, Jomox's sample set in `/sdcard/vst/incipience/` (the owner's `AlphaBaseWaves.zip`)
+  - [ ] On the Live II: design QA (tabs, A / B sub-pages, Q-Link outlines, touch), the owner's listening, `bench.sh`
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
     63 factory kits load; Incipience MIDI In (an AlphaBase's channels 1-11, its CC chart); an OUT insert, as
