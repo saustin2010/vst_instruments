@@ -141,8 +141,9 @@ parameter index, so existing projects keep working.
     Framework fixes in `shadow_skin.py` (the patch): a pop-up's option list was on every Q-Link sub-page of its tab (the
     screen's TUI.json 8.2 -> 5.2 MB), and a stepper's arrows were cut from the tab's last sub-page's picture, not its
     own. The screen is 16 MB (Percolator's 15)
-  - [ ] On the Live II: install both (Incipience OUT is new: one MPC restart), Incipience MIDI In listed as a track
-    output, KEYS CH and pitch bend from MIDI tracks, the lanes from a MIDI track's lane menu, the matrix by ear, OUT 1-11
+  - [x] Installed on the Live II (2026-10-18): both, Incipience OUT registered with one MPC restart, the .so files
+    verified by hash
+  - [ ] On the Live II: Incipience MIDI In listed as a track output, KEYS CH and pitch bend from MIDI tracks, the lanes from a MIDI track's lane menu, the matrix by ear, OUT 1-11
     on audio tracks, `bench.sh` with the matrix busy
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
