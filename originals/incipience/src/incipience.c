@@ -286,7 +286,7 @@ static int rnd_in(inc_t *P, int lo, int hi) {
  * a hat or a cymbal has none a third of the time (the analog part alone). -1: none found (no set), leave it */
 static int rand_sample(inc_t *P, int ins) {
     static const short HATS[] = {1, 24, 0}, CLAPS[] = {84, 96, 132, 161, 0}, RIMS[] = {60, 83, 84, 96, 132, 161, 0},
-                       CYMS[] = {27, 59, 168, 217, 0}, ANY[] = {1, NSMP - 1, 0};
+                       CYMS[] = {27, 59, 168, 217, 0}, ANY[] = {1, 255, 0};   /* SAMPLE's reach */
     const short *r = ins == I_CH || ins == I_OH ? HATS : ins == I_CP ? CLAPS : ins == I_RM ? RIMS
                    : ins == I_CR || ins == I_RD ? CYMS : ANY;
     if (ins < I_X1 && rnd_in(P, 0, 99) < 33) return 0;
@@ -322,15 +322,32 @@ static void randomise(inc_t *P, int ins) {
             }
         }
     if (ins >= I_CH && ins < I_X1) {
-        int b = SBASE[ins - I_CH];
-        if (P->pv[b + S_SAMPLE] < 0.5f) {
-            if (P->pv[b + S_ROUT] < 0.5f) rand_set(P, b + S_ROUT, 1.0f);   /* OFF passes the sample alone */
+        int b = SBASE[ins - I_CH], smp = P->pv[b + S_SAMPLE] >= 0.5f;
+        if (!smp && P->pv[b + S_ROUT] < 0.5f) rand_set(P, b + S_ROUT, 1.0f);   /* OFF passes the sample alone */
+        int rout = (int)P->pv[b + S_ROUT];
+        /* the multimode filter: a low-pass not so low (CUTOFF 55 is 300 Hz), a band-pass not below 200 Hz, a high-pass
+         * not so high, nor its envelope so deep, that little is left */
+        if (ins >= I_CP && rout == 1 && P->pv[b + S_CUTOFF] < 55.0f) rand_set(P, b + S_CUTOFF, (float)rnd_in(P, 55, 127));
+        if (ins >= I_CP && rout == 3 && P->pv[b + S_CUTOFF] < 50.0f) rand_set(P, b + S_CUTOFF, (float)rnd_in(P, 50, 120));
+        if (ins >= I_CP && rout == 2) {
+            if (P->pv[b + S_CUTOFF] > 100.0f) rand_set(P, b + S_CUTOFF, (float)rnd_in(P, 30, 100));
+            if (P->pv[b + S_EVAMT] > 40.0f) rand_set(P, b + S_EVAMT, (float)rnd_in(P, 0, 40));
+        }
+        /* the hats' band: the low-pass an octave or more above the high-pass */
+        if (ins < I_CP && hh_lp_hz(P->pv[b + S_CUTOFF]) < 2.0f * hh_hp_hz(P->pv[b + S_HPCUT])) {
+            float hp = P->pv[b + S_HPCUT];
+            while (hp > 0.0f && hh_lp_hz(P->pv[b + S_CUTOFF]) < 2.0f * hh_hp_hz(hp)) hp -= 5.0f;
+            rand_set(P, b + S_HPCUT, hp < 0.0f ? 0.0f : hp);
+        }
+        if (!smp) {   /* no sample: a noise source, unless the filter whistles */
             int whistle = ins >= I_CP && P->pv[b + S_RES] > 85.0f;
             if (!whistle && P->pv[b + S_MTNZ] < 0.5f) rand_set(P, b + S_MTNZ, (float)rnd_in(P, 1, 127));
             if (!whistle && P->pv[b + S_NZVOL] < 60.0f) rand_set(P, b + S_NZVOL, (float)rnd_in(P, 60, 127));
         }
+    }
+    if (ins >= I_CH && ins < I_X1) {
         smp_t sm;
-        pool_get((int)P->pv[b + S_SAMPLE], &sm);
+        pool_get((int)P->pv[SBASE[ins - I_CH] + S_SAMPLE], &sm);
     } else if (ins == I_X1 || ins == I_X2) {
         smp_t sm;
         pool_get((int)P->pv[XBASE[ins - I_X1] + X_SAMPLE], &sm);
