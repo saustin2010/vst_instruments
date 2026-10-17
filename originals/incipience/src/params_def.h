@@ -717,6 +717,23 @@ static const pdef_t PDEF[] = {
     {"x1_rand", 3, 0, 0.0f, 0.0f, 0.0f},
     {"x2_rand", 3, 0, 0.0f, 0.0f, 0.0f},
     {"fm_rand", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_row_1", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_row_2", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_row_3", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_row_4", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_row_5", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_row_6", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_row_7", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_row_8", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_scroll", 4, 0, 0.0f, 999.0f, 0.0f},
+    {"br_scroll_prev", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_scroll_next", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_path", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_status", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_target", 1, 8, 0.0f, 7.0f, 6.0f},
+    {"br_preview", 1, 2, 0.0f, 1.0f, 1.0f},
+    {"br_up", 3, 0, 0.0f, 0.0f, 0.0f},
+    {"br_places", 3, 0, 0.0f, 0.0f, 0.0f},
 };
 enum {
     P_KIT = 0,
@@ -1432,7 +1449,24 @@ enum {
     P_X1_RAND = 710,
     P_X2_RAND = 711,
     P_FM_RAND = 712,
-    NP = 713
+    P_BR_ROW_1 = 713,
+    P_BR_ROW_2 = 714,
+    P_BR_ROW_3 = 715,
+    P_BR_ROW_4 = 716,
+    P_BR_ROW_5 = 717,
+    P_BR_ROW_6 = 718,
+    P_BR_ROW_7 = 719,
+    P_BR_ROW_8 = 720,
+    P_BR_SCROLL = 721,
+    P_BR_SCROLL_PREV = 722,
+    P_BR_SCROLL_NEXT = 723,
+    P_BR_PATH = 724,
+    P_BR_STATUS = 725,
+    P_BR_TARGET = 726,
+    P_BR_PREVIEW = 727,
+    P_BR_UP = 728,
+    P_BR_PLACES = 729,
+    NP = 730
 };
 /* the hybrid sample channels CH OH CP RM CR RD: P_<CH>_PITCH + S_<NAME> */
 static const int SBASE[6] = {51, 83, 115, 146, 177, 208};
@@ -1530,6 +1564,7 @@ static const char *const MODNAME[NDEST][NCTL] = {
     {"OP1 TUNE", "1>2", "1>3", "1>4", "2>1", "OP2 TUNE", "2>3", "2>4", "3>1", "3>2", "OP3 TUNE", "3>4", "4>1", "4>2", "4>3", "OP4 TUNE", "OP1 ATTACK", "OP1 DECAY", "OP1 LEVEL", "OP1 PITCH ENV", "OP2 ATTACK", "OP2 DECAY", "OP2 LEVEL", "OP2 PITCH ENV", "OP3 ATTACK", "OP3 DECAY", "OP3 LEVEL", "OP3 PITCH ENV", "OP4 ATTACK", "OP4 DECAY", "OP4 LEVEL", "OP4 PITCH ENV", "VOICES", "SPATIAL", "CHORD", "VOLUME", "ACCENT", "PAN", "REV", "DLY"},
     {"REV ROOM", "REV LOW PASS", "REV HIGH PASS", "REV LEVEL", "REVERB", "DLY TIME", "DLY CLOCK", "DLY FEEDBACK", "DLY SPATIAL", "DLY LEVEL", "DELAY", "VOLUME"},
 };
+#define BROWSE_ROWS 8   /* the SAMPLES tab's rows: P_BR_ROW_1 + row */
 /* RANDOMISE: how 0 = left as it is, 1 = lo..hi (v p % of the time), 2 = what control eq got, 3 = a SAMPLE */
 typedef struct { unsigned char how, p; short lo, hi, v, eq; } rnd_t;
 static const rnd_t RND[NP] = {

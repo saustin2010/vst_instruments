@@ -272,7 +272,24 @@ def build():
     # the instrument's own controls (RAND below); its VOLUME, ACCENT and MIX stay as they are
     for k, n, fam in INSTR:
         P.append(dict(key=k + "_rand", name=n + " RANDOMISE", momentary=True))
+    # the SAMPLES tab (owner, 2026-10-18: "can we browse samples on the MPC or point to folders?"): the MPC's drives,
+    # their folders and WAV files, BROWSE_ROWS rows at a time (src/library.c reads them); a file tapped loads into LOAD
+    # TO's channel, whose SAMPLE then steps through that folder. The rows show the engine's text (their value is a tap)
+    for r in range(1, BROWSE_ROWS + 1):
+        P.append(dict(key="br_row_%d" % r, name="ROW %d" % r, momentary=True, dynamic_display=True))
+    step("br_scroll", "SCROLL", 0, 0, 999)
+    P.append(dict(key="br_scroll_prev", name="SCROLL UP", momentary=True, step_of="br_scroll", step_delta=-BROWSE_ROWS))
+    P.append(dict(key="br_scroll_next", name="SCROLL DOWN", momentary=True, step_of="br_scroll", step_delta=BROWSE_ROWS))
+    P.append(dict(key="br_path", name="FOLDER", min=0, max=0, display="string", type="readout"))
+    P.append(dict(key="br_status", name="IN IT", min=0, max=0, display="string", type="readout"))
+    opts("br_target", "LOAD TO", [n for k, n, fam in INSTR if fam in ("hh", "mm", "x")], 6)
+    opts("br_preview", "PREVIEW", ONOFF, 1)
+    P.append(dict(key="br_up", name="UP", momentary=True))
+    P.append(dict(key="br_places", name="DRIVES", momentary=True))
     return P
+
+
+BROWSE_ROWS = 8
 
 
 # What RANDOMISE gives each sound control, by instrument and the key's suffix: (lo, hi), a whole number in that range;
@@ -452,6 +469,17 @@ PAGES += [
         "side": [],
         "info": ["ON AN INSTRUMENT'S KEYS CH, EACH", "LANE SETS THE CONTROL PICKED HERE", "MIDI TRACK LANES: MIDI 1 MOD WHEEL,",
                  "MIDI 16-18 GEN PURPOSE 1-3", "KEYS CH ALL: ON ANY CHANNEL"]}),
+    # your own samples: a page of its own (mpc/design.py draws it: a folder's rows, SCROLL, UP, DRIVES; LOAD TO and
+    # PREVIEW on the right), not a matrix of rows
+    ("SAMPLES", None, "SAMPLE BROWSER", {
+        "pages": [("BROWSE", [])],
+        "browser": True,
+        "side": ["br_target", "br_preview"],
+        "side_title": ["LOAD", "TO + PREVIEW"],
+        "also": ["br_scroll", "br_path", "br_status"],
+        "qlinks": ["br_scroll", "-", "-", "-", "br_target", "-", "-", "-", "br_preview", "-", "-", "-", "-", "-", "-", "-"],
+        "info": ["TAP A FOLDER TO OPEN IT, A WAV FILE TO", "LOAD IT INTO LOAD TO'S INSTRUMENT:", "ITS SAMPLE THEN STEPS THROUGH THAT",
+                 "FOLDER. ALPHABASE SET (UNDER DRIVES):", "BACK TO THE SAMPLE SET BY NUMBER"]}),
 ]
 
 
@@ -486,9 +514,9 @@ def check_pages(P):
         for sub, rows, _ in subpages(tab, k, pg):
             on = [x for _, _, row in rows for x in row if x != "-"]
             assert len(on) == len(set(on)), (tab, sub, "twice")
-            for x in on + pg["side"]:
+            for x in on + pg["side"] + pg.get("also", []):
                 assert x in keys, (tab, x)
-            seen |= set(on) | set(pg["side"])
+            seen |= set(on) | set(pg["side"]) | set(pg.get("also", []))
         if k:
             seen |= {k + "_pan", k + "_rsend", k + "_dsend", k + "_mute"}   # the instrument's MIX box
     missing = [p["key"] for p in P if p["key"] not in seen and not p["key"].startswith("kit") and not p.get("momentary")]
@@ -559,6 +587,8 @@ def write_header(P):
     L.append("static const char *const MODNAME[NDEST][NCTL] = {")
     L += ["    {%s}," % ", ".join('"%s"' % short_name(P, k) for k in t) for t in T]
     L.append("};")
+    L.append("#define BROWSE_ROWS %d   /* the SAMPLES tab's rows: P_BR_ROW_1 + row */" % BROWSE_ROWS)
+    assert [idx["br_row_%d" % r] for r in range(1, BROWSE_ROWS + 1)] == list(range(idx["br_row_1"], idx["br_row_1"] + BROWSE_ROWS))
     # RANDOMISE: P_KD_RAND + inst; what each control gets (RAND above)
     assert [idx[k + "_rand"] for k, _, _ in INSTR] == list(range(idx["kd_rand"], idx["kd_rand"] + len(INSTR)))
     L.append("/* RANDOMISE: how 0 = left as it is, 1 = lo..hi (v p % of the time), 2 = what control eq got, 3 = a SAMPLE */")
@@ -593,7 +623,8 @@ if __name__ == "__main__":
     # each tab's sub-pages in order: "subs" their names, "sub_rows" their rows, "sub_kind" A / B / C or the name
     json.dump([{"tab": t, "inst": k, "title": ti, "subs": [s[0] for s in subpages(t, k, pg)],
                 "sub_rows": [s[1] for s in subpages(t, k, pg)], "sub_kind": [s[2] for s in subpages(t, k, pg)],
-                "qlinks_c": mix_qlinks(k, pg["side"]) if k else None, "side": pg["side"], "info": pg.get("info", [])}
+                "qlinks_c": mix_qlinks(k, pg["side"]) if k else None, "side": pg["side"], "info": pg.get("info", []),
+                "browser": pg.get("browser", False), "side_title": pg.get("side_title"), "qlinks": pg.get("qlinks")}
                for t, k, ti, pg in PAGES],
               open(os.path.join(ROOT, "build", "pages.json"), "w"), indent=1)
     json.dump({"name": "Incipience", "params": P}, open(os.path.join(ROOT, "params.json"), "w"), indent=1)

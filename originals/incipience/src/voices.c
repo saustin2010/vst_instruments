@@ -259,6 +259,23 @@ static int zero_x(const smp_t *sm, int at, int lo, int hi) {   /* the nearest ze
     return at;
 }
 
+/* the sample a hit plays: the AlphaBase set's by number, or file smp of the channel's own folder, held while it plays
+ * (the library frees only a file nothing holds). Not in memory yet: asked for, and this hit has none */
+static void take_sample(inc_t *P, int s, int smp, smpv_t *v) {
+    lib_put(v->lslot);
+    v->lslot = -1;
+    if (smp <= 0) return;
+    if (P->sfold[s] >= 0) v->lslot = lib_get(P->sfold[s], smp - 1, &v->s);
+    else pool_get(smp, &v->s);
+}
+
+void smp_drop(inc_t *P, int s) {   /* silent: the voice stops and lets its file go */
+    smpv_t *v = &P->sv[s];
+    v->active = 0;
+    lib_put(v->lslot);
+    v->lslot = -1;
+}
+
 void smp_trigger(inc_t *P, int s, const play_t *pl) {
     smpv_t *v = &P->sv[s];
     v->pl = *pl;
@@ -268,7 +285,7 @@ void smp_trigger(inc_t *P, int s, const play_t *pl) {
     v->smp = smp;
     v->s.d = NULL;
     v->s.len = 0;
-    if (smp > 0) pool_get(smp, &v->s);
+    take_sample(P, s, smp, v);
     int len = v->s.len;
     int st = (int)(PV(b + start) * 512.0f), sp = PV(b + stop) >= 126.5f ? len : (int)(PV(b + stop) * 512.0f);
     if (st > len) st = len;
@@ -408,7 +425,7 @@ void smp_block(inc_t *P, int s, float *y, int n) {
     }
     int silent = x ? (v->done || v->fade < 1e-4f || !v->s.d) : v->vca.stage == ENV_IDLE;
     if (silent || v->choke < 1e-4f) {
-        v->active = 0;
+        smp_drop(P, s);
         v->f.s1 = v->f.s2 = 0.0f;
         v->hp = v->lp = v->fb = 0.0f;
     }
@@ -522,5 +539,6 @@ void voices_init(inc_t *P) {
     for (int s = 0; s < 8; s++) {
         P->sv[s].rng = 0x5671234u + 77u * (uint32_t)s;
         metal_init(&P->sv[s].nz, 0x6712345u + 131u * (uint32_t)s);
+        P->sv[s].lslot = -1;
     }
 }

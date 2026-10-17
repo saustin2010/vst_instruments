@@ -103,8 +103,60 @@ static void reset_sound(inc_t *P) {
         P->pv[i] = P->ev[i] = PDEF[i].def;
 }
 
+/* ---- the sample channels' SAMPLE: the AlphaBase set by number, or a file of the channel's own folder ------------- */
+static const char *const PFX[NI] = {"kd", "mb", "ch", "oh", "cp", "rm", "cr", "rd", "x1", "x2", "fm"};
+#define SMP_P(c) ((c) < 6 ? SBASE[c] + S_SAMPLE : XBASE[(c) - 6] + X_SAMPLE)   /* sample channel c's SAMPLE */
+
+static int sample_chan(int i) {   /* the sample channel whose SAMPLE control i is, or -1 */
+    for (int c = 0; c < 8; c++)
+        if (i == SMP_P(c)) return c;
+    return -1;
+}
+
+static float sample_top(const inc_t *P, int c) {   /* SAMPLE's reach: the set's numbers, or the folder's files */
+    if (P->sfold[c] < 0) return PDEF[SMP_P(c)].hi;
+    int n = lib_files(P->sfold[c]);
+    return n > 0 ? (float)n : 0.0f;
+}
+
+static void sample_ask(inc_t *P, int c, int n) {   /* sample n of channel c: read now, if it isn't in memory */
+    smp_t sm;
+    if (n <= 0) return;
+    if (P->sfold[c] >= 0) lib_put(lib_get(P->sfold[c], n - 1, &sm));
+    else pool_get(n, &sm);
+}
+
+static void set_folder(inc_t *P, int c, int f) {   /* -1: back to the AlphaBase set */
+    P->sfold[c] = (short)f;
+    P->swant[c][0] = 0;
+}
+
+/* a path or a name in the state: ';' (which ends a value) and '%' escaped */
+static int put_esc(char *o, int len, const char *s) {
+    int n = 0;
+    for (; *s; s++) {
+        const char *e = *s == ';' ? "%3B" : *s == '%' ? "%25" : NULL;
+        int w = e ? 3 : 1;
+        if (n + w >= len) return -1;
+        if (e) memcpy(o + n, e, 3);
+        else o[n] = *s;
+        n += w;
+    }
+    o[n] = 0;
+    return n;
+}
+static void unesc(char *s) {
+    char *o = s;
+    for (; *s; s++, o++) {
+        if (s[0] == '%' && s[1] == '3' && (s[2] == 'B' || s[2] == 'b')) *o = ';', s += 2;
+        else if (s[0] == '%' && s[1] == '2' && s[2] == '5') *o = '%', s += 2;
+        else *o = *s;
+    }
+    *o = 0;
+}
+
 static void apply_state(inc_t *P, const char *s, int kit_only) {
-    char kv[96];
+    char kv[LIB_PATH + 64];
     while (*s) {
         size_t n = strcspn(s, ";");
         if (n && n < sizeof kv) {
@@ -113,8 +165,17 @@ static void apply_state(inc_t *P, const char *s, int kit_only) {
             char *eq = strchr(kv, '=');
             if (eq) {
                 *eq++ = 0;
-                int i = find_key(kv);
-                if (i == P_KIT && !kit_only) P->pv[P_KIT] = (float)atoi(eq);
+                int i = find_key(kv), c = -1;
+                for (int k = I_CH; k <= I_X2 && c < 0 && !kit_only; k++)
+                    if (!strncmp(kv, PFX[k], 2) && (!strcmp(kv + 2, "_dir") || !strcmp(kv + 2, "_file"))) c = k - I_CH;
+                if (c >= 0) {   /* a channel's own folder and file (get_state) */
+                    unesc(eq);
+                    if (kv[3] == 'd') set_folder(P, c, lib_folder(eq));
+                    else snprintf(P->swant[c], sizeof P->swant[c], "%s", eq);
+                } else if (!strcmp(kv, "br_path") && !kit_only) {
+                    unesc(eq);
+                    snprintf(P->bpath, sizeof P->bpath, "%s", eq);
+                } else if (i == P_KIT && !kit_only) P->pv[P_KIT] = (float)atoi(eq);
                 else if (i >= 0 && (!kit_only || is_kit_param(i))) set_value(P, i, eq);
             }
         }
@@ -128,10 +189,11 @@ static void load_kit(inc_t *P, int n) {
     reset_sound(P);
     apply_state(P, P->kits[n].state, 1);
     P->pv[P_KIT] = (float)n;
-    /* ask for the kit's samples now, so they're in by the time it plays */
-    smp_t s;
-    for (int c = 0; c < 6; c++) pool_get((int)P->pv[SBASE[c] + S_SAMPLE], &s);
-    for (int c = 0; c < 2; c++) pool_get((int)P->pv[XBASE[c] + X_SAMPLE], &s);
+    /* a kit plays the AlphaBase set; its samples asked for now, so they're in by the time it plays */
+    for (int c = 0; c < 8; c++) {
+        set_folder(P, c, -1);
+        sample_ask(P, c, (int)P->pv[SMP_P(c)]);
+    }
 }
 
 /* KIT waits for the next block (MPC sets parameter 0 to the far end of its range and straight back on insert and on
@@ -143,22 +205,41 @@ static void apply_kit(inc_t *P) {
     if (n != (int)P->pv[P_KIT]) load_kit(P, n);
 }
 
+/* The project's copy: the kit, then each control not at its default (2026-10-18: a state read starts from the defaults,
+ * so the rest are as they were; the older states with every control load as before), then each sample channel's
+ * folder and file, and the folder the SAMPLES tab shows. The wrapper's 8 KB: every control moved takes 6.5 KB; a
+ * folder that doesn't fit after that isn't kept (its channel opens on the AlphaBase set). */
 static int get_state(const inc_t *P, char *buf, int len) {
     int o = snprintf(buf, len, "kit=%d;", (int)P->pv[P_KIT]);
     for (int i = 0; i < NP && o < len; i++) {
         int k = PDEF[i].kind;
         float v = P->pv[i];
+        if ((k == 0 || k == 1 || k == 4) && v == PDEF[i].def) continue;
         if (k == 0 && fabsf(v - roundf(v)) >= 0.005f) o += snprintf(buf + o, len - o, "%s=%.2f;", PDEF[i].key, v);
-        else if (k == 0) o += snprintf(buf + o, len - o, "%s=%d;", PDEF[i].key, (int)roundf(v));   /* 8 KB in all */
+        else if (k == 0) o += snprintf(buf + o, len - o, "%s=%d;", PDEF[i].key, (int)roundf(v));
         else if (k == 1 || k == 4) o += snprintf(buf + o, len - o, "%s=%d;", PDEF[i].key, (int)P->pv[i]);
     }
+    if (o >= len) return -1;
+    char d[LIB_PATH * 3 + 16], f[512];
+    for (int c = 0; c < 8; c++) {
+        const char *path = lib_path(P->sfold[c]), *name = lib_name(P->sfold[c], (int)P->pv[SMP_P(c)] - 1);
+        if (!path) continue;
+        if (!name) name = P->swant[c];   /* not read yet: the file it was asked for */
+        int a = put_esc(d, sizeof d, path), b = put_esc(f, sizeof f, name);
+        if (a < 0 || b < 0 || o + a + b + 16 >= len) continue;
+        o += snprintf(buf + o, len - o, "%s_dir=%s;%s_file=%s;", PFX[I_CH + c], d, PFX[I_CH + c], f);
+    }
+    if (P->bpath[0] && put_esc(d, sizeof d, P->bpath) > 0 && o + (int)strlen(d) + 10 < len)
+        o += snprintf(buf + o, len - o, "br_path=%s;", d);
     return o < len ? o : -1;
 }
 
-static int is_sample(int i) {   /* a SAMPLE number: a new one is asked for at once (the loader reads it meanwhile) */
-    for (int c = 0; c < 6; c++)
-        if (i == SBASE[c] + S_SAMPLE) return 1;
-    return i == XBASE[0] + X_SAMPLE || i == XBASE[1] + X_SAMPLE;
+/* a state read: everything at its default first (get_state leaves those out) */
+static void reset_all(inc_t *P) {
+    for (int i = 0; i < NP; i++)
+        if (PDEF[i].kind == 0 || PDEF[i].kind == 1 || PDEF[i].kind == 4) P->pv[i] = P->ev[i] = PDEF[i].def;
+    for (int c = 0; c < 8; c++) set_folder(P, c, -1);
+    P->bpath[0] = 0;
 }
 
 /* ---- the mod matrix -------------------------------------------------------------------------------------------- */
@@ -180,19 +261,18 @@ static void mod_apply(inc_t *P) {
         int src = (int)SLOT(s, P_M1_SRC), dest = (int)SLOT(s, P_M1_DEST), c = (int)SLOT(s, P_M1_CTL);
         float depth = SLOT(s, P_M1_DEPTH) / 100.0f;
         if (!src || depth == 0.0f) continue;
-        int t = MODT[dest][c < MODN[dest] ? c : MODN[dest] - 1], k = 0;
+        int t = MODT[dest][c < MODN[dest] ? c : MODN[dest] - 1], k = 0, ch = sample_chan(t);
         while (k < P->ntouched && P->touched[k] != t) k++;
         if (k == P->ntouched) P->touched[P->ntouched++] = (short)t;
-        P->ev[t] += depth * mod_source(P, s, src, dest) * (PDEF[t].hi - PDEF[t].lo);
+        /* SAMPLE on a folder of your own: +-100 % is its files */
+        float span = ch >= 0 && P->sfold[ch] >= 0 ? sample_top(P, ch) : PDEF[t].hi - PDEF[t].lo;
+        P->ev[t] += depth * mod_source(P, s, src, dest) * span;
     }
     for (int k = 0; k < P->ntouched; k++) {
-        int t = P->touched[k];
-        float v = clampf(P->ev[t], PDEF[t].lo, PDEF[t].hi);
+        int t = P->touched[k], ch = sample_chan(t);
+        float v = clampf(P->ev[t], PDEF[t].lo, ch >= 0 ? sample_top(P, ch) : PDEF[t].hi);
         P->ev[t] = PDEF[t].kind == 0 ? v : roundf(v);
-        if (is_sample(t)) {
-            smp_t sm;
-            pool_get((int)P->ev[t], &sm);
-        }
+        if (ch >= 0) sample_ask(P, ch, (int)P->ev[t]);
     }
 }
 
@@ -264,13 +344,11 @@ static void trigger(inc_t *P, int ins, int note, float vel, int pitched, int ch)
 /* a MIDI MOD lane: CC value v (0-127) sets control i across its range, as a Q-Link would; MPC's screen follows */
 static void lane_set(inc_t *P, int i, int v) {
     const pdef_t *d = &PDEF[i];
-    int opt = v * d->nopts / 128;   /* an option list in equal parts */
-    float x = d->kind == 1 ? (float)opt : d->lo + (d->hi - d->lo) * (float)v / 127.0f;
+    int opt = v * d->nopts / 128, c = sample_chan(i);   /* an option list in equal parts */
+    float hi = c >= 0 ? sample_top(P, c) : d->hi;       /* SAMPLE on a folder of your own: its files */
+    float x = d->kind == 1 ? (float)opt : d->lo + (hi - d->lo) * (float)v / 127.0f;
     P->pv[i] = P->ev[i] = d->kind == 4 ? roundf(x) : x;
-    if (is_sample(i)) {
-        smp_t sm;
-        pool_get((int)x, &sm);
-    }
+    if (c >= 0) sample_ask(P, c, (int)P->pv[i]);
     P->changed[i / 32] |= 1u << (i % 32);
 }
 
@@ -290,7 +368,11 @@ static int rand_sample(inc_t *P, int ins) {
     const short *r = ins == I_CH || ins == I_OH ? HATS : ins == I_CP ? CLAPS : ins == I_RM ? RIMS
                    : ins == I_CR || ins == I_RD ? CYMS : ANY;
     if (ins < I_X1 && rnd_in(P, 0, 99) < 33) return 0;
-    int n = 0;
+    int f = P->sfold[ins - I_CH], n = 0;
+    if (f >= 0) {   /* a folder of your own: any of its files */
+        int nf = lib_files(f);
+        return nf > 0 ? rnd_in(P, 1, nf) : -1;
+    }
     for (int k = 0; r[k]; k += 2) n += r[k + 1] - r[k] + 1;
     for (int tries = 0; tries < 64; tries++) {
         int j = rnd_in(P, 0, n - 1), k = 0;
@@ -345,13 +427,165 @@ static void randomise(inc_t *P, int ins) {
             if (!whistle && P->pv[b + S_NZVOL] < 60.0f) rand_set(P, b + S_NZVOL, (float)rnd_in(P, 60, 127));
         }
     }
-    if (ins >= I_CH && ins < I_X1) {
-        smp_t sm;
-        pool_get((int)P->pv[SBASE[ins - I_CH] + S_SAMPLE], &sm);
-    } else if (ins == I_X1 || ins == I_X2) {
-        smp_t sm;
-        pool_get((int)P->pv[XBASE[ins - I_X1] + X_SAMPLE], &sm);
+    if (ins >= I_CH && ins <= I_X2) sample_ask(P, ins - I_CH, (int)P->pv[SMP_P(ins - I_CH)]);
+}
+
+/* ---- the SAMPLES tab: the drives, their folders and WAV files (library.c reads them, off the audio thread) -------- */
+static void mark(inc_t *P, int i) { P->changed[i / 32] |= 1u << (i % 32); }
+
+static void browse(inc_t *P, const char *path) {   /* show this folder ("" = the places) */
+    if (!P->br && !(P->br = lib_browser())) return;
+    if (path != P->bpath) snprintf(P->bpath, sizeof P->bpath, "%s", path);
+    lib_browse(P->br, P->bpath);
+    P->bwait = 1;
+}
+
+static void scroll_to(inc_t *P, int r) {
+    int n = P->bl ? P->bl->n : 0, top = n > BROWSE_ROWS ? n - BROWSE_ROWS : 0;
+    r = r < 0 ? 0 : r > top ? top : r;
+    if (P->pv[P_BR_SCROLL] != (float)r) mark(P, P_BR_SCROLL);
+    P->pv[P_BR_SCROLL] = P->ev[P_BR_SCROLL] = (float)r;
+}
+
+/* the listing asked for, once it's read: shown from its top, or around the folder just left (UP) */
+static void browse_adopt(inc_t *P) {
+    if (!P->br) browse(P, P->bpath);   /* the tab's first look: where it was */
+    lib_list_t *l = lib_listing(P->br);
+    if (!l) return;
+    int at = 0;
+    if (P->bl && l->path[0] && !strncmp(P->bl->path, l->path, strlen(l->path)) && P->bl->path[strlen(l->path)] == '/') {
+        const char *left = P->bl->path + strlen(l->path) + 1;
+        for (int k = 0; k < l->n; k++)
+            if (l->e[k].kind == LE_DIR && !strcmp(l->e[k].name, left)) at = k - BROWSE_ROWS / 2 + 1;
     }
+    lib_list_free(P->bl);
+    P->bl = l;
+    P->bwait = 0;
+    scroll_to(P, at);
+    for (int r = 0; r < BROWSE_ROWS; r++) mark(P, P_BR_ROW_1 + r);   /* their text: MPC asks again */
+}
+
+static int place_top(const inc_t *P, const char *path) {   /* a drive's own folder, or the plugin's samples folder */
+    char s[LIB_PATH + 16];
+    snprintf(s, sizeof s, "%s/samples", P->dir);
+    const char *sl = strrchr(path, '/');
+    return !strcmp(path, s) || !sl || sl == path ||
+           ((size_t)(sl - path) == strlen(LIB_MEDIA) && !strncmp(path, LIB_MEDIA, strlen(LIB_MEDIA)));
+}
+
+static void browse_up(inc_t *P) {
+    if (!P->bpath[0]) return;
+    if (place_top(P, P->bpath)) {
+        browse(P, "");
+        return;
+    }
+    char p[LIB_PATH];
+    snprintf(p, sizeof p, "%s", P->bpath);
+    *strrchr(p, '/') = 0;
+    browse(P, p);
+}
+
+static void audition(inc_t *P, int c) {   /* PREVIEW: the channel plays its new sample once it's in */
+    if (P->pv[P_BR_PREVIEW] < 0.5f) return;
+    P->aud = c + 1;
+    P->aud_n = 0;
+}
+
+static void browse_tap(inc_t *P, int row) {
+    browse_adopt(P);
+    lib_list_t *l = P->bl;
+    int k = (int)P->pv[P_BR_SCROLL] + row, c = (int)P->pv[P_BR_TARGET];
+    if (!l || P->bwait || k >= l->n) return;
+    const lib_ent_t *e = &l->e[k];
+    char p[LIB_PATH + 256];
+    switch (e->kind) {
+    case LE_UP: browse_up(P); break;
+    case LE_PLACE: browse(P, e->path); break;
+    case LE_DIR:
+        snprintf(p, sizeof p, "%s/%s", l->path, e->name);
+        if (strlen(p) < LIB_PATH) browse(P, p);
+        break;
+    case LE_ALPHABASE:   /* back to the set by number */
+        set_folder(P, c, -1);
+        sample_ask(P, c, (int)P->pv[SMP_P(c)]);
+        mark(P, SMP_P(c));
+        audition(P, c);
+        break;
+    default: {
+        int f = lib_folder_set(l->path, l);
+        if (f < 0) return;   /* (too many folders in one session: LIB_FOLDERS) */
+        set_folder(P, c, f);
+        int n = k - l->first_file + 1;
+        P->pv[SMP_P(c)] = P->ev[SMP_P(c)] = (float)n;
+        mark(P, SMP_P(c));
+        sample_ask(P, c, n);
+        audition(P, c);
+    }
+    }
+    for (int r = 0; r < BROWSE_ROWS; r++) mark(P, P_BR_ROW_1 + r);   /* the loaded file's mark moved */
+}
+
+static int is_mine(const inc_t *P, const lib_list_t *l, int k) {   /* the file LOAD TO's channel plays */
+    int c = (int)P->pv[P_BR_TARGET];
+    const char *fp = lib_path(P->sfold[c]);
+    return fp && !strcmp(fp, l->path) && (int)P->pv[SMP_P(c)] == k - l->first_file + 1;
+}
+
+static int browse_row(inc_t *P, int row, char *buf, int len) {
+    browse_adopt(P);
+    const lib_list_t *l = P->bl;
+    int k = (int)P->pv[P_BR_SCROLL] + row;
+    if (!l || k >= l->n) return snprintf(buf, len, "%s", !l && P->bwait && row == 0 ? "READING ..." : " ");
+    const lib_ent_t *e = &l->e[k];
+    switch (e->kind) {
+    case LE_UP: return snprintf(buf, len, ".. UP");
+    case LE_DIR: return snprintf(buf, len, "%.21s /", e->name);
+    case LE_PLACE: return snprintf(buf, len, "%s", e->name);
+    case LE_ALPHABASE: return snprintf(buf, len, "%s%s", P->sfold[(int)P->pv[P_BR_TARGET]] < 0 ? "> " : "", e->name);
+    default: return snprintf(buf, len, "%s%.*s", is_mine(P, l, k) ? "> " : "", (int)strlen(e->name) - 4, e->name);
+    }
+}
+
+static int browse_path(inc_t *P, char *buf, int len) {   /* where it is, its end if long (MPC shows 24 characters) */
+    browse_adopt(P);
+    const char *p = P->bpath;
+    char s[LIB_PATH + 16];
+    snprintf(s, sizeof s, "%s/samples", P->dir);
+    if (!p[0]) return snprintf(buf, len, "DRIVES");
+    char t[LIB_PATH + 32];
+    if (!strncmp(p, s, strlen(s))) snprintf(t, sizeof t, "INCIPIENCE%s", p + strlen(s));
+    else if (!strncmp(p, LIB_MEDIA "/", strlen(LIB_MEDIA) + 1)) snprintf(t, sizeof t, "%s", p + strlen(LIB_MEDIA) + 1);
+    else snprintf(t, sizeof t, "%s", p);
+    if (!strncmp(t, "az01-internal", 13)) {
+        memmove(t + 8, t + 13, strlen(t + 13) + 1);
+        memcpy(t, "INTERNAL", 8);
+    }
+    size_t n = strlen(t);
+    return n > 23 ? snprintf(buf, len, "..%s", t + n - 21) : snprintf(buf, len, "%s", t);
+}
+
+static int browse_status(inc_t *P, char *buf, int len) {
+    browse_adopt(P);
+    const lib_list_t *l = P->bl;
+    if (P->bwait || !l) return snprintf(buf, len, "%s", P->bwait ? "READING ..." : " ");
+    if (l->missing) return snprintf(buf, len, "CAN'T OPEN IT");
+    if (!l->path[0]) return snprintf(buf, len, "PICK A DRIVE");
+    int dirs = l->first_file - 1;
+    if (l->nfiles) return snprintf(buf, len, "%d WAV%s%s", l->nfiles, l->nfiles == 1 ? "" : "S", l->nfiles == LIB_FILES ? " (MAX)" : "");
+    return dirs ? snprintf(buf, len, "%d FOLDER%s", dirs, dirs == 1 ? "" : "S") : snprintf(buf, len, "NO WAV FILES");
+}
+
+/* a saved project's file, once its folder is read: SAMPLE on it (if it's gone, SAMPLE stays at the number saved) */
+static void find_wanted(inc_t *P, int c) {
+    int n = lib_files(P->sfold[c]);
+    for (int k = 0; k < n; k++)
+        if (!strcmp(lib_name(P->sfold[c], k), P->swant[c])) {
+            P->pv[SMP_P(c)] = P->ev[SMP_P(c)] = (float)(k + 1);
+            mark(P, SMP_P(c));
+            sample_ask(P, c, k + 1);
+            break;
+        }
+    P->swant[c][0] = 0;
 }
 
 static void e_midi(void *inst, const uint8_t *m, int len) {
@@ -389,7 +623,7 @@ static void e_midi(void *inst, const uint8_t *m, int len) {
     } else if (st == 0xB0 && (d1 == 120 || d1 == 123)) {
         for (int s = 0; s < 8; s++) {
             smp_release(P, s);
-            if (d1 == 120) P->sv[s].active = 0;
+            if (d1 == 120) smp_drop(P, s);
         }
         if (d1 == 120) {
             P->kd.active = P->mb.active = 0;
@@ -443,6 +677,29 @@ static void e_render(void *inst, int16_t *out, int frames) {
     uint8_t m[3];   /* what MIDI tracks sent to Incipience MIDI In since the last block, channels and all */
     for (int k = 0, n; k < 256 && (n = mi_read(&P->midi_in, m)) > 0; k++) e_midi(P, m, n);
     pool_poke();
+    lib_poke();
+    for (int c = 0; c < 8; c++)
+        if (P->swant[c][0] && lib_files(P->sfold[c]) >= 0) find_wanted(P, c);
+    if (P->aud) {   /* PREVIEW: the channel's new sample, once it's in (a second at most), as a 1/4 s tap of its pad */
+        int c = P->aud - 1, n = (int)P->pv[SMP_P(c)], ready = n <= 0;
+        smp_t sm;
+        if (!ready && P->sfold[c] >= 0) {
+            int sl = lib_get(P->sfold[c], n - 1, &sm);
+            ready = sl >= 0;
+            lib_put(sl);
+        } else if (!ready) {
+            ready = pool_get(n, &sm);
+        }
+        if (ready) {
+            trigger(P, I_CH + c, (int)P->pv[P_KD_NOTE + NOTESTRIDE * (I_CH + c)], 100.0f, 0, 0);
+            P->aud_ch = c;
+            P->aud_off = 44100 / 4;
+            P->aud = 0;
+        } else if ((P->aud_n += frames) > 44100) {
+            P->aud = 0;
+        }
+    }
+    if (P->aud_off > 0 && (P->aud_off -= frames) <= 0) smp_release(P, P->aud_ch);
     fpstate_t fp = ftz_on();
     /* OUT 1-11: this one writes them if it is the main one; an instrument sent to an OUT something plays leaves this
      * mix (its reverb and delay sends stay), and this mix waits a block for it */
@@ -526,7 +783,9 @@ static void *e_create(const char *dir) {
     snprintf(P->dir, sizeof P->dir, "%s", dir ? dir : ".");
     inc_tables_init(P->dir);
     pool_open(P->dir);
+    lib_open(P->dir);
     for (int i = 0; i < NP; i++) P->pv[i] = P->ev[i] = PDEF[i].def;
+    for (int c = 0; c < 8; c++) P->sfold[c] = -1;
     for (int i = 0; i < NI; i++) P->pan_at[i] = -1.0f;
     P->mrng = 0x6c8e9cf5u;
     P->id = __atomic_fetch_add(&next_id, 1, __ATOMIC_RELAXED);
@@ -550,6 +809,10 @@ static void e_destroy(void *inst) {
     mi_close(&P->midi_in);
     fx_free(&P->fx);
     kits_free(P);
+    for (int s = 0; s < 8; s++) smp_drop(P, s);
+    lib_browser_free(P->br);
+    lib_list_free(P->bl);
+    lib_close();
     pool_close();
     free(P);
 }
@@ -558,10 +821,10 @@ static void e_set_param(void *inst, const char *key, const char *val) {
     inc_t *P = inst;
     if (!strcmp(key, "state")) {
         P->kit_pending = -1;
+        reset_all(P);
         apply_state(P, val, 0);
-        smp_t s;
-        for (int c = 0; c < 6; c++) pool_get((int)P->pv[SBASE[c] + S_SAMPLE], &s);
-        for (int c = 0; c < 2; c++) pool_get((int)P->pv[XBASE[c] + X_SAMPLE], &s);
+        for (int c = 0; c < 8; c++) sample_ask(P, c, (int)P->pv[SMP_P(c)]);
+        if (P->br) browse(P, P->bpath);
         return;
     }
     if (!strcmp(key, "lfo_bpm")) {
@@ -581,11 +844,22 @@ static void e_set_param(void *inst, const char *key, const char *val) {
         if (atof(val) >= 0.5) randomise(P, i - P_KD_RAND);
         return;
     }
-    set_value(P, i, val);
-    if (PDEF[i].kind == 4 && (strstr(key, "_sample"))) {   /* a new sample number: start reading it */
-        smp_t s;
-        pool_get((int)P->pv[i], &s);
+    if (PDEF[i].kind == 3 && i >= P_BR_ROW_1) {   /* the SAMPLES tab's taps (each sends 1, its release 0) */
+        if (atof(val) < 0.5) return;
+        if (i < P_BR_ROW_1 + BROWSE_ROWS) browse_tap(P, i - P_BR_ROW_1);
+        else if (i == P_BR_UP) browse_up(P);
+        else if (i == P_BR_PLACES) browse(P, "");
+        return;
     }
+    set_value(P, i, val);
+    int c = sample_chan(i);
+    if (c >= 0) {   /* a new sample: start reading it; on a folder of your own, no further than its files */
+        if (P->pv[i] > sample_top(P, c) && lib_files(P->sfold[c]) >= 0) P->pv[i] = P->ev[i] = sample_top(P, c);
+        sample_ask(P, c, (int)P->pv[i]);
+    }
+    if (i == P_BR_SCROLL) scroll_to(P, (int)P->pv[i]);
+    if (i == P_BR_TARGET)
+        for (int r = 0; r < BROWSE_ROWS; r++) mark(P, P_BR_ROW_1 + r);
 }
 
 void mpc_engine_transport(void *inst, double bpm, double ppq, int playing) {
@@ -611,7 +885,17 @@ static int display(inc_t *P, int i, char *buf, int len) {
 #define ENDS(s) (kl >= strlen(s) && !strcmp(k + kl - strlen(s), s))
     if (ENDS("_metnz") || ENDS("_mtnz") || ENDS("_mtnz1") || ENDS("_mtnz2"))
         return iv == 0 ? snprintf(buf, len, "OFF") : iv == 1 ? snprintf(buf, len, "NOISE") : snprintf(buf, len, "%03d", iv);
+    if (i >= P_BR_ROW_1 && i < P_BR_ROW_1 + BROWSE_ROWS) return browse_row(P, i - P_BR_ROW_1, buf, len);
+    /* the rows shown (the box beside FOLDER says how many there are: this one mustn't change as a listing comes in) */
+    if (i == P_BR_SCROLL) return snprintf(buf, len, "ROWS %d-%d", iv + 1, iv + BROWSE_ROWS);
     if (ENDS("_sample")) {
+        int c = sample_chan(i);
+        if (c >= 0 && P->sfold[c] >= 0) {   /* a file of the channel's own folder, by name */
+            const char *nm = lib_name(P->sfold[c], iv - 1);
+            if (lib_files(P->sfold[c]) < 0) return snprintf(buf, len, "READING");
+            if (iv == 0) return snprintf(buf, len, "OFF");
+            return nm ? snprintf(buf, len, "%.*s", (int)strlen(nm) - 4, nm) : snprintf(buf, len, "%03d (none)", iv);
+        }
         if (iv == 0) return snprintf(buf, len, "OFF");
         return snprintf(buf, len, pool_exists(iv) ? "%03d" : "%03d (none)", iv);
     }
@@ -691,6 +975,8 @@ static int e_get_param(void *inst, const char *key, char *buf, int len) {
         return get_state(P, buf, len);
     }
     if (!strcmp(key, "kit_count")) return snprintf(buf, len, "%d", P->nkits);
+    if (!strcmp(key, "br_path")) return browse_path(P, buf, len);
+    if (!strcmp(key, "br_status")) return browse_status(P, buf, len);
     int cur = P->kit_pending >= 0 ? P->kit_pending : (int)P->pv[P_KIT];
     if (!strcmp(key, "kit")) return snprintf(buf, len, "%d", cur);
     if (!strcmp(key, "kit_name") || !strncmp(key, "kit_name_at:", 12)) {

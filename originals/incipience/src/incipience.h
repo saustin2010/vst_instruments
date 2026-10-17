@@ -51,6 +51,39 @@ int pool_exists(int n);           /* there is a file for it */
 void pool_wait(void);             /* until nothing is waiting to load (offline tools) */
 void pool_poke(void);             /* once a block: wakes the loader if a request is waiting */
 
+/* ---- library.c: your own samples, folders of WAV files anywhere on the MPC (the SAMPLES tab) ---- */
+#define LIB_PATH 512
+#define LIB_FILES 255             /* a folder's first 255 WAV files, in name order: SAMPLE 1-255 */
+#ifndef LIB_MEDIA
+#define LIB_MEDIA "/media"        /* the MPC's drives */
+#endif
+enum { LE_FILE, LE_DIR, LE_UP, LE_PLACE, LE_ALPHABASE };
+typedef struct { int kind; char *name, *path; } lib_ent_t;   /* path: a place's own */
+typedef struct {                  /* a folder ("" = the places): "..", its subfolders, then its WAV files */
+    char path[LIB_PATH];
+    int n, first_file, nfiles, missing, gen;
+    lib_ent_t *e;
+} lib_list_t;
+typedef struct lib_br lib_br_t;   /* an instance's listings */
+void lib_open(const char *dir);
+void lib_close(void);
+void lib_poke(void);              /* once a block, as pool_poke */
+void lib_wait(void);              /* until nothing waits to be read (offline tools) */
+int lib_folder(const char *path); /* its number (read on the thread), -1 if there are too many */
+int lib_folder_set(const char *path, const lib_list_t *l);   /* as listed: the same number if nothing changed */
+int lib_files(int f);             /* its WAV files, -1 while it's being read */
+const char *lib_name(int f, int k);
+const char *lib_path(int f);
+int lib_get(int f, int k, smp_t *s);   /* file k of folder f, held (lib_put) if in memory; otherwise asked for: -1 */
+void lib_put(int slot);
+lib_br_t *lib_browser(void);
+void lib_browser_free(lib_br_t *b);
+void lib_browse(lib_br_t *b, const char *path);
+lib_list_t *lib_listing(lib_br_t *b);   /* the listing asked for last, once read (yours to free), or NULL */
+void lib_list_free(lib_list_t *l);
+int lib_is_wav(const char *name);
+int lib_decode_wav(const uint8_t *b, long sz, int16_t **out, int *frames, float *rate);
+
 /* ---- the instruments (voices.c) ---- */
 /* how a hit was played: its velocity (VOLUME and ACCENT make it a level each block, so they can be modulated), and when
  * it came on the instrument's KEYS CH, its transposition (the note against C3) and channel (whose pitch bend bends it) */
@@ -91,6 +124,7 @@ typedef struct {
     int start, stop, loop, dir;   /* in source frames */
     smp_t s;
     int smp;                      /* the sample number playing */
+    int lslot;                    /* the library file it holds (one of your own samples, library.c), or -1 */
     adsr_t vca, fenv;
     lfo_t lfo;
     svf_t f;                      /* the multimode filter */
@@ -170,6 +204,14 @@ typedef struct inc {
     mi_port_t midi_in;            /* "Incipience MIDI In": notes on their own channels, for KEYS CH (midiin.h) */
     uint32_t changed[(NP + 31) / 32];   /* controls a MIDI MOD lane or RANDOMISE set, for MPC's screen (mpc_engine_changed) */
     uint32_t rrng;                /* RANDOMISE's own (the matrix's RANDOM stays repeatable) */
+    /* your own samples (library.c): each sample channel's folder, its SAMPLE then a file of it */
+    short sfold[8];               /* -1: the AlphaBase set, by number */
+    char swant[8][128];           /* a file to find once its folder is read (a saved project's), or "" */
+    lib_br_t *br;                 /* the SAMPLES tab's listings, from its first use */
+    lib_list_t *bl;               /* the listing shown */
+    char bpath[LIB_PATH];         /* the folder asked for ("" = the places) */
+    int bwait;                    /* a listing is on its way */
+    int aud, aud_n, aud_off, aud_ch;   /* PREVIEW: channel + 1 waiting to play, frames waited; frames to its release */
 } inc_t;
 
 void kick_trigger(inc_t *P, const play_t *pl);
@@ -178,6 +220,7 @@ void mbrane_trigger(inc_t *P, const play_t *pl);
 void mbrane_block(inc_t *P, float *y, int n);
 void smp_trigger(inc_t *P, int s, const play_t *pl);
 void smp_release(inc_t *P, int s);
+void smp_drop(inc_t *P, int s);
 void smp_block(inc_t *P, int s, float *y, int n);
 void fm_trigger(inc_t *P, const play_t *pl, int note, int chord);   /* chord < 0: the note alone */
 void fm_release(inc_t *P, int note);

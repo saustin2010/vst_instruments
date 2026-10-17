@@ -37,6 +37,7 @@ def main():
     text = open(LAYOUT).read()
     head, tabs = parse(text)
     pages = json.load(open(os.path.join(ROOT, "build", "pages.json")))
+    extra = json.load(open(os.path.join(ROOT, "build", "layout_lines.json")))   # mpc/design.py: what convert.py can't make
     want = sum(len(pg["subs"]) for pg in pages)
     if len(tabs) != want:
         raise SystemExit("layout.conf has %d tabs, not convert.py's %d (already merged?)" % (len(tabs), want))
@@ -66,6 +67,7 @@ def main():
                 rest[l].append(t["name"])
         for l in order:   # on every page: as it is; on some: only there
             body.append(l if len(rest[l]) == len(group) else '%s banks="%s"' % (l, "|".join(rest[l])))
+        body += extra.get(pg["tab"], [])
         body += [l for t in group for l in t["lines"] if l.startswith("qlinks ")]
         out += ["", "[tab %s]" % pg["tab"]] + body
     open(LAYOUT, "w").write("\n".join(out) + "\n")

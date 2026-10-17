@@ -25,7 +25,7 @@ IDS = {"kd": "KD", "mb": "MB", "ch": "CH", "oh": "OH", "cp": "CP", "rm": "RM", "
        "x2": "X2", "fm": "FM"}
 NAMES = {"kd": "KICK", "mb": "MBRANE", "ch": "CL HAT", "oh": "OP HAT", "cp": "CLAP", "rm": "RIM", "cr": "CRASH",
          "rd": "RIDE", "x1": "X1", "x2": "X2", "fm": "FM"}
-TAB_IDS = {"MIX": "MX", "MOD": "MD", "MIDI & OUT": "IO", "MIDI MOD": "CC"}
+TAB_IDS = {"MIX": "MX", "MOD": "MD", "MIDI & OUT": "IO", "MIDI MOD": "CC", "SAMPLES": "SM"}
 
 # the screen's colours for what MPC draws itself (names, values, switches, steppers), from the design's palette
 THEME = {"bg": "#efede6", "panel": "#efede6", "box": "#e4e1d8", "line": "#141414", "ink": "#141414",
@@ -137,7 +137,8 @@ OLED_LINE = {("FM", "A"): "FM MATRIX", ("FM", "B"): "OP ENVELOPES", ("FM", "C"):
              ("FX", "B"): "DELAY + SENDS", ("MIX", "PAN"): "PAN + VOLUME", ("MOD", "LFO"): "FOUR LFOS",
              ("MIDI & OUT", "NOTE"): "PAD NOTES", ("MIDI & OUT", "KEYS CH"): "PLAYED PITCHED",
              ("MIDI & OUT", "OUT"): "TO OUT 1-11", ("MIDI MOD", "WHEEL"): "CC 1 MOVES", ("MIDI MOD", "GP 1"): "CC 16 MOVES",
-             ("MIDI MOD", "GP 2"): "CC 17 MOVES", ("MIDI MOD", "GP 3"): "CC 18 MOVES"}
+             ("MIDI MOD", "GP 2"): "CC 17 MOVES", ("MIDI MOD", "GP 3"): "CC 18 MOVES",
+             ("SAMPLES", "BROWSE"): "DRIVES FOLDERS FILES"}
 OLED_LINE.update({("MOD", "MOD %d-%d" % (s, s + 3)): "SLOTS %d-%d" % (s, s + 3) for s in range(1, 17, 4)})
 
 
@@ -162,6 +163,32 @@ def matrix(rows, P, inst_name, diag=()):
     return "".join(out)
 
 
+# the SAMPLES tab's page (gen.py: "browser"): the folder and what's in it over eight rows, SCROLL, UP and DRIVES. The
+# rows and the two readouts aren't in this markup: convert.py has no list, so mpc/merge_ab.py adds them as layout lines
+# (BROWSER_LINES, in the layout's coordinates: the page's y + 86), and the skin draws the rows' tiles itself
+BROWSER_LINES = [
+    "readout cx=290 cy=154 w=488 h=32 vs=20 box=no style=dotmatrix key=br_path",
+    "readout cx=656 cy=154 w=196 h=32 vs=20 box=no style=dotmatrix key=br_status",
+    "list x=40 y=182 w=720 h=362 key=br_row cols=1 rows=8 th=40 gap=6",
+]
+
+
+def browser_page():
+    box = ('<div style="position: absolute; left: %dpx; top: 32px; width: %dpx; height: 36px; background: #0b0b0b; '
+           'border: 2px solid #222; border-radius: 4px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.9);"></div>')
+    btn = ('<button class="ab-btn" data-param="%s" type="button" style="position: absolute; left: %dpx; top: 458px; '
+           'width: 150px; height: 40px; border-radius: 4px; background: #2c2c2c; color: #e5e5e5; font-family: \'Inter\', '
+           'sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; border-bottom: 3px solid #151515;">%s'
+           '</button>')
+    return ('<div style="position: absolute; left: 40px; top: 18px; width: 720px; height: 520px;">'
+            '<div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 3px; '
+            'border-bottom: 1px solid #141414;"><span class="print-label" style="font-size: 11px;">BROWSE</span><span '
+            'class="red-caption" style="font-size: 10px;">DRIVES &middot; FOLDERS &middot; WAV FILES</span></div>'
+            + box % (0, 500) + box % (512, 208)
+            + '<div style="position: absolute; left: 0; top: 444px; width: 260px;">%s</div>' % stepper("br_scroll", "SCROLL", w=260)
+            + btn % ("br_up", 400, "UP") + btn % ("br_places", 570, "DRIVES") + '</div>')
+
+
 def side_ctl(key, P, inst_name):
     p = P[key]
     if p.get("options") and len(p["options"]) == 2:
@@ -181,7 +208,7 @@ def panel(title, caption, items, top):
                "".join('<div style="display: flex; flex-direction: column; align-items: center;">%s</div>' % i for i in items)))
 
 
-def right_column(tab, inst, title, sub, rows, side, P, info=()):
+def right_column(tab, inst, title, sub, rows, side, P, info=(), side_title=None):
     ident = IDS.get(inst, TAB_IDS.get(tab, tab[:2]))
     sub_name = "PAGE " + sub if sub in ("A", "B") else ("VOICE" if inst == "fm" else "MIX") if sub == "C" else sub
     words = OLED_LINE.get((tab, sub)) or " &nbsp;".join(
@@ -212,7 +239,7 @@ def right_column(tab, inst, title, sub, rows, side, P, info=()):
         panels.append(("MIX", title, [side_ctl(inst + "_pan", P, title), side_ctl(inst + "_rsend", P, title),
                                       side_ctl(inst + "_dsend", P, title), switch(inst + "_mute", "MUTE", w=56)]))
     if side:
-        heading = {"fm": ("FM VOICE", "CHORD + LEVEL"), None: ("DELAY", "CLOCK")}.get(inst, ("LFO", "CLOCK"))
+        heading = side_title or {"fm": ("FM VOICE", "CHORD + LEVEL"), None: ("DELAY", "CLOCK")}.get(inst, ("LFO", "CLOCK"))
         extra = (heading[0], heading[1], [side_ctl(k, P, title) for k in side])
         panels.insert(0 if inst == "fm" else len(panels), extra)   # FM VOICE first: its Q-Links come first
     for i, (t, c, items) in enumerate(panels):
@@ -264,8 +291,10 @@ def main():
             names.append(nm)
             diag = {"fm_op1", "fm_op2", "fm_op3", "fm_op4"} if tab == "FM" and sub != "B" else ()
             html_pages.append('<div class="ab-page%s" data-page="%s">%s%s%s</div>' % (
-                " on" if not html_pages else "", nm, matrix(rows, P, pg["title"] if inst else "", diag),
-                right_column(tab, inst, pg["title"], sub, rows, pg["side"], P, pg["info"]), strip(lit)))
+                " on" if not html_pages else "", nm,
+                browser_page() if pg.get("browser") else matrix(rows, P, pg["title"] if inst else "", diag),
+                right_column(tab, inst, pg["title"], sub, rows, pg["side"], P, pg["info"], pg.get("side_title")),
+                strip(lit)))
     nav = "".join('<button class="ab-tab" type="button" onclick="abShow(%d)">%s</button>' % (i, n)
                   for i, n in enumerate(names))
     doc = (head + "</head>\n<body>\n<!-- generated by mpc/design.py from design/stitch-kick.html: do not edit -->\n"
@@ -279,7 +308,8 @@ def main():
     for pg in pages:
         seen = set()
         for rows, sub in zip(pg["sub_rows"], pg["sub_kind"]):
-            ql[ti] = pg["qlinks_c"] if sub == "C" else [k for _, _, row in rows for k in (row + ["-"] * (4 - len(row)))]
+            ql[ti] = pg["qlinks_c"] if sub == "C" else pg["qlinks"] if pg.get("qlinks") else \
+                [k for _, _, row in rows for k in (row + ["-"] * (4 - len(row)))]
             on = {k for _, _, row in rows for k in row if k != "-"} | set(pg["side"])
             if pg["inst"]:
                 on |= {pg["inst"] + s for s in ("_pan", "_rsend", "_dsend", "_mute", "_rand")}
@@ -288,6 +318,8 @@ def main():
             ti += 1
     json.dump({"qlinks": ql, "twice": sorted(twice), "tab_names": names},
               open(os.path.join(ROOT, "build", "convert.json"), "w"), indent=1)
+    json.dump({pg["tab"]: BROWSER_LINES for pg in pages if pg.get("browser")},
+              open(os.path.join(ROOT, "build", "layout_lines.json"), "w"), indent=1)
     print("design/stitch.html: %d pages; build/convert.json" % len(names))
 
 

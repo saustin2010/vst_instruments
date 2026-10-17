@@ -2,7 +2,7 @@
  * size, OUT 1-11 through [FX] Incipience OUT loaded as a library of its own (as MPC loads it), and the matrix's cost.
  * Built natively, without the wrapper (from originals/incipience):
  *   cc -O1 -g -fsanitize=address,undefined -Isrc mpc/selftest.c src/incipience.c src/voices.c src/fx.c src/tables.c \
- *      src/samples.c src/kits.c -lm -lpthread -ldl -o build/selftest
+ *      src/samples.c src/kits.c src/library.c -lm -lpthread -ldl -o build/selftest
  *   cc -O2 -shared -fPIC -Iincipienceout/src incipienceout/src/incipience_out.c -o build/incipienceout.so
  *   build/selftest build/incipienceout.so [bench]
  * Prints a line per check and PASSED at the end (exit 1 on the first failure). */
@@ -86,6 +86,97 @@ static double energy(const int16_t *o, int n) {
     double e = 0;
     for (int i = 0; i < 2 * n; i++) e += (double)o[i] * o[i];
     return e;
+}
+
+/* a 440 Hz sine at amp: fmt 1 PCM (8/16/24/32-bit), 3 float, 0xFFFE extensible (24-bit PCM) */
+static void write_wav(const char *path, int frames, int ch, int bits, int fmt, int rate, float amp) {
+    FILE *f = fopen(path, "wb");
+    if (!f) return;
+    int bpf = ch * bits / 8, ext = fmt == 0xFFFE, flen = ext ? 40 : 16;
+    uint32_t data = (uint32_t)(frames * bpf);
+    uint8_t h[80];
+    int n = 0;
+#define P4(v) (h[n] = (uint8_t)(v), h[n + 1] = (uint8_t)((v) >> 8), h[n + 2] = (uint8_t)((v) >> 16), h[n + 3] = (uint8_t)((v) >> 24), n += 4)
+#define P2(v) (h[n] = (uint8_t)(v), h[n + 1] = (uint8_t)((v) >> 8), n += 2)
+    memcpy(h + n, "RIFF", 4), n += 4;
+    P4(4 + 8 + flen + 8 + data);
+    memcpy(h + n, "WAVEfmt ", 8), n += 8;
+    P4(flen);
+    P2(fmt);
+    P2(ch);
+    P4(rate);
+    P4(rate * bpf);
+    P2(bpf);
+    P2(bits);
+    if (ext) {
+        P2(22);
+        P2(bits);
+        P4(0);
+        P2(1);   /* the subformat GUID's first two bytes: PCM */
+        memcpy(h + n, "\x00\x00\x00\x00\x10\x00\x80\x00\x00\xaa\x00\x38\x9b\x71", 14), n += 14;
+    }
+    memcpy(h + n, "data", 4), n += 4;
+    P4(data);
+    fwrite(h, 1, (size_t)n, f);
+    for (int i = 0; i < frames; i++)
+        for (int c = 0; c < ch; c++) {
+            float x = amp * sinf(2.0f * 3.14159265f * 440.0f * (float)i / (float)rate);
+            uint8_t s[4];
+            int32_t v = (int32_t)lrintf(x * 2147483647.0f);
+            if (fmt == 3) memcpy(s, &x, 4);
+            else for (int k = 0; k < 4; k++) s[k] = (uint8_t)((uint32_t)v >> (8 * k));
+            if (bits == 8) s[0] = (uint8_t)(((uint32_t)v >> 24) ^ 0x80);
+            fwrite(fmt == 3 || bits == 32 || bits == 8 ? s : s + 4 - bits / 8, 1, (size_t)(bits / 8), f);
+        }
+#undef P4
+#undef P2
+    fclose(f);
+}
+
+static uint8_t *slurp(const char *path, long *sz) {
+    FILE *f = fopen(path, "rb");
+    if (!f) return NULL;
+    fseek(f, 0, SEEK_END);
+    *sz = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    uint8_t *b = malloc((size_t)*sz);
+    if (b && fread(b, 1, (size_t)*sz, f) != (size_t)*sz) b = (free(b), NULL);
+    fclose(f);
+    return b;
+}
+
+static int16_t *run_rt(void *I) {   /* a block in real time: the library's thread reads at the MPC's pace */
+    struct timespec ts = {0, 2900000};
+    nanosleep(&ts, NULL);
+    return run(I, 1);
+}
+
+static int row_is(inc_t *P, int r, const char *want) {
+    char k[32], b[64];
+    snprintf(k, sizeof k, "br_row_%d_display", r);
+    E->get_param(P, k, b, sizeof b);
+    return !strcmp(b, want);
+}
+static const char *rows(inc_t *P) {
+    static char all[600];
+    all[0] = 0;
+    for (int r = 1; r <= BROWSE_ROWS; r++) {
+        char k[32], b[64];
+        snprintf(k, sizeof k, "br_row_%d_display", r);
+        E->get_param(P, k, b, sizeof b);
+        snprintf(all + strlen(all), sizeof all - strlen(all), "[%s]", b);
+    }
+    return all;
+}
+static void browse_wait(inc_t *P) {   /* until the listing asked for is read and shown */
+    char b[64];
+    for (int t = 0; t < 4000; t++) {
+        E->get_param(P, "br_row_1_display", b, sizeof b);
+        if (!P->bwait) return;
+        struct timespec ts = {0, 1000000};
+        nanosleep(&ts, NULL);
+    }
+    CHECK(0, "no listing came");
 }
 
 int main(int argc, char **argv) {
@@ -303,6 +394,165 @@ int main(int argc, char **argv) {
         int d = E->get_param(P, "state", buf, sizeof buf);
         printf("ok   state: %d bytes at its longest (8192 max), %d as it starts; restored exactly\n", n, d);
         E->destroy(P);
+    }
+
+    /* ---- your own samples (library.c, the SAMPLES tab): WAV files of each kind read; a folder's WAV files in name
+     * order; the tab's browsing; a file tapped loads into LOAD TO's channel and plays; SAMPLE steps through its folder;
+     * by name in the state; RANDOMISE and the matrix within the folder; a kit back to the AlphaBase set; and past the
+     * memory limit, files go while a voice holds and plays another (built with ASan: no file freed under it) ---- */
+    {
+        int fail = system("rm -rf build/libtest && mkdir -p build/libtest/samples/Sub build/libtest/big");
+        CHECK(!fail, "mkdir build/libtest");
+        /* the kinds of WAV file: 16-bit mono, 24-bit stereo, 32-bit float, 8-bit, 24-bit WAVE_FORMAT_EXTENSIBLE */
+        const struct { const char *name; int ch, bits, fmt, rate; } W[] = {
+            {"kick 1.WAV", 1, 16, 1, 44100}, {"Kick 2.wav", 2, 24, 1, 48000}, {"Kick 10.wav", 1, 32, 3, 96000},
+            {"snare.wav", 1, 8, 1, 22050}, {"Sub/inner.wav", 2, 24, 0xFFFE, 44100}};
+        char path[512];
+        for (size_t w = 0; w < sizeof W / sizeof W[0]; w++) {
+            snprintf(path, sizeof path, "build/libtest/samples/%s", W[w].name);
+            write_wav(path, 4410, W[w].ch, W[w].bits, W[w].fmt, W[w].rate, 0.5f);
+            long sz;
+            uint8_t *b = slurp(path, &sz);
+            int16_t *d = NULL;
+            int fr = 0;
+            float rate = 0;
+            CHECK(b && !lib_decode_wav(b, sz, &d, &fr, &rate), "%s doesn't decode", W[w].name);
+            float want = 0.5f * sinf(2.0f * 3.14159265f * 440.0f * 100.0f / W[w].rate) * 32767.0f;
+            CHECK(fr == 4410 && rate == (float)W[w].rate && fabsf(d[100] - want) < 300.0f, "%s: %d frames at %g, %d not %.0f",
+                  W[w].name, fr, rate, d[100], want);
+            free(b), free(d);
+        }
+        FILE *f = fopen("build/libtest/samples/notes.txt", "w");
+        if (f) fclose(f);
+        write_wav("build/libtest/samples/.hidden.wav", 100, 1, 16, 1, 44100, 0.5f);
+
+        inc_t *P = E->create("build/libtest");
+        browse_wait(P);   /* the tab's first look: the places */
+        CHECK(row_is(P, 1, "> ALPHABASE SET") && row_is(P, 2, "INCIPIENCE SAMPLES"), "places: %s", rows(P));
+        set(P, "br_row_2", "1");
+        browse_wait(P);
+        CHECK(row_is(P, 1, ".. UP") && row_is(P, 2, "Sub /") && row_is(P, 3, "kick 1") && row_is(P, 4, "Kick 2") &&
+              row_is(P, 5, "Kick 10") && row_is(P, 6, "snare") && row_is(P, 7, " "), "folder: %s", rows(P));
+        E->get_param(P, "br_status", buf, sizeof buf);
+        CHECK(!strcmp(buf, "4 WAVS"), "status %s", buf);
+        E->get_param(P, "br_path", buf, sizeof buf);
+        CHECK(!strcmp(buf, "INCIPIENCE"), "path %s", buf);
+        /* tapped: X1 (LOAD TO, to start with) plays it, PREVIEW on */
+        set(P, "br_row_4", "1");
+        CHECK(P->sfold[6] >= 0 && P->pv[P_X1_SAMPLE] == 2.0f, "X1: folder %d, SAMPLE %g", P->sfold[6], P->pv[P_X1_SAMPLE]);
+        int16_t *o = NULL;
+        for (int b = 0; b < 400 && !P->sv[6].active; b++) free(run_rt(P));
+        CHECK(P->sv[6].active && P->sv[6].s.len == 4410 && P->sv[6].lslot >= 0, "PREVIEW didn't play X1's new sample");
+        o = run(P, 20);
+        CHECK(energy(o, 20 * B) > 1e6, "PREVIEW is silent");
+        free(o);
+        CHECK(row_is(P, 4, "> Kick 2"), "the loaded file's mark: %s", rows(P));
+        E->get_param(P, "x1_sample_display", buf, sizeof buf);
+        CHECK(!strcmp(buf, "Kick 2"), "X1 SAMPLE shows %s", buf);
+        seti(P, "x1_sample", 3);
+        E->get_param(P, "x1_sample_display", buf, sizeof buf);
+        CHECK(!strcmp(buf, "Kick 10"), "SAMPLE 3 shows %s", buf);
+        seti(P, "x1_sample", 9);
+        CHECK(P->pv[P_X1_SAMPLE] == 4.0f, "SAMPLE past the folder's files: %g", P->pv[P_X1_SAMPLE]);
+        /* the state names the folder and the file; another instance finds it by name */
+        int n = E->get_param(P, "state", buf, sizeof buf);
+        CHECK(n > 0 && strstr(buf, "x1_dir=build/libtest/samples;") && strstr(buf, "x1_file=snare.wav;"), "state: %s", buf);
+        inc_t *Q = E->create("build/libtest");
+        E->set_param(Q, "state", buf);
+        lib_wait();
+        free(run(Q, 2));
+        E->get_param(Q, "x1_sample_display", buf, sizeof buf);
+        CHECK(Q->sfold[6] >= 0 && Q->pv[P_X1_SAMPLE] == 4.0f && !strcmp(buf, "snare"), "restored: %g %s", Q->pv[P_X1_SAMPLE], buf);
+        E->destroy(Q);
+        /* a file added: the folder listed again is a new folder (the old one still plays what it had); by name again */
+        write_wav("build/libtest/samples/Kick 1b.wav", 4410, 1, 16, 1, 44100, 0.5f);
+        set(P, "br_up", "1");
+        browse_wait(P);
+        set(P, "br_row_2", "1");
+        browse_wait(P);
+        CHECK(row_is(P, 4, "Kick 1b") && row_is(P, 7, "> snare") == 0 && row_is(P, 7, "snare"), "re-listed: %s", rows(P));
+        int old = P->sfold[6];
+        set(P, "br_row_7", "1");
+        CHECK(P->sfold[6] != old && P->pv[P_X1_SAMPLE] == 5.0f, "the new folder: %d (was %d), SAMPLE %g", P->sfold[6], old,
+              P->pv[P_X1_SAMPLE]);
+        /* RANDOMISE: a file of the folder */
+        for (int r = 0; r < 30; r++) {
+            set(P, "x1_rand", "1");
+            CHECK(P->pv[P_X1_SAMPLE] >= 1.0f && P->pv[P_X1_SAMPLE] <= 5.0f, "RANDOMISE: SAMPLE %g", P->pv[P_X1_SAMPLE]);
+        }
+        /* the matrix: RANDOM over the folder's files */
+        set(P, "m1_src", "5"), seti(P, "m1_dest", I_X1), set(P, "m1_depth", "100");
+        for (int c = 0; c < MODN[I_X1]; c++)
+            if (MODT[I_X1][c] == P_X1_SAMPLE) seti(P, "m1_ctl", c);
+        for (int h = 0; h < 40; h++) {
+            midi(P, 0x90, 44, 100);
+            float s = P->ev[P_X1_SAMPLE];
+            CHECK(s >= 0.0f && s <= 5.0f && s == floorf(s), "RANDOM -> SAMPLE on the folder: %g", s);
+            free(run(P, 2));
+        }
+        set(P, "m1_src", "0");
+        /* ALPHABASE SET; and a kit: back to the set */
+        set(P, "br_up", "1");
+        browse_wait(P);
+        set(P, "br_row_1", "1");
+        CHECK(P->sfold[6] < 0 && row_is(P, 1, "> ALPHABASE SET"), "ALPHABASE SET: folder %d", P->sfold[6]);
+        set(P, "br_row_2", "1");
+        browse_wait(P);
+        set(P, "br_row_3", "1");
+        CHECK(P->sfold[6] >= 0, "loaded again");
+        set(P, "kit", "1");
+        free(run(P, 1));
+        CHECK(P->sfold[6] < 0, "a kit keeps X1's folder");
+        E->destroy(P);
+
+        /* past LIB_BYTES (64 MB): 48 files of 1.8 MB, each loaded into X1 and played, while X2 holds the first one,
+         * looping, its pad held the whole time */
+        for (int k = 0; k < 48; k++) {
+            snprintf(path, sizeof path, "build/libtest/big/b%02d.wav", k);
+            write_wav(path, 20 * 44100, 1, 16, 1, 44100, 0.3f);
+        }
+        P = E->create("build/libtest");
+        browse_wait(P);
+        set(P, "br_row_2", "1");
+        browse_wait(P);
+        set(P, "br_row_2", "1");   /* Sub */
+        browse_wait(P);
+        set(P, "br_up", "1");      /* back, around Sub */
+        browse_wait(P);
+        CHECK(row_is(P, 2, "Sub /"), "back up: %s", rows(P));
+        set(P, "br_up", "1");
+        browse_wait(P);
+        /* (big isn't a place: browsed straight to) */
+        E->set_param(P, "state", "kit=0;br_path=build/libtest/big;");
+        browse_wait(P);
+        set(P, "br_target", "7");   /* X2 */
+        set(P, "x2_loopon", "1");
+        set(P, "br_row_2", "1");    /* b00 */
+        for (int b = 0; b < 400 && !P->sv[7].active; b++) free(run_rt(P));
+        CHECK(P->sv[7].active, "X2 plays b00");
+        free(run(P, 100));          /* PREVIEW's quarter-second tap over */
+        midi(P, 0x90, 45, 100);     /* its pad, held from here on */
+        set(P, "br_target", "6");   /* X1 */
+        int played = 0;
+        for (int k = 1; k < 48; k++) {
+            seti(P, "br_scroll", k - 1 > 0 ? k - 1 : 0);
+            int row = k + 2 - (int)P->pv[P_BR_SCROLL];   /* row 1 is ".." at the top */
+            char key[32];
+            snprintf(key, sizeof key, "br_row_%d", row);
+            set(P, key, "1");
+            CHECK(P->pv[P_X1_SAMPLE] == k + 1, "b%02d: SAMPLE %g (row %d)", k, P->pv[P_X1_SAMPLE], row);
+            for (int b = 0; b < 400 && P->aud; b++) free(run_rt(P));
+            played += P->sv[6].active && P->sv[6].s.len == 20 * 44100;
+            free(run(P, 8));
+            CHECK(P->sv[7].active && P->sv[7].s.d, "X2 stopped at b%02d", k);
+        }
+        o = run(P, 50);
+        CHECK(energy(o, 50 * B) > 0 && played >= 40, "played %d of 47", played);
+        free(o);
+        E->destroy(P);
+        fail = system("rm -rf build/libtest");
+        printf("ok   your own samples: 5 kinds of WAV, a folder in name order, browsed, loaded, played, by name in the state; "
+               "past 64 MB, 47 files played while X2 held one\n");
     }
 
     /* ---- OUT 1-11: Incipience and [FX] Incipience OUT as two libraries, both orders ---- */

@@ -9270,6 +9270,128 @@
    "key": "fm_rand",
    "name": "FM RANDOMISE",
    "momentary": true
+  },
+  {
+   "key": "br_row_1",
+   "name": "ROW 1",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_2",
+   "name": "ROW 2",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_3",
+   "name": "ROW 3",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_4",
+   "name": "ROW 4",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_5",
+   "name": "ROW 5",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_6",
+   "name": "ROW 6",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_7",
+   "name": "ROW 7",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_8",
+   "name": "ROW 8",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_scroll",
+   "name": "SCROLL",
+   "type": "stepper",
+   "min": 0,
+   "max": 999,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_scroll_prev",
+   "name": "SCROLL UP",
+   "momentary": true,
+   "step_of": "br_scroll",
+   "step_delta": -8
+  },
+  {
+   "key": "br_scroll_next",
+   "name": "SCROLL DOWN",
+   "momentary": true,
+   "step_of": "br_scroll",
+   "step_delta": 8
+  },
+  {
+   "key": "br_path",
+   "name": "FOLDER",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "br_status",
+   "name": "IN IT",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "br_target",
+   "name": "LOAD TO",
+   "options": [
+    "CL HAT",
+    "OP HAT",
+    "CLAP",
+    "RIM",
+    "CRASH",
+    "RIDE",
+    "X1",
+    "X2"
+   ],
+   "default": "X1"
+  },
+  {
+   "key": "br_preview",
+   "name": "PREVIEW",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "br_up",
+   "name": "UP",
+   "momentary": true
+  },
+  {
+   "key": "br_places",
+   "name": "DRIVES",
+   "momentary": true
   }
  ]
 }
