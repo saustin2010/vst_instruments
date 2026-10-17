@@ -74,6 +74,9 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 - `mpc/host/plugin_api_v1.h`: its `offsetof(reserved) == 120` assert is a 64-bit (Move) layout check, so it is skipped on the MPC's 32-bit ARM (the module and adapter share the one header).
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - Reports itself to MPC as a **Sequencer** (vst.json `"category"`), so the plugin browser can group it with sequencers instead of synths. Not yet checked on a device; the other sequencers still report Synth.
+- **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
+  centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty
+  band above and below.
 
 ## Files
 

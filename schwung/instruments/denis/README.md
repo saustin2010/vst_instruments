@@ -74,6 +74,9 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - Presets in MPC's PRESET menu (2026-10-03): its 30 presets are VST programs (vst.json `programs`), so the PRESET
   dropdown in the plugin header, also on the arrangement screen, lists and loads them.
+- **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
+  centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty
+  band above and below.
 
 ## Files
 

@@ -66,6 +66,9 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   in MPC's PRESET menu. Each sets every control; levels matched within about 4.5 dB.
 - Q-Links (2026-10-03, design QA): one column per panel on the main page, VCO | VCF | ACCENT + OUT | DRIVE, so the
   outline MPC draws round the active column frames one panel (it used to split the VCF across two columns).
+- **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
+  centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty
+  band above and below.
 
 ## Files
 
