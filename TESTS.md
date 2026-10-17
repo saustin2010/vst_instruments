@@ -522,12 +522,14 @@ that `taskset` exists on the MPC (without it the harness runs unpinned) and that
 ```
 framework/setup.sh                  # once: native.sh builds against the framework
 dev-tools/procwatch/setup.sh        # build the harness, copy every deploy/vst .so and presets/ into work/sdcard
-dev-tools/procwatch/emulated.sh     # procwatch on all 40 shipped .so files under emulation, 4 at a time
-dev-tools/procwatch/native.sh       # native builds of all 40
+dev-tools/procwatch/emulated.sh     # procwatch on every shipped .so under emulation (44), 4 at a time
+dev-tools/procwatch/native.sh       # native builds of all of them
 dev-tools/procwatch/ab.sh           # side-by-side idle timing, 2 trials, compared with the baseline
 ```
 
-**One plugin:** `emulated.sh <so>`, then `native.sh <so> && ab.sh <so>`.
+**One plugin:** `emulated.sh <so>`, then `native.sh <so> && ab.sh <so>`. The companion plugins in a plugin's folder (Percolator OUT,
+Incipience OUT) are included since 2026-10-17 (`common.sh`; before that the harness looked one folder deep and missed
+them): `emulated.sh percolatorout incipienceout`.
 
 **Environment settings:**
 
