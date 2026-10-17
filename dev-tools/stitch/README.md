@@ -23,7 +23,7 @@ A spec shows them with a picture item, e.g. Braids (`specs/braids.py`):
 device 2026-09-24). The picture shows the waveform at the knobs' defaults; it follows the selector, not TIMBRE/COLOR.
 
 How a converted skin works: the background image is the mockup itself (panels, titles, switch and pop-up captions,
-knob scales) with its moving parts removed and the content centred in MPC's 1280x628; knobs are filmstrips of the
+knob scales) with its moving parts removed and the content filling MPC's 1280x628; knobs are filmstrips of the
 mockup's knobs; MPC draws knob/slider names and values live (smaller where the mockup packs controls closer: `ns=`/
 `vs=`); switches, toggles, sliders, steppers, pop-ups and trigger buttons are ours, at the mockup's spots; canvases
 become real waveform pictures (Braids algorithm, 303 waveform, Moog/Noisemaker osc 1 wave) and envelope displays that
@@ -85,13 +85,27 @@ Super Arp, Tablor, Verglas, Hush One, Marbles.
 
 ## Other per-design options (convert.py MAPS)
 `tabs` (selector; `#no-tabs` = one page named `page`), `drop` (header/footer to remove; `autodrop: False` when a panel
-mentions "Q-LINK"), `center`, `rot` (the element to turn for knobs whose pointer isn't turned inline), `twice` (a key
+mentions "Q-LINK"), `fill` / `center` (below), `rot` (the element to turn for knobs whose pointer isn't turned inline), `twice` (a key
 placed on two pages, e.g. an edit-pad stepper), `qlinks_skip` (touch-only controls kept off the Q-Links when a page has
 more than 16), `option_labels` (switch labels; otherwise the design's own when they abbreviate ours in order, e.g.
 EXT/TRI), `nowrap` and `nudge` ({key: [dx, dy]}) for switches wider than the design's.
 Generic rules in extract.py: tabs are read without icon ligatures, a grid frame becomes a column once its header is
 dropped, tab glows are hidden. Switches taller than the design's keep the design's top edge; a switch too wide wraps to
 two rows. `envelope.py` also draws ADS (three-stage) displays (Hank).
+
+## Full-height screens: `fill` (2026-10-18)
+The designs are 1280x628 with their own header and footer; dropping those used to leave the rest centred at its
+designed height, ~110 px empty above and below on most screens. Now what's left grows into the whole 628 px (`fill`, on
+unless `"fill": False`, which keeps the old centring): its margins go, a top/bottom padding deeper than 30 px (room the
+design kept for its fixed header/footer) becomes its side padding, and a body placed under the header (`fixed` /
+`absolute`) moves to the top at 628 px. Rows the design sized in px stay that size, so their designs grow them with an
+augment: `{sel, css: "flex-grow: 1"}` (or `"height: auto"` in a grid; `css` adds to the inline style, so it goes after
+any `attr: {style}` on the same element), the container's row gap set to the design's gutter (12 px) where
+`justify-between` had spaced them. Frames placed by px (Elements, Denis) spread with `{sel, stretch_y: [y0, y1, z0, z1]}`.
+Pages drawn from the plan (`grid`) whose frames end over 40 px short of the bottom spread over the whole height, frames
+and controls alike. Off: Incipience (its own pipeline) and Marbles (its design page fills by hand). Moog and
+Noisemaker have hand-edited layouts: their hand edits were carried over by moving each line with the converter's change
+to it (or, for a control added by hand, to its nearest neighbour).
 
 ## Per-port notes (2026-10-02/03)
 - Removed because they have no parameter (they'd be dead on the MPC): pad/HIT/audition buttons, Mr Drums'
