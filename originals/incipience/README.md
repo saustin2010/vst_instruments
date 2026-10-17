@@ -9,8 +9,9 @@
 **Status (2026-10-18): in testing.** Played on an MPC Live II since 2026-10-13. On the Live II since 2026-10-18: every
 instrument playable chromatically on a MIDI channel of its own, OUT 1-11 with [FX] Incipience OUT, MIDI MOD lanes and
 a mod matrix, as on [Percolator](../percolator/). New on 2026-10-18, offline so far (`tools/build.sh`: PASSED,
-`check_skin.py`: OK, `mpc/selftest.c`: PASSED): RANDOMISE on each instrument, NOISE VOL beside SAMPLE. What's next is
-in [ROADMAP.md](../../ROADMAP.md#new-plugins).
+`check_skin.py`: OK, `mpc/selftest.c`: PASSED, also under ASan/UBSan and TSan): your own samples from the MPC's drives
+(the SAMPLES tab), RANDOMISE on each instrument, NOISE VOL beside SAMPLE. What's next is in
+[ROADMAP.md](../../ROADMAP.md#new-plugins).
 
 ## What it is
 
@@ -41,7 +42,8 @@ places (a row of the matrix is a panel and a Q-Link column; the hardware's displ
 third (KICK MIX ...) whose Q-Links turn the panels on the right: the instrument's MIX (pan, reverb and delay sends,
 mute) and its extras (the Mk II's synced LFO clock). On FM the third is FM VOICE: voices, chord, spatial and level
 first, then its MIX and accent. FX has REVERB and DELAY (all the sends), MIX has PAN. Then MOD (its LFOs and 16
-slots), MIDI & OUT (each instrument's NOTE, KEYS CH and OUT) and MIDI MOD (each instrument's four lanes): below.
+slots), MIDI & OUT (each instrument's NOTE, KEYS CH and OUT), MIDI MOD (each instrument's four lanes) and SAMPLES
+(your own samples): below.
 
 SAMPLE is a box with arrows: one sample a tap (a Q-Link still turns through them). PITCH and CENTS on the sample
 channels tune their metal noise as well as the sample (on the AlphaBase they move the sample alone), so a hat or a
@@ -74,6 +76,7 @@ kit you like (MPC's Program save keeps the plugin's state).
 | MOD (LFO, MOD 1-4 ... 13-16) | <img src="screenshots/page_13.png" width="250"> | <img src="screenshots/page_13_1.png" width="250"> | |
 | MIDI & OUT (NOTE, KEYS CH, OUT) | <img src="screenshots/page_14.png" width="250"> | <img src="screenshots/page_14_1.png" width="250"> | <img src="screenshots/page_14_2.png" width="250"> |
 | MIDI MOD (WHEEL, GP 1-3) | <img src="screenshots/page_15.png" width="250"> | <img src="screenshots/page_15_1.png" width="250"> | |
+| SAMPLES | <img src="screenshots/page_16.png" width="250"> | | |
 
 How it's made: the Stitch design is one page, KICK A (`design/stitch-kick.html`, as Stitch wrote it); `mpc/design.py`
 writes every page in its markup (`design/stitch.html`), the repo's `convert.py` turns that into the layout, and
@@ -128,6 +131,32 @@ The sample channels play the AlphaBase's samples by number, as its SAMPLE contro
 the built-in kits still play: they use the kick, the MBrane, metal noise through the filters, the self-oscillating
 filters and the FM synth.
 
+## Your own samples: the SAMPLES tab
+
+Any folder of WAV files on the MPC: its internal drive, an SD card, an SSD, a USB drive, or a `samples` folder you make
+in the plugin's own (`/sdcard/vst/incipience/samples/`).
+
+- **Browse:** DRIVES lists the places (ALPHABASE SET, INCIPIENCE SAMPLES if that folder is there, then the drives);
+  tap one, then its folders (`.. UP` or the UP button goes back). Eight rows at a time: SCROLL (its Q-Link, or its
+  arrows, a page a tap). FOLDER shows where you are (its end, if long: MPC shows 24 characters), the box beside it
+  how many WAV files there are.
+- **Load:** tap a WAV file: it loads into LOAD TO's instrument (CL HAT ... RIDE, X1, X2; X1 to start with) and, with
+  PREVIEW on, plays once. A `>` marks the file LOAD TO's instrument plays.
+- **Point to a folder:** after that, that instrument's SAMPLE shows the file's name and steps through the folder's WAV
+  files in name order ("Kick 2" before "Kick 10"; the first 255), with its arrows or its Q-Link. RANDOMISE picks one of
+  them, and a mod slot or a lane on SAMPLE spans them (+-100 % is the whole folder). ALPHABASE SET, at the top of the
+  places, takes LOAD TO's instrument back to the AlphaBase set by number; so does loading a kit.
+- **Files:** WAV, 8, 16, 24 or 32-bit or 32-bit float, any sample rate (played at its own pitch), stereo mixed to
+  mono, the first minute, 64 MB a file at most. A file is read when something first asks for it (a hit, a tap, a step of
+  SAMPLE), on a thread of its own, never the audio's: the hit that asks plays without it. 64 MB of files stay in memory;
+  past that, the ones longest unplayed are let go (and read again when asked for), never one a voice is playing.
+- **Saved:** the project keeps each instrument's folder and the file's name, and finds the file again by name (files
+  added to the folder since don't matter). A folder that isn't there (a drive not plugged in) plays no sample until you
+  load another. A folder changed on disk while the plugin is open shows its new files when you browse into it again.
+
+The project's copy of the plugin's settings is now only what differs from the defaults (6 bytes for Init, 6.3 KB with
+every control moved, in the wrapper's 8 KB, with room for the folders); projects saved before load as they did.
+
 ## Kits
 
 In MPC's PRESET menu: **Init**, **Analog Basics**, **Low and Slow** (808-style kick, filter toms), **Hard Drive**
@@ -143,11 +172,14 @@ build/render <data folder or ""> build/renders kit           # every kit: each i
 build/render <data folder or ""> build/renders script <file>  # one WAV per line: name;key=value;...;hits=kd@0,ch@0.5
 ```
 
-`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (713 parameters; the
+`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (730 parameters; the
 first 414 are as they were before 2026-10-17, the first 702 before 2026-10-18: MPC saves projects and Q-Links by
 number).
 
 `mpc/selftest.c` checks KEYS CH and pitch bend, the lanes, the matrix, RANDOMISE (40 rolls an instrument: in range,
-the mix kept, every roll heard), the saved state's size (at most 6.5 KB of the
-wrapper's 8 KB) and OUT 1-11 with Incipience OUT loaded as a library of its own (the comment at its top says how to
-build and run it; `bench` times the matrix).
+the mix kept, every roll heard), your own samples (five kinds of WAV file written and read back, a folder's order, the
+SAMPLES tab's browsing, a file loaded and played, found by name from the state, RANDOMISE and the matrix within the
+folder, a kit back to the sample set, and 47 files of 1.8 MB played while another instrument holds one, past the 64 MB:
+it runs clean under ASan/UBSan, which would catch a file freed under a voice, and TSan), the saved state's size (at
+most 6.3 KB of the wrapper's 8 KB) and OUT 1-11 with Incipience OUT loaded as a library of its own (the comment at its
+top says how to build and run it; `bench` times the matrix).

@@ -143,8 +143,23 @@ parameter index, so existing projects keep working.
     own. The screen is 16 MB (Percolator's 15)
   - [x] Installed on the Live II (2026-10-18): both, Incipience OUT registered with one MPC restart, the .so files
     verified by hash
-  - [ ] On the Live II: Incipience MIDI In listed as a track output, KEYS CH and pitch bend from MIDI tracks, the lanes from a MIDI track's lane menu, the matrix by ear, OUT 1-11
-    on audio tracks, `bench.sh` with the matrix busy
+  - [x] On the Live II (owner, 2026-10-18: "other features look ok"): KEYS CH through Incipience MIDI In, OUT 1-11,
+    the lanes and the matrix. Still to do: `bench.sh` with the matrix busy
+  - [x] The owner's notes from the device, offline (2026-10-18, branch `incipience-midi-mod`): **RANDOMISE** per
+    instrument, its sound not its mix ("a randomise button on each voice which sits outside of the mix"; gen.py's
+    `RAND` ranges plus rules so a roll is always heard: 0 quiet in 20,000 rolls an instrument); **NOISE VOL** beside
+    SAMPLE on page A ("the sample button doesn't do anything on CL Hat A": measured, the metal noise at its full level
+    covers the sample, 3 dB apart across samples with it, 19 dB without); **your own samples** ("can we browse samples
+    on the MPC or point to folders?"): a SAMPLES tab browsing the drives, a WAV file tapped loads into an instrument
+    whose SAMPLE then steps through that folder, by name in the project (`src/library.c`: one thread reads, 64 MB kept,
+    a playing file never freed); the project's state is now only what differs from the defaults. 730 parameters.
+    `build.sh` PASSED, `check_skin.py` OK, the self-test PASSED natively and under ASan/UBSan and TSan
+  - [ ] On the Live II: the **data wheel** (owner: "I cannot use the main mpc button to dial in parameters ... in
+    addition to the qlinks"). The screen file gives the controls MPC's focus as Percolator's does (the same focus and
+    touch actions), and sd88me's Force probe saw the wheel send a focused control's value + 0.01: find out whether the
+    wheel works on other plugins of ours and Akai's on the Live II, and if not on Incipience alone, trace what MPC sends
+  - [ ] On the Live II: the SAMPLES tab (the drives' names under `/media`, how fast a folder on the SSD reads, the rows'
+    24 characters, LOAD TO's pop-up), RANDOMISE by ear, NOISE VOL on page A
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
     63 factory kits load; the AlphaBase's CC chart on channels 1-11 (needs its MIDI implementation)
