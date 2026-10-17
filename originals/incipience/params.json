@@ -9215,6 +9215,61 @@
    "max": 100,
    "default": 0,
    "dynamic_display": true
+  },
+  {
+   "key": "kd_rand",
+   "name": "KICK RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "mb_rand",
+   "name": "MBRANE RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "ch_rand",
+   "name": "CL HAT RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "oh_rand",
+   "name": "OP HAT RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "cp_rand",
+   "name": "CLAP RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "rm_rand",
+   "name": "RIM RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "cr_rand",
+   "name": "CRASH RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "rd_rand",
+   "name": "RIDE RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "x1_rand",
+   "name": "X1 RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "x2_rand",
+   "name": "X2 RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "fm_rand",
+   "name": "FM RANDOMISE",
+   "momentary": true
   }
  ]
 }

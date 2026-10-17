@@ -220,6 +220,66 @@ int main(int argc, char **argv) {
         E->destroy(P);
     }
 
+    /* ---- RANDOMISE: each instrument's own sound controls in their ranges, its VOLUME, ACCENT and MIX as they were,
+     * MPC told of each change, and every roll heard (no sample set here: X1 and X2, which are samples alone, aside) ---- */
+    {
+        inc_t *P = E->create("");
+        char k[32];
+        int rolls = 0, quiet = 0;
+        double softest = 1e30;
+        for (int ins = 0; ins < NI; ins++) {
+            const char *key = PDEF[P_KD_RAND + ins].key;
+            int pl = (int)(strchr(key, '_') - key);
+            for (int roll = 0; roll < 40; roll++) {
+                while (mpc_engine_changed(P, k, sizeof k)) {}
+                float before[NP];
+                memcpy(before, P->pv, sizeof before);
+                set(P, key, "1");
+                set(P, key, "0");   /* the button's release: nothing more */
+                int moved = 0;
+                for (int i = 0; i < NP; i++) {
+                    if (P->pv[i] == before[i]) continue;
+                    moved++;
+                    CHECK(!strncmp(PDEF[i].key, key, pl + 1), "%s moved %s", key, PDEF[i].key);
+                    const char *suf = PDEF[i].key + pl + 1;
+                    CHECK(strcmp(suf, "vol") && strcmp(suf, "acc") && strcmp(suf, "pan") && strcmp(suf, "rsend") &&
+                          strcmp(suf, "dsend"), "%s moved %s", key, PDEF[i].key);
+                    const rnd_t *r = &RND[i];
+                    float v = P->pv[i];
+                    CHECK(v == floorf(v) && v >= PDEF[i].lo && v <= (PDEF[i].kind == 1 ? PDEF[i].nopts - 1 : PDEF[i].hi),
+                          "%s = %g", PDEF[i].key, v);
+                    CHECK(r->how != 1 || (v >= r->lo && v <= r->hi) || v == r->v ||
+                          (strstr(PDEF[i].key, "_rout") || strstr(PDEF[i].key, "_mtnz") || strstr(PDEF[i].key, "_nzvol")),
+                          "%s = %g, not %d..%d", PDEF[i].key, v, r->lo, r->hi);   /* the last three: heard (see randomise) */
+                    CHECK(r->how != 2 || v == P->pv[r->eq], "%s = %g, not %s's", PDEF[i].key, v, PDEF[r->eq].key);
+                    CHECK(P->ev[i] == v, "%s: the sound has %g, the screen %g", PDEF[i].key, P->ev[i], v);
+                }
+                int told = 0;
+                while (mpc_engine_changed(P, k, sizeof k)) told++;
+                CHECK(moved > 0 && told >= moved, "%s: %d moved, MPC told of %d", key, moved, told);
+                if (ins == I_X1 || ins == I_X2) continue;
+                midi(P, 0x90, 36 + ins, 100);
+                int16_t *o = run(P, 8);
+                midi(P, 0x80, 36 + ins, 0);
+                int16_t *o2 = run(P, 160);
+                double e = energy(o, 8 * B) + energy(o2, 160 * B);
+                free(o), free(o2);
+                rolls++;
+                if (e < softest) softest = e;
+                if (e < 1e6) {
+                    quiet++;
+                    printf("     quiet: %s roll %d (energy %.3g)\n", key, roll, e);
+                }
+                midi(P, 0xB0, 120, 0);   /* all sound off: the next roll starts from silence */
+                free(run(P, 4));
+            }
+        }
+        CHECK(quiet == 0, "%d of %d rolls silent", quiet, rolls);
+        printf("ok   RANDOMISE: 40 rolls an instrument, each in its ranges, the mix kept, MPC told; %d heard (softest %.3g)\n",
+               rolls, softest);
+        E->destroy(P);
+    }
+
     /* ---- the saved state: within the wrapper's 8 KB with every value at its longest, and back ---- */
     {
         inc_t *P = E->create(""), *Q;

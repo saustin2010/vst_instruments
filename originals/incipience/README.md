@@ -6,10 +6,11 @@
 
 <img src="screenshots/page_0.png" width="760" alt="Incipience's KICK page">
 
-**Status (2026-10-17): in testing.** Played on an MPC Live II since 2026-10-13. New on 2026-10-17, offline so far
-(`tools/build.sh`: PASSED, `check_skin.py`: OK, `mpc/selftest.c`: PASSED): every instrument playable chromatically on
-a MIDI channel of its own, OUT 1-11 with [FX] Incipience OUT, MIDI MOD lanes and a mod matrix, as on
-[Percolator](../percolator/). What's next is in [ROADMAP.md](../../ROADMAP.md#new-plugins).
+**Status (2026-10-18): in testing.** Played on an MPC Live II since 2026-10-13. On the Live II since 2026-10-18: every
+instrument playable chromatically on a MIDI channel of its own, OUT 1-11 with [FX] Incipience OUT, MIDI MOD lanes and
+a mod matrix, as on [Percolator](../percolator/). New on 2026-10-18, offline so far (`tools/build.sh`: PASSED,
+`check_skin.py`: OK, `mpc/selftest.c`: PASSED): RANDOMISE on each instrument, NOISE VOL beside SAMPLE. What's next is
+in [ROADMAP.md](../../ROADMAP.md#new-plugins).
 
 ## What it is
 
@@ -45,6 +46,20 @@ slots), MIDI & OUT (each instrument's NOTE, KEYS CH and OUT) and MIDI MOD (each 
 SAMPLE is a box with arrows: one sample a tap (a Q-Link still turns through them). PITCH and CENTS on the sample
 channels tune their metal noise as well as the sample (on the AlphaBase they move the sample alone), so a hat or a
 cymbal without a sample can be tuned too; a tom from the self-oscillating filter is tuned with CUTOFF.
+
+A sample goes through the channel's filter with its metal noise (ROUTING HH FILTER / LP / HP / BP), and at NOISE VOL's
+full level the noise covers most samples: on CL HAT and CLAP at Init, stepping through the samples changes little until
+NOISE VOL comes down (or METAL NZ goes OFF, or ROUTING OFF, the sample alone), and RIM's whistling filter (RESONANCE
+above 85) rings over its sample the same way. NOISE VOL is on page A beside SAMPLE for that (since 2026-10-18; ENV
+AMOUNT, and on the hats RESONANCE, moved to page B). The sample kits turn the metal noise off where they use samples.
+
+**RANDOMISE**, by the name on each instrument's pages (touch only, on no Q-Link): a new sound from the instrument's own
+controls, each within a range that keeps it a drum sound (gen.py's `RAND`): decays, filters, tunings, the sample (one
+of the instrument's kind from the AlphaBase set: hats for the hats, cymbals for the cymbals), the metal noise, the LFO
+(often off). Its VOLUME, ACCENT, MIX (pan, sends, mute), OUT, KEYS CH and lanes stay as they are, and so do the FM
+synth's VOICES and CHORD. A roll always sounds: a hat or a cymbal left without a sample keeps a noise source through its
+filter, and the FM synth keeps operator 1 in the mix. MPC's screen and Q-Links follow; there is no undo, so save the
+kit you like (MPC's Program save keeps the plugin's state).
 
 | | A | B | MIX / VOICE |
 |---|---|---|---|
@@ -128,9 +143,11 @@ build/render <data folder or ""> build/renders kit           # every kit: each i
 build/render <data folder or ""> build/renders script <file>  # one WAV per line: name;key=value;...;hits=kd@0,ch@0.5
 ```
 
-`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (702 parameters; the
-first 414 are as they were before 2026-10-17: MPC saves projects and Q-Links by number).
+`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (713 parameters; the
+first 414 are as they were before 2026-10-17, the first 702 before 2026-10-18: MPC saves projects and Q-Links by
+number).
 
-`mpc/selftest.c` checks KEYS CH and pitch bend, the lanes, the matrix, the saved state's size (at most 6.5 KB of the
+`mpc/selftest.c` checks KEYS CH and pitch bend, the lanes, the matrix, RANDOMISE (40 rolls an instrument: in range,
+the mix kept, every roll heard), the saved state's size (at most 6.5 KB of the
 wrapper's 8 KB) and OUT 1-11 with Incipience OUT loaded as a library of its own (the comment at its top says how to
 build and run it; `bench` times the matrix).

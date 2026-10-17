@@ -89,6 +89,7 @@ MAPS = {
         "enum": {"item": ".ab-enum", "opt": ".ab-opt"},
         "stepper": {"item": ".ab-step-hit"},
         "popup": {"item": ".ab-pop-hit"},
+        "button": {"item": ".ab-btn", "selfLabel": True},   # RANDOMISE, by the name on each instrument's pages
     },
     "braids": {
         "sweep": 135,

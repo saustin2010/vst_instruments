@@ -202,6 +202,11 @@ def right_column(tab, inst, title, sub, rows, side, P, info=()):
            'line-height: 1;">INCIPIENCE</div></div><div style="margin-left: 24px; margin-top: 6px; font-family: \'Inter\', '
            'sans-serif; font-size: 9.5px; font-weight: 800; letter-spacing: 0.22em; color: #141414;">ELEVEN-VOICE DRUM '
            'SYNTHESIZER</div>']
+    if inst:   # RANDOMISE by the name, outside the MIX panel (owner, 2026-10-18); touch only, on no Q-Link
+        out.append('<button class="ab-btn" data-param="%s_rand" type="button" style="position: absolute; right: 6px; '
+                   'top: 152px; width: 150px; height: 40px; border-radius: 4px; background: #2c2c2c; color: #e5e5e5; '
+                   'font-family: \'Inter\', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; '
+                   'border-bottom: 3px solid #151515;">RANDOMISE</button>' % inst)
     panels = []
     if inst:
         panels.append(("MIX", title, [side_ctl(inst + "_pan", P, title), side_ctl(inst + "_rsend", P, title),
@@ -277,7 +282,7 @@ def main():
             ql[ti] = pg["qlinks_c"] if sub == "C" else [k for _, _, row in rows for k in (row + ["-"] * (4 - len(row)))]
             on = {k for _, _, row in rows for k in row if k != "-"} | set(pg["side"])
             if pg["inst"]:
-                on |= {pg["inst"] + s for s in ("_pan", "_rsend", "_dsend", "_mute")}
+                on |= {pg["inst"] + s for s in ("_pan", "_rsend", "_dsend", "_mute", "_rand")}
             twice |= on & seen
             seen |= on
             ti += 1

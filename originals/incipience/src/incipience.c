@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "incipience.h"
 #if defined(__x86_64__) || defined(__i386__)
 #include <xmmintrin.h>
@@ -273,6 +274,69 @@ static void lane_set(inc_t *P, int i, int v) {
     P->changed[i / 32] |= 1u << (i % 32);
 }
 
+/* ---- RANDOMISE ------------------------------------------------------------------------------------------------- */
+static int rnd_in(inc_t *P, int lo, int hi) {
+    uint32_t x = P->rrng;
+    x ^= x << 13; x ^= x >> 17; x ^= x << 5;
+    P->rrng = x;
+    return lo + (int)(x % (uint32_t)(hi - lo + 1));
+}
+
+/* a SAMPLE for instrument ins from the sample set: among the numbers of its kind (the set's rough classes), one there;
+ * a hat or a cymbal has none a third of the time (the analog part alone). -1: none found (no set), leave it */
+static int rand_sample(inc_t *P, int ins) {
+    static const short HATS[] = {1, 24, 0}, CLAPS[] = {84, 96, 132, 161, 0}, RIMS[] = {60, 83, 84, 96, 132, 161, 0},
+                       CYMS[] = {27, 59, 168, 217, 0}, ANY[] = {1, NSMP - 1, 0};
+    const short *r = ins == I_CH || ins == I_OH ? HATS : ins == I_CP ? CLAPS : ins == I_RM ? RIMS
+                   : ins == I_CR || ins == I_RD ? CYMS : ANY;
+    if (ins < I_X1 && rnd_in(P, 0, 99) < 33) return 0;
+    int n = 0;
+    for (int k = 0; r[k]; k += 2) n += r[k + 1] - r[k] + 1;
+    for (int tries = 0; tries < 64; tries++) {
+        int j = rnd_in(P, 0, n - 1), k = 0;
+        while (j > r[k + 1] - r[k]) j -= r[k + 1] - r[k] + 1, k += 2;
+        if (pool_exists(r[k] + j)) return r[k] + j;
+    }
+    return -1;
+}
+
+static void rand_set(inc_t *P, int i, float v) {
+    P->pv[i] = P->ev[i] = v;
+    P->changed[i / 32] |= 1u << (i % 32);
+}
+
+/* a new sound for instrument ins (gen.py's RAND: each control's range), then whatever makes it heard: a hat or a
+ * cymbal with no sample keeps a noise source and its filter. Its VOLUME, ACCENT and MIX stay; MPC's screen follows */
+static void randomise(inc_t *P, int ins) {
+    for (int pass = 0; pass < 2; pass++)   /* "the same as" controls after the ones they follow */
+        for (int c = 0; c < MODN[ins]; c++) {
+            int i = MODT[ins][c];
+            const rnd_t *r = &RND[i];
+            if (r->how == 2 && pass == 1) rand_set(P, i, P->pv[r->eq]);
+            if (pass == 1 || (r->how != 1 && r->how != 3)) continue;
+            if (r->how == 3) {
+                int n = rand_sample(P, ins);
+                if (n >= 0) rand_set(P, i, (float)n);
+            } else {
+                rand_set(P, i, (float)(r->p && rnd_in(P, 0, 99) < r->p ? r->v : rnd_in(P, r->lo, r->hi)));
+            }
+        }
+    if (ins >= I_CH && ins < I_X1) {
+        int b = SBASE[ins - I_CH];
+        if (P->pv[b + S_SAMPLE] < 0.5f) {
+            if (P->pv[b + S_ROUT] < 0.5f) rand_set(P, b + S_ROUT, 1.0f);   /* OFF passes the sample alone */
+            int whistle = ins >= I_CP && P->pv[b + S_RES] > 85.0f;
+            if (!whistle && P->pv[b + S_MTNZ] < 0.5f) rand_set(P, b + S_MTNZ, (float)rnd_in(P, 1, 127));
+            if (!whistle && P->pv[b + S_NZVOL] < 60.0f) rand_set(P, b + S_NZVOL, (float)rnd_in(P, 60, 127));
+        }
+        smp_t sm;
+        pool_get((int)P->pv[b + S_SAMPLE], &sm);
+    } else if (ins == I_X1 || ins == I_X2) {
+        smp_t sm;
+        pool_get((int)P->pv[XBASE[ins - I_X1] + X_SAMPLE], &sm);
+    }
+}
+
 static void e_midi(void *inst, const uint8_t *m, int len) {
     inc_t *P = inst;
     apply_kit(P);
@@ -449,6 +513,7 @@ static void *e_create(const char *dir) {
     for (int i = 0; i < NI; i++) P->pan_at[i] = -1.0f;
     P->mrng = 0x6c8e9cf5u;
     P->id = __atomic_fetch_add(&next_id, 1, __ATOMIC_RELAXED);
+    P->rrng = ((uint32_t)time(NULL) * 2654435761u ^ P->id * 0x9E3779B9u) | 1u;
     P->bus = tapbus_open();
     mi_open(&P->midi_in, "Incipience");
     voices_init(P);
@@ -495,6 +560,10 @@ static void e_set_param(void *inst, const char *key, const char *val) {
         return;
     }
     apply_kit(P);
+    if (i >= P_KD_RAND && i < P_KD_RAND + NI) {   /* RANDOMISE: on the press (the release sends 0) */
+        if (atof(val) >= 0.5) randomise(P, i - P_KD_RAND);
+        return;
+    }
     set_value(P, i, val);
     if (PDEF[i].kind == 4 && (strstr(key, "_sample"))) {   /* a new sample number: start reading it */
         smp_t s;
@@ -630,7 +699,7 @@ static int e_get_param(void *inst, const char *key, char *buf, int len) {
 static const mpc_engine_t ENGINE = {e_create, e_destroy, e_midi, e_set_param, e_get_param, e_render};
 const mpc_engine_t *mpc_engine(void) { return &ENGINE; }
 
-/* After each block the wrapper asks which parameters changed here (the MIDI MOD lanes, lane_set), one at a time, and
+/* After each block the wrapper asks which parameters changed here (the MIDI MOD lanes, RANDOMISE), one at a time, and
  * tells MPC, so the screen and the Q-Links follow. A wrapper without the hook never asks: the values still change. */
 int mpc_engine_changed(void *inst, char *key, int len) {
     inc_t *P = inst;

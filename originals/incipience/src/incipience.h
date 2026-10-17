@@ -168,7 +168,8 @@ typedef struct inc {
     uint32_t hold_w;
     float pan_at[NI], pan_l[NI], pan_r[NI];   /* each instrument's pan gains, and the PAN they're for */
     mi_port_t midi_in;            /* "Incipience MIDI In": notes on their own channels, for KEYS CH (midiin.h) */
-    uint32_t changed[(NP + 31) / 32];   /* controls a MIDI MOD lane set, for MPC's screen (mpc_engine_changed) */
+    uint32_t changed[(NP + 31) / 32];   /* controls a MIDI MOD lane or RANDOMISE set, for MPC's screen (mpc_engine_changed) */
+    uint32_t rrng;                /* RANDOMISE's own (the matrix's RANDOM stays repeatable) */
 } inc_t;
 
 void kick_trigger(inc_t *P, const play_t *pl);

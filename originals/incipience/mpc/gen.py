@@ -268,7 +268,45 @@ def build():
         step("m%d_ctl" % m, "MOD%d CONTROL" % m, 0, 0, nctl - 1)
         arrows("m%d_ctl" % m, "MOD%d CONTROL" % m)
         knob("m%d_depth" % m, "MOD%d DEPTH" % m, 0, -100, 100)
+    # RANDOMISE (owner, 2026-10-18: "a randomise button on each voice which sits outside of the mix"): a new sound from
+    # the instrument's own controls (RAND below); its VOLUME, ACCENT and MIX stay as they are
+    for k, n, fam in INSTR:
+        P.append(dict(key=k + "_rand", name=n + " RANDOMISE", momentary=True))
     return P
+
+
+# What RANDOMISE gives each sound control, by instrument and the key's suffix: (lo, hi), a whole number in that range;
+# (lo, hi, p, v): v p % of the time, else lo..hi; "=x": the value x got (a release as long as the decay, so a short pad
+# tap doesn't cut it); "smp": a SAMPLE of the instrument's kind (src/incipience.c, rand_sample). Left out: not touched.
+_SMP = {"pitch": (35, 80), "start": (0, 30, 60, 0), "stop": (60, 127, 60, 127), "sample": "smp", "cents": (0, 40, 60, 0),
+        "loop": (0, 127), "loopon": (0, 1, 85, 0), "rev": (0, 1, 85, 0), "lfwav": (0, 63), "lfrat": (0, 127),
+        "lfclk": (0, 1), "lftun": (0, 30, 75, 0), "lfsyn": (0, 1), "lfvca": (0, 60, 75, 0)}
+_HYB = dict(_SMP, vcatt=(0, 30, 60, 0), vcsus=(0, 60, 80, 0), vcrel="=vcdec", fiatt=(0, 30, 60, 0), fidec=(10, 100),
+            fisus=(0, 60, 80, 0), firel="=fidec", evamt=(0, 90), nzvol=(20, 127), mtnz=(1, 127, 25, 0),
+            lfcut=(0, 60, 70, 0))
+_VCDEC = {"ch": (20, 60), "oh": (50, 100), "cp": (30, 80), "rm": (15, 60), "cr": (70, 120), "rd": (60, 115)}
+_LFO = {"wav": (0, 63), "rat": (0, 127), "int": (0, 40, 75, 0)}
+RAND = {
+    "kd": {"tune": (20, 110), "pitch": (10, 70), "decay": (30, 110), "harm": (0, 90, 40, 0), "attack": (20, 127),
+           "pulse": (20, 127), "noise": (0, 90), "eq": (0, 90), "ptatk": (0, 50, 50, 0), "ptdec": (10, 100),
+           "compr": (0, 90), "metnz": (0, 127, 60, 0), "evamt": (0, 70, 50, 0), "gate": (10, 100),
+           **{"lf" + s: r for s, r in _LFO.items()}},
+    "mb": {"pitch1": (20, 100), "damp1": (20, 110), "pitch2": (20, 110), "damp2": (20, 110), "cupl1": (0, 90),
+           "cupl2": (20, 110), "noise": (0, 127), "decay": (20, 100), "p1atk": (0, 40, 50, 0), "p1dec": (10, 90),
+           "p2atk": (0, 40, 50, 0), "p2dec": (10, 90), "nzfil": (20, 127), "mtnz1": (0, 127, 50, 0), "nzshp": (0, 12),
+           "scene": (0, 9, 40, 0), "e1amt": (0, 80, 40, 0), "mtnz2": (0, 127, 60, 0), "e2amt": (0, 80, 40, 0),
+           "gate": (10, 90), **{"l%d%s" % (l, s): r for l in (1, 2) for s, r in _LFO.items()}},
+    "x1": _SMP, "x2": _SMP,
+    "fm": {**{"op%d" % i: (0, 127) for i in range(1, 5)},
+           **{"fm%d%d" % (i, j): (0, 90, 45, 0) if i < j else (0, 70, 70, 0) for i in range(1, 5) for j in range(1, 5) if i != j},
+           **{"eg%dat" % i: (0, 40, 60, 0) for i in range(1, 5)}, **{"eg%drl" % i: (10, 100) for i in range(1, 5)},
+           "s1amt": (60, 127), **{"s%damt" % i: (0, 127, 60, 0) for i in range(2, 5)},   # OP1 always heard
+           **{"s%dfm" % i: (0, 60, 60, 0) for i in range(1, 5)}},
+}
+for _k in ("ch", "oh"):
+    RAND[_k] = dict(_HYB, vcdec=_VCDEC[_k], cutoff=(60, 127), res=(0, 100), rout=(0, 1, 80, 1), hpcut=(30, 100))
+for _k in ("cp", "rm", "cr", "rd"):
+    RAND[_k] = dict(_HYB, vcdec=_VCDEC[_k], cutoff=(30, 127), res=(0, 110), rout=(0, 3))
 
 
 NOUT = 11       # OUT 1-11: every instrument can have a track of its own
@@ -304,8 +342,10 @@ def short_name(P, key):
 #: hardware's display shows one row of its 4 x 4 encoder matrix at a time). A row the same on A and B is one panel
 #: on both. "side": touch-only controls in the right column. Rows: (title, red caption, [keys]); "-" = an empty slot.
 def _smp_rows(k, hh):
-    filt_a = [k + "_cutoff", k + "_hpcut", k + "_res", k + "_rout"] if hh else [k + "_cutoff", k + "_res", k + "_evamt", k + "_rout"]
-    filt_b = [k + "_cutoff", k + "_evamt", k + "_nzvol", k + "_mtnz"] if hh else [k + "_cutoff", k + "_res", k + "_nzvol", k + "_mtnz"]
+    # NOISE VOL on page A, with SAMPLE: the metal noise at its full level covers a sample (owner, 2026-10-18: "the sample
+    # button doesn't do anything on CL Hat A"); turned down, or ROUTING OFF, the sample comes through
+    filt_a = [k + "_cutoff", k + "_hpcut", k + "_nzvol", k + "_rout"] if hh else [k + "_cutoff", k + "_res", k + "_nzvol", k + "_rout"]
+    filt_b = [k + "_cutoff", k + "_res", k + "_evamt", k + "_mtnz"]
     ftitle = "HH FILTER" if hh else "MM FILTER"
     return {
         "A": [("SAMPLE", "PLAYBACK", [k + "_pitch", k + "_start", k + "_stop", k + "_sample"]),
@@ -314,7 +354,7 @@ def _smp_rows(k, hh):
               ("LFO / LEVEL", "TO PITCH", [k + "_lfwav", k + "_lfrat", k + "_lftun", k + "_vol"])],
         "B": [("SAMPLE", "TUNE + LOOP", [k + "_cents", k + "_loop", k + "_loopon", k + "_rev"]),
               ("FILTER", "ENVELOPE", [k + "_fiatt", k + "_fidec", k + "_fisus", k + "_firel"]),
-              (ftitle, "NOISE", filt_b),
+              (ftitle, "ENVELOPE + NOISE", filt_b),
               ("LFO", "TO VCA + CUTOFF", [k + "_lfsyn", k + "_lfvca", k + "_lfcut", k + "_acc"])],
         "side": [k + "_lfclk"],
     }
@@ -518,6 +558,27 @@ def write_header(P):
     L.append("static const unsigned char MODN[NDEST] = {%s};" % ", ".join(str(len(t)) for t in T))
     L.append("static const char *const MODNAME[NDEST][NCTL] = {")
     L += ["    {%s}," % ", ".join('"%s"' % short_name(P, k) for k in t) for t in T]
+    L.append("};")
+    # RANDOMISE: P_KD_RAND + inst; what each control gets (RAND above)
+    assert [idx[k + "_rand"] for k, _, _ in INSTR] == list(range(idx["kd_rand"], idx["kd_rand"] + len(INSTR)))
+    L.append("/* RANDOMISE: how 0 = left as it is, 1 = lo..hi (v p % of the time), 2 = what control eq got, 3 = a SAMPLE */")
+    L.append("typedef struct { unsigned char how, p; short lo, hi, v, eq; } rnd_t;")
+    L.append("static const rnd_t RND[NP] = {")
+    for k, _, _ in INSTR:
+        sounds = targets(P, k)
+        for suf, r in RAND[k].items():
+            key = k + "_" + suf
+            assert key in sounds and suf not in ("vol", "acc", "pan", "rsend", "dsend"), key
+            if r == "smp":
+                L.append("    [P_%s] = {3, 0, 0, 0, 0, 0}," % key.upper())
+            elif isinstance(r, str):
+                L.append("    [P_%s] = {2, 0, 0, 0, 0, P_%s}," % (key.upper(), (k + "_" + r[1:]).upper()))
+            else:
+                lo, hi, p, v = (r + (0, 0))[:4]
+                p_ = next(q for q in P if q["key"] == key)
+                top = len(p_["options"]) - 1 if "options" in p_ else p_["max"]
+                assert p_.get("min", 0) <= lo <= hi <= top and p_.get("min", 0) <= v <= top, key
+                L.append("    [P_%s] = {1, %d, %d, %d, %d, 0}," % (key.upper(), p, lo, hi, v))
     L.append("};")
     open(os.path.join(ROOT, "src", "params_def.h"), "w").write("\n".join(L) + "\n")
 
