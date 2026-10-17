@@ -125,10 +125,28 @@ parameter index, so existing projects keep working.
     reverb and delay ran on empty): they sleep once nothing goes in and nothing is left; now 0.15 (`ab.sh`)
   - [ ] Testers (owner, 2026-10-13: a PR to send out for testing; not to sd88me's catalogue yet)
   - [ ] On the Live II: design QA of the new sub-pages (Q-Link outlines on the right-hand panels), `bench.sh`
+  - [x] MIDI, OUTs and modulation, offline (2026-10-17, branch `incipience-midi-mod`; owner: "play the voices
+    chromatically like I can with the percolator ... output routing for each of the tracks ... all the controls should
+    be able to be modulated"; chose MIDI lanes and a mod matrix both). As Percolator: a KEYS CH per instrument (every
+    note on it plays the instrument pitched, C3 as tuned, pitch bend +-2; channels 2-12 to start with), Incipience MIDI
+    In (its own ALSA port, so channels arrive), MIDI MOD lanes (mod wheel, Gen Purpose 1-3 per instrument, each moving
+    any of its controls); an OUT per instrument (MAIN, OUT 1-11) and [FX] Incipience OUT
+    ([incipienceout](originals/incipience/incipienceout/)), Percolator OUT made stereo and eleven wide. New: a mod matrix
+    of 4 LFOs and 16 slots (SOURCE: an LFO, RANDOM or VELOCITY at each hit; DEST + CONTROL: any control of an
+    instrument or of FX; DEPTH +-100 %). Three tabs: MOD, MIDI & OUT (NOTE moved here from MIX), MIDI MOD. 702
+    parameters (the first 414 unchanged). The kits render bit-for-bit as before; `mpc/selftest.c` PASSED (natively, as
+    32-bit ARM Linux code, and under ASan / UBSan in Linux); the matrix costs nothing measurable natively (all eleven
+    busy: 0.48 s vs 0.46 s for 60 s of audio); `tools/build.sh` PASSED and `check_skin.py` OK for both; procwatch: no
+    flags (Incipience idle/play 0.18, was 0.15; Incipience OUT 3 µs idle; procwatch now covers companion plugins).
+    Framework fixes in `shadow_skin.py` (the patch): a pop-up's option list was on every Q-Link sub-page of its tab (the
+    screen's TUI.json 8.2 -> 5.2 MB), and a stepper's arrows were cut from the tab's last sub-page's picture, not its
+    own. The screen is 16 MB (Percolator's 15)
+  - [ ] On the Live II: install both (Incipience OUT is new: one MPC restart), Incipience MIDI In listed as a track
+    output, KEYS CH and pitch bend from MIDI tracks, the lanes from a MIDI track's lane menu, the matrix by ear, OUT 1-11
+    on audio tracks, `bench.sh` with the matrix busy
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
-    63 factory kits load; Incipience MIDI In (an AlphaBase's channels 1-11, its CC chart); an OUT insert, as
-    Percolator OUT
+    63 factory kits load; the AlphaBase's CC chart on channels 1-11 (needs its MIDI implementation)
 
 - [ ] **Percolator** ([originals/percolator](originals/percolator/), 2026-10-10): a four-voice drum synth laid out like
   the Erica Synths Pērkons HD-01, DSP written from scratch, reads the Pērkons' `.KIT` packs. Seven pages (a voice
