@@ -93,8 +93,12 @@ def check(port, verbose=False):
             for k in ks:   # (one widget's own handles, e.g. a stepper and the name it shows, never "overlap")
                 bound.setdefault(k, []).append((rect(c["bounds"]["bounds"]), id(c), shown_when(c)))
         if lt:
-            want = {w["key"] for w in lt["widgets"] if w["kind"] in CONTROLS and "key" in w   # banks=: some sub-pages only
-                    and (not shadow_skin.banks_of(w) or tab["tabName"] in shadow_skin.banks_of(w))}
+            want = set()
+            for w in lt["widgets"]:
+                if w["kind"] in CONTROLS and "key" in w and (   # banks=: some sub-pages only
+                        not shadow_skin.banks_of(w) or tab["tabName"] in shadow_skin.banks_of(w)):
+                    # a list's key names its rows (<key>_1 ...): the first takes MPC's focus, the others are touch only
+                    want.add(shadow_skin.list_keys(w)[0] if w["kind"] == "list" else w["key"])
             for k in sorted(want - set(bound)):
                 out.append("BIND  %s: %s is in the layout but no widget on the page is bound to it" % (page_name, k))
         # touch boxes of different parameters overlapping

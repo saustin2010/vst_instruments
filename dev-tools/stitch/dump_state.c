@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <time.h>
 typedef struct AEffect AEffect;
 typedef intptr_t (*cb)(AEffect*,int32_t,int32_t,intptr_t,void*,float);
 struct AEffect { int32_t magic; intptr_t (*d)(AEffect*,int32_t,int32_t,intptr_t,void*,float);
@@ -23,6 +24,15 @@ int main(void) {
     if (!a) return 1;
     float L[128], R[128], *o[2] = {L, R};
     for (int k = 0; k < 8; k++) a->pr(a, 0, o, 128);   /* let an engine settle (presets applied on the audio thread) */
+    /* every display asked for once, then a moment: what an engine reads on a thread of its own when first shown (the
+     * folder Incipience's SAMPLES tab lists) is in by the time they're asked for again */
+    for (int i = 0; i < a->npar; i++) {
+        char d[256] = "";
+        a->d(a, 7, i, 0, d, 0);
+    }
+    struct timespec ts = {0, 300000000};
+    nanosleep(&ts, NULL);
+    for (int k = 0; k < 8; k++) a->pr(a, 0, o, 128);
     printf("{");
     for (int i = 0; i < a->npar; i++) {
         char d[256] = "";
