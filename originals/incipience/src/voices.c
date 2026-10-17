@@ -3,12 +3,14 @@
  * spirit rather than a copy of it.
  *
  * Levels: every instrument plays at VOLUME / 127 x (1/2 + 1/2 x ACCENT / 127 x velocity / 127), the hardware's accent
- * rule (no accent = half the volume, full accent = volume) with a pad's velocity as how much accent. */
+ * rule (no accent = half the volume, full accent = volume) with a pad's velocity as how much accent; worked out each
+ * block, so VOLUME and ACCENT can be modulated. An instrument played on its KEYS CH is transposed by its note against
+ * C3 (play_ratio: its oscillators or its sample, and the metal noise) and follows pitch bend on that channel. */
 #include <math.h>
 #include <string.h>
 #include "incipience.h"
 
-#define PV(i) (P->pv[(i)])
+#define PV(i) (P->ev[(i)])   /* the controls after the mod matrix */
 
 static float level(float vol, float acc, float vel) {
     float v = vol / 127.0f;
@@ -32,8 +34,9 @@ static float lfo_semis(float depth) { float d = depth / 127.0f; return 24.0f * d
  * long as GATE (0.1-15 ms), mixed by ATTACK; GATE also sets how much the trigger charges the envelope. EQ is a gentle
  * low-pass over the lot. A second pitch envelope (PITCH ATK / DEC / AMT) bends it up and back, for 808-style glides;
  * the LFO (restarted with each hit) moves the pitch. */
-void kick_trigger(inc_t *P, float vel, float semi) {
+void kick_trigger(inc_t *P, const play_t *pl) {
     kick_t *k = &P->kd;
+    k->pl = *pl;
     k->active = 1;
     k->n = 0;
     k->ph = 0.0f;
@@ -46,9 +49,7 @@ void kick_trigger(inc_t *P, float vel, float semi) {
     ad_times(&k->pe, expmap(PV(P_KD_PTATK), 0.0002f, 0.5f), expmap(PV(P_KD_PTDEC), 0.005f, 3.0f));
     k->pe.v = 0.0f;
     ad_start(&k->pe, expmap(PV(P_KD_PTATK), 0.0002f, 0.5f));
-    k->lvl = level(PV(P_KD_VOL), PV(P_KD_ACC), vel);
     k->click_prev = 0.0f;
-    (void)semi;
 }
 
 static float harm_norm(float p) {   /* RMS of |sin|^p, against a sine's */
@@ -71,7 +72,8 @@ void kick_block(inc_t *P, float *y, int n) {
     int metal = (int)PV(P_KD_METNZ);
     float eqc = op_coef(18000.0f * fexp2(-7.0f * PV(P_KD_EQ) / 127.0f));
     float hpc = op_coef(80.0f);
-    float f0 = kick_hz(PV(P_KD_PITCH)) * INV_SR;
+    float f0 = kick_hz(PV(P_KD_PITCH)) * INV_SR * play_ratio(P, &k->pl);
+    k->lvl = level(PV(P_KD_VOL), PV(P_KD_ACC), k->pl.vel);
     float pamt = 24.0f * powf(PV(P_KD_EVAMT) / 127.0f, 1.5f);
     float lsemi = lfo_run(&k->lfo, (int)PV(P_KD_LFWAV), lfo_hz(PV(P_KD_LFRAT), 0, P->bpm), n) * lfo_semis(PV(P_KD_LFINT));
     ad_times(&k->pe, expmap(PV(P_KD_PTATK), 0.0002f, 0.5f), expmap(PV(P_KD_PTDEC), 0.005f, 3.0f));
@@ -131,8 +133,9 @@ static float damp_k(float d) {   /* DAMPEN -> the filter's damping (1/Q): consta
     return -0.0006f * (d - 118.0f);
 }
 
-void mbrane_trigger(inc_t *P, float vel, float semi) {
+void mbrane_trigger(inc_t *P, const play_t *pl) {
     mbrane_t *m = &P->mb;
+    m->pl = *pl;
     int sc = (int)PV(P_MB_SCENE);
     float gate = sc ? SCENE[sc - 1][SC_GATE] : PV(P_MB_GATE);
     m->active = 1;
@@ -145,8 +148,6 @@ void mbrane_trigger(inc_t *P, float vel, float semi) {
     m->pe1.v = m->pe2.v = 0.0f;
     ad_start(&m->pe1, p1a);
     ad_start(&m->pe2, p2a);
-    m->lvl = level(PV(P_MB_VOL), PV(P_MB_ACC), vel);
-    (void)semi;
 }
 
 static void fosc_coef(svfc_t *c, float g, float k) {
@@ -189,7 +190,8 @@ void mbrane_block(inc_t *P, float *y, int n) {
     float ns1 = sqrtf(fmaxf(k1, 0.002f)), ns2 = sqrtf(fmaxf(k2, 0.002f));
     float tv = expmap(PV(P_MB_DECAY), 0.02f, 6.0f);
     float vc = t60_coef(tv), ncf = t60_coef(0.3f * tv);
-    float base1 = mb_hz(p1), base2 = mb_hz(p2);
+    float tr = play_ratio(P, &m->pl), base1 = mb_hz(p1) * tr, base2 = mb_hz(p2) * tr;
+    m->lvl = level(PV(P_MB_VOL), PV(P_MB_ACC), m->pl.vel);
     for (int i = 0; i < n; i++) {
         float pe1 = ad_run(&m->pe1), pe2 = ad_run(&m->pe2);
         float f1 = fminf(base1 * fexp2((a1 * pe1 + l1) / 12.0f), 0.45f * SR);
@@ -257,8 +259,9 @@ static int zero_x(const smp_t *sm, int at, int lo, int hi) {   /* the nearest ze
     return at;
 }
 
-void smp_trigger(inc_t *P, int s, float vel, float semi) {
+void smp_trigger(inc_t *P, int s, const play_t *pl) {
     smpv_t *v = &P->sv[s];
+    v->pl = *pl;
     int b = base_of(s), x = is_x(s);
     int start = x ? X_START : S_START, stop = x ? X_STOP : S_STOP, loop = x ? X_LOOP : S_LOOP;
     int smp = (int)PV(b + (x ? X_SAMPLE : S_SAMPLE)), rev = (int)PV(b + (x ? X_REV : S_REV));
@@ -297,8 +300,6 @@ void smp_trigger(inc_t *P, int s, float vel, float semi) {
         v->f.s1 = 1.1f;
         v->f.s2 = 0.0f;
     }
-    v->lvl = level(PV(b + (x ? X_VOL : S_VOL)), PV(b + (x ? X_ACC : S_ACC)), vel);
-    (void)semi;
 }
 
 void smp_release(inc_t *P, int s) {
@@ -323,8 +324,10 @@ void smp_block(inc_t *P, int s, float *y, int n) {
     float lt = lfo_semis(PV(b + (x ? X_LFTUN : S_LFTUN)));
     float lvca = PV(b + (x ? X_LFVCA : S_LFVCA)) / 127.0f;
     float sg = 1.0f - lvca * (1.0f - lo) * 0.5f;
+    float tr = play_ratio(P, &v->pl);
+    v->lvl = level(PV(b + (x ? X_VOL : S_VOL)), PV(b + (x ? X_ACC : S_ACC)), v->pl.vel);
     double step = 0.0;
-    if (v->s.d) step = smp_ratio(pitch, cents) * fexp2(lo * lt / 12.0f) * (v->s.rate / SR);
+    if (v->s.d) step = smp_ratio(pitch, cents) * tr * fexp2(lo * lt / 12.0f) * (v->s.rate / SR);
     if (step > 32.0) step = 32.0;
 
     /* the analog part */
@@ -343,7 +346,7 @@ void smp_block(inc_t *P, int s, float *y, int n) {
         nzv = mt ? powf(PV(b + S_NZVOL) / 127.0f, 1.5f) : 0.0f;
         /* PITCH and CENTS tune the channel's metal noise too (not on the AlphaBase, where they move the sample alone):
          * with no sample a hat or a cymbal is still tunable */
-        v->nz.rate = clampf(smp_ratio(pitch, cents), 0.125f, 8.0f);
+        v->nz.rate = clampf(smp_ratio(pitch, cents) * tr, 0.125f, 8.0f);
         float env = v->fenv.v;   /* the filter envelope moves the cutoff once a block */
         float oct = env * 7.0f * PV(b + S_EVAMT) / 127.0f + lo * 4.0f * powf(PV(b + S_LFCUT) / 127.0f, 1.5f);
         float r = PV(b + S_RES);
@@ -422,7 +425,7 @@ static const int CHORD_NOTES[NCHORD][6] = {
     {0, 3, 7, 10, -1}, {0, 4, 7, 10, -1}, {0, 3, 7, 10, 14, -1}, {0, 1, 2, 3, 4, 5},
 };
 
-static void fm_start(inc_t *P, int note, float vel) {
+static void fm_start(inc_t *P, int note, const play_t *pl) {
     int nv = (int)PV(P_FM_VOICES), pick = -1, oldest = 1 << 30;
     if (nv < 1) nv = 1;
     if (nv > FM_VOICES) nv = FM_VOICES;
@@ -436,7 +439,8 @@ static void fm_start(inc_t *P, int note, float vel) {
     v->active = 1;
     v->note = note;
     v->age = ++P->fm_age;
-    v->lvl = level(PV(P_FM_VOL), PV(P_FM_ACC), vel);
+    v->pl = *pl;
+    v->cscale = 1.0f;
     for (int o = 0; o < 4; o++) {
         int b = P_FM_EG1AT + 4 * o;
         float a = expmap(PV(b), 0.0002f, 2.0f);
@@ -448,16 +452,16 @@ static void fm_start(inc_t *P, int note, float vel) {
     }
 }
 
-void fm_trigger(inc_t *P, float vel, int note, int chord) {
+void fm_trigger(inc_t *P, const play_t *pl, int note, int chord) {
     if (chord < 0) {
-        fm_start(P, note, vel);
+        fm_start(P, note, pl);
         return;
     }
     int c = (int)PV(P_FM_CHORD), nv = (int)PV(P_FM_VOICES), n = 0;
     while (n < 6 && n < nv && CHORD_NOTES[c][n] >= 0 && (!n || CHORD_NOTES[c][n])) n++;
     for (int k = 0; k < n; k++) {
-        fm_start(P, note + CHORD_NOTES[c][k], vel);
-        P->fm[P->fm_last].lvl /= sqrtf((float)n);   /* a chord as loud as one note, about */
+        fm_start(P, note + CHORD_NOTES[c][k], pl);
+        P->fm[P->fm_last].cscale = 1.0f / sqrtf((float)n);   /* a chord as loud as one note, about */
     }
 }
 
@@ -486,8 +490,9 @@ void fm_block(inc_t *P, float *y, float *side, int n) {
     for (int k = 0; k < FM_VOICES; k++) {
         fmv_t *v = &P->fm[k];
         if (!v->active) continue;
-        float f0[4];
-        for (int o = 0; o < 4; o++) f0[o] = fminf(fm_op_hz(tune[o], v->note), 0.45f * SR) * INV_SR;
+        float f0[4], tr = play_ratio(P, &v->pl);   /* the note is the transposition: this is the bend */
+        v->lvl = level(PV(P_FM_VOL), PV(P_FM_ACC), v->pl.vel) * v->cscale;
+        for (int o = 0; o < 4; o++) f0[o] = fminf(fm_op_hz(tune[o], v->note) * tr, 0.45f * SR) * INV_SR;
         float peak = 0.0f;
         for (int i = 0; i < n; i++) {
             float o4[4], mono = 0.0f, sd = 0.0f;

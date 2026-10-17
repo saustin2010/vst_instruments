@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include "dsp.h"
 #include "params_def.h"
+#include "tapbus.h"
+#include "midiin.h"
 
 #define NI 11             /* instruments */
 enum { I_KD, I_MB, I_CH, I_OH, I_CP, I_RM, I_CR, I_RD, I_X1, I_X2, I_FM };
@@ -17,6 +19,7 @@ enum { I_KD, I_MB, I_CH, I_OH, I_CP, I_RM, I_CR, I_RD, I_X1, I_X2, I_FM };
 #define LFO_LEN 256
 #define MAX_KITS 512
 #define SMP_RATE 48000.0f /* the AlphaBase's samples */
+#define TAP_HOLD 1024     /* the output's delay line while an OUT is played, frames */
 
 /* ---- tables.c ---- */
 enum { MT_XOR, MT_SUM, MT_LFSR, MT_LFSR_XOR };
@@ -49,8 +52,13 @@ void pool_wait(void);             /* until nothing is waiting to load (offline t
 void pool_poke(void);             /* once a block: wakes the loader if a request is waiting */
 
 /* ---- the instruments (voices.c) ---- */
+/* how a hit was played: its velocity (VOLUME and ACCENT make it a level each block, so they can be modulated), and when
+ * it came on the instrument's KEYS CH, its transposition (the note against C3) and channel (whose pitch bend bends it) */
+typedef struct { float vel, semi; int ch, pitched; } play_t;
+
 typedef struct {
     int active, n, gate_n;
+    play_t pl;
     float lvl;                    /* level from VOLUME, ACCENT and velocity */
     float ph, amp, cenv, tenv, tc, ac, cc;
     ad_t pe;
@@ -62,6 +70,7 @@ typedef struct {
 
 typedef struct {
     int active, n, gate_n;
+    play_t pl;
     float lvl;
     svf_t f1, f2;
     float bp1, bp2;
@@ -75,6 +84,8 @@ typedef struct {
 
 typedef struct {
     int active, gate, done, held;
+    int note;                     /* the MIDI note that played it: its note-off releases it */
+    play_t pl;
     float lvl;
     double pos;
     int start, stop, loop, dir;   /* in source frames */
@@ -92,7 +103,8 @@ typedef struct {
 
 typedef struct {
     int active, note, age;
-    float lvl, semi;
+    play_t pl;
+    float lvl, cscale;            /* cscale: a chord's notes share one note's level */
     float ph[4], out[4];
     ad_t eg[4];
 } fmv_t;
@@ -126,7 +138,8 @@ typedef struct {
 } kit_t;
 
 typedef struct inc {
-    float pv[NP];
+    float pv[NP];                 /* the controls as set (shown, saved) */
+    float ev[NP];                 /* as the sound uses them: pv plus the mod matrix (mod_apply) */
     kick_t kd;
     mbrane_t mb;
     smpv_t sv[8];                 /* CH OH CP RM CR RD X1 X2 */
@@ -140,16 +153,32 @@ typedef struct inc {
     int kit_pending;
     char dir[512];
     int choke_n;                  /* frames since the open hat played (HH CHOKE: a closed hat on the same step is dropped) */
+    float bend[16];               /* pitch bend per MIDI channel, semitones (instruments played on their KEYS CH) */
+    /* the mod matrix */
+    lfo_t mlfo[NLFO];
+    float mrand[NSLOT];           /* each slot's RANDOM, drawn at each hit of its DEST */
+    float mvel[NDEST];            /* each DEST's last velocity, 0..1 (FX: any instrument's) */
+    uint32_t mrng;
+    short touched[NSLOT];         /* the controls the matrix moved in ev[] last time */
+    int ntouched;
+    /* OUT 1-11 (tapbus.h) */
+    uint32_t id;                  /* this instance, process-wide, from 1 */
+    tapbus_t *bus;                /* NULL: OUT 1-11 unavailable */
+    float hold[2][TAP_HOLD];      /* the output, a block late while an OUT is played */
+    uint32_t hold_w;
+    float pan_at[NI], pan_l[NI], pan_r[NI];   /* each instrument's pan gains, and the PAN they're for */
+    mi_port_t midi_in;            /* "Incipience MIDI In": notes on their own channels, for KEYS CH (midiin.h) */
+    uint32_t changed[(NP + 31) / 32];   /* controls a MIDI MOD lane set, for MPC's screen (mpc_engine_changed) */
 } inc_t;
 
-void kick_trigger(inc_t *P, float vel, float semi);
+void kick_trigger(inc_t *P, const play_t *pl);
 void kick_block(inc_t *P, float *y, int n);
-void mbrane_trigger(inc_t *P, float vel, float semi);
+void mbrane_trigger(inc_t *P, const play_t *pl);
 void mbrane_block(inc_t *P, float *y, int n);
-void smp_trigger(inc_t *P, int s, float vel, float semi);
+void smp_trigger(inc_t *P, int s, const play_t *pl);
 void smp_release(inc_t *P, int s);
 void smp_block(inc_t *P, int s, float *y, int n);
-void fm_trigger(inc_t *P, float vel, int note, int chord);
+void fm_trigger(inc_t *P, const play_t *pl, int note, int chord);   /* chord < 0: the note alone */
 void fm_release(inc_t *P, int note);
 void fm_block(inc_t *P, float *y, float *side, int n);
 void voices_init(inc_t *P);
@@ -160,6 +189,9 @@ float hh_lp_hz(float v);
 float hh_hp_hz(float v);
 float fm_op_hz(float tune, int note);
 float smp_ratio(float pitch, float cents);
+static inline float play_ratio(const inc_t *P, const play_t *p) {   /* KEYS CH: transposition and pitch bend */
+    return p->pitched ? fexp2((p->semi + P->bend[p->ch & 15]) / 12.0f) : 1.0f;
+}
 
 /* ---- kits.c ---- */
 void kits_load(inc_t *P);

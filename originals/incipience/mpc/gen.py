@@ -231,7 +231,72 @@ def build():
                           step_delta=-1))
             P.append(dict(key=k + "_sample_next", name=n + " SAMPLE UP", momentary=True, step_of=k + "_sample",
                           step_delta=1))
+
+    # ---- MIDI, OUTs and modulation (owner, 2026-10-17: "play the voices chromatically like I can with the
+    # percolator", "output routing for each of the tracks", "all the controls should be able to be modulated"); none
+    # of it is part of a kit ----
+    def arrows(key, name):
+        P.append(dict(key=key + "_prev", name=name + " DOWN", momentary=True, step_of=key, step_delta=-1))
+        P.append(dict(key=key + "_next", name=name + " UP", momentary=True, step_of=key, step_delta=1))
+
+    # each instrument's KEYS CH (every note on that channel plays it pitched, C3 = as tuned; channels 2-12 to start
+    # with: MPC hands the plugin's own track every note-on on channel 1) and OUT (MAIN, or OUT n: [FX] Incipience OUT
+    # plays it on another track). "send": the labels 1-16 would otherwise be read as option numbers
+    for i, (k, n, fam) in enumerate(INSTR):
+        opts(k + "_kch", n + " KEYS CH", KCH, i + 3, send=[str(c) for c in range(len(KCH))])
+        arrows(k + "_kch", n + " KEYS CH")
+        opts(k + "_out", n + " OUT", OUTS, i + 1)   # its own OUT: it stays in the mix until something plays that
+    # MIDI MOD: four lanes per instrument (the mod wheel, Gen Purpose 1-3: CC 1, 16-18, as MPC names them in a MIDI
+    # track's lane menu); on the instrument's KEYS CH each sets the control picked here, as Percolator's do
+    for k, n, fam in INSTR:
+        tg = ["OFF"] + [short_name(P, t) for t in targets(P, k)]
+        assert len(tg) == len(set(tg)), (k, "two targets with one name")
+        for lane, lname, cc in LANES:
+            opts(k + "_" + lane, n + " " + lname, tg, 0)
+            arrows(k + "_" + lane, n + " " + lname)
+    # the mod matrix: four LFOs, then 16 slots, each a SOURCE moving one control (DEST: the instrument, CONTROL: which
+    # of its controls) by DEPTH (+-100 % of the control's range)
+    for l in range(1, NLFO + 1):
+        step("l%d_wave" % l, "LFO%d WAVE" % l, 4, 0, 63)
+        knob("l%d_rate" % l, "LFO%d RATE" % l, 40)
+        opts("l%d_clock" % l, "LFO%d CLOCK" % l, LFO_CLOCK, 0)
+        opts("l%d_trig" % l, "LFO%d RESTART" % l, ["FREE"] + [n for _, n, _ in INSTR], 0)
+    nctl = max(len(targets(P, d)) for d in DEST_KEYS)
+    for m in range(1, NSLOT + 1):
+        opts("m%d_src" % m, "MOD%d SOURCE" % m, SOURCES, 0)
+        opts("m%d_dest" % m, "MOD%d DEST" % m, DESTS, 0)
+        step("m%d_ctl" % m, "MOD%d CONTROL" % m, 0, 0, nctl - 1)
+        arrows("m%d_ctl" % m, "MOD%d CONTROL" % m)
+        knob("m%d_depth" % m, "MOD%d DEPTH" % m, 0, -100, 100)
     return P
+
+
+NOUT = 11       # OUT 1-11: every instrument can have a track of its own
+NLFO = 4
+NSLOT = 16
+KCH = ["OFF", "ALL"] + [str(c) for c in range(1, 17)]
+OUTS = ["MAIN"] + ["OUT %d" % o for o in range(1, NOUT + 1)]
+LANES = (("wheel", "MOD WHEEL", 1), ("gp1", "GEN PURP 1", 16), ("gp2", "GEN PURP 2", 17), ("gp3", "GEN PURP 3", 18))
+SOURCES = ["OFF", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "RANDOM", "VELOCITY"]
+DESTS = [n for _, n, _ in INSTR] + ["FX"]
+DEST_KEYS = [k for k, _, _ in INSTR] + ["fx"]
+
+
+def targets(P, d):
+    """what a lane or a mod slot can move on instrument d (its sound and its pan / sends), or on "fx" (the reverb,
+       the delay and the master VOLUME): every control a kit stores, MUTE aside"""
+    keys = [p["key"] for p in P]
+    if d == "fx":
+        return [k for k in keys if k.startswith(("rv_", "dl_"))] + ["volume"]
+    kit = keys[keys.index("kit_name") + 1:keys.index("kd_note")]
+    return [k for k in kit if k.startswith(d + "_")]
+
+
+def short_name(P, key):
+    """a control's name without its instrument: KICK DECAY -> DECAY (FX keeps REV / DLY: they name the effect)"""
+    p = next(q for q in P if q["key"] == key)
+    pre = next((n for k, n, _ in INSTR if key.startswith(k + "_")), None)
+    return p["name"][len(pre) + 1:] if pre else p["name"]
 
 
 #: The screen: a tab per instrument (the AlphaBase's instrument keys), then FX and MIX. Each has two Q-Link sub-pages,
@@ -307,16 +372,55 @@ PAGES = [
               ("DLY SENDS", "X1 X2 FM + ON", ["x1_dsend", "x2_dsend", "fm_dsend", "dl_on"])],
         "side": ["dl_sync"]}),
     ("MIX", None, "MIX", {
-        "A": [("PAN", "KD MB CH OH", ["kd_pan", "mb_pan", "ch_pan", "oh_pan"]),
-              ("PAN", "CP RM CR RD", ["cp_pan", "rm_pan", "cr_pan", "rd_pan"]),
-              ("PAN", "X1 X2 FM", ["x1_pan", "x2_pan", "fm_pan", "volume"]),
-              ("HATS", "CHOKE", ["hh_choke", "-", "-", "-"])],
-        "B": [("NOTE", "KD MB CH OH", ["kd_note", "mb_note", "ch_note", "oh_note"]),
-              ("NOTE", "CP RM CR RD", ["cp_note", "rm_note", "cr_note", "rd_note"]),
-              ("NOTE", "X1 X2 FM", ["x1_note", "x2_note", "fm_note", "-"]),
-              ("HATS", "CHOKE", ["hh_choke", "-", "-", "-"])],
+        "pages": [("PAN", [("PAN", "KD MB CH OH", ["kd_pan", "mb_pan", "ch_pan", "oh_pan"]),
+                           ("PAN", "CP RM CR RD", ["cp_pan", "rm_pan", "cr_pan", "rd_pan"]),
+                           ("PAN", "X1 X2 FM", ["x1_pan", "x2_pan", "fm_pan", "volume"]),
+                           ("HATS", "CHOKE", ["hh_choke", "-", "-", "-"])])],
         "side": []}),
 ]
+
+
+def _per_inst(suffix, title):
+    """a row per group of the instrument keys, as on the MIX page"""
+    ks = [k for k, _, _ in INSTR]
+    return [(title, "KD MB CH OH", [k + suffix for k in ks[0:4]]),
+            (title, "CP RM CR RD", [k + suffix for k in ks[4:8]]),
+            (title, "X1 X2 FM", [k + suffix for k in ks[8:11]] + ["-"])]
+
+
+# Tabs with sub-pages of their own ("pages": (name, rows) each; "info": the right column's notes), after MIX: the mod
+# matrix, then MIDI & OUT and MIDI MOD as on Percolator
+PAGES += [
+    ("MOD", None, "MODULATION", {
+        "pages": [("LFO", [("LFO %d" % l, "WAVE RATE CLOCK RESTART",
+                            ["l%d_wave" % l, "l%d_rate" % l, "l%d_clock" % l, "l%d_trig" % l]) for l in range(1, NLFO + 1)])]
+        + [("MOD %d-%d" % (s, s + 3), [("MOD %d" % m, "SOURCE > DEST CONTROL DEPTH",
+                                         ["m%d_src" % m, "m%d_dest" % m, "m%d_ctl" % m, "m%d_depth" % m])
+                                        for m in range(s, s + 4)]) for s in range(1, NSLOT + 1, 4)],
+        "side": [],
+        "info": ["EACH MOD SLOT MOVES ONE CONTROL:", "PICK THE INSTRUMENT (DEST), THEN", "THE CONTROL, AND HOW FAR (DEPTH)",
+                 "RANDOM, VELOCITY: AT EACH HIT", "OF THE DEST INSTRUMENT"]}),
+    ("MIDI & OUT", None, "MIDI + OUTPUTS", {
+        "pages": [("NOTE", _per_inst("_note", "NOTE")), ("KEYS CH", _per_inst("_kch", "KEYS CH")),
+                  ("OUT", _per_inst("_out", "OUT"))],
+        "side": [],
+        "info": ["KEYS CH: A MIDI TRACK SENT TO", "INCIPIENCE MIDI IN ON THAT CHANNEL", "PLAYS IT PITCHED (C3 = AS TUNED)",
+                 "OUT N: [FX] INCIPIENCE OUT ON", "ANOTHER TRACK PLAYS IT THERE"]}),
+    ("MIDI MOD", None, "MIDI MOD LANES", {
+        "pages": [("WHEEL", _per_inst("_wheel", "MOD WHEEL"))]
+        + [("GP %d" % g, _per_inst("_gp%d" % g, "GEN PURP %d" % g)) for g in (1, 2, 3)],
+        "side": [],
+        "info": ["ON AN INSTRUMENT'S KEYS CH, EACH", "LANE SETS THE CONTROL PICKED HERE", "MIDI TRACK LANES: MIDI 1 MOD WHEEL,",
+                 "MIDI 16-18 GEN PURPOSE 1-3", "KEYS CH ALL: ON ANY CHANNEL"]}),
+]
+
+
+def subpages(tab, inst, pg):
+    """a tab's Q-Link sub-pages: (name, rows, kind); kind C = an instrument's third, page A's matrix with the MIX panel
+       and extras on the Q-Links"""
+    if "pages" in pg:
+        return [(n, rows, n) for n, rows in pg["pages"]]
+    return [(n, pg["B" if kind == "B" else "A"], kind) for n, kind in zip(sub_names(tab, inst), "ABC")]
 
 
 def mix_qlinks(k, side):
@@ -331,8 +435,6 @@ def sub_names(tab, inst):
     """the Q-Link sub-pages of a tab, as MPC's tab strip names them"""
     if tab == "FX":
         return ["REVERB", "DELAY"]
-    if tab == "MIX":
-        return ["PAN", "NOTE"]
     return [tab + " A", tab + " B", "FM VOICE" if inst == "fm" else tab + " MIX"]
 
 
@@ -341,8 +443,8 @@ def check_pages(P):
     keys = {p["key"] for p in P}
     seen = set()
     for tab, k, title, pg in PAGES:
-        for sub in ("A", "B"):
-            on = [x for _, _, row in pg[sub] for x in row if x != "-"]
+        for sub, rows, _ in subpages(tab, k, pg):
+            on = [x for _, _, row in rows for x in row if x != "-"]
             assert len(on) == len(set(on)), (tab, sub, "twice")
             for x in on + pg["side"]:
                 assert x in keys, (tab, x)
@@ -391,6 +493,32 @@ def write_header(P):
     L.append("#define MIXSTRIDE 3   /* <inst>_pan, _rsend, _dsend from P_KD_PAN */")
     L.append("#define NOTESTRIDE 3  /* <inst>_note, _note_prev, _note_next from P_KD_NOTE */")
     L.append("#define NCHORD %d" % len(CHORDS))
+    # MIDI, OUTs, modulation: each block's stride from its first parameter
+    L.append("#define IOSTRIDE %d    /* <inst>_kch, its arrows, _out: P_KD_KCH + IOSTRIDE * inst */"
+             % (idx["mb_kch"] - idx["kd_kch"]))
+    L.append("#define LANESTRIDE %d  /* <inst>_wheel, _gp1, _gp2, _gp3 (each with its arrows) from P_KD_WHEEL */"
+             % (idx["mb_wheel"] - idx["kd_wheel"]))
+    L.append("#define LANESTEP %d     /* one lane to the next */" % (idx["kd_gp1"] - idx["kd_wheel"]))
+    L.append("#define LFOSTRIDE %d    /* l<n>_wave, _rate, _clock, _trig from P_L1_WAVE */"
+             % (idx["l2_wave"] - idx["l1_wave"]))
+    L.append("#define SLOTSTRIDE %d   /* m<n>_src, _dest, _ctl, its arrows, _depth from P_M1_SRC */"
+             % (idx["m2_src"] - idx["m1_src"]))
+    for k in ("_out", "_kch_prev"):
+        assert idx["kd" + k] - idx["kd_kch"] == idx["mb" + k] - idx["mb_kch"]
+    L += ["#define NOUT %d" % NOUT, "#define NLFO %d" % NLFO, "#define NSLOT %d" % NSLOT,
+          "#define NDEST %d    /* the instruments, then FX */" % len(DEST_KEYS),
+          "enum { SRC_OFF, SRC_LFO1, SRC_RANDOM = SRC_LFO1 + NLFO, SRC_VELOCITY };"]
+    assert SOURCES[1 + NLFO:] == ["RANDOM", "VELOCITY"]
+    T = [targets(P, d) for d in DEST_KEYS]
+    L.append("#define NCTL %d" % max(len(t) for t in T))
+    L.append("/* what a lane or a mod slot moves: MODT[dest][control], MODN[dest] controls; their names */")
+    L.append("static const short MODT[NDEST][NCTL] = {")
+    L += ["    {%s}," % ", ".join("P_" + k.upper() for k in t) for t in T]
+    L.append("};")
+    L.append("static const unsigned char MODN[NDEST] = {%s};" % ", ".join(str(len(t)) for t in T))
+    L.append("static const char *const MODNAME[NDEST][NCTL] = {")
+    L += ["    {%s}," % ", ".join('"%s"' % short_name(P, k) for k in t) for t in T]
+    L.append("};")
     open(os.path.join(ROOT, "src", "params_def.h"), "w").write("\n".join(L) + "\n")
 
 
@@ -401,8 +529,11 @@ if __name__ == "__main__":
     check_pages(P)
     write_header(P)
     os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
-    json.dump([{"tab": t, "inst": k, "title": ti, "subs": sub_names(t, k),
-                "qlinks_c": mix_qlinks(k, pg["side"]) if k else None, **pg} for t, k, ti, pg in PAGES],
+    # each tab's sub-pages in order: "subs" their names, "sub_rows" their rows, "sub_kind" A / B / C or the name
+    json.dump([{"tab": t, "inst": k, "title": ti, "subs": [s[0] for s in subpages(t, k, pg)],
+                "sub_rows": [s[1] for s in subpages(t, k, pg)], "sub_kind": [s[2] for s in subpages(t, k, pg)],
+                "qlinks_c": mix_qlinks(k, pg["side"]) if k else None, "side": pg["side"], "info": pg.get("info", [])}
+               for t, k, ti, pg in PAGES],
               open(os.path.join(ROOT, "build", "pages.json"), "w"), indent=1)
     json.dump({"name": "Incipience", "params": P}, open(os.path.join(ROOT, "params.json"), "w"), indent=1)
     print("params.json: %d parameters; src/params_def.h" % len(P))

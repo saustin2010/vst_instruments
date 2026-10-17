@@ -23,6 +23,9 @@ KEYS = ["KICK DRUM", "MBRANE", "CLSD HI HAT", "OPEN HI HAT", "CLAP", "RIM SHOT",
         "X SAMPLE 2", "FM SYNTH"]
 IDS = {"kd": "KD", "mb": "MB", "ch": "CH", "oh": "OH", "cp": "CP", "rm": "RM", "cr": "CR", "rd": "RD", "x1": "X1",
        "x2": "X2", "fm": "FM"}
+NAMES = {"kd": "KICK", "mb": "MBRANE", "ch": "CL HAT", "oh": "OP HAT", "cp": "CLAP", "rm": "RIM", "cr": "CRASH",
+         "rd": "RIDE", "x1": "X1", "x2": "X2", "fm": "FM"}
+TAB_IDS = {"MIX": "MX", "MOD": "MD", "MIDI & OUT": "IO", "MIDI MOD": "CC"}
 
 # the screen's colours for what MPC draws itself (names, values, switches, steppers), from the design's palette
 THEME = {"bg": "#efede6", "panel": "#efede6", "box": "#e4e1d8", "line": "#141414", "ink": "#141414",
@@ -99,10 +102,11 @@ INST_PREFIX = ("kd_", "mb_", "ch_", "oh_", "cp_", "rm_", "cr_", "rd_", "x1_", "x
 
 def short(name, inst_name, key=""):
     """a control's caption in the design: its parameter name without the instrument (MPC writes the full one live);
-       on FX and MIX, where each column is an instrument, the instrument instead"""
+       on FX, MIX and the MIDI pages, where each column is an instrument, the instrument instead; on MOD without the
+       slot's or the LFO's number (the row's title has it)"""
     if not inst_name and key.startswith(INST_PREFIX):
-        return name.rsplit(" ", 1)[0].replace(" REV", "").replace(" DLY", "")
-    n = name
+        return NAMES[key[:2]]
+    n = re.sub(r"^(MOD|LFO)\d+ ", "", name)
     for pre in (inst_name + " ", "KICK ", "MBRANE ", "CL HAT ", "OP HAT ", "CLAP ", "RIM ", "CRASH ", "RIDE ", "X1 ",
                 "X2 ", "FM ", "REV ", "DLY "):
         if n.startswith(pre) and len(n) > len(pre):
@@ -113,7 +117,7 @@ def short(name, inst_name, key=""):
 
 def cell(key, P, inst_name, num):
     p = P[key]
-    if key.endswith("_sample"):   # a box with arrows: one sample a tap (the knob ran through 500 too fast)
+    if key.endswith(("_sample", "_ctl")):   # a box with arrows: one sample (one control) a tap
         return stepper(key, short(p["name"], inst_name, key), num)
     if p.get("options") and len(p["options"]) == 2:
         return switch(key, short(p["name"], inst_name, key), num)
@@ -130,7 +134,11 @@ ABBR = {"OSCILLATOR": "OSC", "MEMBRANES": "M1+M2", "COUPLING": "COUPLE", "ENV / 
         "LFO / ACCENT": "LFO", "LFO 1 / LEVEL": "LFO1", "LFO 2 / ACCENT": "LFO2", "PITCH ENV": "P ENV", "HH FILTER": "FILTER",
         "MM FILTER": "FILTER"}
 OLED_LINE = {("FM", "A"): "FM MATRIX", ("FM", "B"): "OP ENVELOPES", ("FM", "C"): "VOICES CHORD MIX", ("FX", "A"): "REVERB + SENDS",
-             ("FX", "B"): "DELAY + SENDS", ("MIX", "A"): "PAN + VOLUME", ("MIX", "B"): "NOTES + CHOKE"}
+             ("FX", "B"): "DELAY + SENDS", ("MIX", "PAN"): "PAN + VOLUME", ("MOD", "LFO"): "FOUR LFOS",
+             ("MIDI & OUT", "NOTE"): "PAD NOTES", ("MIDI & OUT", "KEYS CH"): "PLAYED PITCHED",
+             ("MIDI & OUT", "OUT"): "TO OUT 1-11", ("MIDI MOD", "WHEEL"): "CC 1 MOVES", ("MIDI MOD", "GP 1"): "CC 16 MOVES",
+             ("MIDI MOD", "GP 2"): "CC 17 MOVES", ("MIDI MOD", "GP 3"): "CC 18 MOVES"}
+OLED_LINE.update({("MOD", "MOD %d-%d" % (s, s + 3)): "SLOTS %d-%d" % (s, s + 3) for s in range(1, 17, 4)})
 
 
 def matrix(rows, P, inst_name, diag=()):
@@ -173,9 +181,9 @@ def panel(title, caption, items, top):
                "".join('<div style="display: flex; flex-direction: column; align-items: center;">%s</div>' % i for i in items)))
 
 
-def right_column(tab, inst, title, sub, rows, side, P):
-    ident = IDS.get(inst, {"MIX": "MX"}.get(tab, tab[:2]))
-    sub_name = "PAGE " + sub if sub in "AB" else ("VOICE" if inst == "fm" else "MIX")
+def right_column(tab, inst, title, sub, rows, side, P, info=()):
+    ident = IDS.get(inst, TAB_IDS.get(tab, tab[:2]))
+    sub_name = "PAGE " + sub if sub in ("A", "B") else ("VOICE" if inst == "fm" else "MIX") if sub == "C" else sub
     words = OLED_LINE.get((tab, sub)) or " &nbsp;".join(
         html.escape(ABBR.get(t, t.split(" ")[0][:6])) for t, _, _ in rows)
     out = ['<div style="position: absolute; left: 800px; top: 20px; width: 436px; height: 510px;">',
@@ -204,6 +212,11 @@ def right_column(tab, inst, title, sub, rows, side, P):
         panels.insert(0 if inst == "fm" else len(panels), extra)   # FM VOICE first: its Q-Links come first
     for i, (t, c, items) in enumerate(panels):
         out.append(panel(t, c, items, 30 if i == 0 else 22))
+    if info:   # the MIDI and MOD tabs: how they work, in the printing's type
+        out.append('<div style="margin-top: 34px; width: 430px;"><div style="padding-bottom: 3px; border-bottom: 1px solid '
+                   '#141414;"><span class="print-label" style="font-size: 11px;">HOW IT WORKS</span></div><div style="'
+                   'margin-top: 12px; font-family: \'Inter\', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: '
+                   '0.08em; color: #3a3a3a; line-height: 1.75;">%s</div></div>' % "<br>".join(html.escape(l) for l in info))
     out.append('</div>')
     return "".join(out)
 
@@ -242,13 +255,12 @@ def main():
     for pg in pages:
         tab, inst = pg["tab"], pg["inst"]
         lit = list(IDS).index(inst) if inst in IDS else -1
-        for sub, nm in zip("ABC", pg["subs"]):
+        for nm, rows, sub in zip(pg["subs"], pg["sub_rows"], pg["sub_kind"]):   # C: page A's matrix, Q-Links right
             names.append(nm)
-            rows = pg["B" if sub == "B" else "A"]   # C: page A's matrix, the Q-Links on the right
             diag = {"fm_op1", "fm_op2", "fm_op3", "fm_op4"} if tab == "FM" and sub != "B" else ()
             html_pages.append('<div class="ab-page%s" data-page="%s">%s%s%s</div>' % (
                 " on" if not html_pages else "", nm, matrix(rows, P, pg["title"] if inst else "", diag),
-                right_column(tab, inst, pg["title"], sub, rows, pg["side"], P), strip(lit)))
+                right_column(tab, inst, pg["title"], sub, rows, pg["side"], P, pg["info"]), strip(lit)))
     nav = "".join('<button class="ab-tab" type="button" onclick="abShow(%d)">%s</button>' % (i, n)
                   for i, n in enumerate(names))
     doc = (head + "</head>\n<body>\n<!-- generated by mpc/design.py from design/stitch-kick.html: do not edit -->\n"
@@ -261,8 +273,7 @@ def main():
     ql, twice, ti = {}, set(), 0
     for pg in pages:
         seen = set()
-        for sub in "ABC"[:len(pg["subs"])]:
-            rows = pg["B" if sub == "B" else "A"]
+        for rows, sub in zip(pg["sub_rows"], pg["sub_kind"]):
             ql[ti] = pg["qlinks_c"] if sub == "C" else [k for _, _, row in rows for k in (row + ["-"] * (4 - len(row)))]
             on = {k for _, _, row in rows for k in row if k != "-"} | set(pg["side"])
             if pg["inst"]:
