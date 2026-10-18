@@ -1919,7 +1919,8 @@ BRAND_RETEXT = {
     "monovoice": [["ELEKTRON / RETRO", "RETRO"], ["AKAI MPC OS", "MPC OS"]] + _AKAI + [["AKAI", "MPC"]],
     "hera": [["[JUNO-60]", "[6-VOICE POLY]"], ["JUNO-60 FILTER", "4-POLE FILTER"], ["JUNO", "POLY"], ["AKAI LIVE II", "LIVE II"]],
     "hush1": [["HUSH ONE // SH-101", "HUSH ONE // MONOSYNTH"], ["SH-101 ANALOG CURVES", "ANALOG CURVES"], ["SH-101", "MONO"]] + _AKAI,
-    "noisemaker": [["JUPITER", "POLY"]] + _AKAI,
+    "noisemaker": [["JUPITER", "POLY"], ["// TAL HYBRID SYNTHESIZER", ""], ["TAL-NOISEMAKER", "NOISEMAKER"],   # 2026-10-19:
+                   ["TAL NOISEMAKER", "NOISEMAKER"], ["TAL CYBER PLUCK", "CYBER PLUCK"]] + _AKAI,   # just NOISEMAKER
     "moog": [["// 4-OSC MOOG SYNTHESIZER", "// 4-OSC LADDER SYNTHESIZER"], ["AUDITION MOOG", "AUDITION"], ["MOOG LADDER VCF", "LADDER VCF"],
              ["MOOG MODEL D TOPOLOGY", "4-POLE TOPOLOGY"]] + _AKAI,
     "obxd": _AKAI,

@@ -140,6 +140,8 @@ links above.
 - **Full-height screen (2026-10-18)**: the two rows of panels share the height under the title bar (they were
   260 px each, which left about 35 px empty at the bottom). BANK, the shorter scope and the design QA's moves
   came along.
+- **Just NOISEMAKER on the screen (2026-10-19)**: the design's "TAL" text is gone (the title bar's "// TAL HYBRID
+  SYNTHESIZER" and the MOD page's "TAL NOISEMAKER" plate), under the catalogue's no-other-company-names rule.
 
 ## Files
 
