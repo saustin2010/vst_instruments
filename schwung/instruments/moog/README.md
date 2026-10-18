@@ -73,6 +73,8 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 - FILTER switch (2026-10-12, same files, parameter 41, appended): CLEAN or DRIVE (the ladder's input soft-clipped, with the bass the feedback takes away added back). Not part of the presets: loading one keeps it.
 - Oscillator waveforms are labelled switches (TRIANGLE/SAW/SQUARE/PULSE) and the ranges are footage switches (32'/16'/8'/4'/2', sending the engine's -2..2); three pages (MAIN, OSCILLATORS, MODULATION).
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- **Screen centred (2026-10-18)**: the design's frame is even all round (it sat 37 px from the top and 3 from the
+  bottom). The panels keep their size; the FILTER switch and the design QA's moves came along.
 
 ## Files
 

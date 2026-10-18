@@ -70,6 +70,9 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   `src/dsp/hera_plugin.cpp`), which is how the current mpc-vst-plugins names the PRESET menu's entries.
 - Both changes to `src/dsp/hera_plugin.cpp` (this and VOLUME) are in `upstream-changes.diff`, against charlesvestal/schwung-hera
   `255be06` (module v0.1.7).
+- **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
+  centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty
+  band above and below.
 
 ## Files
 

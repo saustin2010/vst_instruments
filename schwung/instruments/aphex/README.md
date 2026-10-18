@@ -100,6 +100,9 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 - No other company's name on the screen (2026-10-12): FILTER REV's REV.1 KORG-35 is **REV.1 SALLEN-KEY** (the early
   circuit is a Sallen-Key filter with diodes). The sound is unchanged, and saved sounds keep their filter (it's saved as
   a number). `src/dsp/aphex.c` (`-DMPC_PORT`, this plugin's first local change); diff: `upstream-changes.diff`.
+- **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
+  centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty
+  band above and below.
 
 ## Files
 

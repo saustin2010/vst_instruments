@@ -100,6 +100,7 @@ This repo stays where they're developed; the plan and where each plugin stands: 
 
 ## Status (2026-10-05)
 
+- Full-height screens (2026-10-18): the Stitch screens fill the whole plugin area. The conversion used to centre each design at the height it had under its own header and footer, leaving an empty band above and below (about 110 px of 628 on most). 30 screens rebuilt, same controls and parameters; installed and checked on the Live II (2026-10-19). Noisemaker's screen also lost its "TAL" text.
 - Renamed (2026-10-12): no other company's name in a plugin's name, maker or screen. Moog is now **RaffoSynth**; the Mutable Instruments ports are **Macro Osc** (Braids), **Macro Osc 2** (Plaits), **Modal Voice** (Elements), **Resonator** (Rings), **Resonator FX**, **Meta Mod** (Warps), **Drum Map** (Grids) and **Random Sampler** (Marbles), with Émilie Gillet, who wrote them, as their maker. Same sound, presets and parameters; [what changes](docs/catalogue-migration.md#other-companies-names-2026-10-12).
 - All 40 build and pass the offline test (all rebuilt 2026-10-05): an x86 build under AddressSanitizer/UBSan that checks every parameter, presets, saving and restoring, Q-Link behaviour, notes to audio, and a stress test that hammers the plugin from two threads as MPC does.
 - All 40 are installed on an MPC Live II (MPC OS 3.9.1); these builds since 2026-10-05 (the first set 2026-10-03).

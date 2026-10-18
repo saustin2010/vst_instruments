@@ -60,6 +60,9 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 - Not a Move module: `mpc/warps_engine.cc` drives Mutable's `warps::Modulator` at 44.1 kHz (its Init takes the rate). Internal carrier (sine/triangle/saw at NOTE) x the track's audio, or EXTERNAL (left = carrier, right = modulator); MODE 2 = the hidden frequency shifter; MIX blends dry back.
 - `src/stmlib/dsp/dsp.h` (`-DMPC_PORT`, 2026-10-02): `Interpolate` clamps its index; a control at exactly 100% read one past a lookup table (found with dev-tools/fuzz). Diff: `upstream-changes.diff`.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
+- **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
+  centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty
+  band above and below.
 
 ## Files
 
