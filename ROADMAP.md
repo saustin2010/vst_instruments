@@ -206,7 +206,7 @@ parameter index, so existing projects keep working.
 
 ## On a device (nothing below has been tried on hardware yet)
 
-- [ ] **Full-height screens** (2026-10-18, branch `skins-fill-height`): a user noticed the Schwung ports' screens didn't
+- [x] **Full-height screens** (2026-10-18, branch `skins-fill-height`): a user noticed the Schwung ports' screens didn't
   use the whole plugin area. The Stitch conversion centred each design at the height it had under its own header and
   footer, ~110 px empty above and below on most. `dev-tools/stitch` now fills the 628 px (`fill`, its README); 30 screens
   rebuilt (fixed-height rows grown per design, plan pages that stopped halfway down spread, Moog's and Noisemaker's
@@ -216,8 +216,10 @@ parameter index, so existing projects keep working.
     hash-checked); Hera, Open303, RaffoSynth and Dual Slope run from release installs (`.so` inside their
     `/sdcard/Synths` folder, which `install.sh` would replace), so only their `Plugin Skins` was swapped in (staged,
     hash-checked); their released `.so` stay. `check.sh`: screen same for those four
-  - [ ] The owner looks at them (re-insert each plugin: a project keeps its old screen's Q-Link map), mainly controls
-    near the bottom edge; then re-release the plugins with their own repos
+  - [x] The owner looked at them on the Live II (2026-10-19): "these all look good"
+  - [ ] Re-release the plugins with their own repos (`tools/publish.sh`; `check.sh` says "screen: same" for 24). Before
+    those can go: Hush One's layout lacks the four display lines of 2026-10-08 (screen DIFFERENT), and the release
+    tools' offline test fails for Helm, LibPO32, MazeLite, Plaits and Marbles (not from this branch)
 
 - [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Names
   show and load on the Live II (checked 2026-10-03). Still to check: that OB-Xd / Noisemaker show the new bank's presets
