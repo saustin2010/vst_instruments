@@ -210,8 +210,13 @@ parameter index, so existing projects keep working.
   use the whole plugin area. The Stitch conversion centred each design at the height it had under its own header and
   footer, ~110 px empty above and below on most. `dev-tools/stitch` now fills the 628 px (`fill`, its README); 30 screens
   rebuilt (fixed-height rows grown per design, plan pages that stopped halfway down spread, Moog's and Noisemaker's
-  hand edits carried over). Builds PASSED, check_skin OK, screenshots refreshed; `.so` files unchanged. Not on the
-  Live II yet: look at controls near the bottom edge, then re-release the plugins with their own repos.
+  hand edits carried over). Builds PASSED, check_skin OK, screenshots refreshed; `.so` files unchanged. 2026-10-19:
+  Noisemaker's screen lost its "TAL" text (just NOISEMAKER).
+  - [x] Installed on the Live II (2026-10-19): the 26 the repo installs (`install.sh`, no restart, files hash-checked).
+    Not Hera, Open303, RaffoSynth, Dual Slope: they run from release installs (`.so` inside their `/sdcard/Synths`
+    folder, which `install.sh` would replace), so they get the new screens with their next releases
+  - [ ] The owner looks at them (re-insert each plugin: a project keeps its old screen's Q-Link map), mainly controls
+    near the bottom edge; then re-release the plugins with their own repos
 
 - [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Names
   show and load on the Live II (checked 2026-10-03). Still to check: that OB-Xd / Noisemaker show the new bank's presets
