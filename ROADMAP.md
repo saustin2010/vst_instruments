@@ -212,9 +212,10 @@ parameter index, so existing projects keep working.
   rebuilt (fixed-height rows grown per design, plan pages that stopped halfway down spread, Moog's and Noisemaker's
   hand edits carried over). Builds PASSED, check_skin OK, screenshots refreshed; `.so` files unchanged. 2026-10-19:
   Noisemaker's screen lost its "TAL" text (just NOISEMAKER).
-  - [x] Installed on the Live II (2026-10-19): the 26 the repo installs (`install.sh`, no restart, files hash-checked).
-    Not Hera, Open303, RaffoSynth, Dual Slope: they run from release installs (`.so` inside their `/sdcard/Synths`
-    folder, which `install.sh` would replace), so they get the new screens with their next releases
+  - [x] Installed on the Live II (2026-10-19), all 30, no restart: the 26 the repo installs with `install.sh` (files
+    hash-checked); Hera, Open303, RaffoSynth and Dual Slope run from release installs (`.so` inside their
+    `/sdcard/Synths` folder, which `install.sh` would replace), so only their `Plugin Skins` was swapped in (staged,
+    hash-checked); their released `.so` stay. `check.sh`: screen same for those four
   - [ ] The owner looks at them (re-insert each plugin: a project keeps its old screen's Q-Link map), mainly controls
     near the bottom edge; then re-release the plugins with their own repos
 
