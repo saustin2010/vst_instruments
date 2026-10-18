@@ -217,9 +217,13 @@ parameter index, so existing projects keep working.
     `/sdcard/Synths` folder, which `install.sh` would replace), so only their `Plugin Skins` was swapped in (staged,
     hash-checked); their released `.so` stay. `check.sh`: screen same for those four
   - [x] The owner looked at them on the Live II (2026-10-19): "these all look good"
-  - [ ] Re-release the plugins with their own repos (`tools/publish.sh`; `check.sh` says "screen: same" for 24). Before
-    those can go: Hush One's layout lacks the four display lines of 2026-10-08 (screen DIFFERENT), and the release
-    tools' offline test fails for Helm, LibPO32, MazeLite, Plaits and Marbles (not from this branch)
+  - [x] Released (2026-10-19): the 24 in sd88me's catalogue published and released (1.1.0 / 1.2.0 / RaffoSynth 1.3.0),
+    every zip OK in `catalog_check --catalog` ([docs/catalogue-migration.md](docs/catalogue-migration.md#full-height-screens-2026-10-19))
+  - [ ] sd88me's review of [#479](https://github.com/sd88me/mpc-vst-plugins/pull/479): the 24 entries' screenshots
+    at the new tags
+  - [ ] Not released: Hush One (its layout lacks the four display lines of 2026-10-08, screen DIFFERENT under the
+    release tools); the release tools' offline test fails for Helm, LibPO32, MazeLite, Plaits and Marbles (older than
+    this work)
 
 - [ ] MPC's PRESET menu (2026-10-03): every instrument with presets now reports them as VST programs (16 + Moog). Names
   show and load on the Live II (checked 2026-10-03). Still to check: that OB-Xd / Noisemaker show the new bank's presets

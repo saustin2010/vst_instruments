@@ -394,6 +394,24 @@ Drum Map and Random Sampler open their MIDI port under the new name: turn Track 
         on the two entries: both 1.1.0 tested, the 1.0.0 zips superseded (their zips name the old repos), no issues
   - [ ] sd88me's review of [#417](https://github.com/sd88me/mpc-vst-plugins/pull/417) (opened 2026-10-13): the two entries
 
+## Full-height screens (2026-10-19)
+
+The Stitch screens used to leave ~110 px of the 628 empty above and below (`dev-tools/stitch` README, "Full-height
+screens"; vst_instruments#29). The 24 listed plugins with a new screen were published (`tools/publish.sh`) and released
+from their repos' "Release (draft)" workflow, every zip OK in `catalog_check --catalog --expect-id --expect-repo` (the
+3 known warnings: installer scripts older than sd88me's newest template) and its screen byte-identical to `deploy/`'s:
+
+- 1.1.0: Aphex, Denis, Groove Bank, Hank, Hera, MIDI Player, MonkSynth, Mr Drums, Mr Hyde, Noisemaker, OB-Xd,
+  Pixel Walkers, Super Arp, Tablor, Wurl
+- 1.2.0: Modal Voice, Drum Map, Open303, Dual Slope, Resonator, Resonator FX, Verglas, Meta Mod
+- 1.3.0: RaffoSynth
+
+The screens were checked on the Live II with this repo's builds (the zips are offline only, so no `tested.json`
+change). [sd88me/mpc-vst-plugins#479](https://github.com/sd88me/mpc-vst-plugins/pull/479) moves the 24 entries'
+`screenshot` links to the new tags; the versions arrive with his nightly build. Not released: Hush One (its layout
+lacks the four display lines of 2026-10-08, so the release tools draw it differently) and Helm, Libpo32, Maze Lite,
+Macro Osc 2, Random Sampler (unlisted; the release tools' offline test fails for them).
+
 ## The device and this repo's installer
 
 A release installs in the portable layout (`/sdcard/Synths/<skin folder>/<plugin>.so`). Installing one over our
