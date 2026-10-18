@@ -153,7 +153,8 @@ parameter index, so existing projects keep working.
     on the MPC or point to folders?"): a SAMPLES tab browsing the drives, a WAV file tapped loads into an instrument
     whose SAMPLE then steps through that folder, by name in the project (`src/library.c`: one thread reads, 64 MB kept,
     a playing file never freed); the project's state is now only what differs from the defaults. 730 parameters.
-    `build.sh` PASSED, `check_skin.py` OK, the self-test PASSED natively and under ASan/UBSan and TSan
+    `build.sh` PASSED, `check_skin.py` OK, the self-test PASSED natively and under ASan/UBSan and TSan. Installed on
+    the Live II 2026-10-19 (no restart; the .so verified by hash)
   - [ ] On the Live II: the **data wheel** (owner: "I cannot use the main mpc button to dial in parameters ... in
     addition to the qlinks"). The screen file gives the controls MPC's focus as Percolator's does (the same focus and
     touch actions), and sd88me's Force probe saw the wheel send a focused control's value + 0.01: find out whether the
