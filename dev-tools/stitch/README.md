@@ -106,6 +106,8 @@ Pages drawn from the plan (`grid`) whose frames end over 40 px short of the bott
 and controls alike. Off: Incipience (its own pipeline) and Marbles (its design page fills by hand). Moog and
 Noisemaker have hand-edited layouts: their hand edits were carried over by moving each line with the converter's change
 to it (or, for a control added by hand, to its nearest neighbour).
+An envelope display taller than 384 px gets fewer frames (2026-10-19, `envelope_layout.env_frames`), so its strips stay
+within the 12288 px MPC draws right; the release tools cap meters there too, so both builds agree (Aphex: 532 px, 23).
 
 ## Per-port notes (2026-10-02/03)
 - Removed because they have no parameter (they'd be dead on the MPC): pad/HIT/audition buttons, Mr Drums'

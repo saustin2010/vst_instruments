@@ -14,6 +14,8 @@ MV = os.path.dirname(STEVE)
 DOCKER_ROOT = (os.path.dirname(os.path.dirname(MV)) if os.path.basename(os.path.dirname(MV)) == "framework"
                and os.path.exists(os.path.join(os.path.dirname(MV), "setup.sh")) else MV)
 FRAMES, BANDS = 32, 11
+MAX_STRIP = 12288   # tallest strip MPC draws right (the framework's shadow_skin.py; the release tools cap meters at it)
+env_frames = lambda h: max(2, min(FRAMES, MAX_STRIP // max(1, h)))   # a display over 384 px: fewer frames (2026-10-19)
 ENV = re.compile(r"^meter\s.*strip=images/stitch/env_(\w+?)_(a|s|d\d+|r\d+|s\d+)\.png")
 
 
@@ -25,11 +27,12 @@ def lines_for(name, cols, keys, cy, cw, h):
     ka, kd, ks, kr = (list(keys) + [None])[:4]   # three keys: an ADS envelope, no release column
     m = lambda c, k, part, fr: "meter cx=%d cy=%d w=%d h=%d key=%s strip=images/stitch/env_%s_%s.png frames=%d" % (
         cols[c], cy, cw, h, k, name, part, fr)
-    out = [m(0, ka, "a", FRAMES)]
+    fr = env_frames(h)
+    out = [m(0, ka, "a", fr)]
     for b in range(BANDS):
         when = " when=%s:%d/%d" % (ks, b, BANDS)
-        out += [m(1, kd, "d%d" % b, FRAMES) + when, m(2, ks, "s%d" % b, 4) + when] + \
-            ([m(3, kr, "r%d" % b, FRAMES) + when] if kr else [])
+        out += [m(1, kd, "d%d" % b, fr) + when, m(2, ks, "s%d" % b, 4) + when] + \
+            ([m(3, kr, "r%d" % b, fr) + when] if kr else [])
     return out
 
 
@@ -71,7 +74,7 @@ def port(p):
         for f in os.listdir(out_dir):   # old strips of this envelope (band counts change)
             if re.match(r"env_%s_(a|s|d\d+|r\d+|s\d+)\.png$" % name, f):
                 os.remove(os.path.join(out_dir, f))
-        spec = {"out": out_dir, "name": name, "w": e["w"] * 4, "h": e["h"], "color": color, "frames": FRAMES,
+        spec = {"out": out_dir, "name": name, "w": e["w"] * 4, "h": e["h"], "color": color, "frames": env_frames(e["h"]),
                 "bands": BANDS}
         sj = os.path.join(D, "build", "env_%s.json" % name)
         os.makedirs(os.path.dirname(sj), exist_ok=True)

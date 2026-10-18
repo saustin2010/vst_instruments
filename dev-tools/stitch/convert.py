@@ -1997,7 +1997,8 @@ def convert(port):
             sp = cfg["canvas"].get(c["sel"], {})
             if sp.get("env") and c["sel"] not in envs:
                 x, y, w, h = c["rect"]
-                es = {"out": out, "name": sp["name"], "w": round(w), "h": round(h), "frames": 32, "bands": 11,
+                from envelope_layout import env_frames
+                es = {"out": out, "name": sp["name"], "w": round(w), "h": round(h), "frames": env_frames(round(h)), "bands": 11,
                       "stages": len(sp["env"]),
                       "color": "#" + theme_now.get("accent_hi", theme_now.get("accent", "ffb85c"))}
                 ej = os.path.join(out, "env_%s.json" % sp["name"])
