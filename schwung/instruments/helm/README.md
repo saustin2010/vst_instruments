@@ -117,6 +117,9 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - Presets in MPC's PRESET menu (2026-10-03): its 275 patches are VST programs, listed live from the engine (vst.json
   `programs` with `count` and `name_at`; the engine answers a preset's name by number, marked MPC port), named from their files without loading each one (stepping through them at every insert would take seconds).
+- **MOD AMOUNTS full height (2026-10-18)**: the page's panel stopped halfway down the screen; they now spread over all of it. The switch captions
+  drawn into the pages now read as the parameters' names (LFO1 WAVE, not MON LFO 1 WA): the conversion had drawn
+  them before the names were made readable.
 
 ## Files
 

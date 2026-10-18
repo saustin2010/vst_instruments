@@ -44,9 +44,23 @@ JS_SETUP = r"""(cfg) => {
   // a grid frame (rows for header / content / footer) would put the content in the header's row once that's gone
   if (getComputedStyle(root).display.includes('grid') && kids.some(k => k.hasAttribute('data-stitch-drop')))
     root.style.cssText += ';display:flex !important; flex-direction:column !important;';
-  // centre what's left in the 628 px the MPC gives a plugin (the header and footer took some of it)
+  // what's left grows into the 628 px the MPC gives a plugin (2026-10-18: it used to be centred at its designed height,
+  // which left most designs ~110 px empty above and below). The room it kept for the dropped header and footer goes:
+  // its margins, and a top/bottom padding deeper than 30 px becomes its side padding. Its rows and panels take the
+  // height as their own CSS says, so fixed-height rows need an augment (height: auto, or flex-grow). "fill": False
+  // keeps the old way: centred (unless "center": False)
   const body = [...root.children].find(k => !k.hasAttribute('data-stitch-drop') && k.getBoundingClientRect().height > 100);
-  if (body && cfg.center !== false) {
+  if (body && cfg.fill !== false) {
+    const bs = getComputedStyle(body), side = parseFloat(bs.paddingLeft) || 12;
+    body.style.marginTop = body.style.marginBottom = '0px';
+    for (const k of ['paddingTop', 'paddingBottom']) if (parseFloat(bs[k]) > 30) body.style[k] = side + 'px';
+    if (/fixed|absolute/.test(bs.position)) {   // placed under the dropped header
+      body.style.top = '0px'; body.style.bottom = 'auto'; body.style.height = '628px';
+    } else {
+      root.style.cssText += ';display:flex !important; flex-direction:column !important;';
+      body.style.flex = '1 1 0'; body.style.height = 'auto'; body.style.minHeight = '0';
+    }
+  } else if (body && cfg.center !== false) {
     // keep the content at its designed height (a stretchy layout would otherwise spread into the freed space)
     const h0 = before.get(body) || body.getBoundingClientRect().height;
     if (h0 < 620) {
@@ -64,7 +78,9 @@ JS_SETUP = r"""(cfg) => {
 # the match after it with strings swapped (a design that drew one of four identical pages); {sel, text} sets its text;
 # {sel, unclass: regex} drops matching classes (a Tailwind rotate-45 baked into a knob);
 # {sel, remove: true} deletes (a design's made-up status text, say); {sel, move: target, where} moves the match (every
-# match with all: true, in order) to the target, at where (default beforeend): a control into another panel, as is
+# match with all: true, in order) to the target, at where (default beforeend): a control into another panel, as is;
+# {sel, css} adds to the inline style (a fixed-height row that should grow: "flex-grow: 1" or "height: auto");
+# {sel, stretch_y: [y0, y1, z0, z1]} spreads every match's absolute top/height from y0..y1 over z0..z1 (frames placed by px)
 JS_AUGMENT = r"""(ops) => {
   const out = [];
   for (const op of ops || []) {
@@ -87,6 +103,14 @@ JS_AUGMENT = r"""(ops) => {
       }
       continue;
     }
+    if (op.stretch_y) {   // [y0, y1, z0, z1]: absolutely placed frames spanning y0..y1 spread over z0..z1 (fill, 2026-10-18)
+      const [y0, y1, z0, z1] = op.stretch_y, k = (z1 - z0) / (y1 - y0);
+      for (const e of els) {
+        const t = parseFloat(e.style.top), h = parseFloat(e.style.height);
+        e.style.top = Math.round(z0 + (t - y0) * k) + 'px'; e.style.height = Math.round(h * k) + 'px';
+      }
+      continue;
+    }
     if (op.each) { els.forEach((e, i) => op.each[i] !== undefined && (e.innerHTML = op.each[i])); }   // one per match
     if (op.each && !op.attr) continue;
     if (!op.all && !op.each) els = els.slice(0, 1);
@@ -96,6 +120,7 @@ JS_AUGMENT = r"""(ops) => {
       if (op.remove) { e.remove(); continue; }
       if (to) to.insertAdjacentElement(op.where || 'beforeend', e);
       for (const [k, v] of Object.entries(op.attr || {})) e.setAttribute(k, v);
+      if (op.css) e.style.cssText += ';' + op.css;   // added to its inline style (attr: style replaces it)
       if (op.unclass) { const re = new RegExp(op.unclass); [...e.classList].filter(c => re.test(c)).forEach(c => e.classList.remove(c)); }
       if (op.text !== undefined) e.textContent = op.text;
       if (op.html !== undefined) {

@@ -82,7 +82,7 @@ MAPS = {
         # and B in that markup (design/stitch.html, a hidden button per page), and its build/convert.json gives each
         # page's Q-Links (a row of the 4 x 4 matrix a column) and the keys on both of a tab's pages. After this,
         # mpc/merge_ab.py folds each tab's two pages into one tab with Q-Link sub-pages.
-        "sweep": 135, "tabs": ".ab-tab", "center": False, "autodrop": False, "extra": "build/convert.json",
+        "sweep": 135, "tabs": ".ab-tab", "center": False, "fill": False, "autodrop": False, "extra": "build/convert.json",
         "knob": {"item": ".ab-knob", "body": ".knob-body-58, .knob-body-40", "unit": "div:has(> div > .ab-knob)",
                  "label": ".ab-label", "value": ".ab-value"},
         "toggle": {"item": ".ab-switch", "unit": "div:has(> div > .ab-switch)", "label": ".ab-label", "hide": [".ab-value"]},
@@ -127,9 +127,12 @@ MAPS = {
                        "glide", "bend_range", "vel_sens", "-", "volume"]},
     },
     "noisemaker": {
-        # ⚠ a rerun no longer reproduces this screen (it renders 25 px lower): layout.conf has hand edits since
-        # 2026-10-03 (BANK under PATCH, a shorter scope, the design QA's Q-Links and moves; see its header). Re-add
-        # those after any rerun.
+        # ⚠ a rerun doesn't reproduce this screen's layout.conf: it has hand edits since 2026-10-03 (BANK under PATCH, a
+        # shorter scope, the design QA's Q-Links and moves; see its header). Re-add those after any rerun (2026-10-18:
+        # carried over to the full-height screen by moving each with the converter's change to it or its neighbour).
+        # The scope box is hidden in the art: BANK and the shorter scope sit there.
+        "hide": [".scope-container:has(#main-scope-canvas)"],
+        "augment": [{"sel": ".tab-page", "all": True, "css": "grid-template-rows: 1fr 1fr"}],   # fill: the rows take the height
         "sweep": 140,
         "knob": {"item": ".knob-body", "unit": ".knob-unit", "label": ".knob-label", "value": ".knob-val"},
         "slider": {"item": ".slider-track", "unit": ".slider-unit", "label": ".knob-label", "value": ".knob-val"},
@@ -183,6 +186,7 @@ MAPS = {
                 "e2_hold", "-", "-", "-", "mg_shape", "mg_pw", "-", "-"],
         },
         "augment": [
+            {"sel": "#view-envelopes div.col-span-8.panel-frame", "css": "padding-bottom: 36px"},   # fill: room under the bottom row for MPC's names and values
             # MAIN: RANDOM / MUTATE / GATE / RESET together in a PATCH ACTIONS box (the VOICE panel's trigger pad goes)
             {"sel": "#view-main div.flex.flex-col:has(> #main-gate-btn)", "remove": True},
             {"sel": "#view-main div.flex.flex-col.gap-2:has(> div.grid > button[onclick^='randomizePatch'])", "each": [
@@ -211,7 +215,8 @@ MAPS = {
         ],
     },
     "303": {
-        "augment": [{"sel": "body", "retext": [["ROLAND", "OPEN303"], ["TB-303", "ACID"]]}],   # no maker badge in the art
+        "augment": [{"sel": "body", "retext": [["ROLAND", "OPEN303"], ["TB-303", "ACID"]]},   # no maker badge in the art
+                    {"sel": ".rack-row", "all": True, "css": "flex-grow: 1"}],   # fill: the rows take the height
         "sweep": 135,
         "knob": {"item": ".knob-wrapper", "unit": ".control-unit", "label": ".control-label", "value": ".control-value"},
         "enum": {"item": ".enum-v-selector", "opt": ".enum-opt", "unit": ".control-unit", "label": ".control-label"},
@@ -226,7 +231,7 @@ MAPS = {
     "hera": {
         # both pages drawn; HPF / VCF KYBD / VCF BEND / VCA LEVEL / LFO TRIG added in its markup, the cutoff-envelope
         # graphic follows the ADSR faders
-        "sweep": 135, "design_labels": True, "rot": ".knob-cap", "center": False,
+        "sweep": 135, "design_labels": True, "rot": ".knob-cap",
         "tabs": "[id^=nav-btn-]",
         "knob": {"item": "[id^=knob-]", "body": ".knob-face", "unit": "div.flex-col:has(> [id^=knob-])", "label": "span",
                  "value": ".recessed-well:has(> span[id^=val-])"},
@@ -254,7 +259,8 @@ MAPS = {
         },
         "augment": [
             {"sel": "div:has(> div > div > #knob-cutoff)", "attr": {"style": "flex-direction: row-reverse"}},   # design QA
-            {"sel": "body > main", "attr": {"style": "top: 55px;"}},   # fixed under the (dropped) header: centre it
+            {"sel": "#tab-content-main > div, #tab-content-dco > *", "all": True, "attr": {"style": "flex-grow: 1"}},   # fill,
+            {"sel": "#tab-content-main, #tab-content-dco", "all": True, "attr": {"style": "gap: 12px"}},   # rows a gutter apart
             {"sel": "div.flex-col:has(> #btn-range-4)", "attr": {"data-param": "pitch_range"}},
             {"sel": "div.flex-col:has(> #btn-pwm-man)", "attr": {"data-param": "pwm_mod"}},
             {"sel": "div.flex-col:has(> #btn-vca-env)", "attr": {"data-param": "vca_type"}},
@@ -294,6 +300,10 @@ MAPS = {
                         'border-[#1c4a3d]">{opt}</button>',
         },
         "augment": [
+            {"sel": "#view-tune div.grid-cols-8 > div", "all": True, "css": "padding-bottom: 36px"},   # fill: room under the bottom row for MPC's names and values
+            {"sel": "#view-kit > div[class*='h-[248px]']", "css": "padding-bottom: 40px"},   # the same, under the level sliders
+            {"sel": "#view-kit > div[class*='h-['], #view-edit > div[class*='h-[448px]'], #view-tune > div[class*='h-[448px]']",
+             "all": True, "css": "flex-grow: 1"},   # fill: the rows take the height
             {"sel": "button[onclick^=triggerDrumHit]", "all": True, "remove": True},   # pad / HIT / audition buttons
             {"sel": "button[onclick^=randomizeAllKit] .material-symbols-outlined", "remove": True},
             {"sel": "button[onclick^=randomizeAllKit]", "attr": {"data-param": "randomize"}},
@@ -348,7 +358,7 @@ MAPS = {
     },
     "marbles": {
         # one drawn page; its frozen MIDI OUT note readouts become the routing controls; SETUP drawn in its style
-        "sweep": 135, "design_labels": True, "tabs": "#tab-marbles", "drop": ["header", "footer"], "center": False,
+        "sweep": 135, "design_labels": True, "tabs": "#tab-marbles", "drop": ["header", "footer"], "center": False, "fill": False,
         "qlinks_skip": ["t1_out", "t2_out", "t3_out"],   # the routing switches stay touch-only
         "knob": {"item": ".knob-container", "unit": "div:has(> .knob-container)", "label": "[id^=readout-], .text-mpc-ink-dim"},
         "enum": [{"item": "div:has(> .deja-t-btn), .aug-enum", "opt": "button", "label": ".text-mpc-ink-dim"},
@@ -407,7 +417,7 @@ MAPS = {
         },
         "map": {"t-model": "t_model", "clock-div": "clock_div"},
         "grid": {"tabs": ["SETUP"], "tpl": None, "skip": ["channels", "t1_out", "t2_out", "t3_out"]},
-        "tab_order": ["MARBLES", "SETUP"],
+        "tab_order": ["RANDOM SAMPLER", "SETUP"],
     },
     "hush1": dict(HUSH := {
         # pages 1-2 from the design (+ the SOURCE controls it left out); its pages 3-4 were mostly frozen readouts, so
@@ -447,6 +457,7 @@ MAPS = {
             "row": '<div class="flex items-center justify-around w-full">{items}</div>',
         },
         "augment": [
+            {"sel": "#view-source > section.col-span-8", "css": "padding-bottom: 36px"},   # fill: room under the bottom row for MPC's names and values
             # design QA 2026-10-03: the VCF's response-curve display on the left of its knobs
             {"sel": "div.recessed-display:has(> #filterCanvas)", "attr": {"style": "order: -1"}},
             {"sel": "svg circle[id^=arc-]", "all": True, "remove": True},   # value arcs drawn at one value
@@ -496,6 +507,8 @@ MAPS = {
                 "row": '<div class="mt-2 flex items-center justify-around">{items}</div>'},
         "augment": [
             {"sel": "#s1-bits, #s2-bits", "all": True, "attr": {"style": "grid-template-columns: repeat(16, minmax(0, 1fr));"}},
+            # fill: the panels take the height, the knob strip keeps the 142 px it had (MPC's names and values need them)
+            {"sel": "#mpc-enclosure > div.grid", "attr": {"style": "grid-template-rows: minmax(0, 1fr) 142px"}},
             {"sel": "div:has(> button[onclick='triggerResetBoth()'])", "where": "replace", "html": "@popup(g_reset)"},
             {"sel": "section div.mt-2.bg-surface-container-low", "where": "replace", "html": "@row(s1_reset, s2_reset)"},
             # design QA 2026-10-03: the S1 / S2 knob rows spaced out (MPC's names and values overlapped), their
@@ -819,6 +832,7 @@ MAPS = {
              "where": "afterend", "attr": {"class": "flex flex-col justify-center px-1"}},
             {"sel": "section:has([data-param=voice_count]) div.col-span-5", "attr": {"class": "col-span-7 flex items-center justify-around border-r border-[#2d2f34] pr-2"}},
             {"sel": "div:has(> #toggle-unison)", "attr": {"class": "col-span-5 flex flex-col items-center gap-12"}},
+            {"sel": "#rack-container > section", "all": True, "css": "height: auto"},   # fill: the rows take the height (last: attr style replaces)
         ],
         "map": {"master_vol": "volume", "master_tune": "tune", "voice_spread": "unison_det", "glide_rate": "portamento",
                 "asplayed": "as_played"},
@@ -885,7 +899,7 @@ MAPS = {
             1: ["fm_preset_index", "-", "-", "-", "legato", "velocity_sensitivity", "volume", "-"],   # VOLUME added 2026-10-04
         },
         "grid": {"tabs": ["PLAY"], "tpl": None},
-        "tab_order": ["PLAITS", "PLAY"],
+        "tab_order": ["MACRO OSC 2", "PLAY"],
     },
     "rampage": {
         # DUAL SLOPE (was Rampage) from the design; MIDI drawn in its style
@@ -915,6 +929,7 @@ MAPS = {
                       'data-param="{key}"></button></div>',
         },
         "augment": [
+            {"sel": "main > section[class*='h-[248px]']", "all": True, "css": "height: auto"},   # fill: the rows take the height
             {"sel": ".knob-bevel", "all": True, "unclass": "^-?rotate-|^transform$"},
             {"sel": "div:has(> span + button + button + button)", "nth": ["range_a", "range_b"]},
             {"sel": "button.tactile-btn", "nth": ["cycle_a", "trig_a", "cycle_b", "trig_b"]},
@@ -951,12 +966,14 @@ MAPS = {
     },
     "rings": {
         # one page, every control drawn
-        "sweep": 135, "design_labels": True, "tabs": "#no-tabs", "page": "RINGS", "drop": ["header", "footer"],
+        "sweep": 135, "design_labels": True, "tabs": "#no-tabs", "page": "RESONATOR", "drop": ["header", "footer"],
         "knob": {"item": ".knob-radial", "unit": "div.flex-col:has(> div > .knob-radial)", "label": "span"},
         "popup": {"item": "div.w-full.h-11, div[class*='w-[134px]']", "label": "label, span.uppercase"},
         "enum": {"item": "div.grid.grid-cols-3:has(> button)", "opt": "button", "label": "span"},
         # (no MODEL picture: 3 of the 7 models record silence in the probe, so the pictures would mislead)
         "augment": [
+            {"sel": "main > div[class*='h-[250px]'], main > div[class*='h-[255px]']", "all": True, "css": "flex-grow: 1"},   # fill: the rows take the height
+            {"sel": "main", "css": "gap: 12px"},   # a gutter apart
             {"sel": "body", "retext": [["AKAI PRO ENGINE", "OPEN SOURCE DSP"]]},   # no maker badges / wrong routing text in the art (2026-10-03)
             {"sel": "svg.-rotate-90 circle:nth-child(2)", "all": True, "remove": True},   # value arcs at one value
             {"sel": "div.grid.grid-cols-2:has(> div > span + span.rounded-full)", "remove": True},   # fake model quick-picks
@@ -980,12 +997,14 @@ MAPS = {
     },
     "ringsfx": {
         # one page, every control drawn
-        "sweep": 135, "design_labels": True, "tabs": "#no-tabs", "page": "RINGS FX", "drop": ["header", "footer"],
+        "sweep": 135, "design_labels": True, "tabs": "#no-tabs", "page": "RESONATOR FX", "drop": ["header", "footer"],
         "knob": {"item": ".knob-shadow", "unit": "div.flex-col:has(> div > .knob-shadow)", "label": "span",
                  "value": "div.text-center"},   # its name + readout box under the knob: MPC draws those
         "popup": {"item": "div[data-param=model]"},
         "enum": {"item": "div[data-param=polyphony]", "opt": "button", "label": "span"},
         "augment": [
+            {"sel": "main > div[class*='h-[244px]'], main > div[class*='h-[256px]']", "all": True, "css": "flex-grow: 1"},   # fill: the rows take the height
+            {"sel": "main", "css": "gap: 12px"},   # a gutter apart
             {"sel": "svg.-rotate-90 circle:nth-child(2)", "all": True, "remove": True},   # value arcs at one value
             {"sel": ".knob-shadow span", "all": True, "remove": True},   # captions on the caps would turn with them
             {"sel": "div.cursor-pointer:has(> div > span.block)", "attr": {"data-param": "model"}},
@@ -1043,6 +1062,7 @@ MAPS = {
             # design QA 2026-10-03: the event stream on the left of the top row, CLOCK & TIMING on the right
             {"sel": "section.chassis-screws:has(> div > span + span):nth-of-type(2), section.col-span-6:nth-of-type(2)",
              "attr": {"style": "overflow: hidden; order: -1"}},
+            {"sel": "main > section[class*='h-[']", "all": True, "css": "height: auto"},   # fill: the rows take the height (last)
         ],
         # design QA 2026-10-03: a Q-Link column per panel or group (MAIN: CLOCK | LATCH + OCTAVES | the four feel knobs;
         # PATTERN: MODE + PATTERN | the progression's trigger / missing note / seed | RHYTHM | RANDOM PATTERN; MODIFY: the
@@ -1169,7 +1189,7 @@ MAPS = {
     },
     "warps": {
         # one page, every control drawn; the caps turn (its needles pivot off-centre)
-        "sweep": 135, "design_labels": True, "tabs": "#no-tabs", "page": "WARPS", "rot": ".knob-shadow > div",
+        "sweep": 135, "design_labels": True, "tabs": "#no-tabs", "page": "META MOD", "rot": ".knob-shadow > div",
         "drop": ["header", "footer"],
         "knob": {"item": ".knob-shadow", "unit": "div.flex-col:has(> div > .knob-shadow), div.flex-col:has(> .knob-shadow)",
                  "label": "span", "value": "div:has(> span[id^=txt-]), div.px-2"},
@@ -1201,6 +1221,8 @@ MAPS = {
         # design QA 2026-10-03: no maker badges (the emblem read "THE ORIGINAL Wurlitzer", a serial number, the
         # factory town and "AKAI PROFESSIONAL"); the displays on the left of TONE MATRIX and CABINET
         "augment": [
+            {"sel": "main > div[class*='h-[252px]']", "all": True, "css": "flex-grow: 1"},   # fill: the rows take the height
+            {"sel": "main", "css": "gap: 12px"},   # a gutter apart
             {"sel": "body", "retext": [["Akai MPC Standalone DSP Core // Active", ""], ["WURLITZER 200A", "WURL 200A"],
                                        ["AKAI Q-LINK SYNC ACTIVE", ""]]},
             {"sel": "div.border-2:has(> div > h1) > div.uppercase", "remove": True},   # THE ORIGINAL
@@ -1336,6 +1358,9 @@ MAPS = {
         "canvas": {"#scopeCanvas": {"picture": "ratio", "fill": ".recessed-well:has(> #scopeCanvas)"},
                    "#envCanvas": {"env": ["attack", "decay", "sustain"], "name": "mod", "fill": ".recessed-well:has(> #envCanvas)"}},
         "drop": ["header", "footer"],
+        "augment": [{"sel": "div.pt-11 > div[class*='h-[256px]']", "all": True, "css": "flex-grow: 1"},   # fill: the rows take the height
+                    {"sel": "section:has(#envCanvas)", "css": "padding-bottom: 36px"},   # fill: room under the bottom row for MPC's names and values
+                    {"sel": "div.pt-11", "css": "gap: 12px"}],   # a gutter apart
         # design QA 2026-10-03: OPERATOR | MOD ENVELOPE | VOICE split 3 + 2 ("-" = an empty slot); the preset stepper is
         # touch only (its arrows and MPC's PRESET menu)
         "qlinks": {0: ["ratio", "bright", "bite", "tone", "attack", "decay", "sustain", "-",
@@ -1352,6 +1377,7 @@ MAPS = {
         "drop": ["header", "footer"], "page": "MAIN",
         "hide": ["div:has(> #groove-feel-tag)"],
         "augment": [{"sel": "div:has(> div.flex-col > span + span.font-readout-numeric) > button", "remove": True},   # BURST TEST
+                    {"sel": "main > div[class*='h-[256px]']", "all": True, "css": "flex-grow: 1"},   # fill: the rows take the height
                     {"sel": "div:has(> #latch-rocker) > div.mt-2", "remove": True},   # "HOLD SW" under MPC's LATCH name
                     {"sel": "body", "retext": [["MPC EMBEDDED DSP", "SCHWUNG MIDI FX"]]}],   # not Akai's
         # design QA 2026-10-03: FEEL's six as two Q-Link columns (VARIANT / SWING / GATE, STRUM / ACCENT / LATCH), then
@@ -1376,6 +1402,8 @@ MAPS = {
                     '<span class="text-label-sm font-readout-numeric text-primary">0</span></div></div>',
         },
         "augment": [
+            {"sel": "#page-grids > div[class*='h-[254px]']", "all": True, "css": "flex-grow: 1"},   # fill: the rows take the height
+            {"sel": "#page-grids", "css": "gap: 12px"},   # a gutter apart
             {"sel": "body", "retext": [["Notes transmit triggers to external Akai MPC Drum Programs or Synthesizers.", "Notes go out of the Drum Map MIDI port: set a drum track's MIDI input to it."], ["Routed automatically to internal MPC pads and rear MIDI Out 1.", "Its own MIDI port (Preferences > MIDI: Track on), clocked by MPC."]]},   # no maker badges / wrong routing text in the art (2026-10-03)
             {"sel": "div:has(> #mode-drums)", "attr": {"data-param": "mode"}},
             {"sel": "div:has(> #sw-off)", "attr": {"data-param": "swing"}},
@@ -1479,7 +1507,7 @@ MAPS = {
         "canvas": {"#modalCanvas": {"picture": "model", "fill": ".vis-container"}},
         "augment": [
             {"sel": "#pagePlay .frame:has(#modalCanvas) .frame-title", "text": "RESONATOR MODEL // WAVEFORM"},
-            {"sel": ".tab-page", "all": True, "attr": {"style": "position: relative; top: 30px;"}},
+            {"sel": ".tab-page > .frame", "all": True, "stretch_y": [10, 558, 19, 607]},   # fill: 20 px all round, as the sides
         ],
         "map": {"legatoBtn": "legato"},
         # design QA 2026-10-03: bank 1 = BOW | BLOW | STRIKE | RESONATOR knobs, bank 2 = CONTOUR | MODEL | SPACE (six panels
@@ -1515,7 +1543,7 @@ MAPS = {
              "attr": {"class": "matrix-cell", "style": "height: 150px;"}},
             {"sel": "#pageEnvLfo .matrix-cell", "each": ["@knob_s(mat_%d_%d)" % (r, c) for r in (0, 1) for c in range(8)]},
             {"sel": "#pageShNoise .matrix-cell", "each": ["@knob_s(mat_%d_%d)" % (r, c) for r in (2, 3) for c in range(8)]},
-            {"sel": ".tab-page", "all": True, "attr": {"style": "position: relative; top: 30px;"}},   # 548 px of frames, centred
+            {"sel": ".tab-page > .frame", "all": True, "stretch_y": [10, 558, 19, 607]},   # fill: 20 px all round, as the sides
         ],
         "map": {"RANDOM ALL": "rnd_patch", "RANDOM SOUND": "rnd_denis", "RANDOM MOD": "rnd_mod", "RESET MATRIX": "matrix_reset"},
         # design QA 2026-10-03: a Q-Link column per panel ("-" = an empty slot); preset, RANDOM buttons and the filter
@@ -1831,11 +1859,18 @@ def grid_page(tab, cfg, byk):
        without a template becomes a knob). extract.py shows it in place of the design's pages and reads it like them."""
     tpl, labels = cfg["grid"]["tpl"], cfg.get("labels", {})
     kinds = {"enum_v": "enum", "enum_h": "enum", "slider_v": "knob", "slider_h": "knob"}
+    # a plan whose frames stop well short of the bottom (a few controls in one row) spreads over the whole 628 px,
+    # frames and controls alike, with the bottom margin the top one (2026-10-18, as the designs' pages now fill)
+    fr = [it for it in tab["items"] if it["kind"] == "frame" or it["kind"] == "art" and "art" in tpl]   # what is drawn
+    y0 = min((int(it["y"]) - Y_OFF for it in fr), default=0)
+    y1 = max((int(it["y"]) + int(it["h"]) - Y_OFF for it in fr), default=628)
+    k = (628 - 2 * y0) / (y1 - y0) if fr and 628 - y0 - y1 > 40 else 1
+    Y = lambda y: round(y0 + (y - y0) * k)
     out = []
     for it in tab["items"]:
         if it["kind"] in ("frame", "art"):   # art (a logo, a caption): the design's "art" plate if it has one, else nothing
             if it["kind"] in tpl:
-                out.append(fill(tpl[it["kind"]], x=it["x"], y=int(it["y"]) - Y_OFF, w=it["w"], h=it["h"],
+                out.append(fill(tpl[it["kind"]], x=it["x"], y=Y(int(it["y"]) - Y_OFF), w=it["w"], h=round(int(it["h"]) * k),
                                 title=it.get("title", "")))
             continue
         p = byk.get(it.get("key"))
@@ -1850,7 +1885,7 @@ def grid_page(tab, cfg, byk):
                     h=it.get("h", 48), first=opts[0] if opts else "",
                     opts="".join(fill(tpl.get("opt_" + kind, ""), opt=o) for o in opts))
         out.append('<div class="stitch-gc" style="position:absolute; left:%spx; top:%dpx; transform:translate(-50%%,-50%%);">%s</div>'
-                   % (it["cx"], int(it["cy"]) - Y_OFF, html))
+                   % (it["cx"], Y(int(it["cy"]) - Y_OFF), html))
     return ('<div class="stitch-grid-page" style="position:absolute; left:0; top:0; width:1280px; height:628px; z-index:5;">%s'
             '</div>' % "".join(out))
 
@@ -1885,7 +1920,8 @@ BRAND_RETEXT = {
     "monovoice": [["ELEKTRON / RETRO", "RETRO"], ["AKAI MPC OS", "MPC OS"]] + _AKAI + [["AKAI", "MPC"]],
     "hera": [["[JUNO-60]", "[6-VOICE POLY]"], ["JUNO-60 FILTER", "4-POLE FILTER"], ["JUNO", "POLY"], ["AKAI LIVE II", "LIVE II"]],
     "hush1": [["HUSH ONE // SH-101", "HUSH ONE // MONOSYNTH"], ["SH-101 ANALOG CURVES", "ANALOG CURVES"], ["SH-101", "MONO"]] + _AKAI,
-    "noisemaker": [["JUPITER", "POLY"]] + _AKAI,
+    "noisemaker": [["JUPITER", "POLY"], ["// TAL HYBRID SYNTHESIZER", ""], ["TAL-NOISEMAKER", "NOISEMAKER"],   # 2026-10-19:
+                   ["TAL NOISEMAKER", "NOISEMAKER"], ["TAL CYBER PLUCK", "CYBER PLUCK"]] + _AKAI,   # just NOISEMAKER
     "moog": [["// 4-OSC MOOG SYNTHESIZER", "// 4-OSC LADDER SYNTHESIZER"], ["AUDITION MOOG", "AUDITION"], ["MOOG LADDER VCF", "LADDER VCF"],
              ["MOOG MODEL D TOPOLOGY", "4-POLE TOPOLOGY"]] + _AKAI,
     "obxd": _AKAI,
@@ -1962,7 +1998,8 @@ def convert(port):
             sp = cfg["canvas"].get(c["sel"], {})
             if sp.get("env") and c["sel"] not in envs:
                 x, y, w, h = c["rect"]
-                es = {"out": out, "name": sp["name"], "w": round(w), "h": round(h), "frames": 32, "bands": 11,
+                from envelope_layout import env_frames
+                es = {"out": out, "name": sp["name"], "w": round(w), "h": round(h), "frames": env_frames(round(h)), "bands": 11,
                       "stages": len(sp["env"]),
                       "color": "#" + theme_now.get("accent_hi", theme_now.get("accent", "ffb85c"))}
                 ej = os.path.join(out, "env_%s.json" % sp["name"])
@@ -1982,7 +2019,9 @@ def convert(port):
     if not os.path.exists(os.path.join(D, "layout.grid.conf")):
         shutil.copy(os.path.join(D, "layout.conf"), os.path.join(D, "layout.grid.conf"))
     src = open(os.path.join(D, "layout.grid.conf")).read()
-    keep = [l for l in src.splitlines() if re.match(r"(art_css|toggle_img|toggle_img_on)=", l)]
+    # settings lines as the current layout has them (incl. the display lines added after conversion, 2026-10-08)
+    KEEP = r"(art_css|toggle_img|toggle_img_on|qlink_bounds|qlink_box|label_scale|focus_ring)="
+    keep = [l for l in old.splitlines() if re.match(KEEP, l)] or [l for l in src.splitlines() if re.match(KEEP, l)]
     theme = theme_of(html) or dict(re.findall(r"^theme_(\w+)=(\w+)", src, re.M))
     L = ["# %s for MPC, from the Stitch mockup steve/stitch_layouts/%s.md (steve/tools/stitch/convert.py, 2026-10-02)."
          % (port, port),

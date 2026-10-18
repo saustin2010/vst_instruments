@@ -137,6 +137,11 @@ links above.
 - No other company's name on the screen (2026-10-12): FILTER TYPE's Moog and Moog2 are **Ladder** and **Ladder 2**
   (TAL's two 24 dB ladder filters). The sound is unchanged, and saved sounds keep their filter (it's saved as a number).
   `src/dsp/noisemaker_plugin.cpp` (`-DMPC_PORT`); diff: `upstream-changes.diff`.
+- **Full-height screen (2026-10-18)**: the two rows of panels share the height under the title bar (they were
+  260 px each, which left about 35 px empty at the bottom). BANK, the shorter scope and the design QA's moves
+  came along.
+- **Just NOISEMAKER on the screen (2026-10-19)**: the design's "TAL" text is gone (the title bar's "// TAL HYBRID
+  SYNTHESIZER" and the MOD page's "TAL NOISEMAKER" plate), under the catalogue's no-other-company-names rule.
 
 ## Files
 
