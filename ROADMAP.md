@@ -171,8 +171,9 @@ parameter index, so existing projects keep working.
     SNARE did, so silence after playing cost 1.7x a fresh instance's. A stopped voice's filter follows CUTOFF, and a
     sample's end lets the filter and DRIVE ring out (2.0.1 cut them: a click, up to -25 dBFS in Hrtl 60). Offline:
     procwatch `after/fresh` 1.69 -> 1.00; the kits as 2.0.1 to within 2 LSB a hit and 6 in the groove (every hit from
-    the same noise state), Hrtl 54 and 60 but for that click; the selftest's 288 hits all stop. Left: install on the
-    Live II (no restart: re-insert), the owner's checks (browsing the drives, a file on each voice, PREVIEW, RANDOMISE,
+    the same noise state), Hrtl 54 and 60 but for that click; the selftest's 288 hits all stop. Installed on the Live
+    II 2026-10-19 (this repo's build in the 2.0.1 release folder, 2.0.1 backed up in `/sdcard/vst-backups/`; no
+    restart). Left: the owner's checks (browsing the drives, a file on each voice, PREVIEW, RANDOMISE,
     a project saved and reopened, the kits after a pause sounding as before), then a release.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
