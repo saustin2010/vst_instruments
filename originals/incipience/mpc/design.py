@@ -169,7 +169,10 @@ def matrix(rows, P, inst_name, diag=()):
 BROWSER_LINES = [
     "readout cx=290 cy=154 w=488 h=32 vs=20 box=no style=dotmatrix key=br_path",
     "readout cx=656 cy=154 w=196 h=32 vs=20 box=no style=dotmatrix key=br_status",
-    "list x=40 y=182 w=720 h=362 key=br_row cols=1 rows=8 th=40 gap=6",
+    # white text, the cursor's row in a red border (owner, 2026-10-20: "make the font white and not red"); touching a
+    # row hands the data wheel to FILE, so the wheel moves the cursor after any tap on the list ("the main wheel does
+    # not scroll through the files")
+    "list x=40 y=182 w=720 h=362 key=br_row cols=1 rows=8 th=40 gap=6 wheel=br_cursor ink=ffffff lit=d32a2a",
 ]
 
 

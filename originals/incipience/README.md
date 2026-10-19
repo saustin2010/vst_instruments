@@ -154,6 +154,9 @@ MBrane, metal noise through the filters, the self-oscillating filters and the FM
 
 ## Your own samples: the SAMPLES tab
 
+(How it's built, the MPC facts behind it and how to reuse it in another plugin:
+[docs/sample-browser.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/sample-browser.md).)
+
 Any folder of WAV files on the MPC: its internal drive, an SD card, an SSD, a USB drive, or a `samples` folder you make
 in the plugin's data folder (`incipience/samples/` next to `incipience.so`).
 
@@ -168,8 +171,10 @@ the data wheel alone goes through all of it.
   order), each under a heading with its name from the folder you opened (`Kicks /`, `Kicks/Hard /`). Folders without a
   WAV file aren't listed. When a folder holds too much for one list (more than 999 rows, or more than 256 folders to
   look through, as a drive's top level often does), it's listed as before: its subfolders, then its own files.
-- **The cursor (FILE):** its row is lit, and the FILE box under the list shows its name. Move it with the **data
-  wheel** (tap the FILE box once), **Q-Link 1** or the box's arrows, one file at a time: it steps over the headings,
+- **The cursor (FILE):** its row has a red border (the list's text is white), and the FILE box under the list shows its
+  name. Move it with the **data wheel**: MPC's wheel turns the control touched last, and touching any row (or the
+  FILE box) hands it to the cursor (owner, 2026-10-20: "the main wheel does not scroll through the files"). Or use
+  **Q-Link 1**, no touch needed, or the box's arrows. It moves one file at a time and steps over the headings,
   from one folder's last file to the next one's first. **SCROLL** (Q-Link 2, or its arrows) moves a page at a time,
   taking the cursor along. With **PREVIEW** on, each file plays as the cursor lands on it, straight from the folder:
   no instrument, no effects, at Incipience's VOLUME, until it ends or the cursor moves on.

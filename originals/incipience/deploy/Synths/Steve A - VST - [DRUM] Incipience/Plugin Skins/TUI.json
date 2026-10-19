@@ -109787,10 +109787,21 @@
                     }
                 },
                 {
-                    "key": "shRow_720x40",
+                    "key": "shRow_720x40_ffffff_d32a2a_wheel",
                     "value": {
                         "version": 4,
                         "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Wheel",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            },
                             {
                                 "version": 2,
                                 "onAction": "Mouse Down",
@@ -109868,8 +109879,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_tile_720x40_on.png",
-                                        "offImage": "sh_tile_720x40_off.png",
+                                        "onImage": "sh_tile_720x40_d32a2a_on.png",
+                                        "offImage": "sh_tile_720x40_d32a2a_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 1,
                                         "handleName": "Data",
@@ -109906,7 +109917,7 @@
                                                 "style": "SemiBold",
                                                 "height": 24.0
                                             },
-                                            "colour": "ffd32a2a",
+                                            "colour": "ffffffff",
                                             "justification": "left verticallyCentred",
                                             "case": "Original"
                                         },
@@ -110681,7 +110692,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "br_row 1",
-                                    "type": "shRow_720x40",
+                                    "type": "shRow_720x40_ffffff_d32a2a_wheel",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -110693,6 +110704,10 @@
                                         {
                                             "key": "Data",
                                             "value": "Parameter 713"
+                                        },
+                                        {
+                                            "key": "Wheel",
+                                            "value": "Parameter 730"
                                         }
                                     ]
                                 },
@@ -110711,7 +110726,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "br_row 2",
-                                    "type": "shRow_720x40",
+                                    "type": "shRow_720x40_ffffff_d32a2a_wheel",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -110723,6 +110738,10 @@
                                         {
                                             "key": "Data",
                                             "value": "Parameter 714"
+                                        },
+                                        {
+                                            "key": "Wheel",
+                                            "value": "Parameter 730"
                                         }
                                     ]
                                 },
@@ -110741,7 +110760,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "br_row 3",
-                                    "type": "shRow_720x40",
+                                    "type": "shRow_720x40_ffffff_d32a2a_wheel",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -110753,6 +110772,10 @@
                                         {
                                             "key": "Data",
                                             "value": "Parameter 715"
+                                        },
+                                        {
+                                            "key": "Wheel",
+                                            "value": "Parameter 730"
                                         }
                                     ]
                                 },
@@ -110771,7 +110794,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "br_row 4",
-                                    "type": "shRow_720x40",
+                                    "type": "shRow_720x40_ffffff_d32a2a_wheel",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -110783,6 +110806,10 @@
                                         {
                                             "key": "Data",
                                             "value": "Parameter 716"
+                                        },
+                                        {
+                                            "key": "Wheel",
+                                            "value": "Parameter 730"
                                         }
                                     ]
                                 },
@@ -110801,7 +110828,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "br_row 5",
-                                    "type": "shRow_720x40",
+                                    "type": "shRow_720x40_ffffff_d32a2a_wheel",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -110813,6 +110840,10 @@
                                         {
                                             "key": "Data",
                                             "value": "Parameter 717"
+                                        },
+                                        {
+                                            "key": "Wheel",
+                                            "value": "Parameter 730"
                                         }
                                     ]
                                 },
@@ -110831,7 +110862,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "br_row 6",
-                                    "type": "shRow_720x40",
+                                    "type": "shRow_720x40_ffffff_d32a2a_wheel",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -110843,6 +110874,10 @@
                                         {
                                             "key": "Data",
                                             "value": "Parameter 718"
+                                        },
+                                        {
+                                            "key": "Wheel",
+                                            "value": "Parameter 730"
                                         }
                                     ]
                                 },
@@ -110861,7 +110896,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "br_row 7",
-                                    "type": "shRow_720x40",
+                                    "type": "shRow_720x40_ffffff_d32a2a_wheel",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -110873,6 +110908,10 @@
                                         {
                                             "key": "Data",
                                             "value": "Parameter 719"
+                                        },
+                                        {
+                                            "key": "Wheel",
+                                            "value": "Parameter 730"
                                         }
                                     ]
                                 },
@@ -110891,7 +110930,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "br_row 8",
-                                    "type": "shRow_720x40",
+                                    "type": "shRow_720x40_ffffff_d32a2a_wheel",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -110903,6 +110942,10 @@
                                         {
                                             "key": "Data",
                                             "value": "Parameter 720"
+                                        },
+                                        {
+                                            "key": "Wheel",
+                                            "value": "Parameter 730"
                                         }
                                     ]
                                 },

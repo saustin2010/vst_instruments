@@ -189,7 +189,12 @@ parameter index, so existing projects keep working.
     opens that folder; LOAD TO only moves the list when its folder isn't listed; AUTO LOAD (new switch, Q-Link 6): the
     file FILE lands on loads into LOAD TO's instrument. 736 parameters. Offline: self-test PASSED (native, ASan/UBSan,
     TSan), `tools/build.sh` PASSED, `check_skin.py` OK. Found on the way (UBSan): the sine table's lookup read one past
-    its end when a phase a hair under 0 wrapped to 1 (fixed)
+    its end when a phase a hair under 0 wrapped to 1 (fixed). Then (owner, 2026-10-20, on the 1.1.0 drafts: "the main
+    wheel does not scroll through the files in the browser. i need to use the rows button to look", "make the font
+    white and not red"): the list's rows had no `Q-Link` touch action, so a tap on a row left the wheel elsewhere, and
+    the cursor's border was near-black on black. The skin's `list` takes `wheel=br_cursor` (a row's touch hands the
+    wheel to FILE; `framework/mpc-vst-plugins.patch`), `ink=ffffff`, `lit=d32a2a`. How it all works, for other
+    plugins: [docs/sample-browser.md](docs/sample-browser.md). To check on the Live II: the wheel after a row tap
   - [ ] **In sd88me's catalogue**: entries `incipience` and `incipience-out` proposed in
     [sd88me/mpc-vst-plugins#480](https://github.com/sd88me/mpc-vst-plugins/pull/480) (2026-10-19; `catalog_build` on
     both: 0 problems), waiting for his merge
