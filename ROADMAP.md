@@ -123,7 +123,8 @@ parameter index, so existing projects keep working.
   - [x] procwatch (TESTS.md, 2026-10-13): no flags; one thread (the sample loader), asleep while idle; 1.2 KB of heap
     per insert (under the 4 KB flag, a loader thread's own; Tablor's is 14.8 KB). Idle cost was 0.83 of playing (the
     reverb and delay ran on empty): they sleep once nothing goes in and nothing is left; now 0.15 (`ab.sh`)
-  - [ ] Testers (owner, 2026-10-13: a PR to send out for testing; not to sd88me's catalogue yet)
+  - [x] Testers (owner, 2026-10-13: a PR to send out for testing; not to sd88me's catalogue yet). Superseded
+    2026-10-19: the owner asked for it in sd88me's catalogue
   - [ ] On the Live II: design QA of the new sub-pages (Q-Link outlines on the right-hand panels), `bench.sh`
   - [x] MIDI, OUTs and modulation, offline (2026-10-17, branch `incipience-midi-mod`; owner: "play the voices
     chromatically like I can with the percolator ... output routing for each of the tracks ... all the controls should
@@ -159,8 +160,16 @@ parameter index, so existing projects keep working.
     addition to the qlinks"). The screen file gives the controls MPC's focus as Percolator's does (the same focus and
     touch actions), and sd88me's Force probe saw the wheel send a focused control's value + 0.01: find out whether the
     wheel works on other plugins of ours and Akai's on the Live II, and if not on Incipience alone, trace what MPC sends
-  - [ ] On the Live II: the SAMPLES tab (the drives' names under `/media`, how fast a folder on the SSD reads, the rows'
-    24 characters, LOAD TO's pop-up), RANDOMISE by ear, NOISE VOL on page A
+  - [x] On the Live II (owner, 2026-10-19: "looks like all these things are working"): the SAMPLES tab, RANDOMISE,
+    NOISE VOL on page A
+  - [ ] **1.0.0 in sd88me's catalogue** (owner, 2026-10-19: "update in a PR and get this loaded up to 88 as a new
+    instrument"). Done offline: its own repo's files (`prepare.py incipience`: the release workflow with Incipience OUT
+    as a second job and zip, as Percolator OUT; FRAMEWORK.md; the README's Install section and where to get the
+    AlphaBase samples), catalogue entries `incipience` and `incipience-out`, `check.sh incipience incipienceout` PASSED
+    with the release tools (`eaef502`). The sample set may now sit one folder down (Windows' Extract All); the SAMPLES
+    tab's first place is SAMPLE SET BY NUMBER (no maker's name on the screen). Next: publish
+    `saustin2010/mpc-vst-incipience`, the release drafts (v1.0.0, incipience-out-v1.0.0), the release zips on the Live II
+    (portable layout: one MPC restart), publish, the catalogue PR, `tested.json`
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
     63 factory kits load; the AlphaBase's CC chart on channels 1-11 (needs its MIDI implementation)
