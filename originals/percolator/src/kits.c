@@ -252,10 +252,11 @@ static uint8_t *read_file(const char *path, long max, long *len) {
 static uint32_t rd32(const uint8_t *p) { return p[0] | p[1] << 8 | p[2] << 16 | (uint32_t)p[3] << 24; }
 static int cmp_int(const void *a, const void *b) { return *(const int *)a - *(const int *)b; }
 
-/* WAV (PCM 8/16/24/32-bit or float, mono or stereo) -> mono float, with its cue points as slice markers */
-static int load_wav(const char *path, sample_t *s) {
+/* WAV (PCM 8/16/24/32-bit or float, 1-8 channels) -> mono float, with its cue points as slice markers: a kit pack's
+ * samples, and your own (library.c). A file over max_bytes isn't read; past max_frames, the rest is left out */
+int wav_load(const char *path, sample_t *s, long max_bytes, int max_frames) {
     long len;
-    uint8_t *b = read_file(path, 16L << 20, &len);
+    uint8_t *b = read_file(path, max_bytes, &len);
     memset(s, 0, sizeof *s);
     if (!b) return 0;
     int ok = 0, fmt = 0, ch = 0, bits = 0, rate = 0, ncue = 0;
@@ -286,9 +287,10 @@ static int load_wav(const char *path, sample_t *s) {
         }
     }
     int bps = bits / 8;
-    if (data && ch >= 1 && ch <= 2 && rate >= 8000 && rate <= 192000 &&
+    if (data && ch >= 1 && ch <= 8 && rate >= 8000 && rate <= 192000 &&
         ((fmt == 1 && (bits == 8 || bits == 16 || bits == 24 || bits == 32)) || (fmt == 3 && bits == 32))) {
         int frames = (int)(dlen / (uint32_t)(bps * ch));
+        if (frames > max_frames) frames = max_frames;
         if (frames > 0 && (s->d = malloc((frames + 1) * sizeof(float)))) {
             for (int f = 0; f < frames; f++) {
                 float acc = 0;
@@ -352,9 +354,9 @@ static void scan_bank(perc_t *P, const char *dir, const char *name, const char *
     static const char *const SMP[NSLOT] = {"1.wav", "2.wav", "3.wav"};
     for (int s = 0; s < NSLOT; s++) {
         snprintf(path, sizeof path, "%s/SAMPLES/%s", dir, SMP[s]);
-        if (!load_wav(path, &b->smp[s]) && fallback) {
+        if (!wav_load(path, &b->smp[s], 16L << 20, 1 << 30) && fallback) {
             snprintf(path, sizeof path, "%s/SAMPLES/%s", fallback, SMP[s]);
-            load_wav(path, &b->smp[s]);
+            wav_load(path, &b->smp[s], 16L << 20, 1 << 30);
         }
         if (b->smp[s].len) b->has_samples = 1;
     }

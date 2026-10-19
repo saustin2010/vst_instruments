@@ -20,7 +20,9 @@ which mode, where each knob is, the LFO, the delay), but it won't sound exactly 
 - Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [DRUM] Percolator/`, holding `percolator.so`, its screen. The vst_instruments installer puts `percolator.so` in `/sdcard/vst/` instead.
 - Data folder: `percolator/` next to `percolator.so` (with the vst_instruments installer, `/sdcard/vst/percolator/`):
   where the kit packs go
-- 139 parameters (all automatable) on 9 pages, one Q-Link page each
+- Your own WAV files on any voice, from the MPC's drives (the SAMPLES page, [below](#your-own-samples-on-every-voice));
+  a RANDOMISE button per voice ([below](#randomise))
+- 176 parameters (all automatable) on 10 pages, one Q-Link page each
 - 8 kits built in, in MPC's PRESET menu; Erica Synths' four free Pērkons kit packs add 169 more ([below](#pērkons-kit-packs))
 
 ## Playing it
@@ -94,6 +96,49 @@ start-up. A pack that comes with `SAMPLES/1.wav 2.wav 3.wav` (Pērkons pack 2 an
 Then PARAM 2 picks the start point or, when the WAV has cue points (pack 4's breaks), the slice. On the Pērkons this
 needs two settings (Voice 4 / Algo 3 PARAM 2 = start, slicing on); here it follows from the pack having samples.
 
+## Your own samples on every voice
+
+Since 2.1.0 any voice can play a WAV file instead of its algorithm (owner, 2026-10-19: on the Pērkons only voice 4
+plays samples, "but I think they should be allowed on each voice"):
+
+- **SOURCE** (each voice page, beside CUTOFF and DRIVE): **SYNTH**, the voice's algorithm as before, or **SAMPLE**, its
+  own file, played as voice 4's SAMPLE algorithm plays its slots: **TUNE** is its pitch (±2 octaves, the middle as
+  recorded), **DECAY** its envelope, **PARAM 1** reads **CRUSH** (sample rate and bits), **PARAM 2** reads **START**, or
+  **SLICE** when the file has cue points; then the voice's own filter, drive, LEVEL and sends, its NOTE, KEYS CH
+  (pitched), OUT, lanes and LFO depths, as ever. ALGO and MODE wait meanwhile (the readout under MODE says
+  ALGO OFF: SAMPLE).
+- **SAMPLE** (under SOURCE): the file's name; its arrows (or its Q-Link) step through the WAV files of its folder in name
+  order ("Kick 2" before "Kick 10"; the first 255). NO SAMPLE until you load one.
+- **Loading one: the SAMPLES page.** DRIVES lists the places: **PERCOLATOR FOLDER** (the data folder, where the kit
+  packs are, each with its `SAMPLES/` folder), then the MPC's drives (INTERNAL, SD cards, SSDs, USB drives). Tap one,
+  then its folders (`.. UP` or the UP button goes back), eight rows at a time (SCROLL: its Q-Link, or its arrows, a page
+  a tap). The box at the top shows where you are (its end, if long), the one beside it how many WAV files are there.
+  **Tap a WAV file**: it loads into **LOAD TO**'s voice (V1 to start with), whose SOURCE turns to SAMPLE, and with
+  **PREVIEW** on (to start with) plays once. A `>` marks the file LOAD TO's voice plays. On the right, each voice's
+  SOURCE and SAMPLE again (Q-Link columns 3 and 4).
+- **A kit** (the PRESET menu, KIT) turns every voice back to SYNTH, the kit's sound; each keeps its file, so SOURCE =
+  SAMPLE plays it again.
+- **Files:** WAV, 8, 16, 24 or 32-bit or 32-bit float, any sample rate (played at its own pitch), up to 8 channels
+  mixed to mono, the first minute, 64 MB a file at most, cue points as slices (as the kit packs'). A file is read when
+  something first asks for it (a tap, a step of SAMPLE, a hit), on a thread of its own, never the audio's: a hit that
+  asks plays without it. 64 MB of files stay in memory; past that the ones longest unplayed are let go (and read again
+  when asked for), never one a voice is playing.
+- **Saved** with the project: each voice's folder and the file's name, found again by name when the project opens
+  (files added to the folder since don't matter); a folder that isn't there (a drive not plugged in) plays no sample
+  until you load another. A folder changed on disk while Percolator is open shows its new files when you browse into
+  it again. A project saved with 2.0.1 or before opens with every voice on SYNTH.
+
+## RANDOMISE
+
+A button at the top of each voice page (a tap; not on a Q-Link) rolls that voice's sound: **ALGO, MODE, TUNE, DECAY,
+PARAM 1, PARAM 2, VCF, CUTOFF and DRIVE**, each in a range that keeps it a drum of its kind. DECAY never reaches DRONE,
+and the filter is set by where the sound is (its pitch and pitch sweep, WAVE's formant, voice 4's noise and partials):
+a low-pass an octave or more above it, a band-pass on it (voices 1-3), a high-pass below it. On **SOURCE = SAMPLE** it
+picks a file of the voice's folder, its pitch, start (or slice), crush and filter instead of the algorithm's. Left as
+they are: **LEVEL, FX SEND, COMP SEND**, NOTE, KEYS CH, OUT, the MIDI MOD lanes, the LFO depths and SOURCE. MPC's
+screen and Q-Links follow each change. Every roll is heard: 20,000 a voice offline each peak over -36 dBFS, all but
+about 1 in 10,000 over -30 (the built-in kits' softest voice peaks at -27).
+
 ## The compressor
 
 Each voice's **COMP SEND** sets how much of it goes through the compressor (wet) and how much goes past it (dry); the
@@ -134,7 +179,7 @@ and compressor; their FX SEND still feeds its delay.
 ## Pages
 
 Screenshots are rendered from the built skin with the engine's real values right after it's inserted (the Init kit).
-Eight tabs, in this order, each with one Q-Link page (no sub-pages to swipe between). Each voice has its own colour: 1 orange,
+Ten tabs, in this order, each with one Q-Link page (no sub-pages to swipe between). Each voice has its own colour: 1 orange,
 2 magenta, 3 cyan, 4 lime.
 
 ### 1. MASTER
@@ -154,7 +199,9 @@ Q-Link columns: BBD, MASTER, MODULATION, then KIT.
 
 One voice per page, each Q-Link column on its own panel: **Q-Link column 1** = ALGO, MODE, VCF (the switches, big
 enough to tap, and the mode's name under MODE), **column 2** = TUNE, DECAY, PARAM 1, PARAM 2, **column 3** = CUTOFF,
-DRIVE, **column 4** = MIX, under the switches: LEVEL (the voice's volume), FX SEND, COMP SEND. Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
+DRIVE (under TUNE and DECAY since 2.1.0, as on the MOD pages), SOURCE and SAMPLE ([your own samples](#your-own-samples-on-every-voice)),
+**column 4** = MIX, under the switches: LEVEL (the voice's volume), FX SEND, COMP SEND. **RANDOMISE** at the top right
+([below](#randomise)). Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
 follows DECAY (a flat line at the top = DRONE), PITCH (voices 1-2) follows PARAM 2's pitch envelope, voice 4's ATTACK
 follows its PARAM 2.
 
@@ -180,6 +227,14 @@ then a panel per voice, each a Q-Link column: NOTE (arrows, or turn its Q-Link),
 
 Four lanes per voice, each a Q-Link column: what MOD WHEEL (CC 1) and GEN PURPOSE 1-3 (CC 16-18) move on that voice's
 KEYS CH ([Playing it](#playing-it)).
+
+### 10. SAMPLES
+
+<img src="screenshots/page_9.png" width="760" alt="Percolator, the sample browser">
+
+The data folder and the MPC's drives, their folders and WAV files; LOAD TO, PREVIEW; each voice's SOURCE and SAMPLE
+([your own samples](#your-own-samples-on-every-voice)). Q-Link columns: SCROLL; LOAD TO and PREVIEW; the four SOURCEs;
+the four SAMPLEs. Last of the pages, so a project's Q-Link maps keep their pages.
 
 ## Kits
 
@@ -336,9 +391,11 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 
 ## How it's made
 
-- `src/percolator.c`: parameters, MIDI, the LFO, the BBD delay, compressor, voice taps and state; `src/voices.c`: the twelve
-  algorithms and each voice's filter, drive and level; `src/kits.c`: the built-in kits, the `.KIT` reader, WAV and
-  cue loading; `src/dsp.h`. The engine is plain C (`mpc_engine` API), with no upstream code.
+- `src/percolator.c`: parameters, MIDI, the LFO, the BBD delay, compressor, voice taps, state, the SAMPLES page and
+  RANDOMISE; `src/voices.c`: the twelve algorithms, a voice's own sample, and each voice's filter, drive and level;
+  `src/kits.c`: the built-in kits, the `.KIT` reader, WAV and cue loading; `src/library.c`: your own samples (folders,
+  listings and files read on a thread of its own, as Incipience's); `src/dsp.h`. The engine is plain C (`mpc_engine`
+  API), with no upstream code.
 - `mpc/gen.py` writes `params.json`, `src/params_def.h`, `layout.conf` and `build/skin.json` from one list
   (parameters are append-only). `mpc/skin.py` draws the artwork from that in the `mpc-vst-html-art` container (page
   backgrounds from HTML, a knob filmstrip per colour, the switch segments), and `mpc/displays.py` the envelope
@@ -349,15 +406,23 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   ```
 - `mpc/render.c` renders kits offline to WAV (each voice alone, then a groove), no MPC needed:
   ```
-  cc -O2 -Isrc mpc/render.c src/percolator.c src/voices.c src/kits.c -lm -lpthread -o build/render
+  cc -O2 -Isrc mpc/render.c src/percolator.c src/voices.c src/kits.c src/library.c -lm -lpthread -o build/render
   build/render <data folder> build/demo [kit numbers]
+  ```
+- `mpc/selftest.c` checks your own samples and RANDOMISE (WAV kinds and cue points, browsing, a file loaded, previewed
+  and played on each voice at its pitch, the state, a kit, past the 64 MB with a file held, every roll in range and
+  heard; the comment at its top says how to build it, and under ASan/UBSan or TSan in Docker's `gcc:12`):
+  ```
+  cc -O1 -g -DLIB_MEDIA='"build/libtest/media"' -Isrc mpc/selftest.c src/percolator.c src/voices.c src/kits.c \
+     src/library.c -lm -lpthread -ldl -o build/selftest
+  build/selftest            # PASSED; build/selftest 20000 rolls 20,000 a voice
   ```
 - Sources for the design: [Sound On Sound's HD-01 review](https://www.soundonsound.com/reviews/erica-synths-perkons-hd-01),
   the [Perkons Voice manual](https://www.analoguehaven.com/erica-synths/perkons-voice/manual.pdf) (its algorithm
   table) and the [HD-01 manual](https://www.manualslib.com/manual/2588218/Erica-Synths-Perkons-Hd-01.html). The kit
   format was worked out from the packs themselves.
 
-## Status (2026-10-13)
+## Status (2026-10-19)
 
 - Build and offline host test PASSED (ARM `.so`, the x86 test under ASan/UBSan with the four packs mounted: two
   instances, every parameter, Q-Links, pop-ups, CC and NRPN, chunk restore, 177 kits named in the PRESET menu);
@@ -412,6 +477,12 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   `check.sh` PASSED. On the Live II (2026-10-13): its release zip installed, and Pack 3 unzipped as Windows does
   (inside `PERKONS_KIT_PACK_3/`) listed after the kits already there, through Pack 3 62, its last (the pack skips
   25-27 and 51) (owner: "fine"). `tested.json` records it.
+- 2.1.0, in the works (2026-10-19, branch `percolator-samples`; not released, not yet on the MPC): your own samples on
+  every voice (SOURCE, SAMPLE, the SAMPLES page, as Incipience's sample browser) and RANDOMISE per voice (owner: a
+  random button "to randomise each parameter per voice like we did with incipience"); 37 parameters appended (176). Offline: the 177 kits (built in and the four packs) render bit-identical to 2.0.1; `mpc/selftest.c`
+  PASSED natively, as 32-bit ARM, under ASan/UBSan (two seeds) and TSan; build and host test PASSED; `check_skin.py`
+  OK; procwatch: the new thread sleeps (0 wakeups idle), idle and playing cost as 2.0.1. UBSan found a sine-table
+  read one past its end when FM's phase came a hair under 0 (2.0.1 too; harmless in practice, fixed in `src/dsp.h`).
 
 ## Files
 
@@ -424,7 +495,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
 | `vst.json` | build settings: name, maker, sources, the kit list in the PRESET menu |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order; append-only once released) |
-| `layout.conf` | the screen: nine pages, Q-Links (generated) |
+| `layout.conf` | the screen: ten pages, Q-Links (generated) |
 | `percolator.css` | the artwork stylesheet |
 | `images/skin/` | artwork: page backgrounds, knob filmstrips, switch segments, envelope displays (generated) |
 | `src/`, `mpc/` | the engine, the generators, the offline renderer |

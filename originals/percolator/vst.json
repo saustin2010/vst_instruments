@@ -9,7 +9,8 @@
     "sources": [
       "src/percolator.c",
       "src/voices.c",
-      "src/kits.c"
+      "src/kits.c",
+      "src/library.c"
     ],
     "cflags": [
       "-Isrc"

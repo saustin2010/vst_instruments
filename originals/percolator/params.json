@@ -2261,6 +2261,276 @@
     "VCF"
    ],
    "default": "OFF"
+  },
+  {
+   "key": "v1_src",
+   "name": "V1 SOURCE",
+   "options": [
+    "SYNTH",
+    "SAMPLE"
+   ],
+   "default": "SYNTH"
+  },
+  {
+   "key": "v1_smp",
+   "name": "V1 SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "v1_smp_prev",
+   "name": "V1 SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "v1_smp",
+   "step_delta": -1
+  },
+  {
+   "key": "v1_smp_next",
+   "name": "V1 SAMPLE UP",
+   "momentary": true,
+   "step_of": "v1_smp",
+   "step_delta": 1
+  },
+  {
+   "key": "v1_rand",
+   "name": "V1 RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "v2_src",
+   "name": "V2 SOURCE",
+   "options": [
+    "SYNTH",
+    "SAMPLE"
+   ],
+   "default": "SYNTH"
+  },
+  {
+   "key": "v2_smp",
+   "name": "V2 SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "v2_smp_prev",
+   "name": "V2 SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "v2_smp",
+   "step_delta": -1
+  },
+  {
+   "key": "v2_smp_next",
+   "name": "V2 SAMPLE UP",
+   "momentary": true,
+   "step_of": "v2_smp",
+   "step_delta": 1
+  },
+  {
+   "key": "v2_rand",
+   "name": "V2 RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "v3_src",
+   "name": "V3 SOURCE",
+   "options": [
+    "SYNTH",
+    "SAMPLE"
+   ],
+   "default": "SYNTH"
+  },
+  {
+   "key": "v3_smp",
+   "name": "V3 SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "v3_smp_prev",
+   "name": "V3 SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "v3_smp",
+   "step_delta": -1
+  },
+  {
+   "key": "v3_smp_next",
+   "name": "V3 SAMPLE UP",
+   "momentary": true,
+   "step_of": "v3_smp",
+   "step_delta": 1
+  },
+  {
+   "key": "v3_rand",
+   "name": "V3 RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "v4_src",
+   "name": "V4 SOURCE",
+   "options": [
+    "SYNTH",
+    "SAMPLE"
+   ],
+   "default": "SYNTH"
+  },
+  {
+   "key": "v4_smp",
+   "name": "V4 SAMPLE",
+   "type": "stepper",
+   "min": 0,
+   "max": 255,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "v4_smp_prev",
+   "name": "V4 SAMPLE DOWN",
+   "momentary": true,
+   "step_of": "v4_smp",
+   "step_delta": -1
+  },
+  {
+   "key": "v4_smp_next",
+   "name": "V4 SAMPLE UP",
+   "momentary": true,
+   "step_of": "v4_smp",
+   "step_delta": 1
+  },
+  {
+   "key": "v4_rand",
+   "name": "V4 RANDOMISE",
+   "momentary": true
+  },
+  {
+   "key": "br_row_1",
+   "name": "ROW 1",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_2",
+   "name": "ROW 2",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_3",
+   "name": "ROW 3",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_4",
+   "name": "ROW 4",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_5",
+   "name": "ROW 5",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_6",
+   "name": "ROW 6",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_7",
+   "name": "ROW 7",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_row_8",
+   "name": "ROW 8",
+   "momentary": true,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_scroll",
+   "name": "SCROLL",
+   "type": "stepper",
+   "min": 0,
+   "max": 999,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "br_scroll_prev",
+   "name": "SCROLL UP",
+   "momentary": true,
+   "step_of": "br_scroll",
+   "step_delta": -8
+  },
+  {
+   "key": "br_scroll_next",
+   "name": "SCROLL DOWN",
+   "momentary": true,
+   "step_of": "br_scroll",
+   "step_delta": 8
+  },
+  {
+   "key": "br_path",
+   "name": "FOLDER",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "br_status",
+   "name": "IN IT",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "br_target",
+   "name": "LOAD TO",
+   "options": [
+    "V1",
+    "V2",
+    "V3",
+    "V4"
+   ],
+   "default": "V1"
+  },
+  {
+   "key": "br_preview",
+   "name": "PREVIEW",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "ON"
+  },
+  {
+   "key": "br_up",
+   "name": "UP",
+   "momentary": true
+  },
+  {
+   "key": "br_places",
+   "name": "DRIVES",
+   "momentary": true
   }
  ]
 }
