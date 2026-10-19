@@ -12,7 +12,8 @@
       "src/fx.c",
       "src/tables.c",
       "src/samples.c",
-      "src/kits.c"
+      "src/kits.c",
+      "src/library.c"
     ],
     "cflags": [
       "-Isrc"

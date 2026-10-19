@@ -62,14 +62,18 @@ PLUGINS = {
     "stevequencer16": ("stevequencer-16", "MIT", None, []),
     "percolator": ("percolator", "MIT", None, ["percolator"]),   # the owner's own (2026-10-10); users add kit packs
     "percolatorout": ("percolator-out", "MIT", None, []),   # ships in Percolator's release (COMPANIONS)
+    "incipience": ("incipience", "MIT", None, ["incipience"]),   # the owner's own (2026-10-13); users add the AlphaBase samples
+    "incipienceout": ("incipience-out", "MIT", None, []),   # ships in Incipience's release (COMPANIONS)
 }
 # plugins with no repo of their own: they live in another plugin's folder and ship in its release, as a second zip with
 # its own draft and catalogue entry (TR-MPC's Tap FX: ports/trkit/tapfx), from a second job in that release.yml.
 # companion: (the plugin it ships with, the manifest's "requires" line)
-COMPANIONS = {"percolatorout": ("percolator", "Percolator 2.0.0 or later in the same project")}
+COMPANIONS = {"percolatorout": ("percolator", "Percolator 2.0.0 or later in the same project"),
+              "incipienceout": ("incipience", "Incipience 1.0.0 or later in the same project")}
 # releases that ship this repo's own skin (deploy/Synths, built by framework/setup.sh's tools) instead of rebuilding it
 # with sd88me's: his skin builder lays out their per-sub-page controls (banks=) and readouts differently
-OWN_SKIN = {"stevequencer", "stevequencer16", "percolator", "percolatorout"}   # percolator: its readouts (vs=, ink=)
+OWN_SKIN = {"stevequencer", "stevequencer16", "percolator", "percolatorout",   # percolator: its readouts (vs=, ink=)
+            "incipience", "incipienceout"}   # incipience: its A / B / MIX sub-pages (banks=), the SAMPLES list
 PILOTS = {"303", "hera"}   # done by hand and published first: --ready leaves them alone
 # libraries this repo makes with its own scripts (tools/fetch-presets.py MADE): the script, and where its output goes
 MADE = {
@@ -369,6 +373,9 @@ FORK_CHANGES = [
      "The engine tells the wrapper which controls it changed itself (the Pērkons CCs and MIDI MOD lanes it reads on "
      "its own MIDI port), so MPC's screen and Q-Links follow them.",
      "The CCs and lanes still move the sound, but the screen and the Q-Links keep showing the old values."),
+    ("b014168", "travel_nudge", "`\"nudge_pct\"` with `QLINK_TRAVEL`",
+     "A long whole-number list (a sample number, a list's rows) steps one value per Q-Link event or data-wheel click.",
+     "Each Q-Link event moves 1/128 of the range and each wheel click 1/100: two or more values at a time, skipping some."),
     ("10d8f5f", "travel", "`QLINK_TRAVEL` and `SET_IF_CHANGED` in `vst.json` `defines`",
      "Q-Link and data-wheel ticks add up like a detented knob, and a switch moves after half an option's width of "
      "turn; a set to the value the engine already holds is skipped. This is how the plugin was checked on the device.",
@@ -415,6 +422,9 @@ def fork_uses(D, cfg, params, layout):
     d = cfg.get("defines", {})
     if d.get("QLINK_TRAVEL") or d.get("SET_IF_CHANGED"):
         used.add("travel")
+    if (d.get("QLINK_TRAVEL") and any(q.get("nudge_pct") and q.get("display") == "int" and not q.get("options")
+                                      for q in params)):
+        used.add("travel_nudge")
     if cfg.get("live"):
         used.add("live")
     if cfg.get("presets") and any(q.get("values") or q.get("send") for q in params):

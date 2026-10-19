@@ -10,6 +10,7 @@
  * aren't published, so these are made here: clusters of square waves XORed or summed (the bit-pattern cymbals of the
  * classic analog drum machines) and short shift registers clocked at audio rates, which buzz with a pitch, in 126
  * fixed combinations from a seeded hash. */
+#include <dirent.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -95,26 +96,40 @@ static void build_lfo(void) {
     }
 }
 
-/* ABWV0300.raw (the AlphaBase's own LFO waves) in the data folder, if it's there */
-static void load_lfo_file(const char *dir) {
-    if (!dir) return;
+/* ABWV0300.raw (the AlphaBase's own LFO waves) in a folder: 1 if it was there */
+static int lfo_file_in(const char *dir) {
     static const char *const names[] = {"ABWV0300.raw", "ABWV0300.RAW", "abwv0300.raw"};
     for (int k = 0; k < 3; k++) {
-        char path[600];
+        char path[800];
         snprintf(path, sizeof path, "%s/%s", dir, names[k]);
         FILE *f = fopen(path, "rb");
         if (!f) continue;
         int16_t b[LFO_WAVES * LFO_LEN];
         size_t n = fread(b, 2, LFO_WAVES * LFO_LEN, f);
         fclose(f);
-        if (n != LFO_WAVES * LFO_LEN) return;
+        if (n != LFO_WAVES * LFO_LEN) return 0;
         for (int w = 0; w < LFO_WAVES; w++) {
             for (int i = 0; i < LFO_LEN; i++) inc_lfotab[w][i] = b[w * LFO_LEN + i] / 32768.0f;
             inc_lfotab[w][LFO_LEN] = inc_lfotab[w][0];
         }
         inc_lfo_from_file = 1;
-        return;
+        return 1;
     }
+    return 0;
+}
+
+/* in the data folder, or a folder one level down (as the samples, samples.c) */
+static void load_lfo_file(const char *dir) {
+    if (!dir || lfo_file_in(dir)) return;
+    DIR *d = opendir(dir);
+    struct dirent *e;
+    while (d && (e = readdir(d))) {
+        if (e->d_name[0] == '.') continue;
+        char p[600];
+        snprintf(p, sizeof p, "%s/%s", dir, e->d_name);
+        if (lfo_file_in(p)) break;
+    }
+    if (d) closedir(d);
 }
 
 static void build_metal(void) {

@@ -123,12 +123,98 @@ parameter index, so existing projects keep working.
   - [x] procwatch (TESTS.md, 2026-10-13): no flags; one thread (the sample loader), asleep while idle; 1.2 KB of heap
     per insert (under the 4 KB flag, a loader thread's own; Tablor's is 14.8 KB). Idle cost was 0.83 of playing (the
     reverb and delay ran on empty): they sleep once nothing goes in and nothing is left; now 0.15 (`ab.sh`)
-  - [ ] Testers (owner, 2026-10-13: a PR to send out for testing; not to sd88me's catalogue yet)
+  - [x] Testers (owner, 2026-10-13: a PR to send out for testing; not to sd88me's catalogue yet). Superseded
+    2026-10-19: the owner asked for it in sd88me's catalogue
   - [ ] On the Live II: design QA of the new sub-pages (Q-Link outlines on the right-hand panels), `bench.sh`
+  - [x] MIDI, OUTs and modulation, offline (2026-10-17, branch `incipience-midi-mod`; owner: "play the voices
+    chromatically like I can with the percolator ... output routing for each of the tracks ... all the controls should
+    be able to be modulated"; chose MIDI lanes and a mod matrix both). As Percolator: a KEYS CH per instrument (every
+    note on it plays the instrument pitched, C3 as tuned, pitch bend +-2; channels 2-12 to start with), Incipience MIDI
+    In (its own ALSA port, so channels arrive), MIDI MOD lanes (mod wheel, Gen Purpose 1-3 per instrument, each moving
+    any of its controls); an OUT per instrument (MAIN, OUT 1-11) and [FX] Incipience OUT
+    ([incipienceout](originals/incipience/incipienceout/)), Percolator OUT made stereo and eleven wide. New: a mod matrix
+    of 4 LFOs and 16 slots (SOURCE: an LFO, RANDOM or VELOCITY at each hit; DEST + CONTROL: any control of an
+    instrument or of FX; DEPTH +-100 %). Three tabs: MOD, MIDI & OUT (NOTE moved here from MIX), MIDI MOD. 702
+    parameters (the first 414 unchanged). The kits render bit-for-bit as before; `mpc/selftest.c` PASSED (natively, as
+    32-bit ARM Linux code, and under ASan / UBSan in Linux); the matrix costs nothing measurable natively (all eleven
+    busy: 0.48 s vs 0.46 s for 60 s of audio); `tools/build.sh` PASSED and `check_skin.py` OK for both; procwatch: no
+    flags (Incipience idle/play 0.18, was 0.15; Incipience OUT 3 µs idle; procwatch now covers companion plugins).
+    Framework fixes in `shadow_skin.py` (the patch): a pop-up's option list was on every Q-Link sub-page of its tab (the
+    screen's TUI.json 8.2 -> 5.2 MB), and a stepper's arrows were cut from the tab's last sub-page's picture, not its
+    own. The screen is 16 MB (Percolator's 15)
+  - [x] Installed on the Live II (2026-10-18): both, Incipience OUT registered with one MPC restart, the .so files
+    verified by hash
+  - [x] On the Live II (owner, 2026-10-18: "other features look ok"): KEYS CH through Incipience MIDI In, OUT 1-11,
+    the lanes and the matrix. Still to do: `bench.sh` with the matrix busy
+  - [x] The owner's notes from the device, offline (2026-10-18, branch `incipience-midi-mod`): **RANDOMISE** per
+    instrument, its sound not its mix ("a randomise button on each voice which sits outside of the mix"; gen.py's
+    `RAND` ranges plus rules so a roll is always heard: 0 quiet in 20,000 rolls an instrument); **NOISE VOL** beside
+    SAMPLE on page A ("the sample button doesn't do anything on CL Hat A": measured, the metal noise at its full level
+    covers the sample, 3 dB apart across samples with it, 19 dB without); **your own samples** ("can we browse samples
+    on the MPC or point to folders?"): a SAMPLES tab browsing the drives, a WAV file tapped loads into an instrument
+    whose SAMPLE then steps through that folder, by name in the project (`src/library.c`: one thread reads, 64 MB kept,
+    a playing file never freed); the project's state is now only what differs from the defaults. 730 parameters.
+    `build.sh` PASSED, `check_skin.py` OK, the self-test PASSED natively and under ASan/UBSan and TSan. Installed on
+    the Live II 2026-10-19 (no restart; the .so verified by hash)
+  - [x] The **data wheel** (owner, 2026-10-18: "I cannot use the main mpc button to dial in parameters"): it works, on
+    the control you've selected (owner, 2026-10-19: "the data wheel works as long as a box is selected"); nothing was
+    selected. Since b014168 a click on SAMPLE moves one sample. (Whether a knob takes it once tapped: not asked yet)
+  - [x] On the Live II (owner, 2026-10-19: "looks like all these things are working"): the SAMPLES tab, RANDOMISE,
+    NOISE VOL on page A
+  - [x] **1.0.0 released** (owner, 2026-10-19: "update in a PR and get this loaded up to 88 as a new instrument"):
+    its own repo [mpc-vst-incipience](https://github.com/saustin2010/mpc-vst-incipience) (`prepare.py incipience`: the
+    release workflow with Incipience OUT as a second job and zip, as Percolator OUT; FRAMEWORK.md; where to get the
+    AlphaBase samples, which may now sit one folder down), v1.0.0 and incipience-out-v1.0.0 published after both zips
+    were installed on the Live II with their own installer and checked by the owner ("looks good"; `tested.json`). The
+    SAMPLES tab's first place is SAMPLE SET BY NUMBER (no maker's name on the screen). The owner's one note, "when
+    dialing through the samples the numbers skip": with `QLINK_TRAVEL` the release tools' wrapper ignored `nudge_pct`,
+    so a Q-Link tick moved SAMPLE 2 and a wheel click 2.5; fixed on the fork (`steve-features` b014168, the new pin),
+    SAMPLE and SCROLL step one per tick (host test: six ticks step six). PR #31 here
+  - [ ] **1.1.0: the sample browser** (owner, 2026-10-19: "i would like to improve the sample browsers as it's a bit
+    clunky"; chose a cursor with preview, LOAD TO as buttons, shorter names, and AUDITION as a switch): a cursor (FILE:
+    the data wheel on its box, Q-Link 1, its arrows; SCROLL a page) whose row is lit and whose file plays straight from
+    the folder as it lands (PREVIEW); a tap on a file moves the cursor there and a second tap or LOAD loads it; LOAD TO
+    as eight buttons that take the list to that instrument's folder; names without `.wav`, long ones start..end;
+    AUDITION: turning SAMPLE on an instrument's page plays it. Also fixed: the `>` mark now finds the loaded file by name
+    (it marked the wrong one after a file was added to the folder). 735 parameters (the first 730 as in 1.0.0). Offline:
+    self-test PASSED (native, ASan/UBSan, TSan), `tools/build.sh` PASSED (three runs; the drives are listed at create, so
+    the host test's restore check no longer catches the list mid-read), `check_skin.py` OK, `check.sh incipience
+    incipienceout` PASSED, procwatch no flags (idle/play 0.17). To check on the Live II: the lit row (the row's value
+    reads 1; MPC turns it off on a tap, taken as the second tap unless within 100 ms of the first), the wheel on FILE,
+    the preview's timing on the SSD; then release 1.1.0
+  - [ ] **1.1.0: the wheel alone** (owner, 2026-10-20: "rather than touchscreen can we just use the wheel to scroll
+    through folders and sounds?"): a folder lists its subfolders' WAV files too, depth first, each folder's under a
+    heading (folders without any left out; past 999 rows or 256 folders looked in, folder by folder as before), FILE
+    steps over the headings from one folder into the next and FOLDER shows the cursor's file's folder; a heading tapped
+    opens that folder; LOAD TO only moves the list when its folder isn't listed; AUTO LOAD (new switch, Q-Link 6): the
+    file FILE lands on loads into LOAD TO's instrument. 736 parameters. Offline: self-test PASSED (native, ASan/UBSan,
+    TSan), `tools/build.sh` PASSED, `check_skin.py` OK. Found on the way (UBSan): the sine table's lookup read one past
+    its end when a phase a hair under 0 wrapped to 1 (fixed). Then (owner, 2026-10-20, on the 1.1.0 drafts: "the main
+    wheel does not scroll through the files in the browser. i need to use the rows button to look", "make the font
+    white and not red"): the list's rows had no `Q-Link` touch action, so a tap on a row left the wheel elsewhere, and
+    the cursor's border was near-black on black. The skin's `list` takes `wheel=br_cursor` (a row's touch hands the
+    wheel to FILE; `framework/mpc-vst-plugins.patch`), `ink=ffffff`, `lit=d32a2a`. How it all works, for other
+    plugins: [docs/sample-browser.md](docs/sample-browser.md).
+    On the Live II (owner, 2026-10-20): white text confirmed; a tap plays; Q-Links move the cursor and PREVIEW plays,
+    but "the qlinks change really really quickly and skip a few rows" and "using the big mpc job wheel doesn't do
+    anything" (the rows' `wheel=` didn't take). Akai's own skins on the device (`/usr/share/Akai/Content/Synths`, read
+    in a scratch folder, not kept) only ever act on a control's own `Data` handle (`Mouse Down` → `Q-Link`, `Enter
+    Pressed` → `Toggle Switch`), so a row can't hand the wheel to another parameter. Now: `wheel=` gone, the list has
+    `focus=no` (no row takes the wheel), FILE's box is the wheel's ("FILE: TAP, THEN THE WHEEL"); Q-Link 1 is BROWSE
+    (new, 737 params, `qlink_only`), the cursor a row per three Q-Link events, SCROLL a page per three (an arrow a page)
+    (`QL_TICKS`). Checked on the Live II with the rebuilt drafts (owner, 2026-10-20: "this is working"): the wheel on
+    FILE's box, a row tap leaving it there, BROWSE and SCROLL at three events a step. Left for now (owner: "can leave
+    it for now"); next: publish 1.1.0 (both drafts) and `tested.json` 1.1.0
+  - [ ] **In sd88me's catalogue**: entries `incipience` and `incipience-out` proposed in
+    [sd88me/mpc-vst-plugins#480](https://github.com/sd88me/mpc-vst-plugins/pull/480) (2026-10-19; `catalog_build` on
+    both: 0 problems), waiting for his merge
+  - [ ] The next release: a `bench.sh` figure on the Live II (`bench.txt`, the catalogue's "cpu-bench"), with the matrix
+    busy; KIT still moves 4 kits a Q-Link tick (parameter 0: the wrapper holds its set to the next block, so the host
+    test's `nudge_pct` check can't run on it); this repo's own build (`tools/build.sh`, the older wrapper) has no
+    `nudge_pct`, so an install with `./install.sh` still skips samples on a Q-Link
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
-    63 factory kits load; Incipience MIDI In (an AlphaBase's channels 1-11, its CC chart); an OUT insert, as
-    Percolator OUT
+    63 factory kits load; the AlphaBase's CC chart on channels 1-11 (needs its MIDI implementation)
 
 - [ ] **Percolator** ([originals/percolator](originals/percolator/), 2026-10-10): a four-voice drum synth laid out like
   the Erica Synths Pērkons HD-01, DSP written from scratch, reads the Pērkons' `.KIT` packs. Seven pages (a voice

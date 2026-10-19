@@ -6,7 +6,7 @@ MV=$REPO/framework/mpc-vst-plugins      # the framework checkout (framework/setu
 UIDGID="$(id -u):$(id -g)"
 
 plugin_vst_jsons() { (cd "$REPO" && ls schwung/*/*/vst.json mutable-instruments/*/vst.json vcv-rack/*/vst.json \
-    originals/*/vst.json mpc-ports/*/vst.json 2>/dev/null); }
+    originals/*/vst.json originals/*/*/vst.json mpc-ports/*/vst.json 2>/dev/null); }   # */*: companions (Percolator OUT)
 # so_name <plugin dir>: its .so name without .so
 so_name() { sed -n 's/.*"so": *"\([^"]*\)\.so".*/\1/p' "$REPO/$1/vst.json" | head -n 1; }
 all_so_names() { for j in $(plugin_vst_jsons); do so_name "$(dirname "$j")"; done | sort; }

@@ -1,7 +1,7 @@
 /* Incipience offline renderer (development): plays each instrument alone, then a groove, for a kit; or a list of
  * single sounds from a script. Writes WAVs and prints each sound's peak, RMS and length. Built natively, without the
  * wrapper:
- *   cc -O2 -Isrc mpc/render.c src/incipience.c src/voices.c src/fx.c src/tables.c src/samples.c src/kits.c -lm -lpthread -o build/render
+ *   cc -O2 -Isrc mpc/render.c src/incipience.c src/voices.c src/fx.c src/tables.c src/samples.c src/kits.c src/library.c -lm -lpthread -o build/render
  *   build/render <data dir or ""> <out dir> kit <n...>          each instrument of kit n alone, then a groove
  *   build/render <data dir or ""> <out dir> script <file>       one WAV per line: name;key=value;...;hits=<ins>@<s>[:vel]
  */

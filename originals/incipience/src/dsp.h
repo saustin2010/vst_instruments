@@ -48,6 +48,7 @@ static inline float sin_t(float ph) {
     float x = ph * SIN_N;
     int i = (int)x;
     float f = x - i;
+    i &= SIN_N - 1;   /* a phase a hair under 0 comes out of the floor as 1: the table's start again */
     return inc_sintab[i] + (inc_sintab[i + 1] - inc_sintab[i]) * f;
 }
 

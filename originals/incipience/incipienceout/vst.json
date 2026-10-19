@@ -1,0 +1,25 @@
+{
+  "name": "[FX] Incipience OUT",
+  "vendor": "Steve A",
+  "uid": "IncO",
+  "category": "Effect",
+  "so": "incipienceout.so",
+  "effect": true,
+  "build": {
+    "sources": [
+      "src/incipience_out.c"
+    ],
+    "cflags": [
+      "-Isrc"
+    ],
+    "libs": [
+      "-lm"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "QLINK_TRAVEL": 1, "SET_IF_CHANGED": 1
+  }
+}

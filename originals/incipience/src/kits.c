@@ -81,15 +81,22 @@ static const builtin_t WITH_SAMPLES[] = {
      "x2_sample=61;x2_loopon=1;cp_rsend=30;cr_dsend=40;"},
 };
 
-static int has_sample_set(const char *dir) {   /* a few of its numbers present: the set is there */
+static int count_abwv(const char *dir, int depth) {   /* ABWV files here and (depth 1) one folder down */
     int n = 0;
     DIR *d = opendir(dir);
     struct dirent *e;
-    while (d && (e = readdir(d)) && n < 20)
+    while (d && (e = readdir(d)) && n < 20) {
         if (!strncasecmp(e->d_name, "ABWV", 4)) n++;
+        else if (depth && e->d_name[0] != '.') {
+            char p[600];
+            snprintf(p, sizeof p, "%s/%s", dir, e->d_name);
+            n += count_abwv(p, 0);
+        }
+    }
     if (d) closedir(d);
-    return n >= 20;
+    return n;
 }
+static int has_sample_set(const char *dir) { return count_abwv(dir, 1) >= 20; }   /* a few of its numbers: it's there */
 
 static void add_kit(inc_t *P, const char *name, const char *state) {
     if (P->nkits >= MAX_KITS) return;

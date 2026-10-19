@@ -35,8 +35,8 @@ void fx_free(fx_t *f) {
 }
 
 float delay_seconds(const inc_t *P) {
-    float t = P->pv[P_DL_TIME];
-    if (P->pv[P_DL_SYNC] >= 0.5f) {
+    float t = P->ev[P_DL_TIME];
+    if (P->ev[P_DL_SYNC] >= 0.5f) {
         int i = (int)(t * 10.0f / 128.0f);
         float bpm = P->bpm > 0.0f ? P->bpm : 120.0f;
         return fminf(DIV[i < 0 ? 0 : i > 9 ? 9 : i] * 60.0f / bpm, (DL_MAX - 4) / SR);
@@ -58,13 +58,13 @@ void fx_block(inc_t *P, const float *rin, const float *din, float *L, float *R, 
     if (!silent(din, n)) f->dl_sleep = 0;
     float pk = 0.0f;
     /* ---- reverb ---- */
-    if (P->pv[P_RV_ON] >= 0.5f && !f->rv_sleep) {
-        float rs = P->pv[P_RV_SIZE];
+    if (P->ev[P_RV_ON] >= 0.5f && !f->rv_sleep) {
+        float rs = P->ev[P_RV_SIZE];
         float g = rs <= 100.0f ? 0.25f + 0.73f * powf(rs / 100.0f, 0.7f) : 0.98f + 0.035f * (rs - 100.0f) / 27.0f;
         svfc_t lp, hp;
-        svf_coef(&lp, 300.0f * powf(20000.0f / 300.0f, P->pv[P_RV_LO] / 127.0f), 1.414f);
-        svf_coef(&hp, 20.0f * powf(4000.0f / 20.0f, P->pv[P_RV_HI] / 127.0f), 1.414f);
-        float lvl = P->pv[P_RV_LEVEL] / 127.0f;
+        svf_coef(&lp, 300.0f * powf(20000.0f / 300.0f, P->ev[P_RV_LO] / 127.0f), 1.414f);
+        svf_coef(&hp, 20.0f * powf(4000.0f / 20.0f, P->ev[P_RV_HI] / 127.0f), 1.414f);
+        float lvl = P->ev[P_RV_LEVEL] / 127.0f;
         lvl *= lvl * 0.7f;
         for (int i = 0; i < n; i++) {
             float x = rin[i];
@@ -104,12 +104,12 @@ void fx_block(inc_t *P, const float *rin, const float *din, float *L, float *R, 
         if (pk < 1e-6f && silent(rin, n)) f->rv_sleep = 1;
     }
     /* ---- delay ---- */
-    if (P->pv[P_DL_ON] >= 0.5f && !f->dl_sleep) {
+    if (P->ev[P_DL_ON] >= 0.5f && !f->dl_sleep) {
         pk = 0.0f;
         float target = delay_seconds(P) * SR;
-        float fb = 1.02f * P->pv[P_DL_FB] / 127.0f;
-        float s = P->pv[P_DL_SPATIAL] / 127.0f;
-        float lvl = P->pv[P_DL_LEVEL] / 127.0f;
+        float fb = 1.02f * P->ev[P_DL_FB] / 127.0f;
+        float s = P->ev[P_DL_SPATIAL] / 127.0f;
+        float lvl = P->ev[P_DL_LEVEL] / 127.0f;
         lvl *= lvl * 0.8f;
         float dc = op_coef(7000.0f), glide = 1.0f - expf(-1.0f / (0.08f * SR));
         for (int i = 0; i < n; i++) {

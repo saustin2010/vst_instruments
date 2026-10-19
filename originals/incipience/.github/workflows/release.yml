@@ -1,0 +1,57 @@
+# Build a DRAFT release (tag v<version>) with mpc-vst-plugins' shared workflow: Actions -> "Release (draft)" -> Run
+# workflow. Then install that draft's zip on a device, smoke-test it and publish the draft (mpc-vst-plugins
+# docs/RELEASING.md). dry_run builds the zip and skin previews as run artifacts only.
+# The tools come from saustin2010/mpc-vst-plugins (sd88me's repo plus changes offered to it) until they're merged there:
+# then point uses: and tools_ref at sd88me/mpc-vst-plugins and drop tools_repo.
+# This plugin is developed in saustin2010/vst_instruments (originals/incipience) and published here.
+name: Release (draft)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version, e.g. 1.0.1
+        required: true
+      dry_run:
+        description: Build only (zip + skin previews as run artifacts), no draft release
+        type: boolean
+        default: false
+
+jobs:
+  vst:
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@b0141689e72c2ed4acb4352e0c57a0828d4852e5
+    permissions:
+      contents: write
+    with:
+      tag: v${{ inputs.version }}
+      version: ${{ inputs.version }}
+      tools_repo: saustin2010/mpc-vst-plugins
+      tools_ref: b0141689e72c2ed4acb4352e0c57a0828d4852e5
+      vst_dir: .
+      build: bash "$MPC_VST/tools/build_port.sh" vst.json && rm -rf build/skin && mkdir -p build/skin && cp -R deploy/Synths/* build/skin/
+      host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
+      user_data: incipience
+      plugin_id: incipience
+      license: MIT
+      about: "Eleven instruments laid out like the Jomox AlphaBase Mk II analog drum machine, with its controls and 0-127 ranges; plays the AlphaBase's own sample set and your own WAV files."
+      dry_run: ${{ inputs.dry_run }}
+
+  incipienceout:
+    # incipienceout (incipienceout/) ships in this release as its own zip, with its own draft
+    # (tag incipience-out-v<version>) and catalogue entry, as TR-MPC ships its Tap FX
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@b0141689e72c2ed4acb4352e0c57a0828d4852e5
+    permissions:
+      contents: write
+    with:
+      tag: incipience-out-v${{ inputs.version }}
+      version: ${{ inputs.version }}
+      tools_repo: saustin2010/mpc-vst-plugins
+      tools_ref: b0141689e72c2ed4acb4352e0c57a0828d4852e5
+      vst_dir: incipienceout
+      build: bash "$MPC_VST/tools/build_port.sh" incipienceout/vst.json && rm -rf incipienceout/build/skin && mkdir -p incipienceout/build/skin && cp -R incipienceout/deploy/Synths/* incipienceout/build/skin/
+      host_test: '"$MPC_VST/tools/test_port.sh" incipienceout/vst.json'
+      plugin_id: incipience-out
+      license: MIT
+      requires: Incipience 1.0.0 or later in the same project
+      about: "Plays one of Incipience's OUT 1-11 on its own MPC track (an audio track will do), so an instrument gets that track's fader, inserts and outputs."
+      dry_run: ${{ inputs.dry_run }}
