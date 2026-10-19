@@ -30,8 +30,32 @@ static struct {
 static int ld(const int *p) { return __atomic_load_n(p, __ATOMIC_ACQUIRE); }
 static void st(int *p, int v) { __atomic_store_n(p, v, __ATOMIC_RELEASE); }
 
+static int is_wav(const char *f) { size_t n = strlen(f); return n > 4 && !strcasecmp(f + n - 4, ".wav"); }
+
+/* the data folder, and its folders one level down (an unzip often leaves the files in AlphaBaseWaves/ or the like) */
+static void scan_dir(const char *sub);
+
 static void scan(void) {
+    scan_dir("");
     DIR *d = opendir(G.dir);
+    if (!d) return;
+    struct dirent *e;
+    while ((e = readdir(d))) {
+        if (e->d_name[0] == '.') continue;
+        char p[600];
+        snprintf(p, sizeof p, "%s/%s", G.dir, e->d_name);
+        DIR *s = opendir(p);
+        if (!s) continue;
+        closedir(s);
+        scan_dir(e->d_name);
+    }
+    closedir(d);
+}
+
+static void scan_dir(const char *sub) {
+    char path[600];
+    snprintf(path, sizeof path, "%s%s%s", G.dir, *sub ? "/" : "", sub);
+    DIR *d = opendir(path);
     if (!d) return;
     struct dirent *e;
     while ((e = readdir(d))) {
@@ -44,12 +68,16 @@ static void scan(void) {
             n = n * 10 + (s[i] - '0');
         }
         if (!ok || n < 1 || n >= NSMP) continue;
-        if (G.file[n] && !strcasecmp(G.file[n] + 9, "wav")) continue;   /* a .raw over a .wav of the same number */
+        /* the top level before a folder, then (at one level) a .wav before a .raw of the same number */
+        if (G.file[n] && ((*sub && !strchr(G.file[n], '/')) || is_wav(G.file[n]))) continue;
+        char rel[300];
+        snprintf(rel, sizeof rel, "%s%s%s", sub, *sub ? "/" : "", s);
         free(G.file[n]);
-        G.file[n] = strdup(s);
+        G.file[n] = strdup(rel);
     }
     closedir(d);
 }
+
 
 static uint16_t u16(const uint8_t *p) { return (uint16_t)(p[0] | p[1] << 8); }
 static uint32_t u32(const uint8_t *p) { return (uint32_t)(p[0] | p[1] << 8 | p[2] << 16 | (uint32_t)p[3] << 24); }
@@ -70,7 +98,7 @@ static void load(int n) {
     int16_t *out = NULL;
     int frames = 0;
     float rate = SMP_RATE;
-    if (got == (size_t)sz && !strcasecmp(G.file[n] + 9, "wav") && sz > 44 && !memcmp(b, "RIFF", 4) && !memcmp(b + 8, "WAVE", 4)) {
+    if (got == (size_t)sz && is_wav(G.file[n]) && sz > 44 && !memcmp(b, "RIFF", 4) && !memcmp(b + 8, "WAVE", 4)) {
         int ch = 0, bits = 0, fmt = 0;
         long p = 12;
         while (p + 8 <= sz) {
