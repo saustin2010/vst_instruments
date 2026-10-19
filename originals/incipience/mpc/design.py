@@ -169,10 +169,11 @@ def matrix(rows, P, inst_name, diag=()):
 BROWSER_LINES = [
     "readout cx=290 cy=154 w=488 h=32 vs=20 box=no style=dotmatrix key=br_path",
     "readout cx=656 cy=154 w=196 h=32 vs=20 box=no style=dotmatrix key=br_status",
-    # white text, the cursor's row in a red border (owner, 2026-10-20: "make the font white and not red"); touching a
-    # row hands the data wheel to FILE, so the wheel moves the cursor after any tap on the list ("the main wheel does
-    # not scroll through the files")
-    "list x=40 y=182 w=720 h=362 key=br_row cols=1 rows=8 th=40 gap=6 wheel=br_cursor ink=ffffff lit=d32a2a",
+    # white text, the cursor's row in a red border (owner, 2026-10-20: "make the font white and not red"). The data
+    # wheel turns the control that has MPC's hardware focus, which a touch on FILE's box (a stepper, like SAMPLE) gives
+    # it; a row can't hand it to FILE (MPC's touch action works on a control's own parameter only: Akai's skins, and
+    # wheel= tried on the Live II, 2026-10-20), so no row takes the focus and a tap on one leaves the wheel on FILE
+    "list x=40 y=182 w=720 h=362 key=br_row cols=1 rows=8 th=40 gap=6 ink=ffffff lit=d32a2a focus=no",
 ]
 
 
@@ -192,7 +193,7 @@ def browser_page():
             # 1.1.0: SCROLL a page at a time, FILE (the cursor) one entry; LOAD, UP, DRIVES
             # (MPC sizes a button by its label, about 76, 54 and 100 px here: only its centre comes from this markup)
             + '<div style="position: absolute; left: 0; top: 444px; width: 160px;">%s</div>' % stepper("br_scroll", "SCROLL", w=160)
-            + '<div style="position: absolute; left: 170px; top: 444px; width: 270px;">%s</div>' % stepper("br_cursor", "FILE", w=270)
+            + '<div style="position: absolute; left: 170px; top: 444px; width: 270px;">%s</div>' % stepper("br_cursor", "FILE: TAP, THEN THE WHEEL", w=270)
             + btn % ("br_load", 455, 76, "LOAD") + btn % ("br_up", 545, 54, "UP") + btn % ("br_places", 615, 100, "DRIVES")
             + '</div>')
 

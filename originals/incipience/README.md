@@ -18,7 +18,7 @@ the control you've selected: tap a box (SAMPLE, FILE ...) first (owner, 2026-10-
   and its screen.
 - Data folder: `incipience/` next to `incipience.so` (with the vst_instruments installer, `/sdcard/vst/incipience/`):
   where the AlphaBase's samples go ([below](#samples)), and a `samples/` folder of your own if you like
-- 736 parameters (all automatable) on 17 tabs: a tab per instrument with three Q-Link sub-pages, then FX, MIX, MOD,
+- 737 parameters (all automatable) on 17 tabs: a tab per instrument with three Q-Link sub-pages, then FX, MIX, MOD,
   MIDI & OUT, MIDI MOD and SAMPLES
 - 5 kits built in, in MPC's PRESET menu; 3 more with the AlphaBase's samples in the data folder
 - **[FX] Incipience OUT** ([incipienceout](incipienceout/)) puts an instrument on a track of its own ([below](#outputs-out-1-11))
@@ -172,11 +172,12 @@ the data wheel alone goes through all of it.
   WAV file aren't listed. When a folder holds too much for one list (more than 999 rows, or more than 256 folders to
   look through, as a drive's top level often does), it's listed as before: its subfolders, then its own files.
 - **The cursor (FILE):** its row has a red border (the list's text is white), and the FILE box under the list shows its
-  name. Move it with the **data wheel**: MPC's wheel turns the control touched last, and touching any row (or the
-  FILE box) hands it to the cursor (owner, 2026-10-20: "the main wheel does not scroll through the files"). Or use
-  **Q-Link 1**, no touch needed, or the box's arrows. It moves one file at a time and steps over the headings,
-  from one folder's last file to the next one's first. **SCROLL** (Q-Link 2, or its arrows) moves a page at a time,
-  taking the cursor along. With **PREVIEW** on, each file plays as the cursor lands on it, straight from the folder:
+  name. Move it with the **data wheel**: tap the FILE box once and the wheel moves the cursor a file a click; tapping
+  rows afterwards leaves the wheel on FILE (MPC's wheel turns the box you tapped last; a row can't take it, owner,
+  2026-10-20: "the main wheel does not scroll through the files"). **Q-Link 1** (BROWSE, no tap needed) moves it a
+  file per three Q-Link events, so a small turn doesn't skip ("the qlinks change really really quickly and skip a few
+  rows"); the box's arrows step one. It steps over the headings, from one folder's last file to the next one's
+  first. **SCROLL** moves a page: a tap on its arrows, or per three events on Q-Link 2, taking the cursor along. With **PREVIEW** on, each file plays as the cursor lands on it, straight from the folder:
   no instrument, no effects, at Incipience's VOLUME, until it ends or the cursor moves on.
 - **AUTO LOAD** (off to start with; Q-Link 6): each file the cursor lands on loads into LOAD TO's instrument and plays
   through it (PREVIEW on), so the wheel alone browses and loads; turn back to the one you liked.
@@ -255,7 +256,7 @@ build/render <data folder or ""> build/renders kit           # every kit: each i
 build/render <data folder or ""> build/renders script <file>  # one WAV per line: name;key=value;...;hits=kd@0,ch@0.5
 ```
 
-`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (736 parameters; the
+`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (737 parameters; the
 first 414 are as they were before 2026-10-17, the first 702 before 2026-10-18, the first 730 in 1.0.0: MPC saves
 projects and Q-Links by number).
 
@@ -263,7 +264,8 @@ projects and Q-Links by number).
 the mix kept, every roll heard), your own samples (five kinds of WAV file written and read back, a folder's order, the
 SAMPLES tab's browsing (1.1.0: the cursor by tap, FILE and SCROLL, its row lit, the file heard from the folder, a
 second tap or LOAD, MPC's echo of a tap ignored, LOAD TO's folder, long names, AUDITION; subfolders' files in one list,
-FILE across their headings, AUTO LOAD, UP from a heading's folder, too many folders listed folder by folder), a file loaded and played, found by name from the state, RANDOMISE and the matrix within the
+FILE across their headings, AUTO LOAD, UP from a heading's folder, too many folders listed folder by folder, FILE's and SCROLL's Q-Links a step per
+three events), a file loaded and played, found by name from the state, RANDOMISE and the matrix within the
 folder, a kit back to the sample set, and 47 files of 1.8 MB played while another instrument holds one, past the 64 MB:
 it runs clean under ASan/UBSan, which would catch a file freed under a voice, and TSan), the saved state's size (at
 most 6.3 KB of the wrapper's 8 KB) and OUT 1-11 with Incipience OUT loaded as a library of its own (the comment at its

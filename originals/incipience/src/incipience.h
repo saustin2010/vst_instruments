@@ -226,6 +226,7 @@ typedef struct inc {
     uint32_t clock;               /* frames played: a tap told from MPC turning off the row it lit */
     uint32_t btap_at;             /* when a tap last lit a row */
     char bfind[128];              /* a file to put the cursor on once its folder is listed (LOAD TO's own) */
+    int qacc[2];                  /* Q-Link events counted toward FILE's next row, SCROLL's next page (QL_TICKS) */
 } inc_t;
 
 void kick_trigger(inc_t *P, const play_t *pl);

@@ -194,7 +194,15 @@ parameter index, so existing projects keep working.
     white and not red"): the list's rows had no `Q-Link` touch action, so a tap on a row left the wheel elsewhere, and
     the cursor's border was near-black on black. The skin's `list` takes `wheel=br_cursor` (a row's touch hands the
     wheel to FILE; `framework/mpc-vst-plugins.patch`), `ink=ffffff`, `lit=d32a2a`. How it all works, for other
-    plugins: [docs/sample-browser.md](docs/sample-browser.md). To check on the Live II: the wheel after a row tap
+    plugins: [docs/sample-browser.md](docs/sample-browser.md).
+    On the Live II (owner, 2026-10-20): white text confirmed; a tap plays; Q-Links move the cursor and PREVIEW plays,
+    but "the qlinks change really really quickly and skip a few rows" and "using the big mpc job wheel doesn't do
+    anything" (the rows' `wheel=` didn't take). Akai's own skins on the device (`/usr/share/Akai/Content/Synths`, read
+    in a scratch folder, not kept) only ever act on a control's own `Data` handle (`Mouse Down` → `Q-Link`, `Enter
+    Pressed` → `Toggle Switch`), so a row can't hand the wheel to another parameter. Now: `wheel=` gone, the list has
+    `focus=no` (no row takes the wheel), FILE's box is the wheel's ("FILE: TAP, THEN THE WHEEL"); Q-Link 1 is BROWSE
+    (new, 737 params, `qlink_only`), the cursor a row per three Q-Link events, SCROLL a page per three (an arrow a page)
+    (`QL_TICKS`). To check on the Live II: the wheel on FILE's box (and that a row tap leaves it there), Q-Link speed
   - [ ] **In sd88me's catalogue**: entries `incipience` and `incipience-out` proposed in
     [sd88me/mpc-vst-plugins#480](https://github.com/sd88me/mpc-vst-plugins/pull/480) (2026-10-19; `catalog_build` on
     both: 0 problems), waiting for his merge

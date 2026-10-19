@@ -281,7 +281,7 @@ def build():
     # TO's channel, whose SAMPLE then steps through that folder. The rows show the engine's text (their value is a tap)
     for r in range(1, BROWSE_ROWS + 1):
         P.append(dict(key="br_row_%d" % r, name="ROW %d" % r, momentary=True, dynamic_display=True))
-    step("br_scroll", "SCROLL", 0, 0, 999)   # a page a Q-Link tick (FILE is the fine one)
+    step("br_scroll", "SCROLL", 0, 0, 999)   # a page per three Q-Link events, a page an arrow (src: QL_TICKS)
     P.append(dict(key="br_scroll_prev", name="SCROLL UP", momentary=True, step_of="br_scroll", step_delta=-BROWSE_ROWS))
     P.append(dict(key="br_scroll_next", name="SCROLL DOWN", momentary=True, step_of="br_scroll", step_delta=BROWSE_ROWS))
     P.append(dict(key="br_path", name="FOLDER", min=0, max=0, display="string", type="readout"))
@@ -302,6 +302,10 @@ def build():
     # folder lists its subfolders' files too (library.c, when they fit), so FILE runs from one folder's into the next;
     # AUTO LOAD: the file FILE lands on loads into LOAD TO's instrument, nothing to tap
     opts("br_autoload", "AUTO LOAD", ONOFF, 0)
+    # (owner, 2026-10-20: "the qlinks change really really quickly and skip a few rows") FILE on its Q-Link: the cursor
+    # too, but a row per three Q-Link events (src: QL_TICKS); FILE's box keeps a row a click for the data wheel, which
+    # sends the same small moves (the two can't be told apart, docs/NOTES "Input probe"). Not on the page
+    step("br_cursor_q", "BROWSE", 0, 0, 999, clamped=True, qlink_only=True, **LONG)   # (names are unique; MPC shows it on the Q-Link)
     return P
 
 
@@ -494,7 +498,7 @@ PAGES += [
         "side_panels": [("LOAD TO", "PICK, THEN LOAD", ["br_target"]),
                         ("AS YOU TURN", "FILE PLAYS / LOADS + SAMPLE DIAL", ["br_preview", "br_autoload", "br_audition"])],
         "also": ["br_scroll", "br_cursor", "br_path", "br_status"],
-        "qlinks": ["br_cursor", "br_scroll", "-", "-", "br_target", "br_autoload", "-", "-", "br_preview", "br_audition", "-", "-",
+        "qlinks": ["br_cursor_q", "br_scroll", "-", "-", "br_target", "br_autoload", "-", "-", "br_preview", "br_audition", "-", "-",
                    "-", "-", "-", "-"],
         "info": []}),
 ]
@@ -534,6 +538,7 @@ def check_pages(P):
             for x in on + pg["side"] + pg.get("also", []):
                 assert x in keys, (tab, x)
             seen |= set(on) | set(pg["side"]) | set(pg.get("also", []))
+        seen |= set(pg.get("qlinks", []))   # a Q-Link's own (FILE's): on a Q-Link, not drawn
         if k:
             seen |= {k + "_pan", k + "_rsend", k + "_dsend", k + "_mute"}   # the instrument's MIX box
     missing = [p["key"] for p in P if p["key"] not in seen and not p["key"].startswith("kit") and not p.get("momentary")]

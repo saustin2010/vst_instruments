@@ -495,6 +495,25 @@ static void preview_block(inc_t *P, float *L, float *R, int n) {   /* mono, -3 d
 /* ---- 1.1.0: the cursor (FILE), an entry of the listing: its row is lit (its value reads 1) and the view follows it */
 static int cursor(const inc_t *P) { return (int)P->pv[P_BR_CURSOR]; }
 
+static void cursor_set(inc_t *P, int k) {   /* FILE, and FILE's Q-Link (its own parameter) reading the same */
+    P->pv[P_BR_CURSOR] = P->ev[P_BR_CURSOR] = P->pv[P_BR_CURSOR_Q] = P->ev[P_BR_CURSOR_Q] = (float)k;
+    mark(P, P_BR_CURSOR);
+    mark(P, P_BR_CURSOR_Q);
+}
+
+/* MPC sends a Q-Link's small turn as several events (a data wheel click as one, the same size: docs/NOTES "Input
+ * probe"), so FILE's Q-Link moves a row, and SCROLL a page, per QL_TICKS events the same way; turning back starts over
+ * (owner, 2026-10-20: "the qlinks change really really quickly and skip a few rows") */
+#define QL_TICKS 3
+static int ql_tick(inc_t *P, int q, int dir) {   /* 1: this event makes a step */
+    if (!dir) return 0;
+    if (dir * P->qacc[q] < 0) P->qacc[q] = 0;
+    P->qacc[q] += dir;
+    if (abs(P->qacc[q]) < QL_TICKS) return 0;
+    P->qacc[q] = 0;
+    return 1;
+}
+
 /* a flat listing's cursor is on a file: past a heading (or ..) to the next file the way it was going (else back) */
 static int on_file(const lib_list_t *l, int k, int d) {
     if (!l || !l->flat || !l->nfiles) return k;
@@ -515,8 +534,7 @@ static void cursor_to(inc_t *P, int k, int hear) {
     k = k >= n ? n - 1 : k;
     k = k < 0 ? 0 : k;
     k = on_file(l, k, k < was ? -1 : 1);
-    P->pv[P_BR_CURSOR] = P->ev[P_BR_CURSOR] = (float)k;
-    mark(P, P_BR_CURSOR);
+    cursor_set(P, k);
     int s = (int)P->pv[P_BR_SCROLL];
     if (k < s) scroll_to(P, k);
     else if (k >= s + BROWSE_ROWS) scroll_to(P, k - BROWSE_ROWS + 1);
@@ -573,8 +591,7 @@ static void browse_adopt(inc_t *P) {
     lib_list_free(P->bl);
     P->bl = l;
     P->bwait = 0;
-    P->pv[P_BR_CURSOR] = P->ev[P_BR_CURSOR] = (float)at;
-    mark(P, P_BR_CURSOR);
+    cursor_set(P, at);
     scroll_to(P, at - BROWSE_ROWS / 2 + 1);
     mark_rows(P);
 }
@@ -1062,9 +1079,29 @@ static void e_set_param(void *inst, const char *key, const char *val) {
         else if (i == P_BR_LOAD) browse_load(P);
         return;
     }
-    if (i == P_BR_CURSOR) {   /* FILE: the data wheel, Q-Link 1 or its arrows, one entry at a time */
+    if (i == P_BR_CURSOR) {   /* FILE: the data wheel on its box, or its arrows, one entry at a time */
         browse_adopt(P);
         cursor_to(P, (int)lrintf((float)atof(val)), 1);
+        return;
+    }
+    if (i == P_BR_CURSOR_Q) {   /* FILE's Q-Link: a row per QL_TICKS events (the wrapper makes each one a step) */
+        browse_adopt(P);
+        int k = (int)lrintf((float)atof(val)), c = cursor(P);
+        if (ql_tick(P, 0, k > c ? 1 : k < c ? -1 : 0)) cursor_to(P, c + (k > c ? 1 : -1), 1);
+        else cursor_set(P, c);   /* MPC reads back where it is */
+        return;
+    }
+    if (i == P_BR_SCROLL) {
+        /* a page at a time: an arrow's (a whole number, a page away or at an end) at once, a Q-Link's or the wheel's
+         * (between whole numbers) per QL_TICKS events; the cursor stays in view (silently) */
+        browse_adopt(P);
+        float v = (float)atof(val);
+        int top = (int)P->pv[P_BR_SCROLL], d = v > top ? 1 : v < top ? -1 : 0;
+        mark(P, P_BR_SCROLL);   /* MPC reads back where it is */
+        if (fabsf(v - roundf(v)) < 1e-3f) scroll_to(P, (int)lrintf(v));
+        else if (ql_tick(P, 1, d)) scroll_to(P, top + d * BROWSE_ROWS);
+        int s0 = (int)P->pv[P_BR_SCROLL], k = cursor(P), last = s0 + BROWSE_ROWS - 1;
+        if (k < s0 || k > last) cursor_to(P, k < s0 ? s0 : last, 0);
         return;
     }
     set_value(P, i, val);
@@ -1073,12 +1110,6 @@ static void e_set_param(void *inst, const char *key, const char *val) {
         if (P->pv[i] > sample_top(P, c) && lib_files(P->sfold[c]) >= 0) P->pv[i] = P->ev[i] = sample_top(P, c);
         sample_ask(P, c, (int)P->pv[i]);
         if (P->pv[P_BR_AUDITION] >= 0.5f) audition(P, c);   /* AUDITION: turning SAMPLE plays it */
-    }
-    if (i == P_BR_SCROLL) {   /* a page at a time: the cursor stays in view (silently) */
-        browse_adopt(P);
-        scroll_to(P, (int)P->pv[i]);
-        int s0 = (int)P->pv[P_BR_SCROLL], k = cursor(P), last = s0 + BROWSE_ROWS - 1;
-        if (k < s0 || k > last) cursor_to(P, k < s0 ? s0 : last, 0);
     }
     if (i == P_BR_TARGET) target_jump(P);
 }
@@ -1109,7 +1140,7 @@ static int display(inc_t *P, int i, char *buf, int len) {
     if (i >= P_BR_ROW_1 && i < P_BR_ROW_1 + BROWSE_ROWS) return browse_row(P, i - P_BR_ROW_1, buf, len);
     /* the rows shown (the box beside FOLDER says how many there are: this one mustn't change as a listing comes in) */
     if (i == P_BR_SCROLL) return snprintf(buf, len, "ROWS %d-%d", iv + 1, iv + BROWSE_ROWS);
-    if (i == P_BR_CURSOR) return cursor_text(P, buf, len);
+    if (i == P_BR_CURSOR || i == P_BR_CURSOR_Q) return cursor_text(P, buf, len);
     if (ENDS("_sample")) {
         int c = sample_chan(i);
         if (c >= 0 && P->sfold[c] >= 0) {   /* a file of the channel's own folder, by name */

@@ -490,6 +490,20 @@ int main(int argc, char **argv) {
         CHECK(P->pv[P_BR_CURSOR] == 4.0f, "FILE back past the heading: %g", P->pv[P_BR_CURSOR]);
         seti(P, "br_cursor", 0);
         CHECK(P->pv[P_BR_CURSOR] == 1.0f, "FILE past ..: %g", P->pv[P_BR_CURSOR]);
+        /* FILE's Q-Link (BROWSE, a parameter of its own reading as FILE): a row per three events, each a step from where it
+         * reads (as the wrapper hands them on); turning back starts the count over */
+        for (int t = 0; t < 2; t++) seti(P, "br_cursor_q", (int)P->pv[P_BR_CURSOR_Q] + 1);
+        CHECK(P->pv[P_BR_CURSOR] == 1.0f && P->pv[P_BR_CURSOR_Q] == 1.0f, "FILE's Q-Link moved on 2 events: %g",
+              P->pv[P_BR_CURSOR]);
+        seti(P, "br_cursor_q", (int)P->pv[P_BR_CURSOR_Q] + 1);
+        CHECK(P->pv[P_BR_CURSOR] == 2.0f && P->pv[P_BR_CURSOR_Q] == 2.0f, "FILE's Q-Link, 3 events: %g",
+              P->pv[P_BR_CURSOR]);
+        for (int t = 0; t < 2; t++) seti(P, "br_cursor_q", (int)P->pv[P_BR_CURSOR_Q] + 1);
+        for (int t = 0; t < 2; t++) seti(P, "br_cursor_q", (int)P->pv[P_BR_CURSOR_Q] - 1);
+        CHECK(P->pv[P_BR_CURSOR] == 2.0f, "FILE's Q-Link turned back moved: %g", P->pv[P_BR_CURSOR]);
+        seti(P, "br_cursor_q", (int)P->pv[P_BR_CURSOR_Q] - 1);
+        E->get_param(P, "br_cursor_q_display", buf, sizeof buf);
+        CHECK(P->pv[P_BR_CURSOR] == 1.0f && !strcmp(buf, "kick 1"), "FILE's Q-Link back: %g (%s)", P->pv[P_BR_CURSOR], buf);
         /* AUTO LOAD: the file FILE lands on loads (Sub's, from its own folder), nothing tapped */
         set(P, "br_autoload", "1");
         seti(P, "br_cursor", 6);
@@ -675,6 +689,15 @@ int main(int argc, char **argv) {
         CHECK(P->sv[7].active, "X2 plays b00");
         free(run(P, 100));          /* PREVIEW's quarter-second tap over */
         midi(P, 0x90, 45, 100);     /* its pad, held from here on */
+        /* SCROLL: a Q-Link's or the wheel's move (between whole numbers) a page per three, an arrow's whole number at once */
+        set(P, "br_scroll", "7.80469");
+        set(P, "br_scroll", "7.80469");
+        CHECK(P->pv[P_BR_SCROLL] == 0.0f, "SCROLL moved on 2 Q-Link events: %g", P->pv[P_BR_SCROLL]);
+        set(P, "br_scroll", "7.80469");
+        CHECK(P->pv[P_BR_SCROLL] == (float)BROWSE_ROWS && P->pv[P_BR_CURSOR] == (float)BROWSE_ROWS,
+              "SCROLL, 3 Q-Link events: rows from %g, cursor %g", P->pv[P_BR_SCROLL], P->pv[P_BR_CURSOR]);
+        set(P, "br_scroll", "0");   /* SCROLL UP */
+        CHECK(P->pv[P_BR_SCROLL] == 0.0f, "SCROLL UP: %g", P->pv[P_BR_SCROLL]);
         set(P, "br_target", "6");   /* X1 */
         int played = 0;
         for (int k = 1; k < 48; k++) {
@@ -697,7 +720,8 @@ int main(int argc, char **argv) {
         fail = system("rm -rf build/libtest");
         printf("ok   your own samples: 5 kinds of WAV, a folder in name order, browsed (the cursor: taps, FILE, LOAD, lit rows, "
                "PREVIEW from the folder, LOAD TO's folder, long names; subfolders' files in one list, FILE across them, "
-               "AUTO LOAD, too many: folder by folder), loaded, played, AUDITION, by name in the state; "
+               "AUTO LOAD, too many: folder by folder; FILE's and SCROLL's Q-Links a step per 3 events), loaded, played, AUDITION, "
+               "by name in the state; "
                "past 64 MB, 47 files played while X2 held one\n");
     }
 

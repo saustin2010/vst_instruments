@@ -9458,6 +9458,20 @@
     "ON"
    ],
    "default": "OFF"
+  },
+  {
+   "key": "br_cursor_q",
+   "name": "BROWSE",
+   "type": "stepper",
+   "min": 0,
+   "max": 999,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true,
+   "clamped": true,
+   "qlink_only": true,
+   "display": "int",
+   "nudge_pct": 10
   }
  ]
 }
