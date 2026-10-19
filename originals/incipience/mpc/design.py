@@ -163,7 +163,7 @@ def matrix(rows, P, inst_name, diag=()):
     return "".join(out)
 
 
-# the SAMPLES tab's page (gen.py: "browser"): the folder and what's in it over eight rows, SCROLL, UP and DRIVES. The
+# the SAMPLES tab's page (gen.py: "browser"): the folder and what's in it over eight rows, SCROLL, FILE, LOAD, UP, DRIVES. The
 # rows and the two readouts aren't in this markup: convert.py has no list, so mpc/merge_ab.py adds them as layout lines
 # (BROWSER_LINES, in the layout's coordinates: the page's y + 86), and the skin draws the rows' tiles itself
 BROWSER_LINES = [
@@ -177,16 +177,29 @@ def browser_page():
     box = ('<div style="position: absolute; left: %dpx; top: 32px; width: %dpx; height: 36px; background: #0b0b0b; '
            'border: 2px solid #222; border-radius: 4px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.9);"></div>')
     btn = ('<button class="ab-btn" data-param="%s" type="button" style="position: absolute; left: %dpx; top: 458px; '
-           'width: 150px; height: 40px; border-radius: 4px; background: #2c2c2c; color: #e5e5e5; font-family: \'Inter\', '
-           'sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; border-bottom: 3px solid #151515;">%s'
+           'width: %dpx; height: 40px; padding: 0; border-radius: 4px; background: #2c2c2c; color: #e5e5e5; font-family: '
+           '\'Inter\', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; border-bottom: 3px solid '
+           '#151515;">%s'
            '</button>')
     return ('<div style="position: absolute; left: 40px; top: 18px; width: 720px; height: 520px;">'
             '<div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 3px; '
             'border-bottom: 1px solid #141414;"><span class="print-label" style="font-size: 11px;">BROWSE</span><span '
             'class="red-caption" style="font-size: 10px;">DRIVES &middot; FOLDERS &middot; WAV FILES</span></div>'
             + box % (0, 500) + box % (512, 208)
-            + '<div style="position: absolute; left: 0; top: 444px; width: 260px;">%s</div>' % stepper("br_scroll", "SCROLL", w=260)
-            + btn % ("br_up", 400, "UP") + btn % ("br_places", 570, "DRIVES") + '</div>')
+            # 1.1.0: SCROLL a page at a time, FILE (the cursor) one entry; LOAD, UP, DRIVES
+            # (MPC sizes a button by its label, about 76, 54 and 100 px here: only its centre comes from this markup)
+            + '<div style="position: absolute; left: 0; top: 444px; width: 160px;">%s</div>' % stepper("br_scroll", "SCROLL", w=160)
+            + '<div style="position: absolute; left: 170px; top: 444px; width: 270px;">%s</div>' % stepper("br_cursor", "FILE", w=270)
+            + btn % ("br_load", 455, 76, "LOAD") + btn % ("br_up", 545, 54, "UP") + btn % ("br_places", 615, 100, "DRIVES")
+            + '</div>')
+
+
+def grid(key, P, per=4, w=100, h=30):
+    """an option list as buttons, per to a row (LOAD TO's eight instruments): one tap each, always in sight"""
+    opts = "".join('<button class="ab-opt" type="button" style="width: %dpx; height: %dpx; font-size: 11px;">%s</button>'
+                   % (w, h, html.escape(o)) for o in P[key]["options"])
+    return ('<div class="ab-enum" data-param="%s" style="display: flex; flex-wrap: wrap; gap: 4px; width: %dpx;">%s</div>'
+            % (key, per * w + (per - 1) * 4, opts))
 
 
 def side_ctl(key, P, inst_name):
@@ -208,7 +221,7 @@ def panel(title, caption, items, top):
                "".join('<div style="display: flex; flex-direction: column; align-items: center;">%s</div>' % i for i in items)))
 
 
-def right_column(tab, inst, title, sub, rows, side, P, info=(), side_title=None):
+def right_column(tab, inst, title, sub, rows, side, P, info=(), side_title=None, side_panels=None):
     ident = IDS.get(inst, TAB_IDS.get(tab, tab[:2]))
     sub_name = "PAGE " + sub if sub in ("A", "B") else ("VOICE" if inst == "fm" else "MIX") if sub == "C" else sub
     words = OLED_LINE.get((tab, sub)) or " &nbsp;".join(
@@ -242,6 +255,9 @@ def right_column(tab, inst, title, sub, rows, side, P, info=(), side_title=None)
         heading = side_title or {"fm": ("FM VOICE", "CHORD + LEVEL"), None: ("DELAY", "CLOCK")}.get(inst, ("LFO", "CLOCK"))
         extra = (heading[0], heading[1], [side_ctl(k, P, title) for k in side])
         panels.insert(0 if inst == "fm" else len(panels), extra)   # FM VOICE first: its Q-Links come first
+    if side_panels:   # the SAMPLES tab: its own panels (LOAD TO as a grid of buttons)
+        panels = [(t, c, [grid(k, P) if len(P[k].get("options", [])) > 2 else side_ctl(k, P, title) for k in keys])
+                  for t, c, keys in side_panels]
     for i, (t, c, items) in enumerate(panels):
         out.append(panel(t, c, items, 30 if i == 0 else 22))
     if info:   # the MIDI and MOD tabs: how they work, in the printing's type
@@ -293,7 +309,8 @@ def main():
             html_pages.append('<div class="ab-page%s" data-page="%s">%s%s%s</div>' % (
                 " on" if not html_pages else "", nm,
                 browser_page() if pg.get("browser") else matrix(rows, P, pg["title"] if inst else "", diag),
-                right_column(tab, inst, pg["title"], sub, rows, pg["side"], P, pg["info"], pg.get("side_title")),
+                right_column(tab, inst, pg["title"], sub, rows, pg["side"], P, pg["info"], pg.get("side_title"),
+                             pg.get("side_panels")),
                 strip(lit)))
     nav = "".join('<button class="ab-tab" type="button" onclick="abShow(%d)">%s</button>' % (i, n)
                   for i, n in enumerate(names))

@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <time.h>
 #include "incipience.h"
 #if defined(__x86_64__) || defined(__i386__)
@@ -440,29 +441,106 @@ static void browse(inc_t *P, const char *path) {   /* show this folder ("" = the
     P->bwait = 1;
 }
 
+static void mark_rows(inc_t *P) {   /* their text and which is lit: MPC asks again */
+    for (int r = 0; r < BROWSE_ROWS; r++) mark(P, P_BR_ROW_1 + r);
+}
+
 static void scroll_to(inc_t *P, int r) {
     int n = P->bl ? P->bl->n : 0, top = n > BROWSE_ROWS ? n - BROWSE_ROWS : 0;
     r = r < 0 ? 0 : r > top ? top : r;
-    if (P->pv[P_BR_SCROLL] != (float)r) mark(P, P_BR_SCROLL);
+    if (P->pv[P_BR_SCROLL] != (float)r) {
+        mark(P, P_BR_SCROLL);
+        mark_rows(P);
+    }
     P->pv[P_BR_SCROLL] = P->ev[P_BR_SCROLL] = (float)r;
 }
 
-/* the listing asked for, once it's read: shown from its top, or around the folder just left (UP) */
+/* ---- 1.1.0: PREVIEW, the cursor's file straight from its folder (no instrument), until it ends or the cursor moves */
+static void preview_stop(inc_t *P) {
+    if (P->prv_slot >= 0) lib_put(P->prv_slot);
+    P->prv_slot = -1;
+    P->prv_want = 0;
+}
+
+static void preview(inc_t *P, int k) {   /* file entry k of the listing shown */
+    preview_stop(P);
+    const lib_list_t *l = P->bl;
+    if (P->pv[P_BR_PREVIEW] < 0.5f || !l || k < l->first_file || k >= l->n || l->e[k].kind != LE_FILE) return;
+    int f = lib_folder_set(l->path, l);
+    if (f < 0) return;   /* (too many folders in one session: LIB_FOLDERS) */
+    smp_t sm;
+    P->prv_f = f;
+    P->prv_k = k - l->first_file;
+    P->prv_want = 1;
+    P->prv_n = 0;
+    lib_put(lib_get(f, P->prv_k, &sm));   /* asked for now: read on the library's thread */
+}
+
+static void preview_block(inc_t *P, float *L, float *R, int n) {   /* mono, -3 dB, under the main VOLUME */
+    const smp_t *s = &P->prv_s;
+    double inc = s->rate * INV_SR;
+    for (int i = 0; i < n; i++) {
+        int j = (int)P->prv_pos;
+        if (j + 1 >= s->len) {
+            preview_stop(P);
+            return;
+        }
+        float fr = (float)(P->prv_pos - j), v = (s->d[j] + (s->d[j + 1] - s->d[j]) * fr) * (0.7f / 32768.0f);
+        L[i] += v;
+        R[i] += v;
+        P->prv_pos += inc;
+    }
+}
+
+/* ---- 1.1.0: the cursor (FILE), an entry of the listing: its row is lit (its value reads 1) and the view follows it */
+static int cursor(const inc_t *P) { return (int)P->pv[P_BR_CURSOR]; }
+
+static void cursor_to(inc_t *P, int k, int hear) {   /* hear: a move of the cursor's own, PREVIEW plays where it lands */
+    const lib_list_t *l = P->bl;
+    int n = l ? l->n : 0, was = cursor(P);
+    k = k >= n ? n - 1 : k;
+    k = k < 0 ? 0 : k;
+    P->pv[P_BR_CURSOR] = P->ev[P_BR_CURSOR] = (float)k;
+    mark(P, P_BR_CURSOR);
+    int s = (int)P->pv[P_BR_SCROLL];
+    if (k < s) scroll_to(P, k);
+    else if (k >= s + BROWSE_ROWS) scroll_to(P, k - BROWSE_ROWS + 1);
+    mark_rows(P);
+    if (hear && k != was) {
+        if (l && k < n && l->e[k].kind == LE_FILE) preview(P, k);
+        else preview_stop(P);
+    }
+}
+
+/* the listing asked for, once it's read; the cursor on the folder just left (UP), on LOAD TO's file (bfind, or the one
+ * it plays if it's in this folder), else at the top; the view around it */
 static void browse_adopt(inc_t *P) {
     if (!P->br) browse(P, P->bpath);   /* the tab's first look: where it was */
     lib_list_t *l = lib_listing(P->br);
     if (!l) return;
-    int at = 0;
-    if (P->bl && l->path[0] && !strncmp(P->bl->path, l->path, strlen(l->path)) && P->bl->path[strlen(l->path)] == '/') {
+    int at = -1, c = (int)P->pv[P_BR_TARGET];
+    for (int k = l->first_file; P->bfind[0] && at < 0 && k < l->n; k++)   /* LOAD TO picked: its file first */
+        if (!strcmp(l->e[k].name, P->bfind)) at = k;
+    if (at < 0 && P->bl && l->path[0] && !strncmp(P->bl->path, l->path, strlen(l->path)) &&
+        P->bl->path[strlen(l->path)] == '/') {
         const char *left = P->bl->path + strlen(l->path) + 1;
         for (int k = 0; k < l->n; k++)
-            if (l->e[k].kind == LE_DIR && !strcmp(l->e[k].name, left)) at = k - BROWSE_ROWS / 2 + 1;
+            if (l->e[k].kind == LE_DIR && !strcmp(l->e[k].name, left)) at = k;
     }
+    const char *mine = lib_path(P->sfold[c]) && !strcmp(lib_path(P->sfold[c]), l->path) ?
+                       lib_name(P->sfold[c], (int)P->pv[SMP_P(c)] - 1) : NULL;
+    for (int k = l->first_file; at < 0 && mine && k < l->n; k++)
+        if (!strcmp(l->e[k].name, mine)) at = k;
+    if (at < 0) at = l->n > 1 && l->e[0].kind == LE_UP ? 1 : 0;
+    P->bfind[0] = 0;
+    preview_stop(P);
     lib_list_free(P->bl);
     P->bl = l;
     P->bwait = 0;
-    scroll_to(P, at);
-    for (int r = 0; r < BROWSE_ROWS; r++) mark(P, P_BR_ROW_1 + r);   /* their text: MPC asks again */
+    P->pv[P_BR_CURSOR] = P->ev[P_BR_CURSOR] = (float)at;
+    mark(P, P_BR_CURSOR);
+    scroll_to(P, at - BROWSE_ROWS / 2 + 1);
+    mark_rows(P);
 }
 
 static int place_top(const inc_t *P, const char *path) {   /* a drive's own folder, or the plugin's samples folder */
@@ -485,17 +563,15 @@ static void browse_up(inc_t *P) {
     browse(P, p);
 }
 
-static void audition(inc_t *P, int c) {   /* PREVIEW: the channel plays its new sample once it's in */
-    if (P->pv[P_BR_PREVIEW] < 0.5f) return;
+static void audition(inc_t *P, int c) {   /* the channel plays its new sample once it's in (PREVIEW on a load, AUDITION) */
     P->aud = c + 1;
     P->aud_n = 0;
 }
 
-static void browse_tap(inc_t *P, int row) {
-    browse_adopt(P);
-    lib_list_t *l = P->bl;
-    int k = (int)P->pv[P_BR_SCROLL] + row, c = (int)P->pv[P_BR_TARGET];
-    if (!l || P->bwait || k >= l->n) return;
+/* entry k: open a folder or a place, go up, back to the set by number, or load a file into LOAD TO's channel */
+static void browse_act(inc_t *P, int k) {
+    const lib_list_t *l = P->bl;
+    int c = (int)P->pv[P_BR_TARGET];
     const lib_ent_t *e = &l->e[k];
     char p[LIB_PATH + 256];
     switch (e->kind) {
@@ -509,7 +585,8 @@ static void browse_tap(inc_t *P, int row) {
         set_folder(P, c, -1);
         sample_ask(P, c, (int)P->pv[SMP_P(c)]);
         mark(P, SMP_P(c));
-        audition(P, c);
+        cursor_to(P, k, 0);
+        if (P->pv[P_BR_PREVIEW] >= 0.5f) audition(P, c);
         break;
     default: {
         int f = lib_folder_set(l->path, l);
@@ -519,16 +596,83 @@ static void browse_tap(inc_t *P, int row) {
         P->pv[SMP_P(c)] = P->ev[SMP_P(c)] = (float)n;
         mark(P, SMP_P(c));
         sample_ask(P, c, n);
-        audition(P, c);
+        preview_stop(P);   /* now heard through the instrument */
+        if (P->pv[P_BR_PREVIEW] >= 0.5f) audition(P, c);
     }
     }
-    for (int r = 0; r < BROWSE_ROWS; r++) mark(P, P_BR_ROW_1 + r);   /* the loaded file's mark moved */
+    mark_rows(P);   /* the loaded file's mark moved */
+}
+
+/* a tap on a row: a folder (or a place, UP) opens; a file gets the cursor and is heard, and a second tap loads it. A row's
+ * value reads 1 while the cursor is on it, so MPC turns that row off on a tap: that's a tap too, unless it comes straight
+ * after the tap that lit it (a host echoing it back) */
+#define ECHO_FRAMES ((uint32_t)(0.1f * SR))
+static void browse_tap(inc_t *P, int row, int on) {
+    browse_adopt(P);
+    const lib_list_t *l = P->bl;
+    int k = (int)P->pv[P_BR_SCROLL] + row;
+    if (!l || P->bwait || k >= l->n) return;
+    if (!on && (k != cursor(P) || P->clock - P->btap_at < ECHO_FRAMES)) return;
+    if (l->e[k].kind == LE_FILE && k != cursor(P)) {
+        cursor_to(P, k, 1);
+        P->btap_at = P->clock;
+        return;
+    }
+    browse_act(P, k);
+}
+
+static void browse_load(inc_t *P) {   /* LOAD: the cursor's entry, as a second tap on its row */
+    browse_adopt(P);
+    if (P->bl && !P->bwait && cursor(P) < P->bl->n) browse_act(P, cursor(P));
+}
+
+/* LOAD TO picked: the list goes to that instrument's own folder, the cursor on the file it plays (on the set by number,
+ * the list stays where it is) */
+static void target_jump(inc_t *P) {
+    int c = (int)P->pv[P_BR_TARGET];
+    mark_rows(P);
+    const char *fp = lib_path(P->sfold[c]), *nm = lib_name(P->sfold[c], (int)P->pv[SMP_P(c)] - 1);
+    if (!fp || !nm) return;
+    if (P->bl && !P->bwait && !strcmp(fp, P->bl->path)) {
+        for (int k = P->bl->first_file; k < P->bl->n; k++)
+            if (!strcmp(P->bl->e[k].name, nm)) cursor_to(P, k, 0);
+        return;
+    }
+    snprintf(P->bfind, sizeof P->bfind, "%s", nm);
+    browse(P, fp);
 }
 
 static int is_mine(const inc_t *P, const lib_list_t *l, int k) {   /* the file LOAD TO's channel plays */
     int c = (int)P->pv[P_BR_TARGET];
-    const char *fp = lib_path(P->sfold[c]);
-    return fp && !strcmp(fp, l->path) && (int)P->pv[SMP_P(c)] == k - l->first_file + 1;
+    const char *fp = lib_path(P->sfold[c]), *nm = lib_name(P->sfold[c], (int)P->pv[SMP_P(c)] - 1);
+    return fp && nm && !strcmp(fp, l->path) && !strcmp(nm, l->e[k].name);   /* by name: the folder may have changed */
+}
+
+/* a name in n characters (MPC shows 24): without ".wav", and when longer its start and end, ".." between (takes of one
+ * sound often differ only at the end: "Kick Hard Room 04") */
+static int fit(char *buf, int len, const char *s, int n, int strip_wav) {
+    int l = (int)strlen(s);
+    if (strip_wav && l > 4 && !strcasecmp(s + l - 4, ".wav")) l -= 4;
+    if (l <= n) return snprintf(buf, len, "%.*s", l, s);
+    int tail = (n - 2) / 2, head = n - 2 - tail;
+    return snprintf(buf, len, "%.*s..%.*s", head, s, tail, s + l - tail);
+}
+
+static int entry_text(const inc_t *P, const lib_list_t *l, int k, char *buf, int len, int marks) {
+    const lib_ent_t *e = &l->e[k];
+    char t[32];
+    switch (e->kind) {
+    case LE_UP: return snprintf(buf, len, ".. UP");
+    case LE_DIR: fit(t, sizeof t, e->name, 22, 0); return snprintf(buf, len, "%s /", t);
+    case LE_PLACE: fit(t, sizeof t, e->name, 24, 0); return snprintf(buf, len, "%s", t);
+    case LE_ALPHABASE:
+        return snprintf(buf, len, "%s%s", marks && P->sfold[(int)P->pv[P_BR_TARGET]] < 0 ? "> " : "", e->name);
+    default: {
+        int mine = marks && is_mine(P, l, k);
+        fit(t, sizeof t, e->name, mine ? 22 : 24, 1);
+        return snprintf(buf, len, "%s%s", mine ? "> " : "", t);
+    }
+    }
 }
 
 static int browse_row(inc_t *P, int row, char *buf, int len) {
@@ -536,14 +680,14 @@ static int browse_row(inc_t *P, int row, char *buf, int len) {
     const lib_list_t *l = P->bl;
     int k = (int)P->pv[P_BR_SCROLL] + row;
     if (!l || k >= l->n) return snprintf(buf, len, "%s", !l && P->bwait && row == 0 ? "READING ..." : " ");
-    const lib_ent_t *e = &l->e[k];
-    switch (e->kind) {
-    case LE_UP: return snprintf(buf, len, ".. UP");
-    case LE_DIR: return snprintf(buf, len, "%.21s /", e->name);
-    case LE_PLACE: return snprintf(buf, len, "%s", e->name);
-    case LE_ALPHABASE: return snprintf(buf, len, "%s%s", P->sfold[(int)P->pv[P_BR_TARGET]] < 0 ? "> " : "", e->name);
-    default: return snprintf(buf, len, "%s%.*s", is_mine(P, l, k) ? "> " : "", (int)strlen(e->name) - 4, e->name);
-    }
+    return entry_text(P, l, k, buf, len, 1);
+}
+
+static int cursor_text(inc_t *P, char *buf, int len) {   /* FILE: the cursor's entry */
+    browse_adopt(P);
+    const lib_list_t *l = P->bl;
+    if (!l || P->bwait) return snprintf(buf, len, "%s", P->bwait ? "READING ..." : "-");
+    return cursor(P) < l->n ? entry_text(P, l, cursor(P), buf, len, 0) : snprintf(buf, len, "-");
 }
 
 static int browse_path(inc_t *P, char *buf, int len) {   /* where it is, its end if long (MPC shows 24 characters) */
@@ -673,6 +817,7 @@ static void pan_gains(inc_t *P, int i) {
 
 static void e_render(void *inst, int16_t *out, int frames) {
     inc_t *P = inst;
+    P->clock += (uint32_t)frames;
     apply_kit(P);
     uint8_t m[3];   /* what MIDI tracks sent to Incipience MIDI In since the last block, channels and all */
     for (int k = 0, n; k < 256 && (n = mi_read(&P->midi_in, m)) > 0; k++) e_midi(P, m, n);
@@ -700,6 +845,16 @@ static void e_render(void *inst, int16_t *out, int frames) {
         }
     }
     if (P->aud_off > 0 && (P->aud_off -= frames) <= 0) smp_release(P, P->aud_ch);
+    if (P->prv_want) {   /* PREVIEW: the cursor's file, once it's in (a second at most) */
+        int sl = lib_get(P->prv_f, P->prv_k, &P->prv_s);
+        if (sl >= 0) {
+            P->prv_slot = sl;
+            P->prv_pos = 0.0;
+            P->prv_want = 0;
+        } else if ((P->prv_n += frames) > (int)SR) {
+            P->prv_want = 0;
+        }
+    }
     fpstate_t fp = ftz_on();
     /* OUT 1-11: this one writes them if it is the main one; an instrument sent to an OUT something plays leaves this
      * mix (its reverb and delay sends stay), and this mix waits a block for it */
@@ -757,6 +912,7 @@ static void e_render(void *inst, int16_t *out, int frames) {
             }
         }
         fx_block(P, rin, din, L, R, n);
+        if (P->prv_slot >= 0) preview_block(P, L, R, n);
         for (int i = 0; i < n; i++) {
             float l = L[i] * vol, r = R[i] * vol;
             uint32_t w = P->hold_w++ & (TAP_HOLD - 1);
@@ -786,6 +942,7 @@ static void *e_create(const char *dir) {
     lib_open(P->dir);
     for (int i = 0; i < NP; i++) P->pv[i] = P->ev[i] = PDEF[i].def;
     for (int c = 0; c < 8; c++) P->sfold[c] = -1;
+    P->prv_slot = -1;
     for (int i = 0; i < NI; i++) P->pan_at[i] = -1.0f;
     P->mrng = 0x6c8e9cf5u;
     P->id = __atomic_fetch_add(&next_id, 1, __ATOMIC_RELAXED);
@@ -799,6 +956,7 @@ static void *e_create(const char *dir) {
     P->choke_n = 1 << 20;
     kits_load(P);
     load_kit(P, 0);
+    browse(P, "");   /* the drives listed now (a few names): ready by the time the SAMPLES tab or the host reads it */
     return P;
 }
 
@@ -810,6 +968,7 @@ static void e_destroy(void *inst) {
     fx_free(&P->fx);
     kits_free(P);
     for (int s = 0; s < 8; s++) smp_drop(P, s);
+    preview_stop(P);
     lib_browser_free(P->br);
     lib_list_free(P->bl);
     lib_close();
@@ -821,6 +980,7 @@ static void e_set_param(void *inst, const char *key, const char *val) {
     inc_t *P = inst;
     if (!strcmp(key, "state")) {
         P->kit_pending = -1;
+        preview_stop(P);
         reset_all(P);
         apply_state(P, val, 0);
         for (int c = 0; c < 8; c++) sample_ask(P, c, (int)P->pv[SMP_P(c)]);
@@ -844,11 +1004,18 @@ static void e_set_param(void *inst, const char *key, const char *val) {
         if (atof(val) >= 0.5) randomise(P, i - P_KD_RAND);
         return;
     }
-    if (PDEF[i].kind == 3 && i >= P_BR_ROW_1) {   /* the SAMPLES tab's taps (each sends 1, its release 0) */
-        if (atof(val) < 0.5) return;
-        if (i < P_BR_ROW_1 + BROWSE_ROWS) browse_tap(P, i - P_BR_ROW_1);
+    if (PDEF[i].kind == 3 && i >= P_BR_ROW_1) {   /* the SAMPLES tab's taps (each sends 1; a lit row, 0: browse_tap) */
+        int on = atof(val) >= 0.5;
+        if (i < P_BR_ROW_1 + BROWSE_ROWS) browse_tap(P, i - P_BR_ROW_1, on);
+        else if (!on) return;
         else if (i == P_BR_UP) browse_up(P);
         else if (i == P_BR_PLACES) browse(P, "");
+        else if (i == P_BR_LOAD) browse_load(P);
+        return;
+    }
+    if (i == P_BR_CURSOR) {   /* FILE: the data wheel, Q-Link 1 or its arrows, one entry at a time */
+        browse_adopt(P);
+        cursor_to(P, (int)lrintf((float)atof(val)), 1);
         return;
     }
     set_value(P, i, val);
@@ -856,10 +1023,15 @@ static void e_set_param(void *inst, const char *key, const char *val) {
     if (c >= 0) {   /* a new sample: start reading it; on a folder of your own, no further than its files */
         if (P->pv[i] > sample_top(P, c) && lib_files(P->sfold[c]) >= 0) P->pv[i] = P->ev[i] = sample_top(P, c);
         sample_ask(P, c, (int)P->pv[i]);
+        if (P->pv[P_BR_AUDITION] >= 0.5f) audition(P, c);   /* AUDITION: turning SAMPLE plays it */
     }
-    if (i == P_BR_SCROLL) scroll_to(P, (int)P->pv[i]);
-    if (i == P_BR_TARGET)
-        for (int r = 0; r < BROWSE_ROWS; r++) mark(P, P_BR_ROW_1 + r);
+    if (i == P_BR_SCROLL) {   /* a page at a time: the cursor stays in view (silently) */
+        browse_adopt(P);
+        scroll_to(P, (int)P->pv[i]);
+        int s0 = (int)P->pv[P_BR_SCROLL], k = cursor(P), last = s0 + BROWSE_ROWS - 1;
+        if (k < s0 || k > last) cursor_to(P, k < s0 ? s0 : last, 0);
+    }
+    if (i == P_BR_TARGET) target_jump(P);
 }
 
 void mpc_engine_transport(void *inst, double bpm, double ppq, int playing) {
@@ -888,13 +1060,14 @@ static int display(inc_t *P, int i, char *buf, int len) {
     if (i >= P_BR_ROW_1 && i < P_BR_ROW_1 + BROWSE_ROWS) return browse_row(P, i - P_BR_ROW_1, buf, len);
     /* the rows shown (the box beside FOLDER says how many there are: this one mustn't change as a listing comes in) */
     if (i == P_BR_SCROLL) return snprintf(buf, len, "ROWS %d-%d", iv + 1, iv + BROWSE_ROWS);
+    if (i == P_BR_CURSOR) return cursor_text(P, buf, len);
     if (ENDS("_sample")) {
         int c = sample_chan(i);
         if (c >= 0 && P->sfold[c] >= 0) {   /* a file of the channel's own folder, by name */
             const char *nm = lib_name(P->sfold[c], iv - 1);
             if (lib_files(P->sfold[c]) < 0) return snprintf(buf, len, "READING");
             if (iv == 0) return snprintf(buf, len, "OFF");
-            return nm ? snprintf(buf, len, "%.*s", (int)strlen(nm) - 4, nm) : snprintf(buf, len, "%03d (none)", iv);
+            return nm ? fit(buf, len, nm, 24, 1) : snprintf(buf, len, "%03d (none)", iv);
         }
         if (iv == 0) return snprintf(buf, len, "OFF");
         return snprintf(buf, len, pool_exists(iv) ? "%03d" : "%03d (none)", iv);
@@ -985,6 +1158,8 @@ static int e_get_param(void *inst, const char *key, char *buf, int len) {
     }
     int i = find_key(key);
     if (i >= 0) {
+        if (i >= P_BR_ROW_1 && i < P_BR_ROW_1 + BROWSE_ROWS)   /* lit: the cursor's row */
+            return snprintf(buf, len, "%d", P->bl && !P->bwait && (int)P->pv[P_BR_SCROLL] + i - P_BR_ROW_1 == cursor(P));
         if (PDEF[i].kind == 0) return snprintf(buf, len, "%.2f", P->pv[i]);
         if (PDEF[i].kind == 1 || PDEF[i].kind == 4) return snprintf(buf, len, "%d", (int)P->pv[i]);
         return snprintf(buf, len, "0");

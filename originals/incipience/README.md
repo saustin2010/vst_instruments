@@ -4,10 +4,11 @@
 
 <img src="screenshots/page_0.png" width="760" alt="Incipience's KICK page">
 
-**Status (2026-10-19): 1.0.0 released** ([Releases](https://github.com/saustin2010/mpc-vst-incipience/releases)), with
-[FX] Incipience OUT 1.0.0 as a zip of its own. Played on an MPC Live II since 2026-10-13; the 1.0.0 release zips
-installed and checked there by the owner (2026-10-19). Offered to sd88me's plugin catalogue. One thing still open:
-MPC's data wheel doesn't turn Incipience's controls (Q-Links and touch do). What's next is in
+**Status (2026-10-19): 1.1.0, a new sample browser** (below: [Your own samples](#your-own-samples-the-samples-tab)),
+offline so far. 1.0.0 is released ([Releases](https://github.com/saustin2010/mpc-vst-incipience/releases)), with
+[FX] Incipience OUT 1.0.0 as a zip of its own, and its release zips were checked on an MPC Live II by the owner
+(2026-10-19); offered to sd88me's plugin catalogue. Played on the Live II since 2026-10-13. MPC's data wheel turns
+the control you've selected: tap a box (SAMPLE, FILE ...) first (owner, 2026-10-19). What's next is in
 [ROADMAP.md](https://github.com/saustin2010/vst_instruments/blob/main/ROADMAP.md#new-plugins).
 
 ## On the MPC
@@ -17,7 +18,7 @@ MPC's data wheel doesn't turn Incipience's controls (Q-Links and touch do). What
   and its screen.
 - Data folder: `incipience/` next to `incipience.so` (with the vst_instruments installer, `/sdcard/vst/incipience/`):
   where the AlphaBase's samples go ([below](#samples)), and a `samples/` folder of your own if you like
-- 730 parameters (all automatable) on 17 tabs: a tab per instrument with three Q-Link sub-pages, then FX, MIX, MOD,
+- 735 parameters (all automatable) on 17 tabs: a tab per instrument with three Q-Link sub-pages, then FX, MIX, MOD,
   MIDI & OUT, MIDI MOD and SAMPLES
 - 5 kits built in, in MPC's PRESET menu; 3 more with the AlphaBase's samples in the data folder
 - **[FX] Incipience OUT** ([incipienceout](incipienceout/)) puts an instrument on a track of its own ([below](#outputs-out-1-11))
@@ -156,20 +157,38 @@ MBrane, metal noise through the filters, the self-oscillating filters and the FM
 Any folder of WAV files on the MPC: its internal drive, an SD card, an SSD, a USB drive, or a `samples` folder you make
 in the plugin's data folder (`incipience/samples/` next to `incipience.so`).
 
-- **Browse:** DRIVES lists the places (SAMPLE SET BY NUMBER, INCIPIENCE SAMPLES if that folder is there, then the drives);
-  tap one, then its folders (`.. UP` or the UP button goes back). Eight rows at a time: SCROLL (its Q-Link, or its
-  arrows, a page a tap). FOLDER shows where you are (its end, if long: MPC shows 24 characters), the box beside it
-  how many WAV files there are.
-- **Load:** tap a WAV file: it loads into LOAD TO's instrument (CL HAT ... RIDE, X1, X2; X1 to start with) and, with
-  PREVIEW on, plays once. A `>` marks the file LOAD TO's instrument plays.
-- **Point to a folder:** after that, that instrument's SAMPLE shows the file's name and steps through the folder's WAV
-  files in name order ("Kick 2" before "Kick 10"; the first 255), with its arrows or its Q-Link. RANDOMISE picks one of
-  them, and a mod slot or a lane on SAMPLE spans them (+-100 % is the whole folder). SAMPLE SET BY NUMBER, at the top
-  of the places, takes LOAD TO's instrument back to the AlphaBase set by number; so does loading a kit.
+<img src="screenshots/page_16.png" width="500" alt="The SAMPLES tab">
+
+Since 1.1.0 (owner, 2026-10-19: "a bit clunky") it works like MPC's own browser: a cursor goes through the list and
+you hear each file as you land on it, before anything is loaded.
+
+- **The cursor (FILE):** its row is lit, and the FILE box under the list shows its name. Move it with the **data
+  wheel** (tap the FILE box first), **Q-Link 1** or the box's arrows, one entry at a time. **SCROLL** (Q-Link 2, or
+  its arrows) moves a page at a time, taking the cursor along. With **PREVIEW** on, each file plays as the cursor
+  lands on it, straight from the folder: no instrument, no effects, at Incipience's VOLUME, until it ends or the
+  cursor moves on.
+- **Tap a row:** a folder (or a drive, or `.. UP`) opens. A file gets the cursor and plays; **tap it again**, or press
+  **LOAD**, and it loads into LOAD TO's instrument, which then plays it once through its own sound (PREVIEW on).
+- **LOAD TO** is eight buttons: CL HAT, OP HAT, CLAP, RIM, CRASH, RIDE, X1, X2 (X1 to start with). Picking an
+  instrument that already plays a file of yours takes the list to its folder, the cursor on that file, so you can try
+  its neighbours; an instrument on the AlphaBase set leaves the list where it is. So pick first, then load.
+- **DRIVES** lists the places: SAMPLE SET BY NUMBER, INCIPIENCE SAMPLES if that folder is there, then the drives. UP
+  goes back a folder, and the cursor lands on the folder you came from. FOLDER above the list shows where you are (its
+  end, if long), the box beside it how many WAV files there are. A `>` marks the file LOAD TO's instrument plays.
+- **Names:** without `.wav`, and a name longer than the row shows its start and end with `..` between (MPC shows 24
+  characters), so takes that differ at the end ("Kick Hard Room 03", "... 04") stay apart.
+- **AUDITION** (beside PREVIEW, off to start with): turning an instrument's **SAMPLE** on its own page (Q-Link, data
+  wheel or arrows) plays each sample once as you dial, through the instrument: the AlphaBase set by number too. Leave
+  it off while a sequence plays the instrument, or the dial adds hits.
+- **Point to a folder:** after a load, that instrument's SAMPLE shows the file's name and steps through the folder's
+  WAV files in name order ("Kick 2" before "Kick 10"; the first 255), one a Q-Link tick. RANDOMISE picks one of them,
+  and a mod slot or a lane on SAMPLE spans them (+-100 % is the whole folder). SAMPLE SET BY NUMBER takes LOAD TO's
+  instrument back to the AlphaBase set by number; so does loading a kit.
 - **Files:** WAV, 8, 16, 24 or 32-bit or 32-bit float, any sample rate (played at its own pitch), stereo mixed to
-  mono, the first minute, 64 MB a file at most. A file is read when something first asks for it (a hit, a tap, a step of
-  SAMPLE), on a thread of its own, never the audio's: the hit that asks plays without it. 64 MB of files stay in memory;
-  past that, the ones longest unplayed are let go (and read again when asked for), never one a voice is playing.
+  mono, the first minute, 64 MB a file at most. A file is read when something first asks for it (the cursor, a load, a
+  step of SAMPLE), on a thread of its own, never the audio's: what asks plays as soon as it's in (a preview waits up to a
+  second). 64 MB of files stay in memory; past that, the ones longest unplayed are let go (and read again when asked
+  for), never one that's playing.
 - **Saved:** the project keeps each instrument's folder and the file's name, and finds the file again by name (files
   added to the folder since don't matter). A folder that isn't there (a drive not plugged in) plays no sample until you
   load another. A folder changed on disk while the plugin is open shows its new files when you browse into it again.
@@ -221,13 +240,14 @@ build/render <data folder or ""> build/renders kit           # every kit: each i
 build/render <data folder or ""> build/renders script <file>  # one WAV per line: name;key=value;...;hits=kd@0,ch@0.5
 ```
 
-`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (730 parameters; the
-first 414 are as they were before 2026-10-17, the first 702 before 2026-10-18: MPC saves projects and Q-Links by
-number).
+`python3 mpc/gen.py` writes `params.json`, `src/params_def.h` and the page plan from one list (735 parameters; the
+first 414 are as they were before 2026-10-17, the first 702 before 2026-10-18, the first 730 in 1.0.0: MPC saves
+projects and Q-Links by number).
 
 `mpc/selftest.c` checks KEYS CH and pitch bend, the lanes, the matrix, RANDOMISE (40 rolls an instrument: in range,
 the mix kept, every roll heard), your own samples (five kinds of WAV file written and read back, a folder's order, the
-SAMPLES tab's browsing, a file loaded and played, found by name from the state, RANDOMISE and the matrix within the
+SAMPLES tab's browsing (1.1.0: the cursor by tap, FILE and SCROLL, its row lit, the file heard from the folder, a
+second tap or LOAD, MPC's echo of a tap ignored, LOAD TO's folder, long names, AUDITION), a file loaded and played, found by name from the state, RANDOMISE and the matrix within the
 folder, a kit back to the sample set, and 47 files of 1.8 MB played while another instrument holds one, past the 64 MB:
 it runs clean under ASan/UBSan, which would catch a file freed under a voice, and TSan), the saved state's size (at
 most 6.3 KB of the wrapper's 8 KB) and OUT 1-11 with Incipience OUT loaded as a library of its own (the comment at its

@@ -157,6 +157,12 @@ static int row_is(inc_t *P, int r, const char *want) {
     E->get_param(P, k, b, sizeof b);
     return !strcmp(b, want);
 }
+static int row_val(inc_t *P, int r) {   /* 1: lit (the cursor's row) */
+    char k[32], b[64];
+    snprintf(k, sizeof k, "br_row_%d", r);
+    E->get_param(P, k, b, sizeof b);
+    return atoi(b);
+}
 static const char *rows(inc_t *P) {
     static char all[600];
     all[0] = 0;
@@ -437,16 +443,56 @@ int main(int argc, char **argv) {
         CHECK(!strcmp(buf, "4 WAVS"), "status %s", buf);
         E->get_param(P, "br_path", buf, sizeof buf);
         CHECK(!strcmp(buf, "INCIPIENCE"), "path %s", buf);
-        /* tapped: X1 (LOAD TO, to start with) plays it, PREVIEW on */
+        /* 1.1.0: the cursor starts at the top (on Sub, after ..); a tap on a file puts it there, lights its row and plays
+         * the file straight from the folder (PREVIEW on); X1 is unchanged */
+        CHECK(P->pv[P_BR_CURSOR] == 1.0f && row_val(P, 2) == 1 && row_val(P, 1) == 0, "the cursor at the top: %g",
+              P->pv[P_BR_CURSOR]);
         set(P, "br_row_4", "1");
-        CHECK(P->sfold[6] >= 0 && P->pv[P_X1_SAMPLE] == 2.0f, "X1: folder %d, SAMPLE %g", P->sfold[6], P->pv[P_X1_SAMPLE]);
-        int16_t *o = NULL;
+        E->get_param(P, "br_cursor_display", buf, sizeof buf);
+        CHECK(P->pv[P_BR_CURSOR] == 3.0f && !strcmp(buf, "Kick 2") && row_val(P, 4) == 1 && row_val(P, 2) == 0 &&
+              P->sfold[6] < 0, "a tap: cursor %g (%s), X1 folder %d", P->pv[P_BR_CURSOR], buf, P->sfold[6]);
+        for (int b = 0; b < 400 && P->prv_slot < 0; b++) free(run_rt(P));
+        CHECK(P->prv_slot >= 0 && P->prv_s.len == 4410 && !P->sv[6].active, "PREVIEW didn't play the file under the cursor");
+        int16_t *o = run(P, 20);
+        CHECK(energy(o, 20 * B) > 1e6, "the cursor's PREVIEW is silent");
+        free(o);
+        /* MPC turning the lit row off straight after (an echo) isn't a tap; a while later it is: X1 (LOAD TO, to start
+         * with) loads it and plays it, PREVIEW on */
+        set(P, "br_row_4", "0");
+        CHECK(P->sfold[6] < 0, "an echo loaded the file");
+        free(run(P, 40));
+        set(P, "br_row_4", "0");
+        CHECK(P->sfold[6] >= 0 && P->pv[P_X1_SAMPLE] == 2.0f && P->prv_slot < 0, "X1: folder %d, SAMPLE %g",
+              P->sfold[6], P->pv[P_X1_SAMPLE]);
         for (int b = 0; b < 400 && !P->sv[6].active; b++) free(run_rt(P));
         CHECK(P->sv[6].active && P->sv[6].s.len == 4410 && P->sv[6].lslot >= 0, "PREVIEW didn't play X1's new sample");
         o = run(P, 20);
         CHECK(energy(o, 20 * B) > 1e6, "PREVIEW is silent");
         free(o);
         CHECK(row_is(P, 4, "> Kick 2"), "the loaded file's mark: %s", rows(P));
+        /* FILE (the data wheel, Q-Link 1): one entry at a time, heard; LOAD loads it; past the end it stays */
+        seti(P, "br_cursor", 4);
+        for (int b = 0; b < 400 && P->prv_slot < 0; b++) free(run_rt(P));
+        CHECK(P->prv_slot >= 0 && P->pv[P_X1_SAMPLE] == 2.0f, "FILE 4: PREVIEW %d, X1 %g", P->prv_slot, P->pv[P_X1_SAMPLE]);
+        set(P, "br_load", "1");
+        CHECK(P->pv[P_X1_SAMPLE] == 3.0f, "LOAD: X1 %g", P->pv[P_X1_SAMPLE]);
+        seti(P, "br_cursor", 99);
+        CHECK(P->pv[P_BR_CURSOR] == 5.0f, "FILE past the end: %g", P->pv[P_BR_CURSOR]);
+        seti(P, "br_cursor", 3);
+        set(P, "br_row_4", "1");   /* a tap on the cursor's row (MPC saw it off): loads */
+        CHECK(P->pv[P_X1_SAMPLE] == 2.0f, "a tap on the cursor's row: X1 %g", P->pv[P_X1_SAMPLE]);
+        /* AUDITION: turning SAMPLE plays it (off: it doesn't) */
+        for (int b = 0; b < 400 && P->aud; b++) free(run_rt(P));
+        free(run(P, 100));
+        seti(P, "x1_sample", 3);
+        CHECK(!P->aud, "AUDITION off, SAMPLE played");
+        set(P, "br_audition", "1");
+        seti(P, "x1_sample", 2);
+        CHECK(P->aud == 7, "AUDITION on: SAMPLE didn't play");
+        for (int b = 0; b < 400 && P->aud; b++) free(run_rt(P));
+        CHECK(P->sv[6].active, "AUDITION: X1 silent");
+        set(P, "br_audition", "0");
+        free(run(P, 100));
         E->get_param(P, "x1_sample_display", buf, sizeof buf);
         CHECK(!strcmp(buf, "Kick 2"), "X1 SAMPLE shows %s", buf);
         seti(P, "x1_sample", 3);
@@ -470,9 +516,11 @@ int main(int argc, char **argv) {
         browse_wait(P);
         set(P, "br_row_2", "1");
         browse_wait(P);
-        CHECK(row_is(P, 4, "Kick 1b") && row_is(P, 7, "> snare") == 0 && row_is(P, 7, "snare"), "re-listed: %s", rows(P));
+        /* X1 plays snare from the folder as it was: marked by name (1.0.0 marked by number, the wrong file once one was added) */
+        CHECK(row_is(P, 4, "Kick 1b") && row_is(P, 7, "> snare") && P->pv[P_BR_CURSOR] == 6.0f, "re-listed: %s", rows(P));
         int old = P->sfold[6];
         set(P, "br_row_7", "1");
+        set(P, "br_load", "1");
         CHECK(P->sfold[6] != old && P->pv[P_X1_SAMPLE] == 5.0f, "the new folder: %d (was %d), SAMPLE %g", P->sfold[6], old,
               P->pv[P_X1_SAMPLE]);
         /* RANDOMISE: a file of the folder */
@@ -499,7 +547,27 @@ int main(int argc, char **argv) {
         set(P, "br_row_2", "1");
         browse_wait(P);
         set(P, "br_row_3", "1");
+        set(P, "br_load", "1");
         CHECK(P->sfold[6] >= 0, "loaded again");
+        /* LOAD TO: X2 (on the set by number) leaves the list where it is; Sub's file into X2, then X1: the list goes
+         * to X1's folder, the cursor on its file */
+        set(P, "br_target", "7");
+        CHECK(row_is(P, 3, "> kick 1") == 0 && row_is(P, 2, "Sub /"), "X2 picked: %s", rows(P));
+        set(P, "br_row_2", "1");   /* Sub */
+        browse_wait(P);
+        set(P, "br_load", "1");    /* inner, the cursor's to start with */
+        CHECK(P->sfold[7] >= 0 && P->pv[P_X2_SAMPLE] == 1.0f, "X2: folder %d, SAMPLE %g", P->sfold[7], P->pv[P_X2_SAMPLE]);
+        set(P, "br_target", "6");
+        browse_wait(P);
+        E->get_param(P, "br_cursor_display", buf, sizeof buf);
+        CHECK(!strcmp(buf, "kick 1") && row_is(P, 3, "> kick 1"), "X1 picked: the cursor on %s, %s", buf, rows(P));
+        /* a long name: its start and end, 24 characters */
+        write_wav("build/libtest/samples/A long kick drum name take 04.wav", 441, 1, 16, 1, 44100, 0.5f);
+        set(P, "br_up", "1");
+        browse_wait(P);
+        set(P, "br_row_2", "1");
+        browse_wait(P);
+        CHECK(row_is(P, 3, "A long kick..ame take 04") && row_is(P, 4, "> kick 1"), "a long name: %s", rows(P));
         set(P, "kit", "1");
         free(run(P, 1));
         CHECK(P->sfold[6] < 0, "a kit keeps X1's folder");
@@ -528,6 +596,7 @@ int main(int argc, char **argv) {
         set(P, "br_target", "7");   /* X2 */
         set(P, "x2_loopon", "1");
         set(P, "br_row_2", "1");    /* b00 */
+        set(P, "br_load", "1");
         for (int b = 0; b < 400 && !P->sv[7].active; b++) free(run_rt(P));
         CHECK(P->sv[7].active, "X2 plays b00");
         free(run(P, 100));          /* PREVIEW's quarter-second tap over */
@@ -540,6 +609,7 @@ int main(int argc, char **argv) {
             char key[32];
             snprintf(key, sizeof key, "br_row_%d", row);
             set(P, key, "1");
+            set(P, "br_load", "1");
             CHECK(P->pv[P_X1_SAMPLE] == k + 1, "b%02d: SAMPLE %g (row %d)", k, P->pv[P_X1_SAMPLE], row);
             for (int b = 0; b < 400 && P->aud; b++) free(run_rt(P));
             played += P->sv[6].active && P->sv[6].s.len == 20 * 44100;
@@ -551,7 +621,8 @@ int main(int argc, char **argv) {
         free(o);
         E->destroy(P);
         fail = system("rm -rf build/libtest");
-        printf("ok   your own samples: 5 kinds of WAV, a folder in name order, browsed, loaded, played, by name in the state; "
+        printf("ok   your own samples: 5 kinds of WAV, a folder in name order, browsed (the cursor: taps, FILE, LOAD, lit rows, "
+               "PREVIEW from the folder, LOAD TO's folder, long names), loaded, played, AUDITION, by name in the state; "
                "past 64 MB, 47 files played while X2 held one\n");
     }
 

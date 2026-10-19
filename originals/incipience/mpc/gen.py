@@ -281,7 +281,7 @@ def build():
     # TO's channel, whose SAMPLE then steps through that folder. The rows show the engine's text (their value is a tap)
     for r in range(1, BROWSE_ROWS + 1):
         P.append(dict(key="br_row_%d" % r, name="ROW %d" % r, momentary=True, dynamic_display=True))
-    step("br_scroll", "SCROLL", 0, 0, 999, **LONG)
+    step("br_scroll", "SCROLL", 0, 0, 999)   # a page a Q-Link tick (FILE is the fine one)
     P.append(dict(key="br_scroll_prev", name="SCROLL UP", momentary=True, step_of="br_scroll", step_delta=-BROWSE_ROWS))
     P.append(dict(key="br_scroll_next", name="SCROLL DOWN", momentary=True, step_of="br_scroll", step_delta=BROWSE_ROWS))
     P.append(dict(key="br_path", name="FOLDER", min=0, max=0, display="string", type="readout"))
@@ -290,6 +290,14 @@ def build():
     opts("br_preview", "PREVIEW", ONOFF, 1)
     P.append(dict(key="br_up", name="UP", momentary=True))
     P.append(dict(key="br_places", name="DRIVES", momentary=True))
+    # 1.1.0 (owner, 2026-10-19: the browser is "a bit clunky"): a cursor, FILE (the data wheel on its box, Q-Link 1 or
+    # its arrows: one entry at a time), whose row is lit and whose file plays as it lands (PREVIEW); a tap on a row puts
+    # the cursor there, a second tap or LOAD loads it into LOAD TO's instrument (eight buttons now); AUDITION: turning an
+    # instrument's SAMPLE plays it once
+    step("br_cursor", "FILE", 0, 0, 999, clamped=True, **LONG)
+    arrows("br_cursor", "FILE")
+    P.append(dict(key="br_load", name="LOAD", momentary=True))
+    opts("br_audition", "AUDITION", ONOFF, 0)
     return P
 
 
@@ -478,12 +486,13 @@ PAGES += [
     ("SAMPLES", None, "SAMPLE BROWSER", {
         "pages": [("BROWSE", [])],
         "browser": True,
-        "side": ["br_target", "br_preview"],
-        "side_title": ["LOAD", "TO + PREVIEW"],
-        "also": ["br_scroll", "br_path", "br_status"],
-        "qlinks": ["br_scroll", "-", "-", "-", "br_target", "-", "-", "-", "br_preview", "-", "-", "-", "-", "-", "-", "-"],
-        "info": ["TAP A FOLDER TO OPEN IT, A WAV FILE TO", "LOAD IT INTO LOAD TO'S INSTRUMENT:", "ITS SAMPLE THEN STEPS THROUGH THAT",
-                 "FOLDER. SAMPLE SET BY NUMBER (DRIVES):", "BACK TO THE DATA FOLDER'S SAMPLES"]}),
+        "side": ["br_target", "br_preview", "br_audition"],
+        "side_panels": [("LOAD TO", "PICK, THEN LOAD", ["br_target"]),
+                        ("LISTEN", "FILES AS YOU GO + SAMPLE DIAL", ["br_preview", "br_audition"])],
+        "also": ["br_scroll", "br_cursor", "br_path", "br_status"],
+        "qlinks": ["br_cursor", "br_scroll", "-", "-", "br_target", "-", "-", "-", "br_preview", "br_audition", "-", "-",
+                   "-", "-", "-", "-"],
+        "info": []}),
 ]
 
 
@@ -628,7 +637,8 @@ if __name__ == "__main__":
     json.dump([{"tab": t, "inst": k, "title": ti, "subs": [s[0] for s in subpages(t, k, pg)],
                 "sub_rows": [s[1] for s in subpages(t, k, pg)], "sub_kind": [s[2] for s in subpages(t, k, pg)],
                 "qlinks_c": mix_qlinks(k, pg["side"]) if k else None, "side": pg["side"], "info": pg.get("info", []),
-                "browser": pg.get("browser", False), "side_title": pg.get("side_title"), "qlinks": pg.get("qlinks")}
+                "browser": pg.get("browser", False), "side_title": pg.get("side_title"), "qlinks": pg.get("qlinks"),
+                "side_panels": pg.get("side_panels")}
                for t, k, ti, pg in PAGES],
               open(os.path.join(ROOT, "build", "pages.json"), "w"), indent=1)
     json.dump({"name": "Incipience", "params": P}, open(os.path.join(ROOT, "params.json"), "w"), indent=1)

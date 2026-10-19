@@ -212,6 +212,14 @@ typedef struct inc {
     char bpath[LIB_PATH];         /* the folder asked for ("" = the places) */
     int bwait;                    /* a listing is on its way */
     int aud, aud_n, aud_off, aud_ch;   /* PREVIEW: channel + 1 waiting to play, frames waited; frames to its release */
+    /* 1.1.0: the file under the cursor (FILE), played as it lands, straight from its folder (PREVIEW) */
+    int prv_slot;                 /* the library file playing (held), or -1 */
+    int prv_f, prv_k, prv_want, prv_n;   /* the one asked for: folder, file; waiting for it, frames waited */
+    smp_t prv_s;
+    double prv_pos;
+    uint32_t clock;               /* frames played: a tap told from MPC turning off the row it lit */
+    uint32_t btap_at;             /* when a tap last lit a row */
+    char bfind[128];              /* a file to put the cursor on once its folder is listed (LOAD TO's own) */
 } inc_t;
 
 void kick_trigger(inc_t *P, const play_t *pl);

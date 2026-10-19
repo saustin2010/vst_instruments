@@ -9343,9 +9343,7 @@
    "max": 999,
    "step": 1,
    "default": 0,
-   "dynamic_display": true,
-   "display": "int",
-   "nudge_pct": 10
+   "dynamic_display": true
   },
   {
    "key": "br_scroll_prev",
@@ -9410,6 +9408,47 @@
    "key": "br_places",
    "name": "DRIVES",
    "momentary": true
+  },
+  {
+   "key": "br_cursor",
+   "name": "FILE",
+   "type": "stepper",
+   "min": 0,
+   "max": 999,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true,
+   "clamped": true,
+   "display": "int",
+   "nudge_pct": 10
+  },
+  {
+   "key": "br_cursor_prev",
+   "name": "FILE DOWN",
+   "momentary": true,
+   "step_of": "br_cursor",
+   "step_delta": -1
+  },
+  {
+   "key": "br_cursor_next",
+   "name": "FILE UP",
+   "momentary": true,
+   "step_of": "br_cursor",
+   "step_delta": 1
+  },
+  {
+   "key": "br_load",
+   "name": "LOAD",
+   "momentary": true
+  },
+  {
+   "key": "br_audition",
+   "name": "AUDITION",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
   }
  ]
 }
