@@ -1,17 +1,24 @@
 # Incipience
 
-**Drum synth** · Eleven instruments laid out like the Jomox AlphaBase Mk II analog drum machine, with its controls and
-0-127 ranges; plays the AlphaBase's own sample set. · maker in MPC: Steve A · written for this repo · licence: MIT
-([`LICENSE`](LICENSE))
+**Drum synth** · Eleven instruments laid out like the Jomox AlphaBase Mk II analog drum machine, with its controls and 0-127 ranges; plays the AlphaBase's own sample set and your own WAV files. · maker in MPC: Steve A · written for this repo · licence: MIT ([`LICENSE`](LICENSE))
 
 <img src="screenshots/page_0.png" width="760" alt="Incipience's KICK page">
 
-**Status (2026-10-18): in testing.** Played on an MPC Live II since 2026-10-13. On the Live II since 2026-10-18: every
-instrument playable chromatically on a MIDI channel of its own, OUT 1-11 with [FX] Incipience OUT, MIDI MOD lanes and
-a mod matrix, as on [Percolator](../percolator/). New on 2026-10-18, offline so far (`tools/build.sh`: PASSED,
-`check_skin.py`: OK, `mpc/selftest.c`: PASSED, also under ASan/UBSan and TSan): your own samples from the MPC's drives
-(the SAMPLES tab), RANDOMISE on each instrument, NOISE VOL beside SAMPLE. What's next is in
-[ROADMAP.md](../../ROADMAP.md#new-plugins).
+**Status (2026-10-19): 1.0.0, the first release.** Played on an MPC Live II since 2026-10-13; everything below was
+tried there by the owner by 2026-10-19. One thing still open: MPC's data wheel doesn't turn Incipience's controls (Q-Links and
+touch do). What's next is in [ROADMAP.md](https://github.com/saustin2010/vst_instruments/blob/main/ROADMAP.md#new-plugins).
+
+## On the MPC
+
+- In the plugin browser: **[DRUM] Incipience** by **Steve A** (Drum Machine)
+- Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [DRUM] Incipience/`, holding `incipience.so`, its screen. The vst_instruments installer puts `incipience.so` in `/sdcard/vst/` instead.
+  and its screen.
+- Data folder: `incipience/` next to `incipience.so` (with the vst_instruments installer, `/sdcard/vst/incipience/`):
+  where the AlphaBase's samples go ([below](#samples)), and a `samples/` folder of your own if you like
+- 730 parameters (all automatable) on 17 tabs: a tab per instrument with three Q-Link sub-pages, then FX, MIX, MOD,
+  MIDI & OUT, MIDI MOD and SAMPLES
+- 5 kits built in, in MPC's PRESET menu; 3 more with the AlphaBase's samples in the data folder
+- **[FX] Incipience OUT** ([incipienceout](incipienceout/)) puts an instrument on a track of its own ([below](#outputs-out-1-11))
 
 ## What it is
 
@@ -78,11 +85,6 @@ kit you like (MPC's Program save keeps the plugin's state).
 | MIDI MOD (WHEEL, GP 1-3) | <img src="screenshots/page_15.png" width="250"> | <img src="screenshots/page_15_1.png" width="250"> | |
 | SAMPLES | <img src="screenshots/page_16.png" width="250"> | | |
 
-How it's made: the Stitch design is one page, KICK A (`design/stitch-kick.html`, as Stitch wrote it); `mpc/design.py`
-writes every page in its markup (`design/stitch.html`), the repo's `convert.py` turns that into the layout, and
-`mpc/merge_ab.py` folds each tab's two pages into Q-Link sub-pages. `mpc/screen.sh` runs it all, through the build,
-`check_skin.py` and these screenshots.
-
 ## Playing it from MIDI tracks (as Percolator)
 
 - **Pads:** each instrument plays on its NOTE as tuned (36-46 to start with: pads 1-11 of bank B on the plugin's own
@@ -126,15 +128,30 @@ offline, 60 s of all eleven instruments busy rendered in 0.48 s without slots an
 ## Samples
 
 The sample channels play the AlphaBase's samples by number, as its SAMPLE control does: sample `n` is `ABWV<nnnn>.raw`
-(16-bit, 48 kHz, mono, no header) or `ABWV<nnnn>.wav` in the data folder. Jomox gives its sample set away
-(`AlphaBaseWaves.zip` and `ABmk2Waves.zip` on jomox.de: the same 254 samples); they aren't shipped here. Without them
-the built-in kits still play: they use the kick, the MBrane, metal noise through the filters, the self-oscillating
-filters and the FM synth.
+(16-bit, 48 kHz, mono, no header) or `ABWV<nnnn>.wav` (16-bit PCM, any rate) in the data folder. Jomox gives its
+sample set away, and it isn't shipped here: download
+[`AlphaBaseWaves.zip`](https://www.jomox.de/upload/updates/AlphaBaseWaves.zip) (or the Mk II's
+[`ABmk2Waves.zip`](https://www.jomox.de/upload/updates/ABmk2Waves.zip): the same 254 samples; both are under Updates on
+the AlphaBase pages of [jomox.de](https://www.jomox.de)) and unzip it into the data folder, then insert Incipience
+again. From a computer, with the release installed:
+
+```
+scp AlphaBaseWaves.zip root@<mpc-address>:/tmp/
+ssh root@<mpc-address>
+cd "/sdcard/Synths/Steve A - VST - [DRUM] Incipience" && mkdir -p incipience && cd incipience
+unzip -o /tmp/AlphaBaseWaves.zip && rm /tmp/AlphaBaseWaves.zip
+```
+
+(With the vst_instruments installer the data folder is `/sdcard/vst/incipience/`, or unzip it into
+`presets/incipience/` before running `install.sh`.) The files may also sit one folder down, as Windows' "Extract All"
+leaves them (`incipience/AlphaBaseWaves/ABWV0000.raw ...`). The zip's `ABWV0300.raw` holds the AlphaBase's 64 LFO
+waves, which then replace Incipience's own. Without the set the built-in kits still play: they use the kick, the
+MBrane, metal noise through the filters, the self-oscillating filters and the FM synth.
 
 ## Your own samples: the SAMPLES tab
 
 Any folder of WAV files on the MPC: its internal drive, an SD card, an SSD, a USB drive, or a `samples` folder you make
-in the plugin's own (`/sdcard/vst/incipience/samples/`).
+in the plugin's data folder (`incipience/samples/` next to `incipience.so`).
 
 - **Browse:** DRIVES lists the places (ALPHABASE SET, INCIPIENCE SAMPLES if that folder is there, then the drives);
   tap one, then its folders (`.. UP` or the UP button goes back). Eight rows at a time: SCROLL (its Q-Link, or its
@@ -162,9 +179,38 @@ every control moved, in the wrapper's 8 KB, with room for the folders); projects
 In MPC's PRESET menu: **Init**, **Analog Basics**, **Low and Slow** (808-style kick, filter toms), **Hard Drive**
 (909-style) and **Membranes**, which use no samples; with the AlphaBase's sample set in the data folder also **Sampled
 House**, **Sampled Techno** and **Synth Filters** (its synth notes through the resonant filters), the kick and MBrane
-still analog. The AlphaBase's own 63 factory kits (its `ABPR0000.BIN`) need its kit format decoded: not yet.
+still analog. The AlphaBase's own factory kits (its `ABPR0000.BIN`: 51 in the Mk I download, 62 in the Mk II's) need
+its kit format decoded: not yet.
 
-## Rendering offline
+## Install
+
+Needs a standalone MPC or Force on MPC OS 3.x with root SSH access (checked on an MPC Live II).
+
+**From the release:** download `DRUM-Incipience-<version>-mpc-armv7.zip` from [Releases](https://github.com/saustin2010/mpc-vst-incipience/releases),
+copy it to the MPC, unzip it and run `sh install.sh` in its folder as root. The installer stops MPC, backs up
+`MPC.settings`, installs the plugin folder and starts MPC again; `INSTALL.md` in the zip has the details and a by-hand route.
+Your own files in `incipience/` are kept when you update or uninstall.
+
+**[FX] Incipience OUT** ([its README](incipienceout/)) has a zip of its own, `FX-Incipience-OUT-<version>-mpc-armv7.zip`,
+in its own release on the same page (tag `incipience-out-v<version>`); install it the same way.
+
+**With the rest of the collection:** from [vst_instruments](https://github.com/saustin2010/vst_instruments) ([INSTALL.md](https://github.com/saustin2010/vst_instruments/blob/main/INSTALL.md)):
+
+```
+./install.sh <mpc-address> incipience
+```
+
+Use one or the other for this plugin: both register the same plugin (same uid), so the last one run wins.
+
+## How it's made
+
+The engine (`src/`) is written for this repo from the AlphaBase's manual; `mpc/gen.py` writes `params.json`,
+`src/params_def.h` and the page plan from one list. The screen: the Stitch design is one page, KICK A
+(`design/stitch-kick.html`, as Stitch wrote it); `mpc/design.py` writes every page in its markup (`design/stitch.html`),
+vst_instruments' `convert.py` turns that into the layout, and `mpc/merge_ab.py` folds each tab's pages into Q-Link
+sub-pages. `mpc/screen.sh` runs it all, through the build, `check_skin.py` and the screenshots.
+
+Offline renders, no MPC needed:
 
 ```
 cc -O2 -Isrc mpc/render.c src/*.c -lm -lpthread -ldl -o build/render
@@ -183,3 +229,41 @@ folder, a kit back to the sample set, and 47 files of 1.8 MB played while anothe
 it runs clean under ASan/UBSan, which would catch a file freed under a voice, and TSan), the saved state's size (at
 most 6.3 KB of the wrapper's 8 KB) and OUT 1-11 with Incipience OUT loaded as a library of its own (the comment at its
 top says how to build and run it; `bench` times the matrix).
+
+## Files
+
+| Path | What |
+|---|---|
+| `screenshots/` | the pages as MPC draws them |
+| `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
+| `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
+| `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
+| `vst.json` | build settings: name, maker, sources, the kit list in the PRESET menu |
+| `params.json` | the plugin's parameters as MPC sees them (VST index = order; append-only once released) |
+| `layout.conf` | the screen: 17 tabs and their Q-Link sub-pages (generated) |
+| `design/` | the Stitch design (`stitch-kick.html`) and every page in its markup (`stitch.html`, generated) |
+| `images/stitch/` | artwork: page backgrounds and knob filmstrips (generated) |
+| `src/`, `mpc/` | the engine, the generators, the self-test, the offline renderer |
+| `incipienceout/` | [FX] Incipience OUT, which ships in this plugin's release |
+
+## Building
+
+With Docker (32-bit ARM emulation for the build), Python 3 and the tools from
+[saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features) (sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins)
+plus changes offered to it, until they're merged there; the commit is the one in `.github/workflows/release.yml`, and [FRAMEWORK.md](FRAMEWORK.md) says which changes this plugin uses and why):
+
+```
+git clone -b steve-features https://github.com/saustin2010/mpc-vst-plugins
+MPC_VST=$PWD/mpc-vst-plugins
+bash "$MPC_VST/tools/build_port.sh" vst.json        # build/: incipience.so, the screen, the plugin-list entry
+bash "$MPC_VST/tools/test_port.sh" vst.json         # the offline host test (ASan/UBSan): must print PASSED
+```
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`, "Release (draft)") as a draft, installed and checked
+on a device, then published. More: [BUILDING.md](https://github.com/saustin2010/vst_instruments/blob/main/BUILDING.md), and to change the screen, [RESKINNING.md](https://github.com/saustin2010/vst_instruments/blob/main/RESKINNING.md).
+
+## Development
+
+This plugin is developed in [vst_instruments](https://github.com/saustin2010/vst_instruments) (`originals/incipience`), next to the other plugins
+and the tools that made its screen, and published to [mpc-vst-incipience](https://github.com/saustin2010/mpc-vst-incipience) for its
+releases. Issues and pull requests are welcome in either.

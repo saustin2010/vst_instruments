@@ -7,7 +7,7 @@
 MPC plays only a plugin's first stereo pair (sd88me's test on a Force), so Incipience can't hand its instruments to
 MPC's mixer as separate outputs. Instead, each Incipience instrument goes to **MAIN** or to **OUT 1-11** (its OUT, on
 Incipience's MIDI & OUT tab, sub-page OUT), and this small effect, inserted on any other track, plays one OUT there.
-It is [Percolator OUT](../../percolator/percolatorout/) made stereo and eleven wide: an audio track will do, so it
+It is [Percolator OUT](https://github.com/saustin2010/vst_instruments/tree/main/originals/percolator/percolatorout) made stereo and eleven wide: an audio track will do, so it
 doesn't take an instrument plugin's place, and it costs next to nothing (it copies a block).
 
 ## Using it
@@ -39,8 +39,10 @@ instruments sent there stay in Incipience's mix, so nothing goes quiet by accide
 - In the insert effect slots: **[FX] Incipience OUT** by **Steve A**
 - Files: `/sdcard/vst/incipienceout.so` and its screen in `/sdcard/Synths/Steve A - VST - [FX] Incipience OUT/`
 - 3 parameters: OUT, THRU and STATUS (a readout); one page, OUT and THRU on Q-Link column 1
-- Needs Incipience with OUT 1-11 (2026-10-17 or later) in the same project
-- Install: `./install.sh <mpc-address> incipienceout` from vst_instruments (a new plugin: MPC restarts once)
+- Needs Incipience 1.0.0 or later in the same project
+- Install: `FX-Incipience-OUT-<version>-mpc-armv7.zip` from [Incipience's releases](https://github.com/saustin2010/mpc-vst-incipience/releases)
+  (tag `incipience-out-v<version>`), installed like Incipience's zip; or `./install.sh <mpc-address> incipienceout` from
+  vst_instruments
 
 ## How it works
 
@@ -52,13 +54,13 @@ playing, and no file stays open. The layout is in `src/tapbus.h`, which is the s
 (`originals/incipience/src/tapbus.h`): change them together. Its version is part of the file's name, so two different
 layouts never read each other; it is a different file from Percolator's, so the two never mix.
 
-## Status (2026-10-17)
+## Status (2026-10-19)
 
 - Written for Incipience's OUT 1-11 (owner: "output routing for each of the tracks ... copy what's been done with
   percolator"). Offline (`mpc/selftest.c`): Incipience and this effect as two separately loaded libraries, on the Mac
   (`/tmp`) and in Linux (`/dev/shm`, under AddressSanitizer and UBSan): the effect plays exactly the kick, a block late
   (two if it always runs first), Incipience plays the rest; with no Incipience it goes quiet and says so.
-- Not yet on a device.
+- On the Live II since 2026-10-18 (owner: "other features look ok"). 1.0.0 ships in Incipience's 1.0.0 release.
 
 ## Files
 
@@ -69,3 +71,10 @@ layouts never read each other; it is a different file from Percolator's, so the 
 | `mpc/gen.py` | writes `params.json`, `layout.conf` and the artwork's spec |
 | `mpc/art.py` | draws the artwork (in the `mpc-vst-html-art` container) |
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
+| `images/skin/` | the artwork (generated) |
+| `screenshots/` | the page as MPC draws it |
+
+## Building
+
+From the repo root: `tools/build.sh incipienceout` (see [BUILDING.md](https://github.com/saustin2010/vst_instruments/blob/main/BUILDING.md)). It lives in Incipience's
+folder because it ships in Incipience's release (two zips, as TR-MPC ships its Tap FX).

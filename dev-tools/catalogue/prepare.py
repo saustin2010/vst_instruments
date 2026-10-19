@@ -62,14 +62,18 @@ PLUGINS = {
     "stevequencer16": ("stevequencer-16", "MIT", None, []),
     "percolator": ("percolator", "MIT", None, ["percolator"]),   # the owner's own (2026-10-10); users add kit packs
     "percolatorout": ("percolator-out", "MIT", None, []),   # ships in Percolator's release (COMPANIONS)
+    "incipience": ("incipience", "MIT", None, ["incipience"]),   # the owner's own (2026-10-13); users add the AlphaBase samples
+    "incipienceout": ("incipience-out", "MIT", None, []),   # ships in Incipience's release (COMPANIONS)
 }
 # plugins with no repo of their own: they live in another plugin's folder and ship in its release, as a second zip with
 # its own draft and catalogue entry (TR-MPC's Tap FX: ports/trkit/tapfx), from a second job in that release.yml.
 # companion: (the plugin it ships with, the manifest's "requires" line)
-COMPANIONS = {"percolatorout": ("percolator", "Percolator 2.0.0 or later in the same project")}
+COMPANIONS = {"percolatorout": ("percolator", "Percolator 2.0.0 or later in the same project"),
+              "incipienceout": ("incipience", "Incipience 1.0.0 or later in the same project")}
 # releases that ship this repo's own skin (deploy/Synths, built by framework/setup.sh's tools) instead of rebuilding it
 # with sd88me's: his skin builder lays out their per-sub-page controls (banks=) and readouts differently
-OWN_SKIN = {"stevequencer", "stevequencer16", "percolator", "percolatorout"}   # percolator: its readouts (vs=, ink=)
+OWN_SKIN = {"stevequencer", "stevequencer16", "percolator", "percolatorout",   # percolator: its readouts (vs=, ink=)
+            "incipience", "incipienceout"}   # incipience: its A / B / MIX sub-pages (banks=), the SAMPLES list
 PILOTS = {"303", "hera"}   # done by hand and published first: --ready leaves them alone
 # libraries this repo makes with its own scripts (tools/fetch-presets.py MADE): the script, and where its output goes
 MADE = {
