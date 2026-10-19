@@ -60,7 +60,9 @@ def check(port, verbose=False):
     defs = {e["key"]: e["value"] for e in tui["componentDefinitions"]["localComponentDefinitions"]}
     out, minor = [], 0
     src, _ = fw_params.source(json.load(open(os.path.join(D, "vst.json"))))   # params.json, or a module.json
-    popts = {p["key"]: p.get("options") for p in fw_params.load(os.path.join(D, src))[0]}
+    plist = fw_params.load(os.path.join(D, src))[0]
+    popts = {p["key"]: p.get("options") for p in plist}
+    qonly = {p["key"] for p in plist if p.get("qlink_only")}   # a Q-Link's own parameter, on no page (Incipience's BROWSE)
     for t in layout:   # a switch's / pop-up's own option labels must line up with the parameter's options
         for w in t["widgets"]:
             if w["kind"] in ("enum_h", "enum_v", "popup") and w.get("options") and popts.get(w.get("key")) is not None:
@@ -95,6 +97,8 @@ def check(port, verbose=False):
         if lt:
             want = set()
             for w in lt["widgets"]:
+                if w["kind"] == "list" and str(w.get("focus", "")).lower() in ("no", "0", "off"):
+                    continue   # focus=no: no row takes MPC's focus (all touch only)
                 if w["kind"] in CONTROLS and "key" in w and (   # banks=: some sub-pages only
                         not shadow_skin.banks_of(w) or tab["tabName"] in shadow_skin.banks_of(w)):
                     # a list's key names its rows (<key>_1 ...): the first takes MPC's focus, the others are touch only
@@ -132,7 +136,7 @@ def check(port, verbose=False):
                     slots[int(name.split()[1])] = keys[n]
             order = [slots[shadow_skin.qlink_for_slot(s)] for s in range(16) if shadow_skin.qlink_for_slot(s) in slots]
             for k in order:
-                if k not in bound:
+                if k not in bound and k not in qonly:
                     out.append("QLINK %s: Q-Link on %s, which isn't on the page" % (tab["tabName"], k))
             if lt and lt["qlinks"]:
                 if sub < len(lt["qlinks"]):

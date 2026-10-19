@@ -116,7 +116,7 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..bc07c68 100644
+index 6e0f9d4..1e6f7c7 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
 @@ -46,7 +46,8 @@ from the Force and may differ on MPC Live/One/X/Key (e.g. `Force Documents` vs `
@@ -129,7 +129,7 @@ index 6e0f9d4..bc07c68 100644
     (direct, unscheduled send).
  
  Resolved (details in the sections below): option params render as image-button radio groups or `popup`s,
-@@ -596,7 +597,384 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +597,398 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -514,6 +514,20 @@ index 6e0f9d4..bc07c68 100644
 +next block (or until a preset, the state, its display text or another parameter comes); the same-value check then
 +skips a pair that ends where it started (`setParameter`, `flush_pend0`). `tools/host_test.c` replays the toggle with
 +every knob moved (`param0_toggle_check`: Hera failed it with 20 of 22 knobs changed before the fix).
++
++## 2026-10-20: the data wheel and touch actions, from Akai's own skins and a list on a Live II (MPC OS 3.9.1)
++Akai's own plugin skins on the device (`/usr/share/Akai/Content/Synths/*/Plugin Skins/`, 248 files; read, not kept)
++use four touch actions, all on the control's own `Data` handle: `Mouse Down` → `Q-Link` (148), `Enter Pressed` →
++`Toggle Switch` (70), and `Double Click` / `Enter Pressed` → `Show Overlay`. Named handles appear only as indirection:
++a parent component maps names to parameters and a child's `Data` points at one of those names; `acceptsHWFocus` is
++`Yes` on what the data wheel may turn (`Children` on a parent). A list whose rows also ran `Mouse Down` → `Q-Link`
++on a second, named handle bound to a cursor parameter (`wheel=`, tried in Incipience 1.1.0's drafts) didn't move the
++cursor with the data wheel ("the big mpc job wheel doesn't do anything"); taps on the rows still worked. So a control
++can't hand the wheel to another parameter: the wheel turns the `Data` of the control a touch focused (a stepper box
++does it). `list ... focus=no` keeps every row out of the hardware focus, so tapping rows leaves the wheel where it was
++(offline). Same session: a cursor on a Q-Link with `nudge_pct` "change[s] really really quickly and skip[s] a few
++rows": a small turn of a Live II Q-Link is several events. Counting events per step (`qlink_ticks`, or in the engine)
++slows it, but the wheel's clicks are the same small moves, so a parameter turned by both needs a Q-Link-only twin.
 diff --git a/tools/gen_vst.py b/tools/gen_vst.py
 index 7a91d54..2fbf682 100644
 --- a/tools/gen_vst.py
@@ -1036,7 +1050,7 @@ index 0d8dfa9..017eac1 100644
 -        return cfg["module"], "schwung"
      raise SystemExit('vst.json: needs "params" (or an adapter\'s source, e.g. "module")')
 diff --git a/tools/shadow_skin.py b/tools/shadow_skin.py
-index 5faa2a8..7c81048 100644
+index 5faa2a8..460e3be 100644
 --- a/tools/shadow_skin.py
 +++ b/tools/shadow_skin.py
 @@ -8,11 +8,11 @@ backgrounds, knob filmstrips and button states; MPC draws live values.
@@ -1058,10 +1072,10 @@ index 5faa2a8..7c81048 100644
                                                          Needs the hidden "<param>__open" param: popup_params())
      stepper cx= cy= w= h= label="..." key=<param>      (live text; arrows = <param>_prev / <param>_next)
      list    x= y= w= h= cols= rows= th= gap= key=<p>   (rows = params <p>_1..<p>_N: text + tap)
-+            [wheel=<param>] [ink=RRGGBB] [lit=RRGGBB]  (wheel=: touching a row also hands MPC's data wheel and touch
-+                                                        Q-Link to <param>, e.g. a cursor over the rows; ink=: the rows'
-+                                                        text colour, default the accent; lit=: the border of a row whose
-+                                                        value reads 1, default the active segment's colour)
++            [ink=RRGGBB] [lit=RRGGBB] [focus=no]       (ink=: the rows' text colour, default the accent; lit=: the
++                                                        border of a row whose value reads 1, default the active segment's
++                                                        colour; focus=no: no row takes the hardware focus, so a tap on
++                                                        one leaves the data wheel on the control it was turning)
      art     file="drawing.svg" [x= y= w= h=] [fit=]    (an SVG drawing, e.g. from studio.py from-svg, or a .png/.jpg/.webp
                                                          image, drawn into the page background: the whole plugin area, or
                                                          the box; fit=contain|cover|stretch; browser renderer only)
@@ -1182,7 +1196,7 @@ index 5faa2a8..7c81048 100644
          opts = [str(x).lower() for x in (params[index[k]].get("options") or [])] if k in index else []
          if len(opts) < 2:
              raise SystemExit("layout: when=%s: %r is not an option parameter" % (w["when"], k))
-@@ -496,13 +532,14 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -496,6 +532,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
          return ppm
  
      radii, sliders, looks = set(), set(), {}   # knob (r, look id), slider (image, w, h, vert, look id); look id -> look
@@ -1190,14 +1204,6 @@ index 5faa2a8..7c81048 100644
      for t, tab in enumerate(tabs_in):
          kids, controls = [], []
          for w in tab["widgets"]:
-             if w["kind"] not in CONTROL_KINDS:
-                 continue
-             k = w["key"]
--            need = list_keys(w) if w["kind"] == "list" else [k]
-+            need = list_keys(w) + ([w["wheel"]] if w.get("wheel") else []) if w["kind"] == "list" else [k]
-             if w["kind"] == "stepper":
-                 # prev=/next=: explicit override for the arrow tap-zones' bound parameter, for a
-                 # DSP with a real "advance"/"retreat" verb under a DIFFERENT name than "<key>_prev"/
 @@ -540,7 +577,7 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
          # as needlessly fragmented, even though it helped a genuinely busy one (docs/NOTES.md). A
          # future per-tab opt-in split is a plausible follow-up, not a default.
@@ -1419,11 +1425,12 @@ index 5faa2a8..7c81048 100644
                  kids.append(_placed(key, name, i, x, y, rw, rh, focus="No"))
              elif kind == "stepper":
                  x0, y0 = w["cx"] - w["w"] // 2, w["cy"] - w["h"] // 2
-@@ -783,17 +880,25 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -783,17 +880,20 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                      side_key = w.get(side, w["key"] + "_" + side)
                      kids.append(_placed(akey, "%s %s" % (name, side), index[side_key], ax, ay, aw, ah, focus="No"))
              elif kind == "list":
-+                ink, wk, lit = w.get("ink", ACCENT), w.get("wheel"), w.get("lit", SEG_ON)
++                ink, lit = w.get("ink", ACCENT), w.get("lit", SEG_ON)
++                nofocus = str(w.get("focus", "")).lower() in ("no", "0", "off")
                  for slot, ((x, y, tw, th), sk) in enumerate(zip(list_tiles(w), list_keys(w))):
 -                    img = "sh_tile_%dx%d" % (tw, th)
 +                    img = "sh_tile_%dx%d" % (tw, th) + ("_" + lit if lit != SEG_ON else "")
@@ -1432,26 +1439,19 @@ index 5faa2a8..7c81048 100644
 +                        script += ["clear|" + under(), "tile|%d|%d|%d|%d|%s|%s|%d" % (x, y, tw, th, LCD, lit if border else LINE, border),
                                     "crop|%s|%d|%d|%d|%d" % (art("%s_%s" % (img, state)), x, y, tw, th)]
 -                    key = "shRow_%dx%d" % (tw, th)
-+                    key = "shRow_%dx%d" % (tw, th) + ("_" + ink if ink != ACCENT else "") + ("_" + lit if lit != SEG_ON else "") + \
-+                        ("_wheel" if wk else "")
++                    key = "shRow_%dx%d" % (tw, th) + ("_" + ink if ink != ACCENT else "") + ("_" + lit if lit != SEG_ON else "")
                      # the Value label lies over the button and takes the touch, so the row itself toggles on touch
--                    defs.setdefault(key, _local(key, [_action("Mouse Down", "Toggle Switch"), _action("Enter Pressed", "Toggle Switch")],
-+                    # wheel=: the touch also makes another parameter (its "Wheel" handle) the data wheel's and the touch
-+                    # Q-Link's, as a knob's touch does for its own
-+                    acts = [_action("Mouse Down", "Toggle Switch"), _action("Enter Pressed", "Toggle Switch")]
-+                    if wk:
-+                        acts.insert(0, _action("Mouse Down", "Q-Link", handle="Wheel"))
-+                    defs.setdefault(key, _local(key, acts,
+                     defs.setdefault(key, _local(key, [_action("Mouse Down", "Toggle Switch"), _action("Enter Pressed", "Toggle Switch")],
                                                  [_focus(tw, th), _button(img + "_on.png", img + "_off.png", 1, 1, tw, th),
 -                                                 _value_label(12, 0, tw - 24, th, 24.0, ACCENT, "left verticallyCentred")]))
 -                    kids.append(_placed(key, "%s %d" % (name, slot + 1), index[sk], x, y, tw, th, focus="Yes" if slot == 0 else "No"))
 +                                                 _value_label(12, 0, tw - 24, th, 24.0, ink, "left verticallyCentred")]))
-+                    kids.append(_placed(key, "%s %d" % (name, slot + 1), index[sk], x, y, tw, th, focus="Yes" if slot == 0 else "No",
-+                                         extra={"Wheel": index[wk]} if wk else None))
++                    kids.append(_placed(key, "%s %d" % (name, slot + 1), index[sk], x, y, tw, th,
++                                        focus="Yes" if slot == 0 and not nofocus else "No"))
              else:  # enum_h / enum_v: radio group, one image button per option
                  n = len(w["options"])
                  for o, (x, y, sw, sh) in enumerate(seg_rects(w)):
-@@ -815,6 +920,10 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -815,6 +915,10 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  c["bounds"]["showWhenDataModelInvalid"] = "Show"
                  c["bounds"]["additionalInvalidatingHandles"].append(cond(w))
          tagged.clear()
@@ -1462,7 +1462,7 @@ index 5faa2a8..7c81048 100644
          kids += on_top
          sets = tab["qlinks"] or [(tab["name"], controls[:16])]
          for sp, (title, keys) in enumerate(sets):
-@@ -822,12 +931,14 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -822,12 +926,14 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  raise SystemExit("layout: qlinks %r has %d keys (max 16)" % (title, len(keys)))
              ql = {"Q-Link %d" % (q + 1): -1 for q in range(16)}
              for s, k in enumerate(keys):
@@ -1478,7 +1478,7 @@ index 5faa2a8..7c81048 100644
                            "initialSize": "0 0 %d %d" % (W, H), "scale": 1.0})
              qmap.append({"Tab": t + 1, "SubTab": sp + 1, "Bank Direction": "Column", "Q-Links": ql})
              defs[comp] = {"key": comp, "value": {
-@@ -835,13 +946,15 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -835,13 +941,15 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
                  "backgroundData": {"version": 1, "focussed": {"version": 1, "colour": "ff" + PLATE, "image": ""},
                                     "unfocussed": {"version": 1, "colour": "ff" + PLATE, "image": ""}},
                  "ignoreMousePresses": False, "disableCoarseDataWheel": False, "repeats": 1,
@@ -1497,7 +1497,7 @@ index 5faa2a8..7c81048 100644
      for r, lid in sorted(radii):
          if lid:
              script.append("lstrip|%s|%d|%d|%s" % (art("sh_knob_r%d_%s" % (r, lid)), r, FRAMES, skin_assets.encode(looks[lid])))
-@@ -866,23 +979,34 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
+@@ -866,23 +974,34 @@ def build(layout_path, params, skin_dir, art_bin, png_from_ppm):
              x, y = w["cx"] + w["w"] // 2 - 22 - ox, w["cy"] - oy
              dr.polygon([(x - 8, y - 4), (x + 8, y - 4), (x, y + 5)], fill="#" + ACCENT)
          im.save(path)
@@ -1543,7 +1543,7 @@ index 5faa2a8..7c81048 100644
  
  
  def qlink_bounds(tab, keys):
-@@ -905,14 +1029,22 @@ def qlink_bounds(tab, keys):
+@@ -905,14 +1024,22 @@ def qlink_bounds(tab, keys):
              xs += [w["cx"] - w["w"] // 2, w["cx"] + w["w"] // 2]
              ys += [w["cy"] - w["h"] // 2 - 26, w["cy"] + w["h"] // 2]
              continue
@@ -1568,7 +1568,7 @@ index 5faa2a8..7c81048 100644
              ys += [w["cy"] - 18, w["cy"] + 38]
          else:
              for x, y, sw, sh in seg_rects(w):
-@@ -938,6 +1070,8 @@ def program_qlinks(layout_path, params, qmap):
+@@ -938,6 +1065,8 @@ def program_qlinks(layout_path, params, qmap):
                  raise SystemExit("layout: qlinks_track has %d keys (max 16)" % len(keys))
              ql = {"Q-Link %d" % (q + 1): -1 for q in range(16)}
              for s_, k in enumerate(keys):
