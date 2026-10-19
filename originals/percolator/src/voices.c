@@ -495,7 +495,7 @@ static void a_sample(ctx_t *c) {
             float fr = (float)(v->spos - j);
             x = s->d[j] + (s->d[j + 1] - s->d[j]) * fr;
             v->spos += step;
-        } else v->active = 0;
+        } else v->env = 0;   /* past its end: the hit is over (the filter and DRIVE ring out, then it stops) */
         v->holdc += 1.0f;
         if (v->holdc >= holdn) {
             v->holdc -= holdn;
@@ -582,6 +582,8 @@ void voice_trigger(perc_t *P, int vi, const vparam_t *vp, float vel, int note, f
     v->vel = powf(clampf(vel, 1.0f, 127.0f) / 127.0f, 1.4f);
     v->env = 1.0f;
     v->atk = 0;
+    v->pk = 0;
+    v->quiet = 0;
     v->penv = 1.0f;
     v->tr = 1.0f;
     v->nenv = 1.0f;
@@ -631,9 +633,11 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     const float *k = vp->k;
     int algo = vp->algo % 3, mode = vp->mode % 3;
     int room = !v->src && uses_room(vi, algo, mode);
-    if (!v->active && v->room.tail <= 0) {
+    if (!v->active && v->room.tail <= 0) {   /* stopped: the next hit finds the filter as if it had run on */
         v->last = 0;
         v->dclk = 0;
+        v->cut_s += (k[K_CUTOFF] - v->cut_s) * 0.3f;
+        v->out.s1 = v->out.s2 = 0;
         if (v->lslot >= 0) drop_file(v);
         return;
     }
@@ -658,6 +662,7 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     if (vi < 3) c.f0 = voice_freq(vi, k[K_TUNE]) * fexp2(semi / 12.0f);
     else c.rt = metal_ratio(k[K_TUNE]) * fexp2(semi / 12.0f);
     c.ring = drone ? 1.0f : t60_coef(voice_t60(vi, k[K_DECAY]) * (vi == 0 ? 2.0f : 1.5f));
+    int done = 0;
     if (v->active) {
         if (v->src) a_sample(&c);
         else switch (vi * 3 + algo) {
@@ -674,9 +679,11 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
         }
         v->ns += n;
         float lvl = v->env * v->atk;
-        /* (nenv only falls in SNARE: the other algorithms stay on, as they always have; a sample of the voice's own
-         * stops once its envelope has, and lets its file go) */
-        if (!drone && lvl < 1e-4f && (v->src || v->nenv < 1e-4f) && (!clap || v->bursts >= CLAPS[mode])) v->active = 0;
+        if (lvl > v->pk) v->pk = lvl;
+        /* the hit is over: 80 dB under its peak, SNARE's noise too, every CLAP burst out, a drone's note let go */
+        int snare = !v->src && vi == 2 && algo == 0;
+        done = (!drone || !v->gate) && lvl < 1e-4f * v->pk && (!snare || v->nenv < 1e-4f) &&
+               (!clap || v->bursts >= CLAPS[mode]);
         if (room) v->room.tail = (int)(1.5f * SR);
     } else {
         memset(o, 0, sizeof o);
@@ -684,8 +691,6 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     }
     if (room && (k[K_P1] > 0.005f || v->room.tail > 0)) room_run(&v->room, o, k[K_P1], n);
     else if (!v->active) v->room.tail = 0;
-    v->last = v->active ? o[n - 1] : 0;
-    if (!v->active && v->lslot >= 0) drop_file(v);
 
     /* the "analog" end: HP / BP / LP (no resonance control), overdrive, level */
     v->cut_s += (k[K_CUTOFF] - v->cut_s) * 0.3f;
@@ -694,6 +699,7 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     float d = k[K_DRIVE], g = 1.0f + 24.0f * d * d, bias = 0.12f * d, sb = sat(bias), mk = 1.0f / (1.0f + 0.6f * d);
     float tgt = k[K_LEVEL] * k[K_LEVEL] * v->vel, fxs = k[K_FX] * k[K_FX];
     int vcf = vp->vcf;
+    float peak = 0;
     for (int i = 0; i < n; i++) {
         float y = o[i] + v->dclk, bp, hp;
         v->dclk *= 0.985f;
@@ -704,5 +710,14 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
         y *= v->amp;
         mix[i] += y;
         send[i] += y * fxs;
+        if (fabsf(y) > peak) peak = fabsf(y);
     }
+    /* it stops once the hit is over and what it plays has stayed under -100 dB for 2048 frames (a whole cycle of a
+     * low kick); a sample of the voice's own lets its file go then */
+    if (v->active) {
+        v->quiet = peak < 1e-5f ? v->quiet + n : 0;
+        if (done && v->quiet >= 2048) v->active = 0;
+    }
+    v->last = v->active ? o[n - 1] : 0;
+    if (!v->active && v->lslot >= 0) drop_file(v);
 }

@@ -70,6 +70,8 @@ typedef struct {
     float vel;             /* target amplitude from velocity */
     float amp;             /* smoothed level x velocity */
     float env, atk;        /* decay envelope and attack ramp */
+    float pk;              /* their product's peak so far: the hit is over 80 dB under it */
+    int quiet;             /* frames its output has been under -100 dB */
     float penv;            /* pitch envelope, 1 -> 0 */
     float tr;              /* transient envelope */
     float nenv;            /* noise envelope (snare) */

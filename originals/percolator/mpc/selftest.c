@@ -1,7 +1,8 @@
 /* Percolator self-test (development): your own samples on every voice (WAV kinds and cue points, the SAMPLES tab's
  * browsing, a file loaded, previewed and played on each voice, its pitch, PARAM 1-2's names, SAMPLE through its folder,
  * by name in the saved state, a kit back to the algorithms, past the 64 MB of files while another voice holds one) and
- * RANDOMISE (each voice's own controls in their ranges, the rest as it was, MPC told, every roll heard). Built natively,
+ * RANDOMISE (each voice's own controls in their ranges, the rest as it was, MPC told, every roll heard), and every voice
+ * stopping once its hit has died away. Built natively,
  * without the wrapper (from originals/percolator; LIB_MEDIA: a stand-in for the MPC's drives):
  *   cc -O1 -g -DLIB_MEDIA='"build/libtest/media"' -Isrc mpc/selftest.c src/percolator.c src/voices.c src/kits.c \
  *      src/library.c -lm -lpthread -ldl -o build/selftest
@@ -503,6 +504,61 @@ int main(int argc, char **argv) {
     E->destroy(P);
     fail = system("rm -rf build/libtest");
     printf("ok   past 64 MB: 39 files of 3.5 MB played on V1 while V2 held and played another\n");
+
+    /* ---- every voice stops once its hit has died away (up to 2.1.0 only SNARE did): each algorithm and MODE at short,
+     * middle and long DECAY and as a drone, DRIVE off and full; under 1 LSB for the 15 blocks before (the voice
+     * counts 2048 frames in its own 32), silent after ---- */
+    {
+        perc_t *Q = E->create(NULL);
+        seti(Q, "lfo_level", 0);
+        static const int DEC[4] = {0, 50, 95, 100};
+        int cases = 0;
+        float most = 0;
+        char key[16], what[64] = "";
+        for (int v = 0; v < NV; v++)
+            for (int a = 0; a < 3; a++)
+                for (int m = 0; m < 3; m++)
+                    for (int d = 0; d < 4; d++)
+                        for (int dr = 0; dr <= 100; dr += 100) {
+#define SETV(name, x) (snprintf(key, sizeof key, "v%d_" name, v + 1), seti(Q, key, x))
+                            SETV("algo", a), SETV("mode", m), SETV("decay", DEC[d]), SETV("drive", dr);
+                            SETV("level", 100), SETV("fx", 0), SETV("comp", 0);
+                            free(run(Q, 4));
+                            midi(Q, 0x90, 36 + v, 127);
+                            int held = d == 3 ? 3 * 44100 / B : 2;   /* a drone plays on while its note is held */
+                            free(run(Q, held));
+                            CHECK(Q->v[v].active, "V%d ALGO %d MODE %d DECAY %d DRIVE %d stopped while held", v + 1, a, m,
+                                  DEC[d], dr);
+                            midi(Q, 0x80, 36 + v, 0);
+                            float t60 = d == 3 ? 0.35f : voice_t60(v, DEC[d] / 100.0f);
+                            int limit = (int)((3.0f * t60 + 4.0f) * 44100 / B), b = 0, pk[15] = {0}, stop = -1;
+                            for (; b < limit && (Q->v[v].active || Q->v[v].room.tail > 0); b++) {
+                                int16_t *o = run(Q, 1);
+                                if (Q->v[v].active) pk[b % 15] = peak(o, B);
+                                else if (stop < 0) stop = b;
+                                free(o);
+                            }
+                            CHECK(stop >= 0 && b < limit, "V%d ALGO %d MODE %d DECAY %d DRIVE %d never stops", v + 1, a, m,
+                                  DEC[d], dr);
+                            int last = 0;
+                            for (int j = 0; j < 15; j++) last = pk[j] > last ? pk[j] : last;
+                            CHECK(last <= 1, "V%d ALGO %d MODE %d DECAY %d DRIVE %d stopped at %d LSB", v + 1, a, m, DEC[d], dr,
+                                  last);
+                            int16_t *o = run(Q, 200);
+                            CHECK(peak(o, 200 * B) == 0, "V%d ALGO %d MODE %d DECAY %d DRIVE %d: not silent after it stopped",
+                                  v + 1, a, m, DEC[d], dr);
+                            free(o);
+                            float x = stop * B / 44100.0f;
+                            if (x > most) {
+                                most = x;
+                                snprintf(what, sizeof what, "V%d ALGO %d MODE %d DECAY %d DRIVE %d", v + 1, a, m, DEC[d], dr);
+                            }
+                            cases++;
+                        }
+        E->destroy(Q);
+        printf("ok   every voice stops: %d hits (each ALGO and MODE, DECAY 0/50/95/drone, DRIVE 0/100), under 1 LSB before, "
+               "silent after; the longest %.1f s after its note off (%s)\n", cases, most, what);
+    }
     printf("PASSED\n");
     return fail;
 }
