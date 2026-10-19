@@ -173,8 +173,18 @@ parameter index, so existing projects keep working.
     procwatch `after/fresh` 1.69 -> 1.00; the kits as 2.0.1 to within 2 LSB a hit and 6 in the groove (every hit from
     the same noise state), Hrtl 54 and 60 but for that click; the selftest's 288 hits all stop. Installed on the Live
     II 2026-10-19 (this repo's build in the 2.0.1 release folder, 2.0.1 backed up in `/sdcard/vst-backups/`; no
-    restart). Left: the owner's checks (browsing the drives, a file on each voice, PREVIEW, RANDOMISE,
-    a project saved and reopened, the kits after a pause sounding as before), then a release.
+    restart). 2026-10-20 (owner: "the same browser" as Incipience 1.1.0's; the voice pages' SOURCE box "doesn't look
+    nice"), offline: the SAMPLES page is Incipience 1.1.0's browser (one list of a folder and its subfolders, FILE on
+    the data wheel, BROWSE on Q-Link 1 a file per three events, PREVIEW from the drive, a second tap / LOAD / AUTO LOAD,
+    AUDITION; 7 parameters appended, 183; the framework patch's list `ink=`, `lit=`, `focus=no` and `check_skin.py`
+    taken from `incipience-midi-mod`); SOURCE moved to the voice pages' title bar (its two buttons had drawn apart:
+    the skin builder keeps one picture per option of a parameter, the SAMPLES page's smaller ones in the voice page's
+    place) and SAMPLE level with CUTOFF and DRIVE; SAMPLE and FILE a file a click with this repo's wrapper too (the
+    engine steps small moves, as `nudge_pct` does); amber stepper arrows. `mpc/selftest.c` PASSED natively, as armv7, under ASan/UBSan and TSan; procwatch as before, build and
+    host test PASSED, `check_skin.py` OK. Not on the Live II yet. Left: install it, the owner's checks (the wheel on
+    FILE, BROWSE's speed, PREVIEW, a second tap, AUTO LOAD, the voice pages, a file on each voice, RANDOMISE, a project
+    saved and reopened, the kits after a pause sounding as before), then a release (its `release.yml` pin to `b014168`
+    or later for `nudge_pct`, `prepare.py --ready`).
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
     would save most of it. (The voices that never stopped after their first hit, found 2026-10-19: fixed in 2.1.0.)

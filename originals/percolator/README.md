@@ -22,7 +22,7 @@ which mode, where each knob is, the LFO, the delay), but it won't sound exactly 
   where the kit packs go
 - Your own WAV files on any voice, from the MPC's drives (the SAMPLES page, [below](#your-own-samples-on-every-voice));
   a RANDOMISE button per voice ([below](#randomise))
-- 176 parameters (all automatable) on 10 pages, one Q-Link page each
+- 183 parameters (all automatable) on 10 pages, one Q-Link page each
 - 8 kits built in, in MPC's PRESET menu; Erica Synths' four free Pērkons kit packs add 169 more ([below](#pērkons-kit-packs))
 
 ## Playing it
@@ -101,26 +101,41 @@ needs two settings (Voice 4 / Algo 3 PARAM 2 = start, slicing on); here it follo
 Since 2.1.0 any voice can play a WAV file instead of its algorithm (owner, 2026-10-19: on the Pērkons only voice 4
 plays samples, "but I think they should be allowed on each voice"):
 
-- **SOURCE** (each voice page, beside CUTOFF and DRIVE): **SYNTH**, the voice's algorithm as before, or **SAMPLE**, its
+- **SOURCE** (each voice page, at the top beside RANDOMISE): **SYNTH**, the voice's algorithm as before, or **SAMPLE**, its
   own file, played as voice 4's SAMPLE algorithm plays its slots: **TUNE** is its pitch (±2 octaves, the middle as
   recorded), **DECAY** its envelope, **PARAM 1** reads **CRUSH** (sample rate and bits), **PARAM 2** reads **START**, or
   **SLICE** when the file has cue points; then the voice's own filter, drive, LEVEL and sends, its NOTE, KEYS CH
   (pitched), OUT, lanes and LFO depths, as ever. ALGO and MODE wait meanwhile (the readout under MODE says
   ALGO OFF: SAMPLE).
-- **SAMPLE** (under SOURCE): the file's name; its arrows (or its Q-Link) step through the WAV files of its folder in name
-  order ("Kick 2" before "Kick 10"; the first 255). NO SAMPLE until you load one.
-- **Loading one: the SAMPLES page.** DRIVES lists the places: **PERCOLATOR FOLDER** (the data folder, where the kit
-  packs are, each with its `SAMPLES/` folder), then the MPC's drives (INTERNAL, SD cards, SSDs, USB drives). Tap one,
-  then its folders (`.. UP` or the UP button goes back), eight rows at a time (SCROLL: its Q-Link, or its arrows, a page
-  a tap). The box at the top shows where you are (its end, if long), the one beside it how many WAV files are there.
-  **Tap a WAV file**: it loads into **LOAD TO**'s voice (V1 to start with), whose SOURCE turns to SAMPLE, and with
-  **PREVIEW** on (to start with) plays once. A `>` marks the file LOAD TO's voice plays. On the right, each voice's
-  SOURCE and SAMPLE again (Q-Link columns 3 and 4).
+- **SAMPLE** (beside CUTOFF and DRIVE, level with them): the file's name (a long one, its start and end); its arrows,
+  the data wheel (tap the box first) or its Q-Link step through the WAV files of its folder in name order ("Kick 2"
+  before "Kick 10"; the first 255), a file a click. NO SAMPLE until you load one.
+- **Loading one: the SAMPLES page**, the same browser as Incipience 1.1.0's (owner, 2026-10-20: "I want the same
+  browser in percolator"; how it works: [docs/sample-browser.md](../../docs/sample-browser.md)). **DRIVES** lists the
+  places: **PERCOLATOR FOLDER** (the data folder, where the kit packs are, each with its `SAMPLES/` folder), then the
+  MPC's drives (INTERNAL, SD cards, SSDs, USB drives). A folder lists its own WAV files, then every subfolder's, each
+  under a heading with its path (`Kicks/Room /`), so the wheel goes through them all; tap a heading for that folder
+  alone (a folder holding too much for one list, as a drive's top level often does, lists its subfolders instead).
+  `.. UP` or **UP** goes back.
+  - **The cursor (FILE):** its row framed in amber, its name in the FILE box. **Tap the FILE box, then turn the data
+    wheel**: a file a click, over the headings, from one folder into the next. Tapping rows leaves the wheel on FILE.
+    **Q-Link 1 (BROWSE)** moves it too, a file per three Q-Link events (a small turn of a Live II Q-Link is several);
+    **SCROLL** (Q-Link 2, or its arrows) a page.
+  - **PREVIEW** (on to start with): the file the cursor lands on plays straight from the drive, until it ends or the
+    cursor moves.
+  - **Loading:** tap a file to put the cursor there and hear it; **tap it again, or LOAD**, and it loads into
+    **LOAD TO**'s voice (V1 to start with), whose SOURCE turns to SAMPLE (with PREVIEW on, the voice plays it once).
+    **AUTO LOAD** (off to start with): the file the cursor lands on loads at once, so the wheel alone browses and
+    loads. A `>` marks the file LOAD TO's voice plays; picking a voice in LOAD TO puts the cursor on its file (the list
+    goes to its folder if needed).
+  - **AUDITION** (off to start with): turning a voice's SAMPLE plays it once (on SOURCE = SAMPLE).
+  - The box at the top shows where you are (the cursor's file's folder; its end, if long), the one beside it how much is
+    listed (`64 WAVS IN 5 FOLDERS`). On the right, each voice's SOURCE and SAMPLE again (Q-Link columns 3 and 4).
 - **A kit** (the PRESET menu, KIT) turns every voice back to SYNTH, the kit's sound; each keeps its file, so SOURCE =
   SAMPLE plays it again.
 - **Files:** WAV, 8, 16, 24 or 32-bit or 32-bit float, any sample rate (played at its own pitch), up to 8 channels
   mixed to mono, the first minute, 64 MB a file at most, cue points as slices (as the kit packs'). A file is read when
-  something first asks for it (a tap, a step of SAMPLE, a hit), on a thread of its own, never the audio's: a hit that
+  something first asks for it (the cursor landing on it, a load, a step of SAMPLE, a hit), on a thread of its own, never the audio's: a hit that
   asks plays without it. 64 MB of files stay in memory; past that the ones longest unplayed are let go (and read again
   when asked for), never one a voice is playing.
 - **Saved** with the project: each voice's folder and the file's name, found again by name when the project opens
@@ -200,8 +215,8 @@ Q-Link columns: BBD, MASTER, MODULATION, then KIT.
 One voice per page, each Q-Link column on its own panel: **Q-Link column 1** = ALGO, MODE, VCF (the switches, big
 enough to tap, and the mode's name under MODE), **column 2** = TUNE, DECAY, PARAM 1, PARAM 2, **column 3** = CUTOFF,
 DRIVE (under TUNE and DECAY since 2.1.0, as on the MOD pages), SOURCE and SAMPLE ([your own samples](#your-own-samples-on-every-voice)),
-**column 4** = MIX, under the switches: LEVEL (the voice's volume), FX SEND, COMP SEND. **RANDOMISE** at the top right
-([below](#randomise)). Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
+**column 4** = MIX, under the switches: LEVEL (the voice's volume), FX SEND, COMP SEND. **SOURCE** and **RANDOMISE**
+([below](#randomise)) at the top right; SAMPLE beside CUTOFF and DRIVE. Above the knobs, the **envelope display** redraws as you turn its knobs: AMP
 follows DECAY (a flat line at the top = DRONE), PITCH (voices 1-2) follows PARAM 2's pitch envelope, voice 4's ATTACK
 follows its PARAM 2.
 
@@ -232,9 +247,11 @@ KEYS CH ([Playing it](#playing-it)).
 
 <img src="screenshots/page_9.png" width="760" alt="Percolator, the sample browser">
 
-The data folder and the MPC's drives, their folders and WAV files; LOAD TO, PREVIEW; each voice's SOURCE and SAMPLE
-([your own samples](#your-own-samples-on-every-voice)). Q-Link columns: SCROLL; LOAD TO and PREVIEW; the four SOURCEs;
-the four SAMPLEs. Last of the pages, so a project's Q-Link maps keep their pages.
+The data folder and the MPC's drives: a folder's WAV files and its subfolders' in one list, the cursor (FILE: the data
+wheel on its box), SCROLL, LOAD, UP, DRIVES; LOAD TO, PREVIEW, AUTO LOAD, AUDITION; each voice's SOURCE and SAMPLE
+([your own samples](#your-own-samples-on-every-voice)). Q-Link columns: BROWSE (the cursor, a file per three events)
+and SCROLL; LOAD TO, AUTO LOAD, PREVIEW, AUDITION; the four SOURCEs; the four SAMPLEs. Last of the pages, so a
+project's Q-Link maps keep their pages.
 
 ## Kits
 
@@ -423,7 +440,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   table) and the [HD-01 manual](https://www.manualslib.com/manual/2588218/Erica-Synths-Perkons-Hd-01.html). The kit
   format was worked out from the packs themselves.
 
-## Status (2026-10-19)
+## Status (2026-10-20)
 
 - Build and offline host test PASSED (ARM `.so`, the x86 test under ASan/UBSan with the four packs mounted: two
   instances, every parameter, Q-Links, pop-ups, CC and NRPN, chunk restore, 177 kits named in the PRESET menu);
@@ -497,6 +514,16 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   hit and 6 LSB in the groove; Hrtl 54 and Hrtl 60 differ only by that click gone. The selftest stops 288 hits (each
   algorithm and mode, DECAY short to drone, DRIVE off and full: under 1 LSB before, silent after, a held drone plays
   on); build and host test PASSED.
+  Then (owner, 2026-10-20, after rebuilding Incipience's browser: "I want the same browser in percolator", and the
+  SOURCE box on the voice pages "doesn't look nice"): the SAMPLES page is Incipience 1.1.0's
+  browser ([its notes](../../docs/sample-browser.md)): a folder and its subfolders in one list, the cursor (FILE: the
+  data wheel on its box; BROWSE, Q-Link 1, a file per three events), PREVIEW from the drive, a second tap, LOAD or AUTO
+  LOAD, AUDITION; 7 parameters appended (183). The voice pages: SOURCE at the top beside RANDOMISE, SAMPLE level with
+  CUTOFF and DRIVE. Its two buttons had drawn apart because the skin builder keeps one picture per option of a
+  parameter, and the SAMPLES page's smaller ones took the voice page's place; both are one size now. A voice's SAMPLE
+  and FILE move a file a click with this repo's wrapper too: the engine makes any small move one step, as the release
+  tools' `nudge_pct` does. The dot-matrix boxes' arrows are amber now (they were near-black on black). Offline:
+  `mpc/selftest.c` PASSED natively (20,000 rolls), as 32-bit ARM, under ASan/UBSan and TSan; procwatch as before (`after/fresh` 1.00); build and host test PASSED; `check_skin.py` OK. Not on the Live II yet.
 
 ## Files
 
