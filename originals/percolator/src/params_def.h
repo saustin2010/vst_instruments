@@ -180,6 +180,13 @@ static const pdef_t PDEF[] = {
     {"br_preview", 1, 2, 1.0f},
     {"br_up", 3, 0, 0.0f},
     {"br_places", 3, 0, 0.0f},
+    {"br_cursor", 4, 1000, 0.0f},
+    {"br_cursor_prev", 3, 0, 0.0f},
+    {"br_cursor_next", 3, 0, 0.0f},
+    {"br_load", 3, 0, 0.0f},
+    {"br_audition", 1, 2, 0.0f},
+    {"br_autoload", 1, 2, 0.0f},
+    {"br_cursor_q", 4, 1000, 0.0f},
 };
 enum {
     P_KIT = 0,
@@ -358,7 +365,14 @@ enum {
     P_BR_PREVIEW = 173,
     P_BR_UP = 174,
     P_BR_PLACES = 175,
-    NP = 176
+    P_BR_CURSOR = 176,
+    P_BR_CURSOR_PREV = 177,
+    P_BR_CURSOR_NEXT = 178,
+    P_BR_LOAD = 179,
+    P_BR_AUDITION = 180,
+    P_BR_AUTOLOAD = 181,
+    P_BR_CURSOR_Q = 182,
+    NP = 183
 };
 /* per-voice block: v%d_tune is P_V1_TUNE + 11 * (v - 1) */
 #define VSTRIDE 11

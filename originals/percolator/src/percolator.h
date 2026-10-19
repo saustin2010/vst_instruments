@@ -136,6 +136,15 @@ typedef struct perc {
     char bpath[512];       /* the folder asked for ("" = the places) */
     int bwait;             /* a listing is on its way */
     int aud, aud_n, aud_off, aud_v;   /* PREVIEW: voice + 1 waiting to play, frames waited; frames to its release */
+    /* the file under the cursor (FILE), played as it lands, straight from its folder (PREVIEW) */
+    int prv_slot;          /* the library file playing (held), or -1 */
+    int prv_f, prv_k, prv_want, prv_n;   /* the one asked for: folder, file; waiting for it, frames waited */
+    const sample_t *prv_s;
+    double prv_pos;
+    uint32_t clock;        /* frames played: a tap told from MPC turning off the row it lit */
+    uint32_t btap_at;      /* when a tap last lit a row */
+    char bfind[256];       /* a file to put the cursor on once its folder is listed (LOAD TO's own) */
+    int qacc[2];           /* Q-Link events counted toward BROWSE's next row, SCROLL's next page (QL_TICKS) */
 } perc_t;
 
 #define DL_N 65536
@@ -167,12 +176,18 @@ extern sample_t perc_builtin[NSLOT];
 #ifndef LIB_MEDIA
 #define LIB_MEDIA "/media"        /* the MPC's drives */
 #endif
-enum { LE_FILE, LE_DIR, LE_UP, LE_PLACE };
-typedef struct { int kind; char *name, *path; } lib_ent_t;   /* path: a place's own */
-typedef struct lib_list {         /* a folder ("" = the places): "..", its subfolders, then its WAV files */
+#define LIB_FLAT 999              /* a listing of a folder and all its subfolders' files: entries at most (FILE's range) */
+enum { LE_FILE, LE_DIR, LE_UP, LE_PLACE, LE_HEAD };
+typedef struct { int kind; char *name, *path; int grp; } lib_ent_t;   /* path: a place's, a heading's; grp: a file's */
+typedef struct { char *path; int first, n; } lib_grp_t;   /* a folder's WAV files in a listing: e[first] on, n of them */
+typedef struct lib_list {         /* a folder ("" = the places): "..", then its WAV files and, when they all fit
+                                   * (flat), every subfolder's below, each under a heading (LE_HEAD, its path from
+                                   * here); else its subfolders, then its WAV files */
     char path[LIB_PATH];
-    int n, first_file, nfiles, missing, gen;
+    int n, first_file, nfiles, missing, gen;   /* nfiles: in all; first_file: the first */
+    int flat, ng;
     lib_ent_t *e;
+    lib_grp_t *g;                 /* g[0]: the folder's own */
 } lib_list_t;
 typedef struct lib_br lib_br_t;   /* an instance's listings */
 void lib_open(const char *dir);
@@ -180,7 +195,7 @@ void lib_close(void);
 void lib_poke(void);              /* once a block: wakes the thread if a request is waiting */
 void lib_wait(void);              /* until nothing waits to be read (offline tools) */
 int lib_folder(const char *path); /* its number (read on the thread), -1 if there are too many */
-int lib_folder_set(const char *path, const lib_list_t *l);   /* as listed: the same number if nothing changed */
+int lib_folder_set(const lib_list_t *l, int g);   /* folder g of a listing, as listed: the same number if nothing changed */
 int lib_files(int f);             /* its WAV files, -1 while it's being read */
 const char *lib_name(int f, int k);
 const char *lib_path(int f);

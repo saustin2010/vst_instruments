@@ -23,6 +23,9 @@ NOTE_NAMES = ["%s%d" % (("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "
               for n in range(128)]   # MPC's names: 60 = C3, 36 = C1
 WAVES = ["SINE", "TRI", "RAMP", "SAW", "SQUARE", "S&H", "DRIFT"]
 BROWSE_ROWS = 8   # the SAMPLES tab's rows
+# a long list (a voice's SAMPLE, FILE): a step a Q-Link event or wheel click, where 1/100 of the range would skip files
+# (the release tools' wrapper: "nudge_pct", which needs "display": "int"; the engine does the same, src: nudge)
+LONG = dict(display="int", nudge_pct=10)
 
 # the Init kit (also the engine's defaults): 0..100 for knobs, option index for switches
 INIT = {
@@ -123,7 +126,7 @@ def params():
     for v in range(1, 5):
         opts("v%d_src" % v, "V%d SOURCE" % v, ["SYNTH", "SAMPLE"], 0)
         P.append(dict(key="v%d_smp" % v, name="V%d SAMPLE" % v, type="stepper", min=0, max=255, step=1, default=0,
-                      dynamic_display=True))
+                      dynamic_display=True, **LONG))
         P.append(dict(key="v%d_smp_prev" % v, name="V%d SAMPLE DOWN" % v, momentary=True, step_of="v%d_smp" % v,
                       step_delta=-1))
         P.append(dict(key="v%d_smp_next" % v, name="V%d SAMPLE UP" % v, momentary=True, step_of="v%d_smp" % v,
@@ -144,6 +147,21 @@ def params():
     opts("br_preview", "PREVIEW", ["OFF", "ON"], 1)
     P.append(dict(key="br_up", name="UP", momentary=True))
     P.append(dict(key="br_places", name="DRIVES", momentary=True))
+    # Incipience 1.1.0's browser (owner, 2026-10-20: "I want the same browser in percolator"), its parameters in its
+    # order: a cursor, FILE (the data wheel on its box, its arrows: an entry a click), whose row is lit and whose file
+    # plays as it lands (PREVIEW); a tap on a row puts the cursor there, a second tap or LOAD loads it into LOAD TO's
+    # voice; AUDITION: turning a voice's SAMPLE plays it; a folder lists its subfolders' files too, so FILE runs from one
+    # folder's into the next; AUTO LOAD: the file FILE lands on loads; BROWSE: FILE on Q-Link 1, a row per three events
+    # (a Q-Link's small turn is several; the wheel's click one of the same size), not on the page
+    P.append(dict(key="br_cursor", name="FILE", type="stepper", min=0, max=999, step=1, default=0,
+                  dynamic_display=True, clamped=True, **LONG))
+    P.append(dict(key="br_cursor_prev", name="FILE DOWN", momentary=True, step_of="br_cursor", step_delta=-1))
+    P.append(dict(key="br_cursor_next", name="FILE UP", momentary=True, step_of="br_cursor", step_delta=1))
+    P.append(dict(key="br_load", name="LOAD", momentary=True))
+    opts("br_audition", "AUDITION", ["OFF", "ON"], 0)
+    opts("br_autoload", "AUTO LOAD", ["OFF", "ON"], 0)
+    P.append(dict(key="br_cursor_q", name="BROWSE", type="stepper", min=0, max=999, step=1, default=0,
+                  dynamic_display=True, clamped=True, qlink_only=True, **LONG))
     return P
 
 

@@ -2279,7 +2279,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "v1_smp_prev",
@@ -2317,7 +2319,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "v2_smp_prev",
@@ -2355,7 +2359,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "v3_smp_prev",
@@ -2393,7 +2399,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "v4_smp_prev",
@@ -2531,6 +2539,70 @@
    "key": "br_places",
    "name": "DRIVES",
    "momentary": true
+  },
+  {
+   "key": "br_cursor",
+   "name": "FILE",
+   "type": "stepper",
+   "min": 0,
+   "max": 999,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true,
+   "clamped": true,
+   "display": "int",
+   "nudge_pct": 10
+  },
+  {
+   "key": "br_cursor_prev",
+   "name": "FILE DOWN",
+   "momentary": true,
+   "step_of": "br_cursor",
+   "step_delta": -1
+  },
+  {
+   "key": "br_cursor_next",
+   "name": "FILE UP",
+   "momentary": true,
+   "step_of": "br_cursor",
+   "step_delta": 1
+  },
+  {
+   "key": "br_load",
+   "name": "LOAD",
+   "momentary": true
+  },
+  {
+   "key": "br_audition",
+   "name": "AUDITION",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "br_autoload",
+   "name": "AUTO LOAD",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "br_cursor_q",
+   "name": "BROWSE",
+   "type": "stepper",
+   "min": 0,
+   "max": 999,
+   "step": 1,
+   "default": 0,
+   "dynamic_display": true,
+   "clamped": true,
+   "qlink_only": true,
+   "display": "int",
+   "nudge_pct": 10
   }
  ]
 }
