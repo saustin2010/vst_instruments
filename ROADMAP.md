@@ -162,14 +162,22 @@ parameter index, so existing projects keep working.
     wheel works on other plugins of ours and Akai's on the Live II, and if not on Incipience alone, trace what MPC sends
   - [x] On the Live II (owner, 2026-10-19: "looks like all these things are working"): the SAMPLES tab, RANDOMISE,
     NOISE VOL on page A
-  - [ ] **1.0.0 in sd88me's catalogue** (owner, 2026-10-19: "update in a PR and get this loaded up to 88 as a new
-    instrument"). Done offline: its own repo's files (`prepare.py incipience`: the release workflow with Incipience OUT
-    as a second job and zip, as Percolator OUT; FRAMEWORK.md; the README's Install section and where to get the
-    AlphaBase samples), catalogue entries `incipience` and `incipience-out`, `check.sh incipience incipienceout` PASSED
-    with the release tools (`eaef502`). The sample set may now sit one folder down (Windows' Extract All); the SAMPLES
-    tab's first place is SAMPLE SET BY NUMBER (no maker's name on the screen). Next: publish
-    `saustin2010/mpc-vst-incipience`, the release drafts (v1.0.0, incipience-out-v1.0.0), the release zips on the Live II
-    (portable layout: one MPC restart), publish, the catalogue PR, `tested.json`
+  - [x] **1.0.0 released** (owner, 2026-10-19: "update in a PR and get this loaded up to 88 as a new instrument"):
+    its own repo [mpc-vst-incipience](https://github.com/saustin2010/mpc-vst-incipience) (`prepare.py incipience`: the
+    release workflow with Incipience OUT as a second job and zip, as Percolator OUT; FRAMEWORK.md; where to get the
+    AlphaBase samples, which may now sit one folder down), v1.0.0 and incipience-out-v1.0.0 published after both zips
+    were installed on the Live II with their own installer and checked by the owner ("looks good"; `tested.json`). The
+    SAMPLES tab's first place is SAMPLE SET BY NUMBER (no maker's name on the screen). The owner's one note, "when
+    dialing through the samples the numbers skip": with `QLINK_TRAVEL` the release tools' wrapper ignored `nudge_pct`,
+    so a Q-Link tick moved SAMPLE 2 and a wheel click 2.5; fixed on the fork (`steve-features` b014168, the new pin),
+    SAMPLE and SCROLL step one per tick (host test: six ticks step six). PR #31 here
+  - [ ] **In sd88me's catalogue**: entries `incipience` and `incipience-out` proposed in
+    [sd88me/mpc-vst-plugins#480](https://github.com/sd88me/mpc-vst-plugins/pull/480) (2026-10-19; `catalog_build` on
+    both: 0 problems), waiting for his merge
+  - [ ] The next release: a `bench.sh` figure on the Live II (`bench.txt`, the catalogue's "cpu-bench"), with the matrix
+    busy; KIT still moves 4 kits a Q-Link tick (parameter 0: the wrapper holds its set to the next block, so the host
+    test's `nudge_pct` check can't run on it); this repo's own build (`tools/build.sh`, the older wrapper) has no
+    `nudge_pct`, so an install with `./install.sh` still skips samples on a Q-Link
   - [ ] Phase 3: decode the AlphaBase kit files (`ABPR*.BIN`: 128 x 496-byte records; analog values stored x32 as
     12-bit DAC words, e.g. AlphaOne's kick Tune 86 / Pitch 28 / Decay 84 / Harm 0; most fields not mapped yet) so its
     63 factory kits load; the AlphaBase's CC chart on channels 1-11 (needs its MIDI implementation)
