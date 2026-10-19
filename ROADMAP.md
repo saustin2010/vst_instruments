@@ -158,9 +158,22 @@ parameter index, so existing projects keep working.
     050603a), both OK in `catalog_check --catalog`; Percolator OUT's `.so` is byte-identical to 2.0.0's (the one
     checked on the Live II). On the Live II: the zip installed (one restart), Pack 3 in the Windows layout listed
     through Pack 3 62 (owner: "fine"); both published 2026-10-13 (v2.0.1 Latest), `tested.json` 2.0.1.
+  - [ ] 2.1.0 (owner, 2026-10-19: Incipience's sample browser for Percolator, samples "allowed on each voice", and "a
+    random button to randomise each parameter per voice"; branch `percolator-samples`, not pushed): each voice's SOURCE
+    (SYNTH, or SAMPLE: its own WAV file played as voice 4's SAMPLE plays its slots; the owner chose a switch over
+    layering) and SAMPLE (stepping through the file's folder), a SAMPLES page browsing the data folder and the MPC's
+    drives (`src/library.c`, as Incipience's), RANDOMISE per voice (sound controls only, the mix and MIDI kept). 37
+    parameters appended (176), the SAMPLES page last. Offline: the 177 kits render bit-identical to 2.0.1;
+    `mpc/selftest.c` PASSED natively, as armv7, under ASan/UBSan and TSan (every RANDOMISE roll heard: 80,000 over -36
+    dBFS); build and host test PASSED, `check_skin.py` OK, procwatch as 2.0.1 (the new thread sleeps). Also fixed: a
+    sine-table read one past its end (UBSan, FM; in 2.0.1 too). Left: install on the Live II (no restart: re-insert),
+    the owner's checks (browsing the drives, a file on each voice, PREVIEW, RANDOMISE, a project saved and reopened),
+    then a release.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
-    would save most of it.
+    would save most of it. Found 2026-10-19: a voice on any algorithm but SNARE never stops after its first hit
+    (`voice_block`'s stop test also waits for `nenv`, which only SNARE lowers), so up to four voices render silence for
+    good; stopping them changes the kits' sound below -80 dB (offer it as its own change, with kit renders compared).
 - [ ] **Percolator OUT** ([originals/percolator/percolatorout](originals/percolator/percolatorout/), 2026-10-12): an insert effect that plays
   one of Percolator's OUT 1-4 on its own track (owner: an audio track instead of a second plugin). Offline tests
   passed; installed and working on an audio track on the Live II (2026-10-12). Left: a release with Percolator 2.0.0
