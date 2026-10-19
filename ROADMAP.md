@@ -156,10 +156,9 @@ parameter index, so existing projects keep working.
     a playing file never freed); the project's state is now only what differs from the defaults. 730 parameters.
     `build.sh` PASSED, `check_skin.py` OK, the self-test PASSED natively and under ASan/UBSan and TSan. Installed on
     the Live II 2026-10-19 (no restart; the .so verified by hash)
-  - [ ] On the Live II: the **data wheel** (owner: "I cannot use the main mpc button to dial in parameters ... in
-    addition to the qlinks"). The screen file gives the controls MPC's focus as Percolator's does (the same focus and
-    touch actions), and sd88me's Force probe saw the wheel send a focused control's value + 0.01: find out whether the
-    wheel works on other plugins of ours and Akai's on the Live II, and if not on Incipience alone, trace what MPC sends
+  - [x] The **data wheel** (owner, 2026-10-18: "I cannot use the main mpc button to dial in parameters"): it works, on
+    the control you've selected (owner, 2026-10-19: "the data wheel works as long as a box is selected"); nothing was
+    selected. Since b014168 a click on SAMPLE moves one sample. (Whether a knob takes it once tapped: not asked yet)
   - [x] On the Live II (owner, 2026-10-19: "looks like all these things are working"): the SAMPLES tab, RANDOMISE,
     NOISE VOL on page A
   - [x] **1.0.0 released** (owner, 2026-10-19: "update in a PR and get this loaded up to 88 as a new instrument"):
@@ -171,6 +170,18 @@ parameter index, so existing projects keep working.
     dialing through the samples the numbers skip": with `QLINK_TRAVEL` the release tools' wrapper ignored `nudge_pct`,
     so a Q-Link tick moved SAMPLE 2 and a wheel click 2.5; fixed on the fork (`steve-features` b014168, the new pin),
     SAMPLE and SCROLL step one per tick (host test: six ticks step six). PR #31 here
+  - [ ] **1.1.0: the sample browser** (owner, 2026-10-19: "i would like to improve the sample browsers as it's a bit
+    clunky"; chose a cursor with preview, LOAD TO as buttons, shorter names, and AUDITION as a switch): a cursor (FILE:
+    the data wheel on its box, Q-Link 1, its arrows; SCROLL a page) whose row is lit and whose file plays straight from
+    the folder as it lands (PREVIEW); a tap on a file moves the cursor there and a second tap or LOAD loads it; LOAD TO
+    as eight buttons that take the list to that instrument's folder; names without `.wav`, long ones start..end;
+    AUDITION: turning SAMPLE on an instrument's page plays it. Also fixed: the `>` mark now finds the loaded file by name
+    (it marked the wrong one after a file was added to the folder). 735 parameters (the first 730 as in 1.0.0). Offline:
+    self-test PASSED (native, ASan/UBSan, TSan), `tools/build.sh` PASSED (three runs; the drives are listed at create, so
+    the host test's restore check no longer catches the list mid-read), `check_skin.py` OK, `check.sh incipience
+    incipienceout` PASSED, procwatch no flags (idle/play 0.17). To check on the Live II: the lit row (the row's value
+    reads 1; MPC turns it off on a tap, taken as the second tap unless within 100 ms of the first), the wheel on FILE,
+    the preview's timing on the SSD; then release 1.1.0
   - [ ] **In sd88me's catalogue**: entries `incipience` and `incipience-out` proposed in
     [sd88me/mpc-vst-plugins#480](https://github.com/sd88me/mpc-vst-plugins/pull/480) (2026-10-19; `catalog_build` on
     both: 0 problems), waiting for his merge
