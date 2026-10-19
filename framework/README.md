@@ -40,12 +40,14 @@ them. Each plugin's `FRAMEWORK.md` lists the ones it uses, what they do there an
 | [`7afa72e`](https://github.com/saustin2010/mpc-vst-plugins/commit/7afa72e) | `"live"` params in `vst.json`: display params the engine moves by itself, reported to MPC after every block | The step light follows playback; without it, it stays where it was when the page was drawn. | 2: Stevequencer, Stevequencer 16 |
 | [`7f0653c`](https://github.com/saustin2010/mpc-vst-plugins/commit/7f0653c) | A host set of parameter 0 waits for the next block; a pair that ends where it started is dropped; the host test replays it | On insert and on every STOP, MPC's host (JUCE) sets parameter 0 to the far end and straight back: where that is a preset, every knob moved since went back to it (Live II trace, 2026-10-10). | all: the 7 with a preset or kit there (Fizzik, Helm, Hera, Hush One, NuSaw, Libpo32, Percolator) lost edits on STOP. Offered to sd88me as [#279](https://github.com/sd88me/mpc-vst-plugins/pull/279) (2026-10-11), merged |
 | [`eaef502`](https://github.com/saustin2010/mpc-vst-plugins/commit/eaef502) | `mpc_engine_changed()`: an engine reports parameters it changed itself, the wrapper tells MPC as it does a MIDI CC's | MPC's screen and Q-Links follow controls an engine sets from MIDI it reads itself; without it they keep the old values. | 1: Percolator (2.0.0: the Pērkons CCs and MIDI MOD lanes on its own MIDI port). Merged upstream as [#399](https://github.com/sd88me/mpc-vst-plugins/pull/399) (2026-10-12), rebuilt on his main: his wrapper has no `QLINK_TRAVEL`, so it resets `settle()`'s `last_pos` instead, with a test engine (`poc/selfset`) |
+| [`b014168`](https://github.com/saustin2010/mpc-vst-plugins/commit/b014168) | `QLINK_TRAVEL` keeps `nudge_pct`: a long whole-number list steps one per Q-Link event or wheel click | With travel on, a 0-255 sample number moved 2 per Q-Link event and 2.5 per wheel click, skipping numbers (owner on the Live II, 2026-10-19), and `nudge_pct` was never read. | 1: Incipience (SAMPLE, SCROLL). Not offered to sd88me: his wrapper has no `QLINK_TRAVEL` |
 
 Most are opt-in: they change nothing unless a plugin's own files ask for them (a layout line, a `params.json` or `vst.json`
 key, a `defines` entry, the transport hook), so sd88me's own ports build as before. The rest are fixes: the option-list read
 past its end, the installer's path match, the host test (macOS, long ranges, travel) and the release workflow's `tools_repo`. `tools/build.sh` still uses the older base and patch below until all 40 build on these.
-The pin is `eaef502` since 2026-10-12 (`mpc_engine_changed`, for Percolator 2.0.0), which Percolator's `release.yml`
-names; the others still name `7f0653c` (the commit before it on the branch) until their next release runs `prepare.py`.
+The pin is `b014168` since 2026-10-19 (`nudge_pct` with `QLINK_TRAVEL`, for Incipience 1.0.0), which Incipience's
+`release.yml` names; Percolator's names `eaef502` (2026-10-12, `mpc_engine_changed`) and the others `7f0653c` until their
+next release runs `prepare.py`.
 To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `setup-release.sh`, run
 `python3 dev-tools/catalogue/prepare.py --ready` (it rewrites each plugin's `release.yml` and `FRAMEWORK.md`), then
 `check.sh` the plugins.
