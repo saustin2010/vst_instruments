@@ -298,6 +298,10 @@ def build():
     arrows("br_cursor", "FILE")
     P.append(dict(key="br_load", name="LOAD", momentary=True))
     opts("br_audition", "AUDITION", ONOFF, 0)
+    # (owner, 2026-10-20: "rather than touchscreen can we just use the wheel to scroll through folders and sounds?") a
+    # folder lists its subfolders' files too (library.c, when they fit), so FILE runs from one folder's into the next;
+    # AUTO LOAD: the file FILE lands on loads into LOAD TO's instrument, nothing to tap
+    opts("br_autoload", "AUTO LOAD", ONOFF, 0)
     return P
 
 
@@ -486,11 +490,11 @@ PAGES += [
     ("SAMPLES", None, "SAMPLE BROWSER", {
         "pages": [("BROWSE", [])],
         "browser": True,
-        "side": ["br_target", "br_preview", "br_audition"],
+        "side": ["br_target", "br_preview", "br_autoload", "br_audition"],
         "side_panels": [("LOAD TO", "PICK, THEN LOAD", ["br_target"]),
-                        ("LISTEN", "FILES AS YOU GO + SAMPLE DIAL", ["br_preview", "br_audition"])],
+                        ("AS YOU TURN", "FILE PLAYS / LOADS + SAMPLE DIAL", ["br_preview", "br_autoload", "br_audition"])],
         "also": ["br_scroll", "br_cursor", "br_path", "br_status"],
-        "qlinks": ["br_cursor", "br_scroll", "-", "-", "br_target", "-", "-", "-", "br_preview", "br_audition", "-", "-",
+        "qlinks": ["br_cursor", "br_scroll", "-", "-", "br_target", "br_autoload", "-", "-", "br_preview", "br_audition", "-", "-",
                    "-", "-", "-", "-"],
         "info": []}),
 ]

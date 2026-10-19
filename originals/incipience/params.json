@@ -9449,6 +9449,15 @@
     "ON"
    ],
    "default": "OFF"
+  },
+  {
+   "key": "br_autoload",
+   "name": "AUTO LOAD",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
   }
  ]
 }

@@ -465,12 +465,12 @@ static void preview_stop(inc_t *P) {
 static void preview(inc_t *P, int k) {   /* file entry k of the listing shown */
     preview_stop(P);
     const lib_list_t *l = P->bl;
-    if (P->pv[P_BR_PREVIEW] < 0.5f || !l || k < l->first_file || k >= l->n || l->e[k].kind != LE_FILE) return;
-    int f = lib_folder_set(l->path, l);
+    if (P->pv[P_BR_PREVIEW] < 0.5f || !l || k < 0 || k >= l->n || l->e[k].kind != LE_FILE) return;
+    int g = l->e[k].grp, f = lib_folder_set(l, g);
     if (f < 0) return;   /* (too many folders in one session: LIB_FOLDERS) */
     smp_t sm;
     P->prv_f = f;
-    P->prv_k = k - l->first_file;
+    P->prv_k = k - l->g[g].first;
     P->prv_want = 1;
     P->prv_n = 0;
     lib_put(lib_get(f, P->prv_k, &sm));   /* asked for now: read on the library's thread */
@@ -495,11 +495,26 @@ static void preview_block(inc_t *P, float *L, float *R, int n) {   /* mono, -3 d
 /* ---- 1.1.0: the cursor (FILE), an entry of the listing: its row is lit (its value reads 1) and the view follows it */
 static int cursor(const inc_t *P) { return (int)P->pv[P_BR_CURSOR]; }
 
-static void cursor_to(inc_t *P, int k, int hear) {   /* hear: a move of the cursor's own, PREVIEW plays where it lands */
+/* a flat listing's cursor is on a file: past a heading (or ..) to the next file the way it was going (else back) */
+static int on_file(const lib_list_t *l, int k, int d) {
+    if (!l || !l->flat || !l->nfiles) return k;
+    for (int j = k; j >= 0 && j < l->n; j += d)
+        if (l->e[j].kind == LE_FILE) return j;
+    for (int j = k; j >= 0 && j < l->n; j -= d)
+        if (l->e[j].kind == LE_FILE) return j;
+    return k;
+}
+
+static void browse_act(inc_t *P, int k);
+
+/* hear: a move of the cursor's own: the file it lands on plays (PREVIEW), or with AUTO LOAD, loads into LOAD TO's
+ * instrument (and plays through it, PREVIEW on) */
+static void cursor_to(inc_t *P, int k, int hear) {
     const lib_list_t *l = P->bl;
     int n = l ? l->n : 0, was = cursor(P);
     k = k >= n ? n - 1 : k;
     k = k < 0 ? 0 : k;
+    k = on_file(l, k, k < was ? -1 : 1);
     P->pv[P_BR_CURSOR] = P->ev[P_BR_CURSOR] = (float)k;
     mark(P, P_BR_CURSOR);
     int s = (int)P->pv[P_BR_SCROLL];
@@ -507,9 +522,32 @@ static void cursor_to(inc_t *P, int k, int hear) {   /* hear: a move of the curs
     else if (k >= s + BROWSE_ROWS) scroll_to(P, k - BROWSE_ROWS + 1);
     mark_rows(P);
     if (hear && k != was) {
-        if (l && k < n && l->e[k].kind == LE_FILE) preview(P, k);
+        if (l && k < n && l->e[k].kind == LE_FILE && P->pv[P_BR_AUTOLOAD] >= 0.5f) browse_act(P, k);
+        else if (l && k < n && l->e[k].kind == LE_FILE) preview(P, k);
         else preview_stop(P);
     }
+}
+
+static int find_in(const lib_list_t *l, int g, const char *name) {   /* a file of folder g of the listing, by name */
+    for (int k = l->g[g].first; name && k < l->g[g].first + l->g[g].n; k++)
+        if (!strcmp(l->e[k].name, name)) return k;
+    return -1;
+}
+
+static int group_of(const lib_list_t *l, const char *path) {   /* the listing's folder with that path, or -1 */
+    for (int g = 0; path && g < l->ng; g++)
+        if (!strcmp(l->g[g].path, path)) return g;
+    return -1;
+}
+
+static int mine_at(const inc_t *P, const lib_list_t *l) {   /* the file LOAD TO's channel plays, if it's listed */
+    int c = (int)P->pv[P_BR_TARGET], g = group_of(l, lib_path(P->sfold[c]));
+    return g < 0 ? -1 : find_in(l, g, lib_name(P->sfold[c], (int)P->pv[SMP_P(c)] - 1));
+}
+
+static int under(const char *path, const char *dir) {   /* path is dir or in it */
+    size_t n = strlen(dir);
+    return !strncmp(path, dir, n) && (path[n] == 0 || path[n] == '/');
 }
 
 /* the listing asked for, once it's read; the cursor on the folder just left (UP), on LOAD TO's file (bfind, or the one
@@ -518,20 +556,18 @@ static void browse_adopt(inc_t *P) {
     if (!P->br) browse(P, P->bpath);   /* the tab's first look: where it was */
     lib_list_t *l = lib_listing(P->br);
     if (!l) return;
-    int at = -1, c = (int)P->pv[P_BR_TARGET];
-    for (int k = l->first_file; P->bfind[0] && at < 0 && k < l->n; k++)   /* LOAD TO picked: its file first */
-        if (!strcmp(l->e[k].name, P->bfind)) at = k;
+    int at = P->bfind[0] && l->ng ? find_in(l, 0, P->bfind) : -1;   /* LOAD TO picked: its file first */
     if (at < 0 && P->bl && l->path[0] && !strncmp(P->bl->path, l->path, strlen(l->path)) &&
-        P->bl->path[strlen(l->path)] == '/') {
+        P->bl->path[strlen(l->path)] == '/') {   /* UP: the folder left, its row (or a flat listing's first file of it) */
         const char *left = P->bl->path + strlen(l->path) + 1;
-        for (int k = 0; k < l->n; k++)
-            if (l->e[k].kind == LE_DIR && !strcmp(l->e[k].name, left)) at = k;
+        for (int k = 0; at < 0 && k < l->n; k++)
+            if ((l->e[k].kind == LE_DIR && !strcmp(l->e[k].name, left)) ||
+                (l->e[k].kind == LE_HEAD && under(l->e[k].path, P->bl->path)))
+                at = k;
     }
-    const char *mine = lib_path(P->sfold[c]) && !strcmp(lib_path(P->sfold[c]), l->path) ?
-                       lib_name(P->sfold[c], (int)P->pv[SMP_P(c)] - 1) : NULL;
-    for (int k = l->first_file; at < 0 && mine && k < l->n; k++)
-        if (!strcmp(l->e[k].name, mine)) at = k;
+    if (at < 0) at = mine_at(P, l);
     if (at < 0) at = l->n > 1 && l->e[0].kind == LE_UP ? 1 : 0;
+    at = on_file(l, at, 1);
     P->bfind[0] = 0;
     preview_stop(P);
     lib_list_free(P->bl);
@@ -581,6 +617,7 @@ static void browse_act(inc_t *P, int k) {
         snprintf(p, sizeof p, "%s/%s", l->path, e->name);
         if (strlen(p) < LIB_PATH) browse(P, p);
         break;
+    case LE_HEAD: browse(P, e->path); break;   /* a flat listing's folder: that folder alone */
     case LE_ALPHABASE:   /* back to the set by number */
         set_folder(P, c, -1);
         sample_ask(P, c, (int)P->pv[SMP_P(c)]);
@@ -589,10 +626,10 @@ static void browse_act(inc_t *P, int k) {
         if (P->pv[P_BR_PREVIEW] >= 0.5f) audition(P, c);
         break;
     default: {
-        int f = lib_folder_set(l->path, l);
+        int f = lib_folder_set(l, e->grp);
         if (f < 0) return;   /* (too many folders in one session: LIB_FOLDERS) */
         set_folder(P, c, f);
-        int n = k - l->first_file + 1;
+        int n = k - l->g[e->grp].first + 1;
         P->pv[SMP_P(c)] = P->ev[SMP_P(c)] = (float)n;
         mark(P, SMP_P(c));
         sample_ask(P, c, n);
@@ -626,16 +663,16 @@ static void browse_load(inc_t *P) {   /* LOAD: the cursor's entry, as a second t
     if (P->bl && !P->bwait && cursor(P) < P->bl->n) browse_act(P, cursor(P));
 }
 
-/* LOAD TO picked: the list goes to that instrument's own folder, the cursor on the file it plays (on the set by number,
- * the list stays where it is) */
+/* LOAD TO picked: the cursor on the file that instrument plays, the list going to its folder if it isn't listed (on
+ * the set by number, the list stays where it is) */
 static void target_jump(inc_t *P) {
     int c = (int)P->pv[P_BR_TARGET];
     mark_rows(P);
     const char *fp = lib_path(P->sfold[c]), *nm = lib_name(P->sfold[c], (int)P->pv[SMP_P(c)] - 1);
     if (!fp || !nm) return;
-    if (P->bl && !P->bwait && !strcmp(fp, P->bl->path)) {
-        for (int k = P->bl->first_file; k < P->bl->n; k++)
-            if (!strcmp(P->bl->e[k].name, nm)) cursor_to(P, k, 0);
+    if (P->bl && !P->bwait && group_of(P->bl, fp) >= 0) {
+        int k = mine_at(P, P->bl);
+        if (k >= 0) cursor_to(P, k, 0);
         return;
     }
     snprintf(P->bfind, sizeof P->bfind, "%s", nm);
@@ -645,7 +682,8 @@ static void target_jump(inc_t *P) {
 static int is_mine(const inc_t *P, const lib_list_t *l, int k) {   /* the file LOAD TO's channel plays */
     int c = (int)P->pv[P_BR_TARGET];
     const char *fp = lib_path(P->sfold[c]), *nm = lib_name(P->sfold[c], (int)P->pv[SMP_P(c)] - 1);
-    return fp && nm && !strcmp(fp, l->path) && !strcmp(nm, l->e[k].name);   /* by name: the folder may have changed */
+    const lib_ent_t *e = &l->e[k];   /* by name: the folder may have changed */
+    return fp && nm && e->grp >= 0 && !strcmp(fp, l->g[e->grp].path) && !strcmp(nm, e->name);
 }
 
 /* a name in n characters (MPC shows 24): without ".wav", and when longer its start and end, ".." between (takes of one
@@ -663,7 +701,8 @@ static int entry_text(const inc_t *P, const lib_list_t *l, int k, char *buf, int
     char t[32];
     switch (e->kind) {
     case LE_UP: return snprintf(buf, len, ".. UP");
-    case LE_DIR: fit(t, sizeof t, e->name, 22, 0); return snprintf(buf, len, "%s /", t);
+    case LE_DIR:
+    case LE_HEAD: fit(t, sizeof t, e->name, 22, 0); return snprintf(buf, len, "%s /", t);
     case LE_PLACE: fit(t, sizeof t, e->name, 24, 0); return snprintf(buf, len, "%s", t);
     case LE_ALPHABASE:
         return snprintf(buf, len, "%s%s", marks && P->sfold[(int)P->pv[P_BR_TARGET]] < 0 ? "> " : "", e->name);
@@ -690,9 +729,12 @@ static int cursor_text(inc_t *P, char *buf, int len) {   /* FILE: the cursor's e
     return cursor(P) < l->n ? entry_text(P, l, cursor(P), buf, len, 0) : snprintf(buf, len, "-");
 }
 
-static int browse_path(inc_t *P, char *buf, int len) {   /* where it is, its end if long (MPC shows 24 characters) */
+/* where it is, its end if long (MPC shows 24 characters); in a flat listing, the folder of the cursor's file */
+static int browse_path(inc_t *P, char *buf, int len) {
     browse_adopt(P);
     const char *p = P->bpath;
+    const lib_list_t *l = P->bl;
+    if (l && !P->bwait && l->flat && cursor(P) < l->n && l->e[cursor(P)].grp > 0) p = l->g[l->e[cursor(P)].grp].path;
     char s[LIB_PATH + 16];
     snprintf(s, sizeof s, "%s/samples", P->dir);
     if (!p[0]) return snprintf(buf, len, "DRIVES");
@@ -714,9 +756,16 @@ static int browse_status(inc_t *P, char *buf, int len) {
     if (P->bwait || !l) return snprintf(buf, len, "%s", P->bwait ? "READING ..." : " ");
     if (l->missing) return snprintf(buf, len, "CAN'T OPEN IT");
     if (!l->path[0]) return snprintf(buf, len, "PICK A DRIVE");
-    int dirs = l->first_file - 1;
-    if (l->nfiles) return snprintf(buf, len, "%d WAV%s%s", l->nfiles, l->nfiles == 1 ? "" : "S", l->nfiles == LIB_FILES ? " (MAX)" : "");
-    return dirs ? snprintf(buf, len, "%d FOLDER%s", dirs, dirs == 1 ? "" : "S") : snprintf(buf, len, "NO WAV FILES");
+    int dirs = l->flat ? 0 : l->first_file - 1, nf = l->nfiles;
+    if (l->flat && l->ng > 1) {   /* the folders below too */
+        for (int g = 0; g < l->ng; g++) dirs += l->g[g].n > 0;
+        return snprintf(buf, len, "%d WAV%s IN %d FOLDER%s", nf, nf == 1 ? "" : "S", dirs, dirs == 1 ? "" : "S");
+    }
+    if (dirs) /* too many for one list: folder by folder */
+        return nf ? snprintf(buf, len, "%d FOLDER%s + %d WAV%s", dirs, dirs == 1 ? "" : "S", nf, nf == 1 ? "" : "S")
+                  : snprintf(buf, len, "%d FOLDER%s", dirs, dirs == 1 ? "" : "S");
+    if (nf) return snprintf(buf, len, "%d WAV%s%s", nf, nf == 1 ? "" : "S", nf == LIB_FILES ? " (MAX)" : "");
+    return snprintf(buf, len, "NO WAV FILES");
 }
 
 /* a saved project's file, once its folder is read: SAMPLE on it (if it's gone, SAMPLE stays at the number saved) */

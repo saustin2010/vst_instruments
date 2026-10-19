@@ -437,19 +437,21 @@ int main(int argc, char **argv) {
         CHECK(row_is(P, 1, "> SAMPLE SET BY NUMBER") && row_is(P, 2, "INCIPIENCE SAMPLES"), "places: %s", rows(P));
         set(P, "br_row_2", "1");
         browse_wait(P);
-        CHECK(row_is(P, 1, ".. UP") && row_is(P, 2, "Sub /") && row_is(P, 3, "kick 1") && row_is(P, 4, "Kick 2") &&
-              row_is(P, 5, "Kick 10") && row_is(P, 6, "snare") && row_is(P, 7, " "), "folder: %s", rows(P));
+        /* 1.1.0: its own files, then Sub's under a heading */
+        CHECK(row_is(P, 1, ".. UP") && row_is(P, 2, "kick 1") && row_is(P, 3, "Kick 2") && row_is(P, 4, "Kick 10") &&
+              row_is(P, 5, "snare") && row_is(P, 6, "Sub /") && row_is(P, 7, "inner") && row_is(P, 8, " "),
+              "folder: %s", rows(P));
         E->get_param(P, "br_status", buf, sizeof buf);
-        CHECK(!strcmp(buf, "4 WAVS"), "status %s", buf);
+        CHECK(!strcmp(buf, "5 WAVS IN 2 FOLDERS"), "status %s", buf);
         E->get_param(P, "br_path", buf, sizeof buf);
         CHECK(!strcmp(buf, "INCIPIENCE"), "path %s", buf);
-        /* 1.1.0: the cursor starts at the top (on Sub, after ..); a tap on a file puts it there, lights its row and plays
-         * the file straight from the folder (PREVIEW on); X1 is unchanged */
+        /* 1.1.0: the cursor starts on the first file; a tap on a file puts it there, lights its row and plays the file
+         * straight from the folder (PREVIEW on); X1 is unchanged */
         CHECK(P->pv[P_BR_CURSOR] == 1.0f && row_val(P, 2) == 1 && row_val(P, 1) == 0, "the cursor at the top: %g",
               P->pv[P_BR_CURSOR]);
-        set(P, "br_row_4", "1");
+        set(P, "br_row_3", "1");
         E->get_param(P, "br_cursor_display", buf, sizeof buf);
-        CHECK(P->pv[P_BR_CURSOR] == 3.0f && !strcmp(buf, "Kick 2") && row_val(P, 4) == 1 && row_val(P, 2) == 0 &&
+        CHECK(P->pv[P_BR_CURSOR] == 2.0f && !strcmp(buf, "Kick 2") && row_val(P, 3) == 1 && row_val(P, 2) == 0 &&
               P->sfold[6] < 0, "a tap: cursor %g (%s), X1 folder %d", P->pv[P_BR_CURSOR], buf, P->sfold[6]);
         for (int b = 0; b < 400 && P->prv_slot < 0; b++) free(run_rt(P));
         CHECK(P->prv_slot >= 0 && P->prv_s.len == 4410 && !P->sv[6].active, "PREVIEW didn't play the file under the cursor");
@@ -458,10 +460,10 @@ int main(int argc, char **argv) {
         free(o);
         /* MPC turning the lit row off straight after (an echo) isn't a tap; a while later it is: X1 (LOAD TO, to start
          * with) loads it and plays it, PREVIEW on */
-        set(P, "br_row_4", "0");
+        set(P, "br_row_3", "0");
         CHECK(P->sfold[6] < 0, "an echo loaded the file");
         free(run(P, 40));
-        set(P, "br_row_4", "0");
+        set(P, "br_row_3", "0");
         CHECK(P->sfold[6] >= 0 && P->pv[P_X1_SAMPLE] == 2.0f && P->prv_slot < 0, "X1: folder %d, SAMPLE %g",
               P->sfold[6], P->pv[P_X1_SAMPLE]);
         for (int b = 0; b < 400 && !P->sv[6].active; b++) free(run_rt(P));
@@ -469,17 +471,34 @@ int main(int argc, char **argv) {
         o = run(P, 20);
         CHECK(energy(o, 20 * B) > 1e6, "PREVIEW is silent");
         free(o);
-        CHECK(row_is(P, 4, "> Kick 2"), "the loaded file's mark: %s", rows(P));
-        /* FILE (the data wheel, Q-Link 1): one entry at a time, heard; LOAD loads it; past the end it stays */
-        seti(P, "br_cursor", 4);
+        CHECK(row_is(P, 3, "> Kick 2"), "the loaded file's mark: %s", rows(P));
+        /* FILE (the data wheel, Q-Link 1): one file at a time, heard; LOAD loads it; past the end it stays */
+        seti(P, "br_cursor", 3);
         for (int b = 0; b < 400 && P->prv_slot < 0; b++) free(run_rt(P));
         CHECK(P->prv_slot >= 0 && P->pv[P_X1_SAMPLE] == 2.0f, "FILE 4: PREVIEW %d, X1 %g", P->prv_slot, P->pv[P_X1_SAMPLE]);
         set(P, "br_load", "1");
         CHECK(P->pv[P_X1_SAMPLE] == 3.0f, "LOAD: X1 %g", P->pv[P_X1_SAMPLE]);
         seti(P, "br_cursor", 99);
-        CHECK(P->pv[P_BR_CURSOR] == 5.0f, "FILE past the end: %g", P->pv[P_BR_CURSOR]);
-        seti(P, "br_cursor", 3);
-        set(P, "br_row_4", "1");   /* a tap on the cursor's row (MPC saw it off): loads */
+        CHECK(P->pv[P_BR_CURSOR] == 6.0f, "FILE past the end: %g", P->pv[P_BR_CURSOR]);
+        /* FILE past a heading: from snare into Sub's inner, and back; past .. at the top, the first file */
+        seti(P, "br_cursor", 4);
+        seti(P, "br_cursor", 5);
+        E->get_param(P, "br_path", buf, sizeof buf);
+        CHECK(P->pv[P_BR_CURSOR] == 6.0f && !strcmp(buf, "INCIPIENCE/Sub"), "FILE past Sub's heading: %g, path %s",
+              P->pv[P_BR_CURSOR], buf);
+        seti(P, "br_cursor", 5);
+        CHECK(P->pv[P_BR_CURSOR] == 4.0f, "FILE back past the heading: %g", P->pv[P_BR_CURSOR]);
+        seti(P, "br_cursor", 0);
+        CHECK(P->pv[P_BR_CURSOR] == 1.0f, "FILE past ..: %g", P->pv[P_BR_CURSOR]);
+        /* AUTO LOAD: the file FILE lands on loads (Sub's, from its own folder), nothing tapped */
+        set(P, "br_autoload", "1");
+        seti(P, "br_cursor", 6);
+        CHECK(P->sfold[6] >= 0 && !strcmp(lib_path(P->sfold[6]), "build/libtest/samples/Sub") &&
+              P->pv[P_X1_SAMPLE] == 1.0f && P->aud == 7, "AUTO LOAD: X1 %s %g", lib_path(P->sfold[6]),
+              P->pv[P_X1_SAMPLE]);
+        set(P, "br_autoload", "0");
+        seti(P, "br_cursor", 2);
+        set(P, "br_row_3", "1");   /* a tap on the cursor's row (MPC saw it off): loads */
         CHECK(P->pv[P_X1_SAMPLE] == 2.0f, "a tap on the cursor's row: X1 %g", P->pv[P_X1_SAMPLE]);
         /* AUDITION: turning SAMPLE plays it (off: it doesn't) */
         for (int b = 0; b < 400 && P->aud; b++) free(run_rt(P));
@@ -517,9 +536,9 @@ int main(int argc, char **argv) {
         set(P, "br_row_2", "1");
         browse_wait(P);
         /* X1 plays snare from the folder as it was: marked by name (1.0.0 marked by number, the wrong file once one was added) */
-        CHECK(row_is(P, 4, "Kick 1b") && row_is(P, 7, "> snare") && P->pv[P_BR_CURSOR] == 6.0f, "re-listed: %s", rows(P));
+        CHECK(row_is(P, 3, "Kick 1b") && row_is(P, 6, "> snare") && P->pv[P_BR_CURSOR] == 5.0f, "re-listed: %s", rows(P));
         int old = P->sfold[6];
-        set(P, "br_row_7", "1");
+        set(P, "br_row_6", "1");
         set(P, "br_load", "1");
         CHECK(P->sfold[6] != old && P->pv[P_X1_SAMPLE] == 5.0f, "the new folder: %d (was %d), SAMPLE %g", P->sfold[6], old,
               P->pv[P_X1_SAMPLE]);
@@ -549,25 +568,30 @@ int main(int argc, char **argv) {
         set(P, "br_row_3", "1");
         set(P, "br_load", "1");
         CHECK(P->sfold[6] >= 0, "loaded again");
-        /* LOAD TO: X2 (on the set by number) leaves the list where it is; Sub's file into X2, then X1: the list goes
-         * to X1's folder, the cursor on its file */
+        /* LOAD TO: X2 (on the set by number) leaves the list where it is; Sub (its heading tapped: Sub alone) into X2,
+         * then X1: the list goes to X1's folder, the cursor on its file; X2 again: Sub's listed, the cursor moves */
         set(P, "br_target", "7");
-        CHECK(row_is(P, 3, "> kick 1") == 0 && row_is(P, 2, "Sub /"), "X2 picked: %s", rows(P));
-        set(P, "br_row_2", "1");   /* Sub */
+        CHECK(row_is(P, 3, "Kick 1b") && row_is(P, 7, "Sub /"), "X2 picked: %s", rows(P));
+        set(P, "br_row_7", "1");   /* Sub */
         browse_wait(P);
+        CHECK(row_is(P, 1, ".. UP") && row_is(P, 2, "inner") && row_is(P, 3, " "), "Sub alone: %s", rows(P));
         set(P, "br_load", "1");    /* inner, the cursor's to start with */
         CHECK(P->sfold[7] >= 0 && P->pv[P_X2_SAMPLE] == 1.0f, "X2: folder %d, SAMPLE %g", P->sfold[7], P->pv[P_X2_SAMPLE]);
         set(P, "br_target", "6");
         browse_wait(P);
         E->get_param(P, "br_cursor_display", buf, sizeof buf);
-        CHECK(!strcmp(buf, "kick 1") && row_is(P, 3, "> kick 1"), "X1 picked: the cursor on %s, %s", buf, rows(P));
+        CHECK(!strcmp(buf, "Kick 1b") && row_is(P, 3, "> Kick 1b"), "X1 picked: the cursor on %s, %s", buf, rows(P));
+        set(P, "br_target", "7");
+        CHECK(!P->bwait && P->pv[P_BR_CURSOR] == 7.0f && row_is(P, 8, "> inner"), "X2 picked again: %g, %s",
+              P->pv[P_BR_CURSOR], rows(P));
+        set(P, "br_target", "6");
         /* a long name: its start and end, 24 characters */
         write_wav("build/libtest/samples/A long kick drum name take 04.wav", 441, 1, 16, 1, 44100, 0.5f);
         set(P, "br_up", "1");
         browse_wait(P);
         set(P, "br_row_2", "1");
         browse_wait(P);
-        CHECK(row_is(P, 3, "A long kick..ame take 04") && row_is(P, 4, "> kick 1"), "a long name: %s", rows(P));
+        CHECK(row_is(P, 2, "A long kick..ame take 04") && row_is(P, 4, "> Kick 1b"), "a long name: %s", rows(P));
         set(P, "kit", "1");
         free(run(P, 1));
         CHECK(P->sfold[6] < 0, "a kit keeps X1's folder");
@@ -579,15 +603,65 @@ int main(int argc, char **argv) {
             snprintf(path, sizeof path, "build/libtest/big/b%02d.wav", k);
             write_wav(path, 20 * 44100, 1, 16, 1, 44100, 0.3f);
         }
+        /* 1.1.0: a folder lists its subfolders' files too, each folder's under a heading (from the folder listed; one
+         * without any isn't listed): FILE runs on from one folder's into the next, past the headings, the folder shown
+         * the file's; AUTO LOAD; UP from a heading's folder, its parent, the cursor on the folder left; past FLAT_DIRS
+         * folders looked in, folder by folder as before */
+        fail = system("mkdir -p build/libtest/deep/a/b build/libtest/deep/c build/libtest/deep/empty && "
+                      "i=0; while [ $i -lt 300 ]; do mkdir -p build/libtest/many/d$i; i=$((i + 1)); done");
+        CHECK(!fail, "mkdir build/libtest/deep");
+        write_wav("build/libtest/deep/a/x.wav", 441, 1, 16, 1, 44100, 0.5f);
+        write_wav("build/libtest/deep/a/b/y.wav", 441, 1, 16, 1, 44100, 0.5f);
+        write_wav("build/libtest/deep/c/z.wav", 441, 1, 16, 1, 44100, 0.5f);
+        P = E->create("build/libtest");
+        E->set_param(P, "state", "kit=0;br_path=build/libtest/deep;");
+        browse_wait(P);
+        CHECK(row_is(P, 1, ".. UP") && row_is(P, 2, "a /") && row_is(P, 3, "x") && row_is(P, 4, "a/b /") &&
+              row_is(P, 5, "y") && row_is(P, 6, "c /") && row_is(P, 7, "z") && row_is(P, 8, " "), "flat: %s", rows(P));
+        E->get_param(P, "br_status", buf, sizeof buf);
+        CHECK(!strcmp(buf, "3 WAVS IN 3 FOLDERS") && P->pv[P_BR_CURSOR] == 2.0f, "flat: %s, cursor %g", buf,
+              P->pv[P_BR_CURSOR]);
+        seti(P, "br_cursor", 3);
+        E->get_param(P, "br_path", buf, sizeof buf);
+        CHECK(P->pv[P_BR_CURSOR] == 4.0f && !strcmp(buf, "build/libtest/deep/a/b"), "FILE into a/b: %g, %s",
+              P->pv[P_BR_CURSOR], buf);
+        seti(P, "br_cursor", 5);
+        seti(P, "br_cursor", 7);
+        CHECK(P->pv[P_BR_CURSOR] == 6.0f, "FILE into c, then past the end: %g", P->pv[P_BR_CURSOR]);
+        set(P, "br_autoload", "1");
+        seti(P, "br_cursor", 5);   /* up past c's heading: y loads */
+        CHECK(P->pv[P_BR_CURSOR] == 4.0f && P->sfold[6] >= 0 && !strcmp(lib_path(P->sfold[6]), "build/libtest/deep/a/b"),
+              "AUTO LOAD y: %g", P->pv[P_BR_CURSOR]);
+        set(P, "br_autoload", "0");
+        set(P, "br_row_4", "1");   /* a/b's heading: a/b alone */
+        browse_wait(P);
+        CHECK(row_is(P, 1, ".. UP") && row_is(P, 2, "> y") && row_is(P, 3, " "), "a/b alone: %s", rows(P));
+        set(P, "br_up", "1");
+        browse_wait(P);
+        CHECK(row_is(P, 2, "x") && row_is(P, 3, "b /") && P->pv[P_BR_CURSOR] == 3.0f, "up to a: %s, cursor %g", rows(P),
+              P->pv[P_BR_CURSOR]);
+        set(P, "br_up", "1");
+        browse_wait(P);
+        CHECK(P->pv[P_BR_CURSOR] == 2.0f, "up to deep: the cursor %g, not on a's x", P->pv[P_BR_CURSOR]);
+        set(P, "br_target", "7");
+        set(P, "br_target", "6");   /* X1's folder (a/b) is listed: the cursor goes to y, the list stays */
+        CHECK(!P->bwait && P->pv[P_BR_CURSOR] == 4.0f, "X1 picked in deep: %g (%d)", P->pv[P_BR_CURSOR], P->bwait);
+        E->set_param(P, "state", "kit=0;br_path=build/libtest/many;");
+        browse_wait(P);
+        E->get_param(P, "br_status", buf, sizeof buf);
+        CHECK(!P->bl->flat && row_is(P, 2, "d0 /") && row_is(P, 3, "d1 /") && !strcmp(buf, "300 FOLDERS"),
+              "too many folders: %s, %s", buf, rows(P));
+        E->destroy(P);
+
         P = E->create("build/libtest");
         browse_wait(P);
         set(P, "br_row_2", "1");
         browse_wait(P);
-        set(P, "br_row_2", "1");   /* Sub */
+        set(P, "br_row_8", "1");   /* Sub's heading */
         browse_wait(P);
-        set(P, "br_up", "1");      /* back, around Sub */
+        set(P, "br_up", "1");      /* back, the cursor on Sub's file */
         browse_wait(P);
-        CHECK(row_is(P, 2, "Sub /"), "back up: %s", rows(P));
+        CHECK(row_is(P, 7, "Sub /") && P->pv[P_BR_CURSOR] == 8.0f, "back up: %s, cursor %g", rows(P), P->pv[P_BR_CURSOR]);
         set(P, "br_up", "1");
         browse_wait(P);
         /* (big isn't a place: browsed straight to) */
@@ -622,7 +696,8 @@ int main(int argc, char **argv) {
         E->destroy(P);
         fail = system("rm -rf build/libtest");
         printf("ok   your own samples: 5 kinds of WAV, a folder in name order, browsed (the cursor: taps, FILE, LOAD, lit rows, "
-               "PREVIEW from the folder, LOAD TO's folder, long names), loaded, played, AUDITION, by name in the state; "
+               "PREVIEW from the folder, LOAD TO's folder, long names; subfolders' files in one list, FILE across them, "
+               "AUTO LOAD, too many: folder by folder), loaded, played, AUDITION, by name in the state; "
                "past 64 MB, 47 files played while X2 held one\n");
     }
 

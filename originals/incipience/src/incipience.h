@@ -57,12 +57,18 @@ void pool_poke(void);             /* once a block: wakes the loader if a request
 #ifndef LIB_MEDIA
 #define LIB_MEDIA "/media"        /* the MPC's drives */
 #endif
-enum { LE_FILE, LE_DIR, LE_UP, LE_PLACE, LE_ALPHABASE };
-typedef struct { int kind; char *name, *path; } lib_ent_t;   /* path: a place's own */
-typedef struct {                  /* a folder ("" = the places): "..", its subfolders, then its WAV files */
+#define LIB_FLAT 999              /* a listing of a folder and all its subfolders' files: entries at most (FILE's range) */
+enum { LE_FILE, LE_DIR, LE_UP, LE_PLACE, LE_ALPHABASE, LE_HEAD };
+typedef struct { int kind; char *name, *path; int grp; } lib_ent_t;   /* path: a place's, a heading's; grp: a file's */
+typedef struct { char *path; int first, n; } lib_grp_t;   /* a folder's WAV files in a listing: e[first] on, n of them */
+typedef struct {                  /* a folder ("" = the places): "..", then its WAV files and, when they all fit
+                                   * (flat), every subfolder's below, each under a heading (LE_HEAD, its path from
+                                   * here); else its subfolders, then its WAV files */
     char path[LIB_PATH];
-    int n, first_file, nfiles, missing, gen;
+    int n, first_file, nfiles, missing, gen;   /* nfiles: in all; first_file: the first */
+    int flat, ng;
     lib_ent_t *e;
+    lib_grp_t *g;                 /* g[0]: the folder's own */
 } lib_list_t;
 typedef struct lib_br lib_br_t;   /* an instance's listings */
 void lib_open(const char *dir);
@@ -70,7 +76,7 @@ void lib_close(void);
 void lib_poke(void);              /* once a block, as pool_poke */
 void lib_wait(void);              /* until nothing waits to be read (offline tools) */
 int lib_folder(const char *path); /* its number (read on the thread), -1 if there are too many */
-int lib_folder_set(const char *path, const lib_list_t *l);   /* as listed: the same number if nothing changed */
+int lib_folder_set(const lib_list_t *l, int g);   /* folder g of a listing, as listed: the same number if nothing changed */
 int lib_files(int f);             /* its WAV files, -1 while it's being read */
 const char *lib_name(int f, int k);
 const char *lib_path(int f);

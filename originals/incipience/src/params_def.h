@@ -739,6 +739,7 @@ static const pdef_t PDEF[] = {
     {"br_cursor_next", 3, 0, 0.0f, 0.0f, 0.0f},
     {"br_load", 3, 0, 0.0f, 0.0f, 0.0f},
     {"br_audition", 1, 2, 0.0f, 1.0f, 0.0f},
+    {"br_autoload", 1, 2, 0.0f, 1.0f, 0.0f},
 };
 enum {
     P_KIT = 0,
@@ -1476,7 +1477,8 @@ enum {
     P_BR_CURSOR_NEXT = 732,
     P_BR_LOAD = 733,
     P_BR_AUDITION = 734,
-    NP = 735
+    P_BR_AUTOLOAD = 735,
+    NP = 736
 };
 /* the hybrid sample channels CH OH CP RM CR RD: P_<CH>_PITCH + S_<NAME> */
 static const int SBASE[6] = {51, 83, 115, 146, 177, 208};

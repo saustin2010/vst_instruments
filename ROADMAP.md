@@ -182,6 +182,14 @@ parameter index, so existing projects keep working.
     incipienceout` PASSED, procwatch no flags (idle/play 0.17). To check on the Live II: the lit row (the row's value
     reads 1; MPC turns it off on a tap, taken as the second tap unless within 100 ms of the first), the wheel on FILE,
     the preview's timing on the SSD; then release 1.1.0
+  - [ ] **1.1.0: the wheel alone** (owner, 2026-10-20: "rather than touchscreen can we just use the wheel to scroll
+    through folders and sounds?"): a folder lists its subfolders' WAV files too, depth first, each folder's under a
+    heading (folders without any left out; past 999 rows or 256 folders looked in, folder by folder as before), FILE
+    steps over the headings from one folder into the next and FOLDER shows the cursor's file's folder; a heading tapped
+    opens that folder; LOAD TO only moves the list when its folder isn't listed; AUTO LOAD (new switch, Q-Link 6): the
+    file FILE lands on loads into LOAD TO's instrument. 736 parameters. Offline: self-test PASSED (native, ASan/UBSan,
+    TSan), `tools/build.sh` PASSED, `check_skin.py` OK. Found on the way (UBSan): the sine table's lookup read one past
+    its end when a phase a hair under 0 wrapped to 1 (fixed)
   - [ ] **In sd88me's catalogue**: entries `incipience` and `incipience-out` proposed in
     [sd88me/mpc-vst-plugins#480](https://github.com/sd88me/mpc-vst-plugins/pull/480) (2026-10-19; `catalog_build` on
     both: 0 problems), waiting for his merge

@@ -7,8 +7,9 @@
  *  - decoded files (lib_get / lib_put): up to LIB_SLOTS of them, LIB_BYTES in all, read when a hit or a choice first
  *    asks; past that the ones longest unplayed go. A voice holds the file it plays (a count), and the thread frees only
  *    a file nothing holds;
- *  - listings (lib_browse / lib_listing): what the SAMPLES tab shows, the places (the drives) or a folder's subfolders
- *    and WAV files, read for an instance and handed to it when ready. */
+ *  - listings (lib_browse / lib_listing): what the SAMPLES tab shows, the places (the drives) or a folder's WAV files
+ *    and its subfolders' (or, when they don't all fit, its subfolders), read for an instance and handed to it when
+ *    ready. */
 #include <ctype.h>
 #include <dirent.h>
 #include <math.h>
@@ -21,12 +22,14 @@
 #include <time.h>
 #include "incipience.h"
 
-#define LIB_FOLDERS 256
+#define LIB_FOLDERS 1024                 /* (1.1.0: FILE crosses folders, each one heard is one) */
 #define LIB_SLOTS 128
 #define LIB_BYTES (64u << 20)            /* decoded files kept, in all */
 #define LIB_MAXFRAMES (60 * 48000)       /* a minute of a file at most */
 #define LIB_MAXFILE (64L << 20)          /* bigger files aren't read */
 #define LIB_MAXDIRS 600                  /* subfolders listed */
+#define FLAT_DIRS 256                    /* folders looked in for a flat listing (more: folder by folder) */
+#define FLAT_DEPTH 8
 
 enum { FD_WANT, FD_READ };
 enum { SL_FREE, SL_CLAIM, SL_WANT, SL_READY, SL_FAILED, SL_EVICT };
@@ -231,18 +234,46 @@ void lib_list_free(lib_list_t *l) {
         free(l->e[i].name);
         free(l->e[i].path);
     }
+    for (int i = 0; i < l->ng; i++) free(l->g[i].path);
     free(l->e);
+    free(l->g);
     free(l);
 }
 
-static void add(lib_list_t *l, int kind, const char *name, const char *path) {
+static int add(lib_list_t *l, int kind, const char *name, const char *path) {
     lib_ent_t *e = realloc(l->e, sizeof *e * (l->n + 1));
-    if (!e) return;
+    if (!e) return -1;
     l->e = e;
     e[l->n].kind = kind;
     e[l->n].name = strdup(name);
     e[l->n].path = path ? strdup(path) : NULL;
-    l->n++;
+    e[l->n].grp = -1;
+    return l->n++;
+}
+
+static int add_grp(lib_list_t *l, const char *path) {   /* a folder whose files come next */
+    lib_grp_t *g = realloc(l->g, sizeof *g * (l->ng + 1));
+    if (!g) return -1;
+    l->g = g;
+    g[l->ng].path = strdup(path);
+    g[l->ng].first = l->n;
+    g[l->ng].n = 0;
+    return l->ng++;
+}
+
+static void add_files(lib_list_t *l, int g, char **F, int nf) {
+    for (int i = 0; g >= 0 && i < nf; i++) {
+        int k = add(l, LE_FILE, F[i], NULL);
+        if (k < 0) return;
+        l->e[k].grp = g;
+        l->g[g].n++;
+        l->nfiles++;
+    }
+}
+
+static void free_names(char **N, int n) {
+    for (int i = 0; i < n; i++) free(N[i]);
+    free(N);
 }
 
 /* the places: the AlphaBase set, the plugin's own samples folder, the MPC's drives (/media/<drive>: the internal one,
@@ -274,29 +305,62 @@ static lib_list_t *list_places(void) {
     return l;
 }
 
-static lib_list_t *list_folder(const char *path) {
+/* 1.1.0 (owner, 2026-10-20: "can we just use the wheel to scroll through folders and sounds?"): the WAV files of path's
+ * subfolders D, depth first in name order, each folder's under a heading (its path from the listing's folder, rel);
+ * folders without any are left out. -1 once they don't all fit: LIB_FLAT entries, FLAT_DIRS folders looked in */
+static int flat_sub(lib_list_t *l, const char *path, char **D, int nd, const char *rel, int depth, int *looked) {
+    for (int i = 0; i < nd; i++) {
+        char p[LIB_PATH], r[LIB_PATH];
+        if (snprintf(p, sizeof p, "%s/%s", path, D[i]) >= (int)sizeof p) continue;
+        snprintf(r, sizeof r, "%s%s%s", rel, rel[0] ? "/" : "", D[i]);
+        if (++*looked > FLAT_DIRS) return -1;
+        char **F = NULL, **S = NULL;
+        int nf = 0, ns = 0, bad = 0;
+        if (read_dir(p, &F, &nf, depth < FLAT_DEPTH ? &S : NULL, &ns)) continue;
+        if (nf && l->n + 1 + nf > LIB_FLAT) bad = 1;
+        else if (nf) {
+            int h = add(l, LE_HEAD, r, p), g = add_grp(l, p);
+            if (h >= 0) l->e[h].grp = g;
+            add_files(l, g, F, nf);
+        }
+        if (!bad && ns) bad = flat_sub(l, p, S, ns, r, depth + 1, looked);
+        free_names(F, nf);
+        free_names(S, ns);
+        if (bad) return -1;
+    }
+    return 0;
+}
+
+static lib_list_t *new_list(const char *path) {
     lib_list_t *l = calloc(1, sizeof *l);
     if (!l) return NULL;
     snprintf(l->path, sizeof l->path, "%s", path);
     add(l, LE_UP, "..", NULL);
+    return l;
+}
+
+static lib_list_t *list_folder(const char *path) {
+    lib_list_t *l = new_list(path);
+    if (!l) return NULL;
     char **F = NULL, **D = NULL;
-    int nf = 0, nd = 0;
+    int nf = 0, nd = 0, looked = 0;
     if (read_dir(path, &F, &nf, &D, &nd)) {
         l->missing = 1;
         return l;
     }
-    for (int i = 0; i < nd; i++) {
-        add(l, LE_DIR, D[i], NULL);
-        free(D[i]);
+    l->first_file = l->n;   /* flat: its own files, then its subfolders' */
+    add_files(l, add_grp(l, path), F, nf);
+    l->flat = 1;
+    if (nd && flat_sub(l, path, D, nd, "", 1, &looked)) {   /* too many: its subfolders, then its own files */
+        lib_list_free(l);
+        if ((l = new_list(path))) {
+            for (int i = 0; i < nd; i++) add(l, LE_DIR, D[i], NULL);
+            l->first_file = l->n;
+            add_files(l, add_grp(l, path), F, nf);
+        }
     }
-    l->first_file = l->n;
-    for (int i = 0; i < nf; i++) {
-        add(l, LE_FILE, F[i], NULL);
-        free(F[i]);
-    }
-    l->nfiles = nf;
-    free(F);
-    free(D);
+    free_names(F, nf);
+    free_names(D, nd);
     return l;
 }
 
@@ -508,24 +572,23 @@ int lib_folder(const char *path) {
     return i;
 }
 
-int lib_folder_set(const char *path, const lib_list_t *l) {
+int lib_folder_set(const lib_list_t *l, int g) {
+    if (g < 0 || g >= l->ng) return -1;
+    const lib_grp_t *G = &l->g[g];
     pthread_mutex_lock(&L.mu);
-    int i = find_folder(path);
-    if (i >= 0 && ld(&L.f[i].state) == FD_READ && L.f[i].n == l->nfiles) {
+    int i = find_folder(G->path);
+    if (i >= 0 && ld(&L.f[i].state) == FD_READ && L.f[i].n == G->n) {
         int same = 1;
-        for (int k = 0; k < l->nfiles && same; k++) same = !strcmp(L.f[i].names[k], l->e[l->first_file + k].name);
+        for (int k = 0; k < G->n && same; k++) same = !strcmp(L.f[i].names[k], l->e[G->first + k].name);
         if (same) {
             pthread_mutex_unlock(&L.mu);
             return i;
         }
     }
-    char **names = calloc(l->nfiles ? l->nfiles : 1, sizeof *names);
-    for (int k = 0; names && k < l->nfiles; k++) names[k] = strdup(l->e[l->first_file + k].name);
-    i = names ? new_folder(path, names, l->nfiles) : -1;
-    if (i < 0 && names) {
-        for (int k = 0; k < l->nfiles; k++) free(names[k]);
-        free(names);
-    }
+    char **names = calloc(G->n ? G->n : 1, sizeof *names);
+    for (int k = 0; names && k < G->n; k++) names[k] = strdup(l->e[G->first + k].name);
+    i = names ? new_folder(G->path, names, G->n) : -1;
+    if (i < 0 && names) free_names(names, G->n);
     pthread_mutex_unlock(&L.mu);
     return i;
 }
