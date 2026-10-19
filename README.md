@@ -137,7 +137,7 @@ presets/               the plugins' presets, kits, wavetables (not in git: tools
 install.sh, uninstall.sh, tools/   the installer (and tools/build.sh to build from source, tools/publish.sh to publish a plugin to its own repo)
 framework/             our changes to sd88me's mpc-vst-plugins, as a patch, and setup.sh (setup-release.sh: the tools the plugins' own repos release with)
 dev-tools/             the tools the ports and screens were made with
-docs/                  extra guides (presets and libraries, parameter numbers, root SSH on a stock MPC, the catalogue migration plan) and images
+docs/                  extra guides (presets and libraries, parameter numbers, root SSH on a stock MPC, the catalogue migration plan, the sample browser to reuse in other plugins) and images
 licenses/              licence texts the plugins refer to
 ```
 
