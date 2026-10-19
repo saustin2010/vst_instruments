@@ -8,3 +8,6 @@
 .knob-arc { stroke: var(--accent); }
 .knob-track { stroke: #34373d; }
 .text { fill: #b4afa5; letter-spacing: 0.1em; }
+/* the dot-matrix steppers' arrows (KIT, NOTE, SAMPLE, FILE, SCROLL) in the display's amber: the default, the display's
+ * background colour, left them hard to see on the bezel (2026-10-20) */
+.dot-arrow { fill: rgba(255, 177, 61, 0.6); }

@@ -341,9 +341,9 @@ def layout():
             art["segs"].append({"name": name, "w": w, "h": h, "color": COL.get(col) if col else None})
         return "images/skin/%s.png" % name
 
-    def enum(kind, cx, cy, key, col, sw, sh, label=""):
-        L.append('%s cx=%d cy=%d label="%s" key=%s sw=%d sh=%d img=%s img_on=%s'
-                 % (kind, cx, cy, label, key, sw, sh, seg(None, sw, sh), seg(col, sw, sh)))
+    def enum(kind, cx, cy, key, col, sw, sh, label="", extra=""):
+        L.append('%s cx=%d cy=%d label="%s" key=%s sw=%d sh=%d img=%s img_on=%s%s'
+                 % (kind, cx, cy, label, key, sw, sh, seg(None, sw, sh), seg(col, sw, sh), extra))
 
     for col, r in ((1, 40), (2, 40), (3, 40), (4, 40), ("bbd", 40), ("mst", 40), ("mod", 40)):
         art["knobs"].append({"name": "knob_%s" % col, "r": r, "color": COL[col]})
@@ -364,8 +364,10 @@ def layout():
     # 3"), then SOURCE and SAMPLE (2.1.0: a sample of the voice's own, from the SAMPLES tab; CUTOFF and DRIVE moved
     # left, under TUNE and DECAY as on the MOD pages), column 4 = MIX: LEVEL, FX SEND, COMP SEND under the switches
     # (owner, 2026-10-12: a volume beside the comp send); each column has its own plate. The display spans the knob
-    # rows. RANDOMISE (a tap, on no Q-Link) in the title bar.
+    # rows. RANDOMISE (a tap, on no Q-Link) in the title bar, SOURCE beside it (owner, 2026-10-20: the SOURCE box
+    # "doesn't look nice"), SAMPLE level with the knobs, under P1 and P2.
     SX, SW = 16, 372                 # the switch panel
+    SRC_X, SRC_W, SRC_H = 998, 88, 38   # SOURCE, in the title bar (and its size on the SAMPLES page)
     RX, RW = 404, 860                # the display and the knob rows
     SWY = (200, 306, 428)            # ALGO / MODE / VCF
     MY = 484                         # the MIX plate's top; its knobs level with the second knob row
@@ -378,6 +380,11 @@ def layout():
         html = h_panel(8, PY, 1264, PH, c, "VOICE %d" % v, "NOTE")
         L.append("readout cx=%d cy=%d w=70 h=26 vs=22 ink=dim box=no key=v%d_note" % (250, 121, v))   # its NOTE, live
         L.append('button cx=%d cy=%d label="RANDOMISE" key=v%d_rand' % (1176, 119, v))
+        # SOURCE: what the voice plays, its algorithm or its sample. The same size as on the SAMPLES page: the skin
+        # draws one picture per option of a parameter, so two sizes would put the smaller one in the larger one's
+        # place, apart (2.1.0's first screen). qbox=no: its Q-Link column's box stays round row 2
+        html += h_text(SRC_X - 89 - 18 - 64, 113, "SOURCE", "#8f8ba8", 13, .16, 600)
+        enum("enum_h", SRC_X, 119, "v%d_src" % v, v, SRC_W, SRC_H, extra=" qbox=no")
         html += h_plate(SX, 142, SW, MY - 10 - 142, c)
         html += h_plate(SX, MY, SW, 670 - MY, c)
         html += h_text(SX + 16, MY + 10, "MIX", rgba(c, .8), 11, .18)
@@ -406,12 +413,12 @@ def layout():
             html += h_plate(RX, y - 58, RW, 156, c)
             for i, k in enumerate(ks):
                 knob("v%d_%s" % (v, k), RX + 107 + 215 * i, y, v, 40, caption(v, k))
-        # the voice's own sample, in the second row's other half: SOURCE (its algorithm or the sample), SAMPLE (the
-        # file, its name; the arrows step through its folder)
+        # the voice's own sample, in the second row's other half, level with its knobs: SAMPLE (the file, its name;
+        # the arrows and the wheel step through its folder), named as MPC names the knobs, and where files come from
         sx = RX + 430 + 215
-        html += h_ctext(sx, KY[1] - 50, "SOURCE &middot; SAMPLE", "#aba7c4", 13)
-        enum("enum_h", sx, KY[1] - 18, "v%d_src" % v, v, 140, 40)
-        L.append('stepper cx=%d cy=%d w=400 h=44 label="" key=v%d_smp style=dotmatrix' % (sx, KY[1] + 44, v))
+        L.append('stepper cx=%d cy=%d w=380 h=44 label="" key=v%d_smp style=dotmatrix' % (sx, KY[1], v))
+        html += h_ctext(sx, KY[1] + 46, "V%d SAMPLE" % v, "#e6e3f0", 12)
+        html += h_ctext(sx, KY[1] + 71, "WAV FILES: THE SAMPLES PAGE", "#6a6782", 11)
         art["bgs"].append({"name": "bg_v%d" % v, "html": html})
         Q = [["algo", "mode", "vcf"], list(VROWS[0]), list(VROWS[1]) + ["src", "smp"], list(MIX)]
         L.append('qlinks "V%d" = ' % v + ",".join("v%d_%s" % (v, k) if k != "-" else "-"
@@ -526,40 +533,51 @@ def layout():
         art["bgs"].append({"name": "bg_mod%d%d" % pair, "html": html})
         L.append('qlinks "MOD %d+%d" = ' % pair + ",".join("v%d_m_%s" % (v, k) for v in pair for ks in ROWS for k in ks))
         L.append("")
-    # SAMPLES page (owner, 2026-10-19: a sample browser, as Incipience's, and samples on every voice): the data folder
-    # and the MPC's drives, their folders and WAV files eight rows at a time; a file tapped loads into LOAD TO's voice
-    # (its SOURCE turns to SAMPLE) and, with PREVIEW, plays once. On the right each voice's SOURCE and SAMPLE.
-    # Q-Links: SCROLL; LOAD TO, PREVIEW; the four SOURCEs; the four SAMPLEs
+    # SAMPLES page (owner, 2026-10-19: a sample browser, as Incipience's, and samples on every voice; 2026-10-20:
+    # Incipience 1.1.0's, "the same browser"): the data folder and the MPC's drives; a folder's WAV files and its
+    # subfolders' in one list, eight rows at a time, white, the cursor's row (FILE) framed in the panel's colour; no
+    # row takes the data wheel (focus=no), so after a tap on FILE's box the wheel stays on it. A file the cursor lands
+    # on plays (PREVIEW); a second tap, LOAD or AUTO LOAD loads it into LOAD TO's voice (its SOURCE turns to SAMPLE).
+    # On the right each voice's SOURCE and SAMPLE. Q-Links: BROWSE (FILE, a row per three events), SCROLL; LOAD TO,
+    # AUTO LOAD, PREVIEW, AUDITION; the four SOURCEs; the four SAMPLEs
     L.append("[tab SAMPLES]")
     L.append("art file=images/skin/bg_smp.png x=0 y=86 w=1280 h=628")
     html = h_panel(8, 94, 768, 612, COL["kit"], "SAMPLES", "DRIVES &middot; FOLDERS &middot; WAV FILES")
-    html += h_lcd(24, 144, 588, 38, COL["kit"])
-    html += h_lcd(620, 144, 140, 38, COL["kit"])
-    L.append("readout cx=%d cy=%d w=560 h=30 vs=20 ink=ink box=no key=br_path" % (318, 163))
-    L.append("readout cx=%d cy=%d w=130 h=30 vs=18 ink=accent box=no key=br_status" % (690, 163))
-    L.append("list x=24 y=194 w=736 h=378 key=br_row cols=1 rows=%d th=42 gap=6" % BROWSE_ROWS)
-    html += h_ctext(170, 592, "SCROLL", "#aba7c4", 13)
-    L.append('stepper cx=170 cy=634 w=280 h=48 label="" key=br_scroll style=dotmatrix')
-    L.append('button cx=470 cy=634 label="UP" key=br_up')
-    L.append('button cx=630 cy=634 label="DRIVES" key=br_places')
-    html += h_text(24, 674, "TAP A FOLDER TO OPEN IT, A WAV FILE TO LOAD IT INTO LOAD TO'S VOICE (ITS SOURCE TURNS TO "
-                   "SAMPLE)", "#6a6782", 11, .1, 600)
-    html += h_text(24, 690, "THAT VOICE'S SAMPLE THEN STEPS THROUGH THE FOLDER. A KIT TURNS EVERY VOICE BACK TO SYNTH",
-                   "#6a6782", 11, .1, 600)
+    # where it is, how much is listed, UP, DRIVES
+    html += h_lcd(24, 144, 376, 38, COL["kit"])
+    html += h_lcd(408, 144, 160, 38, COL["kit"])
+    L.append("readout cx=%d cy=%d w=356 h=30 vs=20 ink=ink box=no key=br_path" % (212, 163))
+    L.append("readout cx=%d cy=%d w=150 h=30 vs=16 ink=accent box=no key=br_status" % (488, 163))
+    L.append('button cx=606 cy=163 label="UP" key=br_up')
+    L.append('button cx=703 cy=163 label="DRIVES" key=br_places')
+    L.append("list x=24 y=194 w=736 h=378 key=br_row cols=1 rows=%d th=42 gap=6 ink=ffffff lit=%s focus=no"
+             % (BROWSE_ROWS, COL["kit"].lstrip("#")))
+    # under the list: SCROLL, FILE (tap it, then the wheel), LOAD
+    html += h_ctext(114, 584, "SCROLL", "#aba7c4", 13)
+    L.append('stepper cx=114 cy=620 w=180 h=38 label="" key=br_scroll style=dotmatrix')
+    html += h_ctext(424, 584, "FILE &middot; TAP IT, THEN THE WHEEL", "#aba7c4", 13)
+    L.append('stepper cx=424 cy=620 w=420 h=38 label="" key=br_cursor style=dotmatrix')
+    L.append('button cx=700 cy=620 label="LOAD" key=br_load')
+    html += h_text(24, 664, "TAP A FILE TO HEAR IT; TAP IT AGAIN, OR LOAD, TO PUT IT ON LOAD TO'S VOICE", "#6a6782", 11, .1,
+                   600)
+    html += h_text(24, 682, "SUBFOLDERS' FILES ARE LISTED TOO: TAP A HEADING FOR THAT FOLDER ALONE", "#6a6782", 11, .1, 600)
     html += h_panel(786, 94, 486, 236, COL["kit"], "LOAD")
     html += h_ctext(1029, 150, "LOAD TO", "#aba7c4", 13)
     enum("enum_h", 1029, 194, "br_target", "kit", 100, 46)
-    html += h_ctext(1029, 240, "PREVIEW", "#aba7c4", 13)
-    enum("enum_h", 1029, 282, "br_preview", "kit", 110, 40)
+    # as the cursor lands: PREVIEW plays the file, AUTO LOAD loads it; AUDITION: a voice's SAMPLE turned plays it
+    for x, k, lab in ((873, "br_preview", "PREVIEW"), (1029, "br_autoload", "AUTO LOAD"), (1185, "br_audition", "AUDITION")):
+        html += h_ctext(x, 240, lab, "#aba7c4", 13)
+        enum("enum_h", x, 282, k, "kit", 70, 40)
     html += h_panel(786, 340, 486, 366, COL["mst"], "VOICES", "SOURCE &middot; SAMPLE")
     for i, v in enumerate(range(1, 5)):
         y = 418 + 76 * i
         html += h_text(806, y - 12, "V%d" % v, COL[v], 22, .1, 700)
-        enum("enum_h", 930, y, "v%d_src" % v, v, 88, 38)
+        enum("enum_h", 930, y, "v%d_src" % v, v, SRC_W, SRC_H)
         L.append('stepper cx=%d cy=%d w=236 h=40 label="" key=v%d_smp style=dotmatrix' % (1142, y, v))
+    html += h_text(806, 684, "A KIT TURNS EVERY VOICE BACK TO SYNTH", "#6a6782", 11, .1, 600)
     art["bgs"].append({"name": "bg_smp", "html": html})
-    L.append('qlinks "SAMPLES" = br_scroll,-,-,-,br_target,br_preview,-,-,' + ",".join("v%d_src" % v for v in range(1, 5))
-             + "," + ",".join("v%d_smp" % v for v in range(1, 5)))
+    L.append('qlinks "SAMPLES" = br_cursor_q,br_scroll,-,-,br_target,br_autoload,br_preview,br_audition,'
+             + ",".join("v%d_src" % v for v in range(1, 5)) + "," + ",".join("v%d_smp" % v for v in range(1, 5)))
     L.append("")
 
     # Q-Links fixed to the track: a column per voice
