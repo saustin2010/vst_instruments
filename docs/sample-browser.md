@@ -9,8 +9,8 @@ rests on (what's been checked on a device and what hasn't), and the steps to reu
 Owner's asks that shaped it: "can we browse samples on the MPC or point to folders?" (2026-10-18, first version);
 "a bit clunky" (2026-10-19: a cursor that plays each file, LOAD TO as buttons, shorter names, AUDITION); "can we just
 use the wheel to scroll through folders and sounds?", "the main wheel does not scroll through the files", "make the
-font white and not red" (2026-10-20: one list across subfolders, the wheel on any touch of the list, AUTO LOAD, white
-text, a visible cursor).
+font white and not red", "the qlinks change really really quickly and skip a few rows" (2026-10-20: one list across
+subfolders, the wheel on FILE's box, AUTO LOAD, white text, a visible cursor, Q-Links a step per three events).
 
 ## What you see
 
@@ -25,7 +25,7 @@ text, a visible cursor).
  | Room 01                                                            |
  | ...                                (8 rows)                        |
  [< ROWS 9-16 >] [< Kick Hard 02             >] [LOAD] [UP] [DRIVES]
-   SCROLL          FILE (the cursor)
+   SCROLL          FILE: TAP, THEN THE WHEEL
 ```
 
 - **The list:** 8 rows of white text. Opening a folder lists its own WAV files, then every subfolder's (depth first, in
@@ -33,10 +33,11 @@ text, a visible cursor).
   file aren't listed. If a folder holds too much for one list (more than 999 rows, or more than 256 folders to look
   through, as a drive's top level often does), it's listed one level at a time instead: its subfolders as rows, then
   its own files.
-- **The cursor (FILE):** a red border on its row; the FILE box shows its name. The **data wheel** moves it one file at
-  a time, stepping over headings, from one folder's last file into the next one's first. The wheel turns whatever
-  control was touched last, so touch any row (or the FILE box) once, then turn. **Q-Link 1** moves it without a touch,
-  and the FILE box's arrows step it. **SCROLL** (Q-Link 2, its arrows) moves a page, taking the cursor along.
+- **The cursor (FILE):** a red border on its row; the FILE box shows its name. Tap the FILE box once and the **data
+  wheel** moves it a file a click, stepping over headings, from one folder's last file into the next one's first. The
+  rows take no hardware focus, so tapping them afterwards (to hear or load) leaves the wheel on FILE. **Q-Link 1**
+  (BROWSE, a parameter of its own) moves it with no tap, a file per three Q-Link events; the FILE box's arrows step
+  one. **SCROLL** moves a page: an arrow tap at once, Q-Link 2 per three events; the cursor is kept in view.
 - **PREVIEW** (on to start with): the file the cursor lands on plays straight from disk (mono, -3 dB, under the
   plugin's VOLUME, no instrument or effects), until it ends or the cursor moves.
 - **AUTO LOAD** (off to start with, Q-Link 6): the file the cursor lands on loads into LOAD TO's instrument and plays
@@ -64,11 +65,12 @@ text, a visible cursor).
 |---|---|
 | A plugin only has parameters: no file dialog, no keyboard, no way to read the touch position. The browser is parameters whose **display text** the engine writes (`dynamic_display`), re-read by MPC when the wrapper marks them changed. | device, all plugins |
 | MPC shows a control's **parameter name**, not its layout label, and about **24 characters** of text in a box. | device |
-| The **data wheel** turns the control touched last (owner, 2026-10-19: "works as long as a box is selected"). A control is "touched" through its skin's `Mouse Down → Q-Link` action. On the 1.1.0 drafts the wheel didn't move the list (owner, 2026-10-20); the rows had no such action, so a tap on one left the wheel where it was. | device |
+| The **data wheel** turns the control that has MPC's hardware focus (owner, 2026-10-19: "works as long as a box is selected"). A control takes it on a touch when its skin has `Mouse Down → Q-Link` and `acceptsHWFocus: Yes`; the wheel then moves its `Data` parameter. A stepper box (SAMPLE, FILE) is one. | device |
+| A touch action only ever acts on the control's **own** `Data` parameter. Akai's own skins on the Live II (`/usr/share/Akai/Content/Synths/*/Plugin Skins/`, 248 skin files) use four actions, all on `Data` (`Mouse Down → Q-Link`, `Enter Pressed → Toggle Switch`, `Double Click` / `Enter Pressed → Show Overlay`); named handles are only an indirection (a parent maps names to parameters, a child's `Data` points at a name). A row whose `Mouse Down → Q-Link` named another parameter (`wheel=`) did nothing with the wheel (owner, 2026-10-20: "the big mpc job wheel doesn't do anything"). So a list row can't both take taps for itself and hand the wheel to a cursor. | device (2026-10-20) |
+| A Q-Link's small turn arrives as **several events** on the Live II, one step each with `nudge_pct`, so a list cursor on a Q-Link "skip[s] a few rows" (owner, 2026-10-20). The wheel's click is one event of the same size, so the two can't be told apart: give the Q-Link a parameter of its own and count events there (`QL_TICKS` 3). | device (2026-10-20); the 3: offline, from the Key 37's (NOTES `qlink_ticks`) |
 | A wheel click sends the value MPC last read back **+0.01** of the range, a Q-Link event **+1/128** (1-3 on a fast spin). On a 0-999 range that is 10 and 8 entries a tick: `nudge_pct` makes any move under N % of the range one step (wrapper; with `QLINK_TRAVEL` it needs fork commit `b014168`). | device (Force probe, NOTES "Input probe"; SAMPLE one per tick on the Live II, 2026-10-19) |
 | A text readout is re-read every 100 ms by the wrapper (it hashes the text), so FOLDER and the status box update without being marked. | framework |
 | A row is a **Toggle Switch** button: a tap sends `1 - its value`. A row whose value reads 1 (the cursor's, drawn with its "on" tile) sends **0** on a tap. | framework; the lit row on a device: **not yet checked** |
-| `wheel=<param>` on a list: the rows' `Mouse Down` also runs `Q-Link` on a second handle (`Wheel`) bound to that parameter, the way a knob's touch selects the knob. | **not yet checked on a device** (2026-10-20) |
 | Parameters are saved and Q-Linked **by index**: new ones go at the end, never reorder. | device |
 
 ## The engine
@@ -112,6 +114,10 @@ The audio thread never opens a file or waits: it asks and checks back.
 - `preview()` / `preview_block()`: the file under the cursor, from its folder, mixed after the effects; waits for the
   file at most a second.
 - `e_get_param` for a row's value: 1 if the cursor is on that row (that's what lights its tile).
+- `cursor_set()`: FILE and BROWSE (FILE's Q-Link) always read the same. `ql_tick()`: BROWSE's events (each already a
+  step from the wrapper's `nudge_pct`) move the cursor a row per `QL_TICKS`; SCROLL's between-whole-number moves (a
+  Q-Link's, the wheel's) a page per `QL_TICKS`, its whole-number ones (an arrow's, a restore) at once. A turn back
+  starts the count over; every event marks the parameter so MPC reads back where it is.
 - Saved state: `<inst>_dir`, `<inst>_file` per sample instrument, `br_path`; a saved file is found by name once its
   folder is read (`find_wanted`).
 
@@ -122,15 +128,16 @@ In this order at the end of the plugin's list (append-only):
 | Key | Name (what MPC shows) | Kind | Notes |
 |---|---|---|---|
 | `br_row_1`..`_8` | ROW 1-8 | momentary, `dynamic_display` | text = the entry; value 1 = the cursor's row |
-| `br_scroll` (+ `_prev`/`_next`) | SCROLL | stepper 0-999 | the top row; arrows step 8 |
+| `br_scroll` (+ `_prev`/`_next`) | SCROLL | stepper 0-999 | the top row; arrows a page, a Q-Link a page per three |
 | `br_path`, `br_status` | FOLDER, IN IT | readout (string) | |
 | `br_target` | LOAD TO | 8 options | the sample instruments |
 | `br_preview` | PREVIEW | ON/OFF, on | |
 | `br_up`, `br_places` | UP, DRIVES | momentary | |
-| `br_cursor` (+ `_prev`/`_next`) | FILE | stepper 0-999, `clamped`, `display: int`, `nudge_pct: 10` | one entry a wheel click or Q-Link tick |
+| `br_cursor` (+ `_prev`/`_next`) | FILE | stepper 0-999, `clamped`, `display: int`, `nudge_pct: 10` | the box: a file a wheel click |
 | `br_load` | LOAD | momentary | |
 | `br_audition` | AUDITION | ON/OFF, off | |
 | `br_autoload` | AUTO LOAD | ON/OFF, off | |
+| `br_cursor_q` | BROWSE | stepper 0-999, as FILE, `qlink_only` | Q-Link 1: the cursor a row per three events |
 
 `nudge_pct` needs the release tools at fork commit `b014168` or later; this repo's own `tools/build.sh` wrapper
 doesn't have it yet (a Q-Link tick there moves FILE several entries).
@@ -143,12 +150,14 @@ are added by `mpc/merge_ab.py` from `BROWSER_LINES`:
 ```
 readout cx=290 cy=154 w=488 h=32 vs=20 box=no style=dotmatrix key=br_path
 readout cx=656 cy=154 w=196 h=32 vs=20 box=no style=dotmatrix key=br_status
-list x=40 y=182 w=720 h=362 key=br_row cols=1 rows=8 th=40 gap=6 wheel=br_cursor ink=ffffff lit=d32a2a
+list x=40 y=182 w=720 h=362 key=br_row cols=1 rows=8 th=40 gap=6 ink=ffffff lit=d32a2a focus=no
 ```
 
-`wheel=`, `ink=` and `lit=` are this repo's additions to the skin builder (`tools/shadow_skin.py` in
-`framework/mpc-vst-plugins.patch`, 2026-10-20): the rows hand the data wheel to FILE when touched, white text, and the
-cursor's row in a red 3-pixel border (the default, the active segment colour, was near-black on the black list).
+`ink=`, `lit=` and `focus=no` are this repo's additions to the skin builder (`tools/shadow_skin.py` in
+`framework/mpc-vst-plugins.patch`, 2026-10-20): white text, the cursor's row in a red 3-pixel border (the default, the
+active segment colour, was near-black on the black list), and no row taking the hardware focus (by default the first
+row takes it). `check_skin.py` knows both: a `focus=no` list needs no bound row, and a `qlink_only` parameter may sit on
+a Q-Link with nothing on the page.
 FILE and SCROLL are `stepper`s (their text is touchable and takes the wheel); LOAD, UP and DRIVES are buttons (MPC
 sizes a button by its label: only its centre comes from the markup); LOAD TO is an 8-option `enum_h` in two rows.
 
@@ -164,8 +173,9 @@ sizes a button by its label: only its centre comes from the markup); LOAD TO is 
    preview's two lines in the render (`prv_want` wait, `preview_block` after the effects), the `e_set_param` /
    `e_get_param` / display branches for `br_*`, and the state keys. Replace `set_folder` / `sample_ask` / `SMP_P` with
    how your voices take a sample (a folder number and a file number into `lib_get`).
-4. **Screen:** the three layout lines above (with `wheel=`, `ink=`, `lit=`), FILE and SCROLL steppers, LOAD / UP /
-   DRIVES buttons, LOAD TO, the three switches; FILE on Q-Link 1, SCROLL on 2.
+4. **Screen:** the three layout lines above (with `ink=`, `lit=`, `focus=no`), FILE and SCROLL steppers (FILE's caption
+   says to tap it for the wheel), LOAD / UP / DRIVES buttons, LOAD TO, the three switches; BROWSE on Q-Link 1, SCROLL
+   on 2.
 5. **Tests:** `mpc/selftest.c`'s "your own samples" block builds folders of WAV files and drives the browser through
    its parameters (taps, MPC's echo, FILE across headings, AUTO LOAD, UP, LOAD TO, the one-level fallback, 47 files
    past the memory limit while another voice plays). Run it under ASan/UBSan and TSan (Docker `gcc:12`; TSan needs
@@ -173,10 +183,9 @@ sizes a button by its label: only its centre comes from the markup); LOAD TO is 
 
 ## Still to check on a device (2026-10-20)
 
-- The wheel moving FILE after a tap on a row (`wheel=`), and with no touch at all after the page opens (probably not:
-  then touch a row once). If MPC ignores a `Q-Link` action on a named handle, the other way round is sd88me's
-  `popup wheel=1` design on the fork (also unverified): the row's `Data` handle on FILE, so the wheel moves FILE
-  while a row has focus, and the tap's `Toggle Switch` on a named handle bound to the row.
+- The wheel on FILE's box after one tap, and staying there while rows are tapped (`focus=no`). Untried: whether MPC
+  gives a page's first focusable control the focus when it opens (then FILE could have it with no tap).
+- BROWSE and SCROLL at three Q-Link events a step: whether three is right for the Live II's Q-Links.
 - The cursor's red border, and a second tap on the lit row loading (MPC's 0), the 100 ms echo guard.
 - A drive's top level and a big sample pack: how long the one-list read takes on the SSD and SD card (the thread reads
   up to 256 folders before giving up), and the preview's delay.
