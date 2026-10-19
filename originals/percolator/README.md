@@ -411,7 +411,8 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   ```
 - `mpc/selftest.c` checks your own samples and RANDOMISE (WAV kinds and cue points, browsing, a file loaded, previewed
   and played on each voice at its pitch, the state, a kit, past the 64 MB with a file held, every roll in range and
-  heard; the comment at its top says how to build it, and under ASan/UBSan or TSan in Docker's `gcc:12`):
+  heard) and that every voice stops once its hit has died away; the comment at its top says how to build it, and under
+  ASan/UBSan or TSan in Docker's `gcc:12`:
   ```
   cc -O1 -g -DLIB_MEDIA='"build/libtest/media"' -Isrc mpc/selftest.c src/percolator.c src/voices.c src/kits.c \
      src/library.c -lm -lpthread -ldl -o build/selftest
@@ -483,6 +484,18 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   PASSED natively, as 32-bit ARM, under ASan/UBSan (two seeds) and TSan; build and host test PASSED; `check_skin.py`
   OK; procwatch: the new thread sleeps (0 wakeups idle), idle and playing cost as 2.0.1. UBSan found a sine-table
   read one past its end when FM's phase came a hair under 0 (2.0.1 too; harmless in practice, fixed in `src/dsp.h`).
+  Then (owner: fix it first) every voice stops once its hit has died away. Up to 2.0.1 only SNARE did: after its first
+  hit a voice on any other algorithm rendered silence for good, and silence after playing cost 1.7x a fresh
+  instance's (procwatch `after/fresh` 1.69). A voice now stops when its envelope is 80 dB under its peak and what it
+  plays has stayed under -100 dB for 2048 frames (a whole cycle of a low kick; DRIVE's gain is in it). A stopped
+  voice's filter follows CUTOFF as a playing one's does, so its next hit starts where it would have. In 2.0.1 a voice
+  not yet played (or stopped by ALL SOUND OFF) kept its filter where the last kit left it, and its first hit after a
+  kit change swept it for a few ms. A sample's end lets the filter and DRIVE ring out: 2.0.1 cut them, a click (up to
+  -25 dBFS from a low filter still ringing, in Hrtl 60). Offline: `after/fresh` 1.00. Rendered with every hit
+  from the same noise and oscillator state, so that only the stop shows, 175 kits sound as 2.0.1 to within 2 LSB a
+  hit and 6 LSB in the groove; Hrtl 54 and Hrtl 60 differ only by that click gone. The selftest stops 288 hits (each
+  algorithm and mode, DECAY short to drone, DRIVE off and full: under 1 LSB before, silent after, a held drone plays
+  on); build and host test PASSED.
 
 ## Files
 

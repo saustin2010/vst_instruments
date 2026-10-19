@@ -166,14 +166,17 @@ parameter index, so existing projects keep working.
     parameters appended (176), the SAMPLES page last. Offline: the 177 kits render bit-identical to 2.0.1;
     `mpc/selftest.c` PASSED natively, as armv7, under ASan/UBSan and TSan (every RANDOMISE roll heard: 80,000 over -36
     dBFS); build and host test PASSED, `check_skin.py` OK, procwatch as 2.0.1 (the new thread sleeps). Also fixed: a
-    sine-table read one past its end (UBSan, FM; in 2.0.1 too). Left: install on the Live II (no restart: re-insert),
-    the owner's checks (browsing the drives, a file on each voice, PREVIEW, RANDOMISE, a project saved and reopened),
-    then a release.
+    sine-table read one past its end (UBSan, FM; in 2.0.1 too). Then (owner, "fix this first"): every voice stops
+    once its hit has died away (envelope 80 dB under its peak, output under -100 dB for 2048 frames); up to 2.0.1 only
+    SNARE did, so silence after playing cost 1.7x a fresh instance's. A stopped voice's filter follows CUTOFF, and a
+    sample's end lets the filter and DRIVE ring out (2.0.1 cut them: a click, up to -25 dBFS in Hrtl 60). Offline:
+    procwatch `after/fresh` 1.69 -> 1.00; the kits as 2.0.1 to within 2 LSB a hit and 6 in the groove (every hit from
+    the same noise state), Hrtl 54 and 60 but for that click; the selftest's 288 hits all stop. Left: install on the
+    Live II (no restart: re-insert), the owner's checks (browsing the drives, a file on each voice, PREVIEW, RANDOMISE,
+    a project saved and reopened, the kits after a pause sounding as before), then a release.
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
-    would save most of it. Found 2026-10-19: a voice on any algorithm but SNARE never stops after its first hit
-    (`voice_block`'s stop test also waits for `nenv`, which only SNARE lowers), so up to four voices render silence for
-    good; stopping them changes the kits' sound below -80 dB (offer it as its own change, with kit renders compared).
+    would save most of it. (The voices that never stopped after their first hit, found 2026-10-19: fixed in 2.1.0.)
 - [ ] **Percolator OUT** ([originals/percolator/percolatorout](originals/percolator/percolatorout/), 2026-10-12): an insert effect that plays
   one of Percolator's OUT 1-4 on its own track (owner: an audio track instead of a second plugin). Offline tests
   passed; installed and working on an audio track on the Live II (2026-10-12). Left: a release with Percolator 2.0.0
