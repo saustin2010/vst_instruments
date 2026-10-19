@@ -49,7 +49,8 @@ echo "  $split ($(git rev-list --count "$split") commits)"
 remote=$(git ls-remote "$url" refs/heads/main 2>/dev/null | cut -f1 || true)
 if [ -z "$remote" ] && ! git ls-remote "$url" >/dev/null 2>&1; then
   if [ $create = 1 ]; then
-    about=$(sed -n 's/^ *about: *"\{0,1\}\([^"]*\)"\{0,1\} *$/\1/p' "$rel/.github/workflows/release.yml")
+    # the plugin's own job's (the first): a companion's job has an about of its own
+    about=$(sed -n 's/^ *about: *"\{0,1\}\([^"]*\)"\{0,1\} *$/\1/p' "$rel/.github/workflows/release.yml" | head -n 1)
     desc="$about A native VST2 plugin with its own touchscreen skin for MPC OS standalone devices."
     if [ $dry = 1 ]; then
       echo "would create $target: $desc"
