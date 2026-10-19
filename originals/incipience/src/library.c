@@ -250,7 +250,7 @@ static void add(lib_list_t *l, int kind, const char *name, const char *path) {
 static lib_list_t *list_places(void) {
     lib_list_t *l = calloc(1, sizeof *l);
     if (!l) return NULL;
-    add(l, LE_ALPHABASE, "ALPHABASE SET", NULL);
+    add(l, LE_ALPHABASE, "SAMPLE SET BY NUMBER", NULL);   /* no maker's name on the screen */
     char p[LIB_PATH + 300];
     struct stat sb;
     snprintf(p, sizeof p, "%s/samples", L.dir);

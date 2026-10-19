@@ -428,7 +428,7 @@ int main(int argc, char **argv) {
 
         inc_t *P = E->create("build/libtest");
         browse_wait(P);   /* the tab's first look: the places */
-        CHECK(row_is(P, 1, "> ALPHABASE SET") && row_is(P, 2, "INCIPIENCE SAMPLES"), "places: %s", rows(P));
+        CHECK(row_is(P, 1, "> SAMPLE SET BY NUMBER") && row_is(P, 2, "INCIPIENCE SAMPLES"), "places: %s", rows(P));
         set(P, "br_row_2", "1");
         browse_wait(P);
         CHECK(row_is(P, 1, ".. UP") && row_is(P, 2, "Sub /") && row_is(P, 3, "kick 1") && row_is(P, 4, "Kick 2") &&
@@ -491,11 +491,11 @@ int main(int argc, char **argv) {
             free(run(P, 2));
         }
         set(P, "m1_src", "0");
-        /* ALPHABASE SET; and a kit: back to the set */
+        /* SAMPLE SET BY NUMBER; and a kit: back to the set */
         set(P, "br_up", "1");
         browse_wait(P);
         set(P, "br_row_1", "1");
-        CHECK(P->sfold[6] < 0 && row_is(P, 1, "> ALPHABASE SET"), "ALPHABASE SET: folder %d", P->sfold[6]);
+        CHECK(P->sfold[6] < 0 && row_is(P, 1, "> SAMPLE SET BY NUMBER"), "SAMPLE SET BY NUMBER: folder %d", P->sfold[6]);
         set(P, "br_row_2", "1");
         browse_wait(P);
         set(P, "br_row_3", "1");

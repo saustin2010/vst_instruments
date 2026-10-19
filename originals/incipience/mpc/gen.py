@@ -479,7 +479,7 @@ PAGES += [
         "also": ["br_scroll", "br_path", "br_status"],
         "qlinks": ["br_scroll", "-", "-", "-", "br_target", "-", "-", "-", "br_preview", "-", "-", "-", "-", "-", "-", "-"],
         "info": ["TAP A FOLDER TO OPEN IT, A WAV FILE TO", "LOAD IT INTO LOAD TO'S INSTRUMENT:", "ITS SAMPLE THEN STEPS THROUGH THAT",
-                 "FOLDER. ALPHABASE SET (UNDER DRIVES):", "BACK TO THE SAMPLE SET BY NUMBER"]}),
+                 "FOLDER. SAMPLE SET BY NUMBER (DRIVES):", "BACK TO THE DATA FOLDER'S SAMPLES"]}),
 ]
 
 

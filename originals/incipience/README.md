@@ -153,7 +153,7 @@ MBrane, metal noise through the filters, the self-oscillating filters and the FM
 Any folder of WAV files on the MPC: its internal drive, an SD card, an SSD, a USB drive, or a `samples` folder you make
 in the plugin's data folder (`incipience/samples/` next to `incipience.so`).
 
-- **Browse:** DRIVES lists the places (ALPHABASE SET, INCIPIENCE SAMPLES if that folder is there, then the drives);
+- **Browse:** DRIVES lists the places (SAMPLE SET BY NUMBER, INCIPIENCE SAMPLES if that folder is there, then the drives);
   tap one, then its folders (`.. UP` or the UP button goes back). Eight rows at a time: SCROLL (its Q-Link, or its
   arrows, a page a tap). FOLDER shows where you are (its end, if long: MPC shows 24 characters), the box beside it
   how many WAV files there are.
@@ -161,8 +161,8 @@ in the plugin's data folder (`incipience/samples/` next to `incipience.so`).
   PREVIEW on, plays once. A `>` marks the file LOAD TO's instrument plays.
 - **Point to a folder:** after that, that instrument's SAMPLE shows the file's name and steps through the folder's WAV
   files in name order ("Kick 2" before "Kick 10"; the first 255), with its arrows or its Q-Link. RANDOMISE picks one of
-  them, and a mod slot or a lane on SAMPLE spans them (+-100 % is the whole folder). ALPHABASE SET, at the top of the
-  places, takes LOAD TO's instrument back to the AlphaBase set by number; so does loading a kit.
+  them, and a mod slot or a lane on SAMPLE spans them (+-100 % is the whole folder). SAMPLE SET BY NUMBER, at the top
+  of the places, takes LOAD TO's instrument back to the AlphaBase set by number; so does loading a kit.
 - **Files:** WAV, 8, 16, 24 or 32-bit or 32-bit float, any sample rate (played at its own pitch), stereo mixed to
   mono, the first minute, 64 MB a file at most. A file is read when something first asks for it (a hit, a tap, a step of
   SAMPLE), on a thread of its own, never the audio's: the hit that asks plays without it. 64 MB of files stay in memory;
