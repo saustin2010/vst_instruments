@@ -458,7 +458,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "ch_cents",
@@ -725,7 +727,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "oh_cents",
@@ -992,7 +996,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "cp_cents",
@@ -1253,7 +1259,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "rm_cents",
@@ -1514,7 +1522,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "cr_cents",
@@ -1775,7 +1785,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "rd_cents",
@@ -2036,7 +2048,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "x1_cents",
@@ -2172,7 +2186,9 @@
    "max": 255,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "x2_cents",
@@ -9327,7 +9343,9 @@
    "max": 999,
    "step": 1,
    "default": 0,
-   "dynamic_display": true
+   "dynamic_display": true,
+   "display": "int",
+   "nudge_pct": 10
   },
   {
    "key": "br_scroll_prev",

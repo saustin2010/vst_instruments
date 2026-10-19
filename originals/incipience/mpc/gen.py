@@ -34,6 +34,10 @@ def build():
     def knob(key, name, default, lo=0, hi=127, **kw):
         P.append(dict(key=key, name=name, min=lo, max=hi, default=default, dynamic_display=True, **kw))
 
+    # a long list (a sample number, a kit, the SAMPLES rows): one step a Q-Link event or wheel click, where a Q-Link's
+    # 1/128 of the range would skip two to eight at a time (the wrapper's "nudge_pct", which needs "display": "int")
+    LONG = dict(display="int", nudge_pct=10)
+
     def step(key, name, default, lo, hi, **kw):
         P.append(dict(key=key, name=name, type="stepper", min=lo, max=hi, step=1, default=default,
                       dynamic_display=True, **kw))
@@ -117,7 +121,7 @@ def build():
         knob(k + "_pitch", n + " PITCH", 55)
         knob(k + "_start", n + " START", 0)
         knob(k + "_stop", n + " STOP", 127)
-        step(k + "_sample", n + " SAMPLE", 0, 0, 255)
+        step(k + "_sample", n + " SAMPLE", 0, 0, 255, **LONG)
         knob(k + "_cents", n + " CENTS", 0)
         knob(k + "_loop", n + " LOOP", 0)
         opts(k + "_loopon", n + " LOOP ON", ONOFF, 0)
@@ -156,7 +160,7 @@ def build():
         knob(k + "_pitch", n + " PITCH", 55)
         knob(k + "_start", n + " START", 0)
         knob(k + "_stop", n + " STOP", 127)
-        step(k + "_sample", n + " SAMPLE", 0, 0, 255)
+        step(k + "_sample", n + " SAMPLE", 0, 0, 255, **LONG)
         knob(k + "_cents", n + " CENTS", 0)
         knob(k + "_loop", n + " LOOP", 0)
         opts(k + "_loopon", n + " LOOP ON", ONOFF, 0)
@@ -277,7 +281,7 @@ def build():
     # TO's channel, whose SAMPLE then steps through that folder. The rows show the engine's text (their value is a tap)
     for r in range(1, BROWSE_ROWS + 1):
         P.append(dict(key="br_row_%d" % r, name="ROW %d" % r, momentary=True, dynamic_display=True))
-    step("br_scroll", "SCROLL", 0, 0, 999)
+    step("br_scroll", "SCROLL", 0, 0, 999, **LONG)
     P.append(dict(key="br_scroll_prev", name="SCROLL UP", momentary=True, step_of="br_scroll", step_delta=-BROWSE_ROWS))
     P.append(dict(key="br_scroll_next", name="SCROLL DOWN", momentary=True, step_of="br_scroll", step_delta=BROWSE_ROWS))
     P.append(dict(key="br_path", name="FOLDER", min=0, max=0, display="string", type="readout"))

@@ -52,7 +52,8 @@ first, then its MIX and accent. FX has REVERB and DELAY (all the sends), MIX has
 slots), MIDI & OUT (each instrument's NOTE, KEYS CH and OUT), MIDI MOD (each instrument's four lanes) and SAMPLES
 (your own samples): below.
 
-SAMPLE is a box with arrows: one sample a tap (a Q-Link still turns through them). PITCH and CENTS on the sample
+SAMPLE is a box with arrows: one sample a tap, and one a Q-Link tick or data-wheel click (since 1.0.0; it used to
+skip two or three at a time). SCROLL on the SAMPLES tab moves one row a tick the same way. PITCH and CENTS on the sample
 channels tune their metal noise as well as the sample (on the AlphaBase they move the sample alone), so a hat or a
 cymbal without a sample can be tuned too; a tom from the self-oscillating filter is tuned with CUTOFF.
 
