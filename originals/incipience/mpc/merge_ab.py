@@ -43,7 +43,7 @@ def main():
         raise SystemExit("layout.conf has %d tabs, not convert.py's %d (already merged?)" % (len(tabs), want))
     os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
     shutil.copy(LAYOUT, os.path.join(ROOT, "build", "layout.pages.conf"))
-    out = [l for l in head if l.strip() and not l.startswith("#")]
+    out = [l for l in head if l.strip() and not l.startswith("#") and l not in HEADER]   # convert.py keeps them too
     out = ["# Incipience for MPC: designed in Stitch (design/stitch-kick.html), every page in its markup by mpc/design.py,",
            "# converted by steve/tools/stitch/convert.py and folded into tabs with A/B Q-Link sub-pages by mpc/merge_ab.py.",
            "# Generated: change those, not this."] + out + [h for h in HEADER if h != "art_css="]
