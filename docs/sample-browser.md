@@ -67,7 +67,7 @@ subfolders, the wheel on FILE's box, AUTO LOAD, white text, a visible cursor, Q-
 | MPC shows a control's **parameter name**, not its layout label, and about **24 characters** of text in a box. | device |
 | The **data wheel** turns the control that has MPC's hardware focus (owner, 2026-10-19: "works as long as a box is selected"). A control takes it on a touch when its skin has `Mouse Down → Q-Link` and `acceptsHWFocus: Yes`; the wheel then moves its `Data` parameter. A stepper box (SAMPLE, FILE) is one. | device |
 | A touch action only ever acts on the control's **own** `Data` parameter. Akai's own skins on the Live II (`/usr/share/Akai/Content/Synths/*/Plugin Skins/`, 248 skin files) use four actions, all on `Data` (`Mouse Down → Q-Link`, `Enter Pressed → Toggle Switch`, `Double Click` / `Enter Pressed → Show Overlay`); named handles are only an indirection (a parent maps names to parameters, a child's `Data` points at a name). A row whose `Mouse Down → Q-Link` named another parameter (`wheel=`) did nothing with the wheel (owner, 2026-10-20: "the big mpc job wheel doesn't do anything"). So a list row can't both take taps for itself and hand the wheel to a cursor. | device (2026-10-20) |
-| A Q-Link's small turn arrives as **several events** on the Live II, one step each with `nudge_pct`, so a list cursor on a Q-Link "skip[s] a few rows" (owner, 2026-10-20). The wheel's click is one event of the same size, so the two can't be told apart: give the Q-Link a parameter of its own and count events there (`QL_TICKS` 3). | device (2026-10-20); the 3: offline, from the Key 37's (NOTES `qlink_ticks`) |
+| A Q-Link's small turn arrives as **several events** on the Live II, one step each with `nudge_pct`, so a list cursor on a Q-Link "skip[s] a few rows" (owner, 2026-10-20). The wheel's click is one event of the same size, so the two can't be told apart: give the Q-Link a parameter of its own and count events there (`QL_TICKS` 3). | device (2026-10-20; three events a step: "this is working") |
 | A wheel click sends the value MPC last read back **+0.01** of the range, a Q-Link event **+1/128** (1-3 on a fast spin). On a 0-999 range that is 10 and 8 entries a tick: `nudge_pct` makes any move under N % of the range one step (wrapper; with `QLINK_TRAVEL` it needs fork commit `b014168`). | device (Force probe, NOTES "Input probe"; SAMPLE one per tick on the Live II, 2026-10-19) |
 | A text readout is re-read every 100 ms by the wrapper (it hashes the text), so FOLDER and the status box update without being marked. | framework |
 | A row is a **Toggle Switch** button: a tap sends `1 - its value`. A row whose value reads 1 (the cursor's, drawn with its "on" tile) sends **0** on a tap. | framework; the lit row on a device: **not yet checked** |
@@ -181,11 +181,16 @@ sizes a button by its label: only its centre comes from the markup); LOAD TO is 
    past the memory limit while another voice plays). Run it under ASan/UBSan and TSan (Docker `gcc:12`; TSan needs
    `--security-opt seccomp=unconfined`).
 
-## Still to check on a device (2026-10-20)
+## Checked on a device
 
-- The wheel on FILE's box after one tap, and staying there while rows are tapped (`focus=no`). Untried: whether MPC
-  gives a page's first focusable control the focus when it opens (then FILE could have it with no tap).
-- BROWSE and SCROLL at three Q-Link events a step: whether three is right for the Live II's Q-Links.
+On the Live II (MPC OS 3.9.1) with 1.1.0's draft zips, by the owner (2026-10-20: "this is working"): white text and the
+red cursor row, a tap plays, the data wheel on FILE's box after one tap and staying there while rows are tapped
+(`focus=no`), BROWSE (Q-Link 1) and SCROLL (Q-Link 2) at three events a step, PREVIEW as the cursor lands.
+
+## Still to check on a device
+
+- Whether MPC gives a page's first focusable control the focus when it opens (then FILE could have the wheel with no
+  tap).
 - The cursor's red border, and a second tap on the lit row loading (MPC's 0), the 100 ms echo guard.
 - A drive's top level and a big sample pack: how long the one-list read takes on the SSD and SD card (the thread reads
   up to 256 folders before giving up), and the preview's delay.

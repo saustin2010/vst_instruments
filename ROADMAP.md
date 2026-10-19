@@ -202,7 +202,9 @@ parameter index, so existing projects keep working.
     Pressed` → `Toggle Switch`), so a row can't hand the wheel to another parameter. Now: `wheel=` gone, the list has
     `focus=no` (no row takes the wheel), FILE's box is the wheel's ("FILE: TAP, THEN THE WHEEL"); Q-Link 1 is BROWSE
     (new, 737 params, `qlink_only`), the cursor a row per three Q-Link events, SCROLL a page per three (an arrow a page)
-    (`QL_TICKS`). To check on the Live II: the wheel on FILE's box (and that a row tap leaves it there), Q-Link speed
+    (`QL_TICKS`). Checked on the Live II with the rebuilt drafts (owner, 2026-10-20: "this is working"): the wheel on
+    FILE's box, a row tap leaving it there, BROWSE and SCROLL at three events a step. Left for now (owner: "can leave
+    it for now"); next: publish 1.1.0 (both drafts) and `tested.json` 1.1.0
   - [ ] **In sd88me's catalogue**: entries `incipience` and `incipience-out` proposed in
     [sd88me/mpc-vst-plugins#480](https://github.com/sd88me/mpc-vst-plugins/pull/480) (2026-10-19; `catalog_build` on
     both: 0 problems), waiting for his merge

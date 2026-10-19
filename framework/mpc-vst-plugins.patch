@@ -116,7 +116,7 @@ index d0a4ff6..155566f 100644
 +        raise SystemExit("%s: no chain_params and no ui_hierarchy param objects" % path)
      return params, sections or None
 diff --git a/docs/NOTES.md b/docs/NOTES.md
-index 6e0f9d4..1e6f7c7 100644
+index 6e0f9d4..32f69e8 100644
 --- a/docs/NOTES.md
 +++ b/docs/NOTES.md
 @@ -46,7 +46,8 @@ from the Force and may differ on MPC Live/One/X/Key (e.g. `Force Documents` vs `
@@ -129,7 +129,7 @@ index 6e0f9d4..1e6f7c7 100644
     (direct, unscheduled send).
  
  Resolved (details in the sections below): option params render as image-button radio groups or `popup`s,
-@@ -596,7 +597,398 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
+@@ -596,7 +597,399 @@ having fired — that doesn't exist yet. ROADMAP's "Meters" question (does MPC r
  engine-set value) stays open for a genuinely live meter; this finding narrows it to a wrapper gap, not an
  MPC limitation.
  
@@ -525,9 +525,10 @@ index 6e0f9d4..1e6f7c7 100644
 +cursor with the data wheel ("the big mpc job wheel doesn't do anything"); taps on the rows still worked. So a control
 +can't hand the wheel to another parameter: the wheel turns the `Data` of the control a touch focused (a stepper box
 +does it). `list ... focus=no` keeps every row out of the hardware focus, so tapping rows leaves the wheel where it was
-+(offline). Same session: a cursor on a Q-Link with `nudge_pct` "change[s] really really quickly and skip[s] a few
++(confirmed on the Live II the same day: the wheel on a stepper box, then rows tapped, the wheel still on the box). Same session: a cursor on a Q-Link with `nudge_pct` "change[s] really really quickly and skip[s] a few
 +rows": a small turn of a Live II Q-Link is several events. Counting events per step (`qlink_ticks`, or in the engine)
-+slows it, but the wheel's clicks are the same small moves, so a parameter turned by both needs a Q-Link-only twin.
++slows it, but the wheel's clicks are the same small moves, so a parameter turned by both needs a Q-Link-only twin
++(three events a step on the Live II's Q-Links: "this is working").
 diff --git a/tools/gen_vst.py b/tools/gen_vst.py
 index 7a91d54..2fbf682 100644
 --- a/tools/gen_vst.py

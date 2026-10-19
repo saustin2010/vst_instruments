@@ -5,7 +5,8 @@
 <img src="screenshots/page_0.png" width="760" alt="Incipience's KICK page">
 
 **Status (2026-10-20): 1.1.0, a new sample browser** (below: [Your own samples](#your-own-samples-the-samples-tab)):
-a folder and its subfolders in one list, so the data wheel alone goes through them; offline so far. 1.0.0 is released ([Releases](https://github.com/saustin2010/mpc-vst-incipience/releases)), with
+a folder and its subfolders in one list, so the data wheel alone goes through them; its draft zips checked on the
+Live II by the owner (2026-10-20: "this is working"), not released yet. 1.0.0 is released ([Releases](https://github.com/saustin2010/mpc-vst-incipience/releases)), with
 [FX] Incipience OUT 1.0.0 as a zip of its own, and its release zips were checked on an MPC Live II by the owner
 (2026-10-19); offered to sd88me's plugin catalogue. Played on the Live II since 2026-10-13. MPC's data wheel turns
 the control you've selected: tap a box (SAMPLE, FILE ...) first (owner, 2026-10-19). What's next is in
