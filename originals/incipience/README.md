@@ -4,9 +4,11 @@
 
 <img src="screenshots/page_0.png" width="760" alt="Incipience's KICK page">
 
-**Status (2026-10-19): 1.0.0, the first release.** Played on an MPC Live II since 2026-10-13; everything below was
-tried there by the owner by 2026-10-19. One thing still open: MPC's data wheel doesn't turn Incipience's controls (Q-Links and
-touch do). What's next is in [ROADMAP.md](https://github.com/saustin2010/vst_instruments/blob/main/ROADMAP.md#new-plugins).
+**Status (2026-10-19): 1.0.0 released** ([Releases](https://github.com/saustin2010/mpc-vst-incipience/releases)), with
+[FX] Incipience OUT 1.0.0 as a zip of its own. Played on an MPC Live II since 2026-10-13; the 1.0.0 release zips
+installed and checked there by the owner (2026-10-19). Offered to sd88me's plugin catalogue. One thing still open:
+MPC's data wheel doesn't turn Incipience's controls (Q-Links and touch do). What's next is in
+[ROADMAP.md](https://github.com/saustin2010/vst_instruments/blob/main/ROADMAP.md#new-plugins).
 
 ## On the MPC
 
@@ -236,6 +238,7 @@ top says how to build and run it; `bench` times the matrix).
 | Path | What |
 |---|---|
 | `screenshots/` | the pages as MPC draws them |
+| `tested.json` | the releases checked on a device, for the catalogue's "Tested on" |
 | `.github/workflows/release.yml` | the release build (GitHub Actions, a draft release) |
 | `FRAMEWORK.md` | the changes to sd88me's tools this plugin is built with, and why |
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry |
