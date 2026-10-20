@@ -51,6 +51,8 @@ typedef struct {
 typedef struct {
     float k[NK];
     int algo, mode, vcf;
+    int src;            /* SOURCE: 0 its algorithm, 1 its own sample (the SAMPLES tab) */
+    int smp;            /* its SAMPLE: file smp of its folder, 0 = none */
 } vparam_t;
 
 typedef struct {
@@ -68,6 +70,8 @@ typedef struct {
     float vel;             /* target amplitude from velocity */
     float amp;             /* smoothed level x velocity */
     float env, atk;        /* decay envelope and attack ramp */
+    float pk;              /* their product's peak so far: the hit is over 80 dB under it */
+    int quiet;             /* frames its output has been under -100 dB */
     float penv;            /* pitch envelope, 1 -> 0 */
     float tr;              /* transient envelope */
     float nenv;            /* noise envelope (snare) */
@@ -83,7 +87,10 @@ typedef struct {
     float holdc;
     double spos;
     int sstart, send;
-    int slot_bank;         /* bank whose samples the voice plays (-1 built in) */
+    int src;               /* this hit plays the voice's own sample (SOURCE = SAMPLE when it came) */
+    int p2start;           /* PARAM 2 is where the sample starts (or its slice), not voice 4's attack */
+    const sample_t *smp;   /* what a sample hit plays: voice 4's slot (a kit pack's, or built in), or its own file */
+    int lslot;             /* the library file it holds while it plays it (library.c), or -1 */
     float last;            /* last engine sample, for the retrigger declick */
     float dclk;
     float cut_s;           /* smoothed cutoff 0..1 */
@@ -118,7 +125,26 @@ typedef struct perc {
     float hold[TAP_HOLD];  /* the main instance's output, a block late while a voice is tapped */
     uint32_t hold_w;
     mi_port_t midi_in;     /* "Percolator MIDI In": notes on their own channels, for KEYS CH (midiin.h) */
-    uint32_t changed[5];   /* parameters a MIDI CC set, for MPC's screen (mpc_engine_changed), a bit each */
+    uint32_t changed[6];   /* parameters a MIDI CC, RANDOMISE or the SAMPLES tab set, for MPC's screen
+                            * (mpc_engine_changed), a bit each */
+    uint32_t rrng;         /* RANDOMISE's own */
+    /* your own samples (library.c): each voice's folder, its SAMPLE then a file of it */
+    short sfold[NV];       /* -1: none */
+    char swant[NV][256];   /* a file to find once its folder is read (a saved project's), or "" */
+    struct lib_br *br;     /* the SAMPLES tab's listings, from its first use */
+    struct lib_list *bl;   /* the listing shown */
+    char bpath[512];       /* the folder asked for ("" = the places) */
+    int bwait;             /* a listing is on its way */
+    int aud, aud_n, aud_off, aud_v;   /* PREVIEW: voice + 1 waiting to play, frames waited; frames to its release */
+    /* the file under the cursor (FILE), played as it lands, straight from its folder (PREVIEW) */
+    int prv_slot;          /* the library file playing (held), or -1 */
+    int prv_f, prv_k, prv_want, prv_n;   /* the one asked for: folder, file; waiting for it, frames waited */
+    const sample_t *prv_s;
+    double prv_pos;
+    uint32_t clock;        /* frames played: a tap told from MPC turning off the row it lit */
+    uint32_t btap_at;      /* when a tap last lit a row */
+    char bfind[256];       /* a file to put the cursor on once its folder is listed (LOAD TO's own) */
+    int qacc[2];           /* Q-Link events counted toward BROWSE's next row, SCROLL's next page (QL_TICKS) */
 } perc_t;
 
 #define DL_N 65536
@@ -126,6 +152,7 @@ typedef struct perc {
 /* voices.c */
 void voice_trigger(perc_t *P, int vi, const vparam_t *vp, float vel, int note, float semi);
 void voice_release(perc_t *P, int vi);
+void voice_stop(perc_t *P, int vi);   /* silent at once, its file let go */
 void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send, int n);
 const char *algo_p_name(int vi, int algo, int mode, int which, const perc_t *P);
 const char *mode_name(int vi, int algo, int mode);
@@ -140,4 +167,44 @@ void dsp_tables_init(void);
 void kits_load(perc_t *P);
 void kits_free(perc_t *P);
 const sample_t *slot_sample(const perc_t *P, int bank, int slot);
+int wav_load(const char *path, sample_t *s, long max_bytes, int max_frames);   /* 1 if read */
 extern sample_t perc_builtin[NSLOT];
+
+/* library.c: your own samples, folders of WAV files anywhere on the MPC (the SAMPLES tab) */
+#define LIB_PATH 512
+#define LIB_FILES 255             /* a folder's first 255 WAV files, in name order: SAMPLE 1-255 */
+#ifndef LIB_MEDIA
+#define LIB_MEDIA "/media"        /* the MPC's drives */
+#endif
+#define LIB_FLAT 999              /* a listing of a folder and all its subfolders' files: entries at most (FILE's range) */
+enum { LE_FILE, LE_DIR, LE_UP, LE_PLACE, LE_HEAD };
+typedef struct { int kind; char *name, *path; int grp; } lib_ent_t;   /* path: a place's, a heading's; grp: a file's */
+typedef struct { char *path; int first, n; } lib_grp_t;   /* a folder's WAV files in a listing: e[first] on, n of them */
+typedef struct lib_list {         /* a folder ("" = the places): "..", then its WAV files and, when they all fit
+                                   * (flat), every subfolder's below, each under a heading (LE_HEAD, its path from
+                                   * here); else its subfolders, then its WAV files */
+    char path[LIB_PATH];
+    int n, first_file, nfiles, missing, gen;   /* nfiles: in all; first_file: the first */
+    int flat, ng;
+    lib_ent_t *e;
+    lib_grp_t *g;                 /* g[0]: the folder's own */
+} lib_list_t;
+typedef struct lib_br lib_br_t;   /* an instance's listings */
+void lib_open(const char *dir);
+void lib_close(void);
+void lib_poke(void);              /* once a block: wakes the thread if a request is waiting */
+void lib_wait(void);              /* until nothing waits to be read (offline tools) */
+int lib_folder(const char *path); /* its number (read on the thread), -1 if there are too many */
+int lib_folder_set(const lib_list_t *l, int g);   /* folder g of a listing, as listed: the same number if nothing changed */
+int lib_files(int f);             /* its WAV files, -1 while it's being read */
+const char *lib_name(int f, int k);
+const char *lib_path(int f);
+int lib_get(int f, int k, const sample_t **s);   /* file k of folder f, held (lib_put) if in memory; else asked for: -1 */
+void lib_put(int slot);
+lib_br_t *lib_browser(void);
+void lib_browser_free(lib_br_t *b);
+void lib_browse(lib_br_t *b, const char *path);
+lib_list_t *lib_listing(lib_br_t *b);   /* the listing asked for last, once read (yours to free), or NULL */
+lib_list_t *lib_places(void);     /* the places' listing, read at once (yours to free) */
+void lib_list_free(lib_list_t *l);
+int lib_is_wav(const char *name);

@@ -246,9 +246,36 @@ parameter index, so existing projects keep working.
     050603a), both OK in `catalog_check --catalog`; Percolator OUT's `.so` is byte-identical to 2.0.0's (the one
     checked on the Live II). On the Live II: the zip installed (one restart), Pack 3 in the Windows layout listed
     through Pack 3 62 (owner: "fine"); both published 2026-10-13 (v2.0.1 Latest), `tested.json` 2.0.1.
+  - [ ] 2.1.0 (owner, 2026-10-19: Incipience's sample browser for Percolator, samples "allowed on each voice", and "a
+    random button to randomise each parameter per voice"; branch `percolator-samples`, not pushed): each voice's SOURCE
+    (SYNTH, or SAMPLE: its own WAV file played as voice 4's SAMPLE plays its slots; the owner chose a switch over
+    layering) and SAMPLE (stepping through the file's folder), a SAMPLES page browsing the data folder and the MPC's
+    drives (`src/library.c`, as Incipience's), RANDOMISE per voice (sound controls only, the mix and MIDI kept). 37
+    parameters appended (176), the SAMPLES page last. Offline: the 177 kits render bit-identical to 2.0.1;
+    `mpc/selftest.c` PASSED natively, as armv7, under ASan/UBSan and TSan (every RANDOMISE roll heard: 80,000 over -36
+    dBFS); build and host test PASSED, `check_skin.py` OK, procwatch as 2.0.1 (the new thread sleeps). Also fixed: a
+    sine-table read one past its end (UBSan, FM; in 2.0.1 too). Then (owner, "fix this first"): every voice stops
+    once its hit has died away (envelope 80 dB under its peak, output under -100 dB for 2048 frames); up to 2.0.1 only
+    SNARE did, so silence after playing cost 1.7x a fresh instance's. A stopped voice's filter follows CUTOFF, and a
+    sample's end lets the filter and DRIVE ring out (2.0.1 cut them: a click, up to -25 dBFS in Hrtl 60). Offline:
+    procwatch `after/fresh` 1.69 -> 1.00; the kits as 2.0.1 to within 2 LSB a hit and 6 in the groove (every hit from
+    the same noise state), Hrtl 54 and 60 but for that click; the selftest's 288 hits all stop. Installed on the Live
+    II 2026-10-19 (this repo's build in the 2.0.1 release folder, 2.0.1 backed up in `/sdcard/vst-backups/`; no
+    restart). 2026-10-20 (owner: "the same browser" as Incipience 1.1.0's; the voice pages' SOURCE box "doesn't look
+    nice"), offline: the SAMPLES page is Incipience 1.1.0's browser (one list of a folder and its subfolders, FILE on
+    the data wheel, BROWSE on Q-Link 1 a file per three events, PREVIEW from the drive, a second tap / LOAD / AUTO LOAD,
+    AUDITION; 7 parameters appended, 183; the framework patch's list `ink=`, `lit=`, `focus=no` and `check_skin.py`
+    taken from `incipience-midi-mod`); SOURCE moved to the voice pages' title bar (its two buttons had drawn apart:
+    the skin builder keeps one picture per option of a parameter, the SAMPLES page's smaller ones in the voice page's
+    place) and SAMPLE level with CUTOFF and DRIVE; SAMPLE and FILE a file a click with this repo's wrapper too (the
+    engine steps small moves, as `nudge_pct` does); amber stepper arrows. `mpc/selftest.c` PASSED natively, as armv7, under ASan/UBSan and TSan; procwatch as before, build and
+    host test PASSED, `check_skin.py` OK. Installed on the Live II 2026-10-20 (same way, no restart; the 2026-10-19
+    build backed up in `/sdcard/vst-backups/`). The owner checked it there the same day: "this is working well".
+    Left: a release (its `release.yml` pin to `b014168`
+    or later for `nudge_pct`, `prepare.py --ready`).
   - [ ] Later (procwatch, 2026-10-12): `ab.sh` flags Percolator ALWAYS ON (idle/play 0.6): the BBD delay runs every
     sample while silent, as in 1.2.0 (native idle 0.95 us/block then, 1.09 now). A sleep once the delay has rung out
-    would save most of it.
+    would save most of it. (The voices that never stopped after their first hit, found 2026-10-19: fixed in 2.1.0.)
 - [ ] **Percolator OUT** ([originals/percolator/percolatorout](originals/percolator/percolatorout/), 2026-10-12): an insert effect that plays
   one of Percolator's OUT 1-4 on its own track (owner: an audio track instead of a second plugin). Offline tests
   passed; installed and working on an audio track on the Live II (2026-10-12). Left: a release with Percolator 2.0.0

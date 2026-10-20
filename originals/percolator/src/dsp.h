@@ -41,6 +41,7 @@ static inline float sin_t(float ph) {
     float x = ph * SIN_N;
     int i = (int)x;
     float f = x - i;
+    i &= SIN_N - 1;   /* a phase a hair under 0 rounds ph to 1.0 (i = SIN_N): the same point as 0 (UBSan, FM) */
     return perc_sintab[i] + (perc_sintab[i + 1] - perc_sintab[i]) * f;
 }
 

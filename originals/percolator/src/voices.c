@@ -5,6 +5,9 @@
  *   voice 3 (snare):   SNARE (resonators + noise)  SLAP (clap bursts)      TOM (resonator with self-FM)
  *   voice 4 (metal):   NOISE (white/pulse/crush)   METAL (cymbal/bell/PCM) SAMPLE (three slots, slices)
  *
+ * Any voice can play a sample of its own instead (SOURCE = SAMPLE: a WAV file from the SAMPLES tab), as voice 4's
+ * SAMPLE does: TUNE its pitch, PARAM 1 crush, PARAM 2 its start or slice.
+ *
  * Each algorithm writes its signal through the decay envelope; voice_block() then runs the voice's HP/BP/LP filter,
  * its drive and level, and sends to the delay. */
 #include <math.h>
@@ -474,9 +477,12 @@ static void a_metal(ctx_t *c) {
 
 static void a_sample(ctx_t *c) {
     voice_t *v = c->v;
-    const perc_t *P = c->P;
-    int slot = c->vp->mode % 3;
-    const sample_t *s = slot_sample(P, v->slot_bank, slot);
+    const sample_t *s = v->smp;
+    if (!s) {
+        memset(c->o, 0, sizeof(float) * (size_t)c->n);
+        v->active = 0;
+        return;
+    }
     float p1 = c->vp->k[K_P1];
     float step = s->rate * INV_SR * sample_ratio(c->vp->k[K_TUNE]) * fexp2(c->semi / 12.0f);
     float holdn = 1.0f + 31.0f * p1 * p1;
@@ -489,7 +495,7 @@ static void a_sample(ctx_t *c) {
             float fr = (float)(v->spos - j);
             x = s->d[j] + (s->d[j + 1] - s->d[j]) * fr;
             v->spos += step;
-        } else v->active = 0;
+        } else v->env = 0;   /* past its end: the hit is over (the filter and DRIVE ring out, then it stops) */
         v->holdc += 1.0f;
         if (v->holdc >= holdn) {
             v->holdc -= holdn;
@@ -529,8 +535,44 @@ static int uses_room(int vi, int algo, int mode) {
 
 /* ---- trigger, release, render ------------------------------------------------------------------------------- */
 
+/* where a sample hit starts and ends: PARAM 2 picks the slice when the file has cue points, else the start */
+static void sample_span(voice_t *v, const sample_t *s, float p2) {
+    v->sstart = 0;
+    v->send = s->len;
+    if (v->p2start) {
+        int nsl = s->ncue >= 2 ? s->ncue - 1 : 0;
+        if (nsl) {
+            int q = (int)(p2 * nsl);
+            if (q > nsl - 1) q = nsl - 1;
+            v->sstart = s->cue[q];
+            v->send = s->cue[q + 1];
+        } else v->sstart = (int)(p2 * 0.98f * s->len);
+    }
+    v->spos = v->sstart;
+}
+
+static void drop_file(voice_t *v) {
+    lib_put(v->lslot);
+    v->lslot = -1;
+    v->smp = NULL;
+}
+
+void voice_stop(perc_t *P, int vi) {
+    voice_t *v = &P->v[vi];
+    v->active = 0;
+    v->room.tail = 0;
+    drop_file(v);
+}
+
 void voice_trigger(perc_t *P, int vi, const vparam_t *vp, float vel, int note, float semi) {
     voice_t *v = &P->v[vi];
+    /* a hit of the voice's own sample holds its file while it plays; one not in memory yet is asked for, and this hit
+     * has none (silent). The new file is taken before the old one is let go, so a file hit again stays in */
+    int lslot = -1;
+    const sample_t *own = NULL;
+    if (vp->src && vp->smp > 0 && P->sfold[vi] >= 0) lslot = lib_get(P->sfold[vi], vp->smp - 1, &own);
+    drop_file(v);
+    v->lslot = lslot;
     v->dclk = clampf(v->dclk + v->last, -1.5f, 1.5f);
     v->last = 0;
     v->active = 1;
@@ -540,6 +582,8 @@ void voice_trigger(perc_t *P, int vi, const vparam_t *vp, float vel, int note, f
     v->vel = powf(clampf(vel, 1.0f, 127.0f) / 127.0f, 1.4f);
     v->env = 1.0f;
     v->atk = 0;
+    v->pk = 0;
+    v->quiet = 0;
     v->penv = 1.0f;
     v->tr = 1.0f;
     v->nenv = 1.0f;
@@ -548,7 +592,8 @@ void voice_trigger(perc_t *P, int vi, const vparam_t *vp, float vel, int note, f
     v->ns = 0;
     v->hold = 0;
     v->holdc = 0;
-    v->slot_bank = P->bank;
+    v->src = vp->src;
+    v->p2start = 0;
     const float *k = vp->k;
     v->amp = k[K_LEVEL] * k[K_LEVEL] * v->vel;   /* the hit at its level at once (the smoothing is for knob moves) */
     int algo = vp->algo, mode = vp->mode;
@@ -567,21 +612,17 @@ void voice_trigger(perc_t *P, int vi, const vparam_t *vp, float vel, int note, f
         v->zr[0] = 0.85f * (1.0f - k[K_P2]);
         v->zi[0] = 0.25f + 0.75f * k[K_P2];
         v->tr = k[K_P2];
-    } else if (vi == 3 && algo == 2) {
+    }
+    if (v->src) {
+        v->p2start = 1;
+        v->smp = lslot >= 0 ? own : NULL;
+        if (!v->smp) v->active = 0;
+        else sample_span(v, v->smp, k[K_P2]);
+    } else if (vi == 3 && algo == 2) {   /* the slot MODE picks: a kit pack's sample, else a built-in one */
         int slot = mode % 3;
-        const sample_t *s = slot_sample(P, P->bank, slot);
-        v->sstart = 0;
-        v->send = s->len;
-        if (bank_samples(P, P->bank, slot)) {
-            int nsl = s->ncue >= 2 ? s->ncue - 1 : 0;
-            if (nsl) {
-                int q = (int)(k[K_P2] * nsl);
-                if (q > nsl - 1) q = nsl - 1;
-                v->sstart = s->cue[q];
-                v->send = s->cue[q + 1];
-            } else v->sstart = (int)(k[K_P2] * 0.98f * s->len);
-        }
-        v->spos = v->sstart;
+        v->p2start = bank_samples(P, P->bank, slot);
+        v->smp = slot_sample(P, P->bank, slot);
+        sample_span(v, v->smp, k[K_P2]);
     }
 }
 
@@ -591,10 +632,13 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     voice_t *v = &P->v[vi];
     const float *k = vp->k;
     int algo = vp->algo % 3, mode = vp->mode % 3;
-    int room = uses_room(vi, algo, mode);
-    if (!v->active && v->room.tail <= 0) {
+    int room = !v->src && uses_room(vi, algo, mode);
+    if (!v->active && v->room.tail <= 0) {   /* stopped: the next hit finds the filter as if it had run on */
         v->last = 0;
         v->dclk = 0;
+        v->cut_s += (k[K_CUTOFF] - v->cut_s) * 0.3f;
+        v->out.s1 = v->out.s2 = 0;
+        if (v->lslot >= 0) drop_file(v);
         return;
     }
     float e[SUB], o[SUB];
@@ -604,9 +648,10 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     v->drone = drone;
     float mul = drone ? (v->gate ? 1.0f : t60_coef(0.35f)) : t60_coef(voice_t60(vi, k[K_DECAY]));
     float at = 0.0001f;
-    if (vi == 3 && (algo != 2 || !bank_samples(P, v->slot_bank, mode))) at = v4_attack(k[K_P2]);
+    if (vi == 3 && !v->p2start) at = v4_attack(k[K_P2]);
     float ainc = 1.0f / (at * SR);
-    int hold = (vi == 2 && algo == 1) ? (CLAPS[mode] - 1) * CLAP_GAP[mode] : 0;
+    int clap = !v->src && vi == 2 && algo == 1;
+    int hold = clap ? (CLAPS[mode] - 1) * CLAP_GAP[mode] : 0;
     for (int i = 0; i < n; i++) {
         v->atk = v->atk + ainc < 1.0f ? v->atk + ainc : 1.0f;
         if (v->ns + i >= hold) v->env *= mul;
@@ -617,8 +662,10 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     if (vi < 3) c.f0 = voice_freq(vi, k[K_TUNE]) * fexp2(semi / 12.0f);
     else c.rt = metal_ratio(k[K_TUNE]) * fexp2(semi / 12.0f);
     c.ring = drone ? 1.0f : t60_coef(voice_t60(vi, k[K_DECAY]) * (vi == 0 ? 2.0f : 1.5f));
+    int done = 0;
     if (v->active) {
-        switch (vi * 3 + algo) {
+        if (v->src) a_sample(&c);
+        else switch (vi * 3 + algo) {
         case 0: case 3: a_fold(&c); break;
         case 1: case 4: a_wave(&c); break;
         case 2: a_resbd(&c); break;
@@ -632,7 +679,11 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
         }
         v->ns += n;
         float lvl = v->env * v->atk;
-        if (!drone && lvl < 1e-4f && v->nenv < 1e-4f && (vi != 2 || algo != 1 || v->bursts >= CLAPS[mode])) v->active = 0;
+        if (lvl > v->pk) v->pk = lvl;
+        /* the hit is over: 80 dB under its peak, SNARE's noise too, every CLAP burst out, a drone's note let go */
+        int snare = !v->src && vi == 2 && algo == 0;
+        done = (!drone || !v->gate) && lvl < 1e-4f * v->pk && (!snare || v->nenv < 1e-4f) &&
+               (!clap || v->bursts >= CLAPS[mode]);
         if (room) v->room.tail = (int)(1.5f * SR);
     } else {
         memset(o, 0, sizeof o);
@@ -640,7 +691,6 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     }
     if (room && (k[K_P1] > 0.005f || v->room.tail > 0)) room_run(&v->room, o, k[K_P1], n);
     else if (!v->active) v->room.tail = 0;
-    v->last = v->active ? o[n - 1] : 0;
 
     /* the "analog" end: HP / BP / LP (no resonance control), overdrive, level */
     v->cut_s += (k[K_CUTOFF] - v->cut_s) * 0.3f;
@@ -649,6 +699,7 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
     float d = k[K_DRIVE], g = 1.0f + 24.0f * d * d, bias = 0.12f * d, sb = sat(bias), mk = 1.0f / (1.0f + 0.6f * d);
     float tgt = k[K_LEVEL] * k[K_LEVEL] * v->vel, fxs = k[K_FX] * k[K_FX];
     int vcf = vp->vcf;
+    float peak = 0;
     for (int i = 0; i < n; i++) {
         float y = o[i] + v->dclk, bp, hp;
         v->dclk *= 0.985f;
@@ -659,5 +710,14 @@ void voice_block(perc_t *P, int vi, const vparam_t *vp, float *mix, float *send,
         y *= v->amp;
         mix[i] += y;
         send[i] += y * fxs;
+        if (fabsf(y) > peak) peak = fabsf(y);
     }
+    /* it stops once the hit is over and what it plays has stayed under -100 dB for 2048 frames (a whole cycle of a
+     * low kick); a sample of the voice's own lets its file go then */
+    if (v->active) {
+        v->quiet = peak < 1e-5f ? v->quiet + n : 0;
+        if (done && v->quiet >= 2048) v->active = 0;
+    }
+    v->last = v->active ? o[n - 1] : 0;
+    if (!v->active && v->lslot >= 0) drop_file(v);
 }
