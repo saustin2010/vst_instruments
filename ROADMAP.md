@@ -181,7 +181,8 @@ parameter index, so existing projects keep working.
     the skin builder keeps one picture per option of a parameter, the SAMPLES page's smaller ones in the voice page's
     place) and SAMPLE level with CUTOFF and DRIVE; SAMPLE and FILE a file a click with this repo's wrapper too (the
     engine steps small moves, as `nudge_pct` does); amber stepper arrows. `mpc/selftest.c` PASSED natively, as armv7, under ASan/UBSan and TSan; procwatch as before, build and
-    host test PASSED, `check_skin.py` OK. Not on the Live II yet. Left: install it, the owner's checks (the wheel on
+    host test PASSED, `check_skin.py` OK. Installed on the Live II 2026-10-20 (same way, no restart; the 2026-10-19
+    build backed up in `/sdcard/vst-backups/`). Left: the owner's checks (re-insert Percolator first; the wheel on
     FILE, BROWSE's speed, PREVIEW, a second tap, AUTO LOAD, the voice pages, a file on each voice, RANDOMISE, a project
     saved and reopened, the kits after a pause sounding as before), then a release (its `release.yml` pin to `b014168`
     or later for `nudge_pct`, `prepare.py --ready`).
