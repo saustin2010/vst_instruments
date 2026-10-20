@@ -523,7 +523,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   parameter, and the SAMPLES page's smaller ones took the voice page's place; both are one size now. A voice's SAMPLE
   and FILE move a file a click with this repo's wrapper too: the engine makes any small move one step, as the release
   tools' `nudge_pct` does. The dot-matrix boxes' arrows are amber now (they were near-black on black). Offline:
-  `mpc/selftest.c` PASSED natively (20,000 rolls), as 32-bit ARM, under ASan/UBSan and TSan; procwatch as before (`after/fresh` 1.00); build and host test PASSED; `check_skin.py` OK. On the Live II since 2026-10-20, in the same release folder (the 2026-10-19 build backed up).
+  `mpc/selftest.c` PASSED natively (20,000 rolls), as 32-bit ARM, under ASan/UBSan and TSan; procwatch as before (`after/fresh` 1.00); build and host test PASSED; `check_skin.py` OK. On the Live II since 2026-10-20, in the same release folder (the 2026-10-19 build backed up); the owner: "this is working well".
 
 ## Files
 
