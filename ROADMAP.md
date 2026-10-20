@@ -169,8 +169,8 @@ parameter index, so existing projects keep working.
     SAMPLES tab's first place is SAMPLE SET BY NUMBER (no maker's name on the screen). The owner's one note, "when
     dialing through the samples the numbers skip": with `QLINK_TRAVEL` the release tools' wrapper ignored `nudge_pct`,
     so a Q-Link tick moved SAMPLE 2 and a wheel click 2.5; fixed on the fork (`steve-features` b014168, the new pin),
-    SAMPLE and SCROLL step one per tick (host test: six ticks step six). PR #31 here
-  - [ ] **1.1.0: the sample browser** (owner, 2026-10-19: "i would like to improve the sample browsers as it's a bit
+    SAMPLE and SCROLL step one per tick (host test: six ticks step six). PR #31 (merged 2026-10-19, merge commit)
+  - [x] **1.1.0: the sample browser** (owner, 2026-10-19: "i would like to improve the sample browsers as it's a bit
     clunky"; chose a cursor with preview, LOAD TO as buttons, shorter names, and AUDITION as a switch): a cursor (FILE:
     the data wheel on its box, Q-Link 1, its arrows; SCROLL a page) whose row is lit and whose file plays straight from
     the folder as it lands (PREVIEW); a tap on a file moves the cursor there and a second tap or LOAD loads it; LOAD TO
@@ -182,7 +182,7 @@ parameter index, so existing projects keep working.
     incipienceout` PASSED, procwatch no flags (idle/play 0.17). To check on the Live II: the lit row (the row's value
     reads 1; MPC turns it off on a tap, taken as the second tap unless within 100 ms of the first), the wheel on FILE,
     the preview's timing on the SSD; then release 1.1.0
-  - [ ] **1.1.0: the wheel alone** (owner, 2026-10-20: "rather than touchscreen can we just use the wheel to scroll
+  - [x] **1.1.0: the wheel alone** (owner, 2026-10-20: "rather than touchscreen can we just use the wheel to scroll
     through folders and sounds?"): a folder lists its subfolders' WAV files too, depth first, each folder's under a
     heading (folders without any left out; past 999 rows or 256 folders looked in, folder by folder as before), FILE
     steps over the headings from one folder into the next and FOLDER shows the cursor's file's folder; a heading tapped
@@ -204,7 +204,9 @@ parameter index, so existing projects keep working.
     (new, 737 params, `qlink_only`), the cursor a row per three Q-Link events, SCROLL a page per three (an arrow a page)
     (`QL_TICKS`). Checked on the Live II with the rebuilt drafts (owner, 2026-10-20: "this is working"): the wheel on
     FILE's box, a row tap leaving it there, BROWSE and SCROLL at three events a step. Left for now (owner: "can leave
-    it for now"); next: publish 1.1.0 (both drafts) and `tested.json` 1.1.0
+    it for now"). **Released 2026-10-20** (owner: "publish"): v1.1.0 (Latest) and incipience-out-v1.1.0, tags at the
+    commit they were built from (1687b5c), the zips' `.so` files byte-identical to the ones checked on the device;
+    `tested.json` 1.1.0 (MPC Live II, 3.9.1). How it works, for other plugins: [docs/sample-browser.md](docs/sample-browser.md)
   - [ ] **In sd88me's catalogue**: entries `incipience` and `incipience-out` proposed in
     [sd88me/mpc-vst-plugins#480](https://github.com/sd88me/mpc-vst-plugins/pull/480) (2026-10-19; `catalog_build` on
     both: 0 problems), waiting for his merge
