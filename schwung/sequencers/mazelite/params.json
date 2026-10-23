@@ -36,6 +36,7 @@
   },
   {
    "key": "s1_advance",
+   "refresh_display": true,
    "name": "S1 ADVANCE",
    "options": [
     "OFF",
@@ -45,6 +46,7 @@
   },
   {
    "key": "s1_reset",
+   "refresh_display": true,
    "name": "S1 RESET",
    "options": [
     "1 BAR",
@@ -90,6 +92,7 @@
   },
   {
    "key": "s2_advance",
+   "refresh_display": true,
    "name": "S2 ADVANCE",
    "options": [
     "OFF",
@@ -111,6 +114,7 @@
   },
   {
    "key": "trig_mix",
+   "refresh_display": true,
    "name": "S1 TRIG MIX",
    "min": -63,
    "max": 64,
@@ -119,6 +123,7 @@
   },
   {
    "key": "trig_mix_b",
+   "refresh_display": true,
    "name": "S2 TRIG MIX",
    "min": -63,
    "max": 64,
@@ -127,6 +132,7 @@
   },
   {
    "key": "g_reset",
+   "refresh_display": true,
    "name": "RESET BOTH",
    "options": [
     "1 BAR",

@@ -3,6 +3,7 @@
  "params": [
   {
    "key": "engine",
+   "refresh_display": true,
    "name": "MODEL",
    "options": [
     "VA VCF",
@@ -60,6 +61,7 @@
   },
   {
    "key": "fm_preset_index",
+   "clamped": true,
    "name": "FM PATCH",
    "default": 0,
    "min": 0,

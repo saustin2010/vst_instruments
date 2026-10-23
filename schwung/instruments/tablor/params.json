@@ -510,6 +510,7 @@
   },
   {
    "key": "wt1_select",
+   "refresh_display": true,
    "name": "WT1 TABLE",
    "min": 0,
    "max": 127,
@@ -541,6 +542,7 @@
   },
   {
    "key": "wt2_select",
+   "refresh_display": true,
    "name": "WT2 TABLE",
    "min": 0,
    "max": 127,
@@ -572,6 +574,7 @@
   },
   {
    "key": "preset",
+   "refresh_display": true,
    "name": "PRESET",
    "min": 0,
    "max": 127,

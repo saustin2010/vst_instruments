@@ -3,6 +3,7 @@
  "params": [
   {
    "key": "kit",
+   "clamped": true,
    "name": "KIT",
    "type": "stepper",
    "min": 0,
@@ -27,6 +28,7 @@
   },
   {
    "key": "v01_freq",
+   "refresh_display": true,
    "name": "PAD1 PITCH",
    "min": 0,
    "max": 1,
@@ -34,6 +36,7 @@
   },
   {
    "key": "v01_atk",
+   "refresh_display": true,
    "name": "PAD1 ATTACK",
    "min": 0,
    "max": 1,
@@ -41,6 +44,7 @@
   },
   {
    "key": "v01_dcy",
+   "refresh_display": true,
    "name": "PAD1 DECAY",
    "min": 0,
    "max": 1,
@@ -48,6 +52,7 @@
   },
   {
    "key": "v01_mrate",
+   "refresh_display": true,
    "name": "PAD1 MRATE",
    "min": 0,
    "max": 1,
@@ -55,6 +60,7 @@
   },
   {
    "key": "v01_mamt",
+   "refresh_display": true,
    "name": "PAD1 BEND",
    "min": 0,
    "max": 1,
@@ -62,6 +68,7 @@
   },
   {
    "key": "v01_nffrq",
+   "refresh_display": true,
    "name": "PAD1 NFREQ",
    "min": 0,
    "max": 1,
@@ -69,6 +76,7 @@
   },
   {
    "key": "v01_nfq",
+   "refresh_display": true,
    "name": "PAD1 NQ",
    "min": 0,
    "max": 1,
@@ -76,6 +84,7 @@
   },
   {
    "key": "v01_neatk",
+   "refresh_display": true,
    "name": "PAD1 NATK",
    "min": 0,
    "max": 1,
@@ -83,6 +92,7 @@
   },
   {
    "key": "v01_nedcy",
+   "refresh_display": true,
    "name": "PAD1 NDCY",
    "min": 0,
    "max": 1,
@@ -90,6 +100,7 @@
   },
   {
    "key": "v01_mix",
+   "refresh_display": true,
    "name": "PAD1 NOISE",
    "min": 0,
    "max": 1,
@@ -97,6 +108,7 @@
   },
   {
    "key": "v01_dist",
+   "refresh_display": true,
    "name": "PAD1 DIST",
    "min": 0,
    "max": 1,
@@ -104,6 +116,7 @@
   },
   {
    "key": "v01_lvl",
+   "refresh_display": true,
    "name": "01: KICK",
    "min": 0,
    "max": 1,
@@ -111,6 +124,7 @@
   },
   {
    "key": "v02_freq",
+   "refresh_display": true,
    "name": "PAD2 PITCH",
    "min": 0,
    "max": 1,
@@ -118,6 +132,7 @@
   },
   {
    "key": "v02_atk",
+   "refresh_display": true,
    "name": "PAD2 ATTACK",
    "min": 0,
    "max": 1,
@@ -125,6 +140,7 @@
   },
   {
    "key": "v02_dcy",
+   "refresh_display": true,
    "name": "PAD2 DECAY",
    "min": 0,
    "max": 1,
@@ -132,6 +148,7 @@
   },
   {
    "key": "v02_mrate",
+   "refresh_display": true,
    "name": "PAD2 MRATE",
    "min": 0,
    "max": 1,
@@ -139,6 +156,7 @@
   },
   {
    "key": "v02_mamt",
+   "refresh_display": true,
    "name": "PAD2 BEND",
    "min": 0,
    "max": 1,
@@ -146,6 +164,7 @@
   },
   {
    "key": "v02_nffrq",
+   "refresh_display": true,
    "name": "PAD2 NFREQ",
    "min": 0,
    "max": 1,
@@ -153,6 +172,7 @@
   },
   {
    "key": "v02_nfq",
+   "refresh_display": true,
    "name": "PAD2 NQ",
    "min": 0,
    "max": 1,
@@ -160,6 +180,7 @@
   },
   {
    "key": "v02_neatk",
+   "refresh_display": true,
    "name": "PAD2 NATK",
    "min": 0,
    "max": 1,
@@ -167,6 +188,7 @@
   },
   {
    "key": "v02_nedcy",
+   "refresh_display": true,
    "name": "PAD2 NDCY",
    "min": 0,
    "max": 1,
@@ -174,6 +196,7 @@
   },
   {
    "key": "v02_mix",
+   "refresh_display": true,
    "name": "PAD2 NOISE",
    "min": 0,
    "max": 1,
@@ -181,6 +204,7 @@
   },
   {
    "key": "v02_dist",
+   "refresh_display": true,
    "name": "PAD2 DIST",
    "min": 0,
    "max": 1,
@@ -188,6 +212,7 @@
   },
   {
    "key": "v02_lvl",
+   "refresh_display": true,
    "name": "02: SNARE",
    "min": 0,
    "max": 1,
@@ -195,6 +220,7 @@
   },
   {
    "key": "v03_freq",
+   "refresh_display": true,
    "name": "PAD3 PITCH",
    "min": 0,
    "max": 1,
@@ -202,6 +228,7 @@
   },
   {
    "key": "v03_atk",
+   "refresh_display": true,
    "name": "PAD3 ATTACK",
    "min": 0,
    "max": 1,
@@ -209,6 +236,7 @@
   },
   {
    "key": "v03_dcy",
+   "refresh_display": true,
    "name": "PAD3 DECAY",
    "min": 0,
    "max": 1,
@@ -216,6 +244,7 @@
   },
   {
    "key": "v03_mrate",
+   "refresh_display": true,
    "name": "PAD3 MRATE",
    "min": 0,
    "max": 1,
@@ -223,6 +252,7 @@
   },
   {
    "key": "v03_mamt",
+   "refresh_display": true,
    "name": "PAD3 BEND",
    "min": 0,
    "max": 1,
@@ -230,6 +260,7 @@
   },
   {
    "key": "v03_nffrq",
+   "refresh_display": true,
    "name": "PAD3 NFREQ",
    "min": 0,
    "max": 1,
@@ -237,6 +268,7 @@
   },
   {
    "key": "v03_nfq",
+   "refresh_display": true,
    "name": "PAD3 NQ",
    "min": 0,
    "max": 1,
@@ -244,6 +276,7 @@
   },
   {
    "key": "v03_neatk",
+   "refresh_display": true,
    "name": "PAD3 NATK",
    "min": 0,
    "max": 1,
@@ -251,6 +284,7 @@
   },
   {
    "key": "v03_nedcy",
+   "refresh_display": true,
    "name": "PAD3 NDCY",
    "min": 0,
    "max": 1,
@@ -258,6 +292,7 @@
   },
   {
    "key": "v03_mix",
+   "refresh_display": true,
    "name": "PAD3 NOISE",
    "min": 0,
    "max": 1,
@@ -265,6 +300,7 @@
   },
   {
    "key": "v03_dist",
+   "refresh_display": true,
    "name": "PAD3 DIST",
    "min": 0,
    "max": 1,
@@ -272,6 +308,7 @@
   },
   {
    "key": "v03_lvl",
+   "refresh_display": true,
    "name": "03: CLAVE",
    "min": 0,
    "max": 1,
@@ -279,6 +316,7 @@
   },
   {
    "key": "v04_freq",
+   "refresh_display": true,
    "name": "PAD4 PITCH",
    "min": 0,
    "max": 1,
@@ -286,6 +324,7 @@
   },
   {
    "key": "v04_atk",
+   "refresh_display": true,
    "name": "PAD4 ATTACK",
    "min": 0,
    "max": 1,
@@ -293,6 +332,7 @@
   },
   {
    "key": "v04_dcy",
+   "refresh_display": true,
    "name": "PAD4 DECAY",
    "min": 0,
    "max": 1,
@@ -300,6 +340,7 @@
   },
   {
    "key": "v04_mrate",
+   "refresh_display": true,
    "name": "PAD4 MRATE",
    "min": 0,
    "max": 1,
@@ -307,6 +348,7 @@
   },
   {
    "key": "v04_mamt",
+   "refresh_display": true,
    "name": "PAD4 BEND",
    "min": 0,
    "max": 1,
@@ -314,6 +356,7 @@
   },
   {
    "key": "v04_nffrq",
+   "refresh_display": true,
    "name": "PAD4 NFREQ",
    "min": 0,
    "max": 1,
@@ -321,6 +364,7 @@
   },
   {
    "key": "v04_nfq",
+   "refresh_display": true,
    "name": "PAD4 NQ",
    "min": 0,
    "max": 1,
@@ -328,6 +372,7 @@
   },
   {
    "key": "v04_neatk",
+   "refresh_display": true,
    "name": "PAD4 NATK",
    "min": 0,
    "max": 1,
@@ -335,6 +380,7 @@
   },
   {
    "key": "v04_nedcy",
+   "refresh_display": true,
    "name": "PAD4 NDCY",
    "min": 0,
    "max": 1,
@@ -342,6 +388,7 @@
   },
   {
    "key": "v04_mix",
+   "refresh_display": true,
    "name": "PAD4 NOISE",
    "min": 0,
    "max": 1,
@@ -349,6 +396,7 @@
   },
   {
    "key": "v04_dist",
+   "refresh_display": true,
    "name": "PAD4 DIST",
    "min": 0,
    "max": 1,
@@ -356,6 +404,7 @@
   },
   {
    "key": "v04_lvl",
+   "refresh_display": true,
    "name": "04: TOM",
    "min": 0,
    "max": 1,
@@ -363,6 +412,7 @@
   },
   {
    "key": "v05_freq",
+   "refresh_display": true,
    "name": "PAD5 PITCH",
    "min": 0,
    "max": 1,
@@ -370,6 +420,7 @@
   },
   {
    "key": "v05_atk",
+   "refresh_display": true,
    "name": "PAD5 ATTACK",
    "min": 0,
    "max": 1,
@@ -377,6 +428,7 @@
   },
   {
    "key": "v05_dcy",
+   "refresh_display": true,
    "name": "PAD5 DECAY",
    "min": 0,
    "max": 1,
@@ -384,6 +436,7 @@
   },
   {
    "key": "v05_mrate",
+   "refresh_display": true,
    "name": "PAD5 MRATE",
    "min": 0,
    "max": 1,
@@ -391,6 +444,7 @@
   },
   {
    "key": "v05_mamt",
+   "refresh_display": true,
    "name": "PAD5 BEND",
    "min": 0,
    "max": 1,
@@ -398,6 +452,7 @@
   },
   {
    "key": "v05_nffrq",
+   "refresh_display": true,
    "name": "PAD5 NFREQ",
    "min": 0,
    "max": 1,
@@ -405,6 +460,7 @@
   },
   {
    "key": "v05_nfq",
+   "refresh_display": true,
    "name": "PAD5 NQ",
    "min": 0,
    "max": 1,
@@ -412,6 +468,7 @@
   },
   {
    "key": "v05_neatk",
+   "refresh_display": true,
    "name": "PAD5 NATK",
    "min": 0,
    "max": 1,
@@ -419,6 +476,7 @@
   },
   {
    "key": "v05_nedcy",
+   "refresh_display": true,
    "name": "PAD5 NDCY",
    "min": 0,
    "max": 1,
@@ -426,6 +484,7 @@
   },
   {
    "key": "v05_mix",
+   "refresh_display": true,
    "name": "PAD5 NOISE",
    "min": 0,
    "max": 1,
@@ -433,6 +492,7 @@
   },
   {
    "key": "v05_dist",
+   "refresh_display": true,
    "name": "PAD5 DIST",
    "min": 0,
    "max": 1,
@@ -440,6 +500,7 @@
   },
   {
    "key": "v05_lvl",
+   "refresh_display": true,
    "name": "05: HAT CL",
    "min": 0,
    "max": 1,
@@ -447,6 +508,7 @@
   },
   {
    "key": "v06_freq",
+   "refresh_display": true,
    "name": "PAD6 PITCH",
    "min": 0,
    "max": 1,
@@ -454,6 +516,7 @@
   },
   {
    "key": "v06_atk",
+   "refresh_display": true,
    "name": "PAD6 ATTACK",
    "min": 0,
    "max": 1,
@@ -461,6 +524,7 @@
   },
   {
    "key": "v06_dcy",
+   "refresh_display": true,
    "name": "PAD6 DECAY",
    "min": 0,
    "max": 1,
@@ -468,6 +532,7 @@
   },
   {
    "key": "v06_mrate",
+   "refresh_display": true,
    "name": "PAD6 MRATE",
    "min": 0,
    "max": 1,
@@ -475,6 +540,7 @@
   },
   {
    "key": "v06_mamt",
+   "refresh_display": true,
    "name": "PAD6 BEND",
    "min": 0,
    "max": 1,
@@ -482,6 +548,7 @@
   },
   {
    "key": "v06_nffrq",
+   "refresh_display": true,
    "name": "PAD6 NFREQ",
    "min": 0,
    "max": 1,
@@ -489,6 +556,7 @@
   },
   {
    "key": "v06_nfq",
+   "refresh_display": true,
    "name": "PAD6 NQ",
    "min": 0,
    "max": 1,
@@ -496,6 +564,7 @@
   },
   {
    "key": "v06_neatk",
+   "refresh_display": true,
    "name": "PAD6 NATK",
    "min": 0,
    "max": 1,
@@ -503,6 +572,7 @@
   },
   {
    "key": "v06_nedcy",
+   "refresh_display": true,
    "name": "PAD6 NDCY",
    "min": 0,
    "max": 1,
@@ -510,6 +580,7 @@
   },
   {
    "key": "v06_mix",
+   "refresh_display": true,
    "name": "PAD6 NOISE",
    "min": 0,
    "max": 1,
@@ -517,6 +588,7 @@
   },
   {
    "key": "v06_dist",
+   "refresh_display": true,
    "name": "PAD6 DIST",
    "min": 0,
    "max": 1,
@@ -524,6 +596,7 @@
   },
   {
    "key": "v06_lvl",
+   "refresh_display": true,
    "name": "06: HAT OP",
    "min": 0,
    "max": 1,
@@ -531,6 +604,7 @@
   },
   {
    "key": "v07_freq",
+   "refresh_display": true,
    "name": "PAD7 PITCH",
    "min": 0,
    "max": 1,
@@ -538,6 +612,7 @@
   },
   {
    "key": "v07_atk",
+   "refresh_display": true,
    "name": "PAD7 ATTACK",
    "min": 0,
    "max": 1,
@@ -545,6 +620,7 @@
   },
   {
    "key": "v07_dcy",
+   "refresh_display": true,
    "name": "PAD7 DECAY",
    "min": 0,
    "max": 1,
@@ -552,6 +628,7 @@
   },
   {
    "key": "v07_mrate",
+   "refresh_display": true,
    "name": "PAD7 MRATE",
    "min": 0,
    "max": 1,
@@ -559,6 +636,7 @@
   },
   {
    "key": "v07_mamt",
+   "refresh_display": true,
    "name": "PAD7 BEND",
    "min": 0,
    "max": 1,
@@ -566,6 +644,7 @@
   },
   {
    "key": "v07_nffrq",
+   "refresh_display": true,
    "name": "PAD7 NFREQ",
    "min": 0,
    "max": 1,
@@ -573,6 +652,7 @@
   },
   {
    "key": "v07_nfq",
+   "refresh_display": true,
    "name": "PAD7 NQ",
    "min": 0,
    "max": 1,
@@ -580,6 +660,7 @@
   },
   {
    "key": "v07_neatk",
+   "refresh_display": true,
    "name": "PAD7 NATK",
    "min": 0,
    "max": 1,
@@ -587,6 +668,7 @@
   },
   {
    "key": "v07_nedcy",
+   "refresh_display": true,
    "name": "PAD7 NDCY",
    "min": 0,
    "max": 1,
@@ -594,6 +676,7 @@
   },
   {
    "key": "v07_mix",
+   "refresh_display": true,
    "name": "PAD7 NOISE",
    "min": 0,
    "max": 1,
@@ -601,6 +684,7 @@
   },
   {
    "key": "v07_dist",
+   "refresh_display": true,
    "name": "PAD7 DIST",
    "min": 0,
    "max": 1,
@@ -608,6 +692,7 @@
   },
   {
    "key": "v07_lvl",
+   "refresh_display": true,
    "name": "07: CYMB",
    "min": 0,
    "max": 1,
@@ -615,6 +700,7 @@
   },
   {
    "key": "v08_freq",
+   "refresh_display": true,
    "name": "PAD8 PITCH",
    "min": 0,
    "max": 1,
@@ -622,6 +708,7 @@
   },
   {
    "key": "v08_atk",
+   "refresh_display": true,
    "name": "PAD8 ATTACK",
    "min": 0,
    "max": 1,
@@ -629,6 +716,7 @@
   },
   {
    "key": "v08_dcy",
+   "refresh_display": true,
    "name": "PAD8 DECAY",
    "min": 0,
    "max": 1,
@@ -636,6 +724,7 @@
   },
   {
    "key": "v08_mrate",
+   "refresh_display": true,
    "name": "PAD8 MRATE",
    "min": 0,
    "max": 1,
@@ -643,6 +732,7 @@
   },
   {
    "key": "v08_mamt",
+   "refresh_display": true,
    "name": "PAD8 BEND",
    "min": 0,
    "max": 1,
@@ -650,6 +740,7 @@
   },
   {
    "key": "v08_nffrq",
+   "refresh_display": true,
    "name": "PAD8 NFREQ",
    "min": 0,
    "max": 1,
@@ -657,6 +748,7 @@
   },
   {
    "key": "v08_nfq",
+   "refresh_display": true,
    "name": "PAD8 NQ",
    "min": 0,
    "max": 1,
@@ -664,6 +756,7 @@
   },
   {
    "key": "v08_neatk",
+   "refresh_display": true,
    "name": "PAD8 NATK",
    "min": 0,
    "max": 1,
@@ -671,6 +764,7 @@
   },
   {
    "key": "v08_nedcy",
+   "refresh_display": true,
    "name": "PAD8 NDCY",
    "min": 0,
    "max": 1,
@@ -678,6 +772,7 @@
   },
   {
    "key": "v08_mix",
+   "refresh_display": true,
    "name": "PAD8 NOISE",
    "min": 0,
    "max": 1,
@@ -685,6 +780,7 @@
   },
   {
    "key": "v08_dist",
+   "refresh_display": true,
    "name": "PAD8 DIST",
    "min": 0,
    "max": 1,
@@ -692,6 +788,7 @@
   },
   {
    "key": "v08_lvl",
+   "refresh_display": true,
    "name": "08: NOISE",
    "min": 0,
    "max": 1,
@@ -699,6 +796,7 @@
   },
   {
    "key": "v09_freq",
+   "refresh_display": true,
    "name": "PAD9 PITCH",
    "min": 0,
    "max": 1,
@@ -706,6 +804,7 @@
   },
   {
    "key": "v09_atk",
+   "refresh_display": true,
    "name": "PAD9 ATTACK",
    "min": 0,
    "max": 1,
@@ -713,6 +812,7 @@
   },
   {
    "key": "v09_dcy",
+   "refresh_display": true,
    "name": "PAD9 DECAY",
    "min": 0,
    "max": 1,
@@ -720,6 +820,7 @@
   },
   {
    "key": "v09_mrate",
+   "refresh_display": true,
    "name": "PAD9 MRATE",
    "min": 0,
    "max": 1,
@@ -727,6 +828,7 @@
   },
   {
    "key": "v09_mamt",
+   "refresh_display": true,
    "name": "PAD9 BEND",
    "min": 0,
    "max": 1,
@@ -734,6 +836,7 @@
   },
   {
    "key": "v09_nffrq",
+   "refresh_display": true,
    "name": "PAD9 NFREQ",
    "min": 0,
    "max": 1,
@@ -741,6 +844,7 @@
   },
   {
    "key": "v09_nfq",
+   "refresh_display": true,
    "name": "PAD9 NQ",
    "min": 0,
    "max": 1,
@@ -748,6 +852,7 @@
   },
   {
    "key": "v09_neatk",
+   "refresh_display": true,
    "name": "PAD9 NATK",
    "min": 0,
    "max": 1,
@@ -755,6 +860,7 @@
   },
   {
    "key": "v09_nedcy",
+   "refresh_display": true,
    "name": "PAD9 NDCY",
    "min": 0,
    "max": 1,
@@ -762,6 +868,7 @@
   },
   {
    "key": "v09_mix",
+   "refresh_display": true,
    "name": "PAD9 NOISE",
    "min": 0,
    "max": 1,
@@ -769,6 +876,7 @@
   },
   {
    "key": "v09_dist",
+   "refresh_display": true,
    "name": "PAD9 DIST",
    "min": 0,
    "max": 1,
@@ -776,6 +884,7 @@
   },
   {
    "key": "v09_lvl",
+   "refresh_display": true,
    "name": "PAD9 LEVEL",
    "min": 0,
    "max": 1,
@@ -783,6 +892,7 @@
   },
   {
    "key": "v10_freq",
+   "refresh_display": true,
    "name": "PAD10 PITCH",
    "min": 0,
    "max": 1,
@@ -790,6 +900,7 @@
   },
   {
    "key": "v10_atk",
+   "refresh_display": true,
    "name": "PAD10 ATTACK",
    "min": 0,
    "max": 1,
@@ -797,6 +908,7 @@
   },
   {
    "key": "v10_dcy",
+   "refresh_display": true,
    "name": "PAD10 DECAY",
    "min": 0,
    "max": 1,
@@ -804,6 +916,7 @@
   },
   {
    "key": "v10_mrate",
+   "refresh_display": true,
    "name": "PAD10 MRATE",
    "min": 0,
    "max": 1,
@@ -811,6 +924,7 @@
   },
   {
    "key": "v10_mamt",
+   "refresh_display": true,
    "name": "PAD10 BEND",
    "min": 0,
    "max": 1,
@@ -818,6 +932,7 @@
   },
   {
    "key": "v10_nffrq",
+   "refresh_display": true,
    "name": "PAD10 NFREQ",
    "min": 0,
    "max": 1,
@@ -825,6 +940,7 @@
   },
   {
    "key": "v10_nfq",
+   "refresh_display": true,
    "name": "PAD10 NQ",
    "min": 0,
    "max": 1,
@@ -832,6 +948,7 @@
   },
   {
    "key": "v10_neatk",
+   "refresh_display": true,
    "name": "PAD10 NATK",
    "min": 0,
    "max": 1,
@@ -839,6 +956,7 @@
   },
   {
    "key": "v10_nedcy",
+   "refresh_display": true,
    "name": "PAD10 NDCY",
    "min": 0,
    "max": 1,
@@ -846,6 +964,7 @@
   },
   {
    "key": "v10_mix",
+   "refresh_display": true,
    "name": "PAD10 NOISE",
    "min": 0,
    "max": 1,
@@ -853,6 +972,7 @@
   },
   {
    "key": "v10_dist",
+   "refresh_display": true,
    "name": "PAD10 DIST",
    "min": 0,
    "max": 1,
@@ -860,6 +980,7 @@
   },
   {
    "key": "v10_lvl",
+   "refresh_display": true,
    "name": "PAD10 LEVEL",
    "min": 0,
    "max": 1,
@@ -867,6 +988,7 @@
   },
   {
    "key": "v11_freq",
+   "refresh_display": true,
    "name": "PAD11 PITCH",
    "min": 0,
    "max": 1,
@@ -874,6 +996,7 @@
   },
   {
    "key": "v11_atk",
+   "refresh_display": true,
    "name": "PAD11 ATTACK",
    "min": 0,
    "max": 1,
@@ -881,6 +1004,7 @@
   },
   {
    "key": "v11_dcy",
+   "refresh_display": true,
    "name": "PAD11 DECAY",
    "min": 0,
    "max": 1,
@@ -888,6 +1012,7 @@
   },
   {
    "key": "v11_mrate",
+   "refresh_display": true,
    "name": "PAD11 MRATE",
    "min": 0,
    "max": 1,
@@ -895,6 +1020,7 @@
   },
   {
    "key": "v11_mamt",
+   "refresh_display": true,
    "name": "PAD11 BEND",
    "min": 0,
    "max": 1,
@@ -902,6 +1028,7 @@
   },
   {
    "key": "v11_nffrq",
+   "refresh_display": true,
    "name": "PAD11 NFREQ",
    "min": 0,
    "max": 1,
@@ -909,6 +1036,7 @@
   },
   {
    "key": "v11_nfq",
+   "refresh_display": true,
    "name": "PAD11 NQ",
    "min": 0,
    "max": 1,
@@ -916,6 +1044,7 @@
   },
   {
    "key": "v11_neatk",
+   "refresh_display": true,
    "name": "PAD11 NATK",
    "min": 0,
    "max": 1,
@@ -923,6 +1052,7 @@
   },
   {
    "key": "v11_nedcy",
+   "refresh_display": true,
    "name": "PAD11 NDCY",
    "min": 0,
    "max": 1,
@@ -930,6 +1060,7 @@
   },
   {
    "key": "v11_mix",
+   "refresh_display": true,
    "name": "PAD11 NOISE",
    "min": 0,
    "max": 1,
@@ -937,6 +1068,7 @@
   },
   {
    "key": "v11_dist",
+   "refresh_display": true,
    "name": "PAD11 DIST",
    "min": 0,
    "max": 1,
@@ -944,6 +1076,7 @@
   },
   {
    "key": "v11_lvl",
+   "refresh_display": true,
    "name": "PAD11 LEVEL",
    "min": 0,
    "max": 1,
@@ -951,6 +1084,7 @@
   },
   {
    "key": "v12_freq",
+   "refresh_display": true,
    "name": "PAD12 PITCH",
    "min": 0,
    "max": 1,
@@ -958,6 +1092,7 @@
   },
   {
    "key": "v12_atk",
+   "refresh_display": true,
    "name": "PAD12 ATTACK",
    "min": 0,
    "max": 1,
@@ -965,6 +1100,7 @@
   },
   {
    "key": "v12_dcy",
+   "refresh_display": true,
    "name": "PAD12 DECAY",
    "min": 0,
    "max": 1,
@@ -972,6 +1108,7 @@
   },
   {
    "key": "v12_mrate",
+   "refresh_display": true,
    "name": "PAD12 MRATE",
    "min": 0,
    "max": 1,
@@ -979,6 +1116,7 @@
   },
   {
    "key": "v12_mamt",
+   "refresh_display": true,
    "name": "PAD12 BEND",
    "min": 0,
    "max": 1,
@@ -986,6 +1124,7 @@
   },
   {
    "key": "v12_nffrq",
+   "refresh_display": true,
    "name": "PAD12 NFREQ",
    "min": 0,
    "max": 1,
@@ -993,6 +1132,7 @@
   },
   {
    "key": "v12_nfq",
+   "refresh_display": true,
    "name": "PAD12 NQ",
    "min": 0,
    "max": 1,
@@ -1000,6 +1140,7 @@
   },
   {
    "key": "v12_neatk",
+   "refresh_display": true,
    "name": "PAD12 NATK",
    "min": 0,
    "max": 1,
@@ -1007,6 +1148,7 @@
   },
   {
    "key": "v12_nedcy",
+   "refresh_display": true,
    "name": "PAD12 NDCY",
    "min": 0,
    "max": 1,
@@ -1014,6 +1156,7 @@
   },
   {
    "key": "v12_mix",
+   "refresh_display": true,
    "name": "PAD12 NOISE",
    "min": 0,
    "max": 1,
@@ -1021,6 +1164,7 @@
   },
   {
    "key": "v12_dist",
+   "refresh_display": true,
    "name": "PAD12 DIST",
    "min": 0,
    "max": 1,
@@ -1028,6 +1172,7 @@
   },
   {
    "key": "v12_lvl",
+   "refresh_display": true,
    "name": "PAD12 LEVEL",
    "min": 0,
    "max": 1,
@@ -1035,6 +1180,7 @@
   },
   {
    "key": "v13_freq",
+   "refresh_display": true,
    "name": "PAD13 PITCH",
    "min": 0,
    "max": 1,
@@ -1042,6 +1188,7 @@
   },
   {
    "key": "v13_atk",
+   "refresh_display": true,
    "name": "PAD13 ATTACK",
    "min": 0,
    "max": 1,
@@ -1049,6 +1196,7 @@
   },
   {
    "key": "v13_dcy",
+   "refresh_display": true,
    "name": "PAD13 DECAY",
    "min": 0,
    "max": 1,
@@ -1056,6 +1204,7 @@
   },
   {
    "key": "v13_mrate",
+   "refresh_display": true,
    "name": "PAD13 MRATE",
    "min": 0,
    "max": 1,
@@ -1063,6 +1212,7 @@
   },
   {
    "key": "v13_mamt",
+   "refresh_display": true,
    "name": "PAD13 BEND",
    "min": 0,
    "max": 1,
@@ -1070,6 +1220,7 @@
   },
   {
    "key": "v13_nffrq",
+   "refresh_display": true,
    "name": "PAD13 NFREQ",
    "min": 0,
    "max": 1,
@@ -1077,6 +1228,7 @@
   },
   {
    "key": "v13_nfq",
+   "refresh_display": true,
    "name": "PAD13 NQ",
    "min": 0,
    "max": 1,
@@ -1084,6 +1236,7 @@
   },
   {
    "key": "v13_neatk",
+   "refresh_display": true,
    "name": "PAD13 NATK",
    "min": 0,
    "max": 1,
@@ -1091,6 +1244,7 @@
   },
   {
    "key": "v13_nedcy",
+   "refresh_display": true,
    "name": "PAD13 NDCY",
    "min": 0,
    "max": 1,
@@ -1098,6 +1252,7 @@
   },
   {
    "key": "v13_mix",
+   "refresh_display": true,
    "name": "PAD13 NOISE",
    "min": 0,
    "max": 1,
@@ -1105,6 +1260,7 @@
   },
   {
    "key": "v13_dist",
+   "refresh_display": true,
    "name": "PAD13 DIST",
    "min": 0,
    "max": 1,
@@ -1112,6 +1268,7 @@
   },
   {
    "key": "v13_lvl",
+   "refresh_display": true,
    "name": "PAD13 LEVEL",
    "min": 0,
    "max": 1,
@@ -1119,6 +1276,7 @@
   },
   {
    "key": "v14_freq",
+   "refresh_display": true,
    "name": "PAD14 PITCH",
    "min": 0,
    "max": 1,
@@ -1126,6 +1284,7 @@
   },
   {
    "key": "v14_atk",
+   "refresh_display": true,
    "name": "PAD14 ATTACK",
    "min": 0,
    "max": 1,
@@ -1133,6 +1292,7 @@
   },
   {
    "key": "v14_dcy",
+   "refresh_display": true,
    "name": "PAD14 DECAY",
    "min": 0,
    "max": 1,
@@ -1140,6 +1300,7 @@
   },
   {
    "key": "v14_mrate",
+   "refresh_display": true,
    "name": "PAD14 MRATE",
    "min": 0,
    "max": 1,
@@ -1147,6 +1308,7 @@
   },
   {
    "key": "v14_mamt",
+   "refresh_display": true,
    "name": "PAD14 BEND",
    "min": 0,
    "max": 1,
@@ -1154,6 +1316,7 @@
   },
   {
    "key": "v14_nffrq",
+   "refresh_display": true,
    "name": "PAD14 NFREQ",
    "min": 0,
    "max": 1,
@@ -1161,6 +1324,7 @@
   },
   {
    "key": "v14_nfq",
+   "refresh_display": true,
    "name": "PAD14 NQ",
    "min": 0,
    "max": 1,
@@ -1168,6 +1332,7 @@
   },
   {
    "key": "v14_neatk",
+   "refresh_display": true,
    "name": "PAD14 NATK",
    "min": 0,
    "max": 1,
@@ -1175,6 +1340,7 @@
   },
   {
    "key": "v14_nedcy",
+   "refresh_display": true,
    "name": "PAD14 NDCY",
    "min": 0,
    "max": 1,
@@ -1182,6 +1348,7 @@
   },
   {
    "key": "v14_mix",
+   "refresh_display": true,
    "name": "PAD14 NOISE",
    "min": 0,
    "max": 1,
@@ -1189,6 +1356,7 @@
   },
   {
    "key": "v14_dist",
+   "refresh_display": true,
    "name": "PAD14 DIST",
    "min": 0,
    "max": 1,
@@ -1196,6 +1364,7 @@
   },
   {
    "key": "v14_lvl",
+   "refresh_display": true,
    "name": "PAD14 LEVEL",
    "min": 0,
    "max": 1,
@@ -1203,6 +1372,7 @@
   },
   {
    "key": "v15_freq",
+   "refresh_display": true,
    "name": "PAD15 PITCH",
    "min": 0,
    "max": 1,
@@ -1210,6 +1380,7 @@
   },
   {
    "key": "v15_atk",
+   "refresh_display": true,
    "name": "PAD15 ATTACK",
    "min": 0,
    "max": 1,
@@ -1217,6 +1388,7 @@
   },
   {
    "key": "v15_dcy",
+   "refresh_display": true,
    "name": "PAD15 DECAY",
    "min": 0,
    "max": 1,
@@ -1224,6 +1396,7 @@
   },
   {
    "key": "v15_mrate",
+   "refresh_display": true,
    "name": "PAD15 MRATE",
    "min": 0,
    "max": 1,
@@ -1231,6 +1404,7 @@
   },
   {
    "key": "v15_mamt",
+   "refresh_display": true,
    "name": "PAD15 BEND",
    "min": 0,
    "max": 1,
@@ -1238,6 +1412,7 @@
   },
   {
    "key": "v15_nffrq",
+   "refresh_display": true,
    "name": "PAD15 NFREQ",
    "min": 0,
    "max": 1,
@@ -1245,6 +1420,7 @@
   },
   {
    "key": "v15_nfq",
+   "refresh_display": true,
    "name": "PAD15 NQ",
    "min": 0,
    "max": 1,
@@ -1252,6 +1428,7 @@
   },
   {
    "key": "v15_neatk",
+   "refresh_display": true,
    "name": "PAD15 NATK",
    "min": 0,
    "max": 1,
@@ -1259,6 +1436,7 @@
   },
   {
    "key": "v15_nedcy",
+   "refresh_display": true,
    "name": "PAD15 NDCY",
    "min": 0,
    "max": 1,
@@ -1266,6 +1444,7 @@
   },
   {
    "key": "v15_mix",
+   "refresh_display": true,
    "name": "PAD15 NOISE",
    "min": 0,
    "max": 1,
@@ -1273,6 +1452,7 @@
   },
   {
    "key": "v15_dist",
+   "refresh_display": true,
    "name": "PAD15 DIST",
    "min": 0,
    "max": 1,
@@ -1280,6 +1460,7 @@
   },
   {
    "key": "v15_lvl",
+   "refresh_display": true,
    "name": "PAD15 LEVEL",
    "min": 0,
    "max": 1,
@@ -1287,6 +1468,7 @@
   },
   {
    "key": "v16_freq",
+   "refresh_display": true,
    "name": "PAD16 PITCH",
    "min": 0,
    "max": 1,
@@ -1294,6 +1476,7 @@
   },
   {
    "key": "v16_atk",
+   "refresh_display": true,
    "name": "PAD16 ATTACK",
    "min": 0,
    "max": 1,
@@ -1301,6 +1484,7 @@
   },
   {
    "key": "v16_dcy",
+   "refresh_display": true,
    "name": "PAD16 DECAY",
    "min": 0,
    "max": 1,
@@ -1308,6 +1492,7 @@
   },
   {
    "key": "v16_mrate",
+   "refresh_display": true,
    "name": "PAD16 MRATE",
    "min": 0,
    "max": 1,
@@ -1315,6 +1500,7 @@
   },
   {
    "key": "v16_mamt",
+   "refresh_display": true,
    "name": "PAD16 BEND",
    "min": 0,
    "max": 1,
@@ -1322,6 +1508,7 @@
   },
   {
    "key": "v16_nffrq",
+   "refresh_display": true,
    "name": "PAD16 NFREQ",
    "min": 0,
    "max": 1,
@@ -1329,6 +1516,7 @@
   },
   {
    "key": "v16_nfq",
+   "refresh_display": true,
    "name": "PAD16 NQ",
    "min": 0,
    "max": 1,
@@ -1336,6 +1524,7 @@
   },
   {
    "key": "v16_neatk",
+   "refresh_display": true,
    "name": "PAD16 NATK",
    "min": 0,
    "max": 1,
@@ -1343,6 +1532,7 @@
   },
   {
    "key": "v16_nedcy",
+   "refresh_display": true,
    "name": "PAD16 NDCY",
    "min": 0,
    "max": 1,
@@ -1350,6 +1540,7 @@
   },
   {
    "key": "v16_mix",
+   "refresh_display": true,
    "name": "PAD16 NOISE",
    "min": 0,
    "max": 1,
@@ -1357,6 +1548,7 @@
   },
   {
    "key": "v16_dist",
+   "refresh_display": true,
    "name": "PAD16 DIST",
    "min": 0,
    "max": 1,
@@ -1364,6 +1556,7 @@
   },
   {
    "key": "v16_lvl",
+   "refresh_display": true,
    "name": "PAD16 LEVEL",
    "min": 0,
    "max": 1,
@@ -1393,11 +1586,13 @@
   },
   {
    "key": "randomize",
+   "refresh_display": true,
    "name": "RANDOM KIT",
    "momentary": true
   },
   {
    "key": "inst",
+   "refresh_display": true,
    "name": "EDIT PAD",
    "options": [
     "PAD 1",
@@ -1421,6 +1616,7 @@
   },
   {
    "key": "inst_wave",
+   "refresh_display": true,
    "name": "WAVE",
    "default": 0,
    "options": [
@@ -1431,6 +1627,7 @@
   },
   {
    "key": "inst_freq",
+   "refresh_display": true,
    "name": "BASE PITCH",
    "default": 0,
    "min": 0,
@@ -1439,6 +1636,7 @@
   },
   {
    "key": "inst_dcy",
+   "refresh_display": true,
    "name": "OSC DECAY",
    "default": 0,
    "min": 0,
@@ -1447,6 +1645,7 @@
   },
   {
    "key": "inst_mod_mode",
+   "refresh_display": true,
    "name": "MOD MODE",
    "default": 0,
    "options": [
@@ -1457,6 +1656,7 @@
   },
   {
    "key": "inst_mod_amt",
+   "refresh_display": true,
    "name": "MOD AMOUNT",
    "default": 0,
    "min": 0,
@@ -1465,6 +1665,7 @@
   },
   {
    "key": "inst_noise",
+   "refresh_display": true,
    "name": "NOISE MIX",
    "default": 0,
    "min": 0,
@@ -1473,6 +1674,7 @@
   },
   {
    "key": "inst_noise_filt",
+   "refresh_display": true,
    "name": "NOISE FILTER",
    "default": 0,
    "options": [
@@ -1483,6 +1685,7 @@
   },
   {
    "key": "inst_noise_env",
+   "refresh_display": true,
    "name": "NOISE ENV",
    "default": 0,
    "options": [
@@ -1493,6 +1696,7 @@
   },
   {
    "key": "inst_dist",
+   "refresh_display": true,
    "name": "DISTORTION",
    "default": 0,
    "min": 0,
@@ -1501,6 +1705,7 @@
   },
   {
    "key": "inst_level",
+   "refresh_display": true,
    "name": "PAD LEVEL",
    "default": 0,
    "min": 0,

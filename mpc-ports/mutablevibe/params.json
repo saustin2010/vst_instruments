@@ -39,6 +39,7 @@
     },
     {
       "key": "model",
+      "refresh_display": true,
       "name": "MODEL",
       "options": [
         "R: MODAL",
@@ -154,6 +155,7 @@
     },
     {
       "key": "delayTime",
+      "clamped": true,
       "name": "DELAY TIME",
       "min": 10.0,
       "max": 2000.0,
@@ -783,6 +785,7 @@
     },
     {
       "key": "delaySync",
+      "refresh_display": true,
       "name": "DELAY SYNC",
       "options": [
         "FREE",
@@ -792,6 +795,7 @@
     },
     {
       "key": "delayDiv",
+      "refresh_display": true,
       "name": "DELAY DIV",
       "options": [
         "1/16",

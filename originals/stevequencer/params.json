@@ -271,6 +271,7 @@
   },
   {
    "key": "random_all",
+   "refresh_display": true,
    "name": "RANDOM ALL",
    "momentary": true,
    "min": 0,
@@ -278,6 +279,7 @@
   },
   {
    "key": "clear_all",
+   "refresh_display": true,
    "name": "CLEAR ALL",
    "momentary": true,
    "min": 0,
@@ -299,6 +301,7 @@
   },
   {
    "key": "p1_clear",
+   "refresh_display": true,
    "name": "P1 CLEAR",
    "momentary": true,
    "min": 0,
@@ -306,6 +309,7 @@
   },
   {
    "key": "p1_random",
+   "refresh_display": true,
    "name": "P1 RANDOM",
    "momentary": true,
    "min": 0,
@@ -327,6 +331,7 @@
   },
   {
    "key": "p2_clear",
+   "refresh_display": true,
    "name": "P2 CLEAR",
    "momentary": true,
    "min": 0,
@@ -334,6 +339,7 @@
   },
   {
    "key": "p2_random",
+   "refresh_display": true,
    "name": "P2 RANDOM",
    "momentary": true,
    "min": 0,
@@ -355,6 +361,7 @@
   },
   {
    "key": "p3_clear",
+   "refresh_display": true,
    "name": "P3 CLEAR",
    "momentary": true,
    "min": 0,
@@ -362,6 +369,7 @@
   },
   {
    "key": "p3_random",
+   "refresh_display": true,
    "name": "P3 RANDOM",
    "momentary": true,
    "min": 0,
@@ -383,6 +391,7 @@
   },
   {
    "key": "p4_clear",
+   "refresh_display": true,
    "name": "P4 CLEAR",
    "momentary": true,
    "min": 0,
@@ -390,6 +399,7 @@
   },
   {
    "key": "p4_random",
+   "refresh_display": true,
    "name": "P4 RANDOM",
    "momentary": true,
    "min": 0,
