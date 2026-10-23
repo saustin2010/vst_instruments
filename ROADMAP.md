@@ -367,6 +367,18 @@ parameter index, so existing projects keep working.
 
 ## Repo
 
+- [ ] sd88me's wrapper fix (#499, 2026-10-23): all 44 rebuilt and PASSED on `steve-features` + #486-#489 (`e3a0af4`,
+      not pushed), `refresh_display` where a set changes other controls (dev-tools/displaydeps), 39 screens the same and
+      5 kept (framework/README.md). Left: the device check (Q-Links on track edit -> automation; a preset change moves
+      the other knobs; labels follow), then push the branch, `prepare.py --ready`, releases, one catalogue PR, a reply
+      on #499. Plan: the owner's doc "Wrapper Fix #499: Rebuild Plan".
+- [ ] Plaits crashes under an offline stress of random parameter writes and MIDI (2026-10-23, in the build installed
+      now too, also on emulated armv7): a SEGV in `WavetableEngine::ReadWave` (a wave pointer near NULL) and an ASan
+      global-buffer-overflow in `LPCSpeechSynth::PlayFrame` (lpc_speech_synth.cc:136, the speech engine). Both in the
+      vendored Mutable Instruments DSP. Separately, `wave_map_` is allocated for one bank but `LoadUserData` fills four
+      (not the cause of the SEGV). Find the triggering parameter set; MPC Plaits, Mutable Vibe and Mr Hyde vendor the
+      same files.
+
 - [ ] Choose a licence for this repo's own scripts and documents (the plugins keep theirs).
 - [ ] Hush One and Libpo32 state no licence upstream: ask their authors, or leave them out of releases.
 - [ ] GitHub releases: a zip per plugin (its `deploy/` + an on-device install script) for people without git.
