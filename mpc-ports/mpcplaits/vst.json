@@ -6,6 +6,8 @@
   "presets": "presets.json",
   "module": "src/module.json",
   "defines": {
+    "QLINK_TRAVEL": 1,
+    "SET_IF_CHANGED": 1,
     "HAS_LFO_BPM": 1,
     "HAS_TRANSPORT": 1
   },
