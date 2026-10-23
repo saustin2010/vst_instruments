@@ -19,14 +19,14 @@ on:
 
 jobs:
   vst:
-    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@b0141689e72c2ed4acb4352e0c57a0828d4852e5
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@e3a0af4e8cb7eacd4bfcc2fbcbcde834aef50fa4
     permissions:
       contents: write
     with:
       tag: v${{ inputs.version }}
       version: ${{ inputs.version }}
       tools_repo: saustin2010/mpc-vst-plugins
-      tools_ref: b0141689e72c2ed4acb4352e0c57a0828d4852e5
+      tools_ref: e3a0af4e8cb7eacd4bfcc2fbcbcde834aef50fa4
       vst_dir: .
       build: bash "$MPC_VST/tools/build_port.sh" vst.json && rm -rf build/skin && mkdir -p build/skin && cp -R deploy/Synths/* build/skin/
       host_test: '"$MPC_VST/tools/test_port.sh" vst.json'
@@ -39,14 +39,14 @@ jobs:
   incipienceout:
     # incipienceout (incipienceout/) ships in this release as its own zip, with its own draft
     # (tag incipience-out-v<version>) and catalogue entry, as TR-MPC ships its Tap FX
-    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@b0141689e72c2ed4acb4352e0c57a0828d4852e5
+    uses: saustin2010/mpc-vst-plugins/.github/workflows/vst-release.yml@e3a0af4e8cb7eacd4bfcc2fbcbcde834aef50fa4
     permissions:
       contents: write
     with:
       tag: incipience-out-v${{ inputs.version }}
       version: ${{ inputs.version }}
       tools_repo: saustin2010/mpc-vst-plugins
-      tools_ref: b0141689e72c2ed4acb4352e0c57a0828d4852e5
+      tools_ref: e3a0af4e8cb7eacd4bfcc2fbcbcde834aef50fa4
       vst_dir: incipienceout
       build: bash "$MPC_VST/tools/build_port.sh" incipienceout/vst.json && rm -rf incipienceout/build/skin && mkdir -p incipienceout/build/skin && cp -R incipienceout/deploy/Synths/* incipienceout/build/skin/
       host_test: '"$MPC_VST/tools/test_port.sh" incipienceout/vst.json'
