@@ -135,7 +135,7 @@ The recommended model, master + split repos, has these rules:
 
 ## Phase 0: catch the framework up (this blocks everything)
 
-Our plugins build with `framework/mpc-vst-plugins.patch` on sd88me's `39660f2` (his PR #8). Upstream `main` is at
+Our plugins built with `framework/mpc-vst-plugins.patch` on sd88me's `39660f2` (his PR #8) until 2026-10-23. Upstream `main` is at
 #229, and the patch no longer applies there: it fails on `docs/NOTES.md`, `tools/gen_vst.py`, `tools/host_test.c`,
 `tools/shadow_skin.py` and `wrapper/vst2_wrap.c`. Most of it is upstream already: on 2026-10-07 sd88me studied this
 repo ([docs/COMMUNITY_SKINS.md](https://github.com/sd88me/mpc-vst-plugins/blob/main/docs/COMMUNITY_SKINS.md)) and
@@ -173,8 +173,10 @@ is meant to go to sd88me as a PR. `tools/build.sh` keeps using the old base and 
 - [ ] Not ported yet: `"category"` in the plugin list (13 plugins: his entries are Synth or Effect, so our sequencers
       and drum machines are Synth in a release's entry; harmless, since MPC ignores the category and the kind tags do
       the sorting), and the host test's extra checks from our patch (restore, slow Q-Link, effect and program checks).
-- [ ] When all 40 build on the new base: replace `mpc-vst-plugins.patch` and `setup.sh`'s pin, and update
-      `framework/README.md` and BUILDING.md.
+- [x] When all 40 build on the new base: replace `mpc-vst-plugins.patch` and `setup.sh`'s pin, and update
+      `framework/README.md` and BUILDING.md. Done 2026-10-23 with sd88me's wrapper fix (#499): all 44 build and pass
+      on `steve-features` at `e3a0af4`; 39 screens rebuild the same, 5 keep their `deploy/` screens
+      (framework/README.md "Before 2026-10-23").
 
 Each plugin's `layout.conf` gets four lines so his tools draw the screen it was checked with (`check.sh` then says
 "screen: same"): `qlink_bounds=column`, `qlink_box=slot`, `label_scale=1` (his default scales value text by 1.15) and

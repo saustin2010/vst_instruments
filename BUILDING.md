@@ -19,14 +19,15 @@ AddressSanitizer before they go anywhere near an MPC.
 
 ## 1. The framework
 
-The wrapper, the Schwung adapter, the skin generator and the test are sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins). This repo
-carries only our changes to it, as a patch against commit `39660f2` (see [framework/README.md](framework/README.md)):
+The wrapper, the Schwung adapter, the skin generator and the test are sd88me's [mpc-vst-plugins](https://github.com/sd88me/mpc-vst-plugins). Our changes to it
+are commits on a branch of the fork [saustin2010/mpc-vst-plugins](https://github.com/saustin2010/mpc-vst-plugins/tree/steve-features)
+(see [framework/README.md](framework/README.md)), the same commit the plugins' releases build with:
 
 ```
-framework/setup.sh      # clones it into framework/mpc-vst-plugins/ and applies framework/mpc-vst-plugins.patch
+framework/setup.sh      # clones it into framework/mpc-vst-plugins/ at the pinned commit
 ```
 
-(Already have a checkout with the patch applied? Point to it with `export MPC_VST_FRAMEWORK=<path>`.)
+(Already have a checkout at that commit? Point to it with `export MPC_VST_FRAMEWORK=<path>`.)
 
 ## 2. Build a plugin
 
