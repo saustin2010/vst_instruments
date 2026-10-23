@@ -95,6 +95,14 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 - **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
   centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty
   band above and below.
+- Crash fixes in the Mutable Instruments DSP (2026-10-23), the ones MPC Plaits made (`mpc-ports/mpcplaits/src/VENDORED.md`):
+  the wavetable model's x/y/z clamped to its 8 x 8 grid (at the top they reached 8, or bank -1: a garbage wave
+  pointer, which crashed); the speech model no longer reads past its phoneme table (its last frame, a negative frame
+  index, a word bank's index kept after switching back to the phonemes); the wave terrain model's path and wave index
+  kept inside the data; `stmlib::InterpolateWrap` safe for a negative or runaway phase; the FM units without shifting a
+  negative int. Also `stmlib::Interpolate` clamps its index, as this repo's other Mutable ports have since 2026-10-02
+  (a control at full scale read one past a table; here through Rings' resonator). Found by an offline stress of random
+  parameter changes and MIDI (the wavetable crash also on armv7). Diff: `upstream-changes.diff`.
 
 ## Files
 
@@ -107,6 +115,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 | `deploy/` | ready to install: `vst/` → `/sdcard/vst/`, `Synths/` → `/sdcard/Synths/`, plus the plugin-list entry (not used by the release) |
 | `vst.json` | build settings: name, maker, sources, compiler flags |
 | `params.json` | the plugin's parameters as MPC sees them (VST index = order) |
+| `upstream-changes.diff` | this repo's changes to the vendored source in `src/` (the crash fixes above) |
 | `params.base.json` | the engine's own parameter list it was derived from |
 | `params.pre-stitch.json` | the parameter list before the Stitch screen renamed controls |
 | `layout.conf` | the screen: control positions, art, Q-Links (generated from the Stitch design) |

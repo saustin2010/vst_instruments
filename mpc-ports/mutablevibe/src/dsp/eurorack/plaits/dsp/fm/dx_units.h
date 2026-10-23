@@ -76,7 +76,8 @@ inline float Pow2Fast(float x) {
   } else if (order == 3) {
     r.f = 1.0f + x * (0.6958f + x * (0.2251f + x * 0.0791f));
   }
-  r.w += x_integral << 23;
+  // MPC port (as in MPC Plaits): same bits, without shifting a negative int (undefined behaviour UBSan flags)
+  r.w += static_cast<uint32_t>(x_integral) << 23;
   return r.f;
 }
 

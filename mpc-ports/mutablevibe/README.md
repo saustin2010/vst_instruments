@@ -111,6 +111,14 @@ What this repo changed from upstream (the diff is in `upstream-changes.diff`):
 - 24 presets (`presets.json`, written by `mpc/make_presets.py`, which keeps each preset's level trim).
 - Built with this repo's framework, which gained what the port uses from newer upstream builds: per-model names and
   value text (`dynamic_name`, `dynamic_display`); `mpc/engine.h` is a copy of the framework's engine interface.
+- Crash fixes in the Mutable Instruments DSP (2026-10-23), the ones MPC Plaits made (`mpc-ports/mpcplaits/src/VENDORED.md`):
+  the wavetable model's x/y/z clamped to its 8 x 8 grid (at the top they reached 8, or bank -1: a garbage wave
+  pointer, which crashed); the speech model no longer reads past its phoneme table (its last frame, a negative frame
+  index, a word bank's index kept after switching back to the phonemes); the wave terrain model's path and wave index
+  kept inside the data; `stmlib::InterpolateWrap` safe for a negative or runaway phase; the FM units without shifting a
+  negative int. Also `stmlib::Interpolate` clamps its index, as this repo's other Mutable ports have since 2026-10-02
+  (a control at full scale read one past a table; here through Rings' resonator). Found by an offline stress of random
+  parameter changes and MIDI (the wavetable crash also on armv7). Diff: `upstream-changes.diff`.
 
 ## Files
 

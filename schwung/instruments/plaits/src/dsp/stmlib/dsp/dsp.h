@@ -78,7 +78,12 @@ inline float InterpolateHermite(const float* table, float index, float size) {
 }
 
 inline float InterpolateWrap(const float* table, float index, float size) {
+  // MPC port (as in MPC Plaits): upstream assumes index >= 0 and finite (plaits::Sine says "safe for phase >= 0").
+  // WaveTerrainEngine can pass a negative or runaway phase, which read before the table, or -- through an
+  // out-of-range float->int32 conversion -- far outside it (a crash on the device).
+  if (!(fabsf(index) < 1.0e6f)) index = 0.0f;
   index -= static_cast<float>(static_cast<int32_t>(index));
+  if (index < 0.0f) index += 1.0f;
   index *= size;
   MAKE_INTEGRAL_FRACTIONAL(index)
   float a = table[index_integral];

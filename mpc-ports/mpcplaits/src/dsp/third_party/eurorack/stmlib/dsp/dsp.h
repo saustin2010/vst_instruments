@@ -42,7 +42,16 @@ namespace stmlib {
 
 inline float Interpolate(const float* table, float index, float size) {
   index *= size;
+  // MPC port (2026-10-02, as in the repo's other Mutable ports; here 2026-10-23): the hardware's ADCs stop just short of
+  // full scale, but a host parameter at exactly 1.0, or a modulation sum past it, read one past the end of the table
+  // (size + 1 entries; found with an offline stress).
+  if (!(index > 0.0f)) index = 0.0f;  // also NaN
+  if (index > size) index = size;
   MAKE_INTEGRAL_FRACTIONAL(index)
+  if (index_integral >= static_cast<int32_t>(size)) {
+    index_integral = static_cast<int32_t>(size) - 1;
+    index_fractional = index - static_cast<float>(index_integral);
+  }
   float a = table[index_integral];
   float b = table[index_integral + 1];
   return a + (b - a) * index_fractional;

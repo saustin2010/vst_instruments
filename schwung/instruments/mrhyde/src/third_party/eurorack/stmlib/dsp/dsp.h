@@ -42,7 +42,16 @@ namespace stmlib {
 
 inline float Interpolate(const float* table, float index, float size) {
   index *= size;
+  // MPC port (2026-10-02, as in the repo's other Mutable ports; here 2026-10-23): the hardware's ADCs stop just short of
+  // full scale, but a host parameter at exactly 1.0, or a modulation sum past it, read one past the end of the table
+  // (size + 1 entries; found with an offline stress).
+  if (!(index > 0.0f)) index = 0.0f;  // also NaN
+  if (index > size) index = size;
   MAKE_INTEGRAL_FRACTIONAL(index)
+  if (index_integral >= static_cast<int32_t>(size)) {
+    index_integral = static_cast<int32_t>(size) - 1;
+    index_fractional = index - static_cast<float>(index_integral);
+  }
   float a = table[index_integral];
   float b = table[index_integral + 1];
   return a + (b - a) * index_fractional;
@@ -66,7 +75,12 @@ inline float InterpolateHermite(const float* table, float index, float size) {
 }
 
 inline float InterpolateWrap(const float* table, float index, float size) {
+  // MPC port (as in MPC Plaits): upstream assumes index >= 0 and finite (plaits::Sine says "safe for phase >= 0").
+  // WaveTerrainEngine can pass a negative or runaway phase, which read before the table, or -- through an
+  // out-of-range float->int32 conversion -- far outside it (a crash on the device).
+  if (!(fabsf(index) < 1.0e6f)) index = 0.0f;
   index -= static_cast<float>(static_cast<int32_t>(index));
+  if (index < 0.0f) index += 1.0f;
   index *= size;
   MAKE_INTEGRAL_FRACTIONAL(index)
   float a = table[index_integral];

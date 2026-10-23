@@ -58,6 +58,13 @@ From the top of this repo (see [INSTALL.md](../../../INSTALL.md)):
 - `src/dsp/plaits_plugin.cpp` (2026-10-04): a VOLUME param (appended, so older projects keep their mappings; its default is the Move port's level), applied at the output. Diff: `upstream-changes.diff`.
 - `src/dsp/plaits/dsp/engine2/six_op_engine.cc` (2026-10-02): the 6-op scratch buffer is 4 blocks; the Move port's 1 block let every render write 48 floats into the FM patch bank (patches 0-1 played garbage, out-of-range reads; found with dev-tools/fuzz).
 - All Mutable ports (2026-10-02): `stmlib::Interpolate` clamps its index (a control at exactly 100% read one past a table). Diff: `upstream-changes.diff`.
+- Crash fixes in the Mutable Instruments DSP (2026-10-23), the ones MPC Plaits made (`mpc-ports/mpcplaits/src/VENDORED.md`):
+  the wavetable model's x/y/z clamped to its 8 x 8 grid (at the top they reached 8, or bank -1: a garbage wave
+  pointer, which crashed); the speech model no longer reads past its phoneme table (its last frame, a negative frame
+  index, a word bank's index kept after switching back to the phonemes); the wave terrain model's path and wave index
+  kept inside the data; `stmlib::InterpolateWrap` safe for a negative or runaway phase; the FM units without shifting a
+  negative int. Found by an offline stress of random parameter changes and MIDI (the wavetable crash also on armv7).
+  Diff: `upstream-changes.diff`.
 - New touchscreen page from its Google Stitch design (`design/`): the design's artwork as the background, its own knob art, live names and values, and controls the design left out added in its style (see RESKINNING.md).
 - **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
   centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty

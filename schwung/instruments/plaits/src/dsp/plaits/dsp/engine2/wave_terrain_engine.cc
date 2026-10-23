@@ -55,6 +55,8 @@ inline float TerrainLookup(float x, float y, const int8_t* terrain) {
   const float value_scale = 1.0f / 128.0f;
   const float coord_scale = float(terrain_size - 2) * 0.5f;
 
+  CONSTRAIN(x, -1.0f, 1.0f);   // MPC port (as in MPC Plaits): see TerrainLookupWT
+  CONSTRAIN(y, -1.0f, 1.0f);
   x = (x + 1.0f) * coord_scale;
   y = (y + 1.0f) * coord_scale;
 
@@ -94,6 +96,9 @@ inline float TerrainLookupWT(float x, float y, int bank) {
   const int table_size = 128;
   const int table_size_full = table_size + 4;  // Includes 4 wrapped samples
   const int num_waves = 64;
+  // MPC port (as in MPC Plaits): the path can overshoot [-1, 1] slightly, which read past the wave data.
+  CONSTRAIN(x, -1.0f, 1.0f);
+  CONSTRAIN(y, -1.0f, 1.0f);
   const float sample = (y + 1.0f) * 0.5f * float(table_size);
   const float wt = (x + 1.0f) * 0.5f * float(num_waves - 1);
   
@@ -102,6 +107,10 @@ inline float TerrainLookupWT(float x, float y, int bank) {
   
   MAKE_INTEGRAL_FRACTIONAL(sample);
   MAKE_INTEGRAL_FRACTIONAL(wt);
+  if (wt_integral > num_waves - 2) {   // MPC port (as in MPC Plaits): x == 1 read the wave after the bank
+    wt_integral = num_waves - 2;
+    wt_fractional = 1.0f;
+  }
   
   float xy[2];
 #ifdef DIFFERENTIATE_WAVE_DATA

@@ -72,8 +72,14 @@ class LPCSpeechSynth {
   void PlayFrame(const Frame* frames, float frame, bool interpolate) {
     MAKE_INTEGRAL_FRACTIONAL(frame);
     
-    if (!interpolate) {
+    if (frame_integral < 0) {   // MPC port: as MPC Plaits fixed it (mpc-ports/mpcplaits/src/VENDORED.md)
+      frame_integral = 0;
       frame_fractional = 0.0f;
+    }
+    if (!interpolate) {
+      // MPC port (as in MPC Plaits): the last frame of a word has no successor; don't read one (blend is 0 anyway)
+      PlayFrame(frames[frame_integral], frames[frame_integral], 0.0f);
+      return;
     }
     PlayFrame(
         frames[frame_integral],
