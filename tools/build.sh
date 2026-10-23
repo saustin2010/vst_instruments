@@ -44,7 +44,7 @@ for name in "$@"; do
     cp -R "$SKIN" "$D/deploy/Synths/"
   fi
   cp "$D/build/$SO" "$D/deploy/vst/"
-  cp "$D/build/pluginlist-entry.xml" "$D/deploy/"
+  python3 tools/deploy-entry.py "$D"   # file= /sdcard/vst/<so> and vst.json's category, as this repo installs it
   P=$REPO/presets/$(basename "$D")   # its presets/kits/... (not in git): fetched if missing
   case "$HAS_PRESETS" in *" $(basename "$D") "*) [ -n "$(ls -A "$P" 2>/dev/null)" ] ||
     python3 tools/fetch-presets.py "$(basename "$D")" >/dev/null || echo "(couldn't fetch its presets: testing without)" ;; esac

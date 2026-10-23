@@ -49,7 +49,9 @@ side check
 echo "== plugins (${#DIRS[@]})"
 NEW=(); SOS=(); OLD_SKINS=()
 for d in "${DIRS[@]}"; do SOS+=("$(attr file "$d/deploy/pluginlist-entry.xml")"); done
-LISTED=$(side listed "${SOS[@]}")
+# MPC writes characters outside ASCII as XML entities (manufacturer="&#201;milie Gillet"): decode them, so the same name
+# reads the same as the entry's UTF-8 and no listed plugin looks changed
+LISTED=$(side listed "${SOS[@]}" | python3 -c 'import html, sys; sys.stdout.write(html.unescape(sys.stdin.read()))')
 for i in "${!DIRS[@]}"; do
   d=${DIRS[$i]}; e=$d/deploy/pluginlist-entry.xml; so=${SOS[$i]}
   have=$(printf '%s\n' "$LISTED" | grep -F "$so|" | head -n 1)
