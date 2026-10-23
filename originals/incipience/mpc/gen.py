@@ -306,6 +306,17 @@ def build():
     # too, but a row per three Q-Link events (src: QL_TICKS); FILE's box keeps a row a click for the data wheel, which
     # sends the same small moves (the two can't be told apart, docs/NOTES "Input probe"). Not on the page
     step("br_cursor_q", "BROWSE", 0, 0, 999, clamped=True, qlink_only=True, **LONG)   # (names are unique; MPC shows it on the Q-Link)
+    # "refresh_display" (the release tools since sd88me's wrapper fix #486, 2026-10-21: a plain host write no longer asks
+    # MPC to redraw): a set of one of these renames or re-words other controls, or moves one without telling MPC, so it
+    # asks for a redraw (found by dev-tools/displaydeps/scan.sh, plus the kit, the RANDOMISE and SAMPLE controls and the
+    # browser's, whose effect depends on what is loaded)
+    refresh = {"kit", "mb_scene", "dl_sync", "br_scroll", "br_up", "br_places", "br_target", "br_cursor", "br_cursor_q",
+               "br_load"}
+    refresh |= {k + "_rand" for k, _, _ in INSTR} | {"br_row_%d" % r for r in range(1, BROWSE_ROWS + 1)}
+    refresh |= {"l%d_clock" % i for i in range(1, 5)} | {"m%d_dest" % i for i in range(1, 17)}
+    for p in P:
+        if p["key"].endswith(("_lfclk", "_sample")) or p["key"] in refresh:
+            p["refresh_display"] = True
     return P
 
 

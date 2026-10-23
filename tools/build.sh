@@ -18,6 +18,12 @@ BASH5=$(command -v /opt/homebrew/bin/bash || command -v /usr/local/bin/bash || c
 docker_ready || exit 1
 
 HAS_PRESETS=" $(python3 tools/fetch-presets.py --list) "
+# Screens the current tools don't draw as they were approved: made with this repo's older tools (2026-10-23, when
+# the builds moved to the release tools), whose sub-page mode pictures, stepper art in a sub-page's picture, knob
+# label_scale and meter strips weren't carried over. Their committed deploy/Synths stays; the .so and the plugin-list
+# entry are refreshed (parameters are append-only, so the screen's bindings still hold). Their releases ship deploy/
+# too. To change one's screen, carry those features over (framework/README.md) or review the new one on the device.
+KEEP_SCREEN=" incipience stevequencer stevequencer16 mpcplaits mutablevibe "
 
 status=0
 for name in "$@"; do
@@ -30,10 +36,15 @@ for name in "$@"; do
   SKIN=$(ls -d "$D/build/skin/"*/ | head -1); SKIN=${SKIN%/}
   SO=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['so'])" "$D/vst.json")
   MD=$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('defines',{}).get('MODULE_DIR','').strip('\"'))" "$D/vst.json")
-  rm -rf "$D/deploy"; mkdir -p "$D/deploy/vst" "$D/deploy/Synths"
+  keep=""; case "$KEEP_SCREEN" in *" $(basename "$D") "*) keep=" (screen kept: older tools)" ;; esac
+  if [ -n "$keep" ]; then
+    rm -rf "$D/deploy/vst"; mkdir -p "$D/deploy/vst"
+  else
+    rm -rf "$D/deploy"; mkdir -p "$D/deploy/vst" "$D/deploy/Synths"
+    cp -R "$SKIN" "$D/deploy/Synths/"
+  fi
   cp "$D/build/$SO" "$D/deploy/vst/"
-  cp -R "$SKIN" "$D/deploy/Synths/"
-  cp "$D/build/pluginlist-entry.xml" "$D/deploy/"
+  python3 tools/deploy-entry.py "$D"   # file= /sdcard/vst/<so> and vst.json's category, as this repo installs it
   P=$REPO/presets/$(basename "$D")   # its presets/kits/... (not in git): fetched if missing
   case "$HAS_PRESETS" in *" $(basename "$D") "*) [ -n "$(ls -A "$P" 2>/dev/null)" ] ||
     python3 tools/fetch-presets.py "$(basename "$D")" >/dev/null || echo "(couldn't fetch its presets: testing without)" ;; esac
@@ -42,7 +53,7 @@ for name in "$@"; do
   [ -n "$MD" ] && [ -d "$P" ] && TEST_DOCKER_ARGS="$TEST_DOCKER_ARGS -v $P:$MD:ro"
   export TEST_DOCKER_ARGS
   if "$BASH5" "$FW/tools/test_port.sh" "$D/vst.json" > "$D/build/test.log" 2>&1 && grep -q "^PASSED" "$D/build/test.log"; then
-    echo "PASSED"
+    echo "PASSED$keep"
   else
     echo "TEST FAILED (build/test.log)"; grep -E '^FAIL' "$D/build/test.log" | head -5 || true; status=1
   fi

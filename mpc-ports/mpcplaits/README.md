@@ -114,6 +114,10 @@ What this repo changed from upstream (the diff is in `upstream-changes.diff`):
   synced LFOs restart with MPC's transport) were added to it. Not taken: the fork's pop-up `wheel=1` (experimental
   there; the pop-ups still open on a tap and turn with their Q-Link) and its model buttons wrapping round (here they
   stop at the first and last model).
+- `stmlib::Interpolate` clamps its index (2026-10-23), as this repo's other Mutable ports have since 2026-10-02: a
+  control at full scale, or a modulation sum past it, read one past a table. The same offline stress that found
+  Plaits' crashes in the other Plaits-based plugins (which now carry this port's own DSP fixes too). Diff:
+  `upstream-changes.diff`.
 
 ## Files
 

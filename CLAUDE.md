@@ -32,8 +32,9 @@ owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai upda
   commits (git-hash checked); install.sh and tools/build.sh fetch what's missing. Never commit them.
 - `install.sh`, `uninstall.sh`, `tools/` (`mpc-side.sh` runs on the device; `plugin_list.awk` edits MPC.settings;
   `common.sh`; `build.sh`).
-- `framework/`: our changes to sd88me's mpc-vst-plugins as `mpc-vst-plugins.patch` against `39660f2`, and `setup.sh`
-  (clones it into the git-ignored `framework/mpc-vst-plugins/` and applies the patch).
+- `framework/`: `setup.sh` (clones sd88me's mpc-vst-plugins with our changes, the fork branch
+  `saustin2010/mpc-vst-plugins` `steve-features`, into the git-ignored `framework/mpc-vst-plugins/` at the pin in
+  `setup-release.sh`: one framework for builds and releases since 2026-10-23) and `setup-release.sh`.
 - `dev-tools/`: the Stitch pipeline (`stitch/`), the older spec generator (`skin-redesign/`), adapters' sources
   (`midifx/`, `audiofx/`, `mi/`, `rack/`, `midiout/`), `fuzz/`, `probe/`, `screengrab/`, `fake-mpc/`, `procwatch/` (TESTS.md), `package/`.
   They run inside a workspace: `dev-tools/workspace.sh` links this repo into `framework/mpc-vst-plugins/steve/`.
@@ -74,10 +75,13 @@ owner develops on an MPC Live II (MPC OS 3.9.1, root SSH via a rebuilt Akai upda
   Mutable Instruments' terms, 2026-10-12: Moog is RaffoSynth, the Mutable ports have names of their own and Émilie
   Gillet as maker). Saying what a plugin models in its summary or README ("Minimoog-style", "from Émilie Gillet's
   Rings") is fine. A Stitch mockup's text becomes the screen's background: keep brand names out of it too.
-- sd88me's framework files stay in his repo: change them through `framework/mpc-vst-plugins.patch`
-  (`git diff` in the framework clone, plus new files), never by copying them here. The release tools are his current
-  `main` plus commits on `steve-features` of `saustin2010/mpc-vst-plugins` (each offered to him as a PR); a change
-  there means a new pin in `framework/setup-release.sh` and the plugins' `release.yml`.
+- sd88me's framework files stay in his repo: change them as a commit on `steve-features` of
+  `saustin2010/mpc-vst-plugins` (his `main` of 2026-10-08 plus our changes and his wrapper fix, each offered to him as a
+  PR), never by copying them here. A change there means a new pin in `framework/setup-release.sh` (which `setup.sh`
+  reads too) and the plugins' `release.yml`. Only add commits: older releases pin its older ones.
+- A parameter whose set renames or re-words another control, or moves another's value (a preset, a RANDOMISE, a
+  current-item selector, a model switch), needs `"refresh_display": true` in `params.json` since sd88me's wrapper fix
+  (#486, 2026-10-21): MPC re-reads the screen only when asked. `dev-tools/displaydeps/scan.sh <plugin>` lists them.
 - Device facts that matter: plugins go in `/sdcard/vst` (the SD card and SSD are `noexec`), skins in `/sdcard/Synths`,
   the plugin list is `pluginList-arm` in `/media/az01-internal/Settings/MPC/MPC.settings`, read only at MPC start-up.
   MPC shows a control's **parameter name**, not the layout label. MPC ignores plugin MIDI out: sequencers open their own

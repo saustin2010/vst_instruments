@@ -283,6 +283,7 @@
   },
   {
    "key": "lane1_steps",
+   "refresh_display": true,
    "name": "L1 STEPS",
    "min": 1,
    "max": 128,
@@ -420,6 +421,7 @@
   },
   {
    "key": "lane2_steps",
+   "refresh_display": true,
    "name": "L2 STEPS",
    "min": 1,
    "max": 128,
@@ -557,6 +559,7 @@
   },
   {
    "key": "lane3_steps",
+   "refresh_display": true,
    "name": "L3 STEPS",
    "min": 1,
    "max": 128,
@@ -694,6 +697,7 @@
   },
   {
    "key": "lane4_steps",
+   "refresh_display": true,
    "name": "L4 STEPS",
    "min": 1,
    "max": 128,

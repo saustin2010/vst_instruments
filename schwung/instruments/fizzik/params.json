@@ -3,6 +3,7 @@
  "params": [
   {
    "key": "preset",
+   "refresh_display": true,
    "name": "PRESET",
    "options": [
     "ALIENCHURCH",
@@ -40,6 +41,7 @@
   },
   {
    "key": "rnd_patch",
+   "refresh_display": true,
    "name": "RANDOM ALL",
    "options": [
     "idle",
@@ -49,6 +51,7 @@
   },
   {
    "key": "rnd_exc",
+   "refresh_display": true,
    "name": "RND EXCITER",
    "options": [
     "idle",
@@ -58,6 +61,7 @@
   },
   {
    "key": "rnd_reson",
+   "refresh_display": true,
    "name": "RND RESON",
    "options": [
     "idle",
@@ -557,6 +561,7 @@
   },
   {
    "key": "at_preset",
+   "refresh_display": true,
    "name": "AT PRESET",
    "options": [
     "OFF",

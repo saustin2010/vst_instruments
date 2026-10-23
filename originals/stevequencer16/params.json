@@ -271,6 +271,7 @@
   },
   {
    "key": "random_all",
+   "refresh_display": true,
    "name": "RANDOM ALL",
    "momentary": true,
    "min": 0,
@@ -278,6 +279,7 @@
   },
   {
    "key": "clear_all",
+   "refresh_display": true,
    "name": "CLEAR ALL",
    "momentary": true,
    "min": 0,
@@ -37861,6 +37863,7 @@
   },
   {
    "key": "l1_dest",
+   "refresh_display": true,
    "name": "L1 DEST",
    "options": [
     "OFF",
@@ -37989,6 +37992,7 @@
   },
   {
    "key": "l2_dest",
+   "refresh_display": true,
    "name": "L2 DEST",
    "options": [
     "OFF",
@@ -38117,6 +38121,7 @@
   },
   {
    "key": "l3_dest",
+   "refresh_display": true,
    "name": "L3 DEST",
    "options": [
     "OFF",
@@ -38245,6 +38250,7 @@
   },
   {
    "key": "l4_dest",
+   "refresh_display": true,
    "name": "L4 DEST",
    "options": [
     "OFF",
@@ -38373,6 +38379,7 @@
   },
   {
    "key": "l5_dest",
+   "refresh_display": true,
    "name": "L5 DEST",
    "options": [
     "OFF",
@@ -38501,6 +38508,7 @@
   },
   {
    "key": "l6_dest",
+   "refresh_display": true,
    "name": "L6 DEST",
    "options": [
     "OFF",
@@ -38629,6 +38637,7 @@
   },
   {
    "key": "l7_dest",
+   "refresh_display": true,
    "name": "L7 DEST",
    "options": [
     "OFF",
@@ -38757,6 +38766,7 @@
   },
   {
    "key": "l8_dest",
+   "refresh_display": true,
    "name": "L8 DEST",
    "options": [
     "OFF",

@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
 # Fetch the build framework these plugins are built with: sd88me's mpc-vst-plugins (the VST2 wrapper, the Schwung
-# adapter, the skin generator and the offline test) at the commit this repo was made against, plus this repo's changes
-# to it (mpc-vst-plugins.patch). Run once before tools/build.sh:
+# adapter, the skin generator and the offline test) with the changes offered to him, as a branch of the fork
+# saustin2010/mpc-vst-plugins, at the commit framework/setup-release.sh pins (the one the plugins' releases build
+# with: one framework for both since 2026-10-23). Run once before tools/build.sh:
 #   framework/setup.sh            -> framework/mpc-vst-plugins/ (ignored by git)
-# Safe to run again: it only clones once and doesn't apply the patch twice.
+# Safe to run again: it moves a clean checkout to the pin and leaves one with local changes alone.
 set -euo pipefail
 cd "$(dirname "$0")"
-URL=https://github.com/sd88me/mpc-vst-plugins.git
-BASE=39660f2b41c0a6d6e9f8c1f0e19378533d9bbc2f
-[ -d mpc-vst-plugins/.git ] || git clone "$URL" mpc-vst-plugins
+eval "$(grep -E '^(URL|BRANCH|REF)=' setup-release.sh)"   # the pin lives in setup-release.sh
+[ -d mpc-vst-plugins/.git ] || git clone -q -b "$BRANCH" "$URL" mpc-vst-plugins
 cd mpc-vst-plugins
-git fetch -q origin 2>/dev/null || true
-if git apply -R --check ../mpc-vst-plugins.patch 2>/dev/null; then
-  echo "framework/mpc-vst-plugins: patch already applied"
-  exit 0
+git fetch -q "$URL" "$BRANCH" 2>/dev/null || true
+if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+  echo "framework/mpc-vst-plugins has local changes; not touching it"
+  echo "(a checkout made by the old setup.sh, with mpc-vst-plugins.patch applied: git -C framework/mpc-vst-plugins checkout -- . && rm -f framework/mpc-vst-plugins/wrapper/scope.h, then run this again)"
+  exit 1
 fi
-[ -z "$(git status --porcelain --untracked-files=no)" ] || { echo "framework/mpc-vst-plugins has local changes; not touching it"; exit 1; }
-git -c advice.detachedHead=false checkout -q "$BASE"
-git apply ../mpc-vst-plugins.patch
-echo "framework/mpc-vst-plugins: $(git rev-parse --short HEAD) + mpc-vst-plugins.patch"
+git -c advice.detachedHead=false checkout -q "$REF"
+echo "framework/mpc-vst-plugins: $(git rev-parse --short HEAD) ($URL $BRANCH)"

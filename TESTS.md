@@ -321,8 +321,8 @@ If `held` drifts out of step (a note-off that never arrives), the plugin just do
 sustain pedal down, the output isn't zero, so it doesn't sleep either.
 
 **Steps:**
-1. Make the change in the framework clone (`framework/mpc-vst-plugins`). Refresh `framework/mpc-vst-plugins.patch`
-   from its `git diff`, as CLAUDE.md describes, and fold in [#10](#410-transport-read-once-per-block).
+1. Make the change as a commit on the framework's branch (`framework/mpc-vst-plugins`, `steve-features`), as
+   CLAUDE.md describes, and fold in [#10](#410-transport-read-once-per-block).
 2. Test the switch on its own:
    1. Turn it on for Plaits and run `native.sh plaits && ab.sh plaits`. Expect `idle/play` ≤ 0.15, `after/fresh` about
       1, and `peak play` unchanged (0.327).

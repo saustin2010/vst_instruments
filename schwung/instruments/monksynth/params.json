@@ -3,6 +3,7 @@
  "params": [
   {
    "key": "face",
+   "refresh_display": true,
    "name": "CHARACTER",
    "short_name": "Char",
    "min": 0,
@@ -208,6 +209,7 @@
   },
   {
    "key": "preset",
+   "refresh_display": true,
    "name": "SINGER",
    "min": 0,
    "max": 11,

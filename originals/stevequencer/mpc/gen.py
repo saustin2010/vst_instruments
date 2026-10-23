@@ -84,6 +84,11 @@ def params():
     for a, _, name, d, _ in ATTRS:
         out += [dict(key="s%d_%s" % (s, a), name="S%d %s" % (s, name), **d) for s in range(1, NSTEPS + 1)]
     out += [dict(key=k, name=n, **d) for k, n, d, _ in MOD_SETTINGS]
+    # "refresh_display" (the release tools since sd88me's wrapper fix #486, 2026-10-21: a plain host write no longer asks
+    # MPC to redraw): RANDOM ALL / CLEAR ALL and each page's CLEAR / RANDOM move steps (dev-tools/displaydeps/scan.sh)
+    for d in out:
+        if d["key"] in ("random_all", "clear_all") or d["key"].endswith(("_clear", "_random")):
+            d["refresh_display"] = True
     return out
 
 

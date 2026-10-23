@@ -3,6 +3,7 @@
  "params": [
   {
    "key": "kit",
+   "refresh_display": true,
    "name": "KIT",
    "type": "stepper",
    "min": 0,
@@ -99,6 +100,7 @@
   },
   {
    "key": "v1_algo",
+   "refresh_display": true,
    "name": "V1 ALGO",
    "options": [
     "FOLD",
@@ -109,6 +111,7 @@
   },
   {
    "key": "v1_mode",
+   "refresh_display": true,
    "name": "V1 MODE",
    "options": [
     "1",
@@ -197,6 +200,7 @@
   },
   {
    "key": "v2_algo",
+   "refresh_display": true,
    "name": "V2 ALGO",
    "options": [
     "FOLD",
@@ -207,6 +211,7 @@
   },
   {
    "key": "v2_mode",
+   "refresh_display": true,
    "name": "V2 MODE",
    "options": [
     "1",
@@ -295,6 +300,7 @@
   },
   {
    "key": "v3_algo",
+   "refresh_display": true,
    "name": "V3 ALGO",
    "options": [
     "SNARE",
@@ -305,6 +311,7 @@
   },
   {
    "key": "v3_mode",
+   "refresh_display": true,
    "name": "V3 MODE",
    "options": [
     "1",
@@ -393,6 +400,7 @@
   },
   {
    "key": "v4_algo",
+   "refresh_display": true,
    "name": "V4 ALGO",
    "options": [
     "NOISE",
@@ -403,6 +411,7 @@
   },
   {
    "key": "v4_mode",
+   "refresh_display": true,
    "name": "V4 MODE",
    "options": [
     "1",
@@ -458,6 +467,7 @@
   },
   {
    "key": "fx_range",
+   "refresh_display": true,
    "name": "BBD RANGE",
    "options": [
     "SHORT",
@@ -528,6 +538,7 @@
   },
   {
    "key": "keys",
+   "refresh_display": true,
    "name": "KEYS",
    "options": [
     "OFF",
@@ -2264,6 +2275,7 @@
   },
   {
    "key": "v1_src",
+   "refresh_display": true,
    "name": "V1 SOURCE",
    "options": [
     "SYNTH",
@@ -2273,6 +2285,8 @@
   },
   {
    "key": "v1_smp",
+   "clamped": true,
+   "refresh_display": true,
    "name": "V1 SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -2299,11 +2313,13 @@
   },
   {
    "key": "v1_rand",
+   "refresh_display": true,
    "name": "V1 RANDOMISE",
    "momentary": true
   },
   {
    "key": "v2_src",
+   "refresh_display": true,
    "name": "V2 SOURCE",
    "options": [
     "SYNTH",
@@ -2313,6 +2329,8 @@
   },
   {
    "key": "v2_smp",
+   "clamped": true,
+   "refresh_display": true,
    "name": "V2 SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -2339,11 +2357,13 @@
   },
   {
    "key": "v2_rand",
+   "refresh_display": true,
    "name": "V2 RANDOMISE",
    "momentary": true
   },
   {
    "key": "v3_src",
+   "refresh_display": true,
    "name": "V3 SOURCE",
    "options": [
     "SYNTH",
@@ -2353,6 +2373,8 @@
   },
   {
    "key": "v3_smp",
+   "clamped": true,
+   "refresh_display": true,
    "name": "V3 SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -2379,11 +2401,13 @@
   },
   {
    "key": "v3_rand",
+   "refresh_display": true,
    "name": "V3 RANDOMISE",
    "momentary": true
   },
   {
    "key": "v4_src",
+   "refresh_display": true,
    "name": "V4 SOURCE",
    "options": [
     "SYNTH",
@@ -2393,6 +2417,8 @@
   },
   {
    "key": "v4_smp",
+   "clamped": true,
+   "refresh_display": true,
    "name": "V4 SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -2419,59 +2445,69 @@
   },
   {
    "key": "v4_rand",
+   "refresh_display": true,
    "name": "V4 RANDOMISE",
    "momentary": true
   },
   {
    "key": "br_row_1",
+   "refresh_display": true,
    "name": "ROW 1",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_2",
+   "refresh_display": true,
    "name": "ROW 2",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_3",
+   "refresh_display": true,
    "name": "ROW 3",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_4",
+   "refresh_display": true,
    "name": "ROW 4",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_5",
+   "refresh_display": true,
    "name": "ROW 5",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_6",
+   "refresh_display": true,
    "name": "ROW 6",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_7",
+   "refresh_display": true,
    "name": "ROW 7",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_8",
+   "refresh_display": true,
    "name": "ROW 8",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_scroll",
+   "refresh_display": true,
    "name": "SCROLL",
    "type": "stepper",
    "min": 0,
@@ -2512,6 +2548,7 @@
   },
   {
    "key": "br_target",
+   "refresh_display": true,
    "name": "LOAD TO",
    "options": [
     "V1",
@@ -2532,16 +2569,19 @@
   },
   {
    "key": "br_up",
+   "refresh_display": true,
    "name": "UP",
    "momentary": true
   },
   {
    "key": "br_places",
+   "refresh_display": true,
    "name": "DRIVES",
    "momentary": true
   },
   {
    "key": "br_cursor",
+   "refresh_display": true,
    "name": "FILE",
    "type": "stepper",
    "min": 0,
@@ -2569,6 +2609,7 @@
   },
   {
    "key": "br_load",
+   "refresh_display": true,
    "name": "LOAD",
    "momentary": true
   },
@@ -2592,6 +2633,7 @@
   },
   {
    "key": "br_cursor_q",
+   "refresh_display": true,
    "name": "BROWSE",
    "type": "stepper",
    "min": 0,

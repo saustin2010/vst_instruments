@@ -136,7 +136,8 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   Schwung's host headers and `wrapper/engine.h`.
 - `mpc/gen.py` writes `params.json`, `presets.json`, `layout.conf` and the SVG artwork; `mpc/make_png.py` (Pillow, in the
   `mpc-vst-html-art` container) the step headers, the value arc and the buttons. Change those, not their output.
-- It uses three framework additions (`framework/mpc-vst-plugins.patch`, NOTES 2026-10-04): vst.json `"live"` (the wrapper
+- It uses three framework additions (made in this repo's old framework patch, NOTES 2026-10-04; its screen keeps
+  the one those tools drew: framework/README.md "Before 2026-10-23"): vst.json `"live"` (the wrapper
   tells MPC when the engine moves the playing step, for the step light), `banks=` on layout lines (controls on some
   Q-Link sub-pages only) and a side-value knob (`lay=side`).
 

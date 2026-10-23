@@ -3,6 +3,7 @@
  "params": [
   {
    "key": "machine",
+   "refresh_display": true,
    "name": "MACHINE",
    "options": [
     "SW SAW",
@@ -1296,6 +1297,7 @@
   },
   {
    "key": "patch",
+   "refresh_display": true,
    "name": "PATCH",
    "min": 0,
    "max": 12,

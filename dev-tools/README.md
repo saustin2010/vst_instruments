@@ -7,7 +7,7 @@ They expect the working layout they were written in: a checkout of the framework
 `steve/schwung-ports/<plugin>`. `dev-tools/workspace.sh` builds exactly that out of symlinks to this repo:
 
 ```
-framework/setup.sh          # once: the framework + our patch
+framework/setup.sh          # once: the framework, with our changes
 dev-tools/workspace.sh      # once: framework/mpc-vst-plugins/steve/ -> this repo
 cd framework/mpc-vst-plugins
 python3 steve/tools/stitch/convert.py hera          # redo Hera's screen from its Stitch design
@@ -25,6 +25,7 @@ python3 steve/tools/stitch/check_skin.py hera       # bindings, Q-Links, touch b
 | `mi/` | Helpers for engines written around Mutable Instruments' DSP classes (parameters, saved state, resampling). |
 | `rack/` | A small stand-in for the VCV Rack API and a module extractor, so a Rack module's DSP builds unchanged (Rampage). |
 | `fuzz/` | Stress-tests a port offline under ASan/UBSan the way a user hammers it (two threads, state save/restore, re-inserts). |
+| `displaydeps/` | Which parameters other controls follow: `scan.sh <plugin>` sets each parameter through the plugin's VST interface on a fresh instance and lists those whose set renames, re-words or moves another control without telling MPC (they need `"refresh_display": true` since sd88me's wrapper fix #486); `apply.py` adds the flag (or another, `--field clamped`) to `params.json` keeping its layout. Runs without the workspace (Docker, gcc:12). |
 | `probe/` | Builds a port's engine for Linux and pokes it (get/set/notes) to learn its data folders and units. |
 | `presets/` | `levels.sh <plugin dir> [low high]`: plays every preset in a plugin's PRESET menu through the real plugin (x86, after `tools/build.sh`) and prints how loud each is (loudest 400 ms, peak, RMS), to even them out. Used for Mutable Vibe and MPC Plaits (their `mpc/make_presets.py` keep the trims). Runs from the repo, no workspace needed. |
 | `catalogue/` | For plugins moving to their own repos (docs/catalogue-migration.md): `prepare.py <plugin>` writes a plugin folder's repo files (licence, release workflow, library, README sections) from its table of ids and licences; `check.sh <plugin>` builds a plugin with the release tools (`framework/setup-release.sh`), runs the host test and checks its screen is the one in `deploy/` (`skin_same.py`, by content). Runs from the repo, no workspace needed. |

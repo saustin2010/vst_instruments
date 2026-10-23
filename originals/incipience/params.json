@@ -3,6 +3,7 @@
  "params": [
   {
    "key": "kit",
+   "refresh_display": true,
    "name": "KIT",
    "type": "stepper",
    "min": 0,
@@ -316,6 +317,7 @@
   },
   {
    "key": "mb_scene",
+   "refresh_display": true,
    "name": "MBRANE SCENE",
    "type": "stepper",
    "min": 0,
@@ -452,6 +454,7 @@
   },
   {
    "key": "ch_sample",
+   "refresh_display": true,
    "name": "CL HAT SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -631,6 +634,7 @@
   },
   {
    "key": "ch_lfclk",
+   "refresh_display": true,
    "name": "CL HAT LFO CLOCK",
    "options": [
     "FREE",
@@ -721,6 +725,7 @@
   },
   {
    "key": "oh_sample",
+   "refresh_display": true,
    "name": "OP HAT SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -900,6 +905,7 @@
   },
   {
    "key": "oh_lfclk",
+   "refresh_display": true,
    "name": "OP HAT LFO CLOCK",
    "options": [
     "FREE",
@@ -990,6 +996,7 @@
   },
   {
    "key": "cp_sample",
+   "refresh_display": true,
    "name": "CLAP SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -1171,6 +1178,7 @@
   },
   {
    "key": "cp_lfclk",
+   "refresh_display": true,
    "name": "CLAP LFO CLOCK",
    "options": [
     "FREE",
@@ -1253,6 +1261,7 @@
   },
   {
    "key": "rm_sample",
+   "refresh_display": true,
    "name": "RIM SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -1434,6 +1443,7 @@
   },
   {
    "key": "rm_lfclk",
+   "refresh_display": true,
    "name": "RIM LFO CLOCK",
    "options": [
     "FREE",
@@ -1516,6 +1526,7 @@
   },
   {
    "key": "cr_sample",
+   "refresh_display": true,
    "name": "CRASH SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -1697,6 +1708,7 @@
   },
   {
    "key": "cr_lfclk",
+   "refresh_display": true,
    "name": "CRASH LFO CLOCK",
    "options": [
     "FREE",
@@ -1779,6 +1791,7 @@
   },
   {
    "key": "rd_sample",
+   "refresh_display": true,
    "name": "RIDE SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -1960,6 +1973,7 @@
   },
   {
    "key": "rd_lfclk",
+   "refresh_display": true,
    "name": "RIDE LFO CLOCK",
    "options": [
     "FREE",
@@ -2042,6 +2056,7 @@
   },
   {
    "key": "x1_sample",
+   "refresh_display": true,
    "name": "X1 SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -2106,6 +2121,7 @@
   },
   {
    "key": "x1_lfclk",
+   "refresh_display": true,
    "name": "X1 LFO CLOCK",
    "options": [
     "FREE",
@@ -2180,6 +2196,7 @@
   },
   {
    "key": "x2_sample",
+   "refresh_display": true,
    "name": "X2 SAMPLE",
    "type": "stepper",
    "min": 0,
@@ -2244,6 +2261,7 @@
   },
   {
    "key": "x2_lfclk",
+   "refresh_display": true,
    "name": "X2 LFO CLOCK",
    "options": [
     "FREE",
@@ -2916,6 +2934,7 @@
   },
   {
    "key": "dl_sync",
+   "refresh_display": true,
    "name": "DLY CLOCK",
    "options": [
     "FREE",
@@ -8028,6 +8047,7 @@
   },
   {
    "key": "l1_clock",
+   "refresh_display": true,
    "name": "LFO1 CLOCK",
    "options": [
     "FREE",
@@ -8074,6 +8094,7 @@
   },
   {
    "key": "l2_clock",
+   "refresh_display": true,
    "name": "LFO2 CLOCK",
    "options": [
     "FREE",
@@ -8120,6 +8141,7 @@
   },
   {
    "key": "l3_clock",
+   "refresh_display": true,
    "name": "LFO3 CLOCK",
    "options": [
     "FREE",
@@ -8166,6 +8188,7 @@
   },
   {
    "key": "l4_clock",
+   "refresh_display": true,
    "name": "LFO4 CLOCK",
    "options": [
     "FREE",
@@ -8208,6 +8231,7 @@
   },
   {
    "key": "m1_dest",
+   "refresh_display": true,
    "name": "MOD1 DEST",
    "options": [
     "KICK",
@@ -8273,6 +8297,7 @@
   },
   {
    "key": "m2_dest",
+   "refresh_display": true,
    "name": "MOD2 DEST",
    "options": [
     "KICK",
@@ -8338,6 +8363,7 @@
   },
   {
    "key": "m3_dest",
+   "refresh_display": true,
    "name": "MOD3 DEST",
    "options": [
     "KICK",
@@ -8403,6 +8429,7 @@
   },
   {
    "key": "m4_dest",
+   "refresh_display": true,
    "name": "MOD4 DEST",
    "options": [
     "KICK",
@@ -8468,6 +8495,7 @@
   },
   {
    "key": "m5_dest",
+   "refresh_display": true,
    "name": "MOD5 DEST",
    "options": [
     "KICK",
@@ -8533,6 +8561,7 @@
   },
   {
    "key": "m6_dest",
+   "refresh_display": true,
    "name": "MOD6 DEST",
    "options": [
     "KICK",
@@ -8598,6 +8627,7 @@
   },
   {
    "key": "m7_dest",
+   "refresh_display": true,
    "name": "MOD7 DEST",
    "options": [
     "KICK",
@@ -8663,6 +8693,7 @@
   },
   {
    "key": "m8_dest",
+   "refresh_display": true,
    "name": "MOD8 DEST",
    "options": [
     "KICK",
@@ -8728,6 +8759,7 @@
   },
   {
    "key": "m9_dest",
+   "refresh_display": true,
    "name": "MOD9 DEST",
    "options": [
     "KICK",
@@ -8793,6 +8825,7 @@
   },
   {
    "key": "m10_dest",
+   "refresh_display": true,
    "name": "MOD10 DEST",
    "options": [
     "KICK",
@@ -8858,6 +8891,7 @@
   },
   {
    "key": "m11_dest",
+   "refresh_display": true,
    "name": "MOD11 DEST",
    "options": [
     "KICK",
@@ -8923,6 +8957,7 @@
   },
   {
    "key": "m12_dest",
+   "refresh_display": true,
    "name": "MOD12 DEST",
    "options": [
     "KICK",
@@ -8988,6 +9023,7 @@
   },
   {
    "key": "m13_dest",
+   "refresh_display": true,
    "name": "MOD13 DEST",
    "options": [
     "KICK",
@@ -9053,6 +9089,7 @@
   },
   {
    "key": "m14_dest",
+   "refresh_display": true,
    "name": "MOD14 DEST",
    "options": [
     "KICK",
@@ -9118,6 +9155,7 @@
   },
   {
    "key": "m15_dest",
+   "refresh_display": true,
    "name": "MOD15 DEST",
    "options": [
     "KICK",
@@ -9183,6 +9221,7 @@
   },
   {
    "key": "m16_dest",
+   "refresh_display": true,
    "name": "MOD16 DEST",
    "options": [
     "KICK",
@@ -9234,109 +9273,129 @@
   },
   {
    "key": "kd_rand",
+   "refresh_display": true,
    "name": "KICK RANDOMISE",
    "momentary": true
   },
   {
    "key": "mb_rand",
+   "refresh_display": true,
    "name": "MBRANE RANDOMISE",
    "momentary": true
   },
   {
    "key": "ch_rand",
+   "refresh_display": true,
    "name": "CL HAT RANDOMISE",
    "momentary": true
   },
   {
    "key": "oh_rand",
+   "refresh_display": true,
    "name": "OP HAT RANDOMISE",
    "momentary": true
   },
   {
    "key": "cp_rand",
+   "refresh_display": true,
    "name": "CLAP RANDOMISE",
    "momentary": true
   },
   {
    "key": "rm_rand",
+   "refresh_display": true,
    "name": "RIM RANDOMISE",
    "momentary": true
   },
   {
    "key": "cr_rand",
+   "refresh_display": true,
    "name": "CRASH RANDOMISE",
    "momentary": true
   },
   {
    "key": "rd_rand",
+   "refresh_display": true,
    "name": "RIDE RANDOMISE",
    "momentary": true
   },
   {
    "key": "x1_rand",
+   "refresh_display": true,
    "name": "X1 RANDOMISE",
    "momentary": true
   },
   {
    "key": "x2_rand",
+   "refresh_display": true,
    "name": "X2 RANDOMISE",
    "momentary": true
   },
   {
    "key": "fm_rand",
+   "refresh_display": true,
    "name": "FM RANDOMISE",
    "momentary": true
   },
   {
    "key": "br_row_1",
+   "refresh_display": true,
    "name": "ROW 1",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_2",
+   "refresh_display": true,
    "name": "ROW 2",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_3",
+   "refresh_display": true,
    "name": "ROW 3",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_4",
+   "refresh_display": true,
    "name": "ROW 4",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_5",
+   "refresh_display": true,
    "name": "ROW 5",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_6",
+   "refresh_display": true,
    "name": "ROW 6",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_7",
+   "refresh_display": true,
    "name": "ROW 7",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_row_8",
+   "refresh_display": true,
    "name": "ROW 8",
    "momentary": true,
    "dynamic_display": true
   },
   {
    "key": "br_scroll",
+   "refresh_display": true,
    "name": "SCROLL",
    "type": "stepper",
    "min": 0,
@@ -9377,6 +9436,7 @@
   },
   {
    "key": "br_target",
+   "refresh_display": true,
    "name": "LOAD TO",
    "options": [
     "CL HAT",
@@ -9401,16 +9461,19 @@
   },
   {
    "key": "br_up",
+   "refresh_display": true,
    "name": "UP",
    "momentary": true
   },
   {
    "key": "br_places",
+   "refresh_display": true,
    "name": "DRIVES",
    "momentary": true
   },
   {
    "key": "br_cursor",
+   "refresh_display": true,
    "name": "FILE",
    "type": "stepper",
    "min": 0,
@@ -9438,6 +9501,7 @@
   },
   {
    "key": "br_load",
+   "refresh_display": true,
    "name": "LOAD",
    "momentary": true
   },
@@ -9461,6 +9525,7 @@
   },
   {
    "key": "br_cursor_q",
+   "refresh_display": true,
    "name": "BROWSE",
    "type": "stepper",
    "min": 0,

@@ -3,6 +3,8 @@
  "params": [
   {
    "key": "preset",
+   "refresh_display": true,
+   "clamped": true,
    "name": "PATCH",
    "min": 0,
    "max": 522,
@@ -229,6 +231,7 @@
   },
   {
    "key": "lfo_sync",
+   "refresh_display": true,
    "name": "LFO SYNC",
    "options": [
     "FREE",
@@ -322,6 +325,7 @@
   },
   {
    "key": "transpose",
+   "refresh_display": true,
    "name": "TRANSPOSE",
    "min": -24,
    "max": 24,
@@ -330,6 +334,7 @@
   },
   {
    "key": "octave_transpose",
+   "refresh_display": true,
    "name": "OCTAVE",
    "min": -2,
    "max": 2,
@@ -346,6 +351,7 @@
   },
   {
    "key": "gate_trig_mode",
+   "refresh_display": true,
    "name": "GATE MODE",
    "options": [
     "GATE",

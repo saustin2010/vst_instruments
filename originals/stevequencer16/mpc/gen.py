@@ -94,6 +94,12 @@ def params():
         out += [dict(key="l%d_%s" % (n, f), name="L%d %s" % (n, name), **d(n)) for f, name, d, _, _ in LANE_SET]
     out += [{"key": "l%d_summary" % n, "name": "L%d" % n, "min": 0, "max": 0, "display": "string", "type": "readout"}
             for n in range(1, NLANES + 1)]
+    # "refresh_display" (the release tools since sd88me's wrapper fix #486, 2026-10-21: a plain host write no longer asks
+    # MPC to redraw): a lane's DEST changes how its number reads, RANDOM ALL / CLEAR ALL move every step
+    # (dev-tools/displaydeps/scan.sh)
+    for d in out:
+        if d["key"].endswith("_dest") or d["key"] in ("random_all", "clear_all"):
+            d["refresh_display"] = True
     return out
 
 

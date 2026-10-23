@@ -218,3 +218,26 @@ index 884721f..0ff2c52 100644
 +knob cx=1106 cy=610 r=26 label="" key=asg_4_4 img=images/knob_small.svg base=images/knob_shadow.svg bw=84
 +toggle cx=1190 cy=610 label="" key=asg_4_4_on img=images/led_off.svg img_on=images/led_on.svg bw=84
  qlinks "ASSIGN" = asg_1_1,asg_2_1,asg_3_1,asg_4_1,asg_1_2,asg_2_2,asg_3_2,asg_4_2,asg_1_3,asg_2_3,asg_3_3,asg_4_3,asg_1_4,asg_2_4,asg_3_4,asg_4_4
+
+# MPC port (2026-10-23): stmlib::Interpolate clamps its index, as the repo's other Mutable ports do (an offline stress read one past a table)
+diff --git a/src/dsp/third_party/eurorack/stmlib/dsp/dsp.h b/src/dsp/third_party/eurorack/stmlib/dsp/dsp.h
+index 1e1add67..85718548 100755
+--- a/src/dsp/third_party/eurorack/stmlib/dsp/dsp.h
++++ b/src/dsp/third_party/eurorack/stmlib/dsp/dsp.h
+@@ -42,7 +42,16 @@ namespace stmlib {
+ 
+ inline float Interpolate(const float* table, float index, float size) {
+   index *= size;
++  // MPC port (2026-10-02, as in the repo's other Mutable ports; here 2026-10-23): the hardware's ADCs stop just short of
++  // full scale, but a host parameter at exactly 1.0, or a modulation sum past it, read one past the end of the table
++  // (size + 1 entries; found with an offline stress).
++  if (!(index > 0.0f)) index = 0.0f;  // also NaN
++  if (index > size) index = size;
+   MAKE_INTEGRAL_FRACTIONAL(index)
++  if (index_integral >= static_cast<int32_t>(size)) {
++    index_integral = static_cast<int32_t>(size) - 1;
++    index_fractional = index - static_cast<float>(index_integral);
++  }
+   float a = table[index_integral];
+   float b = table[index_integral + 1];
+   return a + (b - a) * index_fractional;

@@ -380,6 +380,7 @@
   },
   {
    "key": "lfo_rate_mode",
+   "refresh_display": true,
    "name": "LFO SYNC",
    "type": "enum",
    "options": [
@@ -512,6 +513,7 @@
   },
   {
    "key": "random_rate_mode",
+   "refresh_display": true,
    "name": "RND SYNC",
    "type": "enum",
    "options": [

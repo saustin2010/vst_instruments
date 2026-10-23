@@ -181,6 +181,14 @@ void WavetableEngine::Render(
       int z0 = z_integral;
       int z1 = z_integral + 1;
       
+      // MPC port (as in MPC Plaits): the smoothed x/y/z can land exactly on 7.0, making x1/y1 8 and z1 map to bank -1
+      // (a garbage wave pointer -- a crash here, a stray read on the module). Clamp to the grid.
+      if (x0 > 7) x0 = 7;
+      if (x1 > 7) x1 = 7;
+      if (y0 > 7) y0 = 7;
+      if (y1 > 7) y1 = 7;
+      if (z0 > 7) z0 = 7;
+      if (z1 > 7) z1 = 7;
       if (z0 >= 4) {
         z0 = 7 - z0;
       }

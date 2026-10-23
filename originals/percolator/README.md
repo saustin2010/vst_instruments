@@ -111,7 +111,7 @@ plays samples, "but I think they should be allowed on each voice"):
   the data wheel (tap the box first) or its Q-Link step through the WAV files of its folder in name order ("Kick 2"
   before "Kick 10"; the first 255), a file a click. NO SAMPLE until you load one.
 - **Loading one: the SAMPLES page**, the same browser as Incipience 1.1.0's (owner, 2026-10-20: "I want the same
-  browser in percolator"; how it works: [docs/sample-browser.md](../../docs/sample-browser.md)). **DRIVES** lists the
+  browser in percolator"; how it works: [docs/sample-browser.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/sample-browser.md)). **DRIVES** lists the
   places: **PERCOLATOR FOLDER** (the data folder, where the kit packs are, each with its `SAMPLES/` folder), then the
   MPC's drives (INTERNAL, SD cards, SSDs, USB drives). A folder lists its own WAV files, then every subfolder's, each
   under a heading with its path (`Kicks/Room /`), so the wheel goes through them all; tap a heading for that folder
@@ -516,7 +516,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   on); build and host test PASSED.
   Then (owner, 2026-10-20, after rebuilding Incipience's browser: "I want the same browser in percolator", and the
   SOURCE box on the voice pages "doesn't look nice"): the SAMPLES page is Incipience 1.1.0's
-  browser ([its notes](../../docs/sample-browser.md)): a folder and its subfolders in one list, the cursor (FILE: the
+  browser ([its notes](https://github.com/saustin2010/vst_instruments/blob/main/docs/sample-browser.md)): a folder and its subfolders in one list, the cursor (FILE: the
   data wheel on its box; BROWSE, Q-Link 1, a file per three events), PREVIEW from the drive, a second tap, LOAD or AUTO
   LOAD, AUDITION; 7 parameters appended (183). The voice pages: SOURCE at the top beside RANDOMISE, SAMPLE level with
   CUTOFF and DRIVE. Its two buttons had drawn apart because the skin builder keeps one picture per option of a

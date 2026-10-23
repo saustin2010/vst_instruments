@@ -203,7 +203,7 @@
                     }
                 },
                 {
-                    "key": "shKnob38_dee6a497_n16v22",
+                    "key": "shKnob38_dee6a497_ns16_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -397,7 +397,7 @@
                     }
                 },
                 {
-                    "key": "shKnob38_dee6a497_n11v22",
+                    "key": "shKnob38_dee6a497_ns11_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -591,7 +591,7 @@
                     }
                 },
                 {
-                    "key": "shKnob38_dee6a497_n14v22",
+                    "key": "shKnob38_dee6a497_ns14_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -785,7 +785,7 @@
                     }
                 },
                 {
-                    "key": "shKnob38_dee6a497_n13v22",
+                    "key": "shKnob38_dee6a497_ns13_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1597,8 +1597,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_0_on.png",
-                                        "offImage": "sh_popopt_0_rate_0_off.png",
+                                        "onImage": "sh_po_0_on.png",
+                                        "offImage": "sh_po_0_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -1665,8 +1665,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_1_on.png",
-                                        "offImage": "sh_popopt_0_rate_1_off.png",
+                                        "onImage": "sh_po_1_on.png",
+                                        "offImage": "sh_po_1_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -1733,8 +1733,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_2_on.png",
-                                        "offImage": "sh_popopt_0_rate_2_off.png",
+                                        "onImage": "sh_po_2_on.png",
+                                        "offImage": "sh_po_2_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -1801,8 +1801,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_3_on.png",
-                                        "offImage": "sh_popopt_0_rate_3_off.png",
+                                        "onImage": "sh_po_3_on.png",
+                                        "offImage": "sh_po_3_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -1869,8 +1869,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_4_on.png",
-                                        "offImage": "sh_popopt_0_rate_4_off.png",
+                                        "onImage": "sh_po_4_on.png",
+                                        "offImage": "sh_po_4_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -1937,8 +1937,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_5_on.png",
-                                        "offImage": "sh_popopt_0_rate_5_off.png",
+                                        "onImage": "sh_po_5_on.png",
+                                        "offImage": "sh_po_5_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -2005,8 +2005,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_6_on.png",
-                                        "offImage": "sh_popopt_0_rate_6_off.png",
+                                        "onImage": "sh_po_6_on.png",
+                                        "offImage": "sh_po_6_off.png",
                                         "buttonId": 6,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -2073,8 +2073,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_7_on.png",
-                                        "offImage": "sh_popopt_0_rate_7_off.png",
+                                        "onImage": "sh_po_7_on.png",
+                                        "offImage": "sh_po_7_off.png",
                                         "buttonId": 7,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -2141,8 +2141,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_rate_8_on.png",
-                                        "offImage": "sh_popopt_0_rate_8_off.png",
+                                        "onImage": "sh_po_8_on.png",
+                                        "offImage": "sh_po_8_off.png",
                                         "buttonId": 8,
                                         "numButtonsInGroup": 9,
                                         "handleName": "Data",
@@ -2311,7 +2311,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "RAND CYCLE",
-                                    "type": "shKnob38_dee6a497_n16v22",
+                                    "type": "shKnob38_dee6a497_ns16_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2341,7 +2341,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "VELOCITY",
-                                    "type": "shKnob38_dee6a497_n11v22",
+                                    "type": "shKnob38_dee6a497_ns11_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2371,7 +2371,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "VEL RANDOM",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2401,7 +2401,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "GATE",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2431,7 +2431,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "GATE RANDOM",
-                                    "type": "shKnob38_dee6a497_n13v22",
+                                    "type": "shKnob38_dee6a497_ns13_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2994,7 +2994,7 @@
                     }
                 },
                 {
-                    "key": "shKnob38_dee6a497_n15v22",
+                    "key": "shKnob38_dee6a497_ns15_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3188,7 +3188,7 @@
                     }
                 },
                 {
-                    "key": "shKnob38_dee6a497_n12v22",
+                    "key": "shKnob38_dee6a497_ns12_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3737,8 +3737,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_lane1_oct_rng_0_on.png",
-                                        "offImage": "sh_popopt_1_lane1_oct_rng_0_off.png",
+                                        "onImage": "sh_po_9_on.png",
+                                        "offImage": "sh_po_9_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -3805,8 +3805,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_lane1_oct_rng_1_on.png",
-                                        "offImage": "sh_popopt_1_lane1_oct_rng_1_off.png",
+                                        "onImage": "sh_po_10_on.png",
+                                        "offImage": "sh_po_10_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -3873,8 +3873,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_lane1_oct_rng_2_on.png",
-                                        "offImage": "sh_popopt_1_lane1_oct_rng_2_off.png",
+                                        "onImage": "sh_po_11_on.png",
+                                        "offImage": "sh_po_11_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -3941,8 +3941,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_lane1_oct_rng_3_on.png",
-                                        "offImage": "sh_popopt_1_lane1_oct_rng_3_off.png",
+                                        "onImage": "sh_po_12_on.png",
+                                        "offImage": "sh_po_12_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -4009,8 +4009,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_lane1_oct_rng_4_on.png",
-                                        "offImage": "sh_popopt_1_lane1_oct_rng_4_off.png",
+                                        "onImage": "sh_po_13_on.png",
+                                        "offImage": "sh_po_13_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -4077,8 +4077,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_lane1_oct_rng_5_on.png",
-                                        "offImage": "sh_popopt_1_lane1_oct_rng_5_off.png",
+                                        "onImage": "sh_po_14_on.png",
+                                        "offImage": "sh_po_14_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -4157,7 +4157,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 STEPS",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4187,7 +4187,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 PULSES",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4217,7 +4217,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 ROTATE",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4277,7 +4277,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 DROP SEED",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4307,7 +4307,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 VELOCITY",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4397,7 +4397,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 NOTE RND",
-                                    "type": "shKnob38_dee6a497_n16v22",
+                                    "type": "shKnob38_dee6a497_ns16_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4427,7 +4427,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 NOTE SEED",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4457,7 +4457,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 OCTAVE",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4487,7 +4487,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 OCT RND",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4517,7 +4517,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L1 OCT SEED",
-                                    "type": "shKnob38_dee6a497_n13v22",
+                                    "type": "shKnob38_dee6a497_ns13_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4929,8 +4929,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_2_lane2_oct_rng_0_on.png",
-                                        "offImage": "sh_popopt_2_lane2_oct_rng_0_off.png",
+                                        "onImage": "sh_po_9_on.png",
+                                        "offImage": "sh_po_9_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -4997,8 +4997,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_2_lane2_oct_rng_1_on.png",
-                                        "offImage": "sh_popopt_2_lane2_oct_rng_1_off.png",
+                                        "onImage": "sh_po_10_on.png",
+                                        "offImage": "sh_po_10_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -5065,8 +5065,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_2_lane2_oct_rng_2_on.png",
-                                        "offImage": "sh_popopt_2_lane2_oct_rng_2_off.png",
+                                        "onImage": "sh_po_11_on.png",
+                                        "offImage": "sh_po_11_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -5133,8 +5133,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_2_lane2_oct_rng_3_on.png",
-                                        "offImage": "sh_popopt_2_lane2_oct_rng_3_off.png",
+                                        "onImage": "sh_po_12_on.png",
+                                        "offImage": "sh_po_12_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -5201,8 +5201,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_2_lane2_oct_rng_4_on.png",
-                                        "offImage": "sh_popopt_2_lane2_oct_rng_4_off.png",
+                                        "onImage": "sh_po_13_on.png",
+                                        "offImage": "sh_po_13_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -5269,8 +5269,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_2_lane2_oct_rng_5_on.png",
-                                        "offImage": "sh_popopt_2_lane2_oct_rng_5_off.png",
+                                        "onImage": "sh_po_14_on.png",
+                                        "offImage": "sh_po_14_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -5349,7 +5349,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 STEPS",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5379,7 +5379,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 PULSES",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5409,7 +5409,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 ROTATE",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5469,7 +5469,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 DROP SEED",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5499,7 +5499,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 VELOCITY",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5589,7 +5589,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 NOTE RND",
-                                    "type": "shKnob38_dee6a497_n16v22",
+                                    "type": "shKnob38_dee6a497_ns16_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5619,7 +5619,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 NOTE SEED",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5649,7 +5649,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 OCTAVE",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5679,7 +5679,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 OCT RND",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5709,7 +5709,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L2 OCT SEED",
-                                    "type": "shKnob38_dee6a497_n13v22",
+                                    "type": "shKnob38_dee6a497_ns13_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6121,8 +6121,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lane3_oct_rng_0_on.png",
-                                        "offImage": "sh_popopt_3_lane3_oct_rng_0_off.png",
+                                        "onImage": "sh_po_9_on.png",
+                                        "offImage": "sh_po_9_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -6189,8 +6189,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lane3_oct_rng_1_on.png",
-                                        "offImage": "sh_popopt_3_lane3_oct_rng_1_off.png",
+                                        "onImage": "sh_po_10_on.png",
+                                        "offImage": "sh_po_10_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -6257,8 +6257,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lane3_oct_rng_2_on.png",
-                                        "offImage": "sh_popopt_3_lane3_oct_rng_2_off.png",
+                                        "onImage": "sh_po_11_on.png",
+                                        "offImage": "sh_po_11_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -6325,8 +6325,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lane3_oct_rng_3_on.png",
-                                        "offImage": "sh_popopt_3_lane3_oct_rng_3_off.png",
+                                        "onImage": "sh_po_12_on.png",
+                                        "offImage": "sh_po_12_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -6393,8 +6393,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lane3_oct_rng_4_on.png",
-                                        "offImage": "sh_popopt_3_lane3_oct_rng_4_off.png",
+                                        "onImage": "sh_po_13_on.png",
+                                        "offImage": "sh_po_13_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -6461,8 +6461,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lane3_oct_rng_5_on.png",
-                                        "offImage": "sh_popopt_3_lane3_oct_rng_5_off.png",
+                                        "onImage": "sh_po_14_on.png",
+                                        "offImage": "sh_po_14_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -6541,7 +6541,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 STEPS",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6571,7 +6571,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 PULSES",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6601,7 +6601,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 ROTATE",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6661,7 +6661,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 DROP SEED",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6691,7 +6691,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 VELOCITY",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6781,7 +6781,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 NOTE RND",
-                                    "type": "shKnob38_dee6a497_n16v22",
+                                    "type": "shKnob38_dee6a497_ns16_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6811,7 +6811,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 NOTE SEED",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6841,7 +6841,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 OCTAVE",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6871,7 +6871,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 OCT RND",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6901,7 +6901,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L3 OCT SEED",
-                                    "type": "shKnob38_dee6a497_n13v22",
+                                    "type": "shKnob38_dee6a497_ns13_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -7313,8 +7313,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_lane4_oct_rng_0_on.png",
-                                        "offImage": "sh_popopt_4_lane4_oct_rng_0_off.png",
+                                        "onImage": "sh_po_9_on.png",
+                                        "offImage": "sh_po_9_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -7381,8 +7381,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_lane4_oct_rng_1_on.png",
-                                        "offImage": "sh_popopt_4_lane4_oct_rng_1_off.png",
+                                        "onImage": "sh_po_10_on.png",
+                                        "offImage": "sh_po_10_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -7449,8 +7449,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_lane4_oct_rng_2_on.png",
-                                        "offImage": "sh_popopt_4_lane4_oct_rng_2_off.png",
+                                        "onImage": "sh_po_11_on.png",
+                                        "offImage": "sh_po_11_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -7517,8 +7517,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_lane4_oct_rng_3_on.png",
-                                        "offImage": "sh_popopt_4_lane4_oct_rng_3_off.png",
+                                        "onImage": "sh_po_12_on.png",
+                                        "offImage": "sh_po_12_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -7585,8 +7585,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_lane4_oct_rng_4_on.png",
-                                        "offImage": "sh_popopt_4_lane4_oct_rng_4_off.png",
+                                        "onImage": "sh_po_13_on.png",
+                                        "offImage": "sh_po_13_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -7653,8 +7653,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_lane4_oct_rng_5_on.png",
-                                        "offImage": "sh_popopt_4_lane4_oct_rng_5_off.png",
+                                        "onImage": "sh_po_14_on.png",
+                                        "offImage": "sh_po_14_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -7733,7 +7733,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 STEPS",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -7763,7 +7763,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 PULSES",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -7793,7 +7793,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 ROTATE",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -7853,7 +7853,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 DROP SEED",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -7883,7 +7883,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 VELOCITY",
-                                    "type": "shKnob38_dee6a497_n12v22",
+                                    "type": "shKnob38_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -7973,7 +7973,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 NOTE RND",
-                                    "type": "shKnob38_dee6a497_n16v22",
+                                    "type": "shKnob38_dee6a497_ns16_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8003,7 +8003,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 NOTE SEED",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8033,7 +8033,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 OCTAVE",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8063,7 +8063,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 OCT RND",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8093,7 +8093,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "L4 OCT SEED",
-                                    "type": "shKnob38_dee6a497_n13v22",
+                                    "type": "shKnob38_dee6a497_ns13_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9368,8 +9368,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_0_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_0_off.png",
+                                        "onImage": "sh_po_15_on.png",
+                                        "offImage": "sh_po_15_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9436,8 +9436,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_1_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_1_off.png",
+                                        "onImage": "sh_po_16_on.png",
+                                        "offImage": "sh_po_16_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9504,8 +9504,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_2_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_2_off.png",
+                                        "onImage": "sh_po_17_on.png",
+                                        "offImage": "sh_po_17_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9572,8 +9572,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_3_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_3_off.png",
+                                        "onImage": "sh_po_18_on.png",
+                                        "offImage": "sh_po_18_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9640,8 +9640,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_4_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_4_off.png",
+                                        "onImage": "sh_po_19_on.png",
+                                        "offImage": "sh_po_19_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9708,8 +9708,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_5_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_5_off.png",
+                                        "onImage": "sh_po_20_on.png",
+                                        "offImage": "sh_po_20_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9776,8 +9776,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_6_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_6_off.png",
+                                        "onImage": "sh_po_21_on.png",
+                                        "offImage": "sh_po_21_off.png",
                                         "buttonId": 6,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9844,8 +9844,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_7_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_7_off.png",
+                                        "onImage": "sh_po_22_on.png",
+                                        "offImage": "sh_po_22_off.png",
                                         "buttonId": 7,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9912,8 +9912,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_8_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_8_off.png",
+                                        "onImage": "sh_po_23_on.png",
+                                        "offImage": "sh_po_23_off.png",
                                         "buttonId": 8,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -9980,8 +9980,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_9_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_9_off.png",
+                                        "onImage": "sh_po_24_on.png",
+                                        "offImage": "sh_po_24_off.png",
                                         "buttonId": 9,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -10048,8 +10048,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_10_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_10_off.png",
+                                        "onImage": "sh_po_25_on.png",
+                                        "offImage": "sh_po_25_off.png",
                                         "buttonId": 10,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -10116,8 +10116,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_11_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_11_off.png",
+                                        "onImage": "sh_po_26_on.png",
+                                        "offImage": "sh_po_26_off.png",
                                         "buttonId": 11,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -10184,8 +10184,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_12_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_12_off.png",
+                                        "onImage": "sh_po_27_on.png",
+                                        "offImage": "sh_po_27_off.png",
                                         "buttonId": 12,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -10252,8 +10252,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_scale_mode_13_on.png",
-                                        "offImage": "sh_popopt_5_scale_mode_13_off.png",
+                                        "onImage": "sh_po_28_on.png",
+                                        "offImage": "sh_po_28_off.png",
                                         "buttonId": 13,
                                         "numButtonsInGroup": 14,
                                         "handleName": "Data",
@@ -10488,8 +10488,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_0_on.png",
-                                        "offImage": "sh_popopt_5_root_note_0_off.png",
+                                        "onImage": "sh_po_29_on.png",
+                                        "offImage": "sh_po_29_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -10556,8 +10556,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_1_on.png",
-                                        "offImage": "sh_popopt_5_root_note_1_off.png",
+                                        "onImage": "sh_po_30_on.png",
+                                        "offImage": "sh_po_30_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -10624,8 +10624,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_2_on.png",
-                                        "offImage": "sh_popopt_5_root_note_2_off.png",
+                                        "onImage": "sh_po_31_on.png",
+                                        "offImage": "sh_po_31_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -10692,8 +10692,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_3_on.png",
-                                        "offImage": "sh_popopt_5_root_note_3_off.png",
+                                        "onImage": "sh_po_32_on.png",
+                                        "offImage": "sh_po_32_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -10760,8 +10760,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_4_on.png",
-                                        "offImage": "sh_popopt_5_root_note_4_off.png",
+                                        "onImage": "sh_po_33_on.png",
+                                        "offImage": "sh_po_33_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -10828,8 +10828,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_5_on.png",
-                                        "offImage": "sh_popopt_5_root_note_5_off.png",
+                                        "onImage": "sh_po_34_on.png",
+                                        "offImage": "sh_po_34_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -10896,8 +10896,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_6_on.png",
-                                        "offImage": "sh_popopt_5_root_note_6_off.png",
+                                        "onImage": "sh_po_35_on.png",
+                                        "offImage": "sh_po_35_off.png",
                                         "buttonId": 6,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -10964,8 +10964,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_7_on.png",
-                                        "offImage": "sh_popopt_5_root_note_7_off.png",
+                                        "onImage": "sh_po_36_on.png",
+                                        "offImage": "sh_po_36_off.png",
                                         "buttonId": 7,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -11032,8 +11032,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_8_on.png",
-                                        "offImage": "sh_popopt_5_root_note_8_off.png",
+                                        "onImage": "sh_po_37_on.png",
+                                        "offImage": "sh_po_37_off.png",
                                         "buttonId": 8,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -11100,8 +11100,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_9_on.png",
-                                        "offImage": "sh_popopt_5_root_note_9_off.png",
+                                        "onImage": "sh_po_38_on.png",
+                                        "offImage": "sh_po_38_off.png",
                                         "buttonId": 9,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -11168,8 +11168,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_10_on.png",
-                                        "offImage": "sh_popopt_5_root_note_10_off.png",
+                                        "onImage": "sh_po_39_on.png",
+                                        "offImage": "sh_po_39_off.png",
                                         "buttonId": 10,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -11236,8 +11236,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_5_root_note_11_on.png",
-                                        "offImage": "sh_popopt_5_root_note_11_off.png",
+                                        "onImage": "sh_po_40_on.png",
+                                        "offImage": "sh_po_40_off.png",
                                         "buttonId": 11,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -11376,7 +11376,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "ORDER SEED",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11406,7 +11406,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "MISSING SEED",
-                                    "type": "shKnob38_dee6a497_n14v22",
+                                    "type": "shKnob38_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11436,7 +11436,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "RANDOM SEED",
-                                    "type": "shKnob38_dee6a497_n15v22",
+                                    "type": "shKnob38_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"

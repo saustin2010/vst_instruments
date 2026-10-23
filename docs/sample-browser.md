@@ -153,8 +153,8 @@ readout cx=656 cy=154 w=196 h=32 vs=20 box=no style=dotmatrix key=br_status
 list x=40 y=182 w=720 h=362 key=br_row cols=1 rows=8 th=40 gap=6 ink=ffffff lit=d32a2a focus=no
 ```
 
-`ink=`, `lit=` and `focus=no` are this repo's additions to the skin builder (`tools/shadow_skin.py` in
-`framework/mpc-vst-plugins.patch`, 2026-10-20): white text, the cursor's row in a red 3-pixel border (the default, the
+`ink=`, `lit=` and `focus=no` are this repo's additions to the skin builder (`tools/shadow_skin.py`, 2026-10-20; since
+2026-10-23 a commit on the framework branch `steve-features`, framework/README.md): white text, the cursor's row in a red 3-pixel border (the default, the
 active segment colour, was near-black on the black list), and no row taking the hardware focus (by default the first
 row takes it). `check_skin.py` knows both: a `focus=no` list needs no bound row, and a `qlink_only` parameter may sit on
 a Q-Link with nothing on the page.

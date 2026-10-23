@@ -258,12 +258,20 @@ void LPCSpeechSynthController::Render(
   const LPCSpeechSynth::Frame* frames = bank == -1
       ? phonemes_
       : word_bank_->frames();
+
+  // MPC port (as in MPC Plaits): switching from a word bank back to the phonemes (bank -1) kept a frame index from the
+  // bigger word table, which then read past the phoneme table.
+  if (playback_frame_ >= num_frames || last_playback_frame_ > num_frames) {
+    playback_frame_ = -1;
+    last_playback_frame_ = -1;
+  }
   
   if (trigger) {
     if (bank == -1) {
       // Pick a pseudo-random consonant, and play it for the duration of a
       // frame.
       int r = (address + 3.0f * formant_shift + 7.0f * frequency) * 8.0f;
+      if (r < 0) r = -r;   // MPC port (as in MPC Plaits): a negative r made a negative frame index
       playback_frame_ = (r % kLPCSpeechSynthNumConsonants);
       playback_frame_ += kLPCSpeechSynthNumVowels;
       last_playback_frame_ = playback_frame_ + 1;

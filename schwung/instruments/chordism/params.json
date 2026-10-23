@@ -196,6 +196,7 @@
   },
   {
    "key": "shape",
+   "refresh_display": true,
    "name": "SHAPE",
    "min": 0,
    "max": 1,
@@ -203,6 +204,7 @@
   },
   {
    "key": "shape_1",
+   "refresh_display": true,
    "name": "SHAPE 1",
    "min": 0,
    "max": 1,
@@ -1319,6 +1321,7 @@
   },
   {
    "key": "preset",
+   "refresh_display": true,
    "name": "PRESET",
    "min": 0,
    "max": 56,

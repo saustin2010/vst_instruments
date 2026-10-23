@@ -126,7 +126,7 @@ def params():
     for v in range(1, 5):
         opts("v%d_src" % v, "V%d SOURCE" % v, ["SYNTH", "SAMPLE"], 0)
         P.append(dict(key="v%d_smp" % v, name="V%d SAMPLE" % v, type="stepper", min=0, max=255, step=1, default=0,
-                      dynamic_display=True, **LONG))
+                      dynamic_display=True, clamped=True, **LONG))   # clamped: 0 (none) until a folder is loaded
         P.append(dict(key="v%d_smp_prev" % v, name="V%d SAMPLE DOWN" % v, momentary=True, step_of="v%d_smp" % v,
                       step_delta=-1))
         P.append(dict(key="v%d_smp_next" % v, name="V%d SAMPLE UP" % v, momentary=True, step_of="v%d_smp" % v,
@@ -162,6 +162,17 @@ def params():
     opts("br_autoload", "AUTO LOAD", ["OFF", "ON"], 0)
     P.append(dict(key="br_cursor_q", name="BROWSE", type="stepper", min=0, max=999, step=1, default=0,
                   dynamic_display=True, clamped=True, qlink_only=True, **LONG))
+    # "refresh_display" (the release tools since sd88me's wrapper fix #486, 2026-10-21: a plain host write no longer asks
+    # MPC to redraw): a set of one of these renames or re-words other controls, or moves one without telling MPC, so it
+    # asks for a redraw (found by dev-tools/displaydeps/scan.sh, plus the browser's controls, whose rows follow a full
+    # folder the scan doesn't have)
+    refresh = {"kit", "keys", "fx_range", "br_scroll", "br_up", "br_places", "br_target", "br_cursor", "br_cursor_q",
+               "br_load"}
+    refresh |= {"v%d_%s" % (v, k) for v in range(1, 5) for k in ("algo", "mode", "src", "smp", "rand")}
+    refresh |= {"br_row_%d" % r for r in range(1, BROWSE_ROWS + 1)}
+    for p in P:
+        if p["key"] in refresh:
+            p["refresh_display"] = True
     return P
 
 
