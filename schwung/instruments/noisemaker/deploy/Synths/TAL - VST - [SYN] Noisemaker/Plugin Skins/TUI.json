@@ -601,7 +601,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_14x130_n12v15_b86",
+                    "key": "shSlider_v_14x130_ns12_vs15_bw86",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -694,7 +694,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_14x130.png",
+                                        "filmStrip": "sh_slider_v_14x130_f94.png",
                                         "numFrames": 94,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -795,7 +795,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_14x130_n13v15_b86",
+                    "key": "shSlider_v_14x130_ns13_vs15_bw86",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -888,7 +888,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_14x130.png",
+                                        "filmStrip": "sh_slider_v_14x130_f94.png",
                                         "numFrames": 94,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -989,7 +989,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_14x130_n11v15_b87",
+                    "key": "shSlider_v_14x130_ns11_vs15_bw87",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1082,7 +1082,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_14x130.png",
+                                        "filmStrip": "sh_slider_v_14x130_f94.png",
                                         "numFrames": 94,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -1895,8 +1895,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_0_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_0_off.png",
+                                        "onImage": "sh_po_0_on.png",
+                                        "offImage": "sh_po_0_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -1963,8 +1963,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_1_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_1_off.png",
+                                        "onImage": "sh_po_1_on.png",
+                                        "offImage": "sh_po_1_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2031,8 +2031,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_2_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_2_off.png",
+                                        "onImage": "sh_po_2_on.png",
+                                        "offImage": "sh_po_2_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2099,8 +2099,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_3_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_3_off.png",
+                                        "onImage": "sh_po_3_on.png",
+                                        "offImage": "sh_po_3_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2167,8 +2167,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_4_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_4_off.png",
+                                        "onImage": "sh_po_4_on.png",
+                                        "offImage": "sh_po_4_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2235,8 +2235,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_5_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_5_off.png",
+                                        "onImage": "sh_po_5_on.png",
+                                        "offImage": "sh_po_5_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2303,8 +2303,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_6_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_6_off.png",
+                                        "onImage": "sh_po_6_on.png",
+                                        "offImage": "sh_po_6_off.png",
                                         "buttonId": 6,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2371,8 +2371,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_7_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_7_off.png",
+                                        "onImage": "sh_po_7_on.png",
+                                        "offImage": "sh_po_7_off.png",
                                         "buttonId": 7,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2439,8 +2439,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_8_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_8_off.png",
+                                        "onImage": "sh_po_8_on.png",
+                                        "offImage": "sh_po_8_off.png",
                                         "buttonId": 8,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2507,8 +2507,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_9_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_9_off.png",
+                                        "onImage": "sh_po_9_on.png",
+                                        "offImage": "sh_po_9_off.png",
                                         "buttonId": 9,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2575,8 +2575,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_10_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_10_off.png",
+                                        "onImage": "sh_po_10_on.png",
+                                        "offImage": "sh_po_10_off.png",
                                         "buttonId": 10,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2643,8 +2643,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_filter_type_11_on.png",
-                                        "offImage": "sh_popopt_0_filter_type_11_off.png",
+                                        "onImage": "sh_po_11_on.png",
+                                        "offImage": "sh_po_11_off.png",
                                         "buttonId": 11,
                                         "numButtonsInGroup": 12,
                                         "handleName": "Data",
@@ -2669,7 +2669,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_13560c04",
+                    "key": "shMeter_44x158_13560c04_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -2700,7 +2700,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_13560c04.png",
+                                        "filmStrip": "sh_meter_44x158_13560c04_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -2725,7 +2725,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_87823f67",
+                    "key": "shMeter_44x158_87823f67_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -2756,7 +2756,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_87823f67.png",
+                                        "filmStrip": "sh_meter_44x158_87823f67_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -2781,7 +2781,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_30178983",
+                    "key": "shMeter_44x158_30178983_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -2812,7 +2812,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_30178983.png",
+                                        "filmStrip": "sh_meter_44x158_30178983_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -2837,7 +2837,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_7eb1efec",
+                    "key": "shMeter_44x158_7eb1efec_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -2868,7 +2868,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_7eb1efec.png",
+                                        "filmStrip": "sh_meter_44x158_7eb1efec_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -2893,7 +2893,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_f628a1c6",
+                    "key": "shMeter_44x158_f628a1c6_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -2924,7 +2924,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_f628a1c6.png",
+                                        "filmStrip": "sh_meter_44x158_f628a1c6_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -2949,7 +2949,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_245ea6f5",
+                    "key": "shMeter_44x158_245ea6f5_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -2980,7 +2980,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_245ea6f5.png",
+                                        "filmStrip": "sh_meter_44x158_245ea6f5_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3005,7 +3005,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_15b3e7a3",
+                    "key": "shMeter_44x158_15b3e7a3_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3036,7 +3036,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_15b3e7a3.png",
+                                        "filmStrip": "sh_meter_44x158_15b3e7a3_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3061,7 +3061,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_973999d1",
+                    "key": "shMeter_44x158_973999d1_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3092,7 +3092,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_973999d1.png",
+                                        "filmStrip": "sh_meter_44x158_973999d1_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3117,7 +3117,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_8529018c",
+                    "key": "shMeter_44x158_8529018c_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3148,7 +3148,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_8529018c.png",
+                                        "filmStrip": "sh_meter_44x158_8529018c_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3173,7 +3173,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_6fbe03ec",
+                    "key": "shMeter_44x158_6fbe03ec_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3204,7 +3204,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_6fbe03ec.png",
+                                        "filmStrip": "sh_meter_44x158_6fbe03ec_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3229,7 +3229,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_93e4497c",
+                    "key": "shMeter_44x158_93e4497c_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3260,7 +3260,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_93e4497c.png",
+                                        "filmStrip": "sh_meter_44x158_93e4497c_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3285,7 +3285,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_596cff7b",
+                    "key": "shMeter_44x158_596cff7b_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3316,7 +3316,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_596cff7b.png",
+                                        "filmStrip": "sh_meter_44x158_596cff7b_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3341,7 +3341,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_ad8f74b3",
+                    "key": "shMeter_44x158_ad8f74b3_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3372,7 +3372,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_ad8f74b3.png",
+                                        "filmStrip": "sh_meter_44x158_ad8f74b3_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3397,7 +3397,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_fe5e2922",
+                    "key": "shMeter_44x158_fe5e2922_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3428,7 +3428,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_fe5e2922.png",
+                                        "filmStrip": "sh_meter_44x158_fe5e2922_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3453,7 +3453,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_a823618f",
+                    "key": "shMeter_44x158_a823618f_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3484,7 +3484,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_a823618f.png",
+                                        "filmStrip": "sh_meter_44x158_a823618f_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3509,7 +3509,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_8d44667e",
+                    "key": "shMeter_44x158_8d44667e_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3540,7 +3540,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_8d44667e.png",
+                                        "filmStrip": "sh_meter_44x158_8d44667e_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3565,7 +3565,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_2f3fc1b1",
+                    "key": "shMeter_44x158_2f3fc1b1_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3596,7 +3596,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_2f3fc1b1.png",
+                                        "filmStrip": "sh_meter_44x158_2f3fc1b1_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3621,7 +3621,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_8768de03",
+                    "key": "shMeter_44x158_8768de03_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3652,7 +3652,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_8768de03.png",
+                                        "filmStrip": "sh_meter_44x158_8768de03_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3677,7 +3677,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_85e07dca",
+                    "key": "shMeter_44x158_85e07dca_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3708,7 +3708,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_85e07dca.png",
+                                        "filmStrip": "sh_meter_44x158_85e07dca_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3733,7 +3733,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_57e55062",
+                    "key": "shMeter_44x158_57e55062_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3764,7 +3764,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_57e55062.png",
+                                        "filmStrip": "sh_meter_44x158_57e55062_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3789,7 +3789,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_5f898528",
+                    "key": "shMeter_44x158_5f898528_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3820,7 +3820,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_5f898528.png",
+                                        "filmStrip": "sh_meter_44x158_5f898528_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3845,7 +3845,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_4e096610",
+                    "key": "shMeter_44x158_4e096610_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3876,7 +3876,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_4e096610.png",
+                                        "filmStrip": "sh_meter_44x158_4e096610_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3901,7 +3901,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_0856107c",
+                    "key": "shMeter_44x158_0856107c_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3932,7 +3932,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_0856107c.png",
+                                        "filmStrip": "sh_meter_44x158_0856107c_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -3957,7 +3957,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_ae170d2e",
+                    "key": "shMeter_44x158_ae170d2e_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -3988,7 +3988,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_ae170d2e.png",
+                                        "filmStrip": "sh_meter_44x158_ae170d2e_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4013,7 +4013,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_dd148953",
+                    "key": "shMeter_44x158_dd148953_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4044,7 +4044,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_dd148953.png",
+                                        "filmStrip": "sh_meter_44x158_dd148953_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4069,7 +4069,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_aa432eb4",
+                    "key": "shMeter_44x158_aa432eb4_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4100,7 +4100,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_aa432eb4.png",
+                                        "filmStrip": "sh_meter_44x158_aa432eb4_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4125,7 +4125,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_03d778bd",
+                    "key": "shMeter_44x158_03d778bd_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4156,7 +4156,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_03d778bd.png",
+                                        "filmStrip": "sh_meter_44x158_03d778bd_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4181,7 +4181,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_7d062693",
+                    "key": "shMeter_44x158_7d062693_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4212,7 +4212,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_7d062693.png",
+                                        "filmStrip": "sh_meter_44x158_7d062693_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4237,7 +4237,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_26aed6b7",
+                    "key": "shMeter_44x158_26aed6b7_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4268,7 +4268,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_26aed6b7.png",
+                                        "filmStrip": "sh_meter_44x158_26aed6b7_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4293,7 +4293,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_ad4a1390",
+                    "key": "shMeter_44x158_ad4a1390_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4324,7 +4324,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_ad4a1390.png",
+                                        "filmStrip": "sh_meter_44x158_ad4a1390_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4349,7 +4349,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_12712c16",
+                    "key": "shMeter_44x158_12712c16_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4380,7 +4380,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_12712c16.png",
+                                        "filmStrip": "sh_meter_44x158_12712c16_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4405,7 +4405,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_61444e45",
+                    "key": "shMeter_44x158_61444e45_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4436,7 +4436,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_61444e45.png",
+                                        "filmStrip": "sh_meter_44x158_61444e45_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4461,7 +4461,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_16f43e5f",
+                    "key": "shMeter_44x158_16f43e5f_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4492,7 +4492,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_16f43e5f.png",
+                                        "filmStrip": "sh_meter_44x158_16f43e5f_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4517,7 +4517,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_4ecdf6ec",
+                    "key": "shMeter_44x158_4ecdf6ec_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -4548,7 +4548,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_4ecdf6ec.png",
+                                        "filmStrip": "sh_meter_44x158_4ecdf6ec_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -4984,7 +4984,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "AMP ATTACK",
-                                    "type": "shSlider_v_14x130_n12v15_b86",
+                                    "type": "shSlider_v_14x130_ns12_vs15_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5014,7 +5014,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "AMP DECAY",
-                                    "type": "shSlider_v_14x130_n13v15_b86",
+                                    "type": "shSlider_v_14x130_ns13_vs15_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5044,7 +5044,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "AMP SUSTAIN",
-                                    "type": "shSlider_v_14x130_n11v15_b87",
+                                    "type": "shSlider_v_14x130_ns11_vs15_bw87",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5074,7 +5074,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "AMP RELEASE",
-                                    "type": "shSlider_v_14x130_n11v15_b87",
+                                    "type": "shSlider_v_14x130_ns11_vs15_bw87",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5326,7 +5326,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_a",
-                                    "type": "shMeter_44x158_13560c04",
+                                    "type": "shMeter_44x158_13560c04_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5356,7 +5356,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_87823f67",
+                                    "type": "shMeter_44x158_87823f67_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5388,7 +5388,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_30178983",
+                                    "type": "shMeter_44x158_30178983_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5420,7 +5420,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_7eb1efec",
+                                    "type": "shMeter_44x158_7eb1efec_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5452,7 +5452,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_f628a1c6",
+                                    "type": "shMeter_44x158_f628a1c6_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5484,7 +5484,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_245ea6f5",
+                                    "type": "shMeter_44x158_245ea6f5_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5516,7 +5516,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_15b3e7a3",
+                                    "type": "shMeter_44x158_15b3e7a3_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5548,7 +5548,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_973999d1",
+                                    "type": "shMeter_44x158_973999d1_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5580,7 +5580,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_8529018c",
+                                    "type": "shMeter_44x158_8529018c_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5612,7 +5612,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_6fbe03ec",
+                                    "type": "shMeter_44x158_6fbe03ec_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5644,7 +5644,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_93e4497c",
+                                    "type": "shMeter_44x158_93e4497c_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5676,7 +5676,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_596cff7b",
+                                    "type": "shMeter_44x158_596cff7b_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5708,7 +5708,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_ad8f74b3",
+                                    "type": "shMeter_44x158_ad8f74b3_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5740,7 +5740,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_fe5e2922",
+                                    "type": "shMeter_44x158_fe5e2922_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5772,7 +5772,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_a823618f",
+                                    "type": "shMeter_44x158_a823618f_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5804,7 +5804,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_8d44667e",
+                                    "type": "shMeter_44x158_8d44667e_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5836,7 +5836,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_2f3fc1b1",
+                                    "type": "shMeter_44x158_2f3fc1b1_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5868,7 +5868,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_8768de03",
+                                    "type": "shMeter_44x158_8768de03_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5900,7 +5900,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_85e07dca",
+                                    "type": "shMeter_44x158_85e07dca_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5932,7 +5932,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_57e55062",
+                                    "type": "shMeter_44x158_57e55062_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5964,7 +5964,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_5f898528",
+                                    "type": "shMeter_44x158_5f898528_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5996,7 +5996,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_4e096610",
+                                    "type": "shMeter_44x158_4e096610_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6028,7 +6028,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_0856107c",
+                                    "type": "shMeter_44x158_0856107c_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6060,7 +6060,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_ae170d2e",
+                                    "type": "shMeter_44x158_ae170d2e_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6092,7 +6092,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_dd148953",
+                                    "type": "shMeter_44x158_dd148953_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6124,7 +6124,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_aa432eb4",
+                                    "type": "shMeter_44x158_aa432eb4_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6156,7 +6156,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_03d778bd",
+                                    "type": "shMeter_44x158_03d778bd_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6188,7 +6188,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_7d062693",
+                                    "type": "shMeter_44x158_7d062693_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6220,7 +6220,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_26aed6b7",
+                                    "type": "shMeter_44x158_26aed6b7_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6252,7 +6252,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_ad4a1390",
+                                    "type": "shMeter_44x158_ad4a1390_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6284,7 +6284,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_12712c16",
+                                    "type": "shMeter_44x158_12712c16_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6316,7 +6316,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_d",
-                                    "type": "shMeter_44x158_61444e45",
+                                    "type": "shMeter_44x158_61444e45_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6348,7 +6348,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_s",
-                                    "type": "shMeter_44x158_16f43e5f",
+                                    "type": "shMeter_44x158_16f43e5f_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6380,7 +6380,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "aenv_r",
-                                    "type": "shMeter_44x158_4ecdf6ec",
+                                    "type": "shMeter_44x158_4ecdf6ec_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6827,7 +6827,7 @@
                     }
                 },
                 {
-                    "key": "shKnob34_e7608323_b119",
+                    "key": "shKnob34_e7608323_bw119",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -7021,7 +7021,7 @@
                     }
                 },
                 {
-                    "key": "shKnob34_e7608323_n16v22_b86",
+                    "key": "shKnob34_e7608323_ns16_vs22_bw86",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -7215,7 +7215,7 @@
                     }
                 },
                 {
-                    "key": "shKnob34_e7608323_b86",
+                    "key": "shKnob34_e7608323_bw86",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -7968,8 +7968,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_osc2_wave_0_on.png",
-                                        "offImage": "sh_popopt_1_osc2_wave_0_off.png",
+                                        "onImage": "sh_po_12_on.png",
+                                        "offImage": "sh_po_12_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 5,
                                         "handleName": "Data",
@@ -8036,8 +8036,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_osc2_wave_1_on.png",
-                                        "offImage": "sh_popopt_1_osc2_wave_1_off.png",
+                                        "onImage": "sh_po_13_on.png",
+                                        "offImage": "sh_po_13_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 5,
                                         "handleName": "Data",
@@ -8104,8 +8104,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_osc2_wave_2_on.png",
-                                        "offImage": "sh_popopt_1_osc2_wave_2_off.png",
+                                        "onImage": "sh_po_14_on.png",
+                                        "offImage": "sh_po_14_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 5,
                                         "handleName": "Data",
@@ -8172,8 +8172,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_osc2_wave_3_on.png",
-                                        "offImage": "sh_popopt_1_osc2_wave_3_off.png",
+                                        "onImage": "sh_po_15_on.png",
+                                        "offImage": "sh_po_15_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 5,
                                         "handleName": "Data",
@@ -8240,8 +8240,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_1_osc2_wave_4_on.png",
-                                        "offImage": "sh_popopt_1_osc2_wave_4_off.png",
+                                        "onImage": "sh_po_16_on.png",
+                                        "offImage": "sh_po_16_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 5,
                                         "handleName": "Data",
@@ -8320,7 +8320,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC1 TUNE",
-                                    "type": "shKnob34_e7608323_b119",
+                                    "type": "shKnob34_e7608323_bw119",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8350,7 +8350,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC1 FINE",
-                                    "type": "shKnob34_e7608323_b119",
+                                    "type": "shKnob34_e7608323_bw119",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8380,7 +8380,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC1 PW",
-                                    "type": "shKnob34_e7608323_b119",
+                                    "type": "shKnob34_e7608323_bw119",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8500,7 +8500,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC1 LEVEL",
-                                    "type": "shKnob34_e7608323_n16v22_b86",
+                                    "type": "shKnob34_e7608323_ns16_vs22_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8530,7 +8530,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC2 LEVEL",
-                                    "type": "shKnob34_e7608323_n16v22_b86",
+                                    "type": "shKnob34_e7608323_ns16_vs22_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8560,7 +8560,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "SUB LEVEL",
-                                    "type": "shKnob34_e7608323_b86",
+                                    "type": "shKnob34_e7608323_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8590,7 +8590,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "RING MOD",
-                                    "type": "shKnob34_e7608323_b86",
+                                    "type": "shKnob34_e7608323_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9055,7 +9055,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_14x130_n11v15_b86",
+                    "key": "shSlider_v_14x130_ns11_vs15_bw86",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -9148,7 +9148,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_14x130.png",
+                                        "filmStrip": "sh_slider_v_14x130_f94.png",
                                         "numFrames": 94,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9249,7 +9249,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_319ff4f0",
+                    "key": "shMeter_44x158_319ff4f0_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9280,7 +9280,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_319ff4f0.png",
+                                        "filmStrip": "sh_meter_44x158_319ff4f0_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9305,7 +9305,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_0593143b",
+                    "key": "shMeter_44x158_0593143b_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9336,7 +9336,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_0593143b.png",
+                                        "filmStrip": "sh_meter_44x158_0593143b_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9361,7 +9361,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_fd8c85cb",
+                    "key": "shMeter_44x158_fd8c85cb_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9392,7 +9392,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_fd8c85cb.png",
+                                        "filmStrip": "sh_meter_44x158_fd8c85cb_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9417,7 +9417,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_b72d1e53",
+                    "key": "shMeter_44x158_b72d1e53_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9448,7 +9448,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_b72d1e53.png",
+                                        "filmStrip": "sh_meter_44x158_b72d1e53_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9473,7 +9473,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_ba01caaa",
+                    "key": "shMeter_44x158_ba01caaa_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9504,7 +9504,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_ba01caaa.png",
+                                        "filmStrip": "sh_meter_44x158_ba01caaa_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9529,7 +9529,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_b4f7187e",
+                    "key": "shMeter_44x158_b4f7187e_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9560,7 +9560,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_b4f7187e.png",
+                                        "filmStrip": "sh_meter_44x158_b4f7187e_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9585,7 +9585,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_8063844b",
+                    "key": "shMeter_44x158_8063844b_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9616,7 +9616,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_8063844b.png",
+                                        "filmStrip": "sh_meter_44x158_8063844b_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9641,7 +9641,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_b5fb618c",
+                    "key": "shMeter_44x158_b5fb618c_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9672,7 +9672,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_b5fb618c.png",
+                                        "filmStrip": "sh_meter_44x158_b5fb618c_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9697,7 +9697,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_ac653359",
+                    "key": "shMeter_44x158_ac653359_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9728,7 +9728,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_ac653359.png",
+                                        "filmStrip": "sh_meter_44x158_ac653359_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9753,7 +9753,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_b21305c3",
+                    "key": "shMeter_44x158_b21305c3_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9784,7 +9784,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_b21305c3.png",
+                                        "filmStrip": "sh_meter_44x158_b21305c3_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9809,7 +9809,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_7dcc52c2",
+                    "key": "shMeter_44x158_7dcc52c2_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9840,7 +9840,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_7dcc52c2.png",
+                                        "filmStrip": "sh_meter_44x158_7dcc52c2_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9865,7 +9865,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_2820df95",
+                    "key": "shMeter_44x158_2820df95_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9896,7 +9896,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_2820df95.png",
+                                        "filmStrip": "sh_meter_44x158_2820df95_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9921,7 +9921,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_ea5b5293",
+                    "key": "shMeter_44x158_ea5b5293_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -9952,7 +9952,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_ea5b5293.png",
+                                        "filmStrip": "sh_meter_44x158_ea5b5293_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -9977,7 +9977,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_4c6bf370",
+                    "key": "shMeter_44x158_4c6bf370_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10008,7 +10008,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_4c6bf370.png",
+                                        "filmStrip": "sh_meter_44x158_4c6bf370_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10033,7 +10033,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_1de374ea",
+                    "key": "shMeter_44x158_1de374ea_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10064,7 +10064,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_1de374ea.png",
+                                        "filmStrip": "sh_meter_44x158_1de374ea_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10089,7 +10089,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_5d20d342",
+                    "key": "shMeter_44x158_5d20d342_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10120,7 +10120,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_5d20d342.png",
+                                        "filmStrip": "sh_meter_44x158_5d20d342_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10145,7 +10145,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_9abd0619",
+                    "key": "shMeter_44x158_9abd0619_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10176,7 +10176,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_9abd0619.png",
+                                        "filmStrip": "sh_meter_44x158_9abd0619_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10201,7 +10201,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_23209351",
+                    "key": "shMeter_44x158_23209351_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10232,7 +10232,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_23209351.png",
+                                        "filmStrip": "sh_meter_44x158_23209351_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10257,7 +10257,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_a3d70602",
+                    "key": "shMeter_44x158_a3d70602_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10288,7 +10288,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_a3d70602.png",
+                                        "filmStrip": "sh_meter_44x158_a3d70602_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10313,7 +10313,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_c5f217c5",
+                    "key": "shMeter_44x158_c5f217c5_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10344,7 +10344,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_c5f217c5.png",
+                                        "filmStrip": "sh_meter_44x158_c5f217c5_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10369,7 +10369,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_308ab2dd",
+                    "key": "shMeter_44x158_308ab2dd_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10400,7 +10400,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_308ab2dd.png",
+                                        "filmStrip": "sh_meter_44x158_308ab2dd_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10425,7 +10425,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_2c32acf5",
+                    "key": "shMeter_44x158_2c32acf5_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10456,7 +10456,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_2c32acf5.png",
+                                        "filmStrip": "sh_meter_44x158_2c32acf5_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10481,7 +10481,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_0197f661",
+                    "key": "shMeter_44x158_0197f661_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10512,7 +10512,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_0197f661.png",
+                                        "filmStrip": "sh_meter_44x158_0197f661_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10537,7 +10537,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_3aa5af65",
+                    "key": "shMeter_44x158_3aa5af65_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10568,7 +10568,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_3aa5af65.png",
+                                        "filmStrip": "sh_meter_44x158_3aa5af65_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10593,7 +10593,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_f017f403",
+                    "key": "shMeter_44x158_f017f403_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10624,7 +10624,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_f017f403.png",
+                                        "filmStrip": "sh_meter_44x158_f017f403_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10649,7 +10649,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_2726033e",
+                    "key": "shMeter_44x158_2726033e_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10680,7 +10680,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_2726033e.png",
+                                        "filmStrip": "sh_meter_44x158_2726033e_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10705,7 +10705,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_1bb2331b",
+                    "key": "shMeter_44x158_1bb2331b_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10736,7 +10736,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_1bb2331b.png",
+                                        "filmStrip": "sh_meter_44x158_1bb2331b_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10761,7 +10761,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_0fff4c48",
+                    "key": "shMeter_44x158_0fff4c48_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10792,7 +10792,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_0fff4c48.png",
+                                        "filmStrip": "sh_meter_44x158_0fff4c48_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10817,7 +10817,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_fff0b1f0",
+                    "key": "shMeter_44x158_fff0b1f0_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10848,7 +10848,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_fff0b1f0.png",
+                                        "filmStrip": "sh_meter_44x158_fff0b1f0_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10873,7 +10873,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_b1c27769",
+                    "key": "shMeter_44x158_b1c27769_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10904,7 +10904,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_b1c27769.png",
+                                        "filmStrip": "sh_meter_44x158_b1c27769_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10929,7 +10929,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_fdab302b",
+                    "key": "shMeter_44x158_fdab302b_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -10960,7 +10960,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_fdab302b.png",
+                                        "filmStrip": "sh_meter_44x158_fdab302b_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -10985,7 +10985,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_c0d8bdc2",
+                    "key": "shMeter_44x158_c0d8bdc2_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -11016,7 +11016,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_c0d8bdc2.png",
+                                        "filmStrip": "sh_meter_44x158_c0d8bdc2_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -11041,7 +11041,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_4207e33d",
+                    "key": "shMeter_44x158_4207e33d_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -11072,7 +11072,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_4207e33d.png",
+                                        "filmStrip": "sh_meter_44x158_4207e33d_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -11097,7 +11097,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_44x158_9e396757",
+                    "key": "shMeter_44x158_9e396757_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -11128,7 +11128,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_44x158_9e396757.png",
+                                        "filmStrip": "sh_meter_44x158_9e396757_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -11537,7 +11537,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT ATTACK",
-                                    "type": "shSlider_v_14x130_n12v15_b86",
+                                    "type": "shSlider_v_14x130_ns12_vs15_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11567,7 +11567,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT DECAY",
-                                    "type": "shSlider_v_14x130_n13v15_b86",
+                                    "type": "shSlider_v_14x130_ns13_vs15_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11597,7 +11597,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT SUSTAIN",
-                                    "type": "shSlider_v_14x130_n11v15_b86",
+                                    "type": "shSlider_v_14x130_ns11_vs15_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11627,7 +11627,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT RELEASE",
-                                    "type": "shSlider_v_14x130_n11v15_b86",
+                                    "type": "shSlider_v_14x130_ns11_vs15_bw86",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11657,7 +11657,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_a",
-                                    "type": "shMeter_44x158_319ff4f0",
+                                    "type": "shMeter_44x158_319ff4f0_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11687,7 +11687,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_0593143b",
+                                    "type": "shMeter_44x158_0593143b_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11719,7 +11719,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_fd8c85cb",
+                                    "type": "shMeter_44x158_fd8c85cb_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11751,7 +11751,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_b72d1e53",
+                                    "type": "shMeter_44x158_b72d1e53_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11783,7 +11783,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_ba01caaa",
+                                    "type": "shMeter_44x158_ba01caaa_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11815,7 +11815,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_b4f7187e",
+                                    "type": "shMeter_44x158_b4f7187e_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11847,7 +11847,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_8063844b",
+                                    "type": "shMeter_44x158_8063844b_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11879,7 +11879,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_b5fb618c",
+                                    "type": "shMeter_44x158_b5fb618c_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11911,7 +11911,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_ac653359",
+                                    "type": "shMeter_44x158_ac653359_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11943,7 +11943,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_b21305c3",
+                                    "type": "shMeter_44x158_b21305c3_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -11975,7 +11975,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_7dcc52c2",
+                                    "type": "shMeter_44x158_7dcc52c2_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12007,7 +12007,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_2820df95",
+                                    "type": "shMeter_44x158_2820df95_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12039,7 +12039,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_ea5b5293",
+                                    "type": "shMeter_44x158_ea5b5293_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12071,7 +12071,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_4c6bf370",
+                                    "type": "shMeter_44x158_4c6bf370_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12103,7 +12103,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_1de374ea",
+                                    "type": "shMeter_44x158_1de374ea_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12135,7 +12135,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_5d20d342",
+                                    "type": "shMeter_44x158_5d20d342_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12167,7 +12167,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_9abd0619",
+                                    "type": "shMeter_44x158_9abd0619_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12199,7 +12199,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_23209351",
+                                    "type": "shMeter_44x158_23209351_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12231,7 +12231,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_a3d70602",
+                                    "type": "shMeter_44x158_a3d70602_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12263,7 +12263,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_c5f217c5",
+                                    "type": "shMeter_44x158_c5f217c5_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12295,7 +12295,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_308ab2dd",
+                                    "type": "shMeter_44x158_308ab2dd_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12327,7 +12327,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_2c32acf5",
+                                    "type": "shMeter_44x158_2c32acf5_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12359,7 +12359,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_0197f661",
+                                    "type": "shMeter_44x158_0197f661_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12391,7 +12391,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_3aa5af65",
+                                    "type": "shMeter_44x158_3aa5af65_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12423,7 +12423,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_f017f403",
+                                    "type": "shMeter_44x158_f017f403_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12455,7 +12455,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_2726033e",
+                                    "type": "shMeter_44x158_2726033e_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12487,7 +12487,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_1bb2331b",
+                                    "type": "shMeter_44x158_1bb2331b_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12519,7 +12519,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_0fff4c48",
+                                    "type": "shMeter_44x158_0fff4c48_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12551,7 +12551,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_fff0b1f0",
+                                    "type": "shMeter_44x158_fff0b1f0_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12583,7 +12583,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_b1c27769",
+                                    "type": "shMeter_44x158_b1c27769_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12615,7 +12615,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_fdab302b",
+                                    "type": "shMeter_44x158_fdab302b_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12647,7 +12647,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_d",
-                                    "type": "shMeter_44x158_c0d8bdc2",
+                                    "type": "shMeter_44x158_c0d8bdc2_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12679,7 +12679,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_s",
-                                    "type": "shMeter_44x158_4207e33d",
+                                    "type": "shMeter_44x158_4207e33d_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12711,7 +12711,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "fenv_r",
-                                    "type": "shMeter_44x158_9e396757",
+                                    "type": "shMeter_44x158_9e396757_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -12952,8 +12952,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_wave_0_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_wave_0_off.png",
+                                        "onImage": "sh_po_17_on.png",
+                                        "offImage": "sh_po_17_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -13020,8 +13020,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_wave_1_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_wave_1_off.png",
+                                        "onImage": "sh_po_18_on.png",
+                                        "offImage": "sh_po_18_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -13088,8 +13088,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_wave_2_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_wave_2_off.png",
+                                        "onImage": "sh_po_19_on.png",
+                                        "offImage": "sh_po_19_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -13156,8 +13156,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_wave_3_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_wave_3_off.png",
+                                        "onImage": "sh_po_20_on.png",
+                                        "offImage": "sh_po_20_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -13224,8 +13224,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_wave_4_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_wave_4_off.png",
+                                        "onImage": "sh_po_21_on.png",
+                                        "offImage": "sh_po_21_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -13292,8 +13292,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_wave_5_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_wave_5_off.png",
+                                        "onImage": "sh_po_22_on.png",
+                                        "offImage": "sh_po_22_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -13528,8 +13528,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_dest_0_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_dest_0_off.png",
+                                        "onImage": "sh_po_23_on.png",
+                                        "offImage": "sh_po_23_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -13596,8 +13596,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_dest_1_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_dest_1_off.png",
+                                        "onImage": "sh_po_24_on.png",
+                                        "offImage": "sh_po_24_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -13664,8 +13664,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_dest_2_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_dest_2_off.png",
+                                        "onImage": "sh_po_25_on.png",
+                                        "offImage": "sh_po_25_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -13732,8 +13732,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_dest_3_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_dest_3_off.png",
+                                        "onImage": "sh_po_26_on.png",
+                                        "offImage": "sh_po_26_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -13800,8 +13800,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_dest_4_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_dest_4_off.png",
+                                        "onImage": "sh_po_27_on.png",
+                                        "offImage": "sh_po_27_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -13868,8 +13868,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_dest_5_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_dest_5_off.png",
+                                        "onImage": "sh_po_28_on.png",
+                                        "offImage": "sh_po_28_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -13936,8 +13936,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_dest_6_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_dest_6_off.png",
+                                        "onImage": "sh_po_29_on.png",
+                                        "offImage": "sh_po_29_off.png",
                                         "buttonId": 6,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -14004,8 +14004,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo1_dest_7_on.png",
-                                        "offImage": "sh_popopt_3_lfo1_dest_7_off.png",
+                                        "onImage": "sh_po_30_on.png",
+                                        "offImage": "sh_po_30_off.png",
                                         "buttonId": 7,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -14125,8 +14125,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_wave_0_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_wave_0_off.png",
+                                        "onImage": "sh_po_31_on.png",
+                                        "offImage": "sh_po_31_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -14193,8 +14193,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_wave_1_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_wave_1_off.png",
+                                        "onImage": "sh_po_32_on.png",
+                                        "offImage": "sh_po_32_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -14261,8 +14261,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_wave_2_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_wave_2_off.png",
+                                        "onImage": "sh_po_33_on.png",
+                                        "offImage": "sh_po_33_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -14329,8 +14329,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_wave_3_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_wave_3_off.png",
+                                        "onImage": "sh_po_34_on.png",
+                                        "offImage": "sh_po_34_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -14397,8 +14397,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_wave_4_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_wave_4_off.png",
+                                        "onImage": "sh_po_35_on.png",
+                                        "offImage": "sh_po_35_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -14465,8 +14465,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_wave_5_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_wave_5_off.png",
+                                        "onImage": "sh_po_36_on.png",
+                                        "offImage": "sh_po_36_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -14586,8 +14586,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_dest_0_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_dest_0_off.png",
+                                        "onImage": "sh_po_23_on.png",
+                                        "offImage": "sh_po_23_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -14654,8 +14654,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_dest_1_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_dest_1_off.png",
+                                        "onImage": "sh_po_24_on.png",
+                                        "offImage": "sh_po_24_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -14722,8 +14722,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_dest_2_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_dest_2_off.png",
+                                        "onImage": "sh_po_25_on.png",
+                                        "offImage": "sh_po_25_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -14790,8 +14790,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_dest_3_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_dest_3_off.png",
+                                        "onImage": "sh_po_26_on.png",
+                                        "offImage": "sh_po_26_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -14858,8 +14858,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_dest_4_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_dest_4_off.png",
+                                        "onImage": "sh_po_37_on.png",
+                                        "offImage": "sh_po_37_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -14926,8 +14926,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_dest_5_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_dest_5_off.png",
+                                        "onImage": "sh_po_38_on.png",
+                                        "offImage": "sh_po_38_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -14994,8 +14994,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_dest_6_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_dest_6_off.png",
+                                        "onImage": "sh_po_39_on.png",
+                                        "offImage": "sh_po_39_off.png",
                                         "buttonId": 6,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -15062,8 +15062,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_3_lfo2_dest_7_on.png",
-                                        "offImage": "sh_popopt_3_lfo2_dest_7_off.png",
+                                        "onImage": "sh_po_30_on.png",
+                                        "offImage": "sh_po_30_off.png",
                                         "buttonId": 7,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -16601,7 +16601,7 @@
                     }
                 },
                 {
-                    "key": "shKnob34_e7608323_n15v22",
+                    "key": "shKnob34_e7608323_ns15_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -16890,8 +16890,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_free_dest_0_on.png",
-                                        "offImage": "sh_popopt_4_free_dest_0_off.png",
+                                        "onImage": "sh_po_40_on.png",
+                                        "offImage": "sh_po_40_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -16958,8 +16958,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_free_dest_1_on.png",
-                                        "offImage": "sh_popopt_4_free_dest_1_off.png",
+                                        "onImage": "sh_po_24_on.png",
+                                        "offImage": "sh_po_24_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17026,8 +17026,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_free_dest_2_on.png",
-                                        "offImage": "sh_popopt_4_free_dest_2_off.png",
+                                        "onImage": "sh_po_25_on.png",
+                                        "offImage": "sh_po_25_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17094,8 +17094,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_free_dest_3_on.png",
-                                        "offImage": "sh_popopt_4_free_dest_3_off.png",
+                                        "onImage": "sh_po_26_on.png",
+                                        "offImage": "sh_po_26_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17162,8 +17162,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_free_dest_4_on.png",
-                                        "offImage": "sh_popopt_4_free_dest_4_off.png",
+                                        "onImage": "sh_po_27_on.png",
+                                        "offImage": "sh_po_27_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17230,8 +17230,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_free_dest_5_on.png",
-                                        "offImage": "sh_popopt_4_free_dest_5_off.png",
+                                        "onImage": "sh_po_28_on.png",
+                                        "offImage": "sh_po_28_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17351,8 +17351,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_speed_0_on.png",
-                                        "offImage": "sh_popopt_4_env_speed_0_off.png",
+                                        "onImage": "sh_po_41_on.png",
+                                        "offImage": "sh_po_41_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17419,8 +17419,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_speed_1_on.png",
-                                        "offImage": "sh_popopt_4_env_speed_1_off.png",
+                                        "onImage": "sh_po_42_on.png",
+                                        "offImage": "sh_po_42_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17487,8 +17487,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_speed_2_on.png",
-                                        "offImage": "sh_popopt_4_env_speed_2_off.png",
+                                        "onImage": "sh_po_43_on.png",
+                                        "offImage": "sh_po_43_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17555,8 +17555,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_speed_3_on.png",
-                                        "offImage": "sh_popopt_4_env_speed_3_off.png",
+                                        "onImage": "sh_po_44_on.png",
+                                        "offImage": "sh_po_44_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17623,8 +17623,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_speed_4_on.png",
-                                        "offImage": "sh_popopt_4_env_speed_4_off.png",
+                                        "onImage": "sh_po_45_on.png",
+                                        "offImage": "sh_po_45_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17691,8 +17691,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_speed_5_on.png",
-                                        "offImage": "sh_popopt_4_env_speed_5_off.png",
+                                        "onImage": "sh_po_46_on.png",
+                                        "offImage": "sh_po_46_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 6,
                                         "handleName": "Data",
@@ -17812,8 +17812,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_dest_0_on.png",
-                                        "offImage": "sh_popopt_4_env_dest_0_off.png",
+                                        "onImage": "sh_po_40_on.png",
+                                        "offImage": "sh_po_40_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -17880,8 +17880,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_dest_1_on.png",
-                                        "offImage": "sh_popopt_4_env_dest_1_off.png",
+                                        "onImage": "sh_po_24_on.png",
+                                        "offImage": "sh_po_24_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -17948,8 +17948,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_dest_2_on.png",
-                                        "offImage": "sh_popopt_4_env_dest_2_off.png",
+                                        "onImage": "sh_po_25_on.png",
+                                        "offImage": "sh_po_25_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -18016,8 +18016,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_dest_3_on.png",
-                                        "offImage": "sh_popopt_4_env_dest_3_off.png",
+                                        "onImage": "sh_po_26_on.png",
+                                        "offImage": "sh_po_26_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -18084,8 +18084,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_dest_4_on.png",
-                                        "offImage": "sh_popopt_4_env_dest_4_off.png",
+                                        "onImage": "sh_po_30_on.png",
+                                        "offImage": "sh_po_30_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -18152,8 +18152,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_dest_5_on.png",
-                                        "offImage": "sh_popopt_4_env_dest_5_off.png",
+                                        "onImage": "sh_po_28_on.png",
+                                        "offImage": "sh_po_28_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -18220,8 +18220,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_dest_6_on.png",
-                                        "offImage": "sh_popopt_4_env_dest_6_off.png",
+                                        "onImage": "sh_po_47_on.png",
+                                        "offImage": "sh_po_47_off.png",
                                         "buttonId": 6,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -18288,8 +18288,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_4_env_dest_7_on.png",
-                                        "offImage": "sh_popopt_4_env_dest_7_off.png",
+                                        "onImage": "sh_po_38_on.png",
+                                        "offImage": "sh_po_38_off.png",
                                         "buttonId": 7,
                                         "numButtonsInGroup": 8,
                                         "handleName": "Data",
@@ -18368,7 +18368,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "ENV3 ATTACK",
-                                    "type": "shKnob34_e7608323_n15v22",
+                                    "type": "shKnob34_e7608323_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -18428,7 +18428,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "ENV3 AMOUNT",
-                                    "type": "shKnob34_e7608323_n15v22",
+                                    "type": "shKnob34_e7608323_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -18488,7 +18488,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "WHEEL CUTOFF",
-                                    "type": "shKnob34_e7608323_n15v22",
+                                    "type": "shKnob34_e7608323_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"

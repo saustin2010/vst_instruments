@@ -9,7 +9,7 @@
             ],
             "localComponentDefinitions": [
                 {
-                    "key": "shKnob42_dee6a497_n17v19_b110",
+                    "key": "shKnob42_dee6a497_ns17_vs19_bw110",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -203,7 +203,7 @@
                     }
                 },
                 {
-                    "key": "shKnob35_e7608323_n12v16_b96",
+                    "key": "shKnob35_e7608323_ns12_vs16_bw96",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -397,7 +397,7 @@
                     }
                 },
                 {
-                    "key": "shKnob28_2a44b74b_n13v15_b89",
+                    "key": "shKnob28_2a44b74b_ns13_vs15_bw89",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -591,7 +591,7 @@
                     }
                 },
                 {
-                    "key": "shKnob28_2a44b74b_n11v15_b89",
+                    "key": "shKnob28_2a44b74b_ns11_vs15_bw89",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -785,7 +785,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n11v22",
+                    "key": "shKnob32_83018408_ns11_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -979,7 +979,7 @@
                     }
                 },
                 {
-                    "key": "shKnob30_24dfee9e_n12v22",
+                    "key": "shKnob30_24dfee9e_ns12_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1503,7 +1503,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_26x150_b133",
+                    "key": "shSlider_v_26x150_bw133",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1596,7 +1596,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_26x150.png",
+                                        "filmStrip": "sh_slider_v_26x150_f81.png",
                                         "numFrames": 81,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -1697,7 +1697,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_26x150_b136",
+                    "key": "shSlider_v_26x150_bw136",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1790,7 +1790,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_26x150.png",
+                                        "filmStrip": "sh_slider_v_26x150_f81.png",
                                         "numFrames": 81,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -1891,7 +1891,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_26x150_b141",
+                    "key": "shSlider_v_26x150_bw141",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1984,7 +1984,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_26x150.png",
+                                        "filmStrip": "sh_slider_v_26x150_f81.png",
                                         "numFrames": 81,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -2390,7 +2390,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "CUTOFF",
-                                    "type": "shKnob42_dee6a497_n17v19_b110",
+                                    "type": "shKnob42_dee6a497_ns17_vs19_bw110",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2420,7 +2420,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "RESONANCE",
-                                    "type": "shKnob35_e7608323_n12v16_b96",
+                                    "type": "shKnob35_e7608323_ns12_vs16_bw96",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2450,7 +2450,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "ENV AMT",
-                                    "type": "shKnob28_2a44b74b_n13v15_b89",
+                                    "type": "shKnob28_2a44b74b_ns13_vs15_bw89",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2480,7 +2480,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "KEY TRACK",
-                                    "type": "shKnob28_2a44b74b_n11v15_b89",
+                                    "type": "shKnob28_2a44b74b_ns11_vs15_bw89",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2510,7 +2510,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OCTAVE",
-                                    "type": "shKnob32_83018408_n11v22",
+                                    "type": "shKnob32_83018408_ns11_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2540,7 +2540,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "VELO SENS",
-                                    "type": "shKnob30_24dfee9e_n12v22",
+                                    "type": "shKnob30_24dfee9e_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2660,7 +2660,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "ATTACK",
-                                    "type": "shSlider_v_26x150_b133",
+                                    "type": "shSlider_v_26x150_bw133",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2690,7 +2690,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "DECAY",
-                                    "type": "shSlider_v_26x150_b133",
+                                    "type": "shSlider_v_26x150_bw133",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2720,7 +2720,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "SUSTAIN",
-                                    "type": "shSlider_v_26x150_b136",
+                                    "type": "shSlider_v_26x150_bw136",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2750,7 +2750,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "RELEASE",
-                                    "type": "shSlider_v_26x150_b141",
+                                    "type": "shSlider_v_26x150_bw141",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2873,7 +2873,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n13v19_b101",
+                    "key": "shKnob32_83018408_ns13_vs19_bw101",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3067,7 +3067,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n13v19_b84",
+                    "key": "shKnob32_83018408_ns13_vs19_bw84",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3261,7 +3261,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n15v19_b110",
+                    "key": "shKnob32_83018408_ns15_vs19_bw110",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3455,7 +3455,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n16v19_b109",
+                    "key": "shKnob32_83018408_ns16_vs19_bw109",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3649,7 +3649,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n13v19_b109",
+                    "key": "shKnob32_83018408_ns13_vs19_bw109",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3843,7 +3843,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n13v19_b110",
+                    "key": "shKnob32_83018408_ns13_vs19_bw110",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -4037,7 +4037,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_b110",
+                    "key": "shKnob32_83018408_bw110",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -4231,7 +4231,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n11v16_b91",
+                    "key": "shKnob32_83018408_ns11_vs16_bw91",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -4978,7 +4978,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_32x240_b201",
+                    "key": "shSlider_v_32x240_bw201",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -5071,7 +5071,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_32x240.png",
+                                        "filmStrip": "sh_slider_v_32x240_f51.png",
                                         "numFrames": 51,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -5172,7 +5172,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_32x240_b197",
+                    "key": "shSlider_v_32x240_bw197",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -5265,7 +5265,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_32x240.png",
+                                        "filmStrip": "sh_slider_v_32x240_f51.png",
                                         "numFrames": 51,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -5366,7 +5366,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_32x240_b175",
+                    "key": "shSlider_v_32x240_bw175",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -5459,7 +5459,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_32x240.png",
+                                        "filmStrip": "sh_slider_v_32x240_f51.png",
                                         "numFrames": 51,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -5614,7 +5614,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "TRANSPOSE",
-                                    "type": "shKnob32_83018408_n13v19_b101",
+                                    "type": "shKnob32_83018408_ns13_vs19_bw101",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5644,7 +5644,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FINE TUNE",
-                                    "type": "shKnob32_83018408_n13v19_b84",
+                                    "type": "shKnob32_83018408_ns13_vs19_bw84",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5674,7 +5674,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT ATTACK",
-                                    "type": "shKnob32_83018408_n15v19_b110",
+                                    "type": "shKnob32_83018408_ns15_vs19_bw110",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5704,7 +5704,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT DECAY",
-                                    "type": "shKnob32_83018408_n16v19_b109",
+                                    "type": "shKnob32_83018408_ns16_vs19_bw109",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5734,7 +5734,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT SUSTAIN",
-                                    "type": "shKnob32_83018408_n13v19_b109",
+                                    "type": "shKnob32_83018408_ns13_vs19_bw109",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5764,7 +5764,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FLT RELEASE",
-                                    "type": "shKnob32_83018408_n13v19_b110",
+                                    "type": "shKnob32_83018408_ns13_vs19_bw110",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5794,7 +5794,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "PULSE WIDTH",
-                                    "type": "shKnob32_83018408_b110",
+                                    "type": "shKnob32_83018408_bw110",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5824,7 +5824,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "PWM LFO",
-                                    "type": "shKnob32_83018408_n11v16_b91",
+                                    "type": "shKnob32_83018408_ns11_vs16_bw91",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5854,7 +5854,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "PWM ENV",
-                                    "type": "shKnob32_83018408_n11v16_b91",
+                                    "type": "shKnob32_83018408_ns11_vs16_bw91",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6094,7 +6094,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "SAW WAVE",
-                                    "type": "shSlider_v_32x240_b201",
+                                    "type": "shSlider_v_32x240_bw201",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6124,7 +6124,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "PULSE / SQR",
-                                    "type": "shSlider_v_32x240_b197",
+                                    "type": "shSlider_v_32x240_bw197",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6154,7 +6154,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "SUB OSC",
-                                    "type": "shSlider_v_32x240_b175",
+                                    "type": "shSlider_v_32x240_bw175",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6184,7 +6184,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "NOISE",
-                                    "type": "shSlider_v_32x240_b175",
+                                    "type": "shSlider_v_32x240_bw175",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -6407,7 +6407,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_83018408_n14v22",
+                    "key": "shKnob32_83018408_ns14_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -7183,7 +7183,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "VEL FILTER",
-                                    "type": "shKnob32_83018408_n11v22",
+                                    "type": "shKnob32_83018408_ns11_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -7213,7 +7213,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "VOL CORRECT",
-                                    "type": "shKnob32_83018408_n11v22",
+                                    "type": "shKnob32_83018408_ns11_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -7243,7 +7243,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "DECLICK",
-                                    "type": "shKnob32_83018408_n14v22",
+                                    "type": "shKnob32_83018408_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"

@@ -785,7 +785,7 @@
                     }
                 },
                 {
-                    "key": "shKnob48_24dfee9e_n16v16_b106",
+                    "key": "shKnob48_24dfee9e_ns16_vs16_bw106",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -979,7 +979,7 @@
                     }
                 },
                 {
-                    "key": "shKnob36_74fb1723_n11v14_b82",
+                    "key": "shKnob36_74fb1723_ns11_vs14_bw82",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1173,7 +1173,7 @@
                     }
                 },
                 {
-                    "key": "shKnob36_9183c642_n11v14_b82",
+                    "key": "shKnob36_9183c642_ns11_vs14_bw82",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1367,7 +1367,7 @@
                     }
                 },
                 {
-                    "key": "shSlider_v_12x189_b138",
+                    "key": "shSlider_v_12x189_bw138",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1460,7 +1460,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_slider_v_12x189.png",
+                                        "filmStrip": "sh_slider_v_12x189_f65.png",
                                         "numFrames": 65,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -1986,7 +1986,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "CUTOFF",
-                                    "type": "shKnob48_24dfee9e_n16v16_b106",
+                                    "type": "shKnob48_24dfee9e_ns16_vs16_bw106",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2016,7 +2016,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "RESONANCE",
-                                    "type": "shKnob36_74fb1723_n11v14_b82",
+                                    "type": "shKnob36_74fb1723_ns11_vs14_bw82",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2046,7 +2046,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "ENV MOD",
-                                    "type": "shKnob36_9183c642_n11v14_b82",
+                                    "type": "shKnob36_9183c642_ns11_vs14_bw82",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2076,7 +2076,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "ATTACK",
-                                    "type": "shSlider_v_12x189_b138",
+                                    "type": "shSlider_v_12x189_bw138",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2106,7 +2106,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "DECAY",
-                                    "type": "shSlider_v_12x189_b138",
+                                    "type": "shSlider_v_12x189_bw138",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2136,7 +2136,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "SUSTAIN",
-                                    "type": "shSlider_v_12x189_b138",
+                                    "type": "shSlider_v_12x189_bw138",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2166,7 +2166,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "RELEASE",
-                                    "type": "shSlider_v_12x189_b138",
+                                    "type": "shSlider_v_12x189_bw138",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -2483,7 +2483,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_a182ae55_n16v22",
+                    "key": "shKnob32_a182ae55_ns16_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -2677,7 +2677,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_a182ae55_n14v22",
+                    "key": "shKnob32_a182ae55_ns14_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -2871,7 +2871,7 @@
                     }
                 },
                 {
-                    "key": "shKnob32_a182ae55_n15v22",
+                    "key": "shKnob32_a182ae55_ns15_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -3359,7 +3359,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "CHORUS",
-                                    "type": "shKnob32_a182ae55_n16v22",
+                                    "type": "shKnob32_a182ae55_ns16_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -3389,7 +3389,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "CHORUS DEPTH",
-                                    "type": "shKnob32_a182ae55_n14v22",
+                                    "type": "shKnob32_a182ae55_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -3479,7 +3479,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "DELAY FBK",
-                                    "type": "shKnob32_a182ae55_n15v22",
+                                    "type": "shKnob32_a182ae55_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"

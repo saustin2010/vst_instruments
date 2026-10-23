@@ -203,7 +203,7 @@
                     }
                 },
                 {
-                    "key": "shKnob37_dee6a497_n14v22",
+                    "key": "shKnob37_dee6a497_ns14_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -397,7 +397,7 @@
                     }
                 },
                 {
-                    "key": "shKnob37_dee6a497_n16v22",
+                    "key": "shKnob37_dee6a497_ns16_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -591,7 +591,7 @@
                     }
                 },
                 {
-                    "key": "shKnob37_dee6a497_n12v22",
+                    "key": "shKnob37_dee6a497_ns12_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -785,7 +785,7 @@
                     }
                 },
                 {
-                    "key": "shKnob37_dee6a497_n15v22",
+                    "key": "shKnob37_dee6a497_ns15_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -979,7 +979,7 @@
                     }
                 },
                 {
-                    "key": "shKnob41_e7608323_n13v22",
+                    "key": "shKnob41_e7608323_ns13_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -1907,8 +1907,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_0_on.png",
-                                        "offImage": "sh_popopt_0_preset_0_off.png",
+                                        "onImage": "sh_po_0_on.png",
+                                        "offImage": "sh_po_0_off.png",
                                         "buttonId": 0,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -1975,8 +1975,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_1_on.png",
-                                        "offImage": "sh_popopt_0_preset_1_off.png",
+                                        "onImage": "sh_po_1_on.png",
+                                        "offImage": "sh_po_1_off.png",
                                         "buttonId": 1,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2043,8 +2043,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_2_on.png",
-                                        "offImage": "sh_popopt_0_preset_2_off.png",
+                                        "onImage": "sh_po_2_on.png",
+                                        "offImage": "sh_po_2_off.png",
                                         "buttonId": 2,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2111,8 +2111,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_3_on.png",
-                                        "offImage": "sh_popopt_0_preset_3_off.png",
+                                        "onImage": "sh_po_3_on.png",
+                                        "offImage": "sh_po_3_off.png",
                                         "buttonId": 3,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2179,8 +2179,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_4_on.png",
-                                        "offImage": "sh_popopt_0_preset_4_off.png",
+                                        "onImage": "sh_po_4_on.png",
+                                        "offImage": "sh_po_4_off.png",
                                         "buttonId": 4,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2247,8 +2247,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_5_on.png",
-                                        "offImage": "sh_popopt_0_preset_5_off.png",
+                                        "onImage": "sh_po_5_on.png",
+                                        "offImage": "sh_po_5_off.png",
                                         "buttonId": 5,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2315,8 +2315,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_6_on.png",
-                                        "offImage": "sh_popopt_0_preset_6_off.png",
+                                        "onImage": "sh_po_6_on.png",
+                                        "offImage": "sh_po_6_off.png",
                                         "buttonId": 6,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2383,8 +2383,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_7_on.png",
-                                        "offImage": "sh_popopt_0_preset_7_off.png",
+                                        "onImage": "sh_po_7_on.png",
+                                        "offImage": "sh_po_7_off.png",
                                         "buttonId": 7,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2451,8 +2451,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_8_on.png",
-                                        "offImage": "sh_popopt_0_preset_8_off.png",
+                                        "onImage": "sh_po_8_on.png",
+                                        "offImage": "sh_po_8_off.png",
                                         "buttonId": 8,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2519,8 +2519,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_9_on.png",
-                                        "offImage": "sh_popopt_0_preset_9_off.png",
+                                        "onImage": "sh_po_9_on.png",
+                                        "offImage": "sh_po_9_off.png",
                                         "buttonId": 9,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2587,8 +2587,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_10_on.png",
-                                        "offImage": "sh_popopt_0_preset_10_off.png",
+                                        "onImage": "sh_po_10_on.png",
+                                        "offImage": "sh_po_10_off.png",
                                         "buttonId": 10,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2655,8 +2655,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_11_on.png",
-                                        "offImage": "sh_popopt_0_preset_11_off.png",
+                                        "onImage": "sh_po_11_on.png",
+                                        "offImage": "sh_po_11_off.png",
                                         "buttonId": 11,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2723,8 +2723,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_12_on.png",
-                                        "offImage": "sh_popopt_0_preset_12_off.png",
+                                        "onImage": "sh_po_12_on.png",
+                                        "offImage": "sh_po_12_off.png",
                                         "buttonId": 12,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2791,8 +2791,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_13_on.png",
-                                        "offImage": "sh_popopt_0_preset_13_off.png",
+                                        "onImage": "sh_po_13_on.png",
+                                        "offImage": "sh_po_13_off.png",
                                         "buttonId": 13,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2859,8 +2859,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_14_on.png",
-                                        "offImage": "sh_popopt_0_preset_14_off.png",
+                                        "onImage": "sh_po_14_on.png",
+                                        "offImage": "sh_po_14_off.png",
                                         "buttonId": 14,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2927,8 +2927,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_15_on.png",
-                                        "offImage": "sh_popopt_0_preset_15_off.png",
+                                        "onImage": "sh_po_15_on.png",
+                                        "offImage": "sh_po_15_off.png",
                                         "buttonId": 15,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -2995,8 +2995,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_16_on.png",
-                                        "offImage": "sh_popopt_0_preset_16_off.png",
+                                        "onImage": "sh_po_16_on.png",
+                                        "offImage": "sh_po_16_off.png",
                                         "buttonId": 16,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3063,8 +3063,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_17_on.png",
-                                        "offImage": "sh_popopt_0_preset_17_off.png",
+                                        "onImage": "sh_po_17_on.png",
+                                        "offImage": "sh_po_17_off.png",
                                         "buttonId": 17,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3131,8 +3131,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_18_on.png",
-                                        "offImage": "sh_popopt_0_preset_18_off.png",
+                                        "onImage": "sh_po_18_on.png",
+                                        "offImage": "sh_po_18_off.png",
                                         "buttonId": 18,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3199,8 +3199,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_19_on.png",
-                                        "offImage": "sh_popopt_0_preset_19_off.png",
+                                        "onImage": "sh_po_19_on.png",
+                                        "offImage": "sh_po_19_off.png",
                                         "buttonId": 19,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3267,8 +3267,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_20_on.png",
-                                        "offImage": "sh_popopt_0_preset_20_off.png",
+                                        "onImage": "sh_po_20_on.png",
+                                        "offImage": "sh_po_20_off.png",
                                         "buttonId": 20,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3335,8 +3335,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_21_on.png",
-                                        "offImage": "sh_popopt_0_preset_21_off.png",
+                                        "onImage": "sh_po_21_on.png",
+                                        "offImage": "sh_po_21_off.png",
                                         "buttonId": 21,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3403,8 +3403,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_22_on.png",
-                                        "offImage": "sh_popopt_0_preset_22_off.png",
+                                        "onImage": "sh_po_22_on.png",
+                                        "offImage": "sh_po_22_off.png",
                                         "buttonId": 22,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3471,8 +3471,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_23_on.png",
-                                        "offImage": "sh_popopt_0_preset_23_off.png",
+                                        "onImage": "sh_po_23_on.png",
+                                        "offImage": "sh_po_23_off.png",
                                         "buttonId": 23,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3539,8 +3539,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_24_on.png",
-                                        "offImage": "sh_popopt_0_preset_24_off.png",
+                                        "onImage": "sh_po_24_on.png",
+                                        "offImage": "sh_po_24_off.png",
                                         "buttonId": 24,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3607,8 +3607,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_25_on.png",
-                                        "offImage": "sh_popopt_0_preset_25_off.png",
+                                        "onImage": "sh_po_25_on.png",
+                                        "offImage": "sh_po_25_off.png",
                                         "buttonId": 25,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3675,8 +3675,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_26_on.png",
-                                        "offImage": "sh_popopt_0_preset_26_off.png",
+                                        "onImage": "sh_po_26_on.png",
+                                        "offImage": "sh_po_26_off.png",
                                         "buttonId": 26,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3743,8 +3743,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_27_on.png",
-                                        "offImage": "sh_popopt_0_preset_27_off.png",
+                                        "onImage": "sh_po_27_on.png",
+                                        "offImage": "sh_po_27_off.png",
                                         "buttonId": 27,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3811,8 +3811,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_28_on.png",
-                                        "offImage": "sh_popopt_0_preset_28_off.png",
+                                        "onImage": "sh_po_28_on.png",
+                                        "offImage": "sh_po_28_off.png",
                                         "buttonId": 28,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3879,8 +3879,8 @@
                                     "type": "Button",
                                     "data": {
                                         "version": 2,
-                                        "onImage": "sh_popopt_0_preset_29_on.png",
-                                        "offImage": "sh_popopt_0_preset_29_off.png",
+                                        "onImage": "sh_po_29_on.png",
+                                        "offImage": "sh_po_29_off.png",
                                         "buttonId": 29,
                                         "numButtonsInGroup": 30,
                                         "handleName": "Data",
@@ -3989,7 +3989,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC1 TIMBRE",
-                                    "type": "shKnob37_dee6a497_n14v22",
+                                    "type": "shKnob37_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4019,7 +4019,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "OSC2 FREQ",
-                                    "type": "shKnob37_dee6a497_n16v22",
+                                    "type": "shKnob37_dee6a497_ns16_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4049,7 +4049,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "HARMONICS",
-                                    "type": "shKnob37_dee6a497_n12v22",
+                                    "type": "shKnob37_dee6a497_ns12_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4109,7 +4109,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FOLD DEPTH",
-                                    "type": "shKnob37_dee6a497_n15v22",
+                                    "type": "shKnob37_dee6a497_ns15_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4139,7 +4139,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "FOLD TYPE",
-                                    "type": "shKnob37_dee6a497_n16v22",
+                                    "type": "shKnob37_dee6a497_ns16_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4169,7 +4169,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "CUTOFF",
-                                    "type": "shKnob41_e7608323_n13v22",
+                                    "type": "shKnob41_e7608323_ns13_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -4229,7 +4229,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "VEL>FILTER",
-                                    "type": "shKnob37_dee6a497_n14v22",
+                                    "type": "shKnob37_dee6a497_ns14_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -5494,7 +5494,7 @@
                     }
                 },
                 {
-                    "key": "shKnob37_dee6a497_n13v22",
+                    "key": "shKnob37_dee6a497_ns13_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -5688,7 +5688,7 @@
                     }
                 },
                 {
-                    "key": "shKnob37_dee6a497_n11v22",
+                    "key": "shKnob37_dee6a497_ns11_vs22",
                     "value": {
                         "version": 4,
                         "actions": [
@@ -6407,7 +6407,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_13560c04",
+                    "key": "shMeter_145x264_13560c04_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6438,7 +6438,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_13560c04.png",
+                                        "filmStrip": "sh_meter_145x264_13560c04_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6463,7 +6463,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_87823f67",
+                    "key": "shMeter_145x264_87823f67_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6494,7 +6494,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_87823f67.png",
+                                        "filmStrip": "sh_meter_145x264_87823f67_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6519,7 +6519,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_30178983",
+                    "key": "shMeter_145x264_30178983_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6550,7 +6550,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_30178983.png",
+                                        "filmStrip": "sh_meter_145x264_30178983_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6575,7 +6575,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_7eb1efec",
+                    "key": "shMeter_145x264_7eb1efec_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6606,7 +6606,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_7eb1efec.png",
+                                        "filmStrip": "sh_meter_145x264_7eb1efec_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6631,7 +6631,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_f628a1c6",
+                    "key": "shMeter_145x264_f628a1c6_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6662,7 +6662,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_f628a1c6.png",
+                                        "filmStrip": "sh_meter_145x264_f628a1c6_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6687,7 +6687,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_245ea6f5",
+                    "key": "shMeter_145x264_245ea6f5_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6718,7 +6718,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_245ea6f5.png",
+                                        "filmStrip": "sh_meter_145x264_245ea6f5_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6743,7 +6743,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_15b3e7a3",
+                    "key": "shMeter_145x264_15b3e7a3_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6774,7 +6774,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_15b3e7a3.png",
+                                        "filmStrip": "sh_meter_145x264_15b3e7a3_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6799,7 +6799,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_973999d1",
+                    "key": "shMeter_145x264_973999d1_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6830,7 +6830,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_973999d1.png",
+                                        "filmStrip": "sh_meter_145x264_973999d1_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6855,7 +6855,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_8529018c",
+                    "key": "shMeter_145x264_8529018c_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6886,7 +6886,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_8529018c.png",
+                                        "filmStrip": "sh_meter_145x264_8529018c_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6911,7 +6911,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_6fbe03ec",
+                    "key": "shMeter_145x264_6fbe03ec_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6942,7 +6942,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_6fbe03ec.png",
+                                        "filmStrip": "sh_meter_145x264_6fbe03ec_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -6967,7 +6967,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_93e4497c",
+                    "key": "shMeter_145x264_93e4497c_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -6998,7 +6998,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_93e4497c.png",
+                                        "filmStrip": "sh_meter_145x264_93e4497c_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7023,7 +7023,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_596cff7b",
+                    "key": "shMeter_145x264_596cff7b_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7054,7 +7054,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_596cff7b.png",
+                                        "filmStrip": "sh_meter_145x264_596cff7b_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7079,7 +7079,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_ad8f74b3",
+                    "key": "shMeter_145x264_ad8f74b3_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7110,7 +7110,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_ad8f74b3.png",
+                                        "filmStrip": "sh_meter_145x264_ad8f74b3_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7135,7 +7135,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_fe5e2922",
+                    "key": "shMeter_145x264_fe5e2922_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7166,7 +7166,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_fe5e2922.png",
+                                        "filmStrip": "sh_meter_145x264_fe5e2922_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7191,7 +7191,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_a823618f",
+                    "key": "shMeter_145x264_a823618f_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7222,7 +7222,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_a823618f.png",
+                                        "filmStrip": "sh_meter_145x264_a823618f_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7247,7 +7247,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_8d44667e",
+                    "key": "shMeter_145x264_8d44667e_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7278,7 +7278,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_8d44667e.png",
+                                        "filmStrip": "sh_meter_145x264_8d44667e_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7303,7 +7303,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_2f3fc1b1",
+                    "key": "shMeter_145x264_2f3fc1b1_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7334,7 +7334,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_2f3fc1b1.png",
+                                        "filmStrip": "sh_meter_145x264_2f3fc1b1_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7359,7 +7359,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_8768de03",
+                    "key": "shMeter_145x264_8768de03_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7390,7 +7390,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_8768de03.png",
+                                        "filmStrip": "sh_meter_145x264_8768de03_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7415,7 +7415,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_85e07dca",
+                    "key": "shMeter_145x264_85e07dca_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7446,7 +7446,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_85e07dca.png",
+                                        "filmStrip": "sh_meter_145x264_85e07dca_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7471,7 +7471,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_57e55062",
+                    "key": "shMeter_145x264_57e55062_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7502,7 +7502,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_57e55062.png",
+                                        "filmStrip": "sh_meter_145x264_57e55062_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7527,7 +7527,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_5f898528",
+                    "key": "shMeter_145x264_5f898528_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7558,7 +7558,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_5f898528.png",
+                                        "filmStrip": "sh_meter_145x264_5f898528_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7583,7 +7583,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_4e096610",
+                    "key": "shMeter_145x264_4e096610_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7614,7 +7614,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_4e096610.png",
+                                        "filmStrip": "sh_meter_145x264_4e096610_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7639,7 +7639,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_0856107c",
+                    "key": "shMeter_145x264_0856107c_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7670,7 +7670,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_0856107c.png",
+                                        "filmStrip": "sh_meter_145x264_0856107c_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7695,7 +7695,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_ae170d2e",
+                    "key": "shMeter_145x264_ae170d2e_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7726,7 +7726,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_ae170d2e.png",
+                                        "filmStrip": "sh_meter_145x264_ae170d2e_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7751,7 +7751,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_dd148953",
+                    "key": "shMeter_145x264_dd148953_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7782,7 +7782,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_dd148953.png",
+                                        "filmStrip": "sh_meter_145x264_dd148953_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7807,7 +7807,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_aa432eb4",
+                    "key": "shMeter_145x264_aa432eb4_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7838,7 +7838,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_aa432eb4.png",
+                                        "filmStrip": "sh_meter_145x264_aa432eb4_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7863,7 +7863,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_03d778bd",
+                    "key": "shMeter_145x264_03d778bd_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7894,7 +7894,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_03d778bd.png",
+                                        "filmStrip": "sh_meter_145x264_03d778bd_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7919,7 +7919,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_7d062693",
+                    "key": "shMeter_145x264_7d062693_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -7950,7 +7950,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_7d062693.png",
+                                        "filmStrip": "sh_meter_145x264_7d062693_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -7975,7 +7975,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_26aed6b7",
+                    "key": "shMeter_145x264_26aed6b7_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -8006,7 +8006,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_26aed6b7.png",
+                                        "filmStrip": "sh_meter_145x264_26aed6b7_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -8031,7 +8031,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_ad4a1390",
+                    "key": "shMeter_145x264_ad4a1390_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -8062,7 +8062,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_ad4a1390.png",
+                                        "filmStrip": "sh_meter_145x264_ad4a1390_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -8087,7 +8087,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_12712c16",
+                    "key": "shMeter_145x264_12712c16_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -8118,7 +8118,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_12712c16.png",
+                                        "filmStrip": "sh_meter_145x264_12712c16_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -8143,7 +8143,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_61444e45",
+                    "key": "shMeter_145x264_61444e45_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -8174,7 +8174,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_61444e45.png",
+                                        "filmStrip": "sh_meter_145x264_61444e45_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -8199,7 +8199,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_16f43e5f",
+                    "key": "shMeter_145x264_16f43e5f_f4",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -8230,7 +8230,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_16f43e5f.png",
+                                        "filmStrip": "sh_meter_145x264_16f43e5f_f4.png",
                                         "numFrames": 4,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -8255,7 +8255,7 @@
                     }
                 },
                 {
-                    "key": "shMeter_145x264_4ecdf6ec",
+                    "key": "shMeter_145x264_4ecdf6ec_f32",
                     "value": {
                         "version": 4,
                         "actions": [],
@@ -8286,7 +8286,7 @@
                                     "data": {
                                         "version": 5,
                                         "knobType": "FilmStrip",
-                                        "filmStrip": "sh_meter_145x264_4ecdf6ec.png",
+                                        "filmStrip": "sh_meter_145x264_4ecdf6ec_f32.png",
                                         "numFrames": 32,
                                         "invert": false,
                                         "dragOrientation": "Vertical",
@@ -8575,7 +8575,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "ENV DEPTH",
-                                    "type": "shKnob37_dee6a497_n13v22",
+                                    "type": "shKnob37_dee6a497_ns13_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8605,7 +8605,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "NOISE DEPTH",
-                                    "type": "shKnob37_dee6a497_n11v22",
+                                    "type": "shKnob37_dee6a497_ns11_vs22",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8815,7 +8815,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "attack",
-                                    "type": "shMeter_145x264_13560c04",
+                                    "type": "shMeter_145x264_13560c04_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8845,7 +8845,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_87823f67",
+                                    "type": "shMeter_145x264_87823f67_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8877,7 +8877,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_30178983",
+                                    "type": "shMeter_145x264_30178983_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8909,7 +8909,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_7eb1efec",
+                                    "type": "shMeter_145x264_7eb1efec_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8941,7 +8941,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_f628a1c6",
+                                    "type": "shMeter_145x264_f628a1c6_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -8973,7 +8973,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_245ea6f5",
+                                    "type": "shMeter_145x264_245ea6f5_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9005,7 +9005,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_15b3e7a3",
+                                    "type": "shMeter_145x264_15b3e7a3_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9037,7 +9037,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_973999d1",
+                                    "type": "shMeter_145x264_973999d1_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9069,7 +9069,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_8529018c",
+                                    "type": "shMeter_145x264_8529018c_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9101,7 +9101,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_6fbe03ec",
+                                    "type": "shMeter_145x264_6fbe03ec_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9133,7 +9133,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_93e4497c",
+                                    "type": "shMeter_145x264_93e4497c_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9165,7 +9165,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_596cff7b",
+                                    "type": "shMeter_145x264_596cff7b_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9197,7 +9197,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_ad8f74b3",
+                                    "type": "shMeter_145x264_ad8f74b3_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9229,7 +9229,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_fe5e2922",
+                                    "type": "shMeter_145x264_fe5e2922_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9261,7 +9261,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_a823618f",
+                                    "type": "shMeter_145x264_a823618f_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9293,7 +9293,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_8d44667e",
+                                    "type": "shMeter_145x264_8d44667e_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9325,7 +9325,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_2f3fc1b1",
+                                    "type": "shMeter_145x264_2f3fc1b1_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9357,7 +9357,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_8768de03",
+                                    "type": "shMeter_145x264_8768de03_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9389,7 +9389,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_85e07dca",
+                                    "type": "shMeter_145x264_85e07dca_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9421,7 +9421,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_57e55062",
+                                    "type": "shMeter_145x264_57e55062_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9453,7 +9453,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_5f898528",
+                                    "type": "shMeter_145x264_5f898528_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9485,7 +9485,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_4e096610",
+                                    "type": "shMeter_145x264_4e096610_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9517,7 +9517,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_0856107c",
+                                    "type": "shMeter_145x264_0856107c_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9549,7 +9549,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_ae170d2e",
+                                    "type": "shMeter_145x264_ae170d2e_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9581,7 +9581,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_dd148953",
+                                    "type": "shMeter_145x264_dd148953_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9613,7 +9613,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_aa432eb4",
+                                    "type": "shMeter_145x264_aa432eb4_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9645,7 +9645,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_03d778bd",
+                                    "type": "shMeter_145x264_03d778bd_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9677,7 +9677,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_7d062693",
+                                    "type": "shMeter_145x264_7d062693_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9709,7 +9709,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_26aed6b7",
+                                    "type": "shMeter_145x264_26aed6b7_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9741,7 +9741,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_ad4a1390",
+                                    "type": "shMeter_145x264_ad4a1390_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9773,7 +9773,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_12712c16",
+                                    "type": "shMeter_145x264_12712c16_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9805,7 +9805,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "decay",
-                                    "type": "shMeter_145x264_61444e45",
+                                    "type": "shMeter_145x264_61444e45_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9837,7 +9837,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "sustain",
-                                    "type": "shMeter_145x264_16f43e5f",
+                                    "type": "shMeter_145x264_16f43e5f_f4",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -9869,7 +9869,7 @@
                                 "componentData": {
                                     "version": 1,
                                     "name": "release",
-                                    "type": "shMeter_145x264_4ecdf6ec",
+                                    "type": "shMeter_145x264_4ecdf6ec_f32",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
