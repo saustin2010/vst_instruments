@@ -367,11 +367,20 @@ parameter index, so existing projects keep working.
 
 ## Repo
 
-- [ ] sd88me's wrapper fix (#499, 2026-10-23): all 44 rebuilt and PASSED on `steve-features` + #486-#489 (`e3a0af4`,
-      not pushed), `refresh_display` where a set changes other controls (dev-tools/displaydeps), 39 screens the same and
-      5 kept (framework/README.md). Left: the device check (Q-Links on track edit -> automation; a preset change moves
-      the other knobs; labels follow), then push the branch, `prepare.py --ready`, releases, one catalogue PR, a reply
-      on #499. Plan: the owner's doc "Wrapper Fix #499: Rebuild Plan".
+- [x] sd88me's wrapper fix (#499, 2026-10-23): all 44 rebuilt and PASSED on `steve-features` + #486-#489 (`e3a0af4`,
+      pushed), `refresh_display` where a set changes other controls (dev-tools/displaydeps), 39 screens the same and
+      5 kept (framework/README.md). Device check on the Live II passed (Q-Links on track edit -> automation record with
+      W; presets move the other knobs; labels follow; sample browsers; Plaits; STOP). PR #34 merged; `check.sh` PASSED
+      for all 34 released plugins (30 "screen: same", 4 ship deploy/); all 34 re-released, 36 zips (patch versions;
+      Percolator 2.1.0 with its per-voice samples), each with a "What's new"; catalogue PR sd88me/mpc-vst-plugins#533
+      (screenshot pins); reply on #499; saustin2010/mpc-vst-incipience#1 closed. Left: #533 merged; offering the
+      unmerged `steve-features` commits to sd88me, one PR per feature (decision 5 of the plan); the rebase onto his
+      latest main (kept locally as `steve-features-2`: 33 screens differ) as a job of its own.
+- [ ] Stevequencer 16 (and Stevequencer) keep sending notes and lanes while their track is muted (device, 2026-10-23):
+      their MIDI goes out on their own ALSA port, which MPC's mute doesn't reach, and a track listening to all MIDI
+      inputs picks the lanes up (CC 20/21 = Q-Links 1/2: Hera's VCF FREQ jumped). Whether MPC tells a plugin anything
+      on mute is untested: a probe (`originals/stevequencer16/build/probe/shim.c`, git-ignored) logs every call MPC
+      makes; then follow mute if MPC signals it, else a MUTE of their own.
 - [x] Plaits crashed under an offline stress of random parameter writes and MIDI (2026-10-23, in the build installed
       then too, also on emulated armv7): the wavetable model's coordinates reached 8 (or bank -1 after the mirror) and
       read a garbage wave pointer; the speech model read past its phoneme table. Fixed in Plaits, Mutable Vibe and Mr

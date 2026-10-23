@@ -4,7 +4,9 @@
 
 <img src="screenshots/page_0.png" width="760" alt="Incipience's KICK page">
 
-**Status (2026-10-20): 1.1.0, a new sample browser** (below: [Your own samples](#your-own-samples-the-samples-tab)):
+**1.1.1, released 2026-10-23** with [FX] Incipience OUT 1.1.1: built on sd88me's wrapper fix
+([#499](https://github.com/sd88me/mpc-vst-plugins/discussions/499): Q-Links on track edit → automation move its parameters
+again); nothing else changed. **Status (2026-10-20): 1.1.0, a new sample browser** (below: [Your own samples](#your-own-samples-the-samples-tab)):
 a folder and its subfolders in one list, so the data wheel alone goes through them. **Released 2026-10-20**
 ([Releases](https://github.com/saustin2010/mpc-vst-incipience/releases)), with [FX] Incipience OUT 1.1.0 (unchanged but
 for its version), after the owner checked its zips on the Live II ("this is working"). 1.0.0 is released ([Releases](https://github.com/saustin2010/mpc-vst-incipience/releases)), with

@@ -69,6 +69,7 @@ different layouts never read each other.
   2026-10-12, once sd88me had merged its catalogue entry (sd88me/mpc-vst-plugins#398): it is in his catalogue as
   `percolator-out`.
 - 2.0.1 (2026-10-13), released with Percolator 2.0.1: no change, its plugin file is byte-for-byte 2.0.0's.
+- 2.1.0 (2026-10-23), released with Percolator 2.1.0: built on sd88me's wrapper fix ([#499](https://github.com/sd88me/mpc-vst-plugins/discussions/499)); nothing else changed.
 
 ## Files
 

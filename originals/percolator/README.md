@@ -495,8 +495,8 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   `check.sh` PASSED. On the Live II (2026-10-13): its release zip installed, and Pack 3 unzipped as Windows does
   (inside `PERKONS_KIT_PACK_3/`) listed after the kits already there, through Pack 3 62, its last (the pack skips
   25-27 and 51) (owner: "fine"). `tested.json` records it.
-- 2.1.0, in the works (2026-10-19, branch `percolator-samples`; not released; on the Live II since 2026-10-19, this repo's
-  build in the 2.0.1 release folder): your own samples on
+- 2.1.0, released 2026-10-23 (with [FX] Percolator OUT 2.1.0; both on sd88me's wrapper fix, [#499](https://github.com/sd88me/mpc-vst-plugins/discussions/499):
+  Q-Links on track edit → automation; worked on from 2026-10-19, on the Live II since then): your own samples on
   every voice (SOURCE, SAMPLE, the SAMPLES page, as Incipience's sample browser) and RANDOMISE per voice (owner: a
   random button "to randomise each parameter per voice like we did with incipience"); 37 parameters appended (176). Offline: the 177 kits (built in and the four packs) render bit-identical to 2.0.1; `mpc/selftest.c`
   PASSED natively, as 32-bit ARM, under ASan/UBSan (two seeds) and TSan; build and host test PASSED; `check_skin.py`
