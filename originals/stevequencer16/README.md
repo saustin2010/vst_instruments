@@ -69,10 +69,11 @@ Q-Links: **1** DEST, NUMBER, MODE, SOURCE · **2** RATE, LENGTH, LOW, HIGH · **
 Q-Link columns: **1** RATE, SWING, DIRECTION, GATE · **2** LOOP START, LOOP LEN · **3** ROOT, SCALE, TRANSPOSE, KEY
 TRANSP · **4** MIDI CH, STEP LIGHT, AUDITION, COUNT-IN.
 
-- **COUNT-IN** (2026-10-24): set it like MPC's **Metro → Count-In**. During a count-in MPC tells plugins it's
-  already playing, so a sequencer would play the count-in bar. With RECORD (count-in when you record) or REC+PLAY
-  (count-in on every Play), Stevequencer 16 sends nothing until MPC's real start, then starts there. If no count-in comes
-  (say it's set but MPC's is off) it starts after nine beats anyway. OFF, the default, starts at once.
+- **COUNT-IN** (2026-10-24, three buttons on SETUP: OFF | REC | REC+PLAY): set it like MPC's **Metro → Count-In**.
+  During a count-in MPC tells plugins it's already playing, so a sequencer would play the count-in bar. With REC
+  (MPC counts in when you record) or REC+PLAY (on every Play), Stevequencer 16 sends nothing until MPC's real start a
+  bar after Play, in any time signature, then starts there. If no count-in comes (say it's set but MPC's is off)
+  it starts a beat after the bar anyway. OFF, the default, starts at once.
 
 ## Lanes
 
@@ -142,7 +143,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 
 ## To check on the device
 
-- COUNT-IN (2026-10-24, tested offline by replaying what MPC sent on the Live II): no notes during a count-in.
+- COUNT-IN's three buttons on the device (the waiting itself was checked on the Live II with a debug build, 2026-10-24).
 - That MPC passes NRPN (CC 99/98/6) from a track's MIDI input on to the instrument (CCs pass: Stevequencer's MOD lanes
   work on the Live II, 2026-10-05).
 - How MPC names and switches eight Q-Link sub-pages on MOD and LANES.

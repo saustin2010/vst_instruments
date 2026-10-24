@@ -57004,6 +57004,210 @@
                     }
                 },
                 {
+                    "key": "shSeg_count_in_0",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Button",
+                                    "type": "Button",
+                                    "data": {
+                                        "version": 2,
+                                        "onImage": "sh_seg_count_in_0_on.png",
+                                        "offImage": "sh_seg_count_in_0_off.png",
+                                        "buttonId": 0,
+                                        "numButtonsInGroup": 3,
+                                        "handleName": "Data",
+                                        "gestureBehaviour": "Instant"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 72 44",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "key": "shSeg_count_in_1",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Button",
+                                    "type": "Button",
+                                    "data": {
+                                        "version": 2,
+                                        "onImage": "sh_seg_count_in_1_on.png",
+                                        "offImage": "sh_seg_count_in_1_off.png",
+                                        "buttonId": 1,
+                                        "numButtonsInGroup": 3,
+                                        "handleName": "Data",
+                                        "gestureBehaviour": "Instant"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 72 44",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "key": "shSeg_count_in_2",
+                    "value": {
+                        "version": 4,
+                        "actions": [
+                            {
+                                "version": 2,
+                                "onAction": "Mouse Down",
+                                "handler": "Q-Link",
+                                "handleName": "Data",
+                                "additionalData": "",
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                }
+                            }
+                        ],
+                        "backgroundData": {
+                            "version": 1,
+                            "focussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            },
+                            "unfocussed": {
+                                "version": 1,
+                                "colour": "0",
+                                "image": ""
+                            }
+                        },
+                        "ignoreMousePresses": false,
+                        "disableCoarseDataWheel": false,
+                        "repeats": 1,
+                        "hideQLinkBounds": false,
+                        "componentsData": [
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": "Button",
+                                    "type": "Button",
+                                    "data": {
+                                        "version": 2,
+                                        "onImage": "sh_seg_count_in_2_on.png",
+                                        "offImage": "sh_seg_count_in_2_off.png",
+                                        "buttonId": 2,
+                                        "numButtonsInGroup": 3,
+                                        "handleName": "Data",
+                                        "gestureBehaviour": "Instant"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": []
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Show",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "0 0 72 44",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
                     "key": "SETUP|SETUP",
                     "value": {
                         "version": 4,
@@ -57657,8 +57861,8 @@
                                 "version": 2,
                                 "componentData": {
                                     "version": 1,
-                                    "name": "count_in",
-                                    "type": "shKnobSide24_b7375201_v30_226x68",
+                                    "name": " OFF",
+                                    "type": "shSeg_count_in_0",
                                     "data": {
                                         "version": 1,
                                         "handleName": "Data"
@@ -57679,7 +57883,67 @@
                                     "showWhenDataModelInvalid": "Hide",
                                     "whenVisible": "Always",
                                     "boundsType": "Absolute",
-                                    "bounds": "784 508 226 68",
+                                    "bounds": "787 520 72 44",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": " REC",
+                                    "type": "shSeg_count_in_1",
+                                    "data": {
+                                        "version": 1,
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": [
+                                        {
+                                            "key": "Data",
+                                            "value": "Parameter 330"
+                                        }
+                                    ]
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Hide",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "861 520 72 44",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
+                                    "name": " REC+PLAY",
+                                    "type": "shSeg_count_in_2",
+                                    "data": {
+                                        "version": 1,
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": [
+                                        {
+                                            "key": "Data",
+                                            "value": "Parameter 330"
+                                        }
+                                    ]
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "No",
+                                    "showWhenDataModelInvalid": "Hide",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "935 520 72 44",
                                     "additionalInvalidatingHandles": []
                                 }
                             },
@@ -58054,7 +58318,7 @@
                     "16 46 238 536",
                     "270 46 238 232",
                     "518 46 250 536",
-                    "772 46 250 536"
+                    "772 46 250 524"
                 ],
                 "componentName": "SETUP|SETUP",
                 "initialSize": "0 0 1280 628",

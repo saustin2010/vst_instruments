@@ -436,7 +436,11 @@ def layout():
                 if is_toggle(it):
                     o.append(L("toggle", cx=x + CW // 2, cy=y + HD // 2, w=CW, h=HD, ns=0, key=it,
                                img="images/hd/set_%s_off.png" % it, img_on="images/hd/set_%s_on.png" % it))
-                vs = 30 if it in ("scale", "count_in") else 46
+                if it == "count_in":   # three buttons, not a dial (the owner, 2026-10-24)
+                    o.append(L("enum_h", cx=x + CW // 2, cy=y + BIG_Y + BIG_H // 2, label='""', key=it, sw=72, sh=44,
+                               options="OFF,REC,REC+PLAY"))
+                    continue
+                vs = 30 if it == "scale" else 46
                 o.append(L("knob", cx=x + CW // 2, cy=y + BIG_Y + BIG_H // 2, r=24, lay="side", bw=CW - 12, bh=BIG_H, vs=vs,
                            key=it, strip="images/blank.png" if is_toggle(it) else "images/arc.png", frames=128))
             elif it[1]:
