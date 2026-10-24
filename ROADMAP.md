@@ -390,8 +390,9 @@ parameter index, so existing projects keep working.
       offline: the framework passes the recording flag (`MPC_TRANSPORT_RECORDING`, `steve-features`
       `ea7f73c`), the shared adapter (dev-tools/midifx) waits for the jump when a port's COUNT-IN says so, and
       Stevequencer and Stevequencer 16 have COUNT-IN on SETUP (screens redrawn with the old tools, the rest
-      byte-identical); `dev-tools/countin/run.sh` replays the measured transport. Left: the owner's check on the
-      device, releases; COUNT-IN on the other eight sequencers' screens. piClideaN's author told:
+      byte-identical); `dev-tools/countin/run.sh` replays the measured transport. Released 2026-10-24
+      (Stevequencer and Stevequencer 16 1.1.0, pinned to `ea7f73c`). Left: the owner's check on the device; COUNT-IN
+      on the other eight sequencers' screens. piClideaN's author told:
       [timomacquis/piClideaN16-MPC#1](https://github.com/timomacquis/piClideaN16-MPC/issues/1).
 - [x] Plaits crashed under an offline stress of random parameter writes and MIDI (2026-10-23, in the build installed
       then too, also on emulated armv7): the wavetable model's coordinates reached 8 (or bank -1 after the mirror) and
