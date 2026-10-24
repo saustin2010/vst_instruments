@@ -376,11 +376,23 @@ parameter index, so existing projects keep working.
       (screenshot pins); reply on #499; saustin2010/mpc-vst-incipience#1 closed. Left: #533 merged; offering the
       unmerged `steve-features` commits to sd88me, one PR per feature (decision 5 of the plan); the rebase onto his
       latest main (kept locally as `steve-features-2`: 33 screens differ) as a job of its own.
-- [ ] Stevequencer 16 (and Stevequencer) keep sending notes and lanes while their track is muted (device, 2026-10-23):
-      their MIDI goes out on their own ALSA port, which MPC's mute doesn't reach, and a track listening to all MIDI
-      inputs picks the lanes up (CC 20/21 = Q-Links 1/2: Hera's VCF FREQ jumped). Whether MPC tells a plugin anything
-      on mute is untested: a probe (`originals/stevequencer16/build/probe/shim.c`, git-ignored) logs every call MPC
-      makes; then follow mute if MPC signals it, else a MUTE of their own.
+- [ ] Stevequencer 16 (and Stevequencer) reach every track left on All Ports (device, 2026-10-23): new tracks default
+      to MIDI input All Ports, all channels (`midiInputRoute` in the project), so the selected track plays their notes
+      and lanes too (CC 20/21 = Q-Links 1/2: Hera's VCF FREQ jumped). Goal (owner, 2026-10-24): only a track set to
+      the Stevequencer's port hears it; MPC's track and MIDI mutes stay as they are. Track off for its port in
+      Preferences -> MIDI stops it reaching any track (device, 2026-10-24): an on/off for the whole port, not routing.
+      Plan: a direct mode, no subscribable port for MPC, notes sent straight to the chosen port (hardware synths;
+      our instruments would need their own ALSA input port, as Percolator has). Parked (owner, 2026-10-24): with Track
+      back on, the ghost notes into Hera no longer happen; pick it up if they come back.
+- [ ] Sequencers play MPC's count-in bar (device, 2026-10-24: piClideaN and our Stevequencers "start before the MPC
+      starts"). MPC reports playing (with the recording flag when recording) through the count-in, then the position
+      jumps back to the real start; while stopped it gives only the playhead's bar (framework docs/NOTES.md). Done
+      offline: the framework passes the recording flag (`MPC_TRANSPORT_RECORDING`, `steve-features`
+      `ea7f73c`), the shared adapter (dev-tools/midifx) waits for the jump when a port's COUNT-IN says so, and
+      Stevequencer and Stevequencer 16 have COUNT-IN on SETUP (screens redrawn with the old tools, the rest
+      byte-identical); `dev-tools/countin/run.sh` replays the measured transport. Left: the owner's check on the
+      device, releases; COUNT-IN on the other eight sequencers' screens. piClideaN's author told:
+      [timomacquis/piClideaN16-MPC#1](https://github.com/timomacquis/piClideaN16-MPC/issues/1).
 - [x] Plaits crashed under an offline stress of random parameter writes and MIDI (2026-10-23, in the build installed
       then too, also on emulated armv7): the wavetable model's coordinates reached 8 (or bank -1 after the mirror) and
       read a garbage wave pointer; the speech model read past its phoneme table. Fixed in Plaits, Mutable Vibe and Mr

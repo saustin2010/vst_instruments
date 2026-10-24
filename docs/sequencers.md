@@ -41,6 +41,11 @@ ways; its README says which, and covers its channels, voices and pages.
 
 A sequencer that sends drum notes should play a drum track.
 
+**MPC's count-in.** During a count-in MPC tells plugins it is already playing, so a sequencer that follows the
+transport plays the count-in bar. Stevequencer and Stevequencer 16 have a COUNT-IN setting on SETUP: set it like
+MPC's Metro → Count-In and they wait for the real start (2026-10-24). The other sequencers here share that code but
+don't have the control on their screens yet.
+
 ## Moving the instrument's controls
 
 A sequencer can also send control changes (CC) along with its notes: Stevequencer's MOD lanes send a value per step,

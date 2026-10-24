@@ -68,8 +68,15 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
   `MODULE_DIR` stays as the fallback.
 - **Preset names without loading them (2026-10-08)**: the engine answers `preset:<n>` with preset n's name (`MPC_PORT` in
   `src/dsp/hera_plugin.cpp`), which is how the current mpc-vst-plugins names the PRESET menu's entries.
-- Both changes to `src/dsp/hera_plugin.cpp` (this and VOLUME) are in `upstream-changes.diff`, against charlesvestal/schwung-hera
-  `255be06` (module v0.1.7).
+- **Louder, per preset (2026-10-24)**: upstream leaves Hera about 12 dB quieter than the other plugins here (each
+  voice at 1/6 for six-voice headroom). Each preset now gets as much of +12 dB as keeps six-note chords at full
+  velocity, in three registers, at or below -2 dBFS at the default VOLUME: 34 of the 56 get the full +12, the hottest
+  less (Clavichord 2 +1.5, Surf +2.5). Typical playing went from about -36 to -25 dBFS (median of the 56,
+  `dev-tools/presets/levels.sh hera 48 60`). It's a clean gain after the chorus, ramped over one block on a preset
+  change (`MPC_PORT` in `src/dsp/hera_plugin.cpp`); a preset not in its table gets +6 dB. Projects using Hera play
+  louder by the same amount.
+- The changes to `src/dsp/hera_plugin.cpp` (VOLUME, preset names, the per-preset gain) are in `upstream-changes.diff`,
+  against charlesvestal/schwung-hera `255be06` (module v0.1.7).
 - **Full-height screen (2026-10-18)**: the panels fill MPC's 1280 × 628 plugin area. The Stitch conversion used to
   centre the design at the height it had under its own header and footer (MPC draws its own), which left an empty
   band above and below.

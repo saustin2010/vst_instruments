@@ -361,6 +361,9 @@ typedef struct {
     int octave_transpose;
     float output_gain;
     float volume;   /* User-controllable volume 0-1, default 0.8 */
+#ifdef MPC_PORT
+    float output_gain_target;   /* (mpc port) the preset's output gain, preset_gain() */
+#endif
 } hera_instance_t;
 
 /* =====================================================================
@@ -588,12 +591,87 @@ static int load_presets(hera_instance_t *inst) {
     return inst->preset_count;
 }
 
+#ifdef MPC_PORT
+/* (mpc port) Output gain per preset, in dB. Upstream leaves Hera about 12 dB quieter than the other plugins here
+ * (each voice at 1/6 for six-voice headroom, then tanh(3x), the chorus and VOLUME 0.8). Each preset gets as much of
+ * +12 dB as keeps six-note chords at full velocity, in three registers, at or below -2 dBFS at the default VOLUME
+ * (measured offline 2026-10-24 through the plugin, as dev-tools/presets/levels.c does). Applied after the chorus: a
+ * clean gain, nothing added to the sound. A preset not listed gets +6 dB. */
+static const struct { const char *name; float db; } k_preset_gain[] = {
+    {"Strings 1", 12.0f},
+    {"Strings 2", 12.0f},
+    {"Strings 3", 12.0f},
+    {"Organ 1", 12.0f},
+    {"Organ 2", 12.0f},
+    {"Organ 3", 12.0f},
+    {"Brass", 10.5f},
+    {"Phase Brass", 12.0f},
+    {"Piano 1", 11.0f},
+    {"Piano 2", 8.0f},
+    {"Celesta", 12.0f},
+    {"Mellow Piano", 12.0f},
+    {"Harpsichord 1", 12.0f},
+    {"Harpsichord 2", 12.0f},
+    {"Guitar", 10.0f},
+    {"Synthesizer Harp", 12.0f},
+    {"Bass 1", 12.0f},
+    {"Bass 2", 12.0f},
+    {"Clavichord 1", 12.0f},
+    {"Clavichord 2", 1.5f},
+    {"Pizzicato Sound 1", 12.0f},
+    {"Pizzicato Sound 2", 12.0f},
+    {"Xylophone", 6.0f},
+    {"Glockenspiel", 4.5f},
+    {"Violine", 9.5f},
+    {"Trumpet", 11.5f},
+    {"Horn", 12.0f},
+    {"Tuba", 7.0f},
+    {"Flute", 8.5f},
+    {"Clarinet", 12.0f},
+    {"Oboe", 5.5f},
+    {"English Horn", 11.0f},
+    {"Funny Cat", 9.0f},
+    {"Wah Brass", 12.0f},
+    {"Phase Combination", 12.0f},
+    {"Reed 1", 12.0f},
+    {"Popcorn", 12.0f},
+    {"Reed 2", 12.0f},
+    {"Reed 3", 12.0f},
+    {"PWM Chorus", 12.0f},
+    {"Synthesizer Organ", 12.0f},
+    {"Effect Sound 1", 12.0f},
+    {"Effect Sound 2", 12.0f},
+    {"Space Harp", 5.5f},
+    {"Funk", 12.0f},
+    {"Space Sound 1", 11.5f},
+    {"Mysterious Invention", 12.0f},
+    {"Space Sound 2", 12.0f},
+    {"Percussive Sound 1", 3.5f},
+    {"Percussive Sound 2", 12.0f},
+    {"Whistle", 6.0f},
+    {"Effect Sound 3", 9.5f},
+    {"UFO", 9.5f},
+    {"Space Sound 3", 12.0f},
+    {"Surf", 2.5f},
+    {"Synthesizer Drum", 10.5f},
+};
+
+static float preset_gain(const char *name) {
+    for (size_t i = 0; i < sizeof k_preset_gain / sizeof k_preset_gain[0]; i++)
+        if (strcmp(k_preset_gain[i].name, name) == 0) return powf(10.0f, k_preset_gain[i].db / 20.0f);
+    return 2.0f;
+}
+#endif
+
 static void apply_preset(hera_instance_t *inst, int preset_idx) {
     if (preset_idx < 0 || preset_idx >= inst->preset_count) return;
 
     HeraPreset *p = &inst->presets[preset_idx];
     inst->current_preset = preset_idx;
     snprintf(inst->preset_name, sizeof(inst->preset_name), "%s", p->name);
+#ifdef MPC_PORT
+    inst->output_gain_target = preset_gain(p->name);
+#endif
 
     for (int i = 0; i < kHeraNumParameters; i++) {
         apply_param(inst, i, p->values[i]);
@@ -796,6 +874,9 @@ static void* v2_create_instance(const char *module_dir, const char *json_default
     memset(inst->module_dir, 0, sizeof(inst->module_dir));
     strncpy(inst->module_dir, module_dir, sizeof(inst->module_dir) - 1);
     inst->output_gain = 1.0f;
+#ifdef MPC_PORT
+    inst->output_gain = inst->output_gain_target = 2.0f;   /* +6 dB until a preset sets its own */
+#endif
     inst->volume = 0.8f;
     inst->pitchFactor = 1.0f;
     inst->vcaType = kHeraVCATypeEnvelope;
@@ -846,6 +927,9 @@ static void* v2_create_instance(const char *module_dir, const char *json_default
     if (load_presets(inst) > 0) {
         inst->current_preset = 0;
         apply_preset(inst, 0);
+#ifdef MPC_PORT
+        inst->output_gain = inst->output_gain_target;
+#endif
     }
 
     plugin_log("Hera v2: Instance created");
@@ -1206,7 +1290,15 @@ static void v2_render_block(void *instance, int16_t *out_interleaved_lr, int fra
 
     /* Convert to int16 stereo interleaved */
     float gain = inst->output_gain * inst->volume;
+#ifdef MPC_PORT
+    /* (mpc port) a new preset's output gain is reached over this block, so a preset change doesn't click */
+    float gain_step = frames > 0 ? (inst->output_gain_target - inst->output_gain) * inst->volume / frames : 0.0f;
+    inst->output_gain = inst->output_gain_target;
+#endif
     for (int i = 0; i < frames; i++) {
+#ifdef MPC_PORT
+        gain += gain_step;
+#endif
         float left = inst->chorusOutL[i] * gain;
         float right = inst->chorusOutR[i] * gain;
 
