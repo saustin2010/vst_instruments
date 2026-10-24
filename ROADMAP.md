@@ -387,11 +387,12 @@ parameter index, so existing projects keep working.
 - [ ] Sequencers play MPC's count-in bar (device, 2026-10-24: piClideaN and our Stevequencers "start before the MPC
       starts"). MPC reports playing (with the recording flag when recording) through the count-in, then the position
       jumps back to the real start; while stopped it gives only the playhead's bar (framework docs/NOTES.md). Done
-      offline: the framework passes the recording flag (`MPC_TRANSPORT_RECORDING`, not yet committed on
-      `steve-features`), the shared adapter (dev-tools/midifx) waits for the jump when a port's COUNT-IN says so, and
+      offline: the framework passes the recording flag (`MPC_TRANSPORT_RECORDING`, `steve-features`
+      `ea7f73c`), the shared adapter (dev-tools/midifx) waits for the jump when a port's COUNT-IN says so, and
       Stevequencer and Stevequencer 16 have COUNT-IN on SETUP (screens redrawn with the old tools, the rest
       byte-identical); `dev-tools/countin/run.sh` replays the measured transport. Left: the owner's check on the
-      device, commits, releases; COUNT-IN on the other eight sequencers' screens; tell piClideaN's author.
+      device, releases; COUNT-IN on the other eight sequencers' screens. piClideaN's author told:
+      [timomacquis/piClideaN16-MPC#1](https://github.com/timomacquis/piClideaN16-MPC/issues/1).
 - [x] Plaits crashed under an offline stress of random parameter writes and MIDI (2026-10-23, in the build installed
       then too, also on emulated armv7): the wavetable model's coordinates reached 8 (or bank -1 after the mirror) and
       read a garbage wave pointer; the speech model read past its phoneme table. Fixed in Plaits, Mutable Vibe and Mr

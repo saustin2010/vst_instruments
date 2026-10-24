@@ -54,7 +54,7 @@ Most are opt-in: they change nothing unless a plugin's own files ask for them (a
 key, a `defines` entry, the transport hook), so sd88me's own ports build as before. The rest are fixes: the option-list read
 past its end, the installer's path match, the host test (macOS, long ranges, travel) and the release workflow's `tools_repo`. Since
 2026-10-23 `tools/build.sh` builds with this branch too (`setup.sh`), and the patch below is retired.
-The pin is `ea7f73c` since 2026-10-24 (MPC's recording flag for the count-in; committed, not pushed to the fork yet).
+The pin is `ea7f73c` since 2026-10-24 (MPC's recording flag for the count-in).
 The plugins' `release.yml` name `e3a0af4`, the pin of their 2026-10-23 releases (sd88me's wrapper fix), until their
 next release runs `prepare.py`.
 To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `setup-release.sh`, run
