@@ -19,7 +19,7 @@ projects that use it.
 
 - In the plugin browser: **[SEQ] Stevequencer 16** by **Steve A** (Sequencer)
 - Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [SEQ] Stevequencer 16/`, holding `stevequencer16.so`, its screen. The vst_instruments installer puts `stevequencer16.so` in `/sdcard/vst/` instead.
-- 330 parameters (all automatable) on 4 pages: STEPS, MOD, LANES, SETUP
+- 331 parameters (all automatable) on 4 pages: STEPS, MOD, LANES, SETUP
 - 14 patterns in MPC's PRESET menu, most with lanes: Init, Acid Slide, Bass Sweep Group, LFO Pulse, Random Steps,
   Half-Time Mod, Group of Three, Accent Return, Bass Line, Arp Climb, Blues Shuffle, Ratchet Stabs, Pendulum Arp, Drunk
   Garden. Their lanes go to CC 20 and CC 21 (the first two Q-Links of this repo's instruments) until you nominate other
@@ -31,6 +31,7 @@ projects that use it.
 Set up as for Stevequencer ([docs/sequencers.md](https://github.com/saustin2010/vst_instruments/blob/main/docs/sequencers.md)): put Stevequencer 16 and an instrument on
 two tracks; **Menu → Preferences → MIDI**: **Track** on for **[SEQ] Stevequencer 16 MIDI Out**; on the instrument's
 track, **MIDI Input Port** = that port and **Monitor** = **In**; press play. It follows MPC's tempo, locked to its bars.
+If you use MPC's count-in, set COUNT-IN on SETUP to match it, so it doesn't play the count-in bar.
 
 ## Pages
 
@@ -66,7 +67,12 @@ Q-Links: **1** DEST, NUMBER, MODE, SOURCE · **2** RATE, LENGTH, LOW, HIGH · **
 <img src="screenshots/page_3.png" width="760" alt="Stevequencer 16, SETUP">
 
 Q-Link columns: **1** RATE, SWING, DIRECTION, GATE · **2** LOOP START, LOOP LEN · **3** ROOT, SCALE, TRANSPOSE, KEY
-TRANSP · **4** MIDI CH, STEP LIGHT, AUDITION.
+TRANSP · **4** MIDI CH, STEP LIGHT, AUDITION, COUNT-IN.
+
+- **COUNT-IN** (2026-10-24): set it like MPC's **Metro → Count-In**. During a count-in MPC tells plugins it's
+  already playing, so a sequencer would play the count-in bar. With RECORD (count-in when you record) or REC+PLAY
+  (count-in on every Play), Stevequencer 16 sends nothing until MPC's real start, then starts there. If no count-in comes
+  (say it's set but MPC's is off) it starts after nine beats anyway. OFF, the default, starts at once.
 
 ## Lanes
 
@@ -136,6 +142,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 
 ## To check on the device
 
+- COUNT-IN (2026-10-24, tested offline by replaying what MPC sent on the Live II): no notes during a count-in.
 - That MPC passes NRPN (CC 99/98/6) from a track's MIDI input on to the instrument (CCs pass: Stevequencer's MOD lanes
   work on the Live II, 2026-10-05).
 - How MPC names and switches eight Q-Link sub-pages on MOD and LANES.

@@ -14,7 +14,7 @@ MIDI port to whatever track you point at it.
 
 - In the plugin browser: **[SEQ] Stevequencer** by **Steve A** (Sequencer)
 - Files: the release installs one folder, `/sdcard/Synths/Steve A - VST - [SEQ] Stevequencer/`, holding `stevequencer.so`, its screen. The vst_instruments installer puts `stevequencer.so` in `/sdcard/vst/` instead.
-- 552 parameters (all automatable) on 6 pages; each step page has 8 Q-Link sub-pages
+- 553 parameters (all automatable) on 6 pages; each step page has 8 Q-Link sub-pages
 - 20 patterns in MPC's PRESET menu: Init, Bass Line, Acid Line, Arp Climb, Offbeat Stabs, Drunk Walk, and 14 seeded
   random ones (2026-10-04): Minor Pulse, Pentatonic Rain, Dorian Groove, Phrygian Run, Lydian Float, Blues Shuffle,
   Whole Tone Drift, Ratchet Stabs, Pendulum Arp, Garden Chance, Harmonic Steps, Low Slow Bass, Five of Eight,
@@ -28,7 +28,8 @@ The walk-through, with what to check when nothing plays: [docs/sequencers.md](ht
 Stevequencer and an instrument on two tracks; **Menu → Preferences → MIDI**: **Track** on for
 **[SEQ] Stevequencer MIDI Out**; on the instrument's track, **MIDI Input Port** = that port and **Monitor** = **In**;
 press play. Stevequencer plays by itself while the transport runs (no notes needed) and follows MPC's tempo, locked to
-its bars: starting mid-song or looping lands on the right step.
+its bars: starting mid-song or looping lands on the right step. If you use MPC's count-in, set COUNT-IN on SETUP to
+match it, so it doesn't play the count-in bar.
 
 ## Pages
 
@@ -65,7 +66,7 @@ modulation" below):
 <img src="screenshots/page_4.png" width="760" alt="Stevequencer, page SETUP">
 
 Q-Link columns: **1** RATE, SWING, DIRECTION, GATE  ·  **2** LOOP START, LOOP LEN  ·  **3** ROOT, SCALE, TRANSPOSE,
-KEY TRANSP  ·  **4** MIDI CH, STEP LIGHT, AUDITION. Touch only: ROTATE the loop left or right, RANDOM or CLEAR the
+KEY TRANSP  ·  **4** MIDI CH, STEP LIGHT, AUDITION, COUNT-IN. Touch only: ROTATE the loop left or right, RANDOM or CLEAR the
 whole loop.
 
 ### 6. MOD
@@ -89,6 +90,10 @@ Q-Link columns: **1** MOD A CC, MOD A MODE, MOD A BASE  ·  **2** MOD B CC, MOD 
   sequence from C3 (latched, like a 303 or SQ-1).
 - **AUDITION:** with the transport stopped, editing a step's pitch or switching it on plays its note.
 - **MIDI CH:** the channel it sends on (1-16).
+- **COUNT-IN** (2026-10-24): set it like MPC's **Metro → Count-In**. During a count-in MPC tells plugins it's
+  already playing, so a sequencer would play the count-in bar. With RECORD (count-in when you record) or REC+PLAY
+  (count-in on every Play), Stevequencer sends nothing until MPC's real start, then starts there. If no count-in comes
+  (say it's set but MPC's is off) it starts after nine beats anyway. OFF, the default, starts at once.
 
 ## Per-step modulation (MOD A, MOD B)
 
@@ -143,6 +148,7 @@ Use one or the other for this plugin: both register the same plugin (same uid), 
 
 ## To check on the device
 
+- COUNT-IN (2026-10-24, tested offline by replaying what MPC sent on the Live II): no notes during a count-in.
 - The step light: MPC's screen thread while playing (`dev-tools/screengrab/cpuwatch.sh`; STEP LIGHT off if it's heavy),
   and that recording with automation doesn't record PLAY STEP.
 - Six Q-Link sub-pages per tab: how MPC names and switches them (25 pages in all; the skin is twice Helm's size).

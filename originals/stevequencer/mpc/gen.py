@@ -46,6 +46,9 @@ SETTINGS = [   # key, name, definition, hint (SETUP footer)
     ("step_light", "STEP LIGHT", {"options": OFFON, "default": 1}, "PLAYHEAD ON SCREEN"),
     ("audition", "AUDITION", {"options": OFFON, "default": 1}, "HEAR EDITS WHILE STOPPED"),
 ]
+# appended after every other parameter (2026-10-24): set like MPC's Metro > Count-In, so a start waits out the count-in
+# (mpc/schwung_midi_fx.c, which handles "count_in" itself)
+APPENDED = [("count_in", "COUNT-IN", {"options": ["OFF", "RECORD", "REC+PLAY"], "default": 0}, "SET LIKE MPC'S COUNT-IN")]
 TRIGGERS = [("rotate_left", "ROTATE L"), ("rotate_right", "ROTATE R"), ("random_all", "RANDOM ALL"), ("clear_all", "CLEAR ALL")]
 PAGE_TOOLS = [("copy", "COPY"), ("paste", "PASTE"), ("clear", "CLEAR"), ("random", "RANDOM")]
 MODV = ["-"] + [str(v) for v in range(128)]
@@ -89,6 +92,9 @@ def params():
     for d in out:
         if d["key"] in ("random_all", "clear_all") or d["key"].endswith(("_clear", "_random")):
             d["refresh_display"] = True
+            for k in [k for k in d if k not in ("key", "refresh_display")]:
+                d[k] = d.pop(k)   # right after "key", as dev-tools/displaydeps/apply.py writes it
+    out += [dict(key=k, name=n, **d) for k, n, d, _ in APPENDED]
     return out
 
 
@@ -277,10 +283,10 @@ SETUP_COLS = [   # one panel per Q-Link column, top to bottom = knobs 1-4
     ("LOOP", ["loop_start", "loop_len", ("ROTATE LOOP", [("rotate_left", "◀ ROTATE"), ("rotate_right", "ROTATE ▶")]),
               ("WHOLE LOOP", [("random_all", "RANDOM"), ("clear_all", "CLEAR")])]),
     ("PITCH", ["root", "scale", "transpose", "key_transpose"]),
-    ("OUTPUT", ["channel", "step_light", "audition", ("MIDI OUT", None)]),
+    ("OUTPUT", ["channel", "step_light", "audition", "count_in"]),
 ]
 SETUP_Q = [it if isinstance(it, str) else "-" for _, items in SETUP_COLS for it in items]
-SETTING = {k: (n, d, hint) for k, n, d, hint in SETTINGS + MOD_SETTINGS}
+SETTING = {k: (n, d, hint) for k, n, d, hint in SETTINGS + MOD_SETTINGS + APPENDED}
 MOD_COLS = [("MOD A", ["moda_cc", "moda_mode", "moda_base"]), ("MOD B", ["modb_cc", "modb_mode", "modb_base"])]
 MOD_Q = [k for _, items in MOD_COLS for k in items + ["-"]]
 mode_file = lambda a_tab: "images/mode_%s.svg" % a_tab.replace("/", "").replace(" ", "").lower()
@@ -305,9 +311,6 @@ def bg_setup():
                 o += rrect(x + 1, y + 1, CW - 2, HD - 1, 9, "1f2227")
                 o += text(x + 12, y + 18, title, 16, THEME["ink_dim"], 700, spacing=0.04)
                 o += text(x + CW - 12, y + 18, tag, 12, THEME["ink_faint"], 700, "end", 0.08)
-                if tools is None:
-                    for k, line in enumerate(("Port: [SEQ] Stevequencer", "MIDI Out. Pick it as an", "instrument track's", "MIDI input.")):
-                        o += text(x + 12, y + 54 + k * 20, line, 15, THEME["ink_dim"], 400, spacing=0.01)
     x, y, w, h = STRIP
     o += rrect(x + 0.5, y + 0.5, w - 1, h - 1, 10, "141619", THEME["line"])
     o += text(x + 16, y + 26, "PAGE", 13, THEME["ink_faint"], 700, spacing=0.12)
@@ -433,7 +436,7 @@ def layout():
                 if is_toggle(it):
                     o.append(L("toggle", cx=x + CW // 2, cy=y + HD // 2, w=CW, h=HD, ns=0, key=it,
                                img="images/hd/set_%s_off.png" % it, img_on="images/hd/set_%s_on.png" % it))
-                vs = 30 if it == "scale" else 46
+                vs = 30 if it in ("scale", "count_in") else 46
                 o.append(L("knob", cx=x + CW // 2, cy=y + BIG_Y + BIG_H // 2, r=24, lay="side", bw=CW - 12, bh=BIG_H, vs=vs,
                            key=it, strip="images/blank.png" if is_toggle(it) else "images/arc.png", frames=128))
             elif it[1]:

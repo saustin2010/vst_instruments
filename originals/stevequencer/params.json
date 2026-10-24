@@ -48444,6 +48444,16 @@
    "max": 127,
    "default": 64,
    "display": "int"
+  },
+  {
+   "key": "count_in",
+   "name": "COUNT-IN",
+   "options": [
+    "OFF",
+    "RECORD",
+    "REC+PLAY"
+   ],
+   "default": 0
   }
  ]
 }

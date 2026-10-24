@@ -9,7 +9,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 URL=https://github.com/saustin2010/mpc-vst-plugins.git
 BRANCH=steve-features
-REF=e3a0af4e8cb7eacd4bfcc2fbcbcde834aef50fa4   # keep equal to tools_ref in the plugins' release.yml
+REF=ea7f73ccfab677e3efada4c05d0f1c80955f8de4   # keep equal to tools_ref in the plugins' release.yml
 [ -d release-tools/.git ] || git clone -q -b "$BRANCH" "$URL" release-tools
 cd release-tools
 git fetch -q "$URL" "$BRANCH" 2>/dev/null || true

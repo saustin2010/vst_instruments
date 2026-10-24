@@ -48,14 +48,15 @@ them. Each plugin's `FRAMEWORK.md` lists the ones it uses, what they do there an
 | [`f7fa837`](https://github.com/saustin2010/mpc-vst-plugins/commit/f7fa837) | Host test: `"clamped"` params left out of the nudge and preset checks too | A sample list with nothing loaded, a delay time synced to the tempo, read back what the engine holds | Percolator, Mutable Vibe, Libpo32, Hush One, Plaits |
 | [`38a5e0e`](https://github.com/saustin2010/mpc-vst-plugins/commit/38a5e0e) [`de1f916`](https://github.com/saustin2010/mpc-vst-plugins/commit/de1f916) [`e3a0af4`](https://github.com/saustin2010/mpc-vst-plugins/commit/e3a0af4) | From this repo's old patch: a `banks=` stepper's arrows from its own sub-page's picture; a list's `ink=` / `lit=` / `focus=no`; a readout's `vs=` / `ink=` | Percolator, Percolator OUT and Incipience OUT build the screens they were approved with | those three (and the browsers) |
 | [`923db97`](https://github.com/saustin2010/mpc-vst-plugins/commit/923db97) | `docs/NOTES.md`: the 15 sections of device and porting notes this repo's old patch kept | Kept when the patch was retired | - |
+| [`ea7f73c`](https://github.com/saustin2010/mpc-vst-plugins/commit/ea7f73c) | `mpc_engine_transport()` gets MPC's recording flag (`MPC_TRANSPORT_RECORDING` added to `playing`); NOTES: MPC's count-in as a plugin sees it | MPC reports playing through its count-in, so sequencers played the count-in bar; with the flag a sequencer can wait out a count-in when recording (Live II, 2026-10-24) | the 10 MIDI sequencers (dev-tools/midifx: COUNT-IN on both Stevequencers) |
 
 Most are opt-in: they change nothing unless a plugin's own files ask for them (a layout line, a `params.json` or `vst.json`
 key, a `defines` entry, the transport hook), so sd88me's own ports build as before. The rest are fixes: the option-list read
 past its end, the installer's path match, the host test (macOS, long ranges, travel) and the release workflow's `tools_repo`. Since
 2026-10-23 `tools/build.sh` builds with this branch too (`setup.sh`), and the patch below is retired.
-The pin is `e3a0af4` since 2026-10-23 (sd88me's wrapper fix, not pushed to the fork yet). The plugins' `release.yml`
-still name the pins of their last releases (`b014168` Incipience, `eaef502` Percolator, Open303 and Dual Slope,
-`7f0653c` the others) until their next release runs `prepare.py`.
+The pin is `ea7f73c` since 2026-10-24 (MPC's recording flag for the count-in; committed, not pushed to the fork yet).
+The plugins' `release.yml` name `e3a0af4`, the pin of their 2026-10-23 releases (sd88me's wrapper fix), until their
+next release runs `prepare.py`.
 To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `setup-release.sh`, run
 `python3 dev-tools/catalogue/prepare.py --ready` (it rewrites each plugin's `release.yml` and `FRAMEWORK.md`), then
 `check.sh` the plugins.
@@ -70,6 +71,13 @@ branch's tools (sub-page mode pictures, a stepper drawn into its sub-page's pict
 Incipience, Stevequencer, Stevequencer 16, MPC Plaits and Mutable Vibe keep their committed `deploy/` screens
 (`tools/build.sh` `KEEP_SCREEN`; their releases ship `deploy/` too). The private controller builds keep their own
 copy of the old base with the wrapper fix back-ported (outside this repo).
+
+To change one of those five screens, draw it with the old tools and keep it (done 2026-10-24 for the Stevequencers'
+COUNT-IN): `git -C framework/release-tools worktree add --detach $PWD/framework/old-tools 39660f2`, then
+`git -C framework/old-tools apply` the patch as it was last committed (`git show df04efc1^:framework/mpc-vst-plugins.patch`);
+`bash framework/old-tools/tools/build_port.sh <plugin>/vst.json` draws `build/skin/`, which replaces
+`deploy/Synths/<folder>`; then `tools/build.sh <plugin>` builds the plugin itself on the current framework (the screen
+stays). Compare the new screen with the committed one first: only the pages you changed should differ.
 
 A rebase of the branch onto sd88me's current `main` (tried 2026-10-23) changes 33 of the 44 screens: his newer skin
 tools draw stepper text, arrows, mode pictures and buttons differently. That is a separate job with a screen review.

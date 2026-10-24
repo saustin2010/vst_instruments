@@ -143303,6 +143303,36 @@
                                 "version": 2,
                                 "componentData": {
                                     "version": 1,
+                                    "name": "count_in",
+                                    "type": "shKnobSide24_b7375201_v30_226x68",
+                                    "data": {
+                                        "version": 1,
+                                        "handleName": "Data"
+                                    }
+                                },
+                                "handle remapping": {
+                                    "version": 1,
+                                    "map": [
+                                        {
+                                            "key": "Data",
+                                            "value": "Parameter 552"
+                                        }
+                                    ]
+                                },
+                                "bounds": {
+                                    "version": 2,
+                                    "acceptsHWFocus": "Yes",
+                                    "showWhenDataModelInvalid": "Hide",
+                                    "whenVisible": "Always",
+                                    "boundsType": "Absolute",
+                                    "bounds": "784 508 226 68",
+                                    "additionalInvalidatingHandles": []
+                                }
+                            },
+                            {
+                                "version": 2,
+                                "componentData": {
+                                    "version": 1,
                                     "name": "play_step",
                                     "type": "shReadout_200x64_60_ffb020",
                                     "data": {
@@ -144247,7 +144277,7 @@
                     "16 46 238 536",
                     "270 46 238 232",
                     "518 46 250 536",
-                    "772 46 250 384"
+                    "772 46 250 536"
                 ],
                 "componentName": "SETUP|SETUP",
                 "initialSize": "0 0 1280 628",

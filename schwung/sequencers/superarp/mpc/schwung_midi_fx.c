@@ -6,6 +6,10 @@
  *   on a stock Live II 2026-10-01); pick that port as another track's MIDI input.
  * - The host transport (engine.h's mpc_engine_transport hook) becomes 24-PPQN MIDI clock plus Start/Stop fed to the
  *   module's process_midi, and answers the module's get_bpm / get_clock_status / get_beat_position.
+ * - MPC's count-in looks like playback to a plugin (docs/NOTES.md, 2026-10-24): the transport reports playing, the
+ *   position runs on through the count-in bar, then jumps back to where playback really starts. A port with a
+ *   "count_in" parameter (0 OFF, 1 RECORD, 2 REC+PLAY, set like MPC's Metro > Count-In) holds a fresh start that may be
+ *   a count-in until that jump, and starts there; with no jump within COUNT_IN_MAX beats it starts anyway.
  * - Notes played on the plugin's own track go to the module (arpeggiators and chord generators use them).
  * - Audio out is silence.
  * libasound is loaded at run time from the device (no ALSA headers needed to build); the event struct below is the
@@ -26,6 +30,10 @@
 #endif
 #define SR 44100
 #define MAX_OUT MIDI_FX_MAX_OUT_MSGS
+#define COUNT_IN_MAX 9.0   /* beats: two 4/4 bars and a beat, longer than any count-in */
+#ifndef MPC_TRANSPORT_RECORDING   /* the wrapper adds it to `playing` while MPC records (its engine.h, 2026-10-24) */
+#define MPC_TRANSPORT_RECORDING 2
+#endif
 
 extern midi_fx_api_v1_t *move_midi_fx_init(const host_api_v1_t *host);
 
@@ -76,6 +84,10 @@ typedef struct {
     double bpm, ppq;        /* tempo; position in quarter notes (advanced per block between host updates) */
     int playing, running;    /* host says playing; we have sent Start */
     long clock;              /* 24-PPQN ticks sent since Start */
+    int count_in;            /* the "count_in" parameter: 0 never, 1 when recording, 2 always wait for a count-in */
+    int waiting;             /* playing, but a count-in may be running: Start waits for the jump back */
+    int stopped_seen;        /* a fresh start needs the transport seen stopped first (not inserted while playing) */
+    double wait_from, wait_last;
 } inst_t;
 
 static midi_fx_api_v1_t *api;
@@ -179,16 +191,36 @@ static void midi(void *p, const uint8_t *m, int len) {
     g_cur = NULL;
 }
 
-static void set_param(void *p, const char *k, const char *v) { inst_t *in = p; g_cur = in; api->set_param(in->mod, k, v); g_cur = NULL; }
-static int get_param(void *p, const char *k, char *b, int n) { inst_t *in = p; return api->get_param ? api->get_param(in->mod, k, b, n) : -1; }
+static void set_param(void *p, const char *k, const char *v) {
+    inst_t *in = p;
+    if (!strcmp(k, "count_in")) { int c = atoi(v); in->count_in = c < 0 ? 0 : c > 2 ? 2 : c; return; }   /* ours, not the module's */
+    g_cur = in; api->set_param(in->mod, k, v); g_cur = NULL;
+}
+static int get_param(void *p, const char *k, char *b, int n) {
+    inst_t *in = p;
+    if (!strcmp(k, "count_in")) return snprintf(b, n, "%d", in->count_in);
+    return api->get_param ? api->get_param(in->mod, k, b, n) : -1;
+}
 
-/* Transport from the wrapper (once per host buffer): start/stop, and resync the position after a jump. */
+/* Transport from the wrapper (once per host buffer): start/stop, resync the position after a jump, and wait out a
+ * count-in (MPC_TRANSPORT_RECORDING in `playing`: engine.h). */
 void mpc_engine_transport(void *p, double bpm, double ppq, int playing) {
     inst_t *in = p;
     if (!in) return;
+    int recording = (playing & MPC_TRANSPORT_RECORDING) != 0;
+    playing = playing != 0;
     if (bpm > 0) in->bpm = bpm;
     g_cur = in;
-    if (playing && !in->running) {
+    if (!playing) in->stopped_seen = 1;
+    if (playing && !in->playing && in->stopped_seen && (in->count_in == 2 || (in->count_in == 1 && recording))) {
+        in->waiting = 1;
+        in->wait_from = in->wait_last = ppq;
+    }
+    if (in->waiting) {   /* the count-in ends where MPC's position jumps back; stopping ends the wait too */
+        if (!playing || (ppq >= 0 && (ppq < in->wait_last - 0.25 || ppq - in->wait_from > COUNT_IN_MAX))) in->waiting = 0;
+        else if (ppq >= 0) in->wait_last = ppq;
+    }
+    if (playing && !in->running && !in->waiting) {
         in->ppq = ppq >= 0 ? ppq : 0;
         in->clock = 0;
         in->running = 1;
@@ -201,7 +233,7 @@ void mpc_engine_transport(void *p, double bpm, double ppq, int playing) {
         in->running = 0;
         uint8_t stop = 0xFC;
         feed(in, &stop, 1);
-    } else if (playing && ppq >= 0 && fabs(ppq - in->ppq) > 1.0 / 24) {
+    } else if (playing && in->running && ppq >= 0 && fabs(ppq - in->ppq) > 1.0 / 24) {
         in->ppq = ppq;   /* loop or locate: follow the host; the module keeps counting clocks */
     }
     in->playing = playing;
