@@ -102,8 +102,8 @@ This repo stays where they're developed; the plan and where each plugin stands: 
 ## Status (2026-10-05)
 
 - Wrapper fix (2026-10-23): sd88me's fix for Q-Links on track edit → automation ([#499](https://github.com/sd88me/mpc-vst-plugins/discussions/499)) is in all 44 plugins: one framework for this repo's builds and the releases (the release tools' `steve-features`, `e3a0af4`), `refresh_display` where a set changes other controls (`dev-tools/displaydeps/`), and the 34 released plugins re-released (patch versions; Percolator 2.1.0) with a catalogue PR ([sd88me/mpc-vst-plugins#533](https://github.com/sd88me/mpc-vst-plugins/pull/533)). Checked on the Live II. Also fixed: two crashes in the Plaits engine, in Plaits, Mutable Vibe, Mr Hyde and MPC Plaits.
-- Count-in (2026-10-24; Stevequencer and Stevequencer 16 1.1.0 released, 1.1.1 next: 1.1.0 missed a count-in started
-  with a plain Play, fixed and checked on the Live II): MPC tells plugins it's playing during its count-in, so the
+- Count-in (2026-10-24; Stevequencer and Stevequencer 16 1.1.1 released: 1.1.0 missed a count-in started with a plain
+  Play, fixed and checked on the Live II; COUNT-IN is three buttons on SETUP): MPC tells plugins it's playing during its count-in, so the
   sequencers played the count-in bar (measured on the Live II). Stevequencer and Stevequencer 16 get a COUNT-IN
   setting on SETUP (set like MPC's) and wait for the real start; the code is shared by all ten MIDI sequencers, and
   the framework now passes MPC's recording flag to them. Replayed offline with `dev-tools/countin/`.
