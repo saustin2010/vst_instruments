@@ -391,8 +391,11 @@ parameter index, so existing projects keep working.
       `ea7f73c`), the shared adapter (dev-tools/midifx) waits for the jump when a port's COUNT-IN says so, and
       Stevequencer and Stevequencer 16 have COUNT-IN on SETUP (screens redrawn with the old tools, the rest
       byte-identical); `dev-tools/countin/run.sh` replays the measured transport. Released 2026-10-24
-      (Stevequencer and Stevequencer 16 1.1.0, pinned to `ea7f73c`). Left: the owner's check on the device; COUNT-IN
-      on the other eight sequencers' screens. piClideaN's author told:
+      (Stevequencer and Stevequencer 16 1.1.0, pinned to `ea7f73c`), but 1.1.0 still played on a count-in started with
+      a plain Play: MPC's position also jumps back part-way through it. Fixed the same day (framework `7470aba` passes
+      the time signature; the real start is the jump back a bar after Play); a debug build (`COUNTIN_LOG`) on the Live II
+      showed Stevequencer 16 silent through the count-in and starting on bar 1. Left: COUNT-IN as three buttons on SETUP
+      (the owner: a dial is wrong for it), release 1.1.1; COUNT-IN on the other eight sequencers' screens. piClideaN's author told:
       [timomacquis/piClideaN16-MPC#1](https://github.com/timomacquis/piClideaN16-MPC/issues/1).
 - [x] Plaits crashed under an offline stress of random parameter writes and MIDI (2026-10-23, in the build installed
       then too, also on emulated armv7): the wavetable model's coordinates reached 8 (or bank -1 after the mirror) and

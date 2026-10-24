@@ -1,7 +1,8 @@
 /* MPC's count-in replayed through a sequencer (wrapper + mpc/schwung_midi_fx.c + module, x86): run.sh links it with
  * the objects the offline test leaves in <plugin>/build, like dev-tools/presets/levels.c. The transport is what MPC
- * reported on a Live II (docs/NOTES.md, 2026-10-24): stopped (ppq 0); for a count-in, playing with the recording flag
- * while the position runs on from 1.43 through one bar, then a jump back to 0 and normal playback. Each case is a fresh
+ * reported on a Live II (docs/NOTES.md, 2026-10-24): stopped (ppq 0); a count-in with Rec + Play (the recording flag,
+ * the position running on from 1.43 for a bar, then back to 0), or with a plain Play (from a stale 14.18 for 1.82
+ * beats, back to 0.0041 for the rest of the bar, then back to 0); then normal playback. Also in 3/4. Each case is a fresh
  * instance with its COUNT-IN set; markers go to stderr between the adapter's "midi out" lines (MIDIFX_DEBUG=1), and
  * run.sh's awk says whether MIDI went out before the real start.
  *   countin <count_in param index> */
@@ -50,10 +51,20 @@ static void mark(const char *m) {
     fprintf(stderr, "== %s\n", m); fflush(stderr);
 }
 static void stop(AEffect *a) { ti.flags = STOPPED; ti.ppqPos = 0; ti.samplePos = 0; blocks(a, 40); }
-/* one bar of count-in from 1.43 (as measured), then the jump back to 0 */
-static void count_in(AEffect *a, int flags) {
-    ti.flags = flags; ti.ppqPos = 1.43; ti.samplePos = 30035;
-    blocks(a, (int)(4.0 / BEAT));
+/* one bar of count-in as measured, then the jump back to 0: with Rec + Play the position runs on from 1.43; with a
+ * plain Play it runs on from a stale 14.18 for 1.82 beats, then from 0.0041 for the rest of the bar */
+static void count_in(AEffect *a, int flags, int plain) {
+    double bar = ti.timeSigNumerator * 4.0 / ti.timeSigDenominator;
+    ti.flags = flags;
+    if (plain) {
+        ti.ppqPos = 14.18; ti.samplePos = 297806;
+        blocks(a, (int)(1.82 / BEAT));
+        ti.ppqPos = 0.0041; ti.samplePos = 87;
+        blocks(a, (int)((bar - 1.82) / BEAT));
+    } else {
+        ti.ppqPos = 1.43; ti.samplePos = 30035;
+        blocks(a, (int)(bar / BEAT));
+    }
     ti.ppqPos = 0; ti.samplePos = 0;
 }
 
@@ -62,11 +73,13 @@ int main(int argc, char **argv) {
     static const struct { const char *name; float count_in; int kind; } cases[] = {
         {"REC+PLAY, count-in with Rec + Play", 1.0f, 0},
         {"RECORD, count-in with Rec + Play", 0.5f, 0},
-        {"REC+PLAY, count-in with plain Play", 1.0f, 1},
+        {"REC+PLAY, count-in with plain Play (two jumps back)", 1.0f, 1},
         {"RECORD, plain Play, no count-in", 0.5f, 2},
         {"OFF, count-in with Rec + Play", 0.0f, 0},
-        {"REC+PLAY, plain Play, no count-in (no jump: the nine-beat limit)", 1.0f, 2},
+        {"REC+PLAY, plain Play, no count-in (no jump: starts a beat after the bar)", 1.0f, 2},
         {"REC+PLAY, Stop during the count-in, then a count-in", 1.0f, 3},
+        {"REC+PLAY, 3/4, count-in with plain Play", 1.0f, 4},
+        {"REC+PLAY, 3/4, count-in with Rec + Play", 1.0f, 5},
     };
     for (unsigned c = 0; c < sizeof cases / sizeof cases[0]; c++) {
         AEffect *a = VSTPluginMain(host);
@@ -78,12 +91,15 @@ int main(int argc, char **argv) {
         fprintf(stderr, "== case %u: %s\n", c + 1, cases[c].name);
         stop(a);
         mark("play pressed");
+        ti.timeSigNumerator = cases[c].kind >= 4 ? 3 : 4;
         switch (cases[c].kind) {
-        case 0: count_in(a, RECORDING); mark("real start"); blocks(a, (int)(8.0 / BEAT)); break;
-        case 1: count_in(a, PLAYING); mark("real start"); blocks(a, (int)(8.0 / BEAT)); break;
+        case 0: count_in(a, RECORDING, 0); mark("real start"); blocks(a, (int)(8.0 / BEAT)); break;
+        case 1: count_in(a, PLAYING, 1); mark("real start"); blocks(a, (int)(8.0 / BEAT)); break;
         case 2: mark("real start"); ti.flags = PLAYING; blocks(a, (int)(12.0 / BEAT)); break;
         case 3: ti.flags = RECORDING; ti.ppqPos = 1.43; blocks(a, (int)(2.0 / BEAT)); stop(a);
-                count_in(a, RECORDING); mark("real start"); blocks(a, (int)(8.0 / BEAT)); break;
+                count_in(a, RECORDING, 0); mark("real start"); blocks(a, (int)(8.0 / BEAT)); break;
+        case 4: count_in(a, PLAYING, 1); mark("real start"); blocks(a, (int)(8.0 / BEAT)); break;
+        case 5: count_in(a, RECORDING, 0); mark("real start"); blocks(a, (int)(8.0 / BEAT)); break;
         }
         mark("stopping");
         stop(a);

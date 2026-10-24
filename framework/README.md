@@ -49,14 +49,15 @@ them. Each plugin's `FRAMEWORK.md` lists the ones it uses, what they do there an
 | [`38a5e0e`](https://github.com/saustin2010/mpc-vst-plugins/commit/38a5e0e) [`de1f916`](https://github.com/saustin2010/mpc-vst-plugins/commit/de1f916) [`e3a0af4`](https://github.com/saustin2010/mpc-vst-plugins/commit/e3a0af4) | From this repo's old patch: a `banks=` stepper's arrows from its own sub-page's picture; a list's `ink=` / `lit=` / `focus=no`; a readout's `vs=` / `ink=` | Percolator, Percolator OUT and Incipience OUT build the screens they were approved with | those three (and the browsers) |
 | [`923db97`](https://github.com/saustin2010/mpc-vst-plugins/commit/923db97) | `docs/NOTES.md`: the 15 sections of device and porting notes this repo's old patch kept | Kept when the patch was retired | - |
 | [`ea7f73c`](https://github.com/saustin2010/mpc-vst-plugins/commit/ea7f73c) | `mpc_engine_transport()` gets MPC's recording flag (`MPC_TRANSPORT_RECORDING` added to `playing`); NOTES: MPC's count-in as a plugin sees it | MPC reports playing through its count-in, so sequencers played the count-in bar; with the flag a sequencer can wait out a count-in when recording (Live II, 2026-10-24) | the 10 MIDI sequencers (dev-tools/midifx: COUNT-IN on both Stevequencers) |
+| [`7470aba`](https://github.com/saustin2010/mpc-vst-plugins/commit/7470aba) | `mpc_engine_transport()` also gets the time signature (bits 8-23 of `playing`); NOTES: a plain-Play count-in | From a plain Play MPC's position jumps back part-way through the count-in too; the real start is the jump a bar after Play, so an engine needs the bar's length (Live II, 2026-10-24) | the 10 MIDI sequencers |
 
 Most are opt-in: they change nothing unless a plugin's own files ask for them (a layout line, a `params.json` or `vst.json`
 key, a `defines` entry, the transport hook), so sd88me's own ports build as before. The rest are fixes: the option-list read
 past its end, the installer's path match, the host test (macOS, long ranges, travel) and the release workflow's `tools_repo`. Since
 2026-10-23 `tools/build.sh` builds with this branch too (`setup.sh`), and the patch below is retired.
-The pin is `ea7f73c` since 2026-10-24 (MPC's recording flag for the count-in).
-The plugins' `release.yml` name `e3a0af4`, the pin of their 2026-10-23 releases (sd88me's wrapper fix), until their
-next release runs `prepare.py`.
+The pin is `7470aba` since 2026-10-24 (MPC's recording flag and time signature for the count-in).
+The plugins' `release.yml` name the pin of their last release (`ea7f73c` Stevequencer, Stevequencer 16 and Hera;
+`e3a0af4` the others) until their next release runs `prepare.py`.
 To move the pin: commit on `steve-features`, push it to the fork, set `REF` in `setup-release.sh`, run
 `python3 dev-tools/catalogue/prepare.py --ready` (it rewrites each plugin's `release.yml` and `FRAMEWORK.md`), then
 `check.sh` the plugins.

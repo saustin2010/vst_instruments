@@ -373,10 +373,11 @@ FORK_CHANGES = [
      "The engine tells the wrapper which controls it changed itself (the Pērkons CCs and MIDI MOD lanes it reads on "
      "its own MIDI port), so MPC's screen and Q-Links follow them.",
      "The CCs and lanes still move the sound, but the screen and the Q-Links keep showing the old values."),
-    ("ea7f73c", "count_in", "MPC's recording flag in `mpc_engine_transport()`",
-     "COUNT-IN set to RECORD knows when MPC records, so a start waits out MPC's count-in only then (MPC reports "
-     "playing through its count-in; Live II, 24 October 2026).",
-     "RECORD can't tell recording from playing, so it starts at once and plays the count-in bar (REC+PLAY still waits)."),
+    ("7470aba", "count_in", "MPC's recording flag and time signature in `mpc_engine_transport()`",
+     "COUNT-IN knows when MPC records (RECORD waits only then) and how long a bar is: MPC reports playing through its "
+     "one-bar count-in, and the real start is the jump back a bar after Play (Live II, 24 October 2026).",
+     "RECORD can't tell recording from playing, and a bar is taken as 4/4: in another time signature the start can come "
+     "a beat late or during the count-in."),
     ("b014168", "travel_nudge", "`\"nudge_pct\"` with `QLINK_TRAVEL`",
      "A long whole-number list (a sample number, a list's rows) steps one value per Q-Link event or data-wheel click.",
      "Each Q-Link event moves 1/128 of the range and each wheel click 1/100: two or more values at a time, skipping some."),
