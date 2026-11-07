@@ -1,6 +1,6 @@
 # MPC VST Instruments
 
-**44 plugins for Akai MPC OS standalone devices**: 24 synths, 4 drum machines, 11 MIDI sequencers and generators, and 5 audio effects. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for the Stevequencers, a browser prototype and a generator; for Percolator, a generator) and converted into MPC's skin format; the two made for MPC by other authors keep their own.
+**46 plugins for Akai MPC OS standalone devices**: 24 synths, 4 drum machines, 11 MIDI sequencers and generators, 5 audio effects and 2 utilities. They run inside MPC's own plugin host like Akai's instruments do (pads, keys, clips, Q-Links, automation, saved with the project), and every one has its own native touchscreen page, designed in Google Stitch (or, for the Stevequencers, a browser prototype and a generator; for Percolator, a generator) and converted into MPC's skin format; the two made for MPC by other authors keep their own.
 
 <img src="docs/images/gallery.png" alt="The first page of every plugin, as the MPC draws it">
 
@@ -81,6 +81,14 @@ Q-Links, switches, pop-ups and displays, nothing clipped). Edit this file and sw
 | <a href="mutable-instruments/ringsfx/"><img src="mutable-instruments/ringsfx/screenshots/page_0.png" width="220" alt="Resonator FX"></a> | **[Resonator FX](mutable-instruments/ringsfx/)**<br><sub>Audio effect · Émilie Gillet · MIT</sub> | Resonator FX: Resonator as an audio effect, the track's sound excites the resonator, with 12 presets. | ✅ |
 | <a href="schwung/effects/verglas/"><img src="schwung/effects/verglas/screenshots/page_0.png" width="220" alt="Verglas"></a> | **[Verglas](schwung/effects/verglas/)**<br><sub>Audio effect · Émilie Gillet · MIT</sub> | Verglas: a granular texture processor as an audio effect, with 12 presets, from Émilie Gillet's open-source Clouds. | ✅ |
 
+### Utilities (2)
+
+| | Plugin | What it is | Design QA |
+|---|---|---|:---:|
+| <a href="originals/mixstrip/"><img src="originals/mixstrip/screenshots/page_0.png" width="220" alt="Mix Strip"></a> | **[Mix Strip](originals/mixstrip/)**<br><sub>Utility (insert) · Steve A · written for this repo</sub> | A mixer strip for one track, played from a MIDI controller read directly (no MIDI learn, no MIDI track): LEVEL, MUTE, CUE (pre-fader listen), FILTER or a send kill, and two FX sends; 16 tracks on two pages of eight columns. New 2026-10-25, offline tests passed. | ☐ |
+| <a href="originals/mixstrip/mixbus/"><img src="originals/mixstrip/mixbus/screenshots/page_0.png" width="220" alt="Mix Bus"></a> | **[Mix Bus](originals/mixstrip/mixbus/)**<br><sub>Utility (insert) · Steve A · written for this repo</sub> | Plays one bus of every Mix Strip on an empty audio track: the CUE for your headphones' output, or FX A / FX B into an effect; shows all 16 strips. New 2026-10-25, with Mix Strip. | ☐ |
+| <a href="originals/mixstrip/mixdesk/"><img src="originals/mixstrip/mixdesk/screenshots/page_0.png" width="220" alt="Mix Desk"></a> | **[Mix Desk](originals/mixstrip/mixdesk/)**<br><sub>Utility (insert) · Steve A · written for this repo</sub> | The controller's sixteen mixer columns (two pages) in one place: pick the MPC track each column plays (the Mix Strips follow), and let the faders and MUTEs drive MPC's own track faders and Track Mutes (MIDI Learn once, in a template); BUTTON 2 = CUE or SEND KILL. New 2026-11-07, offline tests passed. | ☐ |
+
 ## Installing
 
 You need a **Gen1 MPC OS device** (32-bit ARM: e.g. MPC Live, Live II, One, X, Force) with **root SSH access**, and a Mac or Linux computer (Windows: WSL) on the same network. Then:
@@ -102,6 +110,8 @@ This repo stays where they're developed; the plan and where each plugin stands: 
 ## Status (2026-10-05)
 
 - Wrapper fix (2026-10-23): sd88me's fix for Q-Links on track edit → automation ([#499](https://github.com/sd88me/mpc-vst-plugins/discussions/499)) is in all 44 plugins: one framework for this repo's builds and the releases (the release tools' `steve-features`, `e3a0af4`), `refresh_display` where a set changes other controls (`dev-tools/displaydeps/`), and the 34 released plugins re-released (patch versions; Percolator 2.1.0) with a catalogue PR ([sd88me/mpc-vst-plugins#533](https://github.com/sd88me/mpc-vst-plugins/pull/533)). Checked on the Live II. Also fixed: two crashes in the Plaits engine, in Plaits, Mutable Vibe, Mr Hyde and MPC Plaits.
+- New: **[Mix Strip](originals/mixstrip/)** and **[Mix Bus](originals/mixstrip/mixbus/)** (2026-10-25), a mixer played from a MIDI controller: Mix Strip, last in a track's inserts, gives the track a controller column (LEVEL, MUTE, CUE, FILTER, SEND A / B; 16 tracks on two pages), reading the controller straight from its USB port; Mix Bus, on an empty audio track, plays the cue (pre-fader listen) or an FX send of every strip. Built, offline tests passed (`test/run.sh`, strips and buses together); installed on the Live II and working (2026-10-25).
+- New: **[Mix Desk](originals/mixstrip/mixdesk/)** (2026-11-07): the sixteen columns in one place, each on any of tracks 1-16; LEVEL + MUTE on the strips or on MPC's own mixer (its own MIDI port, learned once in a template); BUTTON 2 = CUE or SEND KILL. Mix Strip and Mix Bus follow it (shared memory layout 2: install the three together). Offline tests passed (127 checks); not installed.
 - Count-in (2026-10-24; Stevequencer and Stevequencer 16 1.1.1 released: 1.1.0 missed a count-in started with a plain
   Play, fixed and checked on the Live II; COUNT-IN is three buttons on SETUP): MPC tells plugins it's playing during its count-in, so the
   sequencers played the count-in bar (measured on the Live II). Stevequencer and Stevequencer 16 get a COUNT-IN
