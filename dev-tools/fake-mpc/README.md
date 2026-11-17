@@ -14,4 +14,6 @@ MPC_SSH_BIN=dev-tools/fake-mpc/fake-ssh ./uninstall.sh fake grids --yes
 dev-tools/fake-mpc/start.sh stop
 ```
 
+`start.sh 3.10.1` adds MPC OS 3.10.1's External Plugin Support setting, so `install.sh` takes its `VST2 Plugins` path.
+
 What it can't tell you: whether the real MPC accepts the edited settings, finds the skins, or lists the plugins.

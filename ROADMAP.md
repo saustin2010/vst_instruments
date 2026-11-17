@@ -2,6 +2,41 @@
 
 Open items as of 2026-10-05, most useful first. Tick them off here (with the date) as they're done.
 
+## MPC OS 3.10.1 (2026-11-15)
+
+3.10.1 loads third-party VST2 plugins officially (Akai's MPC Plugin SDK) from `<drive>/VST2 Plugins/<maker> - VST -
+<name>/` folders with a `plugin.json`. Its plugin browser hides plugins registered in `MPC.settings`, which saved
+projects still load. Open MPC's findings are in its `docs/NOTES.md` (2026-10-31 onwards).
+- [x] Backup of the Live II's settings, plugins and both 3.9.1 images on the owner's external drive (2026-11-15)
+- [x] `tools/vst2-move.sh` (`mpc-side.sh vst2`, `vst2retire`): copies the installed plugins into `/sdcard/VST2 Plugins`.
+  Tested offline on a copy of the Live II's 70 plugins, with macOS sh and in `dev-tools/fake-mpc/` (BusyBox): 70
+  folders, binaries identical, re-runs, retire and undo (2026-11-15)
+- [x] Live II on 3.10.1: copies made (2026-11-15); the owner sees them under External Plugins, loading (2026-11-18)
+- [x] `vst2-move.sh --labels` (`mpc-side.sh vst2labels`, 2026-11-18): the browser shows a copy's `plugin.json` name, the
+  binary's, so the 20 plugins labelled only in `MPC.settings` (sd88me's, the drum machines, Drips, Overcast, Devko's,
+  Dub Station, LXRXXL, RMXXXL, πClideaN) lost their [SYN]/[FX]/... labels; it writes the `MPC.settings` name into
+  `plugin.json` (backup `plugin.json.vst2-orig`, `--unlabel` undoes). Tested on a copy of the Live II (macOS sh and
+  `dev-tools/fake-mpc/`), applied on the Live II
+- [x] Live II: after a restart the 20 show their labels in the browser (owner, 2026-11-18)
+- [x] Live II: a labelled plugin still draws its own skin (Profit-08, owner, 2026-11-18): MPC finds the skin by the
+  binary's strings, not the `plugin.json` name
+- [x] Live II: `--retire --apply`, the 70 old `/sdcard/Synths` screens set aside, MPC restarted (2026-11-18). The 21
+  old screen folders under labelled names (3.9.1's copies, e.g. `sd88me - VST - [SYN] Profit-08`) stay: 3.10.1 doesn't
+  look there, 3.9.1 would
+- [ ] Live II: check skins, presets, Q-Links and sequencer ports more widely
+- [x] `install.sh` installs into `VST2 Plugins` when the MPC has External Plugin Support (2026-11-18; `mpc-side.sh
+  place_vst2`, `--vst2` / `--legacy`): new folders and in-place updates (data merged), the pre-3.10.1 binary (`/sdcard/vst`
+  or a release zip's `/sdcard/Synths` folder) updated too where it's still there, the old `/sdcard/Synths` screen set aside, another copy with the same uid hidden
+  (`plugin.json.replaced`), no `MPC.settings` edit; `uninstall.sh` removes the folders. Tested in
+  `dev-tools/fake-mpc/` (`start.sh 3.10.1`): fresh, update, old install around, uninstall with and without
+  `--purge`, and the older-OS install unchanged
+- [ ] Once a project is seen falling back to the copy on the Live II: set the old `/sdcard/vst/*.so` aside, so every
+  project uses the copies
+- [ ] Helm, Hush One and Libpo32 read their data from a fixed `/sdcard/vst/<name>` (MODULE_DIR without MODULE_SUBDIR):
+  give them MODULE_SUBDIR; until then `/sdcard/vst/<name>` must stay
+- [ ] Releases: plugin zips need a `plugin.json` for 3.10.1 (Open MPC's release workflow writes one). sd88me's repo is
+  now `open-mpc/mpc-vst-plugins`: move `steve-features` onto it, new pin, re-release
+
 ## Catalogue ([docs/catalogue-migration.md](docs/catalogue-migration.md))
 
 - [ ] **Other companies' names out** (2026-10-12; sd88me's new catalogue rule and Mutable Instruments' own terms; plan
