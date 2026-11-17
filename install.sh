@@ -112,21 +112,7 @@ for d in "${DIRS[@]}"; do
   mkdir -p "$TMP/$p"
   EXTRA=()
   if [ $MODE = vst2 ]; then   # plugin.json from the plugin-list entry; VST_DATA: a data folder read from a fixed /sdcard/vst path
-    python3 -I - "$d" "$TMP/$p" <<'EOF'
-import html, json, os, re, sys
-d, out = sys.argv[1], sys.argv[2]
-e = open(os.path.join(d, "deploy", "pluginlist-entry.xml"), encoding="utf-8").read()
-a = {k: html.unescape(v) for k, v in re.findall(r'(\w+)="([^"]*)"', e)}
-j = {"name": a["name"], "manufacturer": a["manufacturer"], "uid": "0x" + a["uid"].lower(), "format": "vst2",
-     "kind": "instrument" if a.get("isInstrument", "1") == "1" else "effect"}
-for k in ("version", "category"):
-    if a.get(k): j[k] = a[k]
-j.update(numInputs=int(a.get("numInputs") or 0), numOutputs=int(a.get("numOutputs") or 2), file32=os.path.basename(a["file"]))
-with open(os.path.join(out, "plugin.json"), "w", encoding="utf-8") as f: f.write(json.dumps(j, indent=2, ensure_ascii=False) + "\n")
-v = json.load(open(os.path.join(d, "vst.json"))).get("defines") or {}
-sub, mdir = str(v.get("MODULE_SUBDIR", "")).strip('"'), str(v.get("MODULE_DIR", "")).strip('"')
-with open(os.path.join(out, "VST_DATA"), "w") as f: f.write(os.path.basename(mdir) + "\n" if mdir and not sub else "")
-EOF
+    python3 -I tools/plugin-json.py "$d/deploy/pluginlist-entry.xml" "$TMP/$p" "$d/vst.json"
     EXTRA=(plugin.json VST_DATA)
   fi
   { (cd "$d/deploy" && find vst Synths -type f | sort | while IFS= read -r f; do "${SHA[@]}" "$f"; done)
