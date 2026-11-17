@@ -1,0 +1,296 @@
+{
+ "name": "Mix Bus",
+ "params": [
+  {
+   "key": "status",
+   "name": "STATUS",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "bus",
+   "name": "BUS",
+   "options": [
+    "CUE",
+    "FX A",
+    "FX B"
+   ],
+   "default": "CUE"
+  },
+  {
+   "key": "level",
+   "name": "LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 75,
+   "dynamic_display": true
+  },
+  {
+   "key": "cue_mode",
+   "name": "CUE MODE",
+   "options": [
+    "ADD",
+    "SOLO"
+   ],
+   "default": "ADD"
+  },
+  {
+   "key": "t1",
+   "name": "TRACK 1",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t2",
+   "name": "TRACK 2",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t3",
+   "name": "TRACK 3",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t4",
+   "name": "TRACK 4",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t5",
+   "name": "TRACK 5",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t6",
+   "name": "TRACK 6",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t7",
+   "name": "TRACK 7",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t8",
+   "name": "TRACK 8",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t9",
+   "name": "TRACK 9",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t10",
+   "name": "TRACK 10",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t11",
+   "name": "TRACK 11",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t12",
+   "name": "TRACK 12",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t13",
+   "name": "TRACK 13",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t14",
+   "name": "TRACK 14",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t15",
+   "name": "TRACK 15",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "t16",
+   "name": "TRACK 16",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f1",
+   "name": "TRACK 1 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f2",
+   "name": "TRACK 2 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f3",
+   "name": "TRACK 3 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f4",
+   "name": "TRACK 4 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f5",
+   "name": "TRACK 5 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f6",
+   "name": "TRACK 6 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f7",
+   "name": "TRACK 7 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f8",
+   "name": "TRACK 8 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f9",
+   "name": "TRACK 9 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f10",
+   "name": "TRACK 10 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f11",
+   "name": "TRACK 11 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f12",
+   "name": "TRACK 12 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f13",
+   "name": "TRACK 13 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f14",
+   "name": "TRACK 14 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f15",
+   "name": "TRACK 15 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "f16",
+   "name": "TRACK 16 SW",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  }
+ ]
+}

@@ -1,0 +1,182 @@
+{
+ "name": "Mix Strip",
+ "params": [
+  {
+   "key": "status",
+   "name": "STATUS",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "track",
+   "name": "TRACK",
+   "min": 1,
+   "max": 16,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "level",
+   "name": "LEVEL",
+   "min": 0,
+   "max": 100,
+   "default": 75,
+   "dynamic_display": true
+  },
+  {
+   "key": "mute",
+   "name": "MUTE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "cue",
+   "name": "CUE",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  },
+  {
+   "key": "filter",
+   "name": "FILTER",
+   "min": -100,
+   "max": 100,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "send_a",
+   "name": "SEND A",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "send_b",
+   "name": "SEND B",
+   "min": 0,
+   "max": 100,
+   "default": 0,
+   "dynamic_display": true
+  },
+  {
+   "key": "midi_ch",
+   "name": "MIDI CH",
+   "min": 1,
+   "max": 15,
+   "default": 1,
+   "display": "int"
+  },
+  {
+   "key": "knobs",
+   "name": "KNOBS",
+   "options": [
+    "RELATIVE",
+    "ABSOLUTE"
+   ],
+   "default": "RELATIVE"
+  },
+  {
+   "key": "cc_send_a",
+   "name": "CC SEND A",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "cc_send_b",
+   "name": "CC SEND B",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "cc_filter",
+   "name": "CC FILTER",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "cc_level",
+   "name": "CC LEVEL",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "cc_mute",
+   "name": "CC MUTE",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "cc_cue",
+   "name": "CC CUE",
+   "min": 0,
+   "max": 0,
+   "display": "string",
+   "type": "readout"
+  },
+  {
+   "key": "track_prev",
+   "name": "TRACK DOWN",
+   "momentary": true,
+   "step_of": "track",
+   "step_delta": -1
+  },
+  {
+   "key": "track_next",
+   "name": "TRACK UP",
+   "momentary": true,
+   "step_of": "track",
+   "step_delta": 1
+  },
+  {
+   "key": "midi_ch_prev",
+   "name": "MIDI CH DOWN",
+   "momentary": true,
+   "step_of": "midi_ch",
+   "step_delta": -1
+  },
+  {
+   "key": "midi_ch_next",
+   "name": "MIDI CH UP",
+   "momentary": true,
+   "step_of": "midi_ch",
+   "step_delta": 1
+  },
+  {
+   "key": "knob3",
+   "name": "KNOB 3",
+   "options": [
+    "FILTER",
+    "SEND KILL"
+   ],
+   "default": "FILTER"
+  },
+  {
+   "key": "send_kill",
+   "name": "SEND KILL",
+   "options": [
+    "OFF",
+    "ON"
+   ],
+   "default": "OFF"
+  }
+ ]
+}

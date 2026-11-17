@@ -1,0 +1,28 @@
+{
+  "name": "[UTIL] Mix Desk",
+  "vendor": "Steve A",
+  "uid": "MxDk",
+  "category": "Effect",
+  "so": "mixdesk.so",
+  "effect": true,
+  "cc": false,
+  "nrpn": false,
+  "build": {
+    "sources": [
+      "src/mixdesk.c"
+    ],
+    "cflags": [
+      "-Isrc"
+    ],
+    "libs": [
+      "-lm",
+      "-ldl"
+    ]
+  },
+  "params": "params.json",
+  "layout": "layout.conf",
+  "art": "html",
+  "defines": {
+    "QLINK_TRAVEL": 1, "SET_IF_CHANGED": 1, "PARAM_TEXT_MAX": 48
+  }
+}

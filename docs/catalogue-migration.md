@@ -63,6 +63,7 @@ page, [docs/CATALOG_SPEC.md](https://github.com/sd88me/mpc-vst-plugins/blob/main
 | **Near neighbours** (4) | Eucalypso (Euclidier is also Euclidean, but from a different source), Mono Voice (Monomodule is the real Monomachine engine but build-yourself only), Rings and Rings FX (Mutable Vibe includes six Rings resonator models) | Different plugins, so release them unless you'd rather not |
 | **No licence** (2) | Hush One, Libpo32 (no licence upstream, and the authors can't be asked) | Stay here only, not published |
 | **Written for this repo** (2) | Stevequencer, Stevequencer 16 (MIT, chosen 2026-10-08) | Released 2026-10-10 (below) |
+| **The owner's mixer** (3, added later) | Mix Strip, Mix Bus, Mix Desk (MIT, 2026-10-25 and 2026-11-07) | Stay here only, not in the catalogue (the owner, 2026-11-18): no own repo, no release zips |
 | **New to the catalogue** (26) | Instruments: 303, Aphex, Braids, Chordism, Denis, Elements, Fizzik, Hank, Hera, MonkSynth, Moog, Mr Drums, Mr Hyde, Noisemaker, NuSaw, OB-Xd, Tablor, Wurl. Sequencers: Grids, Groove Bank, MIDI Player, Pixel Walkers, Rampage, Super Arp. Effects: Verglas, Warps | Release |
 
 No catalogue entry shares a uid, `.so` name or skin folder name with the 30 candidates (checked 2026-10-08 against

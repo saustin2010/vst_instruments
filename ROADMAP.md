@@ -100,6 +100,26 @@ parameter index, so existing projects keep working.
 
 ## New plugins
 
+- [ ] **Mix Strip and Mix Bus** ([originals/mixstrip](originals/mixstrip/), 2026-10-25): a mixer played from a MIDI
+  controller (the owner's plan: a cue selector that grew into a mixer): a full strip per track (level, mute, cue,
+  filter, two sends), 16 tracks on two pages on two MIDI channels, knobs relative or absolute, faders absolute with the
+  controller's own pickup, cue and sends built together.
+  - [x] Built and tested offline (2026-10-25): `tools/build.sh` PASSED for both, `test/run.sh` 73 checks PASSED
+    (ASan/UBSan), `check_skin.py` OK, displaydeps none, procwatch no flags (about 6 µs a block native)
+  - [x] Installed on the Live II (2026-10-25); the owner: "both are working well"
+  - [x] Owner's asks, offline (2026-10-25): FILTER detent at OFF ("hard to centre the dial on the controller"); KNOB 3 per
+    strip, FILTER or SEND KILL (left cuts both sends, tails ring on). Tests 90 checks PASSED; to install (no restart)
+  - [ ] Device checks: the listener finds the controller (STATUS), moves reach the strips, they record as automation,
+    CUE on a Mix Bus routed to the headphones' output, FX A into an effect, MPC doesn't list the plugin's port, CPU
+    with 8 strips
+  - [ ] Release (its own repo or in an existing one) once the owner has used it
+  - [x] **Mix Desk** ([originals/mixstrip/mixdesk](originals/mixstrip/mixdesk/), 2026-11-07): the 16 columns in one
+    place, each on any of tracks 1-16; LEVEL + MUTE on the strips or on MPC's own fader and Track Mute (its own MIDI
+    port, MIDI Learn once in a template); BUTTON 2 = CUE or SEND KILL. Shared memory layout 2. `test/run.sh` 127
+    checks PASSED, `tools/build.sh` PASSED for all three, `check_skin.py` OK. Installed on the Live II with Mix Strip
+    and Mix Bus 2026-11-07 (MPC restarted once)
+  - [ ] Mix Desk device checks: MPC lists Mix Desk MIDI Out and learns from it (Control on), the learn survives in a
+    template, ON/OFF or PRESS for a learned Track Mute, MPC's fader comes after the inserts, learned moves record
 - [ ] **Incipience** ([originals/incipience](originals/incipience/), started 2026-10-13, branch `incipience`): an
   eleven-instrument drum synth laid out like the Jomox AlphaBase Mk II (kick, MBrane, two hats, clap, rim, crash, ride
   with the hardware's sample + metal noise + analog filter chain, X1 / X2 sample players, a four-operator FM synth,

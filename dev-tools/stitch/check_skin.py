@@ -15,6 +15,13 @@ STEVE = os.path.dirname(os.path.dirname(HERE))
 MV = os.path.dirname(STEVE)
 sys.path.insert(0, os.path.join(MV, "tools"))
 import shadow_skin  # noqa: E402
+
+
+def banks_of(w):
+    """banks="A|B" -> {"A", "B"}: the Q-Link sub-pages a widget is on (None: all of its tab's). shadow_skin's own is
+    local to its build function since the release tools (2026-10-23)."""
+    b = w.get("banks")
+    return {x.strip() for x in b.split("|") if x.strip()} if b else None
 import params as fw_params  # noqa: E402
 
 CONTROLS = ("knob", "slider_v", "slider_h", "toggle", "button", "enum_h", "enum_v", "popup", "stepper", "list", "menu")
@@ -100,7 +107,7 @@ def check(port, verbose=False):
                 if w["kind"] == "list" and str(w.get("focus", "")).lower() in ("no", "0", "off"):
                     continue   # focus=no: no row takes MPC's focus (all touch only)
                 if w["kind"] in CONTROLS and "key" in w and (   # banks=: some sub-pages only
-                        not shadow_skin.banks_of(w) or tab["tabName"] in shadow_skin.banks_of(w)):
+                        not banks_of(w) or tab["tabName"] in banks_of(w)):
                     # a list's key names its rows (<key>_1 ...): the first takes MPC's focus, the others are touch only
                     want.add(shadow_skin.list_keys(w)[0] if w["kind"] == "list" else w["key"])
             for k in sorted(want - set(bound)):
