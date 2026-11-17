@@ -1,5 +1,9 @@
 # Root SSH on a stock MPC (Live II, MPC OS 3.9.1)
 
+> **MPC OS 3.10.1 and later** have SSH built in: Akai's developer mode (Preferences → Info: tap the version value 3
+> times, the serial number value 2 times, then the firmware version once) starts it. Open MPC found root login with
+> no password, so switch it off when you're done. This page is for 3.9.1 and earlier.
+
 The installer in this repo needs a root shell on the MPC over SSH. Stock MPC OS has none. Many people get one from a
 community firmware mod; this page records the other route, used for the MPC Live II these plugins were developed on:
 **rebuilding Akai's own update image with SSH switched on**. It's a field report from one device (2026-09-29), not a

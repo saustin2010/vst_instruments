@@ -2,6 +2,8 @@
 # A pretend MPC for testing the installer without a device: a 32-bit ARM BusyBox container (the MPC's own shell and
 # tools) with /sdcard, a minimal MPC.settings and a systemctl that only prints what it was asked.
 #   dev-tools/fake-mpc/start.sh          (re)start it, empty;  dev-tools/fake-mpc/start.sh stop  removes it
+#   dev-tools/fake-mpc/start.sh 3.10.1   the same with MPC OS 3.10.1's External Plugin Support on (install.sh then
+#                                        installs into /sdcard/VST2 Plugins)
 # Its files live in dev-tools/fake-mpc/state/ (ignored by git), so you can look at what an install wrote.
 # Needs Docker with 32-bit ARM emulation (BUILDING.md).
 set -euo pipefail
@@ -13,6 +15,11 @@ docker rm -f fake-mpc >/dev/null 2>&1 || true
 rm -rf "$HERE/state"
 mkdir -p "$HERE/state/sdcard" "$HERE/state/media/az01-internal/Settings/MPC" "$HERE/state/bin"
 cp "$HERE/MPC.settings" "$HERE/state/media/az01-internal/Settings/MPC/MPC.settings"
+if [ "${1:-}" = 3.10.1 ]; then   # the setting as 3.10.1 writes it, next to the others
+  sed -i.bak 's|^  <VALUE name="exampleSetting" val="1"/>|&\n  <VALUE name="Enhancements.VST2Support" val="1"/>|' \
+    "$HERE/state/media/az01-internal/Settings/MPC/MPC.settings"
+  rm -f "$HERE/state/media/az01-internal/Settings/MPC/MPC.settings.bak"
+fi
 printf '#!/bin/sh\necho "[systemctl $*]"\n' > "$HERE/state/bin/systemctl"
 chmod +x "$HERE/state/bin/systemctl"
 docker run -d --platform linux/arm/v7 --name fake-mpc -v "$HERE/state/sdcard:/sdcard" -v "$HERE/state/media:/media" \

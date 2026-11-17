@@ -163,6 +163,41 @@ when nothing plays. The routing is confirmed on a stock Live II (2026-10-04) and
 Meta Mod, Resonator FX, Verglas are audio effects: insert them where MPC offers plugin effects. Whether MPC OS lists third-party VST effects in
 its insert-effect browser is **not yet confirmed** on a device; please report what you see.
 
+## MPC OS 3.10.1 and later
+
+MPC OS 3.10.1 supports third-party VST2 plugins officially, and lists them only from a folder named `VST2 Plugins` at
+the root of a drive (on a Gen1 MPC's internal drive, `/sdcard/VST2 Plugins/`), after you turn on **Preferences →
+Enhancements: Enable Enhancements** and **External Plugin Support**. Plugins registered in `MPC.settings`, which is how
+older MPC OS lists them, are hidden from 3.10.1's plugin browser. Saved projects still load them. SSH comes from Akai's
+**developer mode** (Preferences → Info: tap the version value 3 times, the serial number value 2 times, then the
+firmware version once). Switch it off again afterwards: it lets anyone on your network in as root.
+
+`install.sh` sees the External Plugin Support setting and installs each plugin as `/sdcard/VST2 Plugins/<maker> - VST
+- <name>/`: its `.so`, screen, data folder (presets, kits, merged with files you added) and a `plugin.json`.
+`MPC.settings` isn't touched. MPC lists a new plugin after a restart (the installer asks first, as before); an update
+needs none, but re-insert the plugin, and a changed screen shows after a restart. If a plugin was installed before
+3.10.1, its old binary is updated too, in `/sdcard/vst` or, from a release zip, in its `/sdcard/Synths` folder (saved
+projects that name that path load it from there), and its old `/sdcard/Synths` screen is set aside (3.10.1 would draw
+it instead). `--legacy` installs the older way, `--vst2` this
+way. `uninstall.sh` removes the `VST2 Plugins` folders too (data folders kept unless `--purge`).
+
+Plugins installed before you updated to 3.10.1 are copied there once with:
+
+```
+tools/vst2-move.sh <mpc-address>             # the plan: changes nothing
+tools/vst2-move.sh <mpc-address> --apply     # then restart MPC: the plugins are under External Plugins
+tools/vst2-move.sh <mpc-address> --labels --apply  # give back names changed in MPC.settings, then restart MPC
+tools/vst2-move.sh <mpc-address> --retire --apply   # once they work: set the old skins aside, then restart MPC
+```
+
+It copies every plugin `MPC.settings` lists, as it is on the MPC, with its data folder, skin and a `plugin.json`.
+Nothing is deleted. The browser lists a copy by its `plugin.json` name, which the copy takes from the binary, so a name
+changed only in `MPC.settings` (a label like `[SYN]` added to another author's plugin) is lost until `--labels` writes
+the `MPC.settings` name into `plugin.json` (the original is kept as `plugin.json.vst2-orig`; `--unlabel --apply` puts
+it back). The folder keeps the binary's name, which is how MPC finds the skin. MPC lists only the folders directly
+inside `VST2 Plugins`, so the plugins can't be sorted into subfolders there.
+`--unretire --apply` puts the old skins back, before going back to 3.9.1.
+
 ## Updating
 
 Pull the latest version of this repo (`git pull`) and run the installer again with the plugins you want to update.
