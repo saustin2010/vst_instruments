@@ -85,7 +85,8 @@ only the buses are late (see [Mix Bus](mixbus/)).
 - 22 parameters: STATUS (a readout), TRACK, LEVEL, MUTE, CUE, FILTER, SEND A, SEND B, MIDI CH, KNOBS, a CC readout
   per control, the arrows of the TRACK and MIDI CH steppers, KNOB 3 and SEND KILL; one page, LEVEL / SEND A / SEND B /
   FILTER on Q-Link column 1, MUTE / CUE / TRACK / MIDI CH on column 2, KNOBS / KNOB 3 / SEND KILL on column 3
-- Install: `./install.sh <mpc-address> mixstrip mixbus` from this repo (new plugins: MPC restarts once)
+- Install: `./install.sh <mpc-address> mixstrip mixbus mixdesk` from this repo (new plugins: MPC restarts once). Not in
+  sd88me's catalogue: Mix Strip, Mix Bus and Mix Desk are the owner's and are installed from this repo only (2026-11-18)
 
 ## How it works
 
@@ -132,7 +133,7 @@ also Mix Bus's), `test/mix_test.c` (strips and buses together).
 
 - 2026-11-07: [Mix Desk](mixdesk/) added (the owner: "all 8 channels in one place", volume and mute on MPC's own pages,
   "change the cue button to fx send mute/kill. I only need cue when I'm not using my MPC through the mixer"). Shared
-  memory layout 2: install all three together. Not installed yet.
+  memory layout 2: install all three together. Installed on the Live II the same day (MPC restarted once).
 
 - 2026-10-25: written from the owner's plan for a controller mixer (a cue selector that grew into a mixer); built
   and tested offline. Installed on the Live II the same day; the owner: "both are working well". The owner found

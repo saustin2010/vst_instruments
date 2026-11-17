@@ -91,6 +91,7 @@ too (`src/mixin.h`).
 - 2026-11-07: written for the owner ("all 8 channels in one place and I can allocate which track I want on which
   channel"; mute and volume on MPC's own pages: they chose MIDI Learn once, in a template). First built for tracks
   1-8 on one page, then two pages as the owner laid out their tracks: drums 1-4, bass 5-6, keys 7-8 on page 1;
-  samples 9-10 and external MIDI or spare tracks 11-16 on page 2. Not installed. To check on the device: MPC lists Mix Desk MIDI Out and learns from it (Control on), the
+  samples 9-10 and external MIDI or spare tracks 11-16 on page 2. Installed on the Live II the same day and in use with
+  LEVEL + MUTE on STRIPS (the owner chose not to MIDI Learn MPC's mixer). Not checked on the device (MPC MIXER mode): MPC lists Mix Desk MIDI Out and learns from it (Control on), the
   learn survives in a template, ON/OFF or PRESS for a learned Track Mute, MPC's track fader comes after the inserts
   (the cue doesn't follow it), a learned control records as automation.
